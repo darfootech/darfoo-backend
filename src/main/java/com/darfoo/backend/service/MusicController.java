@@ -5,6 +5,7 @@ package com.darfoo.backend.service;
  */
 
 import com.darfoo.backend.model.Music;
+import com.darfoo.backend.model.MusicCategory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ public class MusicController {
     public @ResponseBody
     Music getSingleMusic(@PathVariable String id){
         Music targetMusic = new Music();
+        targetMusic.setCategories(new MusicCategory[] { new MusicCategory(), new MusicCategory(), new MusicCategory() });
         return targetMusic;
     }
 

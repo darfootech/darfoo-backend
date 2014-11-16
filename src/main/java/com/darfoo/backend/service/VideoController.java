@@ -1,6 +1,7 @@
 package com.darfoo.backend.service;
 
 import com.darfoo.backend.model.Video;
+import com.darfoo.backend.model.VideoCategory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class VideoController {
     public @ResponseBody
     Video getSingleVideo(@PathVariable String id){
         Video targetVideo = new Video();
+        targetVideo.setCategories(new VideoCategory[] { new VideoCategory(), new VideoCategory(), new VideoCategory() });
         return targetVideo;
     }
 
