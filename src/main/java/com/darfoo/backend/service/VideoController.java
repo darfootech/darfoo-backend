@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sun.awt.SunHints;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
  * Created by zjh on 14-11-16.
  */
@@ -21,5 +24,12 @@ public class VideoController {
     Video getSingleVideo(@PathVariable String id){
         Video targetVideo = new Video();
         return targetVideo;
+    }
+
+    @RequestMapping("/hottest")
+    public @ResponseBody
+    Video[] getHottestVideos(){
+        Video[] hottestVideos = { new Video(), new Video(), new Video() };
+        return hottestVideos;
     }
 }
