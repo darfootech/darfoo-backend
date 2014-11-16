@@ -16,9 +16,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MusicController {
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public @ResponseBody
-    Music getSingleVideo(@PathVariable String id){
+    Music getSingleMusic(@PathVariable String id){
         Music targetMusic = new Music();
         return targetMusic;
     }
 
+    @RequestMapping(value = "/playurl/{key}", method = RequestMethod.GET)
+    public @ResponseBody
+    String getPlayUrl(@PathVariable String key){
+        return "http://playurl";
+    }
+
+    @RequestMapping("/hottest")
+    public @ResponseBody
+    Music[] getHottestMusics(){
+        Music[] hottestMusics = { new Music(), new Music(), new Music() };
+        return hottestMusics;
+    }
+
+    @RequestMapping("/index")
+    public @ResponseBody
+    Music[] getIndexMusics(){
+        Music[] indexMusics = { new Music(), new Music(), new Music(), new Music(), new Music() };
+        return indexMusics;
+    }
 }
