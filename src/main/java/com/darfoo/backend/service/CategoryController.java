@@ -4,7 +4,9 @@ package com.darfoo.backend.service;
  * Created by zjh on 14-11-16.
  */
 
+import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.MusicCategory;
+import com.darfoo.backend.model.Video;
 import com.darfoo.backend.model.VideoCategory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,7 @@ public class CategoryController {
     public @ResponseBody
     VideoCategory getSingleVideoCategory(@PathVariable String id){
         VideoCategory targetVideoCategory = new VideoCategory();
+        targetVideoCategory.setVideos(new Video[]{new Video(), new Video(), new Video()});
         return targetVideoCategory;
     }
 
@@ -26,6 +29,7 @@ public class CategoryController {
     public @ResponseBody
     MusicCategory getSingleVideo(@PathVariable String id){
         MusicCategory targetMusicCategory = new MusicCategory();
+        targetMusicCategory.setMusics(new Music[]{new Music(), new Music(), new Music()});
         return targetMusicCategory;
     }
 }
