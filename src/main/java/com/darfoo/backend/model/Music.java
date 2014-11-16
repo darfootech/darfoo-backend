@@ -12,6 +12,8 @@ public class Music {
     String music_key;
     Long update_timestamp;
 
+    MusicCategory[] categories;
+
     public Music() {
         this.id = 3;
         this.category_id = 33;
@@ -19,6 +21,14 @@ public class Music {
         this.title = "music";
         this.music_key = "music_key";
         this.update_timestamp = 1416121149L;
+    }
+
+    public MusicCategory[] getCategories() {
+        return categories;
+    }
+
+    public void setCategories(MusicCategory[] categories) {
+        this.categories = categories;
     }
 
     public Integer getId() {

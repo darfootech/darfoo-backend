@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/resources/image")
 public class ImageController {
-    @RequestMapping(value = "/showurl/{key}", method = RequestMethod.GET)
+    @RequestMapping(value = "/displayurl/{key}", method = RequestMethod.GET)
     public @ResponseBody
-    String getSingleVideo(@PathVariable String key){
+    String getDisplayUrl(@PathVariable String key){
         return "http://imageurl";
     }
 }

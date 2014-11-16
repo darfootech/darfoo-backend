@@ -6,7 +6,7 @@ package com.darfoo.backend.model;
 public class Video {
     /*keys*/
     Integer id;
-    Integer category_id;
+    //Integer category_id;
     Integer author_id;
     Integer image_id;
 
@@ -16,6 +16,8 @@ public class Video {
     String title;
     Long update_timestamp;
 
+    VideoCategory[] categories;
+
     /*待定，需要视频的格式信息*/
     String type;
     Long interval;
@@ -23,12 +25,20 @@ public class Video {
 
     public Video() {
         this.id = 3;
-        this.category_id = 321;
+        //this.category_id = 321;
         this.author_id = 123;
         this.video_key = "video_key";
         this.image_key = "image_key";
         this.title = "video";
         this.update_timestamp = 1416121149L;
+    }
+
+    public VideoCategory[] getCategories() {
+        return categories;
+    }
+
+    public void setCategories(VideoCategory[] categories) {
+        this.categories = categories;
     }
 
     public Integer getId() {
@@ -39,13 +49,13 @@ public class Video {
         this.id = id;
     }
 
-    public Integer getCategory_id() {
+    /*public Integer getCategory_id() {
         return category_id;
     }
 
     public void setCategory_id(Integer category_id) {
         this.category_id = category_id;
-    }
+    }*/
 
     public Integer getAuthor_id() {
         return author_id;

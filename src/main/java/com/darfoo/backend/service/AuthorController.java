@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class AuthorController {
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public @ResponseBody
-    Author getSingleVideo(@PathVariable String id){
+    Author getSingleAuthor(@PathVariable String id){
         Author targetAuthor = new Author();
         return targetAuthor;
     }
