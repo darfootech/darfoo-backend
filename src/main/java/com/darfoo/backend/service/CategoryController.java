@@ -25,11 +25,25 @@ public class CategoryController {
         return targetVideoCategory;
     }
 
+    @RequestMapping("/video/all")
+    public @ResponseBody
+    VideoCategory[] getAllVideoCategory(){
+        VideoCategory[] categorie = { new VideoCategory(), new VideoCategory(), new VideoCategory() };
+        return categorie;
+    }
+
     @RequestMapping(value = "/music/{id}", method = RequestMethod.GET)
     public @ResponseBody
     MusicCategory getSingleVideo(@PathVariable String id){
         MusicCategory targetMusicCategory = new MusicCategory();
         targetMusicCategory.setMusics(new Music[]{new Music(), new Music(), new Music()});
         return targetMusicCategory;
+    }
+
+    @RequestMapping("/music/all")
+    public @ResponseBody
+    MusicCategory[] getAllMusicCategory(){
+        MusicCategory[] categorie = { new MusicCategory(), new MusicCategory(), new MusicCategory() };
+        return categorie;
     }
 }
