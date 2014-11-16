@@ -26,10 +26,23 @@ public class VideoController {
         return targetVideo;
     }
 
+    @RequestMapping(value = "/playurl/{key}", method = RequestMethod.GET)
+    public @ResponseBody
+    String getPlayUrl(@PathVariable String key){
+        return "http://playurl";
+    }
+
     @RequestMapping("/hottest")
     public @ResponseBody
     Video[] getHottestVideos(){
         Video[] hottestVideos = { new Video(), new Video(), new Video() };
         return hottestVideos;
+    }
+
+    @RequestMapping("/index")
+    public @ResponseBody
+    Video[] getIndexVideos(){
+        Video[] indexVideos = { new Video(), new Video(), new Video(), new Video(), new Video() };
+        return indexVideos;
     }
 }
