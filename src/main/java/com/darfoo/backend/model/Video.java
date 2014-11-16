@@ -8,6 +8,7 @@ public class Video {
     Integer id;
     Integer category_id;
     Integer author_id;
+    Integer image_id;
 
     /*info*/
     String video_key;
@@ -22,8 +23,8 @@ public class Video {
 
     public Video() {
         this.id = 3;
-        this.category_id = 3;
-        this.author_id = 3;
+        this.category_id = 321;
+        this.author_id = 123;
         this.video_key = "video_key";
         this.image_key = "image_key";
         this.title = "video";
