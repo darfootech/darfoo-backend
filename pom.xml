@@ -12,6 +12,14 @@
         <jackson.version>1.9.10</jackson.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>oschina-repos</id>
+            <name>oschina Repos</name>
+            <url>http://maven.oschina.net/content/groups/public/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- Spring dependencies -->
         <dependency>
