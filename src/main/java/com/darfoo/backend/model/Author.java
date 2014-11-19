@@ -1,15 +1,16 @@
 package com.darfoo.backend.model;
 
+import java.io.Serializable;
+
 /**
  * Created by zjh on 14-11-16.
  */
-public class Author {
+public class Author implements Serializable {
     Integer id;
     String name;
     String description;
 
     public Author() {
-        this.id = 3;
         this.name = "ccc";
         this.description = "this is a composer";
     }

@@ -1,9 +1,11 @@
 package com.darfoo.backend.model;
 
+import java.io.Serializable;
+
 /**
  * Created by zjh on 14-11-16.
  */
-public class Music {
+public class Music implements Serializable {
     Integer id;
     Integer category_id;
     Integer author_id;

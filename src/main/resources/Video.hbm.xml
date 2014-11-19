@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.darfoo.backend.model.Video" table="video" catalog="darfoo">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <property name="image_id" type="java.lang.Integer">
+            <column name="IMAGE_ID" />
+        </property>
+        <property name="author_id" type="java.lang.Integer">
+            <column name="AUTHOR_ID" />
+        </property>
+        <property name="title" type="string">
+            <column name="TITLE" length="255" not-null="true" unique="true" />
+        </property>
+        <property name="video_key" type="string">
+            <column name="VIDEO_KEY" length="255" not-null="true" unique="true" />
+        </property>
+        <property name="image_key" type="string">
+            <column name="IMAGE_KEY" length="255" not-null="true" unique="true" />
+        </property>
+        <property name="update_timestamp" type="java.lang.Long">
+            <column name="UPDATE_TIMESTAMP" not-null="true" unique="true" />
+        </property>
+    </class>
+</hibernate-mapping>

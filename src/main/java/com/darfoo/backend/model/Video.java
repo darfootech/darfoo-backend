@@ -1,9 +1,11 @@
 package com.darfoo.backend.model;
 
+import java.io.Serializable;
+
 /**
  * Created by zjh on 14-11-16.
  */
-public class Video {
+public class Video implements Serializable {
     /*keys*/
     Integer id;
     //Integer category_id;
@@ -27,6 +29,7 @@ public class Video {
         this.id = 3;
         //this.category_id = 321;
         this.author_id = 123;
+        this.image_id = 3;
         this.video_key = "video_key";
         this.image_key = "image_key";
         this.title = "video";
@@ -47,6 +50,14 @@ public class Video {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getImage_id() {
+        return image_id;
+    }
+
+    public void setImage_id(Integer image_id) {
+        this.image_id = image_id;
     }
 
     /*public Integer getCategory_id() {
