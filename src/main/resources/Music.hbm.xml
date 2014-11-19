@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.darfoo.backend.model.Music" table="music" catalog="darfoo">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <property name="category_id" type="java.lang.Integer">
+            <column name="CATEGORY_ID" />
+        </property>
+        <property name="author_id" type="java.lang.Integer">
+            <column name="AUTHOR_ID" />
+        </property>
+        <property name="title" type="string">
+            <column name="TITLE" length="255" not-null="true" unique="true" />
+        </property>
+        <property name="music_key" type="string">
+            <column name="MUSIC_KEY" length="255" not-null="true" unique="true" />
+        </property>
+        <property name="update_timestamp" type="java.lang.Long">
+            <column name="UPDATE_TIMESTAMP" not-null="true" unique="true" />
+        </property>
+    </class>
+</hibernate-mapping>
