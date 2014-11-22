@@ -20,5 +20,4 @@ public class AuthorController {
         Author targetAuthor = new Author();
         return targetAuthor;
     }
-
 }
