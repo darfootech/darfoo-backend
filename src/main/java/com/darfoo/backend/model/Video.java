@@ -47,8 +47,10 @@ public class Video implements Serializable {
     /*info*/
 	@Column(name="VIDEO_KEY",unique=true,nullable=false,columnDefinition="varchar(255) not null")
     String video_key;
+	
 	@Column(name="TITLE",nullable=false,columnDefinition="varchar(255) not null")
     String title;
+	
 	@Column(name="UPDATE_TIMESTAMP",nullable=false,columnDefinition="bigint(64) not null")
     Long update_timestamp;
     /*待定，需要视频的格式信息*/

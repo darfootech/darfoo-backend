@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,22 +19,22 @@ import javax.persistence.Table;
  * Created by zjh on 14-11-16.
  */
 @Entity
-@Table(name="musiccategory")
-public class MusicCategory implements Serializable {
+@Table(name="educationcategroy")
+public class EducationCategory implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
     Integer id;
-	@Column(name="Title",unique=true,nullable=false,columnDefinition="varchar(255) not null")
+	@Column(name="TITLE",unique=true,nullable=false,columnDefinition="varchar(255) not null")
     String title;
 	@Column(name="DESCRIPTION",nullable=false,columnDefinition="varchar(255) not null")
     String description;
-	//建立于music表的 双向N-N关系
-	@ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
-	@JoinTable(name="music_category",joinColumns={@JoinColumn(name="category_id",referencedColumnName="id",nullable=false,columnDefinition="int(11) not null")},
-	inverseJoinColumns={@JoinColumn(name="music_id",nullable=false,columnDefinition="int(11) not null")})
-    Set<Music> musics = new HashSet<Music>();
+	//建立与video表的多对多关系
+	@ManyToMany(fetch=FetchType.EAGER)
+	@JoinTable(name="education_category",joinColumns={@JoinColumn(name="category_id",referencedColumnName="id",nullable=false,columnDefinition="int(11) not null")},
+	inverseJoinColumns={@JoinColumn(name="video_id",nullable=false,columnDefinition="int(11) not null")})
+    Set<Education>  videos = new HashSet<Education>();
 
-    public MusicCategory() {
+    public EducationCategory() {
     }
 
     public Integer getId() {
@@ -54,19 +53,23 @@ public class MusicCategory implements Serializable {
         this.title = title;
     }
 
-    public Set<Music> getMusics() {
-		return musics;
-	}
-
-	public void setMusics(Set<Music> musics) {
-		this.musics = musics;
-	}
-
-	public String getDescription() {
+    public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public Set<Education> getVideos() {
+		return videos;
+	}
+
+	public void setVideos(Set<Education> videos) {
+		this.videos = videos;
+	}
+
+
+
+
 }

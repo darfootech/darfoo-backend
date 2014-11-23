@@ -19,10 +19,15 @@ import com.darfoo.backend.model.VideoCategory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
-public class DaoTests {
+public class VideoDaoTests {
 	@Autowired
 	VideoDao videoDao;
 
+	@Test
+	public void insertAllVideoCategories(){
+		videoDao.insertAllVideoCategories();
+	}
+	
 	@Test
 	public void inserSingleVideo(){
 		Video video = new Video();
@@ -47,14 +52,11 @@ public class DaoTests {
 		s_vCategory.add(c3);
 		s_vCategory.add(c4);
 		video.setTitle("Dearest");
-		video.setVideo_key("Dearest");
+		video.setVideo_key("Dearest"); 
 		video.setUpdate_timestamp(System.currentTimeMillis());
 		videoDao.inserSingleVideo(video);
 	}
-	@Test
-	public void insertAllVideoCategories(){
-		videoDao.insertAllVideoCategories();
-	}
+
 	@Test
 	public void getVideoByVideoId(){
 		long start = System.currentTimeMillis();
@@ -86,8 +88,9 @@ public class DaoTests {
 	public void getVideosByCategories(){
 		long start = System.currentTimeMillis();
 		//String[] categories = {};//无条件限制
-		//String[] categories = {"较快","稍难","情歌风","S"}; //满条件限制
-		String[] categories = {"较慢","普通","优美","S"};
+		//String[] categories = {"较快","稍难","情歌风","S"}; //满足所有条件
+		//String[] categories = {"较快","普通","优美","0"}; //有一个条件不满足
+		String[] categories = {"较快"};//满足单个条件
 		List<Video> videos = videoDao.getVideosByCategories(categories);
 		System.out.println("最终满足的video数量>>>>>>>>>>>>>>>>>>>>>"+videos.size());
 		for(Video video : videos){

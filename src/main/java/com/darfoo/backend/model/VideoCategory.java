@@ -35,9 +35,6 @@ public class VideoCategory implements Serializable {
     Set<Video>  videos = new HashSet<Video>();
 
     public VideoCategory() {
-        this.id = 3;
-        this.title = "dance";
-        this.description = "let's play dance";
     }
 
     public Integer getId() {

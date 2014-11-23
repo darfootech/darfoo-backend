@@ -109,7 +109,7 @@ public class VideoDao {
 	 **/
 	public List<Video> getRecommendVideos(int number){
 		number = 3;
-		List<Video> l_video = null;
+		List<Video> l_video = new ArrayList<Video>();
 		try{
 			Session session = sf.getCurrentSession();
 			//投影查询获得所有video的id
@@ -124,7 +124,7 @@ public class VideoDao {
 				s_vid.add(l_vid.get(count/2+1));
 				c = session.createCriteria(Video.class).add(Restrictions.in("id", s_vid));
 				c.setReadOnly(true);
-				c.setFetchMode("categories", FetchMode.JOIN);//同时加载目录(会导致查询结果不值number个，而是number*4个)
+				//c.setFetchMode("categories", FetchMode.JOIN);//同时加载目录(会导致查询结果不值number个，而是number*4个)
 				l_video = c.list(); 
 				for(Video v : l_video){
 					v.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
@@ -136,13 +136,13 @@ public class VideoDao {
 		return l_video;
 	}
 	/**
-	 * 获取首页最新视频 信息(暂时定位5个，数据库种数量不够多)
+	 * 获取首页最新视频 信息(暂时定5个)
 	 * @return List<Video> l_video 返回一个包含多个video对象的List
 	 * @return video中的categories可以获取
 	 * **/
 	public List<Video>  getLastestVideos(int number){
 		number = 5;
-		List<Video> l_video = null;
+		List<Video> l_video = new ArrayList<Video>();
 		try{
 			Session session = sf.getCurrentSession();
 			Criteria c = session.createCriteria(Video.class).setProjection(Projections.property("update_timestamp")).addOrder(Order.desc("update_timestamp"));
@@ -170,10 +170,10 @@ public class VideoDao {
 	 * @param 例如 categories = {"较快","简单","欢快","A"}  例如 categories = {"较快","欢快","A"} 表示有一个类别用户没有选择
 	 * **/
 	public List<Video> getVideosByCategories(String[] categories){
-		List<Video> l_video = null;
+		List<Video> l_video = new ArrayList<Video>();
 		try{
 			Session session = sf.getCurrentSession();
-			List<Integer> l_interact_id = null;  //存符合部分条件的video id
+			List<Integer> l_interact_id = new ArrayList<Integer>();  //存符合部分条件的video id
 			Criteria c;
 			for(int i=0;i<categories.length;i++){
 				c = session.createCriteria(Video.class).setProjection(Projections.property("id"));
@@ -188,9 +188,10 @@ public class VideoDao {
 				if(l_id.size() == 0){
 					//只要有一项查询结果长度为0，说明视频表无法满足该种类组合，返回一个空的List<Video>对象,长度为0
 					l_video = new ArrayList<Video>();
+					l_interact_id.clear();//清空，表示无交集
 					break;
 				}else{
-					if(l_interact_id == null){
+					if(l_interact_id.size() == 0){
 						l_interact_id = l_id;
 						continue;
 					}else{
@@ -209,7 +210,7 @@ public class VideoDao {
 				c = session.createCriteria(Video.class);
 				c.setReadOnly(true);
 				l_video = c.list();
-			}else if(l_interact_id!=null && l_interact_id.size() > 0){
+			}else if(l_interact_id.size() > 0){
 				//交集内的id数量大于0个
 				c = session.createCriteria(Video.class).add(Restrictions.in("id", l_interact_id));
 				c.setReadOnly(true);
