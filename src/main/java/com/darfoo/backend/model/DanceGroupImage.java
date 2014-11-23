@@ -1,7 +1,5 @@
 package com.darfoo.backend.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,21 +7,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-/**
- * Created by zjh on 14-11-16.
- */
 @Entity
-@Table(name="image")
-public class Image implements Serializable {
+@Table(name="dancegroupimage")
+public class DanceGroupImage {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
     Integer id;
 	@Column(name="IMAGE_KEY",unique=true,nullable=false,columnDefinition="varchar(255) not null")
     String image_key;
 	
-    public Image() {
-        
-    }
 	public String getImage_key() {
         return image_key;
     }
@@ -38,5 +30,4 @@ public class Image implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
 }

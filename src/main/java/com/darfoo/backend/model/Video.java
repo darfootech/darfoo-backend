@@ -1,95 +1,115 @@
 package com.darfoo.backend.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * Created by zjh on 14-11-16.
+ * modify by yy on 14-11-22
  */
+@Entity
+@Table(name="video")
 public class Video implements Serializable {
     /*keys*/
-    Integer id;
-    //Integer category_id;
-    Integer author_id;
-    Integer image_id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+    Integer id;  
 
+    //video & image  单向N-1  在video表中增加一个外键列IMAGE_ID(music的主键)
+	@ManyToOne(targetEntity = Image.class,cascade=CascadeType.ALL)
+	@JoinColumn(name="IMAGE_ID",referencedColumnName="id")
+	Image image;
+	
+	//video & author 单向N-1 在video表中增加一个外键列AUTHOR_ID(author的主键)
+	@ManyToOne(targetEntity = Author.class,cascade=CascadeType.ALL)
+	@JoinColumn(name="AUTHOR_ID",referencedColumnName="id")
+	Author author;
+	
+	//video & category
+	@ManyToMany(targetEntity = VideoCategory.class,cascade=CascadeType.ALL)
+	@JoinTable(name="video_category",joinColumns={@JoinColumn(name="video_id",referencedColumnName="id",nullable=false,columnDefinition="int(11) not null")},
+	inverseJoinColumns={@JoinColumn(name="category_id",nullable=false,columnDefinition="int(11) not null")})
+	Set<VideoCategory> categories = new HashSet<VideoCategory>();	
     /*info*/
+	@Column(name="VIDEO_KEY",unique=true,nullable=false,columnDefinition="varchar(255) not null")
     String video_key;
-    String image_key;
+	
+	@Column(name="TITLE",nullable=false,columnDefinition="varchar(255) not null")
     String title;
+	
+	@Column(name="UPDATE_TIMESTAMP",nullable=false,columnDefinition="bigint(64) not null")
     Long update_timestamp;
-
-    VideoCategory[] categories;
-
     /*待定，需要视频的格式信息*/
-    String type;
-    Long interval;
-    Long size;
-
+//    String type;
+//    Long interval;
+//    Long size;
+	
     public Video() {
-        this.id = 3;
-        //this.category_id = 321;
-        this.author_id = 123;
-        this.image_id = 3;
-        this.video_key = "video_key";
-        this.image_key = "image_key";
-        this.title = "video";
-        this.update_timestamp = 1416121149L;
+
     }
 
-    public VideoCategory[] getCategories() {
-        return categories;
-    }
 
-    public void setCategories(VideoCategory[] categories) {
-        this.categories = categories;
-    }
-
-    public Integer getId() {
+	public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+
+	public Author getAuthor() {
+		return author;
+	}
+
+
+	public void setAuthor(Author author) {
+		this.author = author;
+	}
+
+
+	public Set<VideoCategory> getCategories() {
+		return categories;
+	}
+
+
+	public void setCategories(Set<VideoCategory> categories) {
+		this.categories = categories;
+	}
+
+
+	public void setId(Integer id) {
         this.id = id;
     }
 
-    public Integer getImage_id() {
-        return image_id;
-    }
 
-    public void setImage_id(Integer image_id) {
-        this.image_id = image_id;
-    }
-
-    /*public Integer getCategory_id() {
-        return category_id;
-    }
-
-    public void setCategory_id(Integer category_id) {
-        this.category_id = category_id;
-    }*/
-
-    public Integer getAuthor_id() {
-        return author_id;
-    }
-
-    public void setAuthor_id(Integer author_id) {
-        this.author_id = author_id;
-    }
 
     public String getVideo_key() {
         return video_key;
     }
 
-    public void setVideo_key(String video_key) {
+    public Image getImage() {
+		return image;
+	}
+
+
+	public void setImage(Image image) {
+		this.image = image;
+	}
+
+
+	public void setVideo_key(String video_key) {
         this.video_key = video_key;
-    }
-
-    public String getImage_key() {
-        return image_key;
-    }
-
-    public void setImage_key(String image_key) {
-        this.image_key = image_key;
     }
 
     public String getTitle() {
@@ -106,5 +126,29 @@ public class Video implements Serializable {
 
     public void setUpdate_timestamp(Long update_timestamp) {
         this.update_timestamp = update_timestamp;
+    }
+    
+    public String toString(boolean isShowCategory){
+    	StringBuilder sb = new StringBuilder();
+    	sb.append("title:"+title+"\nvideo_key:"+video_key+"\nupdate_timestamp:"+update_timestamp+
+    			"\nauthor:"+author.getName()+"  演唱家信息:"+author.getDescription()+
+    			"\nimage_key:"+image.getImage_key());
+    	if(isShowCategory){
+        	for(VideoCategory category : categories){
+        		sb.append("\n").append("种类:"+category.title+" 描述:"+category.description);
+        	}	
+    	}
+    	return sb.toString();
+    }
+    public String toString(){
+    	StringBuilder sb = new StringBuilder();
+    	sb.append("title:"+title+"\nvideo_key:"+video_key+"\nupdate_timestamp:"+update_timestamp+
+    			"\nauthor:"+author.getName()+"  演唱家信息:"+author.getDescription()+
+    			"\nimage_key:"+image.getImage_key());
+    	return sb.toString();
+    }
+    public void trigLazyLoad(){
+    	for(VideoCategory category : categories)
+    		;
     }
 }
