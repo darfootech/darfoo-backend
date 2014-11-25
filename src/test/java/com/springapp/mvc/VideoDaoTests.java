@@ -77,7 +77,7 @@ public class VideoDaoTests {
 	@Test
 	public void getLastestVideos(){
 		long start = System.currentTimeMillis();
-		List<Video> videos = videoDao.getLastestVideos(5);
+		List<Video> videos = videoDao.getLatestVideos(5);
 		for(Video video : videos){
 			System.out.println(video.toString(true));
 			System.out.println("——————————————————————————————————————");

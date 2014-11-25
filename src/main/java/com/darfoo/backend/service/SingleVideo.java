@@ -2,6 +2,7 @@ package com.darfoo.backend.service;
 
 /**
  * Created by zjh on 14-11-25.
+ * 获取单个视频信息
  */
 public class SingleVideo {
     Integer id;

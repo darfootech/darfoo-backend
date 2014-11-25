@@ -35,22 +35,31 @@ public class VideoController {
 
     @RequestMapping("/recommend")
     public @ResponseBody
-    List<RecommendVideo> getRecmmendVideos(){
+    List<IndexVideo> getRecmmendVideos(){
         List<Video> recommendVideos = videoDao.getRecommendVideos(3);
-        List<RecommendVideo> result = new ArrayList<RecommendVideo>();
+        List<IndexVideo> result = new ArrayList<IndexVideo>();
         for (Video video : recommendVideos){
             int video_id = video.getId();
-            String video_url = video.getVideo_key();
+            String image_url = video.getImage().getImage_key();
             String video_title = video.getTitle();
-            result.add(new RecommendVideo(video_id, video_title, video_url));
+            Long update_timestamp = video.getUpdate_timestamp();
+            result.add(new IndexVideo(video_id, video_title, image_url, update_timestamp));
         }
         return result;
     }
 
     @RequestMapping("/index")
     public @ResponseBody
-    Video[] getIndexVideos(){
-        Video[] indexVideos = { new Video(), new Video(), new Video(), new Video(), new Video() };
-        return indexVideos;
+    List<IndexVideo> getIndexVideos(){
+        List<Video> latestVideos = videoDao.getLatestVideos(5);
+        List<IndexVideo> result = new ArrayList<IndexVideo>();
+        for (Video video : latestVideos){
+            int video_id = video.getId();
+            String image_url = video.getImage().getImage_key();
+            String video_title = video.getTitle();
+            Long update_timestamp = video.getUpdate_timestamp();
+            result.add(new IndexVideo(video_id, video_title, image_url, update_timestamp));
+        }
+        return result;
     }
 }

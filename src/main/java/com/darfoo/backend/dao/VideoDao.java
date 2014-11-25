@@ -140,7 +140,7 @@ public class VideoDao {
 	 * @return List<Video> l_video 返回一个包含多个video对象的List
 	 * @return video中的categories可以获取
 	 * **/
-	public List<Video>  getLastestVideos(int number){
+	public List<Video>  getLatestVideos(int number){
 		number = 5;
 		List<Video> l_video = new ArrayList<Video>();
 		try{
