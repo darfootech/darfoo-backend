@@ -41,6 +41,17 @@ public class VideoController {
         return new SingleVideo(video_id, video_title, video_url);
     }
 
+    @RequestMapping(value = "/tutorial/{id}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    SingleVideo getSingleTutorialVideo(@PathVariable String id){
+        Education tutorial = educationDao.getEducationVideoById(Integer.parseInt(id));
+        int video_id = tutorial.getId();
+        String video_url = tutorial.getVideo_key();
+        String video_title = tutorial.getTitle();
+        return new SingleVideo(video_id, video_title, video_url);
+    }
+
     @RequestMapping("/recommend")
     public
     @ResponseBody
@@ -86,7 +97,7 @@ public class VideoController {
     @RequestMapping(value = "/category/{categories}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<IndexVideo> getVideosByCategories(@PathVariable String categories) {
+    List<CategoryVideo> getVideosByCategories(@PathVariable String categories) {
         //System.out.println("categories request is " + categories + "!!!!!!!!!!");
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
@@ -110,23 +121,24 @@ public class VideoController {
         System.out.println(targetCategories.toString());
 
         List<Video> targetVideos = videoDao.getVideosByCategories(convertList2Array(targetCategories));
-        List<IndexVideo> result = new ArrayList<IndexVideo>();
+        List<CategoryVideo> result = new ArrayList<CategoryVideo>();
         for (Video video : targetVideos) {
             int video_id = video.getId();
             String image_url = video.getImage().getImage_key();
             String video_title = video.getTitle();
+            String author_name = video.getAuthor().getName();
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new IndexVideo(video_id, video_title, image_url, update_timestamp));
+            result.add(new CategoryVideo(video_id, video_title, author_name, image_url, update_timestamp));
         }
         return result;
     }
 
     //http://localhost:8080/darfoobackend/rest/resources/video/category/teach/0-0-0-0
     //根据类别获取教学视频
-    @RequestMapping(value = "/category/teach/{categories}", method = RequestMethod.GET)
+    @RequestMapping(value = "/category/tutorial/{categories}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<IndexVideo> getTutorialVideosByCategories(@PathVariable String categories) {
+    List<CategoryVideo> getTutorialVideosByCategories(@PathVariable String categories) {
         System.out.println("categories request is " + categories + "!!!!!!!!!!");
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
@@ -142,21 +154,22 @@ public class VideoController {
             String styleCate = tutorialCates.getStyleCategory().get(requestCategories[2]);
             targetCategories.add(styleCate);
         }
-        if (!requestCategories[3].equals("0")) {
+        /*if (!requestCategories[3].equals("0")) {
             String teacherCate = tutorialCates.getTeacherCategory().get(requestCategories[3]);
             targetCategories.add(teacherCate);
-        }
+        }*/
 
         System.out.println(targetCategories.toString());
 
         List<Education> targetVideos = educationDao.getEducationVideosByCategories(convertList2Array(targetCategories));
-        List<IndexVideo> result = new ArrayList<IndexVideo>();
+        List<CategoryVideo> result = new ArrayList<CategoryVideo>();
         for (Education video : targetVideos) {
             int video_id = video.getId();
             String image_url = video.getImage().getImage_key();
+            String author_name = video.getAuthor().getName();
             String video_title = video.getTitle();
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new IndexVideo(video_id, video_title, image_url, update_timestamp));
+            result.add(new CategoryVideo(video_id, video_title, author_name, image_url, update_timestamp));
         }
         return result;
     }

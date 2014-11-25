@@ -2,16 +2,19 @@ package com.darfoo.backend.service;
 
 /**
  * Created by zjh on 14-11-25.
+ * 出现在首页上的视频信息，包括recommend和latest
  */
-public class IndexVideo {
+public class CategoryVideo {
     Integer id;
     String title;
+    String author_name;
     String image_url;
     Long update_timestamp;
 
-    public IndexVideo(Integer id, String title, String image_url, Long update_timestamp) {
+    public CategoryVideo(Integer id, String title, String author_name, String image_url, Long update_timestamp) {
         this.id = id;
         this.title = title;
+        this.author_name = author_name;
         this.image_url = image_url;
         this.update_timestamp = update_timestamp;
     }
@@ -46,5 +49,13 @@ public class IndexVideo {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getAuthor_name() {
+        return author_name;
+    }
+
+    public void setAuthor_name(String author_name) {
+        this.author_name = author_name;
     }
 }
