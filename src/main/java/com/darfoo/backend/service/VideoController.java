@@ -21,6 +21,7 @@ import java.util.List;
 public class VideoController {
     @Autowired
     VideoDao videoDao;
+    VideoCates videoCates = new VideoCates();
 
     //http://localhost:8080/darfoobackend/rest/resources/video/3
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -54,6 +55,52 @@ public class VideoController {
         List<Video> latestVideos = videoDao.getLatestVideos(5);
         List<IndexVideo> result = new ArrayList<IndexVideo>();
         for (Video video : latestVideos){
+            int video_id = video.getId();
+            String image_url = video.getImage().getImage_key();
+            String video_title = video.getTitle();
+            Long update_timestamp = video.getUpdate_timestamp();
+            result.add(new IndexVideo(video_id, video_title, image_url, update_timestamp));
+        }
+        return result;
+    }
+
+    String[] convertList2Array(List<String> vidoes){
+        String[] stockArr = new String[vidoes.size()];
+        stockArr = vidoes.toArray(stockArr);
+        /*for(String s : stockArr)
+            System.out.println(s);*/
+        return stockArr;
+    }
+
+    //http://localhost:8080/darfoobackend/rest/resources/video/category/2-0-0-0
+    @RequestMapping(value = "/category/{categories}", method = RequestMethod.GET)
+    public @ResponseBody
+    List<IndexVideo> getVideosByCategories(@PathVariable String categories){
+        System.out.println("categories request is " + categories + "!!!!!!!!!!");
+        String[] requestCategories = categories.split("-");
+        List<String> targetCategories = new ArrayList<String>();
+        if (!requestCategories[0].equals("0")){
+            String speedCate = videoCates.getSpeedCategory().get(requestCategories[0]);
+            targetCategories.add(speedCate);
+        }
+        if (!requestCategories[1].equals("0")){
+            String difficultyCate = videoCates.getDifficultyCategory().get(requestCategories[1]);
+            targetCategories.add(difficultyCate);
+        }
+        if (!requestCategories[2].equals("0")){
+            String styleCate = videoCates.getStyleCategory().get(requestCategories[2]);
+            targetCategories.add(styleCate);
+        }
+        if (!requestCategories[3].equals("0")){
+            String letterCate = requestCategories[3];
+            targetCategories.add(letterCate);
+        }
+
+        System.out.println(targetCategories.toString());
+
+        List<Video> targetVideos = videoDao.getVideosByCategories(convertList2Array(targetCategories));
+        List<IndexVideo> result = new ArrayList<IndexVideo>();
+        for (Video video : targetVideos){
             int video_id = video.getId();
             String image_url = video.getImage().getImage_key();
             String video_title = video.getTitle();
