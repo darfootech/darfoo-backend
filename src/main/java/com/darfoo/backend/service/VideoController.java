@@ -20,7 +20,7 @@ public class VideoController {
     public @ResponseBody
     Video getSingleVideo(@PathVariable String id){
         Video targetVideo = new Video();
-        targetVideo.setCategories(new VideoCategory[] { new VideoCategory(), new VideoCategory(), new VideoCategory() });
+        //targetVideo.setCategories(new VideoCategory[] { new VideoCategory(), new VideoCategory(), new VideoCategory() });
         return targetVideo;
     }
 

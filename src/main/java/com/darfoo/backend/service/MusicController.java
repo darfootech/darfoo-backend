@@ -19,7 +19,7 @@ public class MusicController {
     public @ResponseBody
     Music getSingleMusic(@PathVariable String id){
         Music targetMusic = new Music();
-        targetMusic.setCategories(new MusicCategory[] { new MusicCategory(), new MusicCategory(), new MusicCategory() });
+        //targetMusic.setCategories(new MusicCategory[] { new MusicCategory(), new MusicCategory(), new MusicCategory() });
         return targetMusic;
     }
 

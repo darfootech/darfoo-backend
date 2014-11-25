@@ -21,7 +21,7 @@ public class CategoryController {
     public @ResponseBody
     VideoCategory getSingleVideoCategory(@PathVariable String id){
         VideoCategory targetVideoCategory = new VideoCategory();
-        targetVideoCategory.setVideos(new Video[]{new Video(), new Video(), new Video()});
+        //targetVideoCategory.setVideos(new Video[]{new Video(), new Video(), new Video()});
         return targetVideoCategory;
     }
 
@@ -36,7 +36,7 @@ public class CategoryController {
     public @ResponseBody
     MusicCategory getSingleVideo(@PathVariable String id){
         MusicCategory targetMusicCategory = new MusicCategory();
-        targetMusicCategory.setMusics(new Music[]{new Music(), new Music(), new Music()});
+        //targetMusicCategory.setMusics(new Music[]{new Music(), new Music(), new Music()});
         return targetMusicCategory;
     }
 
