@@ -9,6 +9,8 @@ import com.darfoo.backend.dao.SearchDao;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.MusicCategory;
 import com.darfoo.backend.service.responsemodel.*;
+import com.darfoo.backend.utils.QiniuUtils;
+import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +29,7 @@ public class MusicController {
     @Autowired
     SearchDao searchDao;
 
+    QiniuUtils qiniuUtils = new QiniuUtils();
     MusicCates musicCates = new MusicCates();
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -34,9 +37,10 @@ public class MusicController {
     SingleMusic getSingleMusic(@PathVariable String id){
         Music targetMusic = musicDao.getMusicByMusicId(Integer.parseInt(id));
         int music_id = targetMusic.getId();
-        String music_url = targetMusic.getMusic_key();
+        String music_url = targetMusic.getMusic_key() + ".mp3";
+        String music_download_url = qiniuUtils.getQiniuResourceUrl(music_url);
         String title = targetMusic.getTitle();
-        return new SingleMusic(music_id, music_url, title);
+        return new SingleMusic(music_id, music_download_url, title);
     }
 
     //http://localhost:8080/darfoobackend/rest/resources/music/search/s
@@ -68,12 +72,6 @@ public class MusicController {
         return result;
     }
 
-    String[] convertList2Array(List<String> vidoes) {
-        String[] stockArr = new String[vidoes.size()];
-        stockArr = vidoes.toArray(stockArr);
-        return stockArr;
-    }
-
     //http://localhost:8080/darfoobackend/rest/resources/music/category/1-0-0
     @RequestMapping(value = "/category/{categories}", method = RequestMethod.GET)
     public @ResponseBody
@@ -94,14 +92,15 @@ public class MusicController {
             targetCategories.add(letterCate);
         }
 
-        List<Music> musics = musicDao.getMusicsByCategories(convertList2Array(targetCategories));
+        List<Music> musics = musicDao.getMusicsByCategories(ServiceUtils.convertList2Array(targetCategories));
         List<CategoryMusic> result = new ArrayList<CategoryMusic>();
         for (Music music : musics){
             int music_id = music.getId();
             String image_url = music.getImage().getImage_key();
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String title = music.getTitle();
             Long update_timestamp = music.getUpdate_timestamp();
-            result.add(new CategoryMusic(music_id, image_url, title, update_timestamp));
+            result.add(new CategoryMusic(music_id, image_download_url, title, update_timestamp));
         }
         return result;
     }
