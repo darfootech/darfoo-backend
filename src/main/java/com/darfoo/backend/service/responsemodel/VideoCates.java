@@ -19,15 +19,15 @@ public class VideoCates {
     private String[] styleArray = {"全部", "欢快", "活泼", "优美", "情歌风", "红歌风", "草原风", "戏曲风", "印巴风", "江南风", "民歌风", "儿歌风"};
 
     public VideoCates() {
-        for (int i=0; i< speedCount; i++){
+        for (int i=0; i<speedCount; i++){
             speedCategory.put(i+"", speedArray[i]);
         }
 
-        for (int i=0; i< difficultyCount; i++){
+        for (int i=0; i<difficultyCount; i++){
             difficultyCategory.put(i+"", difficultyArray[i]);
         }
 
-        for (int i=0; i< styleCount; i++){
+        for (int i=0; i<styleCount; i++){
             styleCategory.put(i+"", styleArray[i]);
         }
     }

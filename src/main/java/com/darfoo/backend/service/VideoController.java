@@ -99,7 +99,7 @@ public class VideoController {
     public
     @ResponseBody
     List<CategoryVideo> getVideosByCategories(@PathVariable String categories) {
-        //System.out.println("categories request is " + categories + "!!!!!!!!!!");
+        //System.out.println("categories request is " + categories + " !!!!!!!!!!");
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
         if (!requestCategories[0].equals("0")) {
@@ -119,7 +119,7 @@ public class VideoController {
             targetCategories.add(letterCate);
         }
 
-        System.out.println(targetCategories.toString());
+        //System.out.println(targetCategories.toString());
 
         List<Video> targetVideos = videoDao.getVideosByCategories(convertList2Array(targetCategories));
         List<CategoryVideo> result = new ArrayList<CategoryVideo>();
@@ -140,7 +140,7 @@ public class VideoController {
     public
     @ResponseBody
     List<CategoryVideo> getTutorialVideosByCategories(@PathVariable String categories) {
-        System.out.println("categories request is " + categories + "!!!!!!!!!!");
+        //System.out.println("categories request is " + categories + " !!!!!!!!!!");
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
         if (!requestCategories[0].equals("0")) {
@@ -160,7 +160,7 @@ public class VideoController {
             targetCategories.add(teacherCate);
         }*/
 
-        System.out.println(targetCategories.toString());
+        //System.out.println(targetCategories.toString());
 
         List<Education> targetVideos = educationDao.getEducationVideosByCategories(convertList2Array(targetCategories));
         List<CategoryVideo> result = new ArrayList<CategoryVideo>();

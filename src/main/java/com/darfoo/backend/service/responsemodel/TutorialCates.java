@@ -22,19 +22,19 @@ public class TutorialCates {
     private String[] teacherArray = {"全部", "teacher1", "teacher2", "teacher3"};
 
     public TutorialCates() {
-        for (int i=0; i< speedCount; i++){
+        for (int i=0; i<speedCount; i++){
             speedCategory.put(i+"", speedArray[i]);
         }
 
-        for (int i=0; i< difficultyCount; i++){
+        for (int i=0; i<difficultyCount; i++){
             difficultyCategory.put(i+"", difficultyArray[i]);
         }
 
-        for (int i=0; i< styleCount; i++){
+        for (int i=0; i<styleCount; i++){
             styleCategory.put(i+"", styleArray[i]);
         }
 
-        for (int i=0; i< teacherCount; i++){
+        for (int i=0; i<teacherCount; i++){
             teacherCategory.put(i+"", teacherArray[i]);
         }
     }

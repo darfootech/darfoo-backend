@@ -7,7 +7,9 @@ package com.darfoo.backend.service;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.MusicCategory;
+import com.darfoo.backend.service.responsemodel.CategoryMusic;
 import com.darfoo.backend.service.responsemodel.HotMusic;
+import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,8 @@ import java.util.List;
 public class MusicController {
     @Autowired
     MusicDao musicDao;
+
+    MusicCates musicCates = new MusicCates();
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public @ResponseBody
@@ -45,6 +49,44 @@ public class MusicController {
             String title = music.getTitle();
             Long update_timestamp = music.getUpdate_timestamp();
             result.add(new HotMusic(id, title, update_timestamp));
+        }
+        return result;
+    }
+
+    String[] convertList2Array(List<String> vidoes) {
+        String[] stockArr = new String[vidoes.size()];
+        stockArr = vidoes.toArray(stockArr);
+        return stockArr;
+    }
+
+    //http://localhost:8080/darfoobackend/rest/resources/music/category/1-0-0
+    @RequestMapping(value = "/category/{categories}", method = RequestMethod.GET)
+    public @ResponseBody
+    List<CategoryMusic> getMusicByCategories(@PathVariable String categories){
+        //System.out.println("category request is " + categories + " !!!!!!!!!");
+        String[] requestCategories = categories.split("-");
+        List<String> targetCategories = new ArrayList<String>();
+        if (!requestCategories[0].equals("0")){
+            String beatCate = musicCates.getBeatCategory().get(requestCategories[0]);
+            targetCategories.add(beatCate);
+        }
+        if (!requestCategories[1].equals("0")){
+            String styleCate = musicCates.getStyleCategory().get(requestCategories[1]);
+            targetCategories.add(styleCate);
+        }
+        if (!requestCategories[2].equals("0")){
+            String letterCate = requestCategories[2];
+            targetCategories.add(letterCate);
+        }
+
+        List<Music> musics = musicDao.getMusicsByCategories(convertList2Array(targetCategories));
+        List<CategoryMusic> result = new ArrayList<CategoryMusic>();
+        for (Music music : musics){
+            int music_id = music.getId();
+            String image_url = music.getImage().getImage_key();
+            String title = music.getTitle();
+            Long update_timestamp = music.getUpdate_timestamp();
+            result.add(new CategoryMusic(music_id, image_url, title, update_timestamp));
         }
         return result;
     }
