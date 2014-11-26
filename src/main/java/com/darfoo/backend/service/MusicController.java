@@ -5,12 +5,10 @@ package com.darfoo.backend.service;
  */
 
 import com.darfoo.backend.dao.MusicDao;
+import com.darfoo.backend.dao.SearchDao;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.MusicCategory;
-import com.darfoo.backend.service.responsemodel.CategoryMusic;
-import com.darfoo.backend.service.responsemodel.HotMusic;
-import com.darfoo.backend.service.responsemodel.MusicCates;
-import com.darfoo.backend.service.responsemodel.SingleMusic;
+import com.darfoo.backend.service.responsemodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +24,8 @@ import java.util.List;
 public class MusicController {
     @Autowired
     MusicDao musicDao;
+    @Autowired
+    SearchDao searchDao;
 
     MusicCates musicCates = new MusicCates();
 
@@ -37,6 +37,21 @@ public class MusicController {
         String music_url = targetMusic.getMusic_key();
         String title = targetMusic.getTitle();
         return new SingleMusic(music_id, music_url, title);
+    }
+
+    //http://localhost:8080/darfoobackend/rest/resources/music/search/s
+    @RequestMapping(value = "/search/{content}", method = RequestMethod.GET)
+    public @ResponseBody
+    List<SearchMusic> searchMusic(@PathVariable String content){
+        List<Music> musics = searchDao.getMusicBySearch(content);
+        List<SearchMusic> result = new ArrayList<SearchMusic>();
+        for (Music music : musics){
+            int id = music.getId();
+            String title = music.getTitle();
+            Long update_timestamp = music.getUpdate_timestamp();
+            result.add(new SearchMusic(id, title, update_timestamp));
+        }
+        return result;
     }
 
     @RequestMapping("/hottest")
