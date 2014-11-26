@@ -2,6 +2,7 @@ package com.darfoo.backend.service;
 
 import com.darfoo.backend.dao.DanceDao;
 import com.darfoo.backend.model.DanceGroup;
+import com.darfoo.backend.service.responsemodel.IndexDanceGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

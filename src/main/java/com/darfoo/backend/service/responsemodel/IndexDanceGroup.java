@@ -1,4 +1,4 @@
-package com.darfoo.backend.service;
+package com.darfoo.backend.service.responsemodel;
 
 /**
  * Created by zjh on 14-11-26.
