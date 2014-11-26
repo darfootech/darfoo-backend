@@ -6,6 +6,7 @@ import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.*;
+import com.darfoo.backend.utils.QiniuUtils;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,7 @@ public class VideoController {
     @Autowired
     SearchDao searchDao;
 
+    QiniuUtils qiniuUtils = new QiniuUtils();
     VideoCates videoCates = new VideoCates();
     TutorialCates tutorialCates = new TutorialCates();
 
@@ -38,9 +40,10 @@ public class VideoController {
     SingleVideo getSingleVideo(@PathVariable String id) {
         Video targetVideo = videoDao.getVideoByVideoId(Integer.parseInt(id));
         int video_id = targetVideo.getId();
-        String video_url = targetVideo.getVideo_key();
+        String video_url = targetVideo.getVideo_key() + ".mp4";
+        String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
         String video_title = targetVideo.getTitle();
-        return new SingleVideo(video_id, video_title, video_url);
+        return new SingleVideo(video_id, video_title, video_download_url);
     }
 
     @RequestMapping(value = "/tutorial/{id}", method = RequestMethod.GET)
@@ -49,9 +52,10 @@ public class VideoController {
     SingleVideo getSingleTutorialVideo(@PathVariable String id){
         Education tutorial = educationDao.getEducationVideoById(Integer.parseInt(id));
         int video_id = tutorial.getId();
-        String video_url = tutorial.getVideo_key();
+        String video_url = tutorial.getVideo_key() + ".mp4";
+        String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
         String video_title = tutorial.getTitle();
-        return new SingleVideo(video_id, video_title, video_url);
+        return new SingleVideo(video_id, video_title, video_download_url);
     }
 
     //http://localhost:8080/darfoobackend/rest/resources/video/search/s
@@ -93,9 +97,10 @@ public class VideoController {
         for (Video video : recommendVideos) {
             int video_id = video.getId();
             String image_url = video.getImage().getImage_key();
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String video_title = video.getTitle();
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new IndexVideo(video_id, video_title, image_url, update_timestamp));
+            result.add(new IndexVideo(video_id, video_title, image_download_url, update_timestamp));
         }
         return result;
     }
@@ -109,9 +114,10 @@ public class VideoController {
         for (Video video : latestVideos) {
             int video_id = video.getId();
             String image_url = video.getImage().getImage_key();
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String video_title = video.getTitle();
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new IndexVideo(video_id, video_title, image_url, update_timestamp));
+            result.add(new IndexVideo(video_id, video_title, image_download_url, update_timestamp));
         }
         return result;
     }
@@ -149,10 +155,11 @@ public class VideoController {
         for (Video video : targetVideos) {
             int video_id = video.getId();
             String image_url = video.getImage().getImage_key();
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String video_title = video.getTitle();
             String author_name = video.getAuthor().getName();
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new CategoryVideo(video_id, video_title, author_name, image_url, update_timestamp));
+            result.add(new CategoryVideo(video_id, video_title, author_name, image_download_url, update_timestamp));
         }
         return result;
     }
@@ -190,10 +197,11 @@ public class VideoController {
         for (Education video : targetVideos) {
             int video_id = video.getId();
             String image_url = video.getImage().getImage_key();
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String author_name = video.getAuthor().getName();
             String video_title = video.getTitle();
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new CategoryVideo(video_id, video_title, author_name, image_url, update_timestamp));
+            result.add(new CategoryVideo(video_id, video_title, author_name, image_download_url, update_timestamp));
         }
         return result;
     }
