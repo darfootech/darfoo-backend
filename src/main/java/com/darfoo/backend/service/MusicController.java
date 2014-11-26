@@ -9,6 +9,7 @@ import com.darfoo.backend.dao.SearchDao;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.MusicCategory;
 import com.darfoo.backend.service.responsemodel.*;
+import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,12 +69,6 @@ public class MusicController {
         return result;
     }
 
-    String[] convertList2Array(List<String> vidoes) {
-        String[] stockArr = new String[vidoes.size()];
-        stockArr = vidoes.toArray(stockArr);
-        return stockArr;
-    }
-
     //http://localhost:8080/darfoobackend/rest/resources/music/category/1-0-0
     @RequestMapping(value = "/category/{categories}", method = RequestMethod.GET)
     public @ResponseBody
@@ -94,7 +89,7 @@ public class MusicController {
             targetCategories.add(letterCate);
         }
 
-        List<Music> musics = musicDao.getMusicsByCategories(convertList2Array(targetCategories));
+        List<Music> musics = musicDao.getMusicsByCategories(ServiceUtils.convertList2Array(targetCategories));
         List<CategoryMusic> result = new ArrayList<CategoryMusic>();
         for (Music music : musics){
             int music_id = music.getId();

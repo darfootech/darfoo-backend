@@ -6,6 +6,7 @@ import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.*;
+import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -115,14 +116,6 @@ public class VideoController {
         return result;
     }
 
-    String[] convertList2Array(List<String> vidoes) {
-        String[] stockArr = new String[vidoes.size()];
-        stockArr = vidoes.toArray(stockArr);
-        /*for(String s : stockArr)
-            System.out.println(s);*/
-        return stockArr;
-    }
-
     //http://localhost:8080/darfoobackend/rest/resources/video/category/2-0-0-0
     //根据类别获取普通视频
     @RequestMapping(value = "/category/{categories}", method = RequestMethod.GET)
@@ -151,7 +144,7 @@ public class VideoController {
 
         //System.out.println(targetCategories.toString());
 
-        List<Video> targetVideos = videoDao.getVideosByCategories(convertList2Array(targetCategories));
+        List<Video> targetVideos = videoDao.getVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
         List<CategoryVideo> result = new ArrayList<CategoryVideo>();
         for (Video video : targetVideos) {
             int video_id = video.getId();
@@ -192,7 +185,7 @@ public class VideoController {
 
         //System.out.println(targetCategories.toString());
 
-        List<Education> targetVideos = educationDao.getEducationVideosByCategories(convertList2Array(targetCategories));
+        List<Education> targetVideos = educationDao.getEducationVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
         List<CategoryVideo> result = new ArrayList<CategoryVideo>();
         for (Education video : targetVideos) {
             int video_id = video.getId();
