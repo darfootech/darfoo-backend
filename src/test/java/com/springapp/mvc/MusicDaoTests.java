@@ -64,9 +64,9 @@ public class MusicDaoTests {
 	}
 	
 	@Test
-	public void getHotestMusics(){
+	public void getHottestMusics(){
 		long start = System.currentTimeMillis();
-		List<Music> musics = musicDao.getHotestMusics(3);
+		List<Music> musics = musicDao.getHottestMusics(5);
 		for(Music music : musics){
 			System.out.println(music.toString(true));
 			System.out.println("——————————————————————————————————————");

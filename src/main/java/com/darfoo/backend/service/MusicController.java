@@ -7,6 +7,7 @@ package com.darfoo.backend.service;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.MusicCategory;
+import com.darfoo.backend.service.responsemodel.HotMusic;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/resources/music")
@@ -31,23 +35,17 @@ public class MusicController {
         return new SingleMusic(music_id, music_url, title);
     }
 
-    @RequestMapping(value = "/playurl/{key}", method = RequestMethod.GET)
-    public @ResponseBody
-    String getPlayUrl(@PathVariable String key){
-        return "http://playurl";
-    }
-
     @RequestMapping("/hottest")
     public @ResponseBody
-    Music[] getHottestMusics(){
-        Music[] hottestMusics = { new Music(), new Music(), new Music() };
-        return hottestMusics;
-    }
-
-    @RequestMapping("/index")
-    public @ResponseBody
-    Music[] getIndexMusics(){
-        Music[] indexMusics = { new Music(), new Music(), new Music(), new Music(), new Music() };
-        return indexMusics;
+    List<HotMusic> getHottestMusics(){
+        List<Music> musics = musicDao.getHottestMusics(5);
+        List<HotMusic> result = new ArrayList<HotMusic>();
+        for (Music music : musics){
+            int id = music.getId();
+            String title = music.getTitle();
+            Long update_timestamp = music.getUpdate_timestamp();
+            result.add(new HotMusic(id, title, update_timestamp));
+        }
+        return result;
     }
 }
