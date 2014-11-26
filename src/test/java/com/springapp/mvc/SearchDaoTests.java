@@ -24,7 +24,7 @@ public class SearchDaoTests {
 	
 	@Test
 	public void searchVideo(){
-		String searchContent = "s";
+		String searchContent = "heart";
 		List<Video> l_video = searchDao.getVideoBySearch(searchContent);
 		for(Video v : l_video){
 			System.out.println(v.toString());

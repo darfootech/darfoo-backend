@@ -19,7 +19,7 @@ import javax.persistence.Table;
  * Created by zjh on 14-11-16.
  */
 @Entity
-@Table(name="videocategroy")
+@Table(name="videocategory")
 public class VideoCategory implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

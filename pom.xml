@@ -11,6 +11,7 @@
         <spring.version>3.2.0.RELEASE</spring.version>
         <jackson.version>1.9.10</jackson.version>
         <hibernate.version>4.2.5.Final</hibernate.version>
+        <mysql.version>5.1.21</mysql.version>
     </properties>
 
     <repositories>
@@ -119,7 +120,8 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.9</version>
+            <version>${mysql.version}</version>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- Hibernate framework -->

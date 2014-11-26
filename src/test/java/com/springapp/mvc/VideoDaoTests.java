@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.darfoo.backend.service.responsemodel.VideoCates;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,9 @@ import com.darfoo.backend.model.VideoCategory;
 public class VideoDaoTests {
 	@Autowired
 	VideoDao videoDao;
+    VideoCates videoCates = new VideoCates();
 
-	@Test
+    @Test
 	public void insertAllVideoCategories(){
 		videoDao.insertAllVideoCategories();
 	}
@@ -77,7 +79,7 @@ public class VideoDaoTests {
 	@Test
 	public void getLastestVideos(){
 		long start = System.currentTimeMillis();
-		List<Video> videos = videoDao.getLastestVideos(5);
+		List<Video> videos = videoDao.getLatestVideos(5);
 		for(Video video : videos){
 			System.out.println(video.toString(true));
 			System.out.println("——————————————————————————————————————");
@@ -100,5 +102,31 @@ public class VideoDaoTests {
 		System.out.println("time elapse:"+(System.currentTimeMillis()-start)/1000f);	
 	}
 	
-	
+	@Test
+    public void requestVideosByCategories(){
+        String categories = "0-1-4-3";
+        String[] requestCategories = categories.split("-");
+        List<String> targetCategories = new ArrayList<String>();
+        if (!requestCategories[0].equals("0")){
+            String speedCate = videoCates.getSpeedCategory().get(requestCategories[0]);
+            targetCategories.add(speedCate);
+        }
+        if (!requestCategories[1].equals("0")){
+            String difficultyCate = videoCates.getDifficultyCategory().get(requestCategories[1]);
+            targetCategories.add(difficultyCate);
+            System.out.println("!!!!speedcate!!!!" + difficultyCate);
+        }
+        if (!requestCategories[2].equals("0")){
+            String styleCate = videoCates.getStyleCategory().get(requestCategories[2]);
+            targetCategories.add(styleCate);
+        }
+        if (!requestCategories[3].equals("0")){
+            String letterCate = requestCategories[3];
+            targetCategories.add(letterCate);
+        }
+
+        System.out.println(targetCategories.toString());
+        System.out.println(requestCategories[0]);
+        System.out.println(requestCategories[0].equals("0"));
+    }
 }

@@ -108,7 +108,7 @@ public class MusicDao {
 	 * @param number 推荐歌曲数量(暂时定为3个)
 	 * @return List<Music> l_music 返回一个包含多个music对象的List
 	 **/
-	public List<Music> getHotestMusics(int number){
+	public List<Music> getHottestMusics(int number){
 		number = 3;
 		List<Music> l_music = new ArrayList<Music>();
 		try{
