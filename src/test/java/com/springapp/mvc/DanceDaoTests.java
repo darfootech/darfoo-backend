@@ -40,4 +40,9 @@ public class DanceDaoTests {
 		}
 		System.out.println((System.currentTimeMillis()-start)/1000f);
 	}
+	
+	@Test
+	public void deleteDanceGroupById(){
+		System.out.println(danceDao.deleteDanceGroupById(5)>0?"delete success":"delete fail");
+	}
 }

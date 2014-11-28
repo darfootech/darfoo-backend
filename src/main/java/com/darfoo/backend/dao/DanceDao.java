@@ -50,4 +50,18 @@ public class DanceDao {
 		}
 		return l_dance;
 	}
+	/**
+	 * 根据id删除dancegroup
+	 * **/
+	public int deleteDanceGroupById(Integer id){
+		int res = 0;
+		try{
+			Session session = sf.getCurrentSession();
+			String sql = "delete from dancegroup where id=:id";
+			res = session.createSQLQuery(sql).setInteger("id", id).executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return res;
+	}
 }

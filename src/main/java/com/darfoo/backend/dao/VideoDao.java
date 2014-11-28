@@ -221,4 +221,27 @@ public class VideoDao {
 		}
 		return l_video;
 	}
+	
+	/**
+	 * 根据id删除单个视频
+	 * videocategory表不受影响
+	 * **/
+	public int deleteVideoById(Integer id){
+		int result = 0;
+		try{
+			Session session = sf.getCurrentSession();
+			//先删除关联表中的关联
+			String sql1 = "delete from video_category where video_id=:video_id";
+			//关联成功删除后再删除video表中的记录
+			String sql2 = "delete from video where id=:id";
+			//返回受影响的行数(由于一般情况下一个video对应4个种类,所以为4行)
+			int res = session.createSQLQuery(sql1).setInteger("video_id", id).executeUpdate();  
+			if(res > 0){
+				result = session.createSQLQuery(sql2).setInteger("id", id).executeUpdate();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

@@ -90,4 +90,8 @@ public class MusicDaoTests {
 		System.out.println("time elapse:"+(System.currentTimeMillis()-start)/1000f);	
 	}
 	
+	@Test
+	public void deleteMusicById(){
+		System.out.println(musicDao.deleteVideoById(1)>0?"delete success":"delete fail");
+	}
 }

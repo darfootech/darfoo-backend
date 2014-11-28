@@ -81,4 +81,9 @@ public class EducationDaoTests {
 		}
 		System.out.println("time elapse:"+(System.currentTimeMillis()-start)/1000f);
 	}
+	
+	@Test
+	public void deleteEducationById(){
+		System.out.println(educationDao.deleteEducationById(5)>0?"delete success":"delete fail");
+	}
 }

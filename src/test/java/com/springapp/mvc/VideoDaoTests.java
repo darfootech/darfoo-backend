@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.darfoo.backend.service.responsemodel.VideoCates;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,4 +130,9 @@ public class VideoDaoTests {
         System.out.println(requestCategories[0]);
         System.out.println(requestCategories[0].equals("0"));
     }
+	
+	@Test
+	public void deleteVideoById(){
+		System.out.println(videoDao.deleteVideoById(6)>0?"delete success":"delete fail");
+	}
 }
