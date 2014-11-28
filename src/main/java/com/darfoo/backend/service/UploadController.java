@@ -31,7 +31,8 @@ public class UploadController {
         String videoSpeed = request.getParameter("videospeed");
         String videoDifficult = request.getParameter("videodifficult");
         String videoStyle = request.getParameter("videostyle");
-        System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle);
+        Long update_timestamp = System.currentTimeMillis() / 1000;
+        System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + update_timestamp);
         return "cleantha";
     }
 
@@ -49,7 +50,8 @@ public class UploadController {
         String imagekey = request.getParameter("imagekey");
         String musicBeat = request.getParameter("musicbeat");
         String musicStyle = request.getParameter("musicstyle");
-        System.out.println("requests: " + musicTitle + " " + authorName + " " + imagekey + " " + musicBeat + " " + musicStyle);
+        Long update_timestamp = System.currentTimeMillis() / 1000;
+        System.out.println("requests: " + musicTitle + " " + authorName + " " + imagekey + " " + musicBeat + " " + musicStyle + " " + update_timestamp);
         return "cleantha";
     }
 
@@ -68,7 +70,8 @@ public class UploadController {
         String videoSpeed = request.getParameter("videospeed");
         String videoDifficult = request.getParameter("videodifficult");
         String videoStyle = request.getParameter("videostyle");
-        System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle);
+        Long update_timestamp = System.currentTimeMillis() / 1000;
+        System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + update_timestamp);
         return "cleantha";
     }
 
@@ -101,7 +104,8 @@ public class UploadController {
         String name = request.getParameter("name");
         String description = request.getParameter("description");
         String imagekey = request.getParameter("imagekey");
-        System.out.println("requests: " + name + " " + description + " " + imagekey);
+        Long update_timestamp = System.currentTimeMillis() / 1000;
+        System.out.println("requests: " + name + " " + description + " " + imagekey + " " + update_timestamp);
         return "cleantha";
     }
 }

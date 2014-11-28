@@ -13,7 +13,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Flat UI Free</title>
+    <title>darfoo-backend</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Loading Bootstrap -->
@@ -22,7 +22,7 @@
     <!-- Loading Flat UI -->
     <link href="/darfoobackend/resources/css/flat-ui.css" rel="stylesheet">
 
-    <link rel="shortcut icon" href="/darfoobackend/resources/img/favicon.ico">
+    <link rel="shortcut icon" href="/darfoobackend/resources/img/favicon.ico?t=1402117937">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
     <!--[if lt IE 9]>
