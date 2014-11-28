@@ -20,26 +20,21 @@
     }
 </script>
 
-<!--<form id="createvideoform" name="createvideoform">
-    <input type="text" name="message" id="message"/>
-    <input type="button" value="上传舞蹈视频" onclick="start()"/>
-</form>-->
-
 <div class="container">
     <h1>上传舞蹈视频</h1>
     <div class="row">
         <div class="col-md-12">
             <form role="form" id="createvideoform" name="createvideoform">
                 <div class="form-group">
-                    <label for="videotitle">舞蹈视频标题(也就是上传视频文件的文件名,不需要后缀)</label>
-                    <input type="text" class="form-control" name="videotitle" id="videotitle" placeholder="请输入舞蹈视频标题">
+                    <label for="title">舞蹈视频标题(也就是上传视频文件的文件名,不需要后缀)</label>
+                    <input type="text" class="form-control" name="title" id="title" placeholder="请输入舞蹈视频标题">
                 </div>
                 <div class="form-group">
                     <label for="authorname">舞蹈视频作者名字</label>
                     <input type="text" class="form-control" name="authorname" id="authorname" placeholder="请输入舞蹈视频作者名字">
                 </div>
                 <div class="form-group">
-                    <label for="imagekey">舞蹈视频作者名字</label>
+                    <label for="imagekey">舞蹈视频封面图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
                     <input type="text" class="form-control" name="imagekey" id="imagekey" placeholder="请输入舞蹈视频封面图片名称">
                 </div>
 
@@ -53,7 +48,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="videodifficult">舞蹈速度</label>
+                    <label for="videodifficult">舞蹈难度</label>
                     <select data-toggle="select" name="videodifficult" id="videodifficult" class="form-control select select-success mrs mbm">
                         <option value="1">简单</option>
                         <option value="2">适中</option>
@@ -80,8 +75,8 @@
 
                 <button type="button" class="btn btn-default" onclick="start()">上传舞蹈视频</button>
             </form>
-        </div><!-- /.col-md-12 -->
-    </div><!-- /.row -->
+        </div>
+    </div>
 </div>
 
 <%@include file="footer.jsp"%>
