@@ -38,7 +38,7 @@ public class UploadController {
     @RequestMapping(value = "/resources/music/new", method = RequestMethod.GET)
     public String uploadMusic(ModelMap modelMap, HttpSession session){
         session.setAttribute("resource", "music");
-        modelMap.addAttribute("resource", "video");
+        modelMap.addAttribute("resource", "music");
         return "uploadmusic";
     }
 
@@ -72,10 +72,36 @@ public class UploadController {
         return "cleantha";
     }
 
+    //作者信息，不管是视频作者还是伴奏作者
     @RequestMapping(value = "/resources/author/new", method = RequestMethod.GET)
     public String uploadAuthor(ModelMap modelMap, HttpSession session){
         session.setAttribute("resource", "author");
         modelMap.addAttribute("resource", "author");
         return "uploadauthor";
+    }
+
+    @RequestMapping(value = "/resources/author/create", method = RequestMethod.POST)
+    public @ResponseBody String createAuthor(HttpServletRequest request){
+        String name = request.getParameter("name");
+        String description = request.getParameter("description");
+        System.out.println("requests: " + name + " " + description);
+        return "cleantha";
+    }
+
+    //新建舞队
+    @RequestMapping(value = "/resources/team/new", method = RequestMethod.GET)
+    public String uploadTeam(ModelMap modelMap, HttpSession session){
+        session.setAttribute("resource", "team");
+        modelMap.addAttribute("resource", "team");
+        return "uploadteam";
+    }
+
+    @RequestMapping(value = "/resources/team/create", method = RequestMethod.POST)
+    public @ResponseBody String createTeam(HttpServletRequest request){
+        String name = request.getParameter("name");
+        String description = request.getParameter("description");
+        String imagekey = request.getParameter("imagekey");
+        System.out.println("requests: " + name + " " + description + " " + imagekey);
+        return "cleantha";
     }
 }

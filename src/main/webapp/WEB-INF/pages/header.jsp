@@ -52,6 +52,8 @@
                 <li class="<%if(resource.equals("video")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/video/new/">舞蹈视频</a></li>
                 <li class="<%if(resource.equals("tutorial")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/tutorial/new/">舞蹈教程</a></li>
                 <li class="<%if(resource.equals("music")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/music/new/">舞蹈伴奏</a></li>
+                <li class="<%if(resource.equals("author")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/author/new/">创建作者</a></li>
+                <li class="<%if(resource.equals("team")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/team/new/">创建舞队</a></li>
             </ul>
         </div>
     </div>
