@@ -20,5 +20,6 @@ public class UploadController {
     public String uploadVideo(ModelMap modelMap){
         modelMap.addAttribute("message", "cleantha");
         return "hello";
+        //return "header";
     }
 }
