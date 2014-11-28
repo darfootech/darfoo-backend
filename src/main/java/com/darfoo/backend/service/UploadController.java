@@ -25,9 +25,14 @@ public class UploadController {
 
     @RequestMapping(value = "/resources/video/create", method = RequestMethod.POST)
     public @ResponseBody String createVideo(HttpServletRequest request){
-        String message = request.getParameter("message");
-        System.out.println("get message: " + message);
-        return "Hello " + message;
+        String videoTitle = request.getParameter("videotitle");
+        String authorName = request.getParameter("authorname");
+        String imagekey = request.getParameter("imagekey");
+        String videoSpeed = request.getParameter("videospeed");
+        String videoDifficult = request.getParameter("videodifficult");
+        String videoStyle = request.getParameter("videostyle");
+        System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle);
+        return "cleantha";
     }
 
     @RequestMapping(value = "/resources/music/new", method = RequestMethod.GET)
