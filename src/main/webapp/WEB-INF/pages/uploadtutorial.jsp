@@ -9,19 +9,22 @@
             url : createTutorialUrl,
             data : $("#createtutorialform").serialize(),
             success : function(data){
-                alert(data);
-                alert("上传视频成功");
-                location.reload();
+                if(data ==  "cleantha"){
+                    alert("提交教程信息成功");
+                }else{
+                    alert("提交教程信息失败")
+                }
+                window.location.href = "/darfoobackend/rest/resources/tutorialresource/new"
             },
             error : function(){
-                alert("上传视频失败");
+                alert("提交教程信息失败");
             }
         })
     }
 </script>
 
 <div class="container">
-    <h1>上传教学视频</h1>
+    <h1>填写教学视频信息</h1>
     <div class="row">
         <div class="col-md-12">
             <form role="form" id="createtutorialform" name="createtutorialform">
@@ -65,7 +68,7 @@
                     </select>
                 </div>
 
-                <button type="button" class="btn btn-default" onclick="start()">上传教学视频</button>
+                <button type="button" class="btn btn-default" onclick="start()">提交教学视频信息</button>
             </form>
         </div>
     </div>

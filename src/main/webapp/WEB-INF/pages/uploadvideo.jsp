@@ -10,14 +10,14 @@
             data : $("#createvideoform").serialize(),
             success : function(data){
                 if(data == "cleantha"){
-                    alert("写入视频信息成功");
+                    alert("提交视频信息成功");
                 }else{
-                    alert("写入视频信息失败");
+                    alert("提交视频信息失败");
                 }
                 window.location.href = "/darfoobackend/rest/resources/videoresource/new"
             },
             error : function(){
-                alert("写入视频信息失败");
+                alert("提交视频信息失败");
             }
         })
     }

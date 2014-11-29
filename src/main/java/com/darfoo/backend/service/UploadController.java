@@ -126,6 +126,29 @@ public class UploadController {
         return "cleantha";
     }
 
+    @RequestMapping(value = "/resources/tutorialresource/new", method = RequestMethod.GET)
+    public String uploadTutorialResource(){
+        return "uploadtutorialresource";
+    }
+
+    @RequestMapping("/resources/tutorialresource/create")
+    public String createTutorialResource(@RequestParam("videoresource") CommonsMultipartFile videoresource, @RequestParam("imageresource") CommonsMultipartFile imageresource){
+        //upload
+        String videoResourceName = videoresource.getOriginalFilename();
+        String imageResourceName = imageresource.getOriginalFilename();
+
+        System.out.println(videoResourceName + " " + imageResourceName);
+
+        try {
+            ServiceUtils.uploadResource(videoresource);
+            ServiceUtils.uploadResource(imageresource);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "success";
+    }
+
     //新建舞队
     @RequestMapping(value = "/resources/team/new", method = RequestMethod.GET)
     public String uploadTeam(ModelMap modelMap, HttpSession session){
