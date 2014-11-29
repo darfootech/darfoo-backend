@@ -5,7 +5,7 @@
     <h1>上传舞蹈视频资源</h1>
     <div class="row">
         <div class="col-md-12">
-            <form role="form" action="/darfoobackend/rest/resources/videoresource/create" method="post" id="createvideoform" name="createvideoform" enctype="multipart/form-data">
+            <form role="form" action="/darfoobackend/rest/resources/videoresource/create" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="videoresource">选择要上传的视频资源</label>
                     <input type="file" id="videoresource" name="videoresource">

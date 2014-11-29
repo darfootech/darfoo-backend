@@ -5,7 +5,7 @@
     <h1>上传舞蹈伴奏资源</h1>
     <div class="row">
         <div class="col-md-12">
-            <form role="form" action="/darfoobackend/rest/resources/musicresource/create" method="post" id="createvideoform" name="createvideoform" enctype="multipart/form-data">
+            <form role="form" action="/darfoobackend/rest/resources/musicresource/create" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="musicresource">选择要上传的音频资源</label>
                     <input type="file" id="musicresource" name="musicresource">
