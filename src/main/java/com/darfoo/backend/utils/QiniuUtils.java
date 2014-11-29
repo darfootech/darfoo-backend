@@ -39,6 +39,7 @@ public class QiniuUtils {
     }
 
     public String uploadResouce(String fileLocation, String fileName) {
+        System.out.println("start to upload resource to qiniu server");
         Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
         // 请确保该bucket已经存在
         String bucketName = "zjdxlab410yy";
