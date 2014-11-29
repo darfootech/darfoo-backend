@@ -9,3 +9,4 @@ src/main/webapp/META-INF
 *.iml
 src/main/resources/datasource.properties
 springIoc.log
+uploadfiles/
