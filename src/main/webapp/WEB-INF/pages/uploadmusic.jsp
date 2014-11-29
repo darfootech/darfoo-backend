@@ -9,19 +9,22 @@
             url : createMusicUrl,
             data : $("#createmusicform").serialize(),
             success : function(data){
-                alert(data);
-                alert("上传伴奏成功");
-                location.reload();
+                if(data == "cleantha"){
+                    alert("提交伴奏信息成功");
+                }else{
+                    alert("提交伴奏信息失败")
+                }
+                window.location.href = "/darfoobackend/rest/resources/musicresource/new"
             },
             error : function(){
-                alert("上传伴奏失败");
+                alert("提交伴奏信息失败");
             }
         })
     }
 </script>
 
 <div class="container">
-    <h1>上传舞蹈伴奏</h1>
+    <h1>填写舞蹈伴奏信息</h1>
     <div class="row">
         <div class="col-md-12">
             <form role="form" id="createmusicform" name="createmusicform">
@@ -62,7 +65,7 @@
                     </select>
                 </div>
 
-                <button type="button" class="btn btn-default" onclick="start()">上传舞蹈伴奏</button>
+                <button type="button" class="btn btn-default" onclick="start()">提交舞蹈伴奏信息</button>
             </form>
         </div>
     </div>
