@@ -11,10 +11,10 @@
             success : function(data){
                 if(data == "cleantha"){
                     alert("提交伴奏信息成功");
+                    window.location.href = "/darfoobackend/rest/resources/musicresource/new"
                 }else{
                     alert("提交伴奏信息失败")
                 }
-                window.location.href = "/darfoobackend/rest/resources/musicresource/new"
             },
             error : function(){
                 alert("提交伴奏信息失败");

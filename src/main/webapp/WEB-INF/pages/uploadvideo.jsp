@@ -11,10 +11,10 @@
             success : function(data){
                 if(data == "cleantha"){
                     alert("提交视频信息成功");
+                    window.location.href = "/darfoobackend/rest/resources/videoresource/new"
                 }else{
                     alert("提交视频信息失败");
                 }
-                window.location.href = "/darfoobackend/rest/resources/videoresource/new"
             },
             error : function(){
                 alert("提交视频信息失败");

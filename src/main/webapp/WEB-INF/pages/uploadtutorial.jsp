@@ -11,10 +11,10 @@
             success : function(data){
                 if(data ==  "cleantha"){
                     alert("提交教程信息成功");
+                    window.location.href = "/darfoobackend/rest/resources/tutorialresource/new"
                 }else{
                     alert("提交教程信息失败")
                 }
-                window.location.href = "/darfoobackend/rest/resources/tutorialresource/new"
             },
             error : function(){
                 alert("提交教程信息失败");

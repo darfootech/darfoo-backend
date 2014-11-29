@@ -10,10 +10,10 @@
             success : function(data){
                 if(data == "cleantha"){
                     alert("提交舞队信息成功");
+                    window.location.href = "/darfoobackend/rest/resources/teamresource/new"
                 }else{
                     alert("提交舞队信息失败");
                 }
-                window.location.href = "/darfoobackend/rest/resources/teamresource/new"
             },
             error : function(){
                 alert("提交舞队信息失败");
