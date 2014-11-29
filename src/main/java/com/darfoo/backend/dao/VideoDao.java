@@ -23,6 +23,7 @@ import com.darfoo.backend.model.Video;
 import com.darfoo.backend.model.VideoCategory;
 
 @Component
+@SuppressWarnings("unchecked")
 public class VideoDao {
 	@Autowired
 	private SessionFactory sf;
@@ -104,12 +105,12 @@ public class VideoDao {
 	}
 	/**
 	 * 获取首页推荐视频信息
-	 * @param number 推荐视频数量(暂时定为3个,选择video_id位于中间的3个视频作为推荐视频)
+	 * @param number 推荐视频数量
 	 * @return List<Video> l_video 返回一个包含多个video对象的List
 	 * @return video中的categories可以获取
 	 **/
+	
 	public List<Video> getRecommendVideos(int number){
-		number = 3;
 		List<Video> l_video = new ArrayList<Video>();
 		try{
 			Session session = sf.getCurrentSession();
@@ -118,18 +119,20 @@ public class VideoDao {
 			c.setReadOnly(true);
 			List<Integer> l_vid = c.list();
 			int count = l_vid.size();
-			if(count >= number){	//要求库里至少有3部视频
-				Set<Integer> s_vid = new HashSet<Integer>();
-				s_vid.add(l_vid.get(count/2));
-				s_vid.add(l_vid.get(count/2-1));
-				s_vid.add(l_vid.get(count/2+1));
-				c = session.createCriteria(Video.class).add(Restrictions.in("id", s_vid));
+			if(count <= number){
+				//请求的视频个数多于数据库数量，则返回全部视频
+				c = session.createCriteria(Video.class);
 				c.setReadOnly(true);
-				//c.setFetchMode("categories", FetchMode.JOIN);//同时加载目录(会导致查询结果不值number个，而是number*4个)
-				l_video = c.list(); 
-				for(Video v : l_video){
-					v.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
-				}
+
+			}else{
+				//请求的视频个数少于数据库数量，则返回最新的number个视频
+				c = session.createCriteria(Video.class).addOrder(Order.desc("update_timestamp"));
+				c.setReadOnly(true);
+				c.setMaxResults(number);
+			}
+			l_video = c.list();
+			for(Video v : l_video){
+				v.trigLazyLoad();   
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -137,12 +140,12 @@ public class VideoDao {
 		return l_video;
 	}
 	/**
-	 * 获取首页最新视频 信息(暂时定5个)
+	 * 获取首页最新视频 信息
+	 * @param number 最新视频的数量
 	 * @return List<Video> l_video 返回一个包含多个video对象的List
 	 * @return video中的categories可以获取
 	 * **/
 	public List<Video>  getLatestVideos(int number){
-		number = 5;
 		List<Video> l_video = new ArrayList<Video>();
 		try{
 			Session session = sf.getCurrentSession();
@@ -245,101 +248,7 @@ public class VideoDao {
 		}
 		return result;
 	}
-	/**
-	 * 更新表中的video
-	 * @param video 新的video对象(要求该对象中所有的成员变量都有具体值)
-	 * @param id    要更新的video的id
-	 * **/
-	public int updateVideo(Video video,Integer id){
-		int res = 0;
-		try{
-			Session session = sf.getCurrentSession();
-			Video oldVideo = (Video)session.createCriteria(Video.class).add(Restrictions.eq("id", id)).setReadOnly(true).uniqueResult();
-			//默认进行全部替换
-			if(oldVideo != null){
-				System.out.println("-------oldvideo-------");
-				System.out.println(oldVideo.toString(true));
-				oldVideo.setTitle(video.getTitle());
-				oldVideo.setVideo_key(video.getVideo_key());
-				oldVideo.setUpdate_timestamp(video.getUpdate_timestamp());
-				//先查询image表中是否包含此video的图片信息
-				Criteria c = session.createCriteria(Image.class).add(Restrictions.eq("image_key", video.getImage().getImage_key()));//image的image_key字段需为unique
-				List<Image> l_img = c.list();
-				if(l_img.size() > 0){
-					//image表包含该video的图片信息,用持久化的实体代替原来的值
-					oldVideo.setImage(l_img.get(0)); 
-				}
-				//查询author表中是否包含此video的作者信息
-				c = session.createCriteria(Author.class).add(Restrictions.eq("name", video.getAuthor().getName())); //author的name字段需为unique
-				List<Author> l_author = c.list();
-				if(l_author.size() > 0){
-					//author表包含该video的作者信息,用持久化的实体代替原来的值
-					oldVideo.setAuthor(l_author.get(0));
-				}
-				System.out.println(oldVideo.getImage().getImage_key());
-				System.out.println(oldVideo.getAuthor().getName());
-				System.out.println(oldVideo.getCategories().size());
-				System.out.println("-------newvideo-------");
-				System.out.println(oldVideo.toString(true));
-				session.update(oldVideo);
-				res = CRUDEvent.UPDATE_SUCCESS;
-			}else{
-				res = CRUDEvent.UPDATE_FAIL;
-			}
-		}catch(Exception e){
-			res = CRUDEvent.CRUD_EXCETION;
-			e.printStackTrace();
-		}
-		return res;
-	}
-	/**
-	 * 更新表中的video
-	 * @param video 新的video对象(要求该对象中所有的成员变量都有具体值)
-	 * @param id    要更新的video的id
-	 * **/
-	public int updateVideo_bak(Video video,Integer id){
-		int res = 0;
-		try{
-			Session session = sf.getCurrentSession();
-			Video oldVideo = (Video)session.createCriteria(Video.class).add(Restrictions.eq("id", id)).setReadOnly(true).uniqueResult();
-			//默认进行全部替换
-			if(oldVideo != null){
-				session.delete(oldVideo);
-				oldVideo.setTitle(video.getTitle());
-				oldVideo.setVideo_key(video.getVideo_key());
-				oldVideo.setUpdate_timestamp(video.getUpdate_timestamp());
-				//先查询image表中是否包含此video的图片信息
-				Criteria c = session.createCriteria(Image.class).add(Restrictions.eq("image_key", video.getImage().getImage_key()));//image的image_key字段需为unique
-				List<Image> l_img = c.list();
-				if(l_img.size() > 0){
-					//image表包含该video的图片信息,用持久化的实体代替原来的值
-					oldVideo.setImage(l_img.get(0)); 
-				}
-				//查询author表中是否包含此video的作者信息
-				c = session.createCriteria(Author.class).add(Restrictions.eq("name", video.getAuthor().getName())); //author的name字段需为unique
-				List<Author> l_author = c.list();
-				if(l_author.size() > 0){
-					//author表包含该video的作者信息,用持久化的实体代替原来的值
-					oldVideo.setAuthor(l_author.get(0));
-				}
-				System.out.println(oldVideo.getImage().getImage_key());
-				System.out.println(oldVideo.getAuthor().getName());
-				System.out.println(oldVideo.getCategories().size());
-				System.out.println("-------newvideo-------");
-				System.out.println(oldVideo.toString(true));
-				oldVideo.setId(id);
-				session.save(oldVideo);
-				res = CRUDEvent.UPDATE_SUCCESS;
-			}else{
-				res = CRUDEvent.UPDATE_FAIL;
-			}
-		}catch(Exception e){
-			res = CRUDEvent.CRUD_EXCETION;
-			e.printStackTrace();
-		}
-		return res;
-	}
-	
+
 	/**
 	 * 级联删除 测试
 	 * **/

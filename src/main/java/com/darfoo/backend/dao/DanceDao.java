@@ -14,6 +14,7 @@ import com.darfoo.backend.model.DanceGroup;
 import com.darfoo.backend.model.DanceGroupImage;
 
 @Component
+@SuppressWarnings("unchecked")
 public class DanceDao {
 	@Autowired
 	private SessionFactory sf;
@@ -36,14 +37,16 @@ public class DanceDao {
 	}
 	/**
 	 * 获取舞队信息
-	 * 默认返回全部
+	 * @param count 需要返回的舞队数量
+	 * @return 返回舞队List
 	 * **/
-	public List<DanceGroup> getDanceGroups(){
+	public List<DanceGroup> getDanceGroups(int count){
 		List<DanceGroup> l_dance = new ArrayList<DanceGroup>();;
 		try{
 			Session session = sf.getCurrentSession();
 			Criteria c = session.createCriteria(DanceGroup.class);
 			c.setReadOnly(true);
+			c.setMaxResults(count);
 			l_dance = c.list();
 		}catch(Exception e){			
 			e.printStackTrace();

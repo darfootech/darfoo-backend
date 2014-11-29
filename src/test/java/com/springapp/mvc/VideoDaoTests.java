@@ -138,37 +138,6 @@ public class VideoDaoTests {
 	}
 	
 	@Test
-	public void updateVideo_bak(){
-		Integer id = 1;  //需要更新的video 对应的id
-		Video video = new Video(); //用于替换的新的video对象
-		Author a1 = new Author();
-		a1.setName("仓木麻衣");
-		a1.setDescription("日本女歌手");
-		video.setAuthor(a1);
-		Image img = new Image();
-		img.setImage_key("仓木麻衣.jpg");
-		video.setImage(img);
-		VideoCategory c1 = new VideoCategory();	
-		VideoCategory c2 = new VideoCategory();	
-		VideoCategory c3 = new VideoCategory();	
-		VideoCategory c4 = new VideoCategory();	
-		c1.setTitle("较快");
-		c2.setTitle("普通");
-		c3.setTitle("情歌风");
-		c4.setTitle("D");
-		Set<VideoCategory> s_vCategory = video.getCategories();
-		s_vCategory.add(c1);
-		s_vCategory.add(c2);
-		s_vCategory.add(c3);
-		s_vCategory.add(c4);
-		video.setTitle("Dearest");
-		video.setVideo_key("Dearest"); 
-		video.setUpdate_timestamp(System.currentTimeMillis());
-		int res = videoDao.updateVideo_bak(video, id);
-		System.out.println(CRUDEvent.getResponse(res));
-	}
-	
-	@Test
 	public void deleteVideoCascade(){
 		videoDao.deleteVideoCascade(7);
 	}
