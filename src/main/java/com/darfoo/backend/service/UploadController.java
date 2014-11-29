@@ -219,5 +219,32 @@ public class UploadController {
         System.out.println("requests: " + name + " " + description + " " + imagekey + " " + update_timestamp);
         return "cleantha";
     }
+
+    @RequestMapping(value = "/resources/teamresource/new", method = RequestMethod.GET)
+    public String uploadTeamResource(){
+        return "uploadteamresource";
+    }
+
+    @RequestMapping("/resources/teamresource/create")
+    public String createTeamResource(@RequestParam("imageresource") CommonsMultipartFile imageresource){
+        //upload
+        String imageResourceName = imageresource.getOriginalFilename();
+
+        System.out.println(imageResourceName);
+
+        String imageStatusCode = "";
+
+        try {
+            imageStatusCode = ServiceUtils.uploadResource(imageresource);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (imageStatusCode.equals("200")){
+            return "success";
+        }else{
+            return "fail";
+        }
+    }
     /*end of team part*/
 }
