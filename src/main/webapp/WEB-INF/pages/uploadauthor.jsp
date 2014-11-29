@@ -8,9 +8,12 @@
             url : "/darfoobackend/rest/resources/author/create",
             data : $("#createauthorform").serialize(),
             success : function(data){
-                alert(data);
-                alert("创建作者成功");
-                location.reload();
+                if(data == "cleantha"){
+                    alert("创建作者成功");
+                    location.reload();
+                }else{
+                    alert("创建作者失败")
+                }
             },
             error : function(){
                 alert("创建作者失败");

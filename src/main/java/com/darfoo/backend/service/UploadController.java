@@ -1,13 +1,24 @@
 package com.darfoo.backend.service;
 
+import com.darfoo.backend.utils.FileUtils;
+import com.darfoo.backend.utils.QiniuUtils;
+import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.*;
+import java.util.Date;
+import java.util.Iterator;
 
 /**
  * Created by zjh on 14-11-27.
@@ -16,6 +27,8 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class UploadController {
+
+    /*video part*/
     @RequestMapping(value = "/resources/video/new", method = RequestMethod.GET)
     public String uploadVideo(ModelMap modelMap, HttpSession session){
         session.setAttribute("resource", "video");
@@ -36,6 +49,38 @@ public class UploadController {
         return "cleantha";
     }
 
+    @RequestMapping(value = "/resources/videoresource/new", method = RequestMethod.GET)
+    public String uploadVideoResource(){
+        return "uploadvideoresource";
+    }
+
+    @RequestMapping("/resources/videoresource/create")
+    public String createVideoResource(@RequestParam("videoresource") CommonsMultipartFile videoresource, @RequestParam("imageresource") CommonsMultipartFile imageresource){
+        //upload
+        String videoResourceName = videoresource.getOriginalFilename();
+        String imageResourceName = imageresource.getOriginalFilename();
+
+        System.out.println(videoResourceName + " " + imageResourceName);
+
+        String videoStatusCode = "";
+        String imageStatusCode = "";
+
+        try {
+            videoStatusCode = ServiceUtils.uploadResource(videoresource);
+            imageStatusCode = ServiceUtils.uploadResource(imageresource);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (videoStatusCode.equals("200") && imageStatusCode.equals("200")){
+            return "success";
+        }else{
+            return "fail";
+        }
+    }
+    /*end of video part*/
+
+    /*music part*/
     @RequestMapping(value = "/resources/music/new", method = RequestMethod.GET)
     public String uploadMusic(ModelMap modelMap, HttpSession session){
         session.setAttribute("resource", "music");
@@ -55,6 +100,38 @@ public class UploadController {
         return "cleantha";
     }
 
+    @RequestMapping(value = "/resources/musicresource/new", method = RequestMethod.GET)
+    public String uploadMusicResource(){
+        return "uploadmusicresource";
+    }
+
+    @RequestMapping("/resources/musicresource/create")
+    public String createMusicResource(@RequestParam("musicresource") CommonsMultipartFile musicresource, @RequestParam("imageresource") CommonsMultipartFile imageresource){
+        //upload
+        String videoResourceName = musicresource.getOriginalFilename();
+        String imageResourceName = imageresource.getOriginalFilename();
+
+        System.out.println(videoResourceName + " " + imageResourceName);
+
+        String musicStatusCode = "";
+        String imageStatusCode = "";
+
+        try {
+            musicStatusCode = ServiceUtils.uploadResource(musicresource);
+            imageStatusCode = ServiceUtils.uploadResource(imageresource);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (musicStatusCode.equals("200") && imageStatusCode.equals("200")){
+            return "success";
+        }else{
+            return "fail";
+        }
+    }
+    /*end of music part*/
+
+    /*tutorial part*/
     @RequestMapping(value = "/resources/tutorial/new", method = RequestMethod.GET)
     public String uploadTutorial(ModelMap modelMap, HttpSession session){
         session.setAttribute("resource", "tutorial");
@@ -75,6 +152,38 @@ public class UploadController {
         return "cleantha";
     }
 
+    @RequestMapping(value = "/resources/tutorialresource/new", method = RequestMethod.GET)
+    public String uploadTutorialResource(){
+        return "uploadtutorialresource";
+    }
+
+    @RequestMapping("/resources/tutorialresource/create")
+    public String createTutorialResource(@RequestParam("videoresource") CommonsMultipartFile videoresource, @RequestParam("imageresource") CommonsMultipartFile imageresource){
+        //upload
+        String videoResourceName = videoresource.getOriginalFilename();
+        String imageResourceName = imageresource.getOriginalFilename();
+
+        System.out.println(videoResourceName + " " + imageResourceName);
+
+        String videoStatusCode = "";
+        String imageStatusCode = "";
+
+        try {
+            videoStatusCode = ServiceUtils.uploadResource(videoresource);
+            imageStatusCode = ServiceUtils.uploadResource(imageresource);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (videoStatusCode.equals("200") && imageStatusCode.equals("200")){
+            return "success";
+        }else{
+            return "fail";
+        }
+    }
+    /*end of tutorial part*/
+
+    /*author part*/
     //作者信息，不管是视频作者还是伴奏作者
     @RequestMapping(value = "/resources/author/new", method = RequestMethod.GET)
     public String uploadAuthor(ModelMap modelMap, HttpSession session){
@@ -90,7 +199,9 @@ public class UploadController {
         System.out.println("requests: " + name + " " + description);
         return "cleantha";
     }
+    /*end of author part*/
 
+    /*team part*/
     //新建舞队
     @RequestMapping(value = "/resources/team/new", method = RequestMethod.GET)
     public String uploadTeam(ModelMap modelMap, HttpSession session){
@@ -108,4 +219,32 @@ public class UploadController {
         System.out.println("requests: " + name + " " + description + " " + imagekey + " " + update_timestamp);
         return "cleantha";
     }
+
+    @RequestMapping(value = "/resources/teamresource/new", method = RequestMethod.GET)
+    public String uploadTeamResource(){
+        return "uploadteamresource";
+    }
+
+    @RequestMapping("/resources/teamresource/create")
+    public String createTeamResource(@RequestParam("imageresource") CommonsMultipartFile imageresource){
+        //upload
+        String imageResourceName = imageresource.getOriginalFilename();
+
+        System.out.println(imageResourceName);
+
+        String imageStatusCode = "";
+
+        try {
+            imageStatusCode = ServiceUtils.uploadResource(imageresource);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (imageStatusCode.equals("200")){
+            return "success";
+        }else{
+            return "fail";
+        }
+    }
+    /*end of team part*/
 }

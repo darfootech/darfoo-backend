@@ -8,19 +8,22 @@
             url : "/darfoobackend/rest/resources/team/create",
             data : $("#createteamform").serialize(),
             success : function(data){
-                alert(data);
-                alert("创建舞队成功");
-                location.reload();
+                if(data == "cleantha"){
+                    alert("提交舞队信息成功");
+                    window.location.href = "/darfoobackend/rest/resources/teamresource/new"
+                }else{
+                    alert("提交舞队信息失败");
+                }
             },
             error : function(){
-                alert("创建舞队失败");
+                alert("提交舞队信息失败");
             }
         })
     }
 </script>
 
 <div class="container">
-    <h1>创建舞队(视频,伴奏)</h1>
+    <h1>提交舞队信息</h1>
     <div class="row">
         <div class="col-md-12">
             <form role="form" id="createteamform" name="createteamform">
@@ -36,7 +39,7 @@
                     <label for="imagekey">舞队图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
                     <input type="text" class="form-control" name="imagekey" id="imagekey" placeholder="请输入舞队图片名称">
                 </div>
-                <button type="button" class="btn btn-default" onclick="start()">创建舞队</button>
+                <button type="button" class="btn btn-default" onclick="start()">提交舞队信息</button>
             </form>
         </div>
     </div>
