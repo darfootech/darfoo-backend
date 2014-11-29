@@ -81,6 +81,7 @@ public class VideoDao {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * 获取单个video的信息
 	 * 根据video的id来获得video对象
@@ -243,5 +244,112 @@ public class VideoDao {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	/**
+	 * 更新表中的video
+	 * @param video 新的video对象(要求该对象中所有的成员变量都有具体值)
+	 * @param id    要更新的video的id
+	 * **/
+	public int updateVideo(Video video,Integer id){
+		int res = 0;
+		try{
+			Session session = sf.getCurrentSession();
+			Video oldVideo = (Video)session.createCriteria(Video.class).add(Restrictions.eq("id", id)).setReadOnly(true).uniqueResult();
+			//默认进行全部替换
+			if(oldVideo != null){
+				System.out.println("-------oldvideo-------");
+				System.out.println(oldVideo.toString(true));
+				oldVideo.setTitle(video.getTitle());
+				oldVideo.setVideo_key(video.getVideo_key());
+				oldVideo.setUpdate_timestamp(video.getUpdate_timestamp());
+				//先查询image表中是否包含此video的图片信息
+				Criteria c = session.createCriteria(Image.class).add(Restrictions.eq("image_key", video.getImage().getImage_key()));//image的image_key字段需为unique
+				List<Image> l_img = c.list();
+				if(l_img.size() > 0){
+					//image表包含该video的图片信息,用持久化的实体代替原来的值
+					oldVideo.setImage(l_img.get(0)); 
+				}
+				//查询author表中是否包含此video的作者信息
+				c = session.createCriteria(Author.class).add(Restrictions.eq("name", video.getAuthor().getName())); //author的name字段需为unique
+				List<Author> l_author = c.list();
+				if(l_author.size() > 0){
+					//author表包含该video的作者信息,用持久化的实体代替原来的值
+					oldVideo.setAuthor(l_author.get(0));
+				}
+				System.out.println(oldVideo.getImage().getImage_key());
+				System.out.println(oldVideo.getAuthor().getName());
+				System.out.println(oldVideo.getCategories().size());
+				System.out.println("-------newvideo-------");
+				System.out.println(oldVideo.toString(true));
+				session.update(oldVideo);
+				res = CRUDEvent.UPDATE_SUCCESS;
+			}else{
+				res = CRUDEvent.UPDATE_FAIL;
+			}
+		}catch(Exception e){
+			res = CRUDEvent.CRUD_EXCETION;
+			e.printStackTrace();
+		}
+		return res;
+	}
+	/**
+	 * 更新表中的video
+	 * @param video 新的video对象(要求该对象中所有的成员变量都有具体值)
+	 * @param id    要更新的video的id
+	 * **/
+	public int updateVideo_bak(Video video,Integer id){
+		int res = 0;
+		try{
+			Session session = sf.getCurrentSession();
+			Video oldVideo = (Video)session.createCriteria(Video.class).add(Restrictions.eq("id", id)).setReadOnly(true).uniqueResult();
+			//默认进行全部替换
+			if(oldVideo != null){
+				session.delete(oldVideo);
+				oldVideo.setTitle(video.getTitle());
+				oldVideo.setVideo_key(video.getVideo_key());
+				oldVideo.setUpdate_timestamp(video.getUpdate_timestamp());
+				//先查询image表中是否包含此video的图片信息
+				Criteria c = session.createCriteria(Image.class).add(Restrictions.eq("image_key", video.getImage().getImage_key()));//image的image_key字段需为unique
+				List<Image> l_img = c.list();
+				if(l_img.size() > 0){
+					//image表包含该video的图片信息,用持久化的实体代替原来的值
+					oldVideo.setImage(l_img.get(0)); 
+				}
+				//查询author表中是否包含此video的作者信息
+				c = session.createCriteria(Author.class).add(Restrictions.eq("name", video.getAuthor().getName())); //author的name字段需为unique
+				List<Author> l_author = c.list();
+				if(l_author.size() > 0){
+					//author表包含该video的作者信息,用持久化的实体代替原来的值
+					oldVideo.setAuthor(l_author.get(0));
+				}
+				System.out.println(oldVideo.getImage().getImage_key());
+				System.out.println(oldVideo.getAuthor().getName());
+				System.out.println(oldVideo.getCategories().size());
+				System.out.println("-------newvideo-------");
+				System.out.println(oldVideo.toString(true));
+				oldVideo.setId(id);
+				session.save(oldVideo);
+				res = CRUDEvent.UPDATE_SUCCESS;
+			}else{
+				res = CRUDEvent.UPDATE_FAIL;
+			}
+		}catch(Exception e){
+			res = CRUDEvent.CRUD_EXCETION;
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	/**
+	 * 级联删除 测试
+	 * **/
+	public void deleteVideoCascade(Integer id){
+		try{
+			Session session = sf.getCurrentSession();
+			Video video = (Video)session.get(Video.class, id);
+			session.delete(video);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 }

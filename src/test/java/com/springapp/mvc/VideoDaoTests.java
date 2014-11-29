@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Image;
@@ -54,16 +55,16 @@ public class VideoDaoTests {
 		s_vCategory.add(c2);
 		s_vCategory.add(c3);
 		s_vCategory.add(c4);
-		video.setTitle("Dearest");
-		video.setVideo_key("Dearest"); 
+		video.setTitle("Ivy");
+		video.setVideo_key("Ivy"); 
 		video.setUpdate_timestamp(System.currentTimeMillis());
 		videoDao.inserSingleVideo(video);
 	}
-
+	
 	@Test
 	public void getVideoByVideoId(){
 		long start = System.currentTimeMillis();
-		Video video = videoDao.getVideoByVideoId(1);
+		Video video = videoDao.getVideoByVideoId(2);
 		System.out.println(video.toString(true));
 		System.out.println("time elapse:"+(System.currentTimeMillis()-start)/1000f);
 	}
@@ -133,6 +134,42 @@ public class VideoDaoTests {
 	
 	@Test
 	public void deleteVideoById(){
-		System.out.println(videoDao.deleteVideoById(6)>0?"delete success":"delete fail");
+		System.out.println(videoDao.deleteVideoById(3)>0?"delete success":"delete fail");
+	}
+	
+	@Test
+	public void updateVideo_bak(){
+		Integer id = 1;  //需要更新的video 对应的id
+		Video video = new Video(); //用于替换的新的video对象
+		Author a1 = new Author();
+		a1.setName("仓木麻衣");
+		a1.setDescription("日本女歌手");
+		video.setAuthor(a1);
+		Image img = new Image();
+		img.setImage_key("仓木麻衣.jpg");
+		video.setImage(img);
+		VideoCategory c1 = new VideoCategory();	
+		VideoCategory c2 = new VideoCategory();	
+		VideoCategory c3 = new VideoCategory();	
+		VideoCategory c4 = new VideoCategory();	
+		c1.setTitle("较快");
+		c2.setTitle("普通");
+		c3.setTitle("情歌风");
+		c4.setTitle("D");
+		Set<VideoCategory> s_vCategory = video.getCategories();
+		s_vCategory.add(c1);
+		s_vCategory.add(c2);
+		s_vCategory.add(c3);
+		s_vCategory.add(c4);
+		video.setTitle("Dearest");
+		video.setVideo_key("Dearest"); 
+		video.setUpdate_timestamp(System.currentTimeMillis());
+		int res = videoDao.updateVideo_bak(video, id);
+		System.out.println(CRUDEvent.getResponse(res));
+	}
+	
+	@Test
+	public void deleteVideoCascade(){
+		videoDao.deleteVideoCascade(7);
 	}
 }

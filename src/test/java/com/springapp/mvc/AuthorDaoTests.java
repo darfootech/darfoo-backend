@@ -39,9 +39,19 @@ public class AuthorDaoTests {
 	@Test
 	public void insertAuthor(){
 		Author author = new Author();
-		author.setName("Fir");
-		author.setDescription("飞儿乐团");
+		author.setName("哈哈哈");
+		author.setDescription("台湾人气偶像组合");
 		int res = authorDao.insertAuthor(author);
+		System.out.println(CRUDEvent.getResponse(res));
+	}
+	
+	@Test
+	public void updateAuthor(){
+		Author author = new Author();
+		author.setName("五月天");
+		author.setDescription("菜狗组合");
+		String oldName = "五月天";
+		int res = authorDao.updateAuthor(author, oldName);
 		System.out.println(CRUDEvent.getResponse(res));
 	}
 }

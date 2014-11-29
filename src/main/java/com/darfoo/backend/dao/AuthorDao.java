@@ -97,10 +97,9 @@ public class AuthorDao {
 				Integer id = (Integer)(session.save(author));
 				res = (id>0)?CRUDEvent.INSERT_SUCCESS:CRUDEvent.INSERT_FAIL;
 			}
-			int i = 1/0;
 		}catch(Exception e){
 			res = CRUDEvent.CRUD_EXCETION;
-			//throw new RuntimeException();
+			//throw new RuntimeException("rollback");			
 		}
 		return res;
 	}
@@ -123,6 +122,9 @@ public class AuthorDao {
 				author.setDescription(newAuthor.getDescription());
 				session.saveOrUpdate(author);
 				res = CRUDEvent.UPDATE_SUCCESS;
+			}else{
+				System.out.println("为空");
+				res = CRUDEvent.UPDATE_FAIL;
 			}
 		}catch(Exception e){
 			res = CRUDEvent.CRUD_EXCETION;
