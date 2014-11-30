@@ -23,6 +23,7 @@ import com.darfoo.backend.model.Video;
 import com.darfoo.backend.model.VideoCategory;
 
 @Component
+@SuppressWarnings("unchecked")
 public class VideoDao {
 	@Autowired
 	private SessionFactory sf;
@@ -81,6 +82,7 @@ public class VideoDao {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * 获取单个video的信息
 	 * 根据video的id来获得video对象
@@ -103,12 +105,12 @@ public class VideoDao {
 	}
 	/**
 	 * 获取首页推荐视频信息
-	 * @param number 推荐视频数量(暂时定为3个,选择video_id位于中间的3个视频作为推荐视频)
+	 * @param number 推荐视频数量
 	 * @return List<Video> l_video 返回一个包含多个video对象的List
 	 * @return video中的categories可以获取
 	 **/
+	
 	public List<Video> getRecommendVideos(int number){
-		number = 3;
 		List<Video> l_video = new ArrayList<Video>();
 		try{
 			Session session = sf.getCurrentSession();
@@ -117,18 +119,20 @@ public class VideoDao {
 			c.setReadOnly(true);
 			List<Integer> l_vid = c.list();
 			int count = l_vid.size();
-			if(count >= number){	//要求库里至少有3部视频
-				Set<Integer> s_vid = new HashSet<Integer>();
-				s_vid.add(l_vid.get(count/2));
-				s_vid.add(l_vid.get(count/2-1));
-				s_vid.add(l_vid.get(count/2+1));
-				c = session.createCriteria(Video.class).add(Restrictions.in("id", s_vid));
+			if(count <= number){
+				//请求的视频个数多于数据库数量，则返回全部视频
+				c = session.createCriteria(Video.class);
 				c.setReadOnly(true);
-				//c.setFetchMode("categories", FetchMode.JOIN);//同时加载目录(会导致查询结果不值number个，而是number*4个)
-				l_video = c.list(); 
-				for(Video v : l_video){
-					v.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
-				}
+
+			}else{
+				//请求的视频个数少于数据库数量，则返回最新的number个视频
+				c = session.createCriteria(Video.class).addOrder(Order.desc("update_timestamp"));
+				c.setReadOnly(true);
+				c.setMaxResults(number);
+			}
+			l_video = c.list();
+			for(Video v : l_video){
+				v.trigLazyLoad();   
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -136,12 +140,12 @@ public class VideoDao {
 		return l_video;
 	}
 	/**
-	 * 获取首页最新视频 信息(暂时定5个)
+	 * 获取首页最新视频 信息
+	 * @param number 最新视频的数量
 	 * @return List<Video> l_video 返回一个包含多个video对象的List
 	 * @return video中的categories可以获取
 	 * **/
 	public List<Video>  getLatestVideos(int number){
-		number = 5;
 		List<Video> l_video = new ArrayList<Video>();
 		try{
 			Session session = sf.getCurrentSession();
@@ -220,5 +224,41 @@ public class VideoDao {
 			e.printStackTrace();
 		}
 		return l_video;
+	}
+	
+	/**
+	 * 根据id删除单个视频
+	 * videocategory表不受影响
+	 * **/
+	public int deleteVideoById(Integer id){
+		int result = 0;
+		try{
+			Session session = sf.getCurrentSession();
+			//先删除关联表中的关联
+			String sql1 = "delete from video_category where video_id=:video_id";
+			//关联成功删除后再删除video表中的记录
+			String sql2 = "delete from video where id=:id";
+			//返回受影响的行数(由于一般情况下一个video对应4个种类,所以为4行)
+			int res = session.createSQLQuery(sql1).setInteger("video_id", id).executeUpdate();  
+			if(res > 0){
+				result = session.createSQLQuery(sql2).setInteger("id", id).executeUpdate();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	/**
+	 * 级联删除 测试
+	 * **/
+	public void deleteVideoCascade(Integer id){
+		try{
+			Session session = sf.getCurrentSession();
+			Video video = (Video)session.get(Video.class, id);
+			session.delete(video);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 }

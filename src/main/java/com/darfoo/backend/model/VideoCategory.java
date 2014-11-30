@@ -15,6 +15,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 /**
  * Created by zjh on 14-11-16.
  */
@@ -29,9 +32,10 @@ public class VideoCategory implements Serializable {
 	@Column(name="DESCRIPTION",nullable=false,columnDefinition="varchar(255) not null")
     String description;
 	//建立与video表的多对多关系
-	@ManyToMany(fetch=FetchType.EAGER)
-	@JoinTable(name="video_category",joinColumns={@JoinColumn(name="category_id",referencedColumnName="id",nullable=false,columnDefinition="int(11) not null")},
-	inverseJoinColumns={@JoinColumn(name="video_id",nullable=false,columnDefinition="int(11) not null")})
+	@ManyToMany(mappedBy="categories",targetEntity=Video.class)
+	@Cascade(value={CascadeType.DELETE,CascadeType.REMOVE})
+//	@JoinTable(name="video_category",joinColumns={@JoinColumn(name="category_id",referencedColumnName="id",nullable=false,columnDefinition="int(11) not null")},
+//	inverseJoinColumns={@JoinColumn(name="video_id",nullable=false,columnDefinition="int(11) not null")})
     Set<Video>  videos = new HashSet<Video>();
 
     public VideoCategory() {

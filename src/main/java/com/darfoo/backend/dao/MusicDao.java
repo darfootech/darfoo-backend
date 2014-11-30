@@ -195,5 +195,26 @@ public class MusicDao {
 		}
 		return l_music;
 	}
-	
+	/**
+	 * 根据id删除单个Music
+	 * musiccategory表不受影响
+	 * **/
+	public int deleteVideoById(Integer id){
+		int result = 0;
+		try{
+			Session session = sf.getCurrentSession();
+			//先删除关联表中的关联
+			String sql1 = "delete from music_category where music_id=:music_id";
+			//关联成功删除后再删除music表中的记录
+			String sql2 = "delete from music where id=:id";
+			//返回受影响的行数(由于一般情况下一个video对应4个种类,所以为4行)
+			int res = session.createSQLQuery(sql1).setInteger("music_id", id).executeUpdate();  
+			if(res > 0){
+				result = session.createSQLQuery(sql2).setInteger("id", id).executeUpdate();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

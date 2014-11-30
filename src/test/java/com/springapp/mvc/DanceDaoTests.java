@@ -33,11 +33,16 @@ public class DanceDaoTests {
 	@Test
 	public void getDanceGroups(){
 		long start = System.currentTimeMillis();
-		List<DanceGroup> l_group = danceDao.getDanceGroups();
+		List<DanceGroup> l_group = danceDao.getDanceGroups(2);//选2个舞队
 		for(DanceGroup group : l_group){
 			System.out.println(group.toString());
 			System.out.println("————————————————————————————————————");
 		}
 		System.out.println((System.currentTimeMillis()-start)/1000f);
+	}
+	
+	@Test
+	public void deleteDanceGroupById(){
+		System.out.println(danceDao.deleteDanceGroupById(5)>0?"delete success":"delete fail");
 	}
 }

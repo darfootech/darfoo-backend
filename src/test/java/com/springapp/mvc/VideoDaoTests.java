@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Set;
 
 import com.darfoo.backend.service.responsemodel.VideoCates;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Image;
@@ -53,16 +55,16 @@ public class VideoDaoTests {
 		s_vCategory.add(c2);
 		s_vCategory.add(c3);
 		s_vCategory.add(c4);
-		video.setTitle("Dearest");
-		video.setVideo_key("Dearest"); 
+		video.setTitle("Ivy");
+		video.setVideo_key("Ivy"); 
 		video.setUpdate_timestamp(System.currentTimeMillis());
 		videoDao.inserSingleVideo(video);
 	}
-
+	
 	@Test
 	public void getVideoByVideoId(){
 		long start = System.currentTimeMillis();
-		Video video = videoDao.getVideoByVideoId(1);
+		Video video = videoDao.getVideoByVideoId(2);
 		System.out.println(video.toString(true));
 		System.out.println("time elapse:"+(System.currentTimeMillis()-start)/1000f);
 	}
@@ -129,4 +131,14 @@ public class VideoDaoTests {
         System.out.println(requestCategories[0]);
         System.out.println(requestCategories[0].equals("0"));
     }
+	
+	@Test
+	public void deleteVideoById(){
+		System.out.println(videoDao.deleteVideoById(3)>0?"delete success":"delete fail");
+	}
+	
+	@Test
+	public void deleteVideoCascade(){
+		videoDao.deleteVideoCascade(7);
+	}
 }

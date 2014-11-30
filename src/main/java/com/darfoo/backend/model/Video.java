@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +15,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 /**
  * Created by zjh on 14-11-16.
@@ -30,17 +32,20 @@ public class Video implements Serializable {
     Integer id;  
 
     //video & image  单向N-1  在video表中增加一个外键列IMAGE_ID(music的主键)
-	@ManyToOne(targetEntity = Image.class,cascade=CascadeType.ALL)
-	@JoinColumn(name="IMAGE_ID",referencedColumnName="id")
+	@ManyToOne(targetEntity = Image.class)
+	@Cascade(value={CascadeType.MERGE,CascadeType.PERSIST,CascadeType.SAVE_UPDATE})
+	@JoinColumn(name="IMAGE_ID",referencedColumnName="id",updatable=true)
 	Image image;
 	
 	//video & author 单向N-1 在video表中增加一个外键列AUTHOR_ID(author的主键)
-	@ManyToOne(targetEntity = Author.class,cascade=CascadeType.ALL)
-	@JoinColumn(name="AUTHOR_ID",referencedColumnName="id")
+	@ManyToOne(targetEntity = Author.class)
+	@Cascade(value={CascadeType.MERGE,CascadeType.PERSIST,CascadeType.SAVE_UPDATE})
+	@JoinColumn(name="AUTHOR_ID",referencedColumnName="id",updatable=true)
 	Author author;
 	
 	//video & category
-	@ManyToMany(targetEntity = VideoCategory.class,cascade=CascadeType.ALL)
+	@ManyToMany(targetEntity = VideoCategory.class)
+	@Cascade(value={CascadeType.DELETE,CascadeType.REMOVE})
 	@JoinTable(name="video_category",joinColumns={@JoinColumn(name="video_id",referencedColumnName="id",nullable=false,columnDefinition="int(11) not null")},
 	inverseJoinColumns={@JoinColumn(name="category_id",nullable=false,columnDefinition="int(11) not null")})
 	Set<VideoCategory> categories = new HashSet<VideoCategory>();	

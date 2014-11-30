@@ -158,4 +158,24 @@ public class EducationDao {
 		}
 		return l_video;
 	}
+	
+	/**
+	 * 根据id删除单个教学视频
+	 * educationcategory表不受影响
+	 * **/
+	public int deleteEducationById(Integer id){
+		int result = 0;
+		try{
+			Session session = sf.getCurrentSession();
+			String sql1 = "delete from education_category where video_id=:video_id";
+			String sql2 = "delete from education where id=:id";
+			int res = session.createSQLQuery(sql1).setInteger("video_id", id).executeUpdate();  
+			if(res > 0){
+				result = session.createSQLQuery(sql2).setInteger("id", id).executeUpdate();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
