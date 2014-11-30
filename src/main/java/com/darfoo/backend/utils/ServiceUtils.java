@@ -19,7 +19,32 @@ public class ServiceUtils {
         return stockArr;
     }
 
-    public static String uploadResource(CommonsMultipartFile file)  throws IOException {
+    //=> 大文件传得比较慢，所以就先放服务器上用七牛的命令行工具统一传
+    public static String uploadLargeResource(CommonsMultipartFile file)  throws IOException {
+        String dirName = "uploadresources/";
+
+        long  startTime=System.currentTimeMillis();
+        System.out.println("fileName："+file.getOriginalFilename());
+
+        //创建目录
+        FileUtils.createDir(dirName);
+        String path = dirName + file.getOriginalFilename();
+
+        File newFile=new File(path);
+        //通过CommonsMultipartFile的方法直接写文件（注意这个时候）
+        file.transferTo(newFile);
+
+        long  endTime=System.currentTimeMillis();
+        System.out.println("方法二的运行时间："+String.valueOf(endTime-startTime)+"ms");
+
+        String statusCode = "200";
+
+        return statusCode;
+        //return "/success";
+    }
+
+    //=> 小文件直接上传七牛服务器
+    public static String uploadSmallResource(CommonsMultipartFile file)  throws IOException {
         String dirName = new Date().getTime() + file.getOriginalFilename() + "/";
 
         long  startTime=System.currentTimeMillis();

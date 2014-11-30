@@ -10,3 +10,6 @@ src/main/webapp/META-INF
 src/main/resources/datasource.properties
 springIoc.log
 uploadfiles/
+*.swp
+.*.swp
+uploadresources/

@@ -66,8 +66,8 @@ public class UploadController {
         String imageStatusCode = "";
 
         try {
-            videoStatusCode = ServiceUtils.uploadResource(videoresource);
-            imageStatusCode = ServiceUtils.uploadResource(imageresource);
+            videoStatusCode = ServiceUtils.uploadLargeResource(videoresource);
+            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -117,8 +117,8 @@ public class UploadController {
         String imageStatusCode = "";
 
         try {
-            musicStatusCode = ServiceUtils.uploadResource(musicresource);
-            imageStatusCode = ServiceUtils.uploadResource(imageresource);
+            musicStatusCode = ServiceUtils.uploadLargeResource(musicresource);
+            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -169,8 +169,8 @@ public class UploadController {
         String imageStatusCode = "";
 
         try {
-            videoStatusCode = ServiceUtils.uploadResource(videoresource);
-            imageStatusCode = ServiceUtils.uploadResource(imageresource);
+            videoStatusCode = ServiceUtils.uploadLargeResource(videoresource);
+            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -235,7 +235,7 @@ public class UploadController {
         String imageStatusCode = "";
 
         try {
-            imageStatusCode = ServiceUtils.uploadResource(imageresource);
+            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource);
         } catch (IOException e) {
             e.printStackTrace();
         }
