@@ -33,7 +33,8 @@ public class ServiceUtils {
         //通过CommonsMultipartFile的方法直接写文件（注意这个时候）
         file.transferTo(newFile);
 
-        String statusCode = qiniuUtils.uploadResouce(path, file.getOriginalFilename());
+        //String statusCode = qiniuUtils.uploadResource(path, file.getOriginalFilename());
+        String statusCode = qiniuUtils.uploadResourceStream(path, file.getOriginalFilename());
         System.out.println("status code: " + statusCode);
 
         //删除目录

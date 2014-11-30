@@ -5,17 +5,27 @@ import com.qiniu.api.config.Config;
 import com.qiniu.api.io.IoApi;
 import com.qiniu.api.io.PutExtra;
 import com.qiniu.api.io.PutRet;
+import com.qiniu.api.resumableio.ResumeableIoApi;
 import com.qiniu.api.rs.GetPolicy;
 import com.qiniu.api.rs.PutPolicy;
 import com.qiniu.api.rs.URLUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.UUID;
 
 /**
  * Created by zjh on 14-11-26.
  */
 public class QiniuUtils {
+    private String bucketName;
+    private String mimeType;
+
     public QiniuUtils() {
         Config.ACCESS_KEY = "bnMvAStYBsL5AjYM3UXbpGalrectRZZF88Y6fZ-X";
         Config.SECRET_KEY = "eMZK5q9HI1EXe7KzNtsyKJZJPHEfh96XcHvDigyG";
+        this.bucketName = "zjdxlab410yy";
+        this.mimeType = null;
     }
 
     //key就是七牛云上的文件名字
@@ -38,12 +48,11 @@ public class QiniuUtils {
         }
     }
 
-    public String uploadResouce(String fileLocation, String fileName) {
+    public String uploadResource(String fileLocation, String fileName) {
         System.out.println("start to upload resource to qiniu server");
         Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
         // 请确保该bucket已经存在
-        String bucketName = "zjdxlab410yy";
-        PutPolicy putPolicy = new PutPolicy(bucketName);
+        PutPolicy putPolicy = new PutPolicy(this.bucketName);
         try {
             String uptoken = putPolicy.token(mac);
             PutExtra extra = new PutExtra();
@@ -52,6 +61,23 @@ public class QiniuUtils {
             PutRet ret = IoApi.putFile(uptoken, key, localFile, extra);
             return ret.getStatusCode() + "";
         } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    //尝试使用断点续传和并行分块上传
+    public String uploadResourceStream(String fileLocation, String fileName){
+        System.out.println("start to upload resource to qiniu server");
+        Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
+        PutPolicy putPolicy = new PutPolicy(this.bucketName);
+
+        try {
+            String upToken = putPolicy.token(mac);
+            String key = fileName;
+            FileInputStream fis = new FileInputStream(new File(fileLocation));
+            PutRet ret = ResumeableIoApi.put(fis, upToken, key, this.mimeType);
+            return ret.getStatusCode() + "";
+        }catch (Exception e){
             return e.getMessage();
         }
     }
