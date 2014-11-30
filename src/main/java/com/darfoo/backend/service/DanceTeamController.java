@@ -28,7 +28,7 @@ public class DanceTeamController {
     public
     @ResponseBody
     List<IndexDanceGroup> getIndexDanceGroups(){
-        List<DanceGroup> groups = danceDao.getDanceGroups();
+        List<DanceGroup> groups = danceDao.getDanceGroups(7);
         List<IndexDanceGroup> result = new ArrayList<IndexDanceGroup>();
         for (DanceGroup group : groups){
             int id = group.getId();

@@ -92,7 +92,7 @@ public class VideoController {
     public
     @ResponseBody
     List<IndexVideo> getRecmmendVideos() {
-        List<Video> recommendVideos = videoDao.getRecommendVideos(3);
+        List<Video> recommendVideos = videoDao.getRecommendVideos(7);
         List<IndexVideo> result = new ArrayList<IndexVideo>();
         for (Video video : recommendVideos) {
             int video_id = video.getId();
@@ -109,7 +109,7 @@ public class VideoController {
     public
     @ResponseBody
     List<IndexVideo> getIndexVideos() {
-        List<Video> latestVideos = videoDao.getLatestVideos(5);
+        List<Video> latestVideos = videoDao.getLatestVideos(7);
         List<IndexVideo> result = new ArrayList<IndexVideo>();
         for (Video video : latestVideos) {
             int video_id = video.getId();

@@ -71,7 +71,7 @@ public class VideoDaoTests {
 	@Test
 	public void getRecommendVideos(){
 		long start = System.currentTimeMillis();
-		List<Video> videos = videoDao.getRecommendVideos(3);
+		List<Video> videos = videoDao.getRecommendVideos(7);
 		for(Video video : videos){
 			System.out.println(video.toString(true));
 			System.out.println("——————————————————————————————————————");
@@ -81,7 +81,7 @@ public class VideoDaoTests {
 	@Test
 	public void getLastestVideos(){
 		long start = System.currentTimeMillis();
-		List<Video> videos = videoDao.getLatestVideos(5);
+		List<Video> videos = videoDao.getLatestVideos(7);
 		for(Video video : videos){
 			System.out.println(video.toString(true));
 			System.out.println("——————————————————————————————————————");

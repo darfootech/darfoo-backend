@@ -33,7 +33,7 @@ public class DanceDaoTests {
 	@Test
 	public void getDanceGroups(){
 		long start = System.currentTimeMillis();
-		List<DanceGroup> l_group = danceDao.getDanceGroups(2);//选2个舞队
+		List<DanceGroup> l_group = danceDao.getDanceGroups(7);//选2个舞队
 		for(DanceGroup group : l_group){
 			System.out.println(group.toString());
 			System.out.println("————————————————————————————————————");
