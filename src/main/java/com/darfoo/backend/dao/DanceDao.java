@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -35,6 +36,25 @@ public class DanceDao {
 			e.printStackTrace();
 		}
 	}
+
+    /**
+     * 根据name判断该舞队是否已经存在表里
+     * @param name 待判断的舞队的name
+     * @return 表中已经存在该name对应的舞队信息,返回true;反之，返回一个false
+     */
+    public boolean isDanceGroupExists(String name){
+        boolean isExist = true;
+        try{
+            Session session = sf.getCurrentSession();
+            String sql = "select * from dancegroup where name=:name";
+            DanceGroup danceGroup = (DanceGroup)session.createSQLQuery(sql).addEntity(DanceGroup.class).setString("name", name).uniqueResult();
+            isExist = (danceGroup==null)?false:true;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return isExist;
+    }
+
 	/**
 	 * 获取舞队信息
 	 * @param count 需要返回的舞队数量
@@ -48,7 +68,7 @@ public class DanceDao {
 			c.setReadOnly(true);
 			c.setMaxResults(count);
 			l_dance = c.list();
-		}catch(Exception e){			
+		}catch(Exception e){
 			e.printStackTrace();
 		}
 		return l_dance;

@@ -34,6 +34,10 @@ public class UploadController {
     ImageDao imageDao;
     @Autowired
     MusicDao musicDao;
+    @Autowired
+    DanceDao danceDao;
+    @Autowired
+    DanceGroupImageDao danceGroupImageDao;
 
     public int insertSingleVideo(String videotitle, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter){
         System.out.println(authorname);
@@ -225,6 +229,36 @@ public class UploadController {
         author.setName(authorname);
         author.setDescription(description);
         authorDao.insertAuthor(author);
+
+        return 200;
+    }
+
+    public int insertSingleDanceGroup(String groupname, String description, String imagekey){
+        boolean isGroupExists = danceDao.isDanceGroupExists(groupname);
+        if (isGroupExists){
+            System.out.println("舞队已存在");
+            return 501;
+        }else{
+            System.out.println("舞队不存在，可以新建舞队");
+        }
+
+        DanceGroupImage image = danceGroupImageDao.getImageByName(imagekey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+            image = new DanceGroupImage();
+            image.setImage_key(imagekey);
+            danceGroupImageDao.inserSingleImage(image);
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            return 503;
+        }
+
+        DanceGroup group = new DanceGroup();
+        group.setName(groupname);
+        group.setDescription(description);
+        group.setUpdate_timestamp(System.currentTimeMillis());
+        group.setImage(image);
+        danceDao.insertSingleDanceGroup(group);
 
         return 200;
     }
@@ -430,7 +464,9 @@ public class UploadController {
         String imagekey = request.getParameter("imagekey");
         Long update_timestamp = System.currentTimeMillis() / 1000;
         System.out.println("requests: " + name + " " + description + " " + imagekey + " " + update_timestamp);
-        return "cleantha";
+
+        int statusCode = this.insertSingleDanceGroup(name, description, imagekey);
+        return statusCode+"";
     }
 
     @RequestMapping(value = "/resources/teamresource/new", method = RequestMethod.GET)

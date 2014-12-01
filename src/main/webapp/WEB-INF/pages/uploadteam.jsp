@@ -8,9 +8,13 @@
             url : "/darfoobackend/rest/resources/team/create",
             data : $("#createteamform").serialize(),
             success : function(data){
-                if(data == "cleantha"){
+                if(data == "200"){
                     alert("提交舞队信息成功");
                     window.location.href = "/darfoobackend/rest/resources/teamresource/new"
+                }else if(data == "501"){
+                    alert("相同名字的舞队已经存在了");
+                }else if(data == "503"){
+                    alert("相同名字的图片已经存在了");
                 }else{
                     alert("提交舞队信息失败");
                 }

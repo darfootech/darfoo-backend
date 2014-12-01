@@ -2,6 +2,7 @@ package com.springapp.mvc;
 
 import java.util.List;
 
+import com.darfoo.backend.dao.DanceGroupImageDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,37 @@ import com.darfoo.backend.model.DanceGroupImage;
 public class DanceDaoTests {
 	@Autowired
 	private DanceDao danceDao;
+    @Autowired
+    DanceGroupImageDao danceGroupImageDao;
 	
 	@Test
 	public void insertSingleDanceGroup(){
+        String groupName = "四号3";
+        String imagekey = "dg111";
+
+        boolean isGroupExists = danceDao.isDanceGroupExists(groupName);
+        if (isGroupExists){
+            System.out.println("舞队已存在");
+            return;
+        }else{
+            System.out.println("舞队不存在，可以新建舞队");
+        }
+
+        DanceGroupImage image = danceGroupImageDao.getImageByName(imagekey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+            image = new DanceGroupImage();
+            image.setImage_key(imagekey);
+            danceGroupImageDao.inserSingleImage(image);
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            return;
+        }
+
 		DanceGroup group = new DanceGroup();
-		group.setName("四号");
+		group.setName(groupName);
 		group.setDescription("小妈队");
 		group.setUpdate_timestamp(System.currentTimeMillis());
-		DanceGroupImage image = new DanceGroupImage();
-		image.setImage_key("dg1");
 		group.setImage(image);
 		danceDao.insertSingleDanceGroup(group);
 	}
