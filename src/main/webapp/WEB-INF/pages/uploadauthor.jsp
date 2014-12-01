@@ -8,9 +8,11 @@
             url : "/darfoobackend/rest/resources/author/create",
             data : $("#createauthorform").serialize(),
             success : function(data){
-                if(data == "cleantha"){
+                if(data == "200"){
                     alert("创建作者成功");
                     location.reload();
+                }else if(data == "501"){
+                    alert("相同名字的作者已经存在");
                 }else{
                     alert("创建作者失败")
                 }

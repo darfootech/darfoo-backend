@@ -213,6 +213,22 @@ public class UploadController {
         return 200;
     }
 
+    public int insertSingleAuthor(String authorname, String description){
+        if(authorDao.isExistAuthor(authorname)){
+            System.out.println("作者已存在");
+            return 501;
+        }else{
+            System.out.println("无该author记录，可以创建");
+        }
+
+        Author author = new Author();
+        author.setName(authorname);
+        author.setDescription(description);
+        authorDao.insertAuthor(author);
+
+        return 200;
+    }
+
     /*video part*/
     @RequestMapping(value = "/resources/video/new", method = RequestMethod.GET)
     public String uploadVideo(ModelMap modelMap, HttpSession session){
@@ -392,7 +408,9 @@ public class UploadController {
         String name = request.getParameter("name");
         String description = request.getParameter("description");
         System.out.println("requests: " + name + " " + description);
-        return "cleantha";
+
+        int statusCode = this.insertSingleAuthor(name, description);
+        return statusCode+"";
     }
     /*end of author part*/
 
