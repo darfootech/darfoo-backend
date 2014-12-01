@@ -44,8 +44,9 @@ public class UploadController {
         String videoSpeed = request.getParameter("videospeed");
         String videoDifficult = request.getParameter("videodifficult");
         String videoStyle = request.getParameter("videostyle");
+        String videoLetter = request.getParameter("videoletter").toUpperCase();
         Long update_timestamp = System.currentTimeMillis() / 1000;
-        System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + update_timestamp);
+        System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + videoLetter + " " + update_timestamp);
         return "cleantha";
     }
 
@@ -95,8 +96,9 @@ public class UploadController {
         String imagekey = request.getParameter("imagekey");
         String musicBeat = request.getParameter("musicbeat");
         String musicStyle = request.getParameter("musicstyle");
+        String musicLetter = request.getParameter("musicletter").toUpperCase();
         Long update_timestamp = System.currentTimeMillis() / 1000;
-        System.out.println("requests: " + musicTitle + " " + authorName + " " + imagekey + " " + musicBeat + " " + musicStyle + " " + update_timestamp);
+        System.out.println("requests: " + musicTitle + " " + authorName + " " + imagekey + " " + musicBeat + " " + musicStyle + " " + musicLetter + " " + update_timestamp);
         return "cleantha";
     }
 

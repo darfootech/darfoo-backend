@@ -65,6 +65,11 @@
                     </select>
                 </div>
 
+                <div class="form-group">
+                    <label for="musicletter">视频首字母(大小写均可)</label>
+                    <input type="text" class="form-control" name="musicletter" id="musicletter" placeholder="请输入舞蹈伴奏首字母,大小写均可">
+                </div>
+
                 <button type="button" class="btn btn-default" onclick="start()">提交舞蹈伴奏信息</button>
             </form>
         </div>

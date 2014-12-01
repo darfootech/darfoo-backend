@@ -78,6 +78,11 @@
                     </select>
                 </div>
 
+                <div class="form-group">
+                    <label for="videoletter">视频首字母(大小写均可)</label>
+                    <input type="text" class="form-control" name="videoletter" id="videoletter" placeholder="请输入舞蹈视频首字母,大小写均可">
+                </div>
+
                 <button type="button" class="btn btn-default" onclick="start()">提交舞蹈视频信息</button>
             </form>
         </div>
