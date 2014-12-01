@@ -12,6 +12,8 @@
                 if(data == "200"){
                     alert("提交视频信息成功");
                     window.location.href = "/darfoobackend/rest/resources/videoresource/new"
+                }else if(data == "505"){
+                    alert("请确保舞蹈视频首字母填写的是一个不区分大小写的英文字母");
                 }else if(data == "503"){
                     alert("相同标题的舞蹈视频已经存在了，请修改舞蹈视频标题");
                 }else if(data == "502"){

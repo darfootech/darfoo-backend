@@ -39,9 +39,9 @@ public class EducationDaoTests {
 	
 	@Test
 	public void insertSingleEducationVideo(){
-        String title = "Strong Heart";
+        String title = "Strong Heart123";
         String authorName = "周杰伦";
-        String imagekey = "仓木麻衣.jpg";
+        String imagekey = "仓木麻衣333.jpg";
 
         Author a = authorDao.getAuthor(authorName);
         if(a != null){
@@ -55,6 +55,9 @@ public class EducationDaoTests {
         Image image = imageDao.getImageByName(imagekey);
         if (image == null){
             System.out.println("图片不存在，可以进行插入");
+            image = new Image();
+            image.setImage_key(imagekey);
+            imageDao.inserSingleImage(image);
         }else{
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
             return;

@@ -40,9 +40,9 @@ public class VideoDaoTests {
 
 	@Test
 	public void insertSingleVideo(){
-        String videoTitle = "clea33";
+        String videoTitle = "clea33333";
         String authorName = "滨崎步";
-        String imagekey = "滨崎步.jpg";
+        String imagekey = "滨崎步3.jpg";
 
         Author a = authorDao.getAuthor(authorName);
         if(a != null){
@@ -56,6 +56,9 @@ public class VideoDaoTests {
         Image image = imageDao.getImageByName(imagekey);
         if (image == null){
             System.out.println("图片不存在，可以进行插入");
+            image = new Image();
+            image.setImage_key(imagekey);
+            imageDao.inserSingleImage(image);
         }else{
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
             return;

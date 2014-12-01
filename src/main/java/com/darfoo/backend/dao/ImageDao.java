@@ -18,6 +18,17 @@ public class ImageDao {
     @Autowired
     private SessionFactory sessionFactory;
 
+    //插入单个图片
+    @SuppressWarnings("unchecked")
+    public void inserSingleImage(Image image){
+        try{
+            Session session = sessionFactory.getCurrentSession();
+            session.save(image);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
     /**
      * 获取单个image的信息
      * 根据image的name来获得image对象

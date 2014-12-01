@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created by zjh on 14-11-26.
@@ -71,5 +72,11 @@ public class ServiceUtils {
         return statusCode;
         //return "/success";
     }
+
+    public static boolean isSingleCharacter(String letter){
+        Pattern pattern = Pattern.compile("[A-Z]");
+        return pattern.matcher(letter).matches();
+    }
+
 
 }

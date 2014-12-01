@@ -1,9 +1,6 @@
 package com.darfoo.backend.service;
 
-import com.darfoo.backend.dao.AuthorDao;
-import com.darfoo.backend.dao.EducationDao;
-import com.darfoo.backend.dao.ImageDao;
-import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.dao.*;
 import com.darfoo.backend.model.*;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +32,8 @@ public class UploadController {
     EducationDao educationDao;
     @Autowired
     ImageDao imageDao;
+    @Autowired
+    MusicDao musicDao;
 
     public int insertSingleVideo(String videotitle, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter){
         System.out.println(authorname);
@@ -47,14 +46,6 @@ public class UploadController {
             return 501;
         }
 
-        Image image = imageDao.getImageByName(imagekey);
-        if (image == null){
-            System.out.println("图片不存在，可以进行插入");
-        }else{
-            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
-            return 502;
-        }
-
         Video queryVideo = videoDao.getVideoByVideoTitle(videotitle);
         if (queryVideo == null){
             System.out.println("视频不存在，可以进行插入");
@@ -62,6 +53,25 @@ public class UploadController {
             System.out.println(queryVideo.toString(true));
             System.out.println("视频已存在，不可以进行插入了，是否需要修改");
             return 503;
+        }
+
+        boolean isSingleLetter = ServiceUtils.isSingleCharacter(videoletter);
+        if (isSingleLetter){
+            System.out.println("是单个大写字母");
+        }else{
+            System.out.println("不是单个大写字母");
+            return 505;
+        }
+
+        Image image = imageDao.getImageByName(imagekey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+            image = new Image();
+            image.setImage_key(imagekey);
+            imageDao.inserSingleImage(image);
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            return 502;
         }
 
         Video video = new Video();
@@ -101,14 +111,6 @@ public class UploadController {
             return 501;
         }
 
-        Image image = imageDao.getImageByName(imagekey);
-        if (image == null){
-            System.out.println("图片不存在，可以进行插入");
-        }else{
-            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
-            return 502;
-        }
-
         Education queryVideo = educationDao.getEducationVideoByTitle(videotitle);
         if (queryVideo == null){
             System.out.println("教程不存在，可以进行插入");
@@ -116,6 +118,17 @@ public class UploadController {
             System.out.println(queryVideo.toString(true));
             System.out.println("教程已存在，不可以进行插入了，是否需要修改");
             return 503;
+        }
+
+        Image image = imageDao.getImageByName(imagekey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+            image = new Image();
+            image.setImage_key(imagekey);
+            imageDao.inserSingleImage(image);
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            return 502;
         }
 
         Education video = new Education();
@@ -137,6 +150,65 @@ public class UploadController {
         video.setVideo_key(videotitle);
         video.setUpdate_timestamp(System.currentTimeMillis());
         educationDao.inserSingleEducationVideo(video);
+
+        return 200;
+    }
+
+    public int insertSingleMusic(String musictitle, String authorname, String imagekey, String musicbeat, String musicstyle, String musicletter){
+        Author targetAuthor = authorDao.getAuthor(authorname);
+        if(targetAuthor != null){
+            System.out.println(targetAuthor.getName());
+        }
+        else{
+            System.out.println("无该author记录");
+            return 501;
+        }
+
+        Music queryMusic = musicDao.getMusicByMusicTitle(musictitle);
+        if (queryMusic == null){
+            System.out.println("伴奏不存在，可以进行插入");
+        }else{
+            System.out.println(queryMusic.toString(true));
+            System.out.println("伴奏已存在，不可以进行插入了，是否需要修改");
+            return 503;
+        }
+
+        boolean isSingleLetter = ServiceUtils.isSingleCharacter(musicletter);
+        if (isSingleLetter){
+            System.out.println("是单个大写字母");
+        }else{
+            System.out.println("不是单个大写字母");
+            return 505;
+        }
+
+        Image image = imageDao.getImageByName(imagekey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+            image = new Image();
+            image.setImage_key(imagekey);
+            imageDao.inserSingleImage(image);
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            return 502;
+        }
+
+        Music music = new Music();
+        music.setAuthor(targetAuthor);
+        music.setImage(image);
+        MusicCategory beat = new MusicCategory();
+        MusicCategory style = new MusicCategory();
+        MusicCategory letter = new MusicCategory();
+        beat.setTitle(musicbeat);
+        style.setTitle(musicstyle);
+        letter.setTitle(musicletter);
+        Set<MusicCategory> s_mCategory = music.getCategories();
+        s_mCategory.add(beat);
+        s_mCategory.add(style);
+        s_mCategory.add(letter);
+        music.setTitle(musictitle);
+        music.setMusic_key(musictitle);
+        music.setUpdate_timestamp(System.currentTimeMillis());
+        musicDao.inserSingleMusic(music);
 
         return 200;
     }
@@ -215,7 +287,9 @@ public class UploadController {
         String musicLetter = request.getParameter("musicletter").toUpperCase();
         Long update_timestamp = System.currentTimeMillis() / 1000;
         System.out.println("requests: " + musicTitle + " " + authorName + " " + imagekey + " " + musicBeat + " " + musicStyle + " " + musicLetter + " " + update_timestamp);
-        return "cleantha";
+
+        int statusCode = this.insertSingleMusic(musicTitle, authorName, imagekey, musicBeat, musicStyle, musicLetter);
+        return statusCode+"";
     }
 
     @RequestMapping(value = "/resources/musicresource/new", method = RequestMethod.GET)

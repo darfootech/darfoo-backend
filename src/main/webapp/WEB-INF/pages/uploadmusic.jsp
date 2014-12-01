@@ -9,11 +9,19 @@
             url : createMusicUrl,
             data : $("#createmusicform").serialize(),
             success : function(data){
-                if(data == "cleantha"){
+                if(data == "200"){
                     alert("提交伴奏信息成功");
                     window.location.href = "/darfoobackend/rest/resources/musicresource/new"
+                }else if(data == "505"){
+                    alert("请确保伴奏首字母填写的是一个不区分大小写的英文字母");
+                }else if(data == "503"){
+                    alert("相同标题的伴奏已经存在了，请修改伴奏标题");
+                }else if(data == "502"){
+                    alert("相同名字的图片已经存在了，请修改上传图片的名字");
+                }else if(data == "501"){
+                    alert("伴奏的作者还不存在，请先创建伴奏作者");
                 }else{
-                    alert("提交伴奏信息失败")
+                    alert("提交伴奏信息失败");
                 }
             },
             error : function(){
@@ -44,24 +52,24 @@
                 <div class="form-group">
                     <label for="musicbeat">舞蹈伴奏节拍</label>
                     <select data-toggle="select" name="musicbeat" id="musicbeat" class="form-control select select-success mrs mbm">
-                        <option value="1">四拍</option>
-                        <option value="2">⼋拍</option>
-                        <option value="3">十六拍</option>
-                        <option value="4">三⼗二拍</option>
+                        <option value="四拍">四拍</option>
+                        <option value="⼋拍<">⼋拍</option>
+                        <option value="十六拍">十六拍</option>
+                        <option value="三⼗二拍">三⼗二拍</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="musicstyle">舞蹈伴奏风格</label>
                     <select data-toggle="select" name="musicstyle" id="musicstyle" class="form-control select select-success mrs mbm">
-                        <option value="1">草原风</option>
-                        <option value="2">⼉歌风</option>
-                        <option value="3">情歌风</option>
-                        <option value="4">红歌风</option>
-                        <option value="5">戏曲⻛</option>
-                        <option value="6">印巴风</option>
-                        <option value="7">江南风</option>
-                        <option value="8">民歌⻛</option>
+                        <option value="草原风">草原风</option>
+                        <option value="⼉歌风<">⼉歌风</option>
+                        <option value="情歌风">情歌风</option>
+                        <option value="红歌风">红歌风</option>
+                        <option value="戏曲⻛">戏曲⻛</option>
+                        <option value="印巴风">印巴风</option>
+                        <option value="江南风">江南风</option>
+                        <option value="民歌⻛">民歌⻛</option>
                     </select>
                 </div>
 
