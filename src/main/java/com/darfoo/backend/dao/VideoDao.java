@@ -103,7 +103,29 @@ public class VideoDao {
 		}
 		return video;
 	}
-	/**
+
+    /**
+     * 获取单个video的信息
+     * 根据video的title来获得video对象
+     * @return video 返回一个video的实例对象(包含关联表中的数据)，详细请看Video.java类
+     * **/
+    public Video getVideoByVideoTitle(String title){
+        Video video = null;
+        try{
+            Session session = sf.getCurrentSession();
+            Criteria c = session.createCriteria(Video.class);
+            c.setReadOnly(true);
+            c.add(Restrictions.eq("title", title));
+            //设置JOIN mode，这样categories会直接加载到video类中
+            c.setFetchMode("categories", FetchMode.JOIN);
+            video = (Video)c.uniqueResult();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return video;
+    }
+
+    /**
 	 * 获取首页推荐视频信息
 	 * @param number 推荐视频数量
 	 * @return List<Video> l_video 返回一个包含多个video对象的List
