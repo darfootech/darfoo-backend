@@ -1,11 +1,9 @@
 package com.darfoo.backend.service;
 
 import com.darfoo.backend.dao.AuthorDao;
+import com.darfoo.backend.dao.EducationDao;
 import com.darfoo.backend.dao.VideoDao;
-import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.Image;
-import com.darfoo.backend.model.Video;
-import com.darfoo.backend.model.VideoCategory;
+import com.darfoo.backend.model.*;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +30,8 @@ public class UploadController {
     AuthorDao authorDao;
     @Autowired
     VideoDao videoDao;
+    @Autowired
+    EducationDao educationDao;
 
     public int insertSingleVideo(String videotitle, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter){
         System.out.println(authorname);
@@ -75,6 +75,49 @@ public class UploadController {
         video.setVideo_key(videotitle);
         video.setUpdate_timestamp(System.currentTimeMillis());
         videoDao.inserSingleVideo(video);
+
+        return 200;
+    }
+
+    public int insertSingleEducationVideo(String videotitle, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle){
+        System.out.println(authorname);
+        Author targetAuthor = authorDao.getAuthor(authorname);
+        if(targetAuthor != null){
+            System.out.println(targetAuthor.getName());
+        }
+        else{
+            System.out.println("无该author记录");
+            return 501;
+        }
+
+        Education queryVideo = educationDao.getEducationVideoByTitle(videotitle);
+        if (queryVideo == null){
+            System.out.println("视频不存在，可以进行插入");
+        }else{
+            System.out.println(queryVideo.toString(true));
+            System.out.println("视频已存在，不可以进行插入了，是否需要修改");
+            return 503;
+        }
+
+        Education video = new Education();
+        video.setAuthor(targetAuthor);
+        Image img = new Image();
+        img.setImage_key(imagekey);
+        video.setImage(img);
+        EducationCategory speed = new EducationCategory();
+        EducationCategory difficult = new EducationCategory();
+        EducationCategory style = new EducationCategory();
+        speed.setTitle("快");
+        difficult.setTitle("适中");
+        style.setTitle("分解教学");
+        Set<EducationCategory> s_eCategory = video.getCategories();
+        s_eCategory.add(speed);
+        s_eCategory.add(difficult);
+        s_eCategory.add(style);
+        video.setTitle(videotitle);
+        video.setVideo_key(videotitle);
+        video.setUpdate_timestamp(System.currentTimeMillis());
+        educationDao.inserSingleEducationVideo(video);
 
         return 200;
     }
@@ -205,7 +248,10 @@ public class UploadController {
         String videoStyle = request.getParameter("videostyle");
         Long update_timestamp = System.currentTimeMillis() / 1000;
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + update_timestamp);
-        return "cleantha";
+
+        int statusCode = this.insertSingleEducationVideo(videoTitle, authorName, imagekey, videoSpeed, videoDifficult, videoStyle);
+        System.out.println("status code: " + statusCode);
+        return statusCode+"";
     }
 
     @RequestMapping(value = "/resources/tutorialresource/new", method = RequestMethod.GET)
