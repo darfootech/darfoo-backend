@@ -34,10 +34,10 @@ public class VideoDaoTests {
 	public void insertAllVideoCategories(){
 		videoDao.insertAllVideoCategories();
 	}
-	
+
 	@Test
-	public void inserSingleVideo(){
-        String videoTitle = "cleantha";
+	public void insertSingleVideo(){
+        String videoTitle = "clea33";
         String authorName = "滨崎步";
 
         Author a = authorDao.getAuthor(authorName);
@@ -70,8 +70,8 @@ public class VideoDaoTests {
 		VideoCategory c2 = new VideoCategory();	
 		VideoCategory c3 = new VideoCategory();	
 		VideoCategory c4 = new VideoCategory();	
-		c1.setTitle("较快");
-		c2.setTitle("普通");
+		c1.setTitle("适中");
+		c2.setTitle("中等");
 		c3.setTitle("情歌风");
 		c4.setTitle("D");
 		Set<VideoCategory> s_vCategory = video.getCategories();

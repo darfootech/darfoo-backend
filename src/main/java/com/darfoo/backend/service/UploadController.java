@@ -1,24 +1,25 @@
 package com.darfoo.backend.service;
 
-import com.darfoo.backend.utils.FileUtils;
-import com.darfoo.backend.utils.QiniuUtils;
+import com.darfoo.backend.dao.AuthorDao;
+import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.model.Author;
+import com.darfoo.backend.model.Image;
+import com.darfoo.backend.model.Video;
+import com.darfoo.backend.model.VideoCategory;
 import com.darfoo.backend.utils.ServiceUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.*;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by zjh on 14-11-27.
@@ -27,6 +28,56 @@ import java.util.Iterator;
 
 @Controller
 public class UploadController {
+    @Autowired
+    AuthorDao authorDao;
+    @Autowired
+    VideoDao videoDao;
+
+    public int insertSingleVideo(String videotitle, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter){
+        System.out.println(authorname);
+        Author targetAuthor = authorDao.getAuthor(authorname);
+        if(targetAuthor != null){
+            System.out.println(targetAuthor.getName());
+        }
+        else{
+            System.out.println("无该author记录");
+            return 501;
+        }
+
+        Video queryVideo = videoDao.getVideoByVideoTitle(videotitle);
+        if (queryVideo == null){
+            System.out.println("视频不存在，可以进行插入");
+        }else{
+            System.out.println(queryVideo.toString(true));
+            System.out.println("视频已存在，不可以进行插入了，是否需要修改");
+            return 503;
+        }
+
+        Video video = new Video();
+        video.setAuthor(targetAuthor);
+        Image img = new Image();
+        img.setImage_key(imagekey);
+        video.setImage(img);
+        VideoCategory speed = new VideoCategory();
+        VideoCategory difficult = new VideoCategory();
+        VideoCategory style = new VideoCategory();
+        VideoCategory letter = new VideoCategory();
+        speed.setTitle(videospeed);
+        difficult.setTitle(videodifficult);
+        style.setTitle(videostyle);
+        letter.setTitle(videoletter);
+        Set<VideoCategory> s_vCategory = video.getCategories();
+        s_vCategory.add(speed);
+        s_vCategory.add(difficult);
+        s_vCategory.add(style);
+        s_vCategory.add(letter);
+        video.setTitle(videotitle);
+        video.setVideo_key(videotitle);
+        video.setUpdate_timestamp(System.currentTimeMillis());
+        videoDao.inserSingleVideo(video);
+
+        return 200;
+    }
 
     /*video part*/
     @RequestMapping(value = "/resources/video/new", method = RequestMethod.GET)
@@ -47,7 +98,10 @@ public class UploadController {
         String videoLetter = request.getParameter("videoletter").toUpperCase();
         Long update_timestamp = System.currentTimeMillis() / 1000;
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + videoLetter + " " + update_timestamp);
-        return "cleantha";
+
+        int statusCode = this.insertSingleVideo(videoTitle, authorName, imagekey, videoSpeed, videoDifficult, videoStyle, videoLetter);
+        System.out.println("status code is: " + statusCode);
+        return statusCode+"";
     }
 
     @RequestMapping(value = "/resources/videoresource/new", method = RequestMethod.GET)
