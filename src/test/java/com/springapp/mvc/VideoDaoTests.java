@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.darfoo.backend.dao.AuthorDao;
+import com.darfoo.backend.dao.ImageDao;
 import com.darfoo.backend.service.responsemodel.VideoCates;
 
 import org.junit.Test;
@@ -28,6 +29,8 @@ public class VideoDaoTests {
 	VideoDao videoDao;
     @Autowired
     AuthorDao authorDao;
+    @Autowired
+    ImageDao imageDao;
     VideoCates videoCates = new VideoCates();
 
     @Test
@@ -39,6 +42,7 @@ public class VideoDaoTests {
 	public void insertSingleVideo(){
         String videoTitle = "clea33";
         String authorName = "滨崎步";
+        String imagekey = "滨崎步.jpg";
 
         Author a = authorDao.getAuthor(authorName);
         if(a != null){
@@ -49,23 +53,26 @@ public class VideoDaoTests {
             return;
         }
 
+        Image image = imageDao.getImageByName(imagekey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            return;
+        }
+
         Video queryVideo = videoDao.getVideoByVideoTitle(videoTitle);
         if (queryVideo == null){
-            System.out.println("对象不存在，可以进行插入");
+            System.out.println("视频不存在，可以进行插入");
         }else{
             System.out.println(queryVideo.toString(true));
-            System.out.println("对象已存在，不可以进行插入了，是否需要修改");
+            System.out.println("视频已存在，不可以进行插入了，是否需要修改");
             return;
         }
 
         Video video = new Video();
-		Author a1 = new Author();
-		a1.setName(authorName);
-		a1.setDescription("日本女歌手");
-		video.setAuthor(a1);
-		Image img = new Image();
-		img.setImage_key("滨崎步.jpg");
-		video.setImage(img);
+		video.setAuthor(a);
+		video.setImage(image);
 		VideoCategory c1 = new VideoCategory();	
 		VideoCategory c2 = new VideoCategory();	
 		VideoCategory c3 = new VideoCategory();	

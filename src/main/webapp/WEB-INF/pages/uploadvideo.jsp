@@ -14,6 +14,8 @@
                     window.location.href = "/darfoobackend/rest/resources/videoresource/new"
                 }else if(data == "503"){
                     alert("相同标题的舞蹈视频已经存在了，请修改舞蹈视频标题");
+                }else if(data == "502"){
+                    alert("相同名字的图片已经存在了，请修改上传图片的名字");
                 }else if(data == "501"){
                     alert("舞蹈视频的作者还不存在，请先创建舞蹈视频作者");
                 }else{

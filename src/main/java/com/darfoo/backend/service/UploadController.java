@@ -2,6 +2,7 @@ package com.darfoo.backend.service;
 
 import com.darfoo.backend.dao.AuthorDao;
 import com.darfoo.backend.dao.EducationDao;
+import com.darfoo.backend.dao.ImageDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.*;
 import com.darfoo.backend.utils.ServiceUtils;
@@ -32,6 +33,8 @@ public class UploadController {
     VideoDao videoDao;
     @Autowired
     EducationDao educationDao;
+    @Autowired
+    ImageDao imageDao;
 
     public int insertSingleVideo(String videotitle, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter){
         System.out.println(authorname);
@@ -42,6 +45,14 @@ public class UploadController {
         else{
             System.out.println("无该author记录");
             return 501;
+        }
+
+        Image image = imageDao.getImageByName(imagekey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            return 502;
         }
 
         Video queryVideo = videoDao.getVideoByVideoTitle(videotitle);
@@ -90,12 +101,20 @@ public class UploadController {
             return 501;
         }
 
+        Image image = imageDao.getImageByName(imagekey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            return 502;
+        }
+
         Education queryVideo = educationDao.getEducationVideoByTitle(videotitle);
         if (queryVideo == null){
-            System.out.println("视频不存在，可以进行插入");
+            System.out.println("教程不存在，可以进行插入");
         }else{
             System.out.println(queryVideo.toString(true));
-            System.out.println("视频已存在，不可以进行插入了，是否需要修改");
+            System.out.println("教程已存在，不可以进行插入了，是否需要修改");
             return 503;
         }
 
@@ -107,9 +126,9 @@ public class UploadController {
         EducationCategory speed = new EducationCategory();
         EducationCategory difficult = new EducationCategory();
         EducationCategory style = new EducationCategory();
-        speed.setTitle("快");
-        difficult.setTitle("适中");
-        style.setTitle("分解教学");
+        speed.setTitle(videospeed);
+        difficult.setTitle(videodifficult);
+        style.setTitle(videostyle);
         Set<EducationCategory> s_eCategory = video.getCategories();
         s_eCategory.add(speed);
         s_eCategory.add(difficult);

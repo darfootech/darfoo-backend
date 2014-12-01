@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.darfoo.backend.dao.AuthorDao;
+import com.darfoo.backend.dao.ImageDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class EducationDaoTests {
 	EducationDao educationDao;
     @Autowired
     AuthorDao authorDao;
+    @Autowired
+    ImageDao imageDao;
 
 	@Test
 	public void insertAllEducationCategories(){
@@ -37,7 +40,8 @@ public class EducationDaoTests {
 	@Test
 	public void insertSingleEducationVideo(){
         String title = "Strong Heart";
-        String authorName = "周杰伦1232";
+        String authorName = "周杰伦";
+        String imagekey = "仓木麻衣.jpg";
 
         Author a = authorDao.getAuthor(authorName);
         if(a != null){
@@ -48,23 +52,26 @@ public class EducationDaoTests {
             return;
         }
 
+        Image image = imageDao.getImageByName(imagekey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            return;
+        }
+
         Education queryVideo = educationDao.getEducationVideoByTitle(title);
         if (queryVideo == null){
-            System.out.println("对象不存在，可以进行插入");
+            System.out.println("教程不存在，可以进行插入");
         }else{
             System.out.println(queryVideo.toString(true));
-            System.out.println("对象已存在，不可以进行插入了，是否需要修改");
+            System.out.println("教程已存在，不可以进行插入了，是否需要修改");
             return;
         }
 
 		Education video = new Education();
-		Author a1 = new Author();
-		a1.setName(authorName);
-		a1.setDescription("日本女歌手");
-		video.setAuthor(a1);
-		Image img = new Image();
-		img.setImage_key("仓木麻衣.jpg");
-		video.setImage(img);
+		video.setAuthor(a);
+		video.setImage(image);
 		EducationCategory c1 = new EducationCategory();	
 		EducationCategory c2 = new EducationCategory();	
 		EducationCategory c3 = new EducationCategory();	

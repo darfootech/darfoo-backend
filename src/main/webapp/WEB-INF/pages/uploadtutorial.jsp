@@ -14,6 +14,8 @@
                     window.location.href = "/darfoobackend/rest/resources/tutorialresource/new"
                 }else if(data == "503"){
                     alert("相同标题的教程已经存在了，请修改教程标题");
+                }else if(data == "502"){
+                    alert("相同名字的图片已经存在了，请修改上传图片的名字");
                 }else if(data == "501"){
                     alert("教程的作者还不存在，请先创建教程作者");
                 }else{
