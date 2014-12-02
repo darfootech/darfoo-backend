@@ -13,7 +13,10 @@ public class CRUDEvent {
 
 	public final static int UPDATE_SUCCESS = 0X21;	//更新成功
 	public final static int UPDATE_FAIL = 0X22;		//更新失败
-	public final static int UPDATE_NOTFOUND = 0X23; //无法找到要更新的对象
+	public final static int UPDATE_VIDEO_NOTFOUND = 0X23; //VIDEO不存在
+	public final static int UPDATE_VIDEOAUTHOR_NOTFOUND = 0X24;//作者不存在
+	public final static int UPDATE_VIDEOIMAGE_NOTFOUND = 0X25; //图片不存在
+	public final static int UPDATE_VIDEOTITLE = 0X25; //返回该参数表示title(video_key)需要更新
 	
 	public final static int DELETE_SUCCESS = 0X31;  //删除成功
 	public final static int DELETE_FAIL = 0X32;		//删除失败
@@ -31,7 +34,7 @@ public class CRUDEvent {
 			case QUERY_FAIL:	res = "QUERY_FAIL";break;
 			case UPDATE_SUCCESS:res = "UPDATE_SUCCESS";break;
 			case UPDATE_FAIL:	res = "UPDATE_FAIL";break;
-			case UPDATE_NOTFOUND:res = "UPDATE_NOTFOUND";break;
+			case UPDATE_VIDEO_NOTFOUND:res = "UPDATE_VIDEO_NOTFOUND";break;
 			case DELETE_SUCCESS:res = "DELETE_SUCCESS";break;
 			case DELETE_FAIL:	res = "DELETE_FAIL";break;
 			case DELETE_NOTFOUND:res = "DELETE_NOTFOUND";break;

@@ -14,6 +14,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.exception.spi.ViolatedConstraintNameExtracter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -292,12 +293,61 @@ public class VideoDao {
 		return res;
 	}
 	/**
-	 * 更新Video
-	 * */
-	public int updateVideoById(Integer id){
+	 * 更新Video之前先做一次check
+	 * **/
+	public  int updateVideoCheck(Integer id,String title, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter){
 		int res = 0;
+		Video oldVideo = null;
 		try{
-			
+			Session session = sf.getCurrentSession();
+			oldVideo = (Video)session.get(Video.class, id);
+			if(oldVideo == null){
+				res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
+			}else{
+				if(authorname != null){
+					if(!authorname.equals(oldVideo.getAuthor().getName())){
+						Criteria c = session.createCriteria(Author.class).add(Restrictions.eq("name", authorname));
+						c.setReadOnly(true);
+						Author a = (Author)c.uniqueResult();
+						if(a == null){
+							System.out.println("要更新的Video的作者不存在，请先完成作者信息的插入");
+							res = CRUDEvent.UPDATE_AUTHOR_NOTFOUND;
+						}
+					}
+				}
+				if(imagekey != null){
+					if(!imagekey.equals(oldVideo.getImage().getImage_key())){
+						Criteria c = session.createCriteria(Image.class).add(Restrictions.eq("image_key", imagekey));
+						c.setReadOnly(true);
+						Image a = (Image)c.uniqueResult();
+						if(a == null){
+							System.out.println("要更新的Video的插图不存在，");
+							res = CRUDEvent.UPDATE_IMAGE_NOTFOUND;
+						}
+					}
+				}
+				if(title !=null){
+					if(!title.equals(oldVideo.getTitle())){
+						res = CRUDEvent.UPDATE_VIDEOTITLE;
+					}
+				}
+				videoletter = videodifficult.toUpperCase();//转换成大写
+				Set<VideoCategory> s_vCategories = oldVideo.getCategories();
+				s_vCategories.clear();
+				VideoCategory v_speed = new VideoCategory();
+				VideoCategory v_difficulty = new VideoCategory();
+				VideoCategory v_style = new VideoCategory();
+				VideoCategory v_letter = new VideoCategory();
+				v_speed.setTitle(videospeed);
+				v_difficulty.setTitle(videodifficult);
+				v_style.setTitle(videostyle);
+				v_letter.setTitle(videoletter);
+				s_vCategories.add(v_speed);
+				s_vCategories.add(v_difficulty);
+				s_vCategories.add(v_style);
+				s_vCategories.add(v_letter);
+				
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
