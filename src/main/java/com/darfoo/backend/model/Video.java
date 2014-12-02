@@ -45,7 +45,7 @@ public class Video implements Serializable {
 	
 	//video & category
 	@ManyToMany(targetEntity = VideoCategory.class)
-	@Cascade(value={CascadeType.DELETE,CascadeType.REMOVE})
+	//@Cascade(value={CascadeType.DELETE,CascadeType.REMOVE})
 	@JoinTable(name="video_category",joinColumns={@JoinColumn(name="video_id",referencedColumnName="id",nullable=false,columnDefinition="int(11) not null")},
 	inverseJoinColumns={@JoinColumn(name="category_id",nullable=false,columnDefinition="int(11) not null")})
 	Set<VideoCategory> categories = new HashSet<VideoCategory>();	

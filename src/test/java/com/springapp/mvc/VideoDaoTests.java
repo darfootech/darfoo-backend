@@ -180,13 +180,11 @@ public class VideoDaoTests {
         System.out.println(requestCategories[0].equals("0"));
     }
 	
-	@Test
-	public void deleteVideoById(){
-		System.out.println(videoDao.deleteVideoById(3)>0?"delete success":"delete fail");
-	}
 	
 	@Test
 	public void deleteVideoCascade(){
-		videoDao.deleteVideoCascade(7);
+		System.out.println(CRUDEvent.getResponse(videoDao.deleteVideoCascade(6)));
 	}
+	
+	
 }
