@@ -7,12 +7,14 @@ public class IndexVideo {
     Integer id;
     String title;
     String image_url;
+    String video_url;
     Long update_timestamp;
 
-    public IndexVideo(Integer id, String title, String image_url, Long update_timestamp) {
+    public IndexVideo(Integer id, String title, String image_url, String video_url, Long update_timestamp) {
         this.id = id;
         this.title = title;
         this.image_url = image_url;
+        this.video_url = video_url;
         this.update_timestamp = update_timestamp;
     }
 
@@ -22,6 +24,14 @@ public class IndexVideo {
 
     public void setImage_url(String image_url) {
         this.image_url = image_url;
+    }
+
+    public String getVideo_url() {
+        return video_url;
+    }
+
+    public void setVideo_url(String video_url) {
+        this.video_url = video_url;
     }
 
     public Long getUpdate_timestamp() {
