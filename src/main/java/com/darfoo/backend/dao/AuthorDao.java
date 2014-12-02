@@ -14,7 +14,7 @@ import com.darfoo.backend.model.Author;
 public class AuthorDao {
 	@Autowired
 	SessionFactory sf;
-	
+
 	/**
 	 * 获取所有author对象
 	 * @return List<Author>
@@ -67,7 +67,7 @@ public class AuthorDao {
 	}
 	/**
 	 * 根据name判断该author是否已经存在表里
-	 * @param name 带判断的author的name
+	 * @param name 待判断的author的name
 	 * @return 表中已经存在该name对应的作者信息,返回true;反之，返回一个false
 	 * **/
 	public boolean isExistAuthor(String name){

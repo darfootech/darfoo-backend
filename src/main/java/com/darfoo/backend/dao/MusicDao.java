@@ -83,6 +83,7 @@ public class MusicDao {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * 获取单个music的信息
 	 * 根据music的id来获得music对象
@@ -103,6 +104,28 @@ public class MusicDao {
 		}
 		return music;
 	}
+
+    /**
+     * 获取单个music的信息
+     * 根据music的title来获得music对象
+     * @return music 返回一个Music的实例对象(包含关联表中的数据)，详细请看Music.java类
+     * **/
+    public Music getMusicByMusicTitle(String title){
+        Music music = null;
+        try{
+            Session session = sf.getCurrentSession();
+            Criteria c = session.createCriteria(Music.class);
+            c.setReadOnly(true);
+            c.add(Restrictions.eq("title", title));
+            //设置JOIN mode，这样categories会直接加载到music类中
+            c.setFetchMode("categories", FetchMode.JOIN);
+            music = (Music)c.uniqueResult();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return music;
+    }
+
 	/**
 	 * 获取热门歌曲排行榜(暂时不排)
 	 * @param number 推荐歌曲数量(暂时定为3个)

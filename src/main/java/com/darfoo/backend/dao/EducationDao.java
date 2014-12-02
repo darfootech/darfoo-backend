@@ -101,6 +101,28 @@ public class EducationDao {
 		}
 		return video;
 	}
+
+    /**
+     * 获取单个enducation video的信息
+     * 根据video的title来获得video对象
+     * @return video 返回一个video的实例对象(包含关联表中的数据),详细看Education类
+     * **/
+    public Education getEducationVideoByTitle(String title){
+        Education video = null;
+        try{
+            Session session = sf.getCurrentSession();
+            Criteria c = session.createCriteria(Education.class);
+            c.setReadOnly(true);
+            c.add(Restrictions.eq("title", title));
+            //设置JOIN mode，这样categories会直接加载到video类中
+            c.setFetchMode("categories", FetchMode.JOIN);
+            video = (Education)c.uniqueResult();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return video;
+    }
+
 	/**
 	 * 根据类别获取视频列表(我要上网—视频页面) 暂时去掉名师那个种类
 	 * $categories  (快-简单—队形表演) 如果用户没有选择某个类别，那么就去掉该字符串

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.darfoo.backend.dao.AuthorDao;
+import com.darfoo.backend.dao.ImageDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,10 @@ import com.darfoo.backend.model.Video;
 public class EducationDaoTests {
 	@Autowired
 	EducationDao educationDao;
+    @Autowired
+    AuthorDao authorDao;
+    @Autowired
+    ImageDao imageDao;
 
 	@Test
 	public void insertAllEducationCategories(){
@@ -33,14 +39,42 @@ public class EducationDaoTests {
 	
 	@Test
 	public void insertSingleEducationVideo(){
+        String title = "Strong Heart123";
+        String authorName = "周杰伦";
+        String imagekey = "仓木麻衣333.jpg";
+
+        Author a = authorDao.getAuthor(authorName);
+        if(a != null){
+            System.out.println(a.getName());
+        }
+        else{
+            System.out.println("无该author记录");
+            return;
+        }
+
+        Image image = imageDao.getImageByName(imagekey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+            image = new Image();
+            image.setImage_key(imagekey);
+            imageDao.inserSingleImage(image);
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            return;
+        }
+
+        Education queryVideo = educationDao.getEducationVideoByTitle(title);
+        if (queryVideo == null){
+            System.out.println("教程不存在，可以进行插入");
+        }else{
+            System.out.println(queryVideo.toString(true));
+            System.out.println("教程已存在，不可以进行插入了，是否需要修改");
+            return;
+        }
+
 		Education video = new Education();
-		Author a1 = new Author();
-		a1.setName("周杰伦");
-		a1.setDescription("日本女歌手");
-		video.setAuthor(a1);
-		Image img = new Image();
-		img.setImage_key("仓木麻衣.jpg");
-		video.setImage(img);
+		video.setAuthor(a);
+		video.setImage(image);
 		EducationCategory c1 = new EducationCategory();	
 		EducationCategory c2 = new EducationCategory();	
 		EducationCategory c3 = new EducationCategory();	
@@ -51,8 +85,8 @@ public class EducationDaoTests {
 		s_eCategory.add(c1);
 		s_eCategory.add(c2);
 		s_eCategory.add(c3);
-		video.setTitle("Strong Heart");
-		video.setVideo_key("StrongHeart");
+		video.setTitle(title);
+		video.setVideo_key(title);
 		video.setUpdate_timestamp(System.currentTimeMillis());
 		educationDao.inserSingleEducationVideo(video);
 	}

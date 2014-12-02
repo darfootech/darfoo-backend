@@ -3,6 +3,8 @@ package com.springapp.mvc;
 import java.util.List;
 import java.util.Set;
 
+import com.darfoo.backend.dao.AuthorDao;
+import com.darfoo.backend.dao.ImageDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,10 @@ import com.darfoo.backend.model.Music;
 public class MusicDaoTests {
 	@Autowired
 	private MusicDao musicDao;
+    @Autowired
+    AuthorDao authorDao;
+    @Autowired
+    ImageDao imageDao;
 	
 	@Test
 	public void insertAllMusicCategories(){
@@ -31,14 +37,42 @@ public class MusicDaoTests {
 	
 	@Test
 	public void inserSingleMusic(){
-		Music music = new Music();
-		Author a1 = new Author();
-		a1.setName("T-ara");
-		a1.setDescription("韩国女团组合");
-		music.setAuthor(a1);
-		Image img = new Image();
-		img.setImage_key("T-ara.jpg");
-		music.setImage(img);
+        String musicTitle = "Sexy Love33";
+        String authorName = "T-ara";
+        String imagekey = "T-ara333.jpg";
+
+        Author a = authorDao.getAuthor(authorName);
+        if(a != null){
+            System.out.println(a.getName());
+        }
+        else{
+            System.out.println("无该author记录");
+            return;
+        }
+
+        Image image = imageDao.getImageByName(imagekey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+            image = new Image();
+            image.setImage_key(imagekey);
+            imageDao.inserSingleImage(image);
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            return;
+        }
+
+        Music queryMusic = musicDao.getMusicByMusicTitle(musicTitle);
+        if (queryMusic == null){
+            System.out.println("伴奏不存在，可以进行插入");
+        }else{
+            System.out.println(queryMusic.toString(true));
+            System.out.println("伴奏已存在，不可以进行插入了，是否需要修改");
+            return;
+        }
+
+        Music music = new Music();
+		music.setAuthor(a);
+		music.setImage(image);
 		MusicCategory c1 = new MusicCategory();	
 		MusicCategory c2 = new MusicCategory();	
 		MusicCategory c3 = new MusicCategory();	
@@ -49,8 +83,8 @@ public class MusicDaoTests {
 		s_mCategory.add(c1);
 		s_mCategory.add(c2);
 		s_mCategory.add(c3);
-		music.setTitle("Sexy Love");
-		music.setMusic_key("SexyLove");
+		music.setTitle(musicTitle);
+		music.setMusic_key(musicTitle);
 		music.setUpdate_timestamp(System.currentTimeMillis());
 		musicDao.inserSingleMusic(music);
 	}

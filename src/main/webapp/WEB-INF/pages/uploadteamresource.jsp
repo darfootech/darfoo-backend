@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <form role="form" action="/darfoobackend/rest/resources/teamresource/create" method="post" id="createvideoform" name="createvideoform" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="imageresource">选择要上传的舞队图片</label>
+                    <label for="imageresource">选择要上传的舞队图片(请确保是JPG或者PNG格式的图片文件)</label>
                     <input type="file" id="imageresource" name="imageresource">
                 </div>
 

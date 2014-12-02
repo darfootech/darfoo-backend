@@ -7,12 +7,12 @@
         <div class="col-md-12">
             <form role="form" action="/darfoobackend/rest/resources/musicresource/create" method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="musicresource">选择要上传的音频资源</label>
+                    <label for="musicresource">选择要上传的音频资源(请确保是MP3格式的音频文件)</label>
                     <input type="file" id="musicresource" name="musicresource">
                 </div>
 
                 <div class="form-group">
-                    <label for="imageresource">选择要上传的视频封面图片</label>
+                    <label for="imageresource">选择要上传的视频封面图片(请确保是JPG或者PNG格式的图片文件)</label>
                     <input type="file" id="imageresource" name="imageresource">
                 </div>
 

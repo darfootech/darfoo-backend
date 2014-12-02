@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.darfoo.backend.dao.AuthorDao;
+import com.darfoo.backend.dao.ImageDao;
 import com.darfoo.backend.service.responsemodel.VideoCates;
 
 import org.junit.Test;
@@ -25,29 +27,61 @@ import com.darfoo.backend.model.VideoCategory;
 public class VideoDaoTests {
 	@Autowired
 	VideoDao videoDao;
+    @Autowired
+    AuthorDao authorDao;
+    @Autowired
+    ImageDao imageDao;
     VideoCates videoCates = new VideoCates();
 
     @Test
 	public void insertAllVideoCategories(){
 		videoDao.insertAllVideoCategories();
 	}
-	
+
 	@Test
-	public void inserSingleVideo(){
-		Video video = new Video();
-		Author a1 = new Author();
-		a1.setName("滨崎步");
-		a1.setDescription("日本女歌手");
-		video.setAuthor(a1);
-		Image img = new Image();
-		img.setImage_key("滨崎步.jpg");
-		video.setImage(img);
+	public void insertSingleVideo(){
+        String videoTitle = "clea33333";
+        String authorName = "滨崎步";
+        String imagekey = "滨崎步3.jpg";
+
+        Author a = authorDao.getAuthor(authorName);
+        if(a != null){
+            System.out.println(a.getName());
+        }
+        else{
+            System.out.println("无该author记录");
+            return;
+        }
+
+        Image image = imageDao.getImageByName(imagekey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+            image = new Image();
+            image.setImage_key(imagekey);
+            imageDao.inserSingleImage(image);
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            return;
+        }
+
+        Video queryVideo = videoDao.getVideoByVideoTitle(videoTitle);
+        if (queryVideo == null){
+            System.out.println("视频不存在，可以进行插入");
+        }else{
+            System.out.println(queryVideo.toString(true));
+            System.out.println("视频已存在，不可以进行插入了，是否需要修改");
+            return;
+        }
+
+        Video video = new Video();
+		video.setAuthor(a);
+		video.setImage(image);
 		VideoCategory c1 = new VideoCategory();	
 		VideoCategory c2 = new VideoCategory();	
 		VideoCategory c3 = new VideoCategory();	
 		VideoCategory c4 = new VideoCategory();	
-		c1.setTitle("较快");
-		c2.setTitle("普通");
+		c1.setTitle("适中");
+		c2.setTitle("中等");
 		c3.setTitle("情歌风");
 		c4.setTitle("D");
 		Set<VideoCategory> s_vCategory = video.getCategories();
@@ -55,8 +89,8 @@ public class VideoDaoTests {
 		s_vCategory.add(c2);
 		s_vCategory.add(c3);
 		s_vCategory.add(c4);
-		video.setTitle("Ivy");
-		video.setVideo_key("Ivy"); 
+		video.setTitle(videoTitle);
+		video.setVideo_key(videoTitle);
 		video.setUpdate_timestamp(System.currentTimeMillis());
 		videoDao.inserSingleVideo(video);
 	}
@@ -68,6 +102,20 @@ public class VideoDaoTests {
 		System.out.println(video.toString(true));
 		System.out.println("time elapse:"+(System.currentTimeMillis()-start)/1000f);
 	}
+
+    @Test
+    public void getVideoByVideoTitle(){
+        long start = System.currentTimeMillis();
+        Video video = videoDao.getVideoByVideoTitle("ccc");
+        if (video == null){
+            System.out.println("对象不存在，可以进行插入");
+        }else{
+            System.out.println(video.toString(true));
+            System.out.println("对象已存在，不可以进行插入了，是否需要修改");
+        }
+        System.out.println("time elapse:"+(System.currentTimeMillis()-start)/1000f);
+    }
+
 	@Test
 	public void getRecommendVideos(){
 		long start = System.currentTimeMillis();

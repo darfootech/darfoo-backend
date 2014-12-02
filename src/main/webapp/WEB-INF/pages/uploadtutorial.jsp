@@ -9,11 +9,17 @@
             url : createTutorialUrl,
             data : $("#createtutorialform").serialize(),
             success : function(data){
-                if(data ==  "cleantha"){
+                if(data == "200"){
                     alert("提交教程信息成功");
                     window.location.href = "/darfoobackend/rest/resources/tutorialresource/new"
+                }else if(data == "503"){
+                    alert("相同标题的教程已经存在了，请修改教程标题");
+                }else if(data == "502"){
+                    alert("相同名字的图片已经存在了，请修改上传图片的名字");
+                }else if(data == "501"){
+                    alert("教程的作者还不存在，请先创建教程作者");
                 }else{
-                    alert("提交教程信息失败")
+                    alert("提交教程信息失败");
                 }
             },
             error : function(){
@@ -44,27 +50,27 @@
                 <div class="form-group">
                     <label for="videospeed">教学视频速度</label>
                     <select data-toggle="select" name="videospeed" id="videospeed" class="form-control select select-success mrs mbm">
-                        <option value="1">快</option>
-                        <option value="2">中</option>
-                        <option value="3">慢</option>
+                        <option value="快">快</option>
+                        <option value="中">中</option>
+                        <option value="慢">慢</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="videodifficult">教学视频难度</label>
                     <select data-toggle="select" name="videodifficult" id="videodifficult" class="form-control select select-success mrs mbm">
-                        <option value="1">简单</option>
-                        <option value="2">适中</option>
-                        <option value="3">稍难</option>
+                        <option value="简单">简单</option>
+                        <option value="适中">适中</option>
+                        <option value="稍难">稍难</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="videostyle">教学视频类型</label>
                     <select data-toggle="select" name="videostyle" id="videostyle" class="form-control select select-success mrs mbm">
-                        <option value="1">队形表演</option>
-                        <option value="2">背⾯教学</option>
-                        <option value="3">分解教学</option>
+                        <option value="队形表演">队形表演</option>
+                        <option value="背⾯教学">背⾯教学</option>
+                        <option value="分解教学">分解教学</option>
                     </select>
                 </div>
 
