@@ -272,7 +272,7 @@ public class UploadController {
     }
 
     @RequestMapping(value = "/resources/video/create", method = RequestMethod.POST)
-    public @ResponseBody String createVideo(HttpServletRequest request){
+    public @ResponseBody String createVideo(HttpServletRequest request, HttpSession session){
         String videoTitle = request.getParameter("title");
         String authorName = request.getParameter("authorname");
         String imagekey = request.getParameter("imagekey");
@@ -282,6 +282,9 @@ public class UploadController {
         String videoLetter = request.getParameter("videoletter").toUpperCase();
         Long update_timestamp = System.currentTimeMillis() / 1000;
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + videoLetter + " " + update_timestamp);
+
+        session.setAttribute("videoTitle", videoTitle + ".mp4");
+        session.setAttribute("videoImage", imagekey);
 
         int statusCode = this.insertSingleVideo(videoTitle, authorName, imagekey, videoSpeed, videoDifficult, videoStyle, videoLetter);
         System.out.println("status code is: " + statusCode);
@@ -294,8 +297,11 @@ public class UploadController {
     }
 
     @RequestMapping("/resources/videoresource/create")
-    public String createVideoResource(@RequestParam("videoresource") CommonsMultipartFile videoresource, @RequestParam("imageresource") CommonsMultipartFile imageresource){
+    public String createVideoResource(@RequestParam("videoresource") CommonsMultipartFile videoresource, @RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session){
         //upload
+        String videoTitle = (String)session.getAttribute("videoTitle");
+        String imageKey = (String)session.getAttribute("videoImage");
+
         String videoResourceName = videoresource.getOriginalFilename();
         String imageResourceName = imageresource.getOriginalFilename();
 
@@ -305,8 +311,8 @@ public class UploadController {
         String imageStatusCode = "";
 
         try {
-            videoStatusCode = ServiceUtils.uploadLargeResource(videoresource);
-            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource);
+            videoStatusCode = ServiceUtils.uploadLargeResource(videoresource, videoTitle);
+            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imageKey);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -328,7 +334,7 @@ public class UploadController {
     }
 
     @RequestMapping(value = "/resources/music/create", method = RequestMethod.POST)
-    public @ResponseBody String createMusic(HttpServletRequest request){
+    public @ResponseBody String createMusic(HttpServletRequest request, HttpSession session){
         String musicTitle = request.getParameter("title");
         String authorName = request.getParameter("authorname");
         String imagekey = request.getParameter("imagekey");
@@ -337,6 +343,9 @@ public class UploadController {
         String musicLetter = request.getParameter("musicletter").toUpperCase();
         Long update_timestamp = System.currentTimeMillis() / 1000;
         System.out.println("requests: " + musicTitle + " " + authorName + " " + imagekey + " " + musicBeat + " " + musicStyle + " " + musicLetter + " " + update_timestamp);
+
+        session.setAttribute("musicTitle", musicTitle + ".mp3");
+        session.setAttribute("musicImage", imagekey);
 
         int statusCode = this.insertSingleMusic(musicTitle, authorName, imagekey, musicBeat, musicStyle, musicLetter);
         return statusCode+"";
@@ -348,8 +357,11 @@ public class UploadController {
     }
 
     @RequestMapping("/resources/musicresource/create")
-    public String createMusicResource(@RequestParam("musicresource") CommonsMultipartFile musicresource, @RequestParam("imageresource") CommonsMultipartFile imageresource){
+    public String createMusicResource(@RequestParam("musicresource") CommonsMultipartFile musicresource, @RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session){
         //upload
+        String musicTitle = (String)session.getAttribute("musicTitle");
+        String imageKey = (String)session.getAttribute("musicImage");
+
         String videoResourceName = musicresource.getOriginalFilename();
         String imageResourceName = imageresource.getOriginalFilename();
 
@@ -359,8 +371,8 @@ public class UploadController {
         String imageStatusCode = "";
 
         try {
-            musicStatusCode = ServiceUtils.uploadLargeResource(musicresource);
-            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource);
+            musicStatusCode = ServiceUtils.uploadLargeResource(musicresource, musicTitle);
+            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imageKey);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -382,7 +394,7 @@ public class UploadController {
     }
 
     @RequestMapping(value = "/resources/tutorial/create", method = RequestMethod.POST)
-    public @ResponseBody String createTutorial(HttpServletRequest request){
+    public @ResponseBody String createTutorial(HttpServletRequest request, HttpSession session){
         String videoTitle = request.getParameter("title");
         String authorName = request.getParameter("authorname");
         String imagekey = request.getParameter("imagekey");
@@ -391,6 +403,9 @@ public class UploadController {
         String videoStyle = request.getParameter("videostyle");
         Long update_timestamp = System.currentTimeMillis() / 1000;
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + update_timestamp);
+
+        session.setAttribute("tutorialTitle", videoTitle + ".mp4");
+        session.setAttribute("tutorialImage", imagekey);
 
         int statusCode = this.insertSingleEducationVideo(videoTitle, authorName, imagekey, videoSpeed, videoDifficult, videoStyle);
         System.out.println("status code: " + statusCode);
@@ -403,8 +418,11 @@ public class UploadController {
     }
 
     @RequestMapping("/resources/tutorialresource/create")
-    public String createTutorialResource(@RequestParam("videoresource") CommonsMultipartFile videoresource, @RequestParam("imageresource") CommonsMultipartFile imageresource){
+    public String createTutorialResource(@RequestParam("videoresource") CommonsMultipartFile videoresource, @RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session){
         //upload
+        String tutorialTitle = (String)session.getAttribute("tutorialTitle");
+        String imagekey = (String)session.getAttribute("tutorialImage");
+
         String videoResourceName = videoresource.getOriginalFilename();
         String imageResourceName = imageresource.getOriginalFilename();
 
@@ -414,8 +432,8 @@ public class UploadController {
         String imageStatusCode = "";
 
         try {
-            videoStatusCode = ServiceUtils.uploadLargeResource(videoresource);
-            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource);
+            videoStatusCode = ServiceUtils.uploadLargeResource(videoresource, tutorialTitle);
+            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -458,12 +476,14 @@ public class UploadController {
     }
 
     @RequestMapping(value = "/resources/team/create", method = RequestMethod.POST)
-    public @ResponseBody String createTeam(HttpServletRequest request){
+    public @ResponseBody String createTeam(HttpServletRequest request, HttpSession session){
         String name = request.getParameter("name");
         String description = request.getParameter("description");
         String imagekey = request.getParameter("imagekey");
         Long update_timestamp = System.currentTimeMillis() / 1000;
         System.out.println("requests: " + name + " " + description + " " + imagekey + " " + update_timestamp);
+
+        session.setAttribute("dancegroupImage", imagekey);
 
         int statusCode = this.insertSingleDanceGroup(name, description, imagekey);
         return statusCode+"";
@@ -475,8 +495,10 @@ public class UploadController {
     }
 
     @RequestMapping("/resources/teamresource/create")
-    public String createTeamResource(@RequestParam("imageresource") CommonsMultipartFile imageresource){
+    public String createTeamResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session){
         //upload
+        String imagekey = (String)session.getAttribute("dancegroupImage");
+
         String imageResourceName = imageresource.getOriginalFilename();
 
         System.out.println(imageResourceName);
@@ -484,7 +506,7 @@ public class UploadController {
         String imageStatusCode = "";
 
         try {
-            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource);
+            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
         } catch (IOException e) {
             e.printStackTrace();
         }
