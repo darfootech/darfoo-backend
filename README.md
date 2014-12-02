@@ -23,6 +23,4 @@ qrsync conf.json
 
 #### todo
 
-* hibernate使用annotation
-* 自动化创建数据库和数据表
-* 单元测试
+* 自动化创建数据库和迁移数据表
