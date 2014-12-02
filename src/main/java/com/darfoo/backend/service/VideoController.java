@@ -67,8 +67,10 @@ public class VideoController {
         for (Video video : videos){
             int id = video.getId();
             String title = video.getTitle();
+            String video_url = video.getVideo_key() + ".mp4";
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new SearchVideo(id, title, update_timestamp));
+            result.add(new SearchVideo(id, title, video_download_url, update_timestamp));
         }
         return result;
     }
@@ -82,8 +84,10 @@ public class VideoController {
         for (Education video : videos){
             int id = video.getId();
             String title = video.getTitle();
+            String video_url = video.getVideo_key() + ".mp4";
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new SearchVideo(id, title, update_timestamp));
+            result.add(new SearchVideo(id, title, video_download_url, update_timestamp));
         }
         return result;
     }
@@ -99,8 +103,10 @@ public class VideoController {
             String image_url = video.getImage().getImage_key();
             String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String video_title = video.getTitle();
+            String video_url = video.getVideo_key() + ".mp4";
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new IndexVideo(video_id, video_title, image_download_url, update_timestamp));
+            result.add(new IndexVideo(video_id, video_title, image_download_url, video_download_url, update_timestamp));
         }
         return result;
     }
@@ -116,8 +122,10 @@ public class VideoController {
             String image_url = video.getImage().getImage_key();
             String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String video_title = video.getTitle();
+            String video_url = video.getVideo_key() + ".mp4";
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new IndexVideo(video_id, video_title, image_download_url, update_timestamp));
+            result.add(new IndexVideo(video_id, video_title, image_download_url, video_download_url, update_timestamp));
         }
         return result;
     }
@@ -157,9 +165,11 @@ public class VideoController {
             String image_url = video.getImage().getImage_key();
             String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String video_title = video.getTitle();
+            String video_url = video.getVideo_key() + ".mp4";
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             String author_name = video.getAuthor().getName();
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new CategoryVideo(video_id, video_title, author_name, image_download_url, update_timestamp));
+            result.add(new CategoryVideo(video_id, video_title, author_name, image_download_url, video_download_url, update_timestamp));
         }
         return result;
     }
@@ -200,8 +210,10 @@ public class VideoController {
             String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String author_name = video.getAuthor().getName();
             String video_title = video.getTitle();
+            String video_url = video.getVideo_key() + ".mp4";
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new CategoryVideo(video_id, video_title, author_name, image_download_url, update_timestamp));
+            result.add(new CategoryVideo(video_id, video_title, author_name, image_download_url, video_download_url, update_timestamp));
         }
         return result;
     }

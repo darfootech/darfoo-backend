@@ -9,14 +9,24 @@ import java.util.Map;
 public class CategoryMusic {
     Integer id;
     String image_url;
+    String music_url;
     String title;
     Long update_timestamp;
 
-    public CategoryMusic(Integer id, String image_url, String title, Long update_timestamp) {
+    public CategoryMusic(Integer id, String image_url, String music_url, String title, Long update_timestamp) {
         this.id = id;
         this.image_url = image_url;
+        this.music_url = music_url;
         this.title = title;
         this.update_timestamp = update_timestamp;
+    }
+
+    public String getMusic_url() {
+        return music_url;
+    }
+
+    public void setMusic_url(String music_url) {
+        this.music_url = music_url;
     }
 
     public Integer getId() {

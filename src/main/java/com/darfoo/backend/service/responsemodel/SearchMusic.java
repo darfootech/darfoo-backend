@@ -6,12 +6,22 @@ package com.darfoo.backend.service.responsemodel;
 public class SearchMusic {
     Integer id;
     String title;
+    String music_url;
     Long update_timestamp;
 
-    public SearchMusic(Integer id, String title, Long update_timestamp) {
+    public SearchMusic(Integer id, String title, String music_url, Long update_timestamp) {
         this.id = id;
         this.title = title;
+        this.music_url = music_url;
         this.update_timestamp = update_timestamp;
+    }
+
+    public String getMusic_url() {
+        return music_url;
+    }
+
+    public void setMusic_url(String music_url) {
+        this.music_url = music_url;
     }
 
     public Integer getId() {
