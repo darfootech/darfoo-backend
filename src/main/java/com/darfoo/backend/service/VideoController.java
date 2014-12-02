@@ -67,8 +67,10 @@ public class VideoController {
         for (Video video : videos){
             int id = video.getId();
             String title = video.getTitle();
+            String video_url = video.getVideo_key() + ".mp4";
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new SearchVideo(id, title, update_timestamp));
+            result.add(new SearchVideo(id, title, video_download_url, update_timestamp));
         }
         return result;
     }
@@ -82,8 +84,10 @@ public class VideoController {
         for (Education video : videos){
             int id = video.getId();
             String title = video.getTitle();
+            String video_url = video.getVideo_key() + ".mp4";
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new SearchVideo(id, title, update_timestamp));
+            result.add(new SearchVideo(id, title, video_download_url, update_timestamp));
         }
         return result;
     }
