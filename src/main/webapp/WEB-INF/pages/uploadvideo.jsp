@@ -76,7 +76,7 @@
                         <option value="活泼">活泼</option>
                         <option value="优美">优美</option>
                         <option value="情歌风">情歌风</option>
-                        <option value="红歌">红歌⻛</option>
+                        <option value="红歌风">红歌⻛</option>
                         <option value="草原风">草原风</option>
                         <option value="戏曲⻛">戏曲⻛</option>
                         <option value="印巴⻛">印巴⻛</option>
