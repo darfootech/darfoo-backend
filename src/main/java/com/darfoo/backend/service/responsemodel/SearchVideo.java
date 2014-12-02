@@ -6,12 +6,22 @@ package com.darfoo.backend.service.responsemodel;
 public class SearchVideo {
     Integer id;
     String title;
+    String video_url;
     Long update_timestamp;
 
-    public SearchVideo(Integer id, String title, Long update_timestamp) {
+    public SearchVideo(Integer id, String title, String video_url, Long update_timestamp) {
         this.id = id;
         this.title = title;
+        this.video_url = video_url;
         this.update_timestamp = update_timestamp;
+    }
+
+    public String getVideo_url() {
+        return video_url;
+    }
+
+    public void setVideo_url(String video_url) {
+        this.video_url = video_url;
     }
 
     public Integer getId() {
