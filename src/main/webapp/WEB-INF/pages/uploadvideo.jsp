@@ -76,13 +76,13 @@
                         <option value="活泼">活泼</option>
                         <option value="优美">优美</option>
                         <option value="情歌风">情歌风</option>
-                        <option value="红歌风">红歌⻛</option>
+                        <option value="红歌风">红歌风</option>
                         <option value="草原风">草原风</option>
-                        <option value="戏曲⻛">戏曲⻛</option>
-                        <option value="印巴⻛">印巴⻛</option>
-                        <option value="江南⻛">江南⻛</option>
+                        <option value="戏曲风">戏曲风</option>
+                        <option value="印巴风">印巴风</option>
+                        <option value="江南风">江南风</option>
                         <option value="民歌风">民歌风</option>
-                        <option value="儿歌⻛">儿歌⻛</option>
+                        <option value="儿歌风">儿歌风</option>
                     </select>
                 </div>
 
