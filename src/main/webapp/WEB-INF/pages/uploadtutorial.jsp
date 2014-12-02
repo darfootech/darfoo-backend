@@ -69,7 +69,7 @@
                     <label for="videostyle">教学视频类型</label>
                     <select data-toggle="select" name="videostyle" id="videostyle" class="form-control select select-success mrs mbm">
                         <option value="队形表演">队形表演</option>
-                        <option value="背⾯教学">背⾯教学</option>
+                        <option value="背面教学">背面教学</option>
                         <option value="分解教学">分解教学</option>
                     </select>
                 </div>
