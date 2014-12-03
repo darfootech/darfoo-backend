@@ -23,6 +23,7 @@ import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.MusicCategory;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.UpdateCheckResponse;
+import com.darfoo.backend.model.Music;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
@@ -153,8 +154,21 @@ public class MusicDaoTests {
 		categoryTitles.add(musicLetter.toUpperCase());
 		if(response.updateIsReady()){
 			//updateIsReady为true表示可以进行更新操作
-			System.out.println(CRUDEvent.getResponse(musicDao.updateMusic(vid, authorName, imageKey,categoryTitles)));
+			System.out.println(CRUDEvent.getResponse(musicDao.updateMusic(vid, authorName, imageKey,categoryTitles,System.currentTimeMillis())));
 		}
 	}
-	
+	/**
+	 * 获取所有的music对象
+	 * **/
+	@Test
+	public void getAllMusics(){
+		Set<Music> s_musics = new HashSet<Music>();
+		s_musics = musicDao.getAllMusic();
+		System.out.println("总共查到"+s_musics.size());
+		for(Music video : s_musics){
+			System.out.println("----------------");
+			System.out.println(video.toString(true));
+			
+		}
+	}
 }

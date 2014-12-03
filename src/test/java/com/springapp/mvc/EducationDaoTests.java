@@ -22,6 +22,7 @@ import com.darfoo.backend.model.EducationCategory;
 import com.darfoo.backend.model.Image;
 import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.EducationCategory;
+import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.UpdateCheckResponse;
 import com.darfoo.backend.model.Video;
 
@@ -145,9 +146,24 @@ public class EducationDaoTests {
 		categoryTitles.add(videoStyle);
 		if(response.updateIsReady()){
 			//updateIsReady为true表示可以进行更新操作
-			System.out.println(CRUDEvent.getResponse(educationDao.updateEducation(vid, authorName, imageKey,categoryTitles)));
+			System.out.println(CRUDEvent.getResponse(educationDao.updateEducation(vid, authorName, imageKey,categoryTitles,System.currentTimeMillis())));
 		}else{
 			System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
+		}
+	}
+	
+	/**
+	 * 获取所有的education对象
+	 * **/
+	@Test
+	public void getAllEducations(){
+		Set<Education> s_educations = new HashSet<Education>();
+		s_educations = educationDao.getAllEdutcaion();
+		System.out.println("总共查到"+s_educations.size());
+		for(Education video : s_educations){
+			System.out.println("----------------");
+			System.out.println(video.toString(true));
+			
 		}
 	}
 }

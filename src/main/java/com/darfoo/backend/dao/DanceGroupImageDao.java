@@ -1,6 +1,11 @@
 package com.darfoo.backend.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.darfoo.backend.model.DanceGroupImage;
+import com.darfoo.backend.model.Image;
+
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
@@ -50,4 +55,28 @@ public class DanceGroupImageDao {
         }
         return image;
     }
+    
+    /**
+     * 获取所有的image
+     * @return List<DanceGroupImage>
+     * **/
+	public List<DanceGroupImage> getAllImage(){
+		List<DanceGroupImage> l_image = new ArrayList<DanceGroupImage>();
+		try{
+			Session session = sessionFactory.getCurrentSession();
+			Criteria c = session.createCriteria(DanceGroupImage.class).setReadOnly(true);			
+			l_image = c.list();
+		}catch(Exception e){			
+			e.printStackTrace();
+		}
+		return l_image;
+		
+	}
+	/**
+	 * 更新Image
+	 * (更新imageKey意义不大，不如直接插入一个新的)
+	 * **/
+//	public void updateImage(Integer id,String imageKey){
+//		
+//	}
 }

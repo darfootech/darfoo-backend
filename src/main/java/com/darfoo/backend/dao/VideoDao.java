@@ -296,11 +296,12 @@ public class VideoDao {
 		return res;
 	}
 	/**
-	 * 更新Video之前先做check(主要是对author和image的check)
+	 * 更新Video之前先做check(主要是对author和image的check) 
 	 * ***不对title(key)进行update，这样的更新没有必要，不如直接插入一个Video(吉卉这个请注意)
 	 * @param id 需要更新的对象对应的id
 	 * @param authorname 新的作者名字  (null值表示不需要更新)
 	 * @param imagekey   新的图片key (null值表示不需要更新)
+	 * @return response  里面包含check的结果
 	 * **/
 	public  UpdateCheckResponse updateVideoCheck(Integer id, String authorname, String imagekey){
 		UpdateCheckResponse response = new UpdateCheckResponse();
@@ -356,7 +357,7 @@ public class VideoDao {
 	 * @param imagekey   新的图片key(null值表示不需要更新)
 	 * @param categoryTitles  种类的集合(null值表示不需要更新)
 	 * **/
-	public int updateVideo(Integer id,String authorname, String imagekey, Set<String> categoryTitles){
+	public int updateVideo(Integer id,String authorname, String imagekey, Set<String> categoryTitles,Long updateTimestamp){
 		int res = 0;
 		try{
 			Session session = sf.getCurrentSession();
@@ -397,6 +398,8 @@ public class VideoDao {
 			}else{
 				System.out.println("种类不需要更新");
 			}
+			if(updateTimestamp != null)
+				oldVideo.setUpdate_timestamp(updateTimestamp);
 			System.out.println("-----更新后的video如下-----");
 			System.out.println(oldVideo.toString(true));
 			session.saveOrUpdate(oldVideo);
@@ -408,5 +411,23 @@ public class VideoDao {
 		return res;
 	}
 	
+	/**
+	 * 获得所有Video对象
+	 * **/
+	public Set<Video> getAllVideo(){
+		Set<Video> s_videos = new HashSet<Video>();
+		try{
+			Session session = sf.getCurrentSession();
+			Criteria c = session.createCriteria(Video.class);
+			c.setReadOnly(true);
+			c.setFetchMode("categories", FetchMode.JOIN);
+			List<Video> l_videos = c.list();  
+			if(l_videos.size() > 0)
+				s_videos = new HashSet<Video>(l_videos); //使用Set封装去掉List中重复的信息
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return s_videos;
+	}
 	
 }

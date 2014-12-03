@@ -1,5 +1,8 @@
 package com.springapp.mvc;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +50,18 @@ public class AuthorDaoTests {
 	
 	@Test
 	public void updateAuthor(){
-		Author author = new Author();
-		author.setName("五月天");
-		author.setDescription("菜狗组合");
-		String oldName = "五月天";
-		int res = authorDao.updateAuthor(author, oldName);
+		Integer id = 2;
+		String newName = "周杰伦";
+		String newDesciption = null;
+		int res = authorDao.updateAuthor(id,newName, newDesciption);//更新id为2的Author对象的名字
 		System.out.println(CRUDEvent.getResponse(res));
+	}
+	
+	@Test
+	public void getAllAuthor(){
+		List<Author> l_author = authorDao.getAllAuthor();
+		for(Author a : l_author){
+			System.out.println(a.getName()+"  "+a.getDescription());
+		}
 	}
 }

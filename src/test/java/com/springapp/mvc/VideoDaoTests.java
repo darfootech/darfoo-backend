@@ -209,9 +209,24 @@ public class VideoDaoTests {
 		categoryTitles.add(videoLetter.toUpperCase());
 		if(response.updateIsReady()){
 			//updateIsReady为true表示可以进行更新操作
-			System.out.println(CRUDEvent.getResponse(videoDao.updateVideo(vid, authorName, imageKey,categoryTitles)));
+			System.out.println(CRUDEvent.getResponse(videoDao.updateVideo(vid, authorName, imageKey,categoryTitles,System.currentTimeMillis())));
 		}else{
 			System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
+		}
+	}
+	
+	/**
+	 * 获取所有的video对象
+	 * **/
+	@Test
+	public void getAllVideos(){
+		Set<Video> s_videos = new HashSet<Video>();
+		s_videos = videoDao.getAllVideo();
+		System.out.println("总共查到"+s_videos.size());
+		for(Video video : s_videos){
+			System.out.println("----------------");
+			System.out.println(video.toString(true));
+			
 		}
 	}
 }

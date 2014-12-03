@@ -21,6 +21,7 @@ import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Image;
 import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.EducationCategory;
+import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.UpdateCheckResponse;
 import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.VideoCategory;
@@ -285,7 +286,7 @@ public class EducationDao {
 	 * @param imagekey   新的图片key(null值表示不需要更新)
 	 * @param categoryTitles  种类的集合(null值表示不需要更新)
 	 * **/
-	public int updateEducation(Integer id,String authorname, String imagekey, Set<String> categoryTitles){
+	public int updateEducation(Integer id,String authorname, String imagekey, Set<String> categoryTitles,Long updateTimestamp){
 		int res = 0;
 		try{
 			Session session = sf.getCurrentSession();
@@ -326,6 +327,8 @@ public class EducationDao {
 			}else{
 				System.out.println("种类不需要更新");
 			}
+			if(updateTimestamp != null)
+				oldEducation.setUpdate_timestamp(updateTimestamp);
 			System.out.println("-----更新后的education如下-----");
 			System.out.println(oldEducation.toString(true));
 			session.saveOrUpdate(oldEducation);
@@ -335,5 +338,24 @@ public class EducationDao {
 			e.printStackTrace();
 		}
 		return res;
+	}
+	
+	/**
+	 * 获得所有Education对象
+	 * **/
+	public Set<Education> getAllEdutcaion(){
+		Set<Education> s_educations = new HashSet<Education>();
+		try{
+			Session session = sf.getCurrentSession();
+			Criteria c = session.createCriteria(Education.class);
+			c.setReadOnly(true);
+			c.setFetchMode("categories", FetchMode.JOIN);
+			List<Education> l_educations = c.list();  
+			if(l_educations.size() > 0)
+				s_educations = new HashSet<Education>(l_educations); //使用Set封装去掉List中重复的信息
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return s_educations;
 	}
 }

@@ -23,7 +23,7 @@ import com.darfoo.backend.model.Image;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.MusicCategory;
 import com.darfoo.backend.model.Music;
-import com.darfoo.backend.model.Video;
+import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.VideoCategory;
 import com.darfoo.backend.model.UpdateCheckResponse;
 
@@ -303,7 +303,7 @@ public class MusicDao {
 	 * @param imagekey   新的图片key(null值表示不需要更新)
 	 * @param categoryTitles  种类的集合(null值表示不需要更新)
 	 * **/
-	public int updateMusic(Integer id,String authorname, String imagekey, Set<String> categoryTitles){
+	public int updateMusic(Integer id,String authorname, String imagekey, Set<String> categoryTitles,Long updateTimestamp){
 		int res = 0;
 		try{
 			Session session = sf.getCurrentSession();
@@ -344,6 +344,8 @@ public class MusicDao {
 			}else{
 				System.out.println("种类不需要更新");
 			}
+			if(updateTimestamp != null)
+				oldMusic.setUpdate_timestamp(updateTimestamp);
 			System.out.println("-----更新后的Music如下-----");
 			System.out.println(oldMusic.toString(true));
 			session.saveOrUpdate(oldMusic);
@@ -354,5 +356,22 @@ public class MusicDao {
 		}
 		return res;
 	}
-	
+	/**
+	 * 获得所有Music对象
+	 * **/
+	public Set<Music> getAllMusic(){
+		Set<Music> s_musics = new HashSet<Music>();
+		try{
+			Session session = sf.getCurrentSession();
+			Criteria c = session.createCriteria(Music.class);
+			c.setReadOnly(true);
+			c.setFetchMode("categories", FetchMode.JOIN);
+			List<Music> l_musics = c.list();  
+			if(l_musics.size() > 0)
+				s_musics = new HashSet<Music>(l_musics); //使用Set封装去掉List中重复的信息
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return s_musics;
+	}
 }

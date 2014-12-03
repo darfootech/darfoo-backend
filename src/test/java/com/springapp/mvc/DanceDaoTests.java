@@ -1,8 +1,11 @@
 package com.springapp.mvc;
 
 import java.util.List;
+import java.util.Set;
 
+import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.DanceGroupImageDao;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.darfoo.backend.dao.DanceDao;
 import com.darfoo.backend.model.DanceGroup;
 import com.darfoo.backend.model.DanceGroupImage;
+import com.darfoo.backend.model.UpdateCheckResponse;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
@@ -66,6 +70,46 @@ public class DanceDaoTests {
 	
 	@Test
 	public void deleteDanceGroupById(){
-		System.out.println(danceDao.deleteDanceGroupById(5)>0?"delete success":"delete fail");
+		System.out.println(CRUDEvent.getResponse(danceDao.deleteDanceGroupById(5)));
+	}
+	/**
+	 * 更新舞队
+	 * **/
+	@Test
+	public void updateDanceGroup(){
+		int id = 5;
+		//String imageKey = "dg2";
+		String imageKey = null;
+		UpdateCheckResponse response = danceDao.updateDanceGroupCheck(id, imageKey);
+		String name = "年轻妈妈";
+		String description = "青春无极限";
+		if(response.updateIsReady()){
+			System.out.println(CRUDEvent.getResponse(danceDao.updateDanceGourp(id, name, description, imageKey,System.currentTimeMillis())));
+		}else{
+			System.out.println("请先完成舞队图片的插入");
+		}
+	}
+	
+	/**
+	 * 得到所有舞队
+	 * **/
+	@Test
+	public void getAllDanceGroup(){
+		Set<DanceGroup> s_groups = danceDao.getAllDanceGourp();
+		for(DanceGroup group : s_groups){
+			System.out.println(group.getName()+"  "+group.getDescription()+" "+group.getImage().getImage_key());
+		}
+	}
+	
+	/**
+	 * 得到所有舞队图片
+	 * **/
+	@Test
+	public void getAllDanceGourpImage(){
+		List<DanceGroupImage> l_image = danceGroupImageDao.getAllImage();
+		for(DanceGroupImage image : l_image){
+			System.out.println(image.getId()+"  "+image.getImage_key());
+		}
+		
 	}
 }

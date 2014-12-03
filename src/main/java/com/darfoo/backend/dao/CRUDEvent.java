@@ -13,8 +13,8 @@ public class CRUDEvent {
 
 	public final static int UPDATE_SUCCESS = 0X21;	//更新成功
 	public final static int UPDATE_FAIL = 0X22;		//更新失败
-	public final static int UPDATE_VIDEO_NOTFOUND = 0X23; //VIDEO不存在
-	public final static int UPDATE_MUSIC_NOTFOUND = 0X24; //VIDEO不存在
+//	public final static int UPDATE_VIDEO_NOTFOUND = 0X23; //VIDEO不存在
+//	public final static int UPDATE_MUSIC_NOTFOUND = 0X24; //MUSIC不存在
 	public final static int UPDATE_AUTHOR_NOTFOUND = 0X25;//作者不存在
 	public final static int UPDATE_IMAGE_NOTFOUND = 0X26; //图片不存在
 	
@@ -22,7 +22,7 @@ public class CRUDEvent {
 	public final static int DELETE_FAIL = 0X32;		//删除失败
 	public final static int DELETE_NOTFOUND = 0X33; //无法找到要删除的对象
 	
-	public final static int CRUD_EXCETION = 0X04; 	//捕获异常
+	public final static int CRUD_EXCETION = 0X04; 	//出现异常
 	
 	public static String getResponse(int CRUDEvent){
 		String res = "";
@@ -34,8 +34,8 @@ public class CRUDEvent {
 			case QUERY_FAIL:	res = "QUERY_FAIL";break;
 			case UPDATE_SUCCESS:res = "UPDATE_SUCCESS";break;
 			case UPDATE_FAIL:	res = "UPDATE_FAIL";break;
-			case UPDATE_VIDEO_NOTFOUND:res = "UPDATE_VIDEO_NOTFOUND";break;
-			case UPDATE_MUSIC_NOTFOUND:res = "UPDATE_MUSIC_NOTFOUND";break;
+//			case UPDATE_VIDEO_NOTFOUND:res = "UPDATE_VIDEO_NOTFOUND";break;
+//			case UPDATE_MUSIC_NOTFOUND:res = "UPDATE_MUSIC_NOTFOUND";break;
 			case UPDATE_AUTHOR_NOTFOUND:res = "UPDATE_AUTHOR_NOTFOUND";break;
 			case UPDATE_IMAGE_NOTFOUND :res = "UPDATE_IMAGE_NOTFOUND";break;
 			case DELETE_SUCCESS:res = "DELETE_SUCCESS";break;
