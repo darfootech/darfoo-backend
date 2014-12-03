@@ -30,9 +30,9 @@ public class MusicCategory implements Serializable {
 	@Column(name="DESCRIPTION",nullable=false,columnDefinition="varchar(255) not null")
     String description;
 	//建立于music表的 双向N-N关系
-	@ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
-	@JoinTable(name="music_category",joinColumns={@JoinColumn(name="category_id",referencedColumnName="id",nullable=false,columnDefinition="int(11) not null")},
-	inverseJoinColumns={@JoinColumn(name="music_id",nullable=false,columnDefinition="int(11) not null")})
+	@ManyToMany(mappedBy="categories",targetEntity=Music.class)
+//	@JoinTable(name="music_category",joinColumns={@JoinColumn(name="category_id",referencedColumnName="id",nullable=false,columnDefinition="int(11) not null")},
+//	inverseJoinColumns={@JoinColumn(name="music_id",nullable=false,columnDefinition="int(11) not null")})
     Set<Music> musics = new HashSet<Music>();
 
     public MusicCategory() {

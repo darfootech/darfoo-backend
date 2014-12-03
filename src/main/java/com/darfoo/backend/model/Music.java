@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,6 +16,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 /**
  * Created by zjh on 14-11-16.
  */
@@ -28,18 +30,20 @@ public class Music implements Serializable {
     Integer id;
 	
 	//music & musiccategory 双向N-N
-	@ManyToMany(targetEntity=MusicCategory.class,cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+	@ManyToMany(targetEntity=MusicCategory.class)
 	@JoinTable(name="music_category",joinColumns={@JoinColumn(name="music_id",referencedColumnName="id",nullable=false,columnDefinition="int(11) not null")},
 	inverseJoinColumns={@JoinColumn(name="category_id",nullable=false,columnDefinition="int(11) not null")})
 	Set<MusicCategory> categories = new HashSet<MusicCategory>();
 	
 	//music & author 单向N-1 在music表中增加一个外键列AUTHOR_ID(author的主键)
-	@ManyToOne(targetEntity=Author.class,cascade=CascadeType.ALL)
+	@ManyToOne(targetEntity=Author.class)
+	@Cascade(value={CascadeType.MERGE,CascadeType.PERSIST,CascadeType.SAVE_UPDATE}) //去掉级联删除
 	@JoinColumn(name="AUTHOR_ID",referencedColumnName="id")
 	Author author;
 	
 	//music & image 单向N-1 在music表中增加一个外键列IMAGE_ID(image的主键)
-	@ManyToOne(targetEntity=Image.class,cascade=CascadeType.ALL)
+	@ManyToOne(targetEntity=Image.class)
+	@Cascade(value={CascadeType.MERGE,CascadeType.PERSIST,CascadeType.SAVE_UPDATE})  //去掉级联删除
 	@JoinColumn(name="IMAGE_ID",referencedColumnName="id")
 	Image image;
 	
