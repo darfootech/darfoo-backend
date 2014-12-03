@@ -28,4 +28,11 @@
         <property name="defaultEncoding" value="UTF-8"/>
     </bean>
 
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.darfoo.backend.Interceptors.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
 </beans>
