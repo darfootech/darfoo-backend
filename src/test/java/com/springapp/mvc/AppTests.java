@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jackson.map.MapperConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,5 +35,11 @@ public class AppTests {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+    
+    @Test
+    public void json(){
+    	
+    
     }
 }

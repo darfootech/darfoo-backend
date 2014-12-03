@@ -1,6 +1,7 @@
 package com.springapp.mvc;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Image;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.model.VideoCategory;
+import com.darfoo.backend.model.UpdateCheckResponse;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -180,13 +182,51 @@ public class VideoDaoTests {
         System.out.println(requestCategories[0].equals("0"));
     }
 	
-	@Test
-	public void deleteVideoById(){
-		System.out.println(videoDao.deleteVideoById(3)>0?"delete success":"delete fail");
-	}
 	
 	@Test
 	public void deleteVideoCascade(){
-		videoDao.deleteVideoCascade(7);
+		System.out.println(CRUDEvent.getResponse(videoDao.deleteVideoById(3)));
+	}
+	
+	/**
+	 * 更新操作可以参考这个测试
+	 * **/
+	@Test
+	public void updateVideoById(){
+		Integer vid = 4;
+		String authorName = "仓木麻衣";
+		String imageKey = "仓木麻衣.jpg";		
+		UpdateCheckResponse response = videoDao.updateVideoCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
+		System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
+		String videoSpeed = "适中";
+		String videoDifficuty = "稍难";
+		String videoStyle = "戏曲风";
+		String videoLetter = "q";		
+		Set<String> categoryTitles = new HashSet<String>();
+		categoryTitles.add(videoSpeed);
+		categoryTitles.add(videoDifficuty);
+		categoryTitles.add(videoStyle);
+		categoryTitles.add(videoLetter.toUpperCase());
+		if(response.updateIsReady()){
+			//updateIsReady为true表示可以进行更新操作
+			System.out.println(CRUDEvent.getResponse(videoDao.updateVideo(vid, authorName, imageKey,categoryTitles,System.currentTimeMillis())));
+		}else{
+			System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
+		}
+	}
+	
+	/**
+	 * 获取所有的video对象
+	 * **/
+	@Test
+	public void getAllVideos(){
+		Set<Video> s_videos = new HashSet<Video>();
+		s_videos = videoDao.getAllVideo();
+		System.out.println("总共查到"+s_videos.size());
+		for(Video video : s_videos){
+			System.out.println("----------------");
+			System.out.println(video.toString(true));
+			
+		}
 	}
 }

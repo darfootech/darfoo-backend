@@ -1,10 +1,13 @@
 package com.springapp.mvc;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.darfoo.backend.dao.AuthorDao;
+import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.ImageDao;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,8 @@ import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.MusicCategory;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.MusicCategory;
+import com.darfoo.backend.model.Music;
+import com.darfoo.backend.model.UpdateCheckResponse;
 import com.darfoo.backend.model.Music;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -126,6 +131,44 @@ public class MusicDaoTests {
 	
 	@Test
 	public void deleteMusicById(){
-		System.out.println(musicDao.deleteVideoById(1)>0?"delete success":"delete fail");
+		System.out.println(CRUDEvent.getResponse(musicDao.deleteMusicById(2)));   //--->DELETE_SUCCESS
+//		System.out.println(CRUDEvent.getResponse(musicDao.deleteMusicById(200))); //--->DELETE_NOTFOUND
+	}
+	
+	/**
+	 * 更新操作可以参考这个测试
+	 * **/
+	@Test
+	public void updateMusicById(){
+		Integer vid = 4;
+		String authorName = "仓木麻衣";
+		String imageKey = "仓木麻衣";		
+		UpdateCheckResponse response = musicDao.updateMusicCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
+		System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
+		String musicBeat = "八拍";
+		String musicStyle = "戏曲风";
+		String musicLetter = "q";		
+		Set<String> categoryTitles = new HashSet<String>();
+		categoryTitles.add(musicBeat);
+		categoryTitles.add(musicStyle);
+		categoryTitles.add(musicLetter.toUpperCase());
+		if(response.updateIsReady()){
+			//updateIsReady为true表示可以进行更新操作
+			System.out.println(CRUDEvent.getResponse(musicDao.updateMusic(vid, authorName, imageKey,categoryTitles,System.currentTimeMillis())));
+		}
+	}
+	/**
+	 * 获取所有的music对象
+	 * **/
+	@Test
+	public void getAllMusics(){
+		Set<Music> s_musics = new HashSet<Music>();
+		s_musics = musicDao.getAllMusic();
+		System.out.println("总共查到"+s_musics.size());
+		for(Music video : s_musics){
+			System.out.println("----------------");
+			System.out.println(video.toString(true));
+			
+		}
 	}
 }

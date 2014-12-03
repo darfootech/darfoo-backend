@@ -1,11 +1,14 @@
 package com.springapp.mvc;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.darfoo.backend.dao.AuthorDao;
+import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.ImageDao;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,8 @@ import com.darfoo.backend.model.EducationCategory;
 import com.darfoo.backend.model.Image;
 import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.EducationCategory;
+import com.darfoo.backend.model.Education;
+import com.darfoo.backend.model.UpdateCheckResponse;
 import com.darfoo.backend.model.Video;
 
 
@@ -118,6 +123,47 @@ public class EducationDaoTests {
 	
 	@Test
 	public void deleteEducationById(){
-		System.out.println(educationDao.deleteEducationById(5)>0?"delete success":"delete fail");
+		System.out.println(CRUDEvent.getResponse(educationDao.deleteEducationById(5)));
+	}
+	
+	
+	/**
+	 * 更新操作可以参考这个测试
+	 * **/
+	@Test
+	public void updateEducationById(){
+		Integer vid = 5;
+		String authorName = "滨崎步";
+		String imageKey = "滨崎步.jpg";		
+		UpdateCheckResponse response = educationDao.updateEducationCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
+		System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
+		String videoSpeed = "快";  //"快","中","慢"//按速度
+		String videoDifficuty = "稍难";  //"简单","适中","稍难"//按难度  
+		String videoStyle = "队形表演";	//"队形表演","背面教学","分解教学"//按教学类型
+		Set<String> categoryTitles = new HashSet<String>();
+		categoryTitles.add(videoSpeed);
+		categoryTitles.add(videoDifficuty);
+		categoryTitles.add(videoStyle);
+		if(response.updateIsReady()){
+			//updateIsReady为true表示可以进行更新操作
+			System.out.println(CRUDEvent.getResponse(educationDao.updateEducation(vid, authorName, imageKey,categoryTitles,System.currentTimeMillis())));
+		}else{
+			System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
+		}
+	}
+	
+	/**
+	 * 获取所有的education对象
+	 * **/
+	@Test
+	public void getAllEducations(){
+		Set<Education> s_educations = new HashSet<Education>();
+		s_educations = educationDao.getAllEdutcaion();
+		System.out.println("总共查到"+s_educations.size());
+		for(Education video : s_educations){
+			System.out.println("----------------");
+			System.out.println(video.toString(true));
+			
+		}
 	}
 }
