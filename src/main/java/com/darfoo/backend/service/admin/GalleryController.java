@@ -34,9 +34,10 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/video/{id}", method = RequestMethod.GET)
-    public String showSingleVideo(@PathVariable String id){
+    public String showSingleVideo(@PathVariable String id, ModelMap modelMap){
         System.out.println(Integer.parseInt(id));
-
+        Video video = videoDao.getVideoByVideoId(Integer.parseInt(id));
+        modelMap.addAttribute("video", video);
         return "singlevideo";
     }
 }
