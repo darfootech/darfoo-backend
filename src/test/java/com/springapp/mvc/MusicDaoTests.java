@@ -1,5 +1,6 @@
 package com.springapp.mvc;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -162,11 +163,12 @@ public class MusicDaoTests {
 	 * **/
 	@Test
 	public void getAllMusics(){
-		Set<Music> s_musics = new HashSet<Music>();
+		List<Music> s_musics = new ArrayList<Music>();
 		s_musics = musicDao.getAllMusic();
 		System.out.println("总共查到"+s_musics.size());
 		for(Music video : s_musics){
 			System.out.println("----------------");
+            System.out.println("id: " + video.getId());
 			System.out.println(video.toString(true));
 			
 		}

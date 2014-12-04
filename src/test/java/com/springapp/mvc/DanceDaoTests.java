@@ -95,8 +95,9 @@ public class DanceDaoTests {
 	 * **/
 	@Test
 	public void getAllDanceGroup(){
-		Set<DanceGroup> s_groups = danceDao.getAllDanceGourp();
+		List<DanceGroup> s_groups = danceDao.getAllDanceGourp();
 		for(DanceGroup group : s_groups){
+            System.out.println("id: " + group.getId());
 			System.out.println(group.getName()+"  "+group.getDescription()+" "+group.getImage().getImage_key());
 		}
 	}

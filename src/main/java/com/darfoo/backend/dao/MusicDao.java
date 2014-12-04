@@ -1,12 +1,9 @@
 package com.darfoo.backend.dao;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import com.darfoo.backend.model.*;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
@@ -18,14 +15,8 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.Image;
-import com.darfoo.backend.model.Music;
-import com.darfoo.backend.model.MusicCategory;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Music;
-import com.darfoo.backend.model.VideoCategory;
-import com.darfoo.backend.model.UpdateCheckResponse;
 
 @Component
 @SuppressWarnings("unchecked")
@@ -359,19 +350,34 @@ public class MusicDao {
 	/**
 	 * 获得所有Music对象
 	 * **/
-	public Set<Music> getAllMusic(){
-		Set<Music> s_musics = new HashSet<Music>();
-		try{
+	public List<Music> getAllMusic(){
+		List<Music> s_musics = new ArrayList<Music>();
+        Map<Integer, Music> sortMap = new HashMap<Integer, Music>();
+
+        try{
 			Session session = sf.getCurrentSession();
 			Criteria c = session.createCriteria(Music.class);
 			c.setReadOnly(true);
 			c.setFetchMode("categories", FetchMode.JOIN);
 			List<Music> l_musics = c.list();  
-			if(l_musics.size() > 0)
-				s_musics = new HashSet<Music>(l_musics); //使用Set封装去掉List中重复的信息
+			if(l_musics.size() > 0){
+                for (Music music : l_musics){
+                    sortMap.put(music.getId(), music);
+                }
+            }
+
+            List<Integer> sortedKeys=new ArrayList(sortMap.keySet());
+            Collections.sort(sortedKeys);
+
+            for (Integer index : sortedKeys){
+                s_musics.add(sortMap.get(index));
+            }
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return s_musics;
+
+        Collections.reverse(s_musics);
+        return s_musics;
 	}
 }

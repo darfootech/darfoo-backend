@@ -1,11 +1,8 @@
 package com.darfoo.backend.dao;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import com.darfoo.backend.model.*;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
@@ -17,14 +14,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.Image;
 import com.darfoo.backend.model.Education;
-import com.darfoo.backend.model.EducationCategory;
-import com.darfoo.backend.model.Music;
-import com.darfoo.backend.model.UpdateCheckResponse;
-import com.darfoo.backend.model.Education;
-import com.darfoo.backend.model.VideoCategory;
 
 @Component
 public class EducationDao {
@@ -343,19 +333,34 @@ public class EducationDao {
 	/**
 	 * 获得所有Education对象
 	 * **/
-	public Set<Education> getAllEdutcaion(){
-		Set<Education> s_educations = new HashSet<Education>();
-		try{
+	public List<Education> getAllEdutcaion(){
+		List<Education> s_educations = new ArrayList<Education>();
+        Map<Integer, Education> sortMap = new HashMap<Integer, Education>();
+
+        try{
 			Session session = sf.getCurrentSession();
 			Criteria c = session.createCriteria(Education.class);
 			c.setReadOnly(true);
 			c.setFetchMode("categories", FetchMode.JOIN);
 			List<Education> l_educations = c.list();  
-			if(l_educations.size() > 0)
-				s_educations = new HashSet<Education>(l_educations); //使用Set封装去掉List中重复的信息
+			if(l_educations.size() > 0){
+                for (Education education : l_educations){
+                    sortMap.put(education.getId(), education);
+                }
+            }
+
+            List<Integer> sortedKeys=new ArrayList(sortMap.keySet());
+            Collections.sort(sortedKeys);
+
+            for (Integer index : sortedKeys){
+                s_educations.add(sortMap.get(index));
+            }
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return s_educations;
+
+        Collections.reverse(s_educations);
+        return s_educations;
 	}
 }

@@ -1,10 +1,8 @@
 package com.darfoo.backend.dao;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import com.darfoo.backend.model.*;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
@@ -12,11 +10,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.darfoo.backend.model.DanceGroup;
-import com.darfoo.backend.model.DanceGroupImage;
-import com.darfoo.backend.model.Image;
-import com.darfoo.backend.model.UpdateCheckResponse;
 
 @Component
 @SuppressWarnings("unchecked")
@@ -173,17 +166,32 @@ public class DanceDao {
 	 * 获得所有舞队
 	 * @return Set<DanceGroup>
 	 * **/
-	public Set<DanceGroup> getAllDanceGourp(){
-		Set<DanceGroup> s_groups = new HashSet<DanceGroup>();
-		try{
+	public List<DanceGroup> getAllDanceGourp(){
+		List<DanceGroup> s_groups = new ArrayList<DanceGroup>();
+        Map<Integer, DanceGroup> sortMap = new HashMap<Integer, DanceGroup>();
+
+        try{
 			Session session = sf.getCurrentSession();
 			Criteria c = session.createCriteria(DanceGroup.class).setReadOnly(true);
 			List<DanceGroup> l_groups = c.list();
-			if(l_groups.size() > 0)
-				s_groups = new HashSet<DanceGroup>(l_groups);
-		}catch(Exception e){
+			if(l_groups.size() > 0){
+                for (DanceGroup danceGroup : l_groups){
+                    sortMap.put(danceGroup.getId(), danceGroup);
+                }
+            }
+
+            List<Integer> sortedKeys=new ArrayList(sortMap.keySet());
+            Collections.sort(sortedKeys);
+
+            for (Integer index : sortedKeys){
+                s_groups.add(sortMap.get(index));
+            }
+
+        }catch(Exception e){
 			e.printStackTrace();
 		}
-		return  s_groups;
+
+        Collections.reverse(s_groups);
+        return s_groups;
 	}
 }
