@@ -1,6 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@include file="header.jsp"%>
 
+<script>
+    $(function(){
+        var speed = $("#speed").text();
+        var difficult = $("#difficult").text();
+        var style = $("#style").text();
+
+        $('#videospeed option[value="' + speed + '"]').attr("selected", true);
+        $('#videodifficult option[value="' + difficult + '"]').attr("selected", true);
+        $('#videostyle option[value="' + style + '"]').attr("selected", true);
+    });
+</script>
+
+<div id="speed" style="display: none">${speed}</div>
+<div id="difficult" style="display: none">${difficult}</div>
+<div id="style" style="display: none">${style}</div>
+
 <div class="container">
     <h1>查看与修改舞蹈视频信息</h1>
     <div class="row">
@@ -22,7 +38,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="videospeed">舞蹈速度</label>
+                    <label for="videospeed">舞蹈速度---原本为${speed}</label>
                     <select data-toggle="select" name="videospeed" id="videospeed" class="form-control select select-success mrs mbm">
                         <option value="较快">较快</option>
                         <option value="适中">适中</option>
@@ -31,7 +47,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="videodifficult">舞蹈难度</label>
+                    <label for="videodifficult">舞蹈难度---原本为${difficult}</label>
                     <select data-toggle="select" name="videodifficult" id="videodifficult" class="form-control select select-success mrs mbm">
                         <option value="简单">简单</option>
                         <option value="中等">中等</option>
@@ -40,7 +56,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="videostyle">舞蹈风格</label>
+                    <label for="videostyle">舞蹈风格---原本为${style}</label>
                     <select data-toggle="select" name="videostyle" id="videostyle" class="form-control select select-success mrs mbm">
                         <option value="欢快">欢快</option>
                         <option value="活泼">活泼</option>
@@ -58,7 +74,7 @@
 
                 <div class="form-group">
                     <label for="videoletter">视频首字母(大小写均可)</label>
-                    <input type="text" class="form-control" name="videoletter" id="videoletter" placeholder="${video.video_key}" disabled="true">
+                    <input type="text" class="form-control" name="videoletter" id="videoletter" value="${letter}">
                 </div>
 
                 <button type="button" class="btn btn-default" onclick="start()">提交舞蹈视频信息</button>
