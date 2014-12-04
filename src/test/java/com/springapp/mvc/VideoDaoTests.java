@@ -222,11 +222,11 @@ public class VideoDaoTests {
 	public void getAllVideos(){
 		Set<Video> s_videos = new HashSet<Video>();
 		s_videos = videoDao.getAllVideo();
-		System.out.println("总共查到"+s_videos.size());
 		for(Video video : s_videos){
 			System.out.println("----------------");
 			System.out.println(video.toString(true));
 			
 		}
-	}
+        System.out.println("总共查到"+s_videos.size());
+    }
 }

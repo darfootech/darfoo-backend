@@ -5,6 +5,7 @@
   Time: 上午11:08
   To change this template use File | Settings | File Templates.
 --%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String resource = (String)session.getAttribute("resource");
@@ -54,6 +55,17 @@
                 <li class="<%if(resource.equals("music")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/music/new/">舞蹈伴奏</a></li>
                 <li class="<%if(resource.equals("author")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/author/new/">创建作者</a></li>
                 <li class="<%if(resource.equals("team")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/team/new/">创建舞队</a></li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">查看和修改 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/darfoobackend/rest/admin/video/all">查看修改舞蹈视频</a></li>
+                        <li><a href="/darfoobackend/rest/admin/tutorial/all">查看修改舞蹈教程</a></li>
+                        <li><a href="/darfoobackend/rest/admin/music/all">查看修改舞蹈伴奏</a></li>
+                        <li><a href="/darfoobackend/rest/admin/author/all">查看修改作者</a></li>
+                        <li><a href="/darfoobackend/rest/admin/team/all">查看修改舞队</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>
