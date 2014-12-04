@@ -12,7 +12,7 @@
         $('#videostyle option[value="' + style + '"]').attr("selected", true);
     });
 
-    function start(){
+    function update(){
         var createVideoUrl = "/darfoobackend/rest/admin/video/update";
         $.ajax({
             type : "POST",
@@ -20,21 +20,47 @@
             data : $("#createvideoform").serialize(),
             success : function(data){
                 if(data == "200"){
-                    alert("提交视频信息成功");
+                    alert("更新视频信息成功");
                     window.location.href = "/darfoobackend/rest/admin/video/all"
                 }else if(data == "505"){
                     alert("请确保舞蹈视频首字母填写的是一个不区分大小写的英文字母");
                 }else{
-                    alert("提交视频信息失败");
+                    alert("更新视频信息失败");
                 }
             },
             error : function(){
-                alert("提交视频信息失败");
+                alert("更新视频信息失败");
+            }
+        })
+    }
+
+    function kickout(){
+        var videoid = $("#videoid").text();
+
+        var targeturl = "/darfoobackend/rest/admin/video/delete";
+
+        $.ajax({
+            type : "POST",
+            url : targeturl,
+            data : {"id":videoid},
+            success : function(data){
+                if(data == "200"){
+                    alert("删除视频信息成功");
+                    window.location.href = "/darfoobackend/rest/admin/video/all"
+                }else if(data == "505"){
+                    alert("删除视频信息失败");
+                }else{
+                    alert("删除视频信息失败");
+                }
+            },
+            error : function(){
+                alert("删除视频信息失败");
             }
         })
     }
 </script>
 
+<div id="videoid" style="display: none">${video.id}</div>
 <div id="speed" style="display: none">${speed}</div>
 <div id="difficult" style="display: none">${difficult}</div>
 <div id="style" style="display: none">${style}</div>
@@ -50,7 +76,7 @@
 
                 <div class="form-group">
                     <label for="title">舞蹈视频标题(也就是上传视频文件的文件名,不需要后缀)</label>
-                    <input type="text" class="form-control" name="title" id="title" value="${video.title}">
+                    <input type="text" class="form-control" name="title" id="title" placeholder="${video.title}" disabled="disabled">
                 </div>
 
                 <div style="display: none">
@@ -72,7 +98,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="videospeed">舞蹈速度---原本为${speed}</label>
+                    <label for="videospeed">舞蹈速度---<div style="color: green; display: inline; font-size: 18pt">原本为${speed}</div></label>
                     <select data-toggle="select" name="videospeed" id="videospeed" class="form-control select select-success mrs mbm">
                         <option value="较快">较快</option>
                         <option value="适中">适中</option>
@@ -81,7 +107,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="videodifficult">舞蹈难度---原本为${difficult}</label>
+                    <label for="videodifficult">舞蹈难度---<div style="color: green; display: inline; font-size: 18pt">原本为${difficult}</div></label>
                     <select data-toggle="select" name="videodifficult" id="videodifficult" class="form-control select select-success mrs mbm">
                         <option value="简单">简单</option>
                         <option value="中等">中等</option>
@@ -90,7 +116,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="videostyle">舞蹈风格---原本为${style}</label>
+                    <label for="videostyle">舞蹈风格---<div style="color: green; display: inline; font-size: 18pt">原本为${style}</div></label>
                     <select data-toggle="select" name="videostyle" id="videostyle" class="form-control select select-success mrs mbm">
                         <option value="欢快">欢快</option>
                         <option value="活泼">活泼</option>
@@ -111,7 +137,8 @@
                     <input type="text" class="form-control" name="videoletter" id="videoletter" value="${letter}">
                 </div>
 
-                <button type="button" class="btn btn-default" onclick="start()">提交舞蹈视频信息</button>
+                <button type="button" class="btn btn-default" onclick="update()">更新舞蹈视频信息</button>
+                <button type="button" class="btn btn-default" onclick="kickout()">删除舞蹈视频</button>
             </form>
         </div>
     </div>

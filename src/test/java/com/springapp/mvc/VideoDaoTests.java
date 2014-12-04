@@ -185,7 +185,7 @@ public class VideoDaoTests {
 	
 	@Test
 	public void deleteVideoCascade(){
-		System.out.println(CRUDEvent.getResponse(videoDao.deleteVideoById(3)));
+		System.out.println(CRUDEvent.getResponse(videoDao.deleteVideoById(17)));
 	}
 	
 	/**
@@ -220,12 +220,12 @@ public class VideoDaoTests {
 	 * **/
 	@Test
 	public void getAllVideos(){
-		Set<Video> s_videos = new HashSet<Video>();
+		List<Video> s_videos = new ArrayList<Video>();
 		s_videos = videoDao.getAllVideo();
 		for(Video video : s_videos){
 			System.out.println("----------------");
-			System.out.println(video.toString(true));
-			
+            System.out.println("videois: " + video.getId());
+            System.out.println(video.toString(true));
 		}
         System.out.println("总共查到"+s_videos.size());
     }

@@ -54,11 +54,15 @@ public class UpdateController {
         categoryTitles.add(videoLetter.toUpperCase());
         if(response.updateIsReady()){
             //updateIsReady为true表示可以进行更新操作
-            System.out.println(CRUDEvent.getResponse(videoDao.updateVideo(vid, authorName, imageKey, categoryTitles, System.currentTimeMillis())));
+            String status = CRUDEvent.getResponse(videoDao.updateVideo(vid, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
+            if (status.equals("UPDATE_SUCCESS")){
+                return 200+"";
+            }else {
+                return 503+"";
+            }
         }else{
             System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
+            return 505+"";
         }
-
-        return 200+"";
     }
 }
