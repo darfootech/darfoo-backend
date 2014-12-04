@@ -11,6 +11,28 @@
         $('#videodifficult option[value="' + difficult + '"]').attr("selected", true);
         $('#videostyle option[value="' + style + '"]').attr("selected", true);
     });
+
+    function start(){
+        var createVideoUrl = "/darfoobackend/rest/admin/video/update";
+        $.ajax({
+            type : "POST",
+            url : createVideoUrl,
+            data : $("#createvideoform").serialize(),
+            success : function(data){
+                if(data == "200"){
+                    alert("提交视频信息成功");
+                    window.location.href = "/darfoobackend/rest/admin/video/all"
+                }else if(data == "505"){
+                    alert("请确保舞蹈视频首字母填写的是一个不区分大小写的英文字母");
+                }else{
+                    alert("提交视频信息失败");
+                }
+            },
+            error : function(){
+                alert("提交视频信息失败");
+            }
+        })
+    }
 </script>
 
 <div id="speed" style="display: none">${speed}</div>
@@ -22,19 +44,31 @@
     <div class="row">
         <div class="col-md-12">
             <form role="form" id="createvideoform" name="createvideoform">
+                <div style="display: none">
+                    <input type="text" name="id" value="${video.id}">
+                </div>
+
                 <div class="form-group">
                     <label for="title">舞蹈视频标题(也就是上传视频文件的文件名,不需要后缀)</label>
                     <input type="text" class="form-control" name="title" id="title" value="${video.title}">
                 </div>
 
+                <div style="display: none">
+                    <input type="text" name="authorname" value="${video.author.name}">
+                </div>
+
                 <div class="form-group">
                     <label for="authorname">舞蹈视频作者名字</label>
-                    <input type="text" class="form-control" name="authorname" id="authorname" value="${video.author.name}">
+                    <input type="text" class="form-control" id="authorname" placeholder="${video.author.name}" disabled="disabled">
+                </div>
+
+                <div style="display: none">
+                    <input type="text" name="imagekey" value="${video.image.image_key}">
                 </div>
 
                 <div class="form-group">
                     <label for="imagekey">舞蹈视频封面图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
-                    <input type="text" class="form-control" name="imagekey" id="imagekey" placeholder="${video.image.image_key}" disabled="true">
+                    <input type="text" class="form-control" id="imagekey" placeholder="${video.image.image_key}" disabled="disabled">
                 </div>
 
                 <div class="form-group">
