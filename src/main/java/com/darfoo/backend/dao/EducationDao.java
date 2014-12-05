@@ -206,6 +206,8 @@ public class EducationDao {
 			if(education == null){
 				res = CRUDEvent.DELETE_NOTFOUND;
 			}else{
+                education.setAuthor(null);
+                session.update(education);
 				session.delete(education);
 				res = CRUDEvent.DELETE_SUCCESS;
 			}			

@@ -123,7 +123,7 @@ public class EducationDaoTests {
 	
 	@Test
 	public void deleteEducationById(){
-		System.out.println(CRUDEvent.getResponse(educationDao.deleteEducationById(5)));
+		System.out.println(CRUDEvent.getResponse(educationDao.deleteEducationById(24)));
 	}
 	
 	
