@@ -1,5 +1,6 @@
 package com.darfoo.backend.service.admin;
 
+import com.darfoo.backend.dao.AuthorDao;
 import com.darfoo.backend.dao.EducationDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
@@ -29,6 +30,8 @@ public class GalleryController {
     EducationDao educationDao;
     @Autowired
     MusicDao musicDao;
+    @Autowired
+    AuthorDao authorDao;
 
     @RequestMapping(value = "/admin/video/all", method = RequestMethod.GET)
     public String showAllVideo(ModelMap modelMap, HttpSession session){
@@ -126,5 +129,25 @@ public class GalleryController {
         }
         modelMap.addAttribute("music", music);
         return "singlemusic";
+    }
+
+    @RequestMapping(value = "/admin/author/all", method = RequestMethod.GET)
+    public String showAllAuthor(ModelMap modelMap, HttpSession session){
+        List<Author> s_author = new ArrayList<Author>();
+        s_author = authorDao.getAllAuthor();
+        modelMap.addAttribute("allauthors", s_author);
+        return "allauthor";
+    }
+
+    @RequestMapping(value = "/admin/author/{id}", method = RequestMethod.GET)
+    public String showSingleAuthor(@PathVariable String id, ModelMap modelMap, HttpSession session){
+        System.out.println(Integer.parseInt(id));
+        Author author = authorDao.getAuthor(Integer.parseInt(id));
+
+        session.setAttribute("authorname", author.getName());
+        session.setAttribute("authordescription", author.getDescription());
+
+        modelMap.addAttribute("author", author);
+        return "singleauthor";
     }
 }

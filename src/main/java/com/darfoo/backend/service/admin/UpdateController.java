@@ -1,14 +1,10 @@
 package com.darfoo.backend.service.admin;
 
-import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.EducationDao;
-import com.darfoo.backend.dao.MusicDao;
-import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.dao.*;
 import com.darfoo.backend.model.UpdateCheckResponse;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,6 +26,8 @@ public class UpdateController {
     EducationDao educationDao;
     @Autowired
     MusicDao musicDao;
+    @Autowired
+    AuthorDao authorDao;
 
     @RequestMapping(value = "/admin/video/update", method = RequestMethod.POST)
     public @ResponseBody String updateVideo(HttpServletRequest request, HttpSession session){
@@ -139,6 +137,31 @@ public class UpdateController {
         } else {
             System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
             return 501 + "";
+        }
+    }
+
+    @RequestMapping(value = "/admin/author/update", method = RequestMethod.POST)
+    public @ResponseBody String updateAuthor(HttpServletRequest request, HttpSession session) {
+        String name = request.getParameter("name");
+        String description = request.getParameter("description");
+
+        if (name.equals("")){
+            name = (String)session.getAttribute("authorname");
+        }
+
+        if (description.equals("")){
+            description = (String)session.getAttribute("authordescription");
+        }
+
+        System.out.println("requests: " + name + " " + description);
+
+        Integer id = Integer.parseInt(request.getParameter("id"));
+        int res = authorDao.updateAuthor(id, name, description);//更新id为2的Author对象的名字
+        String status = CRUDEvent.getResponse(res);
+        if (status.equals("UPDATE_SUCCESS")) {
+            return 200 + "";
+        } else {
+            return 503 + "";
         }
     }
 }
