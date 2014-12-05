@@ -1,6 +1,9 @@
 package com.darfoo.backend.service.admin;
 
+import com.darfoo.backend.dao.EducationDao;
 import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.model.Education;
+import com.darfoo.backend.model.EducationCategory;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.model.VideoCategory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,8 @@ import java.util.Set;
 public class GalleryController {
     @Autowired
     VideoDao videoDao;
+    @Autowired
+    EducationDao educationDao;
 
     @RequestMapping(value = "/admin/video/all", method = RequestMethod.GET)
     public String showAllVideo(ModelMap modelMap, HttpSession session){
@@ -58,5 +63,37 @@ public class GalleryController {
         }
         modelMap.addAttribute("video", video);
         return "singlevideo";
+    }
+
+    @RequestMapping(value = "/admin/tutorial/all", method = RequestMethod.GET)
+    public String showAllTutorial(ModelMap modelMap, HttpSession session){
+        List<Education> s_tutorial = new ArrayList<Education>();
+        s_tutorial = educationDao.getAllEdutcaion();
+        modelMap.addAttribute("alltutorials", s_tutorial);
+        return "alltutorial";
+    }
+
+    @RequestMapping(value = "/admin/tutorial/{id}", method = RequestMethod.GET)
+    public String showSingleTutorial(@PathVariable String id, ModelMap modelMap){
+        System.out.println(Integer.parseInt(id));
+        Education tutorial = educationDao.getEducationVideoById(Integer.parseInt(id));
+        Set<EducationCategory> categories = tutorial.getCategories();
+        for (EducationCategory category : categories){
+            int categoryid = category.getId();
+            String categorytitle = category.getTitle();
+            System.out.println(categoryid);
+            System.out.println(categorytitle);
+            if (categoryid >= 1 && categoryid <= 3){
+                modelMap.addAttribute("speed", category.getTitle());
+            }else if(categoryid >= 4 && categoryid <= 6){
+                modelMap.addAttribute("difficult", category.getTitle());
+            }else if(categoryid >= 7 && categoryid <= 9){
+                modelMap.addAttribute("style", category.getTitle());
+            }else{
+                System.out.println("something is wrong with the category");
+            }
+        }
+        modelMap.addAttribute("tutorial", tutorial);
+        return "singletutorial";
     }
 }

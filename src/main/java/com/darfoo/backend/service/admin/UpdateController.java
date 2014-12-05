@@ -1,6 +1,7 @@
 package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.CRUDEvent;
+import com.darfoo.backend.dao.EducationDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.UpdateCheckResponse;
 import com.darfoo.backend.utils.ServiceUtils;
@@ -24,6 +25,8 @@ import java.util.Set;
 public class UpdateController {
     @Autowired
     VideoDao videoDao;
+    @Autowired
+    EducationDao educationDao;
 
     @RequestMapping(value = "/admin/video/update", method = RequestMethod.POST)
     public @ResponseBody String updateVideo(HttpServletRequest request, HttpSession session){
@@ -63,6 +66,37 @@ public class UpdateController {
         }else{
             System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
             return 505+"";
+        }
+    }
+
+    @RequestMapping(value = "/admin/tutorial/update", method = RequestMethod.POST)
+    public @ResponseBody String updateTutorial(HttpServletRequest request, HttpSession session) {
+        String videoTitle = request.getParameter("title");
+        String authorName = request.getParameter("authorname");
+        String imageKey = request.getParameter("imagekey");
+        String videoSpeed = request.getParameter("tutorialspeed");
+        String videoDifficult = request.getParameter("tutorialdifficult");
+        String videoStyle = request.getParameter("tutorialstyle");
+        System.out.println("requests: " + videoTitle + " " + authorName + " " + imageKey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle);
+
+        Integer vid = Integer.parseInt(request.getParameter("id"));
+        UpdateCheckResponse response = educationDao.updateEducationCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
+        System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
+        Set<String> categoryTitles = new HashSet<String>();
+        categoryTitles.add(videoSpeed);
+        categoryTitles.add(videoDifficult);
+        categoryTitles.add(videoStyle);
+        if (response.updateIsReady()) {
+            //updateIsReady为true表示可以进行更新操作
+            String status = CRUDEvent.getResponse(educationDao.updateEducation(vid, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
+            if (status.equals("UPDATE_SUCCESS")) {
+                return 200 + "";
+            } else {
+                return 503 + "";
+            }
+        } else {
+            System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
+            return 505 + "";
         }
     }
 }
