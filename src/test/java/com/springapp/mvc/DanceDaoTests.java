@@ -95,8 +95,9 @@ public class DanceDaoTests {
 	 * **/
 	@Test
 	public void getAllDanceGroup(){
-		Set<DanceGroup> s_groups = danceDao.getAllDanceGourp();
+		List<DanceGroup> s_groups = danceDao.getAllDanceGourp();
 		for(DanceGroup group : s_groups){
+            System.out.println("id: " + group.getId());
 			System.out.println(group.getName()+"  "+group.getDescription()+" "+group.getImage().getImage_key());
 		}
 	}
@@ -112,4 +113,20 @@ public class DanceDaoTests {
 		}
 		
 	}
+
+    @Test
+    public void deleteTeamById(){
+        System.out.println(CRUDEvent.getResponse(danceDao.deleteDanceGroupById(14)));
+    }
+
+    @Test
+    public void getTeamById(){
+        int id = 3;
+        DanceGroup a = danceDao.getTeamById(id);
+        if(a != null)
+            System.out.println(a.getName());
+        else
+            System.out.println("无该team记录");
+
+    }
 }

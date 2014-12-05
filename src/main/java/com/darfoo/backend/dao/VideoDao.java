@@ -1,10 +1,6 @@
 package com.darfoo.backend.dao;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -414,20 +410,38 @@ public class VideoDao {
 	/**
 	 * 获得所有Video对象
 	 * **/
-	public Set<Video> getAllVideo(){
-		Set<Video> s_videos = new HashSet<Video>();
+	public List<Video> getAllVideo(){
+		List<Video> s_videos = new ArrayList<Video>();
+        Map<Integer, Video> videoSortMap = new HashMap<Integer, Video>();
 		try{
 			Session session = sf.getCurrentSession();
 			Criteria c = session.createCriteria(Video.class);
 			c.setReadOnly(true);
 			c.setFetchMode("categories", FetchMode.JOIN);
 			List<Video> l_videos = c.list();  
-			if(l_videos.size() > 0)
-				s_videos = new HashSet<Video>(l_videos); //使用Set封装去掉List中重复的信息
+			if(l_videos.size() > 0){
+                //去除重复的video
+                for (Video video : l_videos){
+                    videoSortMap.put(video.getId(), video);
+                    /*if (!s_videos.contains(video)){
+                        s_videos.add(video);
+                    }*/
+                }
+            }
+
+            List<Integer> sortedKeys=new ArrayList(videoSortMap.keySet());
+            Collections.sort(sortedKeys);
+
+            for (Integer index : sortedKeys){
+                s_videos.add(videoSortMap.get(index));
+            }
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return s_videos;
+
+		Collections.reverse(s_videos);
+        return s_videos;
 	}
 	
 }

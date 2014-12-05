@@ -61,6 +61,7 @@ public class AuthorDaoTests {
 	public void getAllAuthor(){
 		List<Author> l_author = authorDao.getAllAuthor();
 		for(Author a : l_author){
+            System.out.println("id: " + a.getId());
 			System.out.println(a.getName()+"  "+a.getDescription());
 		}
 	}

@@ -97,13 +97,12 @@ public class AuthorDao {
 		List<Author> l_author = new ArrayList<Author>();
 		try{
 			Session session = sf.getCurrentSession();
-			String sql = "select * from author";
+			String sql = "select * from author order by id desc";
 			l_author = session.createSQLQuery(sql).addEntity(Author.class).list();
 		}catch(Exception e){			
 			e.printStackTrace();
 		}
 		return l_author;
-		
 	}
 	/**
 	 * 单独更新Author。更新的前提是,author已经有对应的name在表中

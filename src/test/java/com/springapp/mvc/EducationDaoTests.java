@@ -123,7 +123,7 @@ public class EducationDaoTests {
 	
 	@Test
 	public void deleteEducationById(){
-		System.out.println(CRUDEvent.getResponse(educationDao.deleteEducationById(5)));
+		System.out.println(CRUDEvent.getResponse(educationDao.deleteEducationById(24)));
 	}
 	
 	
@@ -157,11 +157,12 @@ public class EducationDaoTests {
 	 * **/
 	@Test
 	public void getAllEducations(){
-		Set<Education> s_educations = new HashSet<Education>();
+		List<Education> s_educations = new ArrayList<Education>();
 		s_educations = educationDao.getAllEdutcaion();
 		System.out.println("总共查到"+s_educations.size());
 		for(Education video : s_educations){
 			System.out.println("----------------");
+            System.out.println("id: " + video.getId());
 			System.out.println(video.toString(true));
 			
 		}

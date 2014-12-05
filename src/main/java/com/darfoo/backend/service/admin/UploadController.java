@@ -1,4 +1,4 @@
-package com.darfoo.backend.service;
+package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.model.*;
