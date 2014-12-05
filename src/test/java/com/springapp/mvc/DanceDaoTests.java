@@ -113,4 +113,20 @@ public class DanceDaoTests {
 		}
 		
 	}
+
+    @Test
+    public void deleteTeamById(){
+        System.out.println(CRUDEvent.getResponse(danceDao.deleteDanceGroupById(14)));
+    }
+
+    @Test
+    public void getTeamById(){
+        int id = 3;
+        DanceGroup a = danceDao.getTeamById(id);
+        if(a != null)
+            System.out.println(a.getName());
+        else
+            System.out.println("无该team记录");
+
+    }
 }

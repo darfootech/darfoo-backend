@@ -28,6 +28,8 @@ public class UpdateController {
     MusicDao musicDao;
     @Autowired
     AuthorDao authorDao;
+    @Autowired
+    DanceDao danceDao;
 
     @RequestMapping(value = "/admin/video/update", method = RequestMethod.POST)
     public @ResponseBody String updateVideo(HttpServletRequest request, HttpSession session){
@@ -162,6 +164,37 @@ public class UpdateController {
             return 200 + "";
         } else {
             return 503 + "";
+        }
+    }
+
+    @RequestMapping(value = "/admin/team/update", method = RequestMethod.POST)
+    public @ResponseBody String updateTeam(HttpServletRequest request, HttpSession session) {
+        String name = request.getParameter("name");
+        String description = request.getParameter("description");
+        String imagekey = request.getParameter("imagekey");
+
+        if (name.equals("")){
+            name = (String)session.getAttribute("teamname");
+        }
+
+        if (description.equals("")){
+            description = (String)session.getAttribute("teamdescription");
+        }
+
+        System.out.println("requests: " + name + " " + description + " " + imagekey);
+
+        Integer id = Integer.parseInt(request.getParameter("id"));
+        UpdateCheckResponse response = danceDao.updateDanceGroupCheck(id, imagekey);
+        if(response.updateIsReady()){
+            String status = CRUDEvent.getResponse(danceDao.updateDanceGourp(id, name, description, imagekey, System.currentTimeMillis()));
+            if (status.equals("UPDATE_SUCCESS")) {
+                return 200 + "";
+            } else {
+                return 503 + "";
+            }
+        }else{
+            System.out.println("请先完成舞队图片的插入");
+            return 505 + "";
         }
     }
 }

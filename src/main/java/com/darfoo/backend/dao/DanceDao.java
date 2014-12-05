@@ -194,4 +194,16 @@ public class DanceDao {
         Collections.reverse(s_groups);
         return s_groups;
 	}
+
+    public DanceGroup getTeamById(Integer id){
+        DanceGroup danceGroup = null;
+        try{
+            Session session = sf.getCurrentSession();
+            String sql = "select * from dancegroup where id=:id";
+            danceGroup = (DanceGroup)session.createSQLQuery(sql).addEntity(DanceGroup.class).setInteger("id", id).uniqueResult();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return danceGroup;
+    }
 }

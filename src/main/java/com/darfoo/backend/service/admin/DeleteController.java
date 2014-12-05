@@ -1,9 +1,6 @@
 package com.darfoo.backend.service.admin;
 
-import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.EducationDao;
-import com.darfoo.backend.dao.MusicDao;
-import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +23,8 @@ public class DeleteController {
     EducationDao educationDao;
     @Autowired
     MusicDao musicDao;
+    @Autowired
+    DanceDao dancedao;
 
     @RequestMapping(value = "/admin/video/delete", method = RequestMethod.POST)
     public @ResponseBody
@@ -57,6 +56,19 @@ public class DeleteController {
     String deleteMusic(HttpServletRequest request, HttpSession session){
         Integer id = Integer.parseInt(request.getParameter("id"));
         String status = CRUDEvent.getResponse(musicDao.deleteMusicById(id));
+        System.out.println(status);
+        if (status.equals("DELETE_SUCCESS")){
+            return 200+"";
+        }else{
+            return 505+"";
+        }
+    }
+
+    @RequestMapping(value = "/admin/team/delete", method = RequestMethod.POST)
+    public @ResponseBody
+    String deleteTeam(HttpServletRequest request, HttpSession session){
+        Integer id = Integer.parseInt(request.getParameter("id"));
+        String status = CRUDEvent.getResponse(dancedao.deleteDanceGroupById(id));
         System.out.println(status);
         if (status.equals("DELETE_SUCCESS")){
             return 200+"";

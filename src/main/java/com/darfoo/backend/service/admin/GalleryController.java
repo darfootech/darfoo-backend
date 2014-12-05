@@ -1,9 +1,6 @@
 package com.darfoo.backend.service.admin;
 
-import com.darfoo.backend.dao.AuthorDao;
-import com.darfoo.backend.dao.EducationDao;
-import com.darfoo.backend.dao.MusicDao;
-import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.dao.*;
 import com.darfoo.backend.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +29,8 @@ public class GalleryController {
     MusicDao musicDao;
     @Autowired
     AuthorDao authorDao;
+    @Autowired
+    DanceDao danceDao;
 
     @RequestMapping(value = "/admin/video/all", method = RequestMethod.GET)
     public String showAllVideo(ModelMap modelMap, HttpSession session){
@@ -149,5 +148,25 @@ public class GalleryController {
 
         modelMap.addAttribute("author", author);
         return "singleauthor";
+    }
+
+    @RequestMapping(value = "/admin/team/all", method = RequestMethod.GET)
+    public String showAllDanceGroup(ModelMap modelMap, HttpSession session){
+        List<DanceGroup> s_team = new ArrayList<DanceGroup>();
+        s_team = danceDao.getAllDanceGourp();
+        modelMap.addAttribute("allteams", s_team);
+        return "allteam";
+    }
+
+    @RequestMapping(value = "/admin/team/{id}", method = RequestMethod.GET)
+    public String showSingleDanceGroup(@PathVariable String id, ModelMap modelMap, HttpSession session){
+        System.out.println(Integer.parseInt(id));
+        DanceGroup danceGroup = danceDao.getTeamById(Integer.parseInt(id));
+
+        session.setAttribute("teamname", danceGroup.getName());
+        session.setAttribute("teamdescription", danceGroup.getDescription());
+
+        modelMap.addAttribute("team", danceGroup);
+        return "singleteam";
     }
 }
