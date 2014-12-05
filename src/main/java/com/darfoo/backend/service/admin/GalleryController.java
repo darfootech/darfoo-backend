@@ -1,11 +1,9 @@
 package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.EducationDao;
+import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
-import com.darfoo.backend.model.Education;
-import com.darfoo.backend.model.EducationCategory;
-import com.darfoo.backend.model.Video;
-import com.darfoo.backend.model.VideoCategory;
+import com.darfoo.backend.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,6 +27,8 @@ public class GalleryController {
     VideoDao videoDao;
     @Autowired
     EducationDao educationDao;
+    @Autowired
+    MusicDao musicDao;
 
     @RequestMapping(value = "/admin/video/all", method = RequestMethod.GET)
     public String showAllVideo(ModelMap modelMap, HttpSession session){
@@ -95,5 +94,37 @@ public class GalleryController {
         }
         modelMap.addAttribute("tutorial", tutorial);
         return "singletutorial";
+    }
+
+    @RequestMapping(value = "/admin/music/all", method = RequestMethod.GET)
+    public String showAllMusic(ModelMap modelMap, HttpSession session){
+        List<Music> s_music = new ArrayList<Music>();
+        s_music = musicDao.getAllMusic();
+        modelMap.addAttribute("allmusics", s_music);
+        return "allmusic";
+    }
+
+    @RequestMapping(value = "/admin/music/{id}", method = RequestMethod.GET)
+    public String showSingleMusic(@PathVariable String id, ModelMap modelMap){
+        System.out.println(Integer.parseInt(id));
+        Music music = musicDao.getMusicByMusicId(Integer.parseInt(id));
+        Set<MusicCategory> categories = music.getCategories();
+        for (MusicCategory category : categories){
+            int categoryid = category.getId();
+            String categorytitle = category.getTitle();
+            System.out.println(categoryid);
+            System.out.println(categorytitle);
+            if (categoryid >= 1 && categoryid <= 4){
+                modelMap.addAttribute("beat", category.getTitle());
+            }else if(categoryid >= 5 && categoryid <= 12){
+                modelMap.addAttribute("style", category.getTitle());
+            }else if(categoryid >= 13 && categoryid <= 38){
+                modelMap.addAttribute("letter", category.getTitle());
+            }else{
+                System.out.println("something is wrong with the category");
+            }
+        }
+        modelMap.addAttribute("music", music);
+        return "singlemusic";
     }
 }

@@ -173,4 +173,9 @@ public class MusicDaoTests {
 			
 		}
 	}
+
+    @Test
+    public void deleteVideoCascade(){
+        System.out.println(CRUDEvent.getResponse(musicDao.deleteMusicById(14)));
+    }
 }
