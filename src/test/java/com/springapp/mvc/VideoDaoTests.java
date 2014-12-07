@@ -42,9 +42,9 @@ public class VideoDaoTests {
 
 	@Test
 	public void insertSingleVideo(){
-        String videoTitle = "clea33333";
-        String authorName = "滨崎步";
-        String imagekey = "滨崎步3.jpg";
+        String videoTitle = "clea333";
+        String authorName = "周杰伦";
+        String imagekey = "滨崎步311.jpg";
 
         Author a = authorDao.getAuthor(authorName);
         if(a != null){
@@ -60,18 +60,21 @@ public class VideoDaoTests {
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
             image.setImage_key(imagekey);
-            imageDao.inserSingleImage(image);
+            imageDao.insertSingleImage(image);
         }else{
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
             return;
         }
 
-        Video queryVideo = videoDao.getVideoByVideoTitle(videoTitle);
+        int authorid = a.getId();
+        //视频title可以重名,但是不可能出现视频title一样,作者id都一样的情况,也就是一个作者的作品中不会出现重名的情况
+        Video queryVideo = videoDao.getVideoByTitleAuthorId(videoTitle, authorid);
         if (queryVideo == null){
-            System.out.println("视频不存在，可以进行插入");
+            System.out.println("视频名字和作者id组合不存在，可以进行插入");
         }else{
-            System.out.println(queryVideo.toString(true));
-            System.out.println("视频已存在，不可以进行插入了，是否需要修改");
+            System.out.println(queryVideo.getId());
+            System.out.println(queryVideo.getAuthor().getName());
+            System.out.println("视频名字和作者id组合已存在，不可以进行插入了，是否需要修改");
             return;
         }
 
@@ -92,9 +95,17 @@ public class VideoDaoTests {
 		s_vCategory.add(c3);
 		s_vCategory.add(c4);
 		video.setTitle(videoTitle);
-		video.setVideo_key(videoTitle);
+		video.setVideo_key(videoTitle + System.currentTimeMillis());
 		video.setUpdate_timestamp(System.currentTimeMillis());
-		videoDao.inserSingleVideo(video);
+		int insertStatus = videoDao.insertSingleVideo(video);
+        if (insertStatus == -1){
+            System.out.println("插入视频失败");
+        }else{
+            System.out.println("插入视频成功，视频id是" + insertStatus);
+        }
+
+        videoDao.updateVideoKeyById(insertStatus, videoTitle + "-" + insertStatus);
+
 	}
 	
 	@Test
@@ -194,6 +205,7 @@ public class VideoDaoTests {
 	@Test
 	public void updateVideoById(){
 		Integer vid = 4;
+        String videoTitle = "呵呵";
 		String authorName = "仓木麻衣";
 		String imageKey = "仓木麻衣.jpg";		
 		UpdateCheckResponse response = videoDao.updateVideoCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
@@ -209,7 +221,7 @@ public class VideoDaoTests {
 		categoryTitles.add(videoLetter.toUpperCase());
 		if(response.updateIsReady()){
 			//updateIsReady为true表示可以进行更新操作
-			System.out.println(CRUDEvent.getResponse(videoDao.updateVideo(vid, authorName, imageKey,categoryTitles,System.currentTimeMillis())));
+			System.out.println(CRUDEvent.getResponse(videoDao.updateVideo(vid, videoTitle, authorName, imageKey,categoryTitles,System.currentTimeMillis())));
 		}else{
 			System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
 		}

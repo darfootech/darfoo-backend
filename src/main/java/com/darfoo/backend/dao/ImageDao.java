@@ -25,7 +25,7 @@ public class ImageDao {
 
     //插入单个图片
     @SuppressWarnings("unchecked")
-    public void inserSingleImage(Image image){
+    public void insertSingleImage(Image image){
         try{
             Session session = sf.getCurrentSession();
             session.save(image);

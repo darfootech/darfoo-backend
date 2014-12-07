@@ -43,7 +43,7 @@ public class DanceDaoTests {
             System.out.println("图片不存在，可以进行插入");
             image = new DanceGroupImage();
             image.setImage_key(imagekey);
-            danceGroupImageDao.inserSingleImage(image);
+            danceGroupImageDao.insertSingleImage(image);
         }else{
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
             return;

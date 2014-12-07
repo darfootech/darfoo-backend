@@ -42,10 +42,10 @@ public class MusicDaoTests {
 	}
 	
 	@Test
-	public void inserSingleMusic(){
-        String musicTitle = "Sexy Love33";
+	public void insertSingleMusic(){
+        String musicTitle = "Sexy Love333";
         String authorName = "T-ara";
-        String imagekey = "T-ara333.jpg";
+        String imagekey = "T-ara3133.jpg";
 
         Author a = authorDao.getAuthor(authorName);
         if(a != null){
@@ -61,18 +61,20 @@ public class MusicDaoTests {
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
             image.setImage_key(imagekey);
-            imageDao.inserSingleImage(image);
+            imageDao.insertSingleImage(image);
         }else{
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
             return;
         }
 
-        Music queryMusic = musicDao.getMusicByMusicTitle(musicTitle);
+        int authorid = a.getId();
+        Music queryMusic = musicDao.getMusicByTitleAuthorId(musicTitle, authorid);
         if (queryMusic == null){
-            System.out.println("伴奏不存在，可以进行插入");
+            System.out.println("伴奏与作者id组合不存在，可以进行插入");
         }else{
-            System.out.println(queryMusic.toString(true));
-            System.out.println("伴奏已存在，不可以进行插入了，是否需要修改");
+            System.out.println(queryMusic.getId());
+            System.out.println(queryMusic.getAuthor().getName());
+            System.out.println("伴奏与作者id组合已存在，不可以进行插入了，是否需要修改");
             return;
         }
 
@@ -92,7 +94,14 @@ public class MusicDaoTests {
 		music.setTitle(musicTitle);
 		music.setMusic_key(musicTitle);
 		music.setUpdate_timestamp(System.currentTimeMillis());
-		musicDao.inserSingleMusic(music);
+		int insertStatus = musicDao.insertSingleMusic(music);
+        if (insertStatus == -1){
+            System.out.println("插入伴奏失败");
+        }else{
+            System.out.println("插入伴奏成功，视频id是" + insertStatus);
+        }
+
+        musicDao.updateMusicKeyById(insertStatus, musicTitle + "-" + insertStatus);
 	}
 	
 	@Test
@@ -141,9 +150,10 @@ public class MusicDaoTests {
 	 * **/
 	@Test
 	public void updateMusicById(){
-		Integer vid = 4;
+		Integer vid = 10;
+        String musicTitle = "呵呵呵";
 		String authorName = "仓木麻衣";
-		String imageKey = "仓木麻衣";		
+		String imageKey = "仓木麻衣.jpg";
 		UpdateCheckResponse response = musicDao.updateMusicCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
 		System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
 		String musicBeat = "八拍";
@@ -155,7 +165,7 @@ public class MusicDaoTests {
 		categoryTitles.add(musicLetter.toUpperCase());
 		if(response.updateIsReady()){
 			//updateIsReady为true表示可以进行更新操作
-			System.out.println(CRUDEvent.getResponse(musicDao.updateMusic(vid, authorName, imageKey,categoryTitles,System.currentTimeMillis())));
+			System.out.println(CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, authorName, imageKey,categoryTitles,System.currentTimeMillis())));
 		}
 	}
 	/**

@@ -26,7 +26,7 @@ public class DanceGroupImageDao {
 
     //插入单个图片
     @SuppressWarnings("unchecked")
-    public void inserSingleImage(DanceGroupImage image){
+    public void insertSingleImage(DanceGroupImage image){
         try{
             Session session = sessionFactory.getCurrentSession();
             session.save(image);

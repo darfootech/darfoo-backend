@@ -41,7 +41,7 @@ public class EducationDao {
 	}
 	//插入单个education视频
 	@SuppressWarnings("unchecked")
-	public void inserSingleEducationVideo(Education video){
+	public int insertSingleEducationVideo(Education video){
 		Set<EducationCategory> eCategories = video.getCategories();
 		Author author = video.getAuthor();
 		Image image = video.getImage();
@@ -71,8 +71,11 @@ public class EducationDao {
 			eCategories = new HashSet<EducationCategory>(l_vCategory);
 			video.setCategories(eCategories);
 			session.saveOrUpdate(video);
+            int insertId = video.getId();
+            return insertId;
 		}catch(Exception e){
 			e.printStackTrace();
+            return -1;
 		}
 	}
 	/**
@@ -115,6 +118,23 @@ public class EducationDao {
             e.printStackTrace();
         }
         return video;
+    }
+
+    /**
+     * 获取单个tutorial的信息
+     * 根据tutorial的title和作者id来获得tutorial对象
+     * @return education 返回一个Education的实例对象(包含关联表中的数据)，详细请看Education.java类
+     * **/
+    public Education getEducationByTitleAuthorId(String title, int authorid){
+         Education education = null;
+        try{
+            Session session = sf.getCurrentSession();
+            String sql = "select * from education where title=:title and author_id=:authorid";
+            education = (Education)session.createSQLQuery(sql).addEntity(Education.class).setString("title", title).setInteger("authorid", authorid).uniqueResult();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return education;
     }
 
 	/**
@@ -278,7 +298,7 @@ public class EducationDao {
 	 * @param imagekey   新的图片key(null值表示不需要更新)
 	 * @param categoryTitles  种类的集合(null值表示不需要更新)
 	 * **/
-	public int updateEducation(Integer id,String authorname, String imagekey, Set<String> categoryTitles,Long updateTimestamp){
+	public int updateEducation(Integer id, String title, String authorname, String imagekey, Set<String> categoryTitles, Long updateTimestamp){
 		int res = 0;
 		try{
 			Session session = sf.getCurrentSession();
@@ -321,6 +341,11 @@ public class EducationDao {
 			}
 			if(updateTimestamp != null)
 				oldEducation.setUpdate_timestamp(updateTimestamp);
+
+            if (title != null){
+                oldEducation.setTitle(title);
+            }
+
 			System.out.println("-----更新后的education如下-----");
 			System.out.println(oldEducation.toString(true));
 			session.saveOrUpdate(oldEducation);
@@ -331,6 +356,21 @@ public class EducationDao {
 		}
 		return res;
 	}
+
+    public int updateVideoKeyById(int tutorialid, String newTutorialKey){
+        int res = 0;
+        try{
+            Session session = sf.getCurrentSession();
+            Education oldTutorial = (Education)session.get(Education.class, tutorialid);
+            oldTutorial.setVideo_key(newTutorialKey);
+            session.saveOrUpdate(oldTutorial);
+            res = CRUDEvent.UPDATE_SUCCESS;
+        }catch (Exception e){
+            res = CRUDEvent.CRUD_EXCETION;
+            e.printStackTrace();
+        }
+        return res;
+    }
 	
 	/**
 	 * 获得所有Education对象

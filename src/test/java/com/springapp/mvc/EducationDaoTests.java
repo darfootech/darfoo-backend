@@ -44,9 +44,9 @@ public class EducationDaoTests {
 	
 	@Test
 	public void insertSingleEducationVideo(){
-        String title = "Strong Heart123";
+        String title = "Strong Heart321";
         String authorName = "周杰伦";
-        String imagekey = "仓木麻衣333.jpg";
+        String imagekey = "仓木麻衣3321.jpg";
 
         Author a = authorDao.getAuthor(authorName);
         if(a != null){
@@ -62,18 +62,20 @@ public class EducationDaoTests {
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
             image.setImage_key(imagekey);
-            imageDao.inserSingleImage(image);
+            imageDao.insertSingleImage(image);
         }else{
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
             return;
         }
 
-        Education queryVideo = educationDao.getEducationVideoByTitle(title);
+        int authorid = a.getId();
+        Education queryVideo = educationDao.getEducationByTitleAuthorId(title, authorid);
         if (queryVideo == null){
-            System.out.println("教程不存在，可以进行插入");
+            System.out.println("教程和作者id组合不存在，可以进行插入");
         }else{
-            System.out.println(queryVideo.toString(true));
-            System.out.println("教程已存在，不可以进行插入了，是否需要修改");
+            System.out.println(queryVideo.getId());
+            System.out.println(queryVideo.getAuthor().getName());
+            System.out.println("教程和作者id组合已存在，不可以进行插入了，是否需要修改");
             return;
         }
 
@@ -93,7 +95,14 @@ public class EducationDaoTests {
 		video.setTitle(title);
 		video.setVideo_key(title);
 		video.setUpdate_timestamp(System.currentTimeMillis());
-		educationDao.inserSingleEducationVideo(video);
+		int insertStatus = educationDao.insertSingleEducationVideo(video);
+        if (insertStatus == -1){
+            System.out.println("插入教程失败");
+        }else{
+            System.out.println("插入教程成功，视频id是" + insertStatus);
+        }
+
+        educationDao.updateVideoKeyById(insertStatus, title + "-" + insertStatus);
 	}
 	
 	@Test
@@ -132,7 +141,8 @@ public class EducationDaoTests {
 	 * **/
 	@Test
 	public void updateEducationById(){
-		Integer vid = 5;
+		Integer vid = 7;
+        String tutorialTitle = "呵呵";
 		String authorName = "滨崎步";
 		String imageKey = "滨崎步.jpg";		
 		UpdateCheckResponse response = educationDao.updateEducationCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
@@ -146,7 +156,7 @@ public class EducationDaoTests {
 		categoryTitles.add(videoStyle);
 		if(response.updateIsReady()){
 			//updateIsReady为true表示可以进行更新操作
-			System.out.println(CRUDEvent.getResponse(educationDao.updateEducation(vid, authorName, imageKey,categoryTitles,System.currentTimeMillis())));
+			System.out.println(CRUDEvent.getResponse(educationDao.updateEducation(vid, tutorialTitle, authorName, imageKey,categoryTitles,System.currentTimeMillis())));
 		}else{
 			System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
 		}

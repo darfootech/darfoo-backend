@@ -43,7 +43,7 @@ public class MusicDao {
 	}
 	//插入单个音频
 	@SuppressWarnings("unchecked")
-	public void inserSingleMusic(Music music){
+	public int insertSingleMusic(Music music){
 		Set<MusicCategory> mCategories = music.getCategories();
 		Author author = music.getAuthor();
 		Image image = music.getImage();
@@ -73,8 +73,11 @@ public class MusicDao {
 			mCategories = new HashSet<MusicCategory>(l_mCategory);
 			music.setCategories(mCategories);
 			session.save(music);
-		}catch(Exception e){
+            int insertId = music.getId();
+            return insertId;
+        }catch(Exception e){
 			e.printStackTrace();
+            return -1;
 		}
 	}
 
@@ -120,7 +123,24 @@ public class MusicDao {
         return music;
     }
 
-	/**
+    /**
+     * 获取单个music的信息
+     * 根据music的title来获得music对象
+     * @return music 返回一个Music的实例对象(包含关联表中的数据)，详细请看Music.java类
+     * **/
+    public Music getMusicByTitleAuthorId(String title, int authorid){
+        Music music = null;
+        try{
+            Session session = sf.getCurrentSession();
+            String sql = "select * from music where title=:title and author_id=:authorid";
+            music = (Music)session.createSQLQuery(sql).addEntity(Music.class).setString("title", title).setInteger("authorid", authorid).uniqueResult();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return music;
+    }
+
+    /**
 	 * 获取热门歌曲排行榜(暂时不排)
 	 * @param number 推荐歌曲数量(暂时定为3个)
 	 * @return List<Music> l_music 返回一个包含多个music对象的List
@@ -294,7 +314,7 @@ public class MusicDao {
 	 * @param imagekey   新的图片key(null值表示不需要更新)
 	 * @param categoryTitles  种类的集合(null值表示不需要更新)
 	 * **/
-	public int updateMusic(Integer id,String authorname, String imagekey, Set<String> categoryTitles,Long updateTimestamp){
+	public int updateMusic(Integer id, String title, String authorname, String imagekey, Set<String> categoryTitles, Long updateTimestamp){
 		int res = 0;
 		try{
 			Session session = sf.getCurrentSession();
@@ -337,6 +357,11 @@ public class MusicDao {
 			}
 			if(updateTimestamp != null)
 				oldMusic.setUpdate_timestamp(updateTimestamp);
+
+            if (title != null){
+                oldMusic.setTitle(title);
+            }
+
 			System.out.println("-----更新后的Music如下-----");
 			System.out.println(oldMusic.toString(true));
 			session.saveOrUpdate(oldMusic);
@@ -347,6 +372,22 @@ public class MusicDao {
 		}
 		return res;
 	}
+
+    public int updateMusicKeyById(int musicid, String newMusicKey){
+        int res = 0;
+        try{
+            Session session = sf.getCurrentSession();
+            Music oldMusic = (Music)session.get(Music.class, musicid);
+            oldMusic.setMusic_key(newMusicKey);
+            session.saveOrUpdate(oldMusic);
+            res = CRUDEvent.UPDATE_SUCCESS;
+        }catch (Exception e){
+            res = CRUDEvent.CRUD_EXCETION;
+            e.printStackTrace();
+        }
+        return res;
+    }
+
 	/**
 	 * 获得所有Music对象
 	 * **/

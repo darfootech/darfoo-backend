@@ -22,7 +22,7 @@ public class ImageDaoTests {
 	public void insertImage(){
 		Image image = new Image();
 		image.setImage_key("CCCC");
-		imageDao.inserSingleImage(image);
+		imageDao.insertSingleImage(image);
 	}
 	
 	@Test
