@@ -24,6 +24,8 @@
                     window.location.href = "/darfoobackend/rest/admin/video/all"
                 }else if(data == "505"){
                     alert("请确保舞蹈视频首字母填写的是一个不区分大小写的英文字母");
+                }else if(data == "501"){
+                    alert("该作者已经有相同名字的舞蹈视频了");
                 }else{
                     alert("更新视频信息失败");
                 }
@@ -74,9 +76,13 @@
                     <input type="text" name="id" value="${video.id}">
                 </div>
 
+                <div style="display: none">
+                    <input type="text" name="origintitle" value="${video.title}">
+                </div>
+
                 <div class="form-group">
                     <label for="title">舞蹈视频标题(也就是上传视频文件的文件名,不需要后缀)</label>
-                    <input type="text" class="form-control" name="title" id="title" placeholder="${video.title}" disabled="disabled">
+                    <input type="text" class="form-control" name="title" id="title" placeholder="${video.title}">
                 </div>
 
                 <div style="display: none">
