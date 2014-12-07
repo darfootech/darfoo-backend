@@ -2,6 +2,7 @@ package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.model.Author;
+import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.UpdateCheckResponse;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.utils.ServiceUtils;
@@ -56,6 +57,27 @@ public class UpdateController {
         }
     }
 
+    public int checkTutorialTitleAuthorIdDuplicate(String tutorialTitle, String authorName){
+        Author a = authorDao.getAuthor(authorName);
+        if(a != null){
+            System.out.println(a.getName());
+        }
+        else{
+            System.out.println("无该author记录");
+        }
+
+        int authorid = a.getId();
+        Education queryVideo = educationDao.getEducationByTitleAuthorId(tutorialTitle, authorid);
+        if (queryVideo == null){
+            System.out.println("教程和作者id组合不存在，可以进行插入");
+            return 1;
+        }else{
+            System.out.println(queryVideo.getId());
+            System.out.println(queryVideo.getAuthor().getName());
+            System.out.println("教程和作者id组合已存在，不可以进行插入了，是否需要修改");
+            return 0;
+        }
+    }
 
     @RequestMapping(value = "/admin/video/update", method = RequestMethod.POST)
     public @ResponseBody String updateVideo(HttpServletRequest request, HttpSession session){
@@ -110,12 +132,18 @@ public class UpdateController {
     @RequestMapping(value = "/admin/tutorial/update", method = RequestMethod.POST)
     public @ResponseBody String updateTutorial(HttpServletRequest request, HttpSession session) {
         String videoTitle = request.getParameter("title");
+        String originTitle = request.getParameter("origintitle");
         String authorName = request.getParameter("authorname");
         String imageKey = request.getParameter("imagekey");
         String videoSpeed = request.getParameter("tutorialspeed");
         String videoDifficult = request.getParameter("tutorialdifficult");
         String videoStyle = request.getParameter("tutorialstyle");
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imageKey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle);
+
+        int duplicateCode = checkTutorialTitleAuthorIdDuplicate(videoTitle, authorName);
+        if (duplicateCode == 0){
+            return 501+"";
+        }
 
         Integer vid = Integer.parseInt(request.getParameter("id"));
         UpdateCheckResponse response = educationDao.updateEducationCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
@@ -124,6 +152,9 @@ public class UpdateController {
         categoryTitles.add(videoSpeed);
         categoryTitles.add(videoDifficult);
         categoryTitles.add(videoStyle);
+        if (videoTitle.equals("")){
+            videoTitle = originTitle;
+        }
         if (response.updateIsReady()) {
             //updateIsReady为true表示可以进行更新操作
             String status = CRUDEvent.getResponse(educationDao.updateEducation(vid, videoTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
