@@ -141,9 +141,10 @@ public class MusicDaoTests {
 	 * **/
 	@Test
 	public void updateMusicById(){
-		Integer vid = 4;
+		Integer vid = 10;
+        String musicTitle = "呵呵呵";
 		String authorName = "仓木麻衣";
-		String imageKey = "仓木麻衣";		
+		String imageKey = "仓木麻衣.jpg";
 		UpdateCheckResponse response = musicDao.updateMusicCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
 		System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
 		String musicBeat = "八拍";
@@ -155,7 +156,7 @@ public class MusicDaoTests {
 		categoryTitles.add(musicLetter.toUpperCase());
 		if(response.updateIsReady()){
 			//updateIsReady为true表示可以进行更新操作
-			System.out.println(CRUDEvent.getResponse(musicDao.updateMusic(vid, authorName, imageKey,categoryTitles,System.currentTimeMillis())));
+			System.out.println(CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, authorName, imageKey,categoryTitles,System.currentTimeMillis())));
 		}
 	}
 	/**

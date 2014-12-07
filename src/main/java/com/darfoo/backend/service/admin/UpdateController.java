@@ -60,7 +60,7 @@ public class UpdateController {
         categoryTitles.add(videoLetter.toUpperCase());
         if(response.updateIsReady()){
             //updateIsReady为true表示可以进行更新操作
-            String status = CRUDEvent.getResponse(videoDao.updateVideo(vid, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
+            String status = CRUDEvent.getResponse(videoDao.updateVideo(vid, videoTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
             if (status.equals("UPDATE_SUCCESS")){
                 return 200+"";
             }else {
@@ -91,7 +91,7 @@ public class UpdateController {
         categoryTitles.add(videoStyle);
         if (response.updateIsReady()) {
             //updateIsReady为true表示可以进行更新操作
-            String status = CRUDEvent.getResponse(educationDao.updateEducation(vid, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
+            String status = CRUDEvent.getResponse(educationDao.updateEducation(vid, videoTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
             if (status.equals("UPDATE_SUCCESS")) {
                 return 200 + "";
             } else {
@@ -105,13 +105,13 @@ public class UpdateController {
 
     @RequestMapping(value = "/admin/music/update", method = RequestMethod.POST)
     public @ResponseBody String updateMusic(HttpServletRequest request, HttpSession session) {
-        String videoTitle = request.getParameter("title");
+        String musicTitle = request.getParameter("title");
         String authorName = request.getParameter("authorname");
         String imageKey = request.getParameter("imagekey");
         String musicBeat = request.getParameter("musicbeat");
         String musicStyle = request.getParameter("musicstyle");
         String musicLetter = request.getParameter("musicletter").toUpperCase();
-        System.out.println("requests: " + videoTitle + " " + authorName + " " + imageKey + " " + musicBeat + " " + musicStyle + " " + musicLetter);
+        System.out.println("requests: " + musicTitle + " " + authorName + " " + imageKey + " " + musicBeat + " " + musicStyle + " " + musicLetter);
 
         boolean isSingleLetter = ServiceUtils.isSingleCharacter(musicLetter);
         if (isSingleLetter){
@@ -130,7 +130,7 @@ public class UpdateController {
         categoryTitles.add(musicLetter.toUpperCase());
         if(response.updateIsReady()){
             //updateIsReady为true表示可以进行更新操作
-            String status = CRUDEvent.getResponse(musicDao.updateMusic(vid, authorName, imageKey,categoryTitles,System.currentTimeMillis()));
+            String status = CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, authorName, imageKey,categoryTitles,System.currentTimeMillis()));
             if (status.equals("UPDATE_SUCCESS")) {
                 return 200 + "";
             } else {

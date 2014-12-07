@@ -294,7 +294,7 @@ public class MusicDao {
 	 * @param imagekey   新的图片key(null值表示不需要更新)
 	 * @param categoryTitles  种类的集合(null值表示不需要更新)
 	 * **/
-	public int updateMusic(Integer id,String authorname, String imagekey, Set<String> categoryTitles,Long updateTimestamp){
+	public int updateMusic(Integer id, String title, String authorname, String imagekey, Set<String> categoryTitles, Long updateTimestamp){
 		int res = 0;
 		try{
 			Session session = sf.getCurrentSession();
@@ -337,6 +337,11 @@ public class MusicDao {
 			}
 			if(updateTimestamp != null)
 				oldMusic.setUpdate_timestamp(updateTimestamp);
+
+            if (title != null){
+                oldMusic.setTitle(title);
+            }
+
 			System.out.println("-----更新后的Music如下-----");
 			System.out.println(oldMusic.toString(true));
 			session.saveOrUpdate(oldMusic);

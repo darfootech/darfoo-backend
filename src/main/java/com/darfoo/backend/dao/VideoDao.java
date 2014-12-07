@@ -373,7 +373,7 @@ public class VideoDao {
 	 * @param imagekey   新的图片key(null值表示不需要更新)
 	 * @param categoryTitles  种类的集合(null值表示不需要更新)
 	 * **/
-	public int updateVideo(Integer id,String authorname, String imagekey, Set<String> categoryTitles,Long updateTimestamp){
+	public int updateVideo(Integer id, String title , String authorname, String imagekey, Set<String> categoryTitles, Long updateTimestamp){
 		int res = 0;
 		try{
 			Session session = sf.getCurrentSession();
@@ -416,6 +416,11 @@ public class VideoDao {
 			}
 			if(updateTimestamp != null)
 				oldVideo.setUpdate_timestamp(updateTimestamp);
+
+            if (title != null){
+                oldVideo.setTitle(title);
+            }
+
 			System.out.println("-----更新后的video如下-----");
 			System.out.println(oldVideo.toString(true));
 			session.saveOrUpdate(oldVideo);

@@ -205,6 +205,7 @@ public class VideoDaoTests {
 	@Test
 	public void updateVideoById(){
 		Integer vid = 4;
+        String videoTitle = "呵呵";
 		String authorName = "仓木麻衣";
 		String imageKey = "仓木麻衣.jpg";		
 		UpdateCheckResponse response = videoDao.updateVideoCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
@@ -220,7 +221,7 @@ public class VideoDaoTests {
 		categoryTitles.add(videoLetter.toUpperCase());
 		if(response.updateIsReady()){
 			//updateIsReady为true表示可以进行更新操作
-			System.out.println(CRUDEvent.getResponse(videoDao.updateVideo(vid, authorName, imageKey,categoryTitles,System.currentTimeMillis())));
+			System.out.println(CRUDEvent.getResponse(videoDao.updateVideo(vid, videoTitle, authorName, imageKey,categoryTitles,System.currentTimeMillis())));
 		}else{
 			System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
 		}
