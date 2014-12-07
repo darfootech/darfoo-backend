@@ -42,9 +42,9 @@ public class VideoDaoTests {
 
 	@Test
 	public void insertSingleVideo(){
-        String videoTitle = "clea33333";
+        String videoTitle = "clea33";
         String authorName = "滨崎步";
-        String imagekey = "滨崎步3.jpg";
+        String imagekey = "滨崎步333.jpg";
 
         Author a = authorDao.getAuthor(authorName);
         if(a != null){
@@ -66,12 +66,14 @@ public class VideoDaoTests {
             return;
         }
 
-        Video queryVideo = videoDao.getVideoByVideoTitle(videoTitle);
+        int authorid = a.getId();
+        //视频title可以重名,但是不可能出现视频title一样,作者id都一样的情况,也就是一个作者的作品中不会出现重名的情况
+        Video queryVideo = videoDao.getVideoByTitleAuthorId(videoTitle, authorid);
         if (queryVideo == null){
-            System.out.println("视频不存在，可以进行插入");
+            System.out.println("视频名字和作者id组合不存在，可以进行插入");
         }else{
             System.out.println(queryVideo.toString(true));
-            System.out.println("视频已存在，不可以进行插入了，是否需要修改");
+            System.out.println("视频名字和作者id组合已存在，不可以进行插入了，是否需要修改");
             return;
         }
 
@@ -92,9 +94,17 @@ public class VideoDaoTests {
 		s_vCategory.add(c3);
 		s_vCategory.add(c4);
 		video.setTitle(videoTitle);
-		video.setVideo_key(videoTitle);
+		video.setVideo_key(videoTitle + System.currentTimeMillis());
 		video.setUpdate_timestamp(System.currentTimeMillis());
-		videoDao.inserSingleVideo(video);
+		int insertStatus = videoDao.inserSingleVideo(video);
+        if (insertStatus == -1){
+            System.out.println("插入视频失败");
+        }else{
+            System.out.println("插入视频成功，视频id是" + insertStatus);
+        }
+
+        videoDao.updateVideoKeyById(insertStatus, videoTitle + "-" + insertStatus);
+
 	}
 	
 	@Test

@@ -48,7 +48,7 @@ public class VideoDao {
 	}
 	//插入单个视频
 	@SuppressWarnings("unchecked")
-	public void inserSingleVideo(Video video){
+	public int inserSingleVideo(Video video){
 		Set<VideoCategory> vCategories = video.getCategories();
 		Author author = video.getAuthor();
 		Image image = video.getImage();
@@ -78,8 +78,11 @@ public class VideoDao {
 			vCategories = new HashSet<VideoCategory>(l_vCategory);
 			video.setCategories(vCategories);
 			session.save(video);
+            int insertId = video.getId();
+            return insertId;
 		}catch(Exception e){
 			e.printStackTrace();
+            return -1;
 		}
 	}
 
@@ -119,6 +122,23 @@ public class VideoDao {
             //设置JOIN mode，这样categories会直接加载到video类中
             c.setFetchMode("categories", FetchMode.JOIN);
             video = (Video)c.uniqueResult();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return video;
+    }
+
+    /**
+     * 获取单个video的信息
+     * 根据video的title和作者id来获得video对象
+     * @return video 返回一个video的实例对象(包含关联表中的数据)，详细请看Video.java类
+     * **/
+    public Video getVideoByTitleAuthorId(String title, int authorid){
+        Video video = null;
+        try{
+            Session session = sf.getCurrentSession();
+            String sql = "select * from video where title=:title and author_id=:authorid";
+            video = (Video)session.createSQLQuery(sql).addEntity(Author.class).setString("title", title).setInteger("authorid", authorid).uniqueResult();
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -406,6 +426,21 @@ public class VideoDao {
 		}
 		return res;
 	}
+
+    public int updateVideoKeyById(int videoid, String newVideoKey){
+        int res = 0;
+        try{
+            Session session = sf.getCurrentSession();
+            Video oldVideo = (Video)session.get(Video.class, videoid);
+            oldVideo.setVideo_key(newVideoKey);
+            session.saveOrUpdate(oldVideo);
+            res = CRUDEvent.UPDATE_SUCCESS;
+        }catch (Exception e){
+            res = CRUDEvent.CRUD_EXCETION;
+            e.printStackTrace();
+        }
+        return res;
+    }
 	
 	/**
 	 * 获得所有Video对象
