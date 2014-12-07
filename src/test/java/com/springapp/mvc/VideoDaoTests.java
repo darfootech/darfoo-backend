@@ -42,9 +42,9 @@ public class VideoDaoTests {
 
 	@Test
 	public void insertSingleVideo(){
-        String videoTitle = "clea33";
-        String authorName = "滨崎步";
-        String imagekey = "滨崎步333.jpg";
+        String videoTitle = "clea333";
+        String authorName = "周杰伦";
+        String imagekey = "滨崎步311.jpg";
 
         Author a = authorDao.getAuthor(authorName);
         if(a != null){
@@ -72,7 +72,8 @@ public class VideoDaoTests {
         if (queryVideo == null){
             System.out.println("视频名字和作者id组合不存在，可以进行插入");
         }else{
-            System.out.println(queryVideo.toString(true));
+            System.out.println(queryVideo.getId());
+            System.out.println(queryVideo.getAuthor().getName());
             System.out.println("视频名字和作者id组合已存在，不可以进行插入了，是否需要修改");
             return;
         }

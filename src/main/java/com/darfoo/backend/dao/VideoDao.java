@@ -138,7 +138,7 @@ public class VideoDao {
         try{
             Session session = sf.getCurrentSession();
             String sql = "select * from video where title=:title and author_id=:authorid";
-            video = (Video)session.createSQLQuery(sql).addEntity(Author.class).setString("title", title).setInteger("authorid", authorid).uniqueResult();
+            video = (Video)session.createSQLQuery(sql).addEntity(Video.class).setString("title", title).setInteger("authorid", authorid).uniqueResult();
         }catch(Exception e){
             e.printStackTrace();
         }

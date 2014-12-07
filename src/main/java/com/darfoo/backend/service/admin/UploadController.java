@@ -153,7 +153,7 @@ public class UploadController {
         video.setTitle(videotitle);
         video.setVideo_key(videotitle);
         video.setUpdate_timestamp(System.currentTimeMillis());
-        educationDao.inserSingleEducationVideo(video);
+        educationDao.insertSingleEducationVideo(video);
 
         return 200;
     }

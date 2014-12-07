@@ -44,9 +44,9 @@ public class EducationDaoTests {
 	
 	@Test
 	public void insertSingleEducationVideo(){
-        String title = "Strong Heart123";
+        String title = "Strong Heart321";
         String authorName = "周杰伦";
-        String imagekey = "仓木麻衣333.jpg";
+        String imagekey = "仓木麻衣3321.jpg";
 
         Author a = authorDao.getAuthor(authorName);
         if(a != null){
@@ -68,12 +68,14 @@ public class EducationDaoTests {
             return;
         }
 
-        Education queryVideo = educationDao.getEducationVideoByTitle(title);
+        int authorid = a.getId();
+        Education queryVideo = educationDao.getEducationByTitleAuthorId(title, authorid);
         if (queryVideo == null){
-            System.out.println("教程不存在，可以进行插入");
+            System.out.println("教程和作者id组合不存在，可以进行插入");
         }else{
-            System.out.println(queryVideo.toString(true));
-            System.out.println("教程已存在，不可以进行插入了，是否需要修改");
+            System.out.println(queryVideo.getId());
+            System.out.println(queryVideo.getAuthor().getName());
+            System.out.println("教程和作者id组合已存在，不可以进行插入了，是否需要修改");
             return;
         }
 
@@ -93,7 +95,14 @@ public class EducationDaoTests {
 		video.setTitle(title);
 		video.setVideo_key(title);
 		video.setUpdate_timestamp(System.currentTimeMillis());
-		educationDao.inserSingleEducationVideo(video);
+		int insertStatus = educationDao.insertSingleEducationVideo(video);
+        if (insertStatus == -1){
+            System.out.println("插入视频失败");
+        }else{
+            System.out.println("插入视频成功，视频id是" + insertStatus);
+        }
+
+        educationDao.updateVideoKeyById(insertStatus, title + "-" + insertStatus);
 	}
 	
 	@Test
