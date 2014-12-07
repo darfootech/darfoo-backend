@@ -72,7 +72,7 @@ public class UploadController {
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
             image.setImage_key(imagekey);
-            imageDao.inserSingleImage(image);
+            imageDao.insertSingleImage(image);
         }else{
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
             return 502;
@@ -99,7 +99,7 @@ public class UploadController {
         video.setTitle(videotitle);
         video.setVideo_key(videotitle);
         video.setUpdate_timestamp(System.currentTimeMillis());
-        videoDao.inserSingleVideo(video);
+        videoDao.insertSingleVideo(video);
 
         return 200;
     }
@@ -129,7 +129,7 @@ public class UploadController {
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
             image.setImage_key(imagekey);
-            imageDao.inserSingleImage(image);
+            imageDao.insertSingleImage(image);
         }else{
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
             return 502;
@@ -190,7 +190,7 @@ public class UploadController {
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
             image.setImage_key(imagekey);
-            imageDao.inserSingleImage(image);
+            imageDao.insertSingleImage(image);
         }else{
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
             return 502;
@@ -212,7 +212,7 @@ public class UploadController {
         music.setTitle(musictitle);
         music.setMusic_key(musictitle);
         music.setUpdate_timestamp(System.currentTimeMillis());
-        musicDao.inserSingleMusic(music);
+        musicDao.insertSingleMusic(music);
 
         return 200;
     }
@@ -247,7 +247,7 @@ public class UploadController {
             System.out.println("图片不存在，可以进行插入");
             image = new DanceGroupImage();
             image.setImage_key(imagekey);
-            danceGroupImageDao.inserSingleImage(image);
+            danceGroupImageDao.insertSingleImage(image);
         }else{
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
             return 503;

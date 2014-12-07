@@ -48,7 +48,7 @@ public class VideoDao {
 	}
 	//插入单个视频
 	@SuppressWarnings("unchecked")
-	public int inserSingleVideo(Video video){
+	public int insertSingleVideo(Video video){
 		Set<VideoCategory> vCategories = video.getCategories();
 		Author author = video.getAuthor();
 		Image image = video.getImage();

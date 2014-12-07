@@ -62,7 +62,7 @@ public class EducationDaoTests {
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
             image.setImage_key(imagekey);
-            imageDao.inserSingleImage(image);
+            imageDao.insertSingleImage(image);
         }else{
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
             return;
@@ -97,9 +97,9 @@ public class EducationDaoTests {
 		video.setUpdate_timestamp(System.currentTimeMillis());
 		int insertStatus = educationDao.insertSingleEducationVideo(video);
         if (insertStatus == -1){
-            System.out.println("插入视频失败");
+            System.out.println("插入教程失败");
         }else{
-            System.out.println("插入视频成功，视频id是" + insertStatus);
+            System.out.println("插入教程成功，视频id是" + insertStatus);
         }
 
         educationDao.updateVideoKeyById(insertStatus, title + "-" + insertStatus);

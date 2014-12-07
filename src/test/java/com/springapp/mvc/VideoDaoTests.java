@@ -60,7 +60,7 @@ public class VideoDaoTests {
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
             image.setImage_key(imagekey);
-            imageDao.inserSingleImage(image);
+            imageDao.insertSingleImage(image);
         }else{
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
             return;
@@ -97,7 +97,7 @@ public class VideoDaoTests {
 		video.setTitle(videoTitle);
 		video.setVideo_key(videoTitle + System.currentTimeMillis());
 		video.setUpdate_timestamp(System.currentTimeMillis());
-		int insertStatus = videoDao.inserSingleVideo(video);
+		int insertStatus = videoDao.insertSingleVideo(video);
         if (insertStatus == -1){
             System.out.println("插入视频失败");
         }else{
