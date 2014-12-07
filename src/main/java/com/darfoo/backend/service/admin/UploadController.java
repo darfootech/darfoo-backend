@@ -15,6 +15,8 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -39,24 +41,20 @@ public class UploadController {
     @Autowired
     DanceGroupImageDao danceGroupImageDao;
 
-    public int insertSingleVideo(String videotitle, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter){
+    public HashMap<String, Integer> insertSingleVideo(String videotitle, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter){
         System.out.println(authorname);
+
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+
         Author targetAuthor = authorDao.getAuthor(authorname);
         if(targetAuthor != null){
             System.out.println(targetAuthor.getName());
         }
         else{
             System.out.println("无该author记录");
-            return 501;
-        }
-
-        Video queryVideo = videoDao.getVideoByVideoTitle(videotitle);
-        if (queryVideo == null){
-            System.out.println("视频不存在，可以进行插入");
-        }else{
-            System.out.println(queryVideo.toString(true));
-            System.out.println("视频已存在，不可以进行插入了，是否需要修改");
-            return 503;
+            resultMap.put("statuscode", 501);
+            resultMap.put("insertid", -1);
+            return resultMap;
         }
 
         boolean isSingleLetter = ServiceUtils.isSingleCharacter(videoletter);
@@ -64,7 +62,23 @@ public class UploadController {
             System.out.println("是单个大写字母");
         }else{
             System.out.println("不是单个大写字母");
-            return 505;
+            resultMap.put("statuscode", 505);
+            resultMap.put("insertid", -1);
+            return resultMap;
+        }
+
+        int authorid = targetAuthor.getId();
+        //视频title可以重名,但是不可能出现视频title一样,作者id都一样的情况,也就是一个作者的作品中不会出现重名的情况
+        Video queryVideo = videoDao.getVideoByTitleAuthorId(videotitle, authorid);
+        if (queryVideo == null){
+            System.out.println("视频名字和作者id组合不存在，可以进行插入");
+        }else{
+            System.out.println(queryVideo.getId());
+            System.out.println(queryVideo.getAuthor().getName());
+            System.out.println("视频名字和作者id组合已存在，不可以进行插入了，是否需要修改");
+            resultMap.put("statuscode", 503);
+            resultMap.put("insertid", -1);
+            return resultMap;
         }
 
         Image image = imageDao.getImageByName(imagekey);
@@ -75,7 +89,9 @@ public class UploadController {
             imageDao.insertSingleImage(image);
         }else{
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
-            return 502;
+            resultMap.put("statuscode", 502);
+            resultMap.put("insertid", -1);
+            return resultMap;
         }
 
         Video video = new Video();
@@ -99,9 +115,18 @@ public class UploadController {
         video.setTitle(videotitle);
         video.setVideo_key(videotitle);
         video.setUpdate_timestamp(System.currentTimeMillis());
-        videoDao.insertSingleVideo(video);
+        int insertStatus = videoDao.insertSingleVideo(video);
+        if (insertStatus == -1){
+            System.out.println("插入视频失败");
+        }else{
+            System.out.println("插入视频成功，视频id是" + insertStatus);
+        }
 
-        return 200;
+        videoDao.updateVideoKeyById(insertStatus, videotitle + "-" + insertStatus);
+
+        resultMap.put("statuscode", 200);
+        resultMap.put("insertid", insertStatus);
+        return resultMap;
     }
 
     public int insertSingleEducationVideo(String videotitle, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle){
@@ -283,12 +308,17 @@ public class UploadController {
         Long update_timestamp = System.currentTimeMillis() / 1000;
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + videoLetter + " " + update_timestamp);
 
-        session.setAttribute("videoTitle", videoTitle + ".mp4");
-        session.setAttribute("videoImage", imagekey);
-
-        int statusCode = this.insertSingleVideo(videoTitle, authorName, imagekey, videoSpeed, videoDifficult, videoStyle, videoLetter);
+        HashMap<String, Integer> resultMap = this.insertSingleVideo(videoTitle, authorName, imagekey, videoSpeed, videoDifficult, videoStyle, videoLetter);
+        int statusCode = resultMap.get("statuscode");
         System.out.println("status code is: " + statusCode);
-        return statusCode+"";
+        if (statusCode != 200){
+            return statusCode+"";
+        }else{
+            int insertid = resultMap.get("insertid");
+            session.setAttribute("videoKey", videoTitle + "-" + insertid + ".mp4");
+            session.setAttribute("videoImage", imagekey);
+            return statusCode+"";
+        }
     }
 
     @RequestMapping(value = "/resources/videoresource/new", method = RequestMethod.GET)
@@ -299,13 +329,14 @@ public class UploadController {
     @RequestMapping("/resources/videoresource/create")
     public String createVideoResource(@RequestParam("videoresource") CommonsMultipartFile videoresource, @RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session){
         //upload
-        String videoTitle = (String)session.getAttribute("videoTitle");
+        String videoTitle = (String)session.getAttribute("videoKey");
         String imageKey = (String)session.getAttribute("videoImage");
 
-        String videoResourceName = videoresource.getOriginalFilename();
-        String imageResourceName = imageresource.getOriginalFilename();
+        //String videoResourceName = videoresource.getOriginalFilename();
+        //String imageResourceName = imageresource.getOriginalFilename();
+        //System.out.println(videoResourceName + " " + imageResourceName);
 
-        System.out.println(videoResourceName + " " + imageResourceName);
+        System.out.println(videoTitle + " " + imageKey);
 
         String videoStatusCode = "";
         String imageStatusCode = "";
