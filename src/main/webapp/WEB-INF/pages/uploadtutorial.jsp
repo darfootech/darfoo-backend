@@ -13,7 +13,7 @@
                     alert("提交教程信息成功");
                     window.location.href = "/darfoobackend/rest/resources/tutorialresource/new"
                 }else if(data == "503"){
-                    alert("相同标题的教程已经存在了，请修改教程标题");
+                    alert("这个作者已经有相同标题的舞蹈教程了，请修改舞蹈教程标题了");
                 }else if(data == "502"){
                     alert("相同名字的图片已经存在了，请修改上传图片的名字");
                 }else if(data == "501"){

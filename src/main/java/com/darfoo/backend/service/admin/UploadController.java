@@ -129,24 +129,33 @@ public class UploadController {
         return resultMap;
     }
 
-    public int insertSingleEducationVideo(String videotitle, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle){
+    public HashMap<String, Integer> insertSingleEducationVideo(String videotitle, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle){
         System.out.println(authorname);
+
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+
         Author targetAuthor = authorDao.getAuthor(authorname);
         if(targetAuthor != null){
             System.out.println(targetAuthor.getName());
         }
         else{
             System.out.println("无该author记录");
-            return 501;
+            resultMap.put("statuscode", 501);
+            resultMap.put("insertid", -1);
+            return resultMap;
         }
 
-        Education queryVideo = educationDao.getEducationVideoByTitle(videotitle);
+        int authorid = targetAuthor.getId();
+        Education queryVideo = educationDao.getEducationByTitleAuthorId(videotitle, authorid);
         if (queryVideo == null){
-            System.out.println("教程不存在，可以进行插入");
+            System.out.println("教程和作者id组合不存在，可以进行插入");
         }else{
-            System.out.println(queryVideo.toString(true));
-            System.out.println("教程已存在，不可以进行插入了，是否需要修改");
-            return 503;
+            System.out.println(queryVideo.getId());
+            System.out.println(queryVideo.getAuthor().getName());
+            System.out.println("教程和作者id组合已存在，不可以进行插入了，是否需要修改");
+            resultMap.put("statuscode", 503);
+            resultMap.put("insertid", -1);
+            return resultMap;
         }
 
         Image image = imageDao.getImageByName(imagekey);
@@ -157,7 +166,9 @@ public class UploadController {
             imageDao.insertSingleImage(image);
         }else{
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
-            return 502;
+            resultMap.put("statuscode", 502);
+            resultMap.put("insertid", -1);
+            return resultMap;
         }
 
         Education video = new Education();
@@ -178,9 +189,19 @@ public class UploadController {
         video.setTitle(videotitle);
         video.setVideo_key(videotitle);
         video.setUpdate_timestamp(System.currentTimeMillis());
-        educationDao.insertSingleEducationVideo(video);
+        int insertStatus = educationDao.insertSingleEducationVideo(video);
+        if (insertStatus == -1){
+            System.out.println("插入教程失败");
+        }else{
+            System.out.println("插入教程成功，视频id是" + insertStatus);
+        }
 
-        return 200;
+        educationDao.updateVideoKeyById(insertStatus, videotitle + "-" + insertStatus);
+
+        resultMap.put("statuscode", 200);
+        resultMap.put("insertid", insertStatus);
+
+        return resultMap;
     }
 
     public int insertSingleMusic(String musictitle, String authorname, String imagekey, String musicbeat, String musicstyle, String musicletter){
@@ -435,12 +456,17 @@ public class UploadController {
         Long update_timestamp = System.currentTimeMillis() / 1000;
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + update_timestamp);
 
-        session.setAttribute("tutorialTitle", videoTitle + ".mp4");
-        session.setAttribute("tutorialImage", imagekey);
-
-        int statusCode = this.insertSingleEducationVideo(videoTitle, authorName, imagekey, videoSpeed, videoDifficult, videoStyle);
-        System.out.println("status code: " + statusCode);
-        return statusCode+"";
+        HashMap<String, Integer> resultMap = this.insertSingleEducationVideo(videoTitle, authorName, imagekey, videoSpeed, videoDifficult, videoStyle);
+        int statusCode = resultMap.get("statuscode");
+        System.out.println("status code is: " + statusCode);
+        if (statusCode != 200){
+            return statusCode+"";
+        }else{
+            int insertid = resultMap.get("insertid");
+            session.setAttribute("tutorialKey", videoTitle + "-" + insertid + ".mp4");
+            session.setAttribute("tutorialImage", imagekey);
+            return statusCode+"";
+        }
     }
 
     @RequestMapping(value = "/resources/tutorialresource/new", method = RequestMethod.GET)
@@ -451,13 +477,14 @@ public class UploadController {
     @RequestMapping("/resources/tutorialresource/create")
     public String createTutorialResource(@RequestParam("videoresource") CommonsMultipartFile videoresource, @RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session){
         //upload
-        String tutorialTitle = (String)session.getAttribute("tutorialTitle");
+        String tutorialTitle = (String)session.getAttribute("tutorialKey");
         String imagekey = (String)session.getAttribute("tutorialImage");
 
-        String videoResourceName = videoresource.getOriginalFilename();
-        String imageResourceName = imageresource.getOriginalFilename();
+        //String videoResourceName = videoresource.getOriginalFilename();
+        //String imageResourceName = imageresource.getOriginalFilename();
+        //System.out.println(videoResourceName + " " + imageResourceName);
 
-        System.out.println(videoResourceName + " " + imageResourceName);
+        System.out.println(tutorialTitle + " " + imagekey);
 
         String videoStatusCode = "";
         String imageStatusCode = "";
