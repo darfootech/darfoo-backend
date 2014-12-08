@@ -3,6 +3,7 @@ package com.darfoo.backend.dao;
 import java.util.*;
 
 import com.darfoo.backend.model.*;
+
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
@@ -222,13 +223,11 @@ public class EducationDao {
 		int res = 0;
 		try{
 			Session session = sf.getCurrentSession();
-			Education education = (Education)session.get(Education.class, id);
-			if(education == null){
+			Education video = (Education)session.get(Education.class, id);
+			if(video == null){
 				res = CRUDEvent.DELETE_NOTFOUND;
 			}else{
-                education.setAuthor(null);
-                session.update(education);
-				session.delete(education);
+				session.delete(video);
 				res = CRUDEvent.DELETE_SUCCESS;
 			}			
 		}catch(Exception e){

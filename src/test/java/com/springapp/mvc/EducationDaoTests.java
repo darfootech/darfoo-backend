@@ -177,4 +177,13 @@ public class EducationDaoTests {
 			
 		}
 	}
+	
+	/**
+	 * delete Education
+	 * **/
+	@Test 
+	public void deleteEducation(){
+		int res = educationDao.deleteEducationById(5);
+		System.out.println(CRUDEvent.getResponse(res));
+	}
 }
