@@ -32,6 +32,9 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             System.out.println("在新建资源");
             if (request.getSession() != null && request.getSession().getAttribute("loginUser") != null && (request.getSession().getAttribute("loginUser").equals("upload") || request.getSession().getAttribute("loginUser").equals("cleantha"))) {
                 return true;
+            }else{
+                response.sendRedirect(request.getContextPath() + "/rest/login");
+                return false;
             }
         }else if(request.getSession() != null && request.getSession().getAttribute("loginUser") != null && request.getSession().getAttribute("loginUser").equals("cleantha")) {
             // 其他情况判断session中是否有key，有的话继续用户的操作
@@ -45,7 +48,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         }
 
         System.out.println("something is going wrong");
-        response.sendRedirect(request.getContextPath() + "/rest/login");
         return false;
     }
 }
