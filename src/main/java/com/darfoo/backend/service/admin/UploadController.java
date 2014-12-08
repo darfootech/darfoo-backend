@@ -204,23 +204,19 @@ public class UploadController {
         return resultMap;
     }
 
-    public int insertSingleMusic(String musictitle, String authorname, String imagekey, String musicbeat, String musicstyle, String musicletter){
+    public HashMap<String, Integer> insertSingleMusic(String musictitle, String authorname, String imagekey, String musicbeat, String musicstyle, String musicletter){
         Author targetAuthor = authorDao.getAuthor(authorname);
+
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+
         if(targetAuthor != null){
             System.out.println(targetAuthor.getName());
         }
         else{
             System.out.println("无该author记录");
-            return 501;
-        }
-
-        Music queryMusic = musicDao.getMusicByMusicTitle(musictitle);
-        if (queryMusic == null){
-            System.out.println("伴奏不存在，可以进行插入");
-        }else{
-            System.out.println(queryMusic.toString(true));
-            System.out.println("伴奏已存在，不可以进行插入了，是否需要修改");
-            return 503;
+            resultMap.put("statuscode", 501);
+            resultMap.put("insertid", -1);
+            return resultMap;
         }
 
         boolean isSingleLetter = ServiceUtils.isSingleCharacter(musicletter);
@@ -228,7 +224,22 @@ public class UploadController {
             System.out.println("是单个大写字母");
         }else{
             System.out.println("不是单个大写字母");
-            return 505;
+            resultMap.put("statuscode", 505);
+            resultMap.put("insertid", -1);
+            return resultMap;
+        }
+
+        int authorid = targetAuthor.getId();
+        Music queryMusic = musicDao.getMusicByTitleAuthorId(musictitle, authorid);
+        if (queryMusic == null){
+            System.out.println("伴奏与作者id组合不存在，可以进行插入");
+        }else{
+            System.out.println(queryMusic.getId());
+            System.out.println(queryMusic.getAuthor().getName());
+            System.out.println("伴奏与作者id组合已存在，不可以进行插入了，是否需要修改");
+            resultMap.put("statuscode", 503);
+            resultMap.put("insertid", -1);
+            return resultMap;
         }
 
         Image image = imageDao.getImageByName(imagekey);
@@ -239,7 +250,9 @@ public class UploadController {
             imageDao.insertSingleImage(image);
         }else{
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
-            return 502;
+            resultMap.put("statuscode", 502);
+            resultMap.put("insertid", -1);
+            return resultMap;
         }
 
         Music music = new Music();
@@ -258,9 +271,18 @@ public class UploadController {
         music.setTitle(musictitle);
         music.setMusic_key(musictitle);
         music.setUpdate_timestamp(System.currentTimeMillis());
-        musicDao.insertSingleMusic(music);
+        int insertStatus = musicDao.insertSingleMusic(music);
+        if (insertStatus == -1){
+            System.out.println("插入伴奏失败");
+        }else{
+            System.out.println("插入伴奏成功，视频id是" + insertStatus);
+        }
 
-        return 200;
+        musicDao.updateMusicKeyById(insertStatus, musictitle + "-" + insertStatus);
+
+        resultMap.put("statuscode", 200);
+        resultMap.put("insertid", insertStatus);
+        return resultMap;
     }
 
     public int insertSingleAuthor(String authorname, String description){
@@ -396,11 +418,17 @@ public class UploadController {
         Long update_timestamp = System.currentTimeMillis() / 1000;
         System.out.println("requests: " + musicTitle + " " + authorName + " " + imagekey + " " + musicBeat + " " + musicStyle + " " + musicLetter + " " + update_timestamp);
 
-        session.setAttribute("musicTitle", musicTitle + ".mp3");
-        session.setAttribute("musicImage", imagekey);
-
-        int statusCode = this.insertSingleMusic(musicTitle, authorName, imagekey, musicBeat, musicStyle, musicLetter);
-        return statusCode+"";
+        HashMap<String, Integer> resultMap = this.insertSingleMusic(musicTitle, authorName, imagekey, musicBeat, musicStyle, musicLetter);
+        int statusCode = resultMap.get("statuscode");
+        System.out.println("status code is: " + statusCode);
+        if (statusCode != 200){
+            return statusCode+"";
+        }else{
+            int insertid = resultMap.get("insertid");
+            session.setAttribute("musicTitle", musicTitle + "-" + insertid + ".mp3");
+            session.setAttribute("musicImage", imagekey);
+            return statusCode+"";
+        }
     }
 
     @RequestMapping(value = "/resources/musicresource/new", method = RequestMethod.GET)

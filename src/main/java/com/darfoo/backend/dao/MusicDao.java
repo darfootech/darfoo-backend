@@ -125,7 +125,7 @@ public class MusicDao {
 
     /**
      * 获取单个music的信息
-     * 根据music的title来获得music对象
+     * 根据music的title和作者id来获得music对象
      * @return music 返回一个Music的实例对象(包含关联表中的数据)，详细请看Music.java类
      * **/
     public Music getMusicByTitleAuthorId(String title, int authorid){
