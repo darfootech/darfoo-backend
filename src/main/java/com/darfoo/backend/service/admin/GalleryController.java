@@ -84,11 +84,11 @@ public class GalleryController {
             String categorytitle = category.getTitle();
             System.out.println(categoryid);
             System.out.println(categorytitle);
-            if (categoryid >= 1 && categoryid <= 3){
-                modelMap.addAttribute("speed", category.getTitle());
-            }else if(categoryid >= 4 && categoryid <= 6){
-                modelMap.addAttribute("difficult", category.getTitle());
-            }else if(categoryid >= 7 && categoryid <= 9){
+            if (categorytitle.equals("快") || categorytitle.equals("中") || categorytitle.equals("慢")){
+                modelMap.addAttribute("speed", categorytitle);
+            }else if(categorytitle.equals("简单") || categorytitle.equals("适中") || categorytitle.equals("稍难")){
+                modelMap.addAttribute("difficult", categorytitle);
+            }else if(categorytitle.equals("背面教学") || categorytitle.equals("分解教学") || categorytitle.equals("队形表演")){
                 modelMap.addAttribute("style", category.getTitle());
             }else{
                 System.out.println("something is wrong with the category");
