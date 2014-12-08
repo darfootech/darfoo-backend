@@ -1,10 +1,7 @@
 package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.*;
-import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.Education;
-import com.darfoo.backend.model.UpdateCheckResponse;
-import com.darfoo.backend.model.Video;
+import com.darfoo.backend.model.*;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -75,6 +72,28 @@ public class UpdateController {
             System.out.println(queryVideo.getId());
             System.out.println(queryVideo.getAuthor().getName());
             System.out.println("教程和作者id组合已存在，不可以进行插入了，是否需要修改");
+            return 0;
+        }
+    }
+
+    public int checkMusicTitleAuthorIdDuplicate(String musicTitle, String authorName){
+        Author a = authorDao.getAuthor(authorName);
+        if(a != null){
+            System.out.println(a.getName());
+        }
+        else{
+            System.out.println("无该author记录");
+        }
+
+        int authorid = a.getId();
+        Music queryMusic = musicDao.getMusicByTitleAuthorId(musicTitle, authorid);
+        if (queryMusic == null){
+            System.out.println("伴奏与作者id组合不存在，可以进行插入");
+            return 1;
+        }else{
+            System.out.println(queryMusic.getId());
+            System.out.println(queryMusic.getAuthor().getName());
+            System.out.println("伴奏与作者id组合已存在，不可以进行插入了，是否需要修改");
             return 0;
         }
     }
@@ -172,6 +191,7 @@ public class UpdateController {
     @RequestMapping(value = "/admin/music/update", method = RequestMethod.POST)
     public @ResponseBody String updateMusic(HttpServletRequest request, HttpSession session) {
         String musicTitle = request.getParameter("title");
+        String originTitle = request.getParameter("origintitle");
         String authorName = request.getParameter("authorname");
         String imageKey = request.getParameter("imagekey");
         String musicBeat = request.getParameter("musicbeat");
@@ -187,6 +207,11 @@ public class UpdateController {
             return 505+"";
         }
 
+        int duplicateCode = checkMusicTitleAuthorIdDuplicate(musicTitle, authorName);
+        if (duplicateCode == 0){
+            return 501+"";
+        }
+
         Integer vid = Integer.parseInt(request.getParameter("id"));
         UpdateCheckResponse response = musicDao.updateMusicCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
         System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
@@ -194,6 +219,9 @@ public class UpdateController {
         categoryTitles.add(musicBeat);
         categoryTitles.add(musicStyle);
         categoryTitles.add(musicLetter.toUpperCase());
+        if (musicTitle.equals("")){
+            musicTitle = originTitle;
+        }
         if(response.updateIsReady()){
             //updateIsReady为true表示可以进行更新操作
             String status = CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, authorName, imageKey,categoryTitles,System.currentTimeMillis()));
