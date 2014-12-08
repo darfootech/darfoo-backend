@@ -44,6 +44,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
 
+        System.out.println("something is going wrong");
+        response.sendRedirect(request.getContextPath() + "/rest/login");
         return false;
     }
 }
