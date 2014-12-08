@@ -72,6 +72,13 @@
                     </ul>
                 </li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <% if (session != null && session.getAttribute("loginUser") != null){ %>
+                    <li class="active"><a href="/darfoobackend/rest/login/out">注销</a></li>
+                <% } else { %>
+                    <li class="active">未登录</li>
+                <% } %>
+            </ul>
         </div>
     </div>
 </div>

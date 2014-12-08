@@ -15,26 +15,35 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         String uri = request.getRequestURI();
 
         // 判断路径是登出还是登录验证，是这两者之一的话执行Controller中定义的方法
+        // 客户端的restfulapi的url不能拦截
         if(uri.endsWith("/login/auth") || uri.endsWith("/login/out") || (uri.contains("/resources/") && !uri.contains("new") && !uri.contains("create"))) {
+            System.out.println("在请求登陆登出和restfulapi");
             return true;
-        }
-
-        // 进入登录页面，判断session中是否有key，有的话重定向到首页，否则进入登录界面
-        if(uri.endsWith("/login/") || uri.endsWith("/login")) {
+        }else if(uri.endsWith("/login/") || uri.endsWith("/login")) {
+            // 进入登录页面，判断session中是否有key，有的话重定向到首页，否则进入登录界面
+            System.out.println("在请求登陆页面");
             if(request.getSession() != null && request.getSession().getAttribute("loginUser") != null) {
                 response.sendRedirect(request.getContextPath() + "/rest/resources/video/new");
             } else {
                 return true;
             }
-        }
-
-        // 其他情况判断session中是否有key，有的话继续用户的操作
-        if(request.getSession() != null && request.getSession().getAttribute("loginUser") != null && request.getSession().getAttribute("loginUser").equals("cleantha")) {
+        }else if (uri.contains("/resources/") && (uri.contains("new") || uri.contains("create"))){
+            //上传资源需要一个低权限的用户
+            System.out.println("在新建资源");
+            if (request.getSession() != null && request.getSession().getAttribute("loginUser") != null && (request.getSession().getAttribute("loginUser").equals("upload") || request.getSession().getAttribute("loginUser").equals("cleantha"))) {
+                return true;
+            }
+        }else if(request.getSession() != null && request.getSession().getAttribute("loginUser") != null && request.getSession().getAttribute("loginUser").equals("cleantha")) {
+            // 其他情况判断session中是否有key，有的话继续用户的操作
+            System.out.println("在管理资源");
             return true;
+        }else{
+            // 最后的情况就是进入登录页面
+            System.out.println("需要登陆");
+            response.sendRedirect(request.getContextPath() + "/rest/login");
+            return false;
         }
 
-        // 最后的情况就是进入登录页面
-        response.sendRedirect(request.getContextPath() + "/rest/login");
         return false;
     }
 }
