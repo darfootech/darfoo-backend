@@ -22,6 +22,8 @@
                     window.location.href = "/darfoobackend/rest/admin/music/all"
                 }else if(data == "505"){
                     alert("请确保舞蹈伴奏首字母填写的是一个不区分大小写的英文字母");
+                }else if(data == "501"){
+                    alert("该作者已经有相同名字的舞蹈伴奏了");
                 }else{
                     alert("更新伴奏信息失败");
                 }
@@ -71,9 +73,13 @@
                     <input type="text" name="id" value="${music.id}">
                 </div>
 
+                <div style="display: none">
+                    <input type="text" name="origintitle" value="${music.title}">
+                </div>
+
                 <div class="form-group">
                     <label for="title">舞蹈伴奏标题(也就是上传伴奏文件的文件名,不需要后缀)</label>
-                    <input type="text" class="form-control" name="title" id="title" placeholder="${music.title}" disabled="disabled">
+                    <input type="text" class="form-control" name="title" id="title" placeholder="${music.title}">
                 </div>
 
                 <div style="display: none">

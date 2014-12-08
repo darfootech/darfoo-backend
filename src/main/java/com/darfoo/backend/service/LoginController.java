@@ -1,5 +1,6 @@
 package com.darfoo.backend.service;
 
+import org.omg.CORBA.Request;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,17 +30,25 @@ public class LoginController {
         System.out.println(username);
         System.out.println(password);
 
-        if (username.equals("darfoo@tech") && password.equals("Oofrad@333")){
+        if (username.equals("darfoo@tech") && password.equals("Oofrad@darfoo")){
             request.getSession().setAttribute("loginUser", "cleantha");
+            return "200";
+        }else if(username.equals("darfoo@upload") && password.equals("Upload@333")){
+            request.getSession().setAttribute("loginUser", "upload");
             return "200";
         }else{
             return "501";
         }
     }
 
+    @RequestMapping(value = "/permissiondeny", method = RequestMethod.GET)
+    public String permissiondeny() {
+        return "permissiondeny";
+    }
+
     @RequestMapping("/out")
     public String out(HttpServletRequest req) {
         req.getSession().removeAttribute("loginUser");
-        return "redirect:/login";
+        return "redirect:/rest/login";
     }
 }
