@@ -242,7 +242,14 @@ public class UploadController {
         }
 
         Music music = new Music();
-        music.setAuthor(authorDao.getAllAuthor().get(0));
+        if (authorDao.getAllAuthor().size() == 0){
+            System.out.println("无法找到默认作者，不可以创建伴奏");
+            resultMap.put("statuscode", 501);
+            resultMap.put("insertid", -1);
+        }else{
+            System.out.println("可以找到默认作者，可以创建伴奏");
+            music.setAuthor(authorDao.getAllAuthor().get(0));
+        }
         music.setImage(image);
         MusicCategory beat = new MusicCategory();
         MusicCategory style = new MusicCategory();

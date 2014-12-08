@@ -43,8 +43,8 @@ public class MusicDaoTests {
 	
 	@Test
 	public void insertSingleMusic(){
-        String musicTitle = "Sexy Love33333";
-        String imagekey = "T-ara321321.jpg";
+        String musicTitle = "Sexy Love33321";
+        String imagekey = "T-ara325521.jpg";
 
         Image image = imageDao.getImageByName(imagekey);
         if (image == null){
@@ -67,7 +67,13 @@ public class MusicDaoTests {
         }
 
         Music music = new Music();
-		music.setAuthor(authorDao.getAllAuthor().get(0));
+        if (authorDao.getAllAuthor().size() == 0){
+            System.out.println("无法找到默认作者，不可以创建伴奏");
+            return;
+        }else{
+            System.out.println("可以找到默认作者，可以创建伴奏");
+            music.setAuthor(authorDao.getAllAuthor().get(0));
+        }
 		music.setImage(image);
 		MusicCategory c1 = new MusicCategory();	
 		MusicCategory c2 = new MusicCategory();	
