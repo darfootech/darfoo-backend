@@ -99,7 +99,7 @@ public class EducationDaoTests {
         if (insertStatus == -1){
             System.out.println("插入教程失败");
         }else{
-            System.out.println("插入教程成功，视频id是" + insertStatus);
+            System.out.println("插入教程成功，教程id是" + insertStatus);
         }
 
         educationDao.updateVideoKeyById(insertStatus, title + "-" + insertStatus);

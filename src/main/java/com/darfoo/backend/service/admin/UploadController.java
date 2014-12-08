@@ -193,7 +193,7 @@ public class UploadController {
         if (insertStatus == -1){
             System.out.println("插入教程失败");
         }else{
-            System.out.println("插入教程成功，视频id是" + insertStatus);
+            System.out.println("插入教程成功，教程id是" + insertStatus);
         }
 
         educationDao.updateVideoKeyById(insertStatus, videotitle + "-" + insertStatus);
@@ -205,19 +205,7 @@ public class UploadController {
     }
 
     public HashMap<String, Integer> insertSingleMusic(String musictitle, String authorname, String imagekey, String musicbeat, String musicstyle, String musicletter){
-        Author targetAuthor = authorDao.getAuthor(authorname);
-
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
-
-        if(targetAuthor != null){
-            System.out.println(targetAuthor.getName());
-        }
-        else{
-            System.out.println("无该author记录");
-            resultMap.put("statuscode", 501);
-            resultMap.put("insertid", -1);
-            return resultMap;
-        }
 
         boolean isSingleLetter = ServiceUtils.isSingleCharacter(musicletter);
         if (isSingleLetter){
@@ -229,14 +217,12 @@ public class UploadController {
             return resultMap;
         }
 
-        int authorid = targetAuthor.getId();
-        Music queryMusic = musicDao.getMusicByTitleAuthorId(musictitle, authorid);
+        Music queryMusic = musicDao.getMusicByMusicTitle(musictitle);
         if (queryMusic == null){
-            System.out.println("伴奏与作者id组合不存在，可以进行插入");
+            System.out.println("伴奏不存在，可以进行插入");
         }else{
-            System.out.println(queryMusic.getId());
-            System.out.println(queryMusic.getAuthor().getName());
-            System.out.println("伴奏与作者id组合已存在，不可以进行插入了，是否需要修改");
+            System.out.println(queryMusic.toString(true));
+            System.out.println("伴奏已存在，不可以进行插入了，是否需要修改");
             resultMap.put("statuscode", 503);
             resultMap.put("insertid", -1);
             return resultMap;
@@ -256,7 +242,7 @@ public class UploadController {
         }
 
         Music music = new Music();
-        music.setAuthor(targetAuthor);
+        music.setAuthor(authorDao.getAllAuthor().get(0));
         music.setImage(image);
         MusicCategory beat = new MusicCategory();
         MusicCategory style = new MusicCategory();
@@ -275,7 +261,7 @@ public class UploadController {
         if (insertStatus == -1){
             System.out.println("插入伴奏失败");
         }else{
-            System.out.println("插入伴奏成功，视频id是" + insertStatus);
+            System.out.println("插入伴奏成功，伴奏id是" + insertStatus);
         }
 
         musicDao.updateMusicKeyById(insertStatus, musictitle + "-" + insertStatus);

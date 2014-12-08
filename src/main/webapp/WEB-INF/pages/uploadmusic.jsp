@@ -40,10 +40,16 @@
                     <label for="title">舞蹈伴奏标题(也就是上传音频文件的文件名,不需要后缀)</label>
                     <input type="text" class="form-control" name="title" id="title" placeholder="请输入舞蹈伴奏标题">
                 </div>
-                <div class="form-group">
+
+                <div style="display: none">
+                    <input type="text" name="authorname" value="nothing">
+                </div>
+
+                <!--<div class="form-group">
                     <label for="authorname">舞蹈伴奏作者名字</label>
                     <input type="text" class="form-control" name="authorname" id="authorname" placeholder="请输入舞蹈伴奏作者名字">
-                </div>
+                </div>-->
+
                 <div class="form-group">
                     <label for="imagekey">舞蹈伴奏封面图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
                     <input type="text" class="form-control" name="imagekey" id="imagekey" placeholder="请输入舞蹈伴奏封面图片名称">
