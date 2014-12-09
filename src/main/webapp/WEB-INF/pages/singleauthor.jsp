@@ -38,16 +38,16 @@
             data : {"id":authorid},
             success : function(data){
                 if(data == "200"){
-                    alert("删除伴奏信息成功");
+                    alert("删除作者信息成功");
                     window.location.href = "/darfoobackend/rest/admin/author/all"
                 }else if(data == "505"){
-                    alert("删除伴奏信息失败");
+                    alert("删除作者信息失败");
                 }else{
-                    alert("删除伴奏信息失败");
+                    alert("删除作者信息失败");
                 }
             },
             error : function(){
-                alert("删除伴奏信息失败");
+                alert("删除作者信息失败");
             }
         })
     }
@@ -84,6 +84,7 @@
                 </div>
 
                 <button type="button" class="btn btn-default" onclick="update()">更新作者信息</button>
+                <button type="button" class="btn btn-default" onclick="kickout()">删除作者</button>
             </form>
         </div>
     </div>

@@ -10,16 +10,16 @@
             data : $("#createteamform").serialize(),
             success : function(data){
                 if(data == "200"){
-                    alert("更新伴奏信息成功");
+                    alert("更新舞队信息成功");
                     window.location.href = "/darfoobackend/rest/admin/team/all"
                 }else if(data == "505"){
                     alert("请确保舞队首字母填写的是一个不区分大小写的英文字母");
                 }else{
-                    alert("更新伴奏信息失败,可能是舞队名字已经存在,在所有舞队中查看");
+                    alert("更新舞队信息失败,可能是舞队名字已经存在,在所有舞队中查看");
                 }
             },
             error : function(){
-                alert("更新伴奏信息失败,可能是舞队名字已经存在,在所有舞队中查看");
+                alert("更新舞队信息失败,可能是舞队名字已经存在,在所有舞队中查看");
             }
         })
     }
@@ -35,16 +35,16 @@
             data : {"id":teamid},
             success : function(data){
                 if(data == "200"){
-                    alert("删除伴奏信息成功");
+                    alert("删除舞队信息成功");
                     window.location.href = "/darfoobackend/rest/admin/team/all"
                 }else if(data == "505"){
-                    alert("删除伴奏信息失败");
+                    alert("删除舞队信息失败");
                 }else{
-                    alert("删除伴奏信息失败");
+                    alert("删除舞队信息失败");
                 }
             },
             error : function(){
-                alert("删除伴奏信息失败");
+                alert("删除舞队信息失败");
             }
         })
     }
