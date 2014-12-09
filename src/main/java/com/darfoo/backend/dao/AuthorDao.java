@@ -74,7 +74,7 @@ public class AuthorDao {
 	/**
 	 * 插入单个Author
 	 * @param author
-	 * 在插入时请保证image有值，否则将以null插入
+	 * 在插入时请保证image有值，否则将以null
 	 * **/
 	public int insertAuthor(Author author){
 		int res = 0;
