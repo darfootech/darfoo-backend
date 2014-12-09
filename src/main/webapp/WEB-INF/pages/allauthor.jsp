@@ -2,7 +2,7 @@
 <%@include file="header.jsp"%>
 
 <div class="container">
-    <h6>总共有${allauthors.size()}个作者</h6>
+    <h6>总共有${allauthors.size()}个作者(明星舞队)</h6>
     <div class="row">
         <div class="col-md-12">
             <c:if test="${not empty allauthors}">

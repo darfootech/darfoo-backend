@@ -252,6 +252,13 @@ public class UpdateController {
         String description = request.getParameter("description");
         String imagekey = request.getParameter("imagekey");
 
+        if(authorDao.isExistAuthor(name)){
+            System.out.println("作者已存在");
+            return 501+"";
+        }else{
+            System.out.println("无该author记录，可以创建");
+        }
+
         if (name.equals("")){
             name = (String)session.getAttribute("authorname");
         }

@@ -278,7 +278,7 @@ public class UploadController {
         return resultMap;
     }
 
-    public int insertSingleAuthor(String authorname, String description){
+    public int insertSingleAuthor(String authorname, String description, String imagekey){
         if(authorDao.isExistAuthor(authorname)){
             System.out.println("作者已存在");
             return 501;
@@ -286,9 +286,21 @@ public class UploadController {
             System.out.println("无该author记录，可以创建");
         }
 
+        Image image = imageDao.getImageByName(imagekey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+            image = new Image();
+            image.setImage_key(imagekey);
+            imageDao.insertSingleImage(image);
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            return 503;
+        }
+
         Author author = new Author();
         author.setName(authorname);
         author.setDescription(description);
+        author.setImage(image);
         authorDao.insertAuthor(author);
 
         return 200;
@@ -537,13 +549,45 @@ public class UploadController {
     }
 
     @RequestMapping(value = "/resources/author/create", method = RequestMethod.POST)
-    public @ResponseBody String createAuthor(HttpServletRequest request){
+    public @ResponseBody String createAuthor(HttpServletRequest request, HttpSession session){
         String name = request.getParameter("name");
         String description = request.getParameter("description");
+        String imagekey = request.getParameter("imagekey");
         System.out.println("requests: " + name + " " + description);
 
-        int statusCode = this.insertSingleAuthor(name, description);
+        session.setAttribute("authorImage", imagekey);
+
+        int statusCode = this.insertSingleAuthor(name, description, imagekey);
         return statusCode+"";
+    }
+
+    @RequestMapping(value = "/resources/authorresource/new", method = RequestMethod.GET)
+    public String uploadAuthorResource(){
+        return "uploadauthorresource";
+    }
+
+    @RequestMapping("/resources/authorresource/create")
+    public String createAuthorResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session){
+        //upload
+        String imagekey = (String)session.getAttribute("authorImage");
+
+        String imageResourceName = imageresource.getOriginalFilename();
+
+        System.out.println(imageResourceName);
+
+        String imageStatusCode = "";
+
+        try {
+            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (imageStatusCode.equals("200")){
+            return "success";
+        }else{
+            return "fail";
+        }
     }
     /*end of author part*/
 
