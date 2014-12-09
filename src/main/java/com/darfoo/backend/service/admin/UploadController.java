@@ -41,7 +41,7 @@ public class UploadController {
     @Autowired
     DanceGroupImageDao danceGroupImageDao;
 
-    public HashMap<String, Integer> insertSingleVideo(String videotitle, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter){
+    public HashMap<String, Integer> insertSingleVideo(String videotitle, String videotype, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter){
         System.out.println(authorname);
 
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
@@ -122,7 +122,7 @@ public class UploadController {
             System.out.println("插入视频成功，视频id是" + insertStatus);
         }
 
-        videoDao.updateVideoKeyById(insertStatus, videotitle + "-" + insertStatus);
+        videoDao.updateVideoKeyById(insertStatus, videotitle + "-" + insertStatus + "." + videotype);
 
         resultMap.put("statuscode", 200);
         resultMap.put("insertid", insertStatus);
@@ -335,6 +335,7 @@ public class UploadController {
     @RequestMapping(value = "/resources/video/create", method = RequestMethod.POST)
     public @ResponseBody String createVideo(HttpServletRequest request, HttpSession session){
         String videoTitle = request.getParameter("title");
+        String videoType = request.getParameter("videotype");
         String authorName = request.getParameter("authorname");
         String imagekey = request.getParameter("imagekey");
         String videoSpeed = request.getParameter("videospeed");
@@ -344,14 +345,14 @@ public class UploadController {
         Long update_timestamp = System.currentTimeMillis() / 1000;
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + videoLetter + " " + update_timestamp);
 
-        HashMap<String, Integer> resultMap = this.insertSingleVideo(videoTitle, authorName, imagekey, videoSpeed, videoDifficult, videoStyle, videoLetter);
+        HashMap<String, Integer> resultMap = this.insertSingleVideo(videoTitle, videoType, authorName, imagekey, videoSpeed, videoDifficult, videoStyle, videoLetter);
         int statusCode = resultMap.get("statuscode");
         System.out.println("status code is: " + statusCode);
         if (statusCode != 200){
             return statusCode+"";
         }else{
             int insertid = resultMap.get("insertid");
-            session.setAttribute("videoKey", videoTitle + "-" + insertid + ".mp4");
+            session.setAttribute("videoKey", videoTitle + "-" + insertid + "." + videoType);
             session.setAttribute("videoImage", imagekey);
             return statusCode+"";
         }
