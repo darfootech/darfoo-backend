@@ -196,7 +196,7 @@ public class VideoDaoTests {
 	
 	@Test
 	public void deleteVideoCascade(){
-		System.out.println(CRUDEvent.getResponse(videoDao.deleteVideoById(18)));
+		System.out.println(CRUDEvent.getResponse(videoDao.deleteVideoById(2)));
 	}
 	
 	/**
