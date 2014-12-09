@@ -168,7 +168,7 @@ public class EducationDaoTests {
 	@Test
 	public void getAllEducations(){
 		List<Education> s_educations = new ArrayList<Education>();
-		s_educations = educationDao.getAllEdutcaion();
+		s_educations = educationDao.getAllEducation();
 		System.out.println("总共查到"+s_educations.size());
 		for(Education video : s_educations){
 			System.out.println("----------------");

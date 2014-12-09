@@ -42,7 +42,7 @@ public class UpdateResourceKey {
     @Test
     public void updateTutorialKey(){
         List<Education> s_educations;
-        s_educations = educationDao.getAllEdutcaion();
+        s_educations = educationDao.getAllEducation();
         for(Education tutorial : s_educations){
             int tutorialid = tutorial.getId();
             String tutorialkey = tutorial.getVideo_key() + ".mp4";

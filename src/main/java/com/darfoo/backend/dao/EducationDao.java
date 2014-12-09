@@ -374,7 +374,7 @@ public class EducationDao {
 	/**
 	 * 获得所有Education对象
 	 * **/
-	public List<Education> getAllEdutcaion(){
+	public List<Education> getAllEducation(){
 		List<Education> s_educations = new ArrayList<Education>();
         Map<Integer, Education> sortMap = new HashMap<Integer, Education>();
 
