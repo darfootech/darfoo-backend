@@ -250,6 +250,7 @@ public class UpdateController {
     public @ResponseBody String updateAuthor(HttpServletRequest request, HttpSession session) {
         String name = request.getParameter("name");
         String description = request.getParameter("description");
+        String imagekey = request.getParameter("imagekey");
 
         if (name.equals("")){
             name = (String)session.getAttribute("authorname");
@@ -262,7 +263,7 @@ public class UpdateController {
         System.out.println("requests: " + name + " " + description);
 
         Integer id = Integer.parseInt(request.getParameter("id"));
-        int res = authorDao.updateAuthor(id, name, description);//更新id为2的Author对象的名字
+        int res = authorDao.updateAuthor(id, name, description, imagekey);//更新id为2的Author对象的名字
         String status = CRUDEvent.getResponse(res);
         if (status.equals("UPDATE_SUCCESS")) {
             return 200 + "";

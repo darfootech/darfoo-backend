@@ -59,8 +59,8 @@ public class AuthorDaoTests {
 		String newDesciption = "asdkabscla";
 		String newimageKey = "仓木麻衣.jpg";
 		UpdateCheckResponse response = authorDao.updateAuthorCheck(id, newimageKey);
-		if(response.updateIsReady()){			
-			int res = authorDao.updateAuthor(id,newName, newDesciption,newimageKey);//更新id为2的Author对象的名字
+		if(response.updateIsReady()){
+			int res = authorDao.updateAuthor(id, newName, newDesciption, newimageKey);//更新id为2的Author对象的名字
 			System.out.println(CRUDEvent.getResponse(res));
 		}else{
 			System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
@@ -78,7 +78,7 @@ public class AuthorDaoTests {
 	
 	@Test
 	public void deleteAuthor(){
-		Integer id = 1;
+		Integer id = 6;
 		System.out.println(CRUDEvent.getResponse(authorDao.deleteAuthorById(id)));
 	}
 }
