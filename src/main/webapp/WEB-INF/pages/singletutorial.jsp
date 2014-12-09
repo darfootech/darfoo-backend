@@ -6,10 +6,12 @@
         var speed = $("#speed").text();
         var difficult = $("#difficult").text();
         var style = $("#style").text();
+        var type = $("#type").text();
 
         $('#tutorialspeed option[value="' + speed + '"]').attr("selected", true);
         $('#tutorialdifficult option[value="' + difficult + '"]').attr("selected", true);
         $('#tutorialstyle option[value="' + style + '"]').attr("selected", true);
+        $('#videotype option[value="' + type + '"]').attr("selected", true);
     });
 
     function update(){
@@ -66,6 +68,7 @@
 <div id="speed" style="display: none">${speed}</div>
 <div id="difficult" style="display: none">${difficult}</div>
 <div id="style" style="display: none">${style}</div>
+<div id="type" style="display: none">${videotype}</div>
 
 <div class="container">
     <h1>查看与修改舞蹈教程信息</h1>
@@ -101,6 +104,14 @@
                 <div class="form-group">
                     <label for="imagekey">舞蹈教程封面图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
                     <input type="text" class="form-control" id="imagekey" placeholder="${tutorial.image.image_key}" disabled="disabled">
+                </div>
+
+                <div class="form-group">
+                    <label for="videotype">舞蹈教程格式---<div style="color: green; display: inline; font-size: 18pt">原本为${videotype}</div></label>
+                    <select data-toggle="select" name="videotype" id="videotype" class="form-control select select-success mrs mbm">
+                        <option value="mp4">mp4</option>
+                        <option value="flv">flv</option>
+                    </select>
                 </div>
 
                 <div class="form-group">

@@ -156,6 +156,7 @@ public class UpdateController {
     @RequestMapping(value = "/admin/tutorial/update", method = RequestMethod.POST)
     public @ResponseBody String updateTutorial(HttpServletRequest request, HttpSession session) {
         String videoTitle = request.getParameter("title");
+        String videoType = request.getParameter("videotype");
         String originTitle = request.getParameter("origintitle");
         String authorName = request.getParameter("authorname");
         String imageKey = request.getParameter("imagekey");
@@ -176,6 +177,10 @@ public class UpdateController {
         categoryTitles.add(videoSpeed);
         categoryTitles.add(videoDifficult);
         categoryTitles.add(videoStyle);
+
+        String newTutorialKey = educationDao.getEducationVideoById(vid).getVideo_key().split("\\.")[0] + "." + videoType;
+        educationDao.updateVideoKeyById(vid, newTutorialKey);
+
         if (videoTitle.equals("")){
             videoTitle = originTitle;
         }

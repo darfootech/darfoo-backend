@@ -97,6 +97,9 @@ public class GalleryController {
                 System.out.println("something is wrong with the category");
             }
         }
+        String videoKey = tutorial.getVideo_key();
+        String videoType = videoKey.split("\\.")[1];
+        modelMap.addAttribute("videotype", videoType);
         modelMap.addAttribute("tutorial", tutorial);
         return "singletutorial";
     }

@@ -129,7 +129,7 @@ public class UploadController {
         return resultMap;
     }
 
-    public HashMap<String, Integer> insertSingleEducationVideo(String videotitle, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle){
+    public HashMap<String, Integer> insertSingleEducationVideo(String videotitle, String videotype, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle){
         System.out.println(authorname);
 
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
@@ -196,7 +196,7 @@ public class UploadController {
             System.out.println("插入教程成功，教程id是" + insertStatus);
         }
 
-        educationDao.updateVideoKeyById(insertStatus, videotitle + "-" + insertStatus);
+        educationDao.updateVideoKeyById(insertStatus, videotitle + "-" + insertStatus + "." + videotype);
 
         resultMap.put("statuscode", 200);
         resultMap.put("insertid", insertStatus);
@@ -470,6 +470,7 @@ public class UploadController {
     @RequestMapping(value = "/resources/tutorial/create", method = RequestMethod.POST)
     public @ResponseBody String createTutorial(HttpServletRequest request, HttpSession session){
         String videoTitle = request.getParameter("title");
+        String videoType = request.getParameter("videotype");
         String authorName = request.getParameter("authorname");
         String imagekey = request.getParameter("imagekey");
         String videoSpeed = request.getParameter("videospeed");
@@ -478,14 +479,14 @@ public class UploadController {
         Long update_timestamp = System.currentTimeMillis() / 1000;
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + update_timestamp);
 
-        HashMap<String, Integer> resultMap = this.insertSingleEducationVideo(videoTitle, authorName, imagekey, videoSpeed, videoDifficult, videoStyle);
+        HashMap<String, Integer> resultMap = this.insertSingleEducationVideo(videoTitle, videoType, authorName, imagekey, videoSpeed, videoDifficult, videoStyle);
         int statusCode = resultMap.get("statuscode");
         System.out.println("status code is: " + statusCode);
         if (statusCode != 200){
             return statusCode+"";
         }else{
             int insertid = resultMap.get("insertid");
-            session.setAttribute("tutorialKey", videoTitle + "-" + insertid + ".mp4");
+            session.setAttribute("tutorialKey", videoTitle + "-" + insertid + "." + videoType);
             session.setAttribute("tutorialImage", imagekey);
             return statusCode+"";
         }
