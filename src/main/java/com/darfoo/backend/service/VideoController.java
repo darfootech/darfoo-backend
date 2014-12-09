@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,10 +60,12 @@ public class VideoController {
     }
 
     //http://localhost:8080/darfoobackend/rest/resources/video/search/s
-    @RequestMapping(value = "/search/{content}", method = RequestMethod.GET)
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
     public @ResponseBody
-    List<SearchVideo> searchVideo(@PathVariable String content){
-        List<Video> videos = searchDao.getVideoBySearch(content);
+    List<SearchVideo> searchVideo(HttpServletRequest request){
+        String searchContent = request.getParameter("search");
+        System.out.println(searchContent);
+        List<Video> videos = searchDao.getVideoBySearch(searchContent);
         List<SearchVideo> result = new ArrayList<SearchVideo>();
         for (Video video : videos){
             int id = video.getId();
@@ -78,10 +81,12 @@ public class VideoController {
     }
 
     //http://localhost:8080/darfoobackend/rest/resources/video/tutorial/search/heart
-    @RequestMapping(value = "/tutorial/search/{content}", method = RequestMethod.GET)
+    @RequestMapping(value = "/tutorial/search", method = RequestMethod.GET)
     public @ResponseBody
-    List<SearchVideo> searchTutorial(@PathVariable String content){
-        List<Education> videos = searchDao.getEducationBySearch(content);
+    List<SearchVideo> searchTutorial(HttpServletRequest request){
+        String searchContent = request.getParameter("search");
+        System.out.println(searchContent);
+        List<Education> videos = searchDao.getEducationBySearch(searchContent);
         List<SearchVideo> result = new ArrayList<SearchVideo>();
         for (Education video : videos){
             int id = video.getId();
