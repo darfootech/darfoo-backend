@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,10 +45,12 @@ public class MusicController {
     }
 
     //http://localhost:8080/darfoobackend/rest/resources/music/search/s
-    @RequestMapping(value = "/search/{content}", method = RequestMethod.GET)
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
     public @ResponseBody
-    List<SearchMusic> searchMusic(@PathVariable String content){
-        List<Music> musics = searchDao.getMusicBySearch(content);
+    List<SearchMusic> searchMusic(HttpServletRequest request){
+        String searchContent = request.getParameter("search");
+        System.out.println(searchContent);
+        List<Music> musics = searchDao.getMusicBySearch(searchContent);
         List<SearchMusic> result = new ArrayList<SearchMusic>();
         for (Music music : musics){
             int id = music.getId();

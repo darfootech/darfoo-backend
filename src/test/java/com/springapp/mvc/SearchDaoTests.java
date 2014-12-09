@@ -24,10 +24,10 @@ public class SearchDaoTests {
 	
 	@Test
 	public void searchVideo(){
-		String searchContent = "heart";
+		String searchContent = "七里香";
 		List<Video> l_video = searchDao.getVideoBySearch(searchContent);
 		for(Video v : l_video){
-			System.out.println(v.toString());
+			System.out.println(v.getTitle());
 			System.out.println("————————————————————————————————");
 		}
 	}

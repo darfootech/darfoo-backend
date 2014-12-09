@@ -10,12 +10,20 @@ public class SearchMusic {
     String music_url;
     Long update_timestamp;
 
-    public SearchMusic(Integer id, String image_url, String title, String music_url, Long update_timestamp) {
+    public SearchMusic(Integer id, String title, String image_url, String music_url, Long update_timestamp) {
         this.id = id;
         this.title = title;
         this.image_url = image_url;
         this.music_url = music_url;
         this.update_timestamp = update_timestamp;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 
     public String getMusic_url() {
