@@ -7,6 +7,7 @@ package com.darfoo.backend.service;
 import com.darfoo.backend.dao.AuthorDao;
 import com.darfoo.backend.model.Author;
 import com.darfoo.backend.service.responsemodel.IndexAuthor;
+import com.darfoo.backend.service.responsemodel.SingleAuthor;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,9 +29,16 @@ public class AuthorController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public @ResponseBody
-    Author getSingleAuthor(@PathVariable String id){
+    SingleAuthor getSingleAuthor(@PathVariable String id){
         Author targetAuthor = authorDao.getAuthor(Integer.parseInt(id));
-        return targetAuthor;
+        String name = targetAuthor.getName();
+        String description = targetAuthor.getDescription();
+        String image_url = "";
+        if (targetAuthor.getImage() != null){
+            image_url = targetAuthor.getImage().getImage_key();
+        }
+        String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
+        return new SingleAuthor(Integer.parseInt(id), image_download_url, name, description);
     }
 
     @RequestMapping("/index")
