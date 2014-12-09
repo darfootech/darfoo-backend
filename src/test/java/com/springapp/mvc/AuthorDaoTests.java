@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.darfoo.backend.dao.AuthorDao;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.model.Author;
+import com.darfoo.backend.model.UpdateCheckResponse;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
@@ -48,21 +49,36 @@ public class AuthorDaoTests {
 		System.out.println(CRUDEvent.getResponse(res));
 	}
 	
+	/**
+	 * 更新作者，先对image进行是否存在的检测，再更新
+	 * **/
 	@Test
 	public void updateAuthor(){
-		Integer id = 2;
+		Integer id = 1;
 		String newName = "周杰伦";
-		String newDesciption = null;
-		int res = authorDao.updateAuthor(id,newName, newDesciption);//更新id为2的Author对象的名字
-		System.out.println(CRUDEvent.getResponse(res));
+		String newDesciption = "asdkabscla";
+		String newimageKey = "仓木麻衣.jpg";
+		UpdateCheckResponse response = authorDao.updateAuthorCheck(id, newimageKey);
+		if(response.updateIsReady()){			
+			int res = authorDao.updateAuthor(id,newName, newDesciption,newimageKey);//更新id为2的Author对象的名字
+			System.out.println(CRUDEvent.getResponse(res));
+		}else{
+			System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
+		}
+
 	}
 	
 	@Test
 	public void getAllAuthor(){
 		List<Author> l_author = authorDao.getAllAuthor();
 		for(Author a : l_author){
-            System.out.println("id: " + a.getId());
-			System.out.println(a.getName()+"  "+a.getDescription());
+			System.out.println(a.toString());
 		}
+	}
+	
+	@Test
+	public void deleteAuthor(){
+		Integer id = 1;
+		System.out.println(CRUDEvent.getResponse(authorDao.deleteAuthorById(id)));
 	}
 }

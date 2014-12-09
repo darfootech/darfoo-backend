@@ -13,8 +13,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -30,6 +34,12 @@ public class Author implements Serializable {
     String name;
 	@Column(name="DESCRIPTION",nullable=false,columnDefinition="varchar(255) not null")
     String description;
+	
+	//暂时弄成单向对应关系
+	@OneToOne(targetEntity=Image.class,fetch=FetchType.EAGER)
+	@Cascade(value={CascadeType.MERGE,CascadeType.PERSIST,CascadeType.SAVE_UPDATE})
+	@JoinColumn(name="IMAGE_ID",referencedColumnName="id",updatable=true)
+	Image image;
 	
     public Author() {
 
@@ -58,6 +68,19 @@ public class Author implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-
     
+    public Image getImage() {
+		return image;
+	}
+
+	public void setImage(Image image) {
+		this.image = image;
+	}
+
+	@Override
+    public String toString(){
+    	StringBuilder sb = new StringBuilder();
+    	sb.append(this.getId()+" "+this.getName()+" "+this.getDescription()+" "+this.getImage().getImage_key());
+    	return sb.toString();
+    }
 }

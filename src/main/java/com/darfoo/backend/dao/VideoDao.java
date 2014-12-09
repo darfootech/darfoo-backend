@@ -313,7 +313,6 @@ public class VideoDao {
 	}
 	/**
 	 * 更新Video之前先做check(主要是对author和image的check) 
-	 * ***不对title(key)进行update，这样的更新没有必要，不如直接插入一个Video(吉卉这个请注意)
 	 * @param id 需要更新的对象对应的id
 	 * @param authorname 新的作者名字  (null值表示不需要更新)
 	 * @param imagekey   新的图片key (null值表示不需要更新)

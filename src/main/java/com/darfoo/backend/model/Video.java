@@ -135,23 +135,29 @@ public class Video implements Serializable {
     
     public String toString(boolean isShowCategory){
     	StringBuilder sb = new StringBuilder();
-    	sb.append("title:"+title+"\nvideo_key:"+video_key+"\nupdate_timestamp:"+update_timestamp+
-    			"\nauthor:"+author.getName()+"  演唱家信息:"+author.getDescription()+
-    			"\nimage_key:"+image.getImage_key());
+    	sb.append("title:"+title+"\nvideo_key:"+video_key+"\nupdate_timestamp:"+update_timestamp);
+    	if(author == null){
+    		sb.append("\nauthor:null");
+    	}else{
+    		sb.append("\nauthor:"+author.getName()+"  演唱家信息:"+author.getDescription()+" 作者图片:"+author.getImage().getImage_key());
+    	}
+    	if(image == null){
+    		sb.append("\n视频图片:null");
+    	}else{
+    		sb.append("\n视频图片:"+image.getImage_key());
+    	}    	
     	if(isShowCategory){
-        	for(VideoCategory category : categories){
-        		sb.append("\n").append("种类:"+category.title+" 描述:"+category.description);
-        	}	
+    		if(categories == null){
+    			sb.append("种类为空");
+    		}else{
+            	for(VideoCategory category : categories){
+            		sb.append("\n").append("种类:"+category.title+" 描述:"+category.description);
+            	}	
+    		}
     	}
     	return sb.toString();
     }
-    public String toString(){
-    	StringBuilder sb = new StringBuilder();
-    	sb.append("title:"+title+"\nvideo_key:"+video_key+"\nupdate_timestamp:"+update_timestamp+
-    			"\nauthor:"+author.getName()+"  演唱家信息:"+author.getDescription()+
-    			"\nimage_key:"+image.getImage_key());
-    	return sb.toString();
-    }
+
     public void trigLazyLoad(){
     	for(VideoCategory category : categories)
     		;
