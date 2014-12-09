@@ -99,7 +99,7 @@ public class EducationDaoTests {
         if (insertStatus == -1){
             System.out.println("插入教程失败");
         }else{
-            System.out.println("插入教程成功，视频id是" + insertStatus);
+            System.out.println("插入教程成功，教程id是" + insertStatus);
         }
 
         educationDao.updateVideoKeyById(insertStatus, title + "-" + insertStatus);
@@ -168,7 +168,7 @@ public class EducationDaoTests {
 	@Test
 	public void getAllEducations(){
 		List<Education> s_educations = new ArrayList<Education>();
-		s_educations = educationDao.getAllEdutcaion();
+		s_educations = educationDao.getAllEducation();
 		System.out.println("总共查到"+s_educations.size());
 		for(Education video : s_educations){
 			System.out.println("----------------");

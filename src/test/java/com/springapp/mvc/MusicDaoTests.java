@@ -43,18 +43,8 @@ public class MusicDaoTests {
 	
 	@Test
 	public void insertSingleMusic(){
-        String musicTitle = "Sexy Love333";
-        String authorName = "T-ara";
-        String imagekey = "T-ara3133.jpg";
-
-        Author a = authorDao.getAuthor(authorName);
-        if(a != null){
-            System.out.println(a.getName());
-        }
-        else{
-            System.out.println("无该author记录");
-            return;
-        }
+        String musicTitle = "Sexy Love33321";
+        String imagekey = "T-ara325521.jpg";
 
         Image image = imageDao.getImageByName(imagekey);
         if (image == null){
@@ -67,19 +57,23 @@ public class MusicDaoTests {
             return;
         }
 
-        int authorid = a.getId();
-        Music queryMusic = musicDao.getMusicByTitleAuthorId(musicTitle, authorid);
+        Music queryMusic = musicDao.getMusicByMusicTitle(musicTitle);
         if (queryMusic == null){
-            System.out.println("伴奏与作者id组合不存在，可以进行插入");
+            System.out.println("伴奏不存在，可以进行插入");
         }else{
-            System.out.println(queryMusic.getId());
-            System.out.println(queryMusic.getAuthor().getName());
-            System.out.println("伴奏与作者id组合已存在，不可以进行插入了，是否需要修改");
+            System.out.println(queryMusic.toString(true));
+            System.out.println("伴奏已存在，不可以进行插入了，是否需要修改");
             return;
         }
 
         Music music = new Music();
-		music.setAuthor(a);
+        if (authorDao.getAllAuthor().size() == 0){
+            System.out.println("无法找到默认作者，不可以创建伴奏");
+            return;
+        }else{
+            System.out.println("可以找到默认作者，可以创建伴奏");
+            music.setAuthor(authorDao.getAllAuthor().get(0));
+        }
 		music.setImage(image);
 		MusicCategory c1 = new MusicCategory();	
 		MusicCategory c2 = new MusicCategory();	

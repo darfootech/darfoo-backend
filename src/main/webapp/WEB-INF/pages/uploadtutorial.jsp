@@ -48,6 +48,14 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="videotype">舞蹈教程文件格式</label>
+                    <select data-toggle="select" name="videotype" id="videotype" class="form-control select select-success mrs mbm">
+                        <option value="mp4">mp4</option>
+                        <option value="flv">flv</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label for="videospeed">教学视频速度</label>
                     <select data-toggle="select" name="videospeed" id="videospeed" class="form-control select select-success mrs mbm">
                         <option value="快">快</option>

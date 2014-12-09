@@ -41,7 +41,7 @@ public class UploadController {
     @Autowired
     DanceGroupImageDao danceGroupImageDao;
 
-    public HashMap<String, Integer> insertSingleVideo(String videotitle, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter){
+    public HashMap<String, Integer> insertSingleVideo(String videotitle, String videotype, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter){
         System.out.println(authorname);
 
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
@@ -122,14 +122,14 @@ public class UploadController {
             System.out.println("插入视频成功，视频id是" + insertStatus);
         }
 
-        videoDao.updateVideoKeyById(insertStatus, videotitle + "-" + insertStatus);
+        videoDao.updateVideoKeyById(insertStatus, videotitle + "-" + insertStatus + "." + videotype);
 
         resultMap.put("statuscode", 200);
         resultMap.put("insertid", insertStatus);
         return resultMap;
     }
 
-    public HashMap<String, Integer> insertSingleEducationVideo(String videotitle, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle){
+    public HashMap<String, Integer> insertSingleEducationVideo(String videotitle, String videotype, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle){
         System.out.println(authorname);
 
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
@@ -193,10 +193,10 @@ public class UploadController {
         if (insertStatus == -1){
             System.out.println("插入教程失败");
         }else{
-            System.out.println("插入教程成功，视频id是" + insertStatus);
+            System.out.println("插入教程成功，教程id是" + insertStatus);
         }
 
-        educationDao.updateVideoKeyById(insertStatus, videotitle + "-" + insertStatus);
+        educationDao.updateVideoKeyById(insertStatus, videotitle + "-" + insertStatus + "." + videotype);
 
         resultMap.put("statuscode", 200);
         resultMap.put("insertid", insertStatus);
@@ -205,19 +205,7 @@ public class UploadController {
     }
 
     public HashMap<String, Integer> insertSingleMusic(String musictitle, String authorname, String imagekey, String musicbeat, String musicstyle, String musicletter){
-        Author targetAuthor = authorDao.getAuthor(authorname);
-
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
-
-        if(targetAuthor != null){
-            System.out.println(targetAuthor.getName());
-        }
-        else{
-            System.out.println("无该author记录");
-            resultMap.put("statuscode", 501);
-            resultMap.put("insertid", -1);
-            return resultMap;
-        }
 
         boolean isSingleLetter = ServiceUtils.isSingleCharacter(musicletter);
         if (isSingleLetter){
@@ -229,14 +217,12 @@ public class UploadController {
             return resultMap;
         }
 
-        int authorid = targetAuthor.getId();
-        Music queryMusic = musicDao.getMusicByTitleAuthorId(musictitle, authorid);
+        Music queryMusic = musicDao.getMusicByMusicTitle(musictitle);
         if (queryMusic == null){
-            System.out.println("伴奏与作者id组合不存在，可以进行插入");
+            System.out.println("伴奏不存在，可以进行插入");
         }else{
-            System.out.println(queryMusic.getId());
-            System.out.println(queryMusic.getAuthor().getName());
-            System.out.println("伴奏与作者id组合已存在，不可以进行插入了，是否需要修改");
+            System.out.println(queryMusic.toString(true));
+            System.out.println("伴奏已存在，不可以进行插入了，是否需要修改");
             resultMap.put("statuscode", 503);
             resultMap.put("insertid", -1);
             return resultMap;
@@ -256,7 +242,14 @@ public class UploadController {
         }
 
         Music music = new Music();
-        music.setAuthor(targetAuthor);
+        if (authorDao.getAllAuthor().size() == 0){
+            System.out.println("无法找到默认作者，不可以创建伴奏");
+            resultMap.put("statuscode", 501);
+            resultMap.put("insertid", -1);
+        }else{
+            System.out.println("可以找到默认作者，可以创建伴奏");
+            music.setAuthor(authorDao.getAllAuthor().get(0));
+        }
         music.setImage(image);
         MusicCategory beat = new MusicCategory();
         MusicCategory style = new MusicCategory();
@@ -275,7 +268,7 @@ public class UploadController {
         if (insertStatus == -1){
             System.out.println("插入伴奏失败");
         }else{
-            System.out.println("插入伴奏成功，视频id是" + insertStatus);
+            System.out.println("插入伴奏成功，伴奏id是" + insertStatus);
         }
 
         musicDao.updateMusicKeyById(insertStatus, musictitle + "-" + insertStatus);
@@ -285,7 +278,7 @@ public class UploadController {
         return resultMap;
     }
 
-    public int insertSingleAuthor(String authorname, String description){
+    public int insertSingleAuthor(String authorname, String description, String imagekey){
         if(authorDao.isExistAuthor(authorname)){
             System.out.println("作者已存在");
             return 501;
@@ -293,9 +286,21 @@ public class UploadController {
             System.out.println("无该author记录，可以创建");
         }
 
+        Image image = imageDao.getImageByName(imagekey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+            image = new Image();
+            image.setImage_key(imagekey);
+            imageDao.insertSingleImage(image);
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            return 503;
+        }
+
         Author author = new Author();
         author.setName(authorname);
         author.setDescription(description);
+        author.setImage(image);
         authorDao.insertAuthor(author);
 
         return 200;
@@ -342,6 +347,7 @@ public class UploadController {
     @RequestMapping(value = "/resources/video/create", method = RequestMethod.POST)
     public @ResponseBody String createVideo(HttpServletRequest request, HttpSession session){
         String videoTitle = request.getParameter("title");
+        String videoType = request.getParameter("videotype");
         String authorName = request.getParameter("authorname");
         String imagekey = request.getParameter("imagekey");
         String videoSpeed = request.getParameter("videospeed");
@@ -351,14 +357,14 @@ public class UploadController {
         Long update_timestamp = System.currentTimeMillis() / 1000;
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + videoLetter + " " + update_timestamp);
 
-        HashMap<String, Integer> resultMap = this.insertSingleVideo(videoTitle, authorName, imagekey, videoSpeed, videoDifficult, videoStyle, videoLetter);
+        HashMap<String, Integer> resultMap = this.insertSingleVideo(videoTitle, videoType, authorName, imagekey, videoSpeed, videoDifficult, videoStyle, videoLetter);
         int statusCode = resultMap.get("statuscode");
         System.out.println("status code is: " + statusCode);
         if (statusCode != 200){
             return statusCode+"";
         }else{
             int insertid = resultMap.get("insertid");
-            session.setAttribute("videoKey", videoTitle + "-" + insertid + ".mp4");
+            session.setAttribute("videoKey", videoTitle + "-" + insertid + "." + videoType);
             session.setAttribute("videoImage", imagekey);
             return statusCode+"";
         }
@@ -476,6 +482,7 @@ public class UploadController {
     @RequestMapping(value = "/resources/tutorial/create", method = RequestMethod.POST)
     public @ResponseBody String createTutorial(HttpServletRequest request, HttpSession session){
         String videoTitle = request.getParameter("title");
+        String videoType = request.getParameter("videotype");
         String authorName = request.getParameter("authorname");
         String imagekey = request.getParameter("imagekey");
         String videoSpeed = request.getParameter("videospeed");
@@ -484,14 +491,14 @@ public class UploadController {
         Long update_timestamp = System.currentTimeMillis() / 1000;
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + update_timestamp);
 
-        HashMap<String, Integer> resultMap = this.insertSingleEducationVideo(videoTitle, authorName, imagekey, videoSpeed, videoDifficult, videoStyle);
+        HashMap<String, Integer> resultMap = this.insertSingleEducationVideo(videoTitle, videoType, authorName, imagekey, videoSpeed, videoDifficult, videoStyle);
         int statusCode = resultMap.get("statuscode");
         System.out.println("status code is: " + statusCode);
         if (statusCode != 200){
             return statusCode+"";
         }else{
             int insertid = resultMap.get("insertid");
-            session.setAttribute("tutorialKey", videoTitle + "-" + insertid + ".mp4");
+            session.setAttribute("tutorialKey", videoTitle + "-" + insertid + "." + videoType);
             session.setAttribute("tutorialImage", imagekey);
             return statusCode+"";
         }
@@ -542,13 +549,45 @@ public class UploadController {
     }
 
     @RequestMapping(value = "/resources/author/create", method = RequestMethod.POST)
-    public @ResponseBody String createAuthor(HttpServletRequest request){
+    public @ResponseBody String createAuthor(HttpServletRequest request, HttpSession session){
         String name = request.getParameter("name");
         String description = request.getParameter("description");
+        String imagekey = request.getParameter("imagekey");
         System.out.println("requests: " + name + " " + description);
 
-        int statusCode = this.insertSingleAuthor(name, description);
+        session.setAttribute("authorImage", imagekey);
+
+        int statusCode = this.insertSingleAuthor(name, description, imagekey);
         return statusCode+"";
+    }
+
+    @RequestMapping(value = "/resources/authorresource/new", method = RequestMethod.GET)
+    public String uploadAuthorResource(){
+        return "uploadauthorresource";
+    }
+
+    @RequestMapping("/resources/authorresource/create")
+    public String createAuthorResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session){
+        //upload
+        String imagekey = (String)session.getAttribute("authorImage");
+
+        String imageResourceName = imageresource.getOriginalFilename();
+
+        System.out.println(imageResourceName);
+
+        String imageStatusCode = "";
+
+        try {
+            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (imageStatusCode.equals("200")){
+            return "success";
+        }else{
+            return "fail";
+        }
     }
     /*end of author part*/
 

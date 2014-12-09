@@ -52,10 +52,12 @@ public class MusicController {
         for (Music music : musics){
             int id = music.getId();
             String title = music.getTitle();
+            String image_url = music.getImage().getImage_key();
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String music_url = music.getMusic_key() + ".mp3";
             String music_download_url = qiniuUtils.getQiniuResourceUrl(music_url);
             Long update_timestamp = music.getUpdate_timestamp();
-            result.add(new SearchMusic(id, title, music_download_url, update_timestamp));
+            result.add(new SearchMusic(id, title, image_download_url, music_download_url, update_timestamp));
         }
         return result;
     }

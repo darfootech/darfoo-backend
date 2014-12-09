@@ -125,7 +125,7 @@ public class AuthorDao {
 				System.out.println("要更新的Author不存在");
 				response.setAuthorUpdate(1);
 			}else{
-				if(imagekey != null){
+				if(imagekey != null && author.getImage() != null){
 					if(!imagekey.equals(author.getImage().getImage_key())){
 						Criteria c = session.createCriteria(Image.class).add(Restrictions.eq("image_key", imagekey));
 						c.setReadOnly(true);

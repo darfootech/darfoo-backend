@@ -3,6 +3,8 @@ package com.springapp.mvc;
 import java.util.Iterator;
 import java.util.List;
 
+import com.darfoo.backend.dao.ImageDao;
+import com.darfoo.backend.model.Image;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ import com.darfoo.backend.model.UpdateCheckResponse;
 public class AuthorDaoTests {
 	@Autowired
 	AuthorDao authorDao;
+    @Autowired
+    ImageDao imageDao;
 	
 	@Test
 	public void getAuthorByName(){
@@ -42,9 +46,31 @@ public class AuthorDaoTests {
 	
 	@Test
 	public void insertAuthor(){
+        String authorName = "四号3";
+        String imagekey = "dg111";
+
+        if(authorDao.isExistAuthor(authorName)){
+            System.out.println("已存在，不能创建新作者");
+            return;
+        }else{
+            System.out.println("无该author记录，可以创建新作者");
+        }
+
+        Image image = imageDao.getImageByName(imagekey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+            image = new Image();
+            image.setImage_key(imagekey);
+            imageDao.insertSingleImage(image);
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            return;
+        }
+
 		Author author = new Author();
-		author.setName("哈哈哈");
+		author.setName(authorName);
 		author.setDescription("台湾人气偶像组合");
+        author.setImage(image);
 		int res = authorDao.insertAuthor(author);
 		System.out.println(CRUDEvent.getResponse(res));
 	}
@@ -54,13 +80,32 @@ public class AuthorDaoTests {
 	 * **/
 	@Test
 	public void updateAuthor(){
-		Integer id = 1;
-		String newName = "周杰伦";
-		String newDesciption = "asdkabscla";
-		String newimageKey = "仓木麻衣.jpg";
+		Integer id = 4;
+		String newName = "滨崎步";
+		String newDesciption = "日本女歌手";
+		String newimageKey = "滨崎步3113.jpg";
+
+        if(authorDao.isExistAuthor(newName)){
+            System.out.println("已存在，不能修改作者名字");
+            return;
+        }else{
+            System.out.println("作者名字不存在，可以进行修改");
+        }
+
+        Image image = imageDao.getImageByName(newimageKey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+            image = new Image();
+            image.setImage_key(newimageKey);
+            imageDao.insertSingleImage(image);
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            return;
+        }
+
 		UpdateCheckResponse response = authorDao.updateAuthorCheck(id, newimageKey);
-		if(response.updateIsReady()){			
-			int res = authorDao.updateAuthor(id,newName, newDesciption,newimageKey);//更新id为2的Author对象的名字
+		if(response.updateIsReady()){
+			int res = authorDao.updateAuthor(id, newName, newDesciption, newimageKey);//更新id为2的Author对象的名字
 			System.out.println(CRUDEvent.getResponse(res));
 		}else{
 			System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
@@ -78,7 +123,7 @@ public class AuthorDaoTests {
 	
 	@Test
 	public void deleteAuthor(){
-		Integer id = 1;
+		Integer id = 6;
 		System.out.println(CRUDEvent.getResponse(authorDao.deleteAuthorById(id)));
 	}
 }

@@ -10,7 +10,7 @@
             success : function(data){
                 if(data == "200"){
                     alert("创建作者成功");
-                    location.reload();
+                    window.location.href = "/darfoobackend/rest/resources/authorresource/new"
                 }else if(data == "501"){
                     alert("相同名字的作者已经存在");
                 }else{
@@ -25,7 +25,7 @@
 </script>
 
 <div class="container">
-    <h1>创建作者(视频,伴奏)</h1>
+    <h1>创建作者-明星舞队(视频,教程,伴奏)</h1>
     <div class="row">
         <div class="col-md-12">
             <form role="form" id="createauthorform" name="createauthorform">
@@ -36,6 +36,10 @@
                 <div class="form-group">
                     <label for="description">作者简介</label>
                     <input type="text" class="form-control" name="description" id="description" placeholder="请输入作者简介">
+                </div>
+                <div class="form-group">
+                    <label for="imagekey">作者图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
+                    <input type="text" class="form-control" name="imagekey" id="imagekey" placeholder="请输入作者图片名称">
                 </div>
                 <button type="button" class="btn btn-default" onclick="start()">创建作者</button>
             </form>

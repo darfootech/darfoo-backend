@@ -62,6 +62,9 @@ public class GalleryController {
                 System.out.println("something is wrong with the category");
             }
         }
+        String videoKey = video.getVideo_key();
+        String videoType = videoKey.split("\\.")[1];
+        modelMap.addAttribute("videotype", videoType);
         modelMap.addAttribute("video", video);
         return "singlevideo";
     }
@@ -69,7 +72,7 @@ public class GalleryController {
     @RequestMapping(value = "/admin/tutorial/all", method = RequestMethod.GET)
     public String showAllTutorial(ModelMap modelMap, HttpSession session){
         List<Education> s_tutorial = new ArrayList<Education>();
-        s_tutorial = educationDao.getAllEdutcaion();
+        s_tutorial = educationDao.getAllEducation();
         modelMap.addAttribute("alltutorials", s_tutorial);
         return "alltutorial";
     }
@@ -94,6 +97,9 @@ public class GalleryController {
                 System.out.println("something is wrong with the category");
             }
         }
+        String videoKey = tutorial.getVideo_key();
+        String videoType = videoKey.split("\\.")[1];
+        modelMap.addAttribute("videotype", videoType);
         modelMap.addAttribute("tutorial", tutorial);
         return "singletutorial";
     }

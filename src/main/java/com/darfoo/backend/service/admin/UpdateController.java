@@ -101,6 +101,7 @@ public class UpdateController {
     @RequestMapping(value = "/admin/video/update", method = RequestMethod.POST)
     public @ResponseBody String updateVideo(HttpServletRequest request, HttpSession session){
         String videoTitle = request.getParameter("title");
+        String videoType = request.getParameter("videotype");
         String originTitle = request.getParameter("origintitle");
         String authorName = request.getParameter("authorname");
         String imageKey = request.getParameter("imagekey");
@@ -131,6 +132,10 @@ public class UpdateController {
         categoryTitles.add(videoDifficult);
         categoryTitles.add(videoStyle);
         categoryTitles.add(videoLetter.toUpperCase());
+
+        String newVideoKey = videoDao.getVideoByVideoId(vid).getVideo_key().split("\\.")[0] + "." + videoType;
+        videoDao.updateVideoKeyById(vid, newVideoKey);
+
         if (videoTitle.equals("")){
             videoTitle = originTitle;
         }
@@ -151,6 +156,7 @@ public class UpdateController {
     @RequestMapping(value = "/admin/tutorial/update", method = RequestMethod.POST)
     public @ResponseBody String updateTutorial(HttpServletRequest request, HttpSession session) {
         String videoTitle = request.getParameter("title");
+        String videoType = request.getParameter("videotype");
         String originTitle = request.getParameter("origintitle");
         String authorName = request.getParameter("authorname");
         String imageKey = request.getParameter("imagekey");
@@ -171,6 +177,10 @@ public class UpdateController {
         categoryTitles.add(videoSpeed);
         categoryTitles.add(videoDifficult);
         categoryTitles.add(videoStyle);
+
+        String newTutorialKey = educationDao.getEducationVideoById(vid).getVideo_key().split("\\.")[0] + "." + videoType;
+        educationDao.updateVideoKeyById(vid, newTutorialKey);
+
         if (videoTitle.equals("")){
             videoTitle = originTitle;
         }
@@ -240,6 +250,14 @@ public class UpdateController {
     public @ResponseBody String updateAuthor(HttpServletRequest request, HttpSession session) {
         String name = request.getParameter("name");
         String description = request.getParameter("description");
+        String imagekey = request.getParameter("imagekey");
+
+        if(authorDao.isExistAuthor(name)){
+            System.out.println("作者已存在");
+            return 501+"";
+        }else{
+            System.out.println("无该author记录，可以创建");
+        }
 
         if (name.equals("")){
             name = (String)session.getAttribute("authorname");
@@ -252,7 +270,7 @@ public class UpdateController {
         System.out.println("requests: " + name + " " + description);
 
         Integer id = Integer.parseInt(request.getParameter("id"));
-        int res = authorDao.updateAuthor(id, name, description);//更新id为2的Author对象的名字
+        int res = authorDao.updateAuthor(id, name, description, imagekey);//更新id为2的Author对象的名字
         String status = CRUDEvent.getResponse(res);
         if (status.equals("UPDATE_SUCCESS")) {
             return 200 + "";
