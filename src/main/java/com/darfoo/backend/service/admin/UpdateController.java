@@ -30,6 +30,8 @@ public class UpdateController {
     AuthorDao authorDao;
     @Autowired
     DanceDao danceDao;
+    @Autowired
+    ImageDao imageDao;
 
     public int checkVideoTitleAuthorIdDuplicate(String videoTitle, String authorName){
         Author a = authorDao.getAuthor(authorName);
@@ -251,12 +253,26 @@ public class UpdateController {
         String name = request.getParameter("name");
         String description = request.getParameter("description");
         String imagekey = request.getParameter("imagekey");
+        String newimagekey = request.getParameter("newimagekey");
 
         if(authorDao.isExistAuthor(name)){
             System.out.println("作者已存在");
             return 501+"";
         }else{
             System.out.println("无该author记录，可以创建");
+        }
+
+        if (newimagekey != null){
+            Image image = imageDao.getImageByName(newimagekey);
+            if (image == null){
+                System.out.println("图片不存在，可以进行插入");
+                image = new Image();
+                image.setImage_key(newimagekey);
+                imageDao.insertSingleImage(image);
+            }else{
+                System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+                return 505+"";
+            }
         }
 
         if (name.equals("")){
@@ -270,10 +286,14 @@ public class UpdateController {
         System.out.println("requests: " + name + " " + description);
 
         Integer id = Integer.parseInt(request.getParameter("id"));
-        int res = authorDao.updateAuthor(id, name, description, imagekey);//更新id为2的Author对象的名字
+        int res = authorDao.updateAuthor(id, name, description, newimagekey);//更新id为2的Author对象的名字
         String status = CRUDEvent.getResponse(res);
         if (status.equals("UPDATE_SUCCESS")) {
-            return 200 + "";
+            if (newimagekey != null){
+                return 201 + "";
+            }else{
+                return 200 + "";
+            }
         } else {
             return 503 + "";
         }
