@@ -13,10 +13,13 @@
                 if(data == "200"){
                     alert("更新作者信息成功");
                     window.location.href = "/darfoobackend/rest/admin/author/all"
+                }else if(data == "201"){
+                    alert("更新作者信息成功");
+                    window.location.href = "/darfoobackend/rest/resources/authorresource/new"
                 }else if(data == "501"){
                     alert("相同名字的作者已经存在了，请修改作者名字")
                 }else if(data == "505"){
-                    alert("请确保作者首字母填写的是一个不区分大小写的英文字母");
+                    alert("相同名字的图片已经存在了，请修改图片名字");
                 }else{
                     alert("更新作者信息失败");
                 }
@@ -82,6 +85,14 @@
                     <label for="imagekey">作者图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
                     <input type="text" class="form-control" id="imagekey" placeholder="${author.image.image_key}" disabled="disabled">
                 </div>
+
+                <c:if test="${empty author.image}">
+                    <h3>该作者还没有上传图片,请上传</h3>
+                    <div class="form-group">
+                        <label for="newimagekey">作者图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
+                        <input type="text" class="form-control" name="newimagekey" id="newimagekey" placeholder="请输入作者图片名称">
+                    </div>
+                </c:if>
 
                 <button type="button" class="btn btn-default" onclick="update()">更新作者信息</button>
                 <button type="button" class="btn btn-default" onclick="kickout()">删除作者</button>
