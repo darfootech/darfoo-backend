@@ -13,3 +13,4 @@ uploadfiles/
 *.swp
 .*.swp
 uploadresources/
+*.csv
