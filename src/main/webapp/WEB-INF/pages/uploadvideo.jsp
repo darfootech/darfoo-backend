@@ -41,9 +41,18 @@
                     <input type="text" class="form-control" name="title" id="title" placeholder="请输入舞蹈视频标题">
                 </div>
 
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label for="authorname">舞蹈视频作者名字</label>
                     <input type="text" class="form-control" name="authorname" id="authorname" placeholder="请输入舞蹈视频作者名字">
+                </div>-->
+
+                <div class="form-group">
+                    <label for="authorname">舞蹈视频关联的明星舞队</label>
+                    <select data-toggle="select" name="authorname" id="authorname" class="form-control select select-success mrs mbm">
+                        <c:forEach var="author" items="${authors}">
+                            <option value="${author.name}">${author.name}</option>
+                        </c:forEach>
+                    </select>
                 </div>
 
                 <div class="form-group">

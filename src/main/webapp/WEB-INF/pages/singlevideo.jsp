@@ -7,11 +7,13 @@
         var difficult = $("#difficult").text();
         var style = $("#style").text();
         var type = $("#type").text();
+        var starteamname = $("#starteamname").text();
 
         $('#videospeed option[value="' + speed + '"]').attr("selected", true);
         $('#videodifficult option[value="' + difficult + '"]').attr("selected", true);
         $('#videostyle option[value="' + style + '"]').attr("selected", true);
         $('#videotype option[value="' + type + '"]').attr("selected", true);
+        $('#authorname option[value="' + starteamname + '"]').attr("selected", true);
     });
 
     function update(){
@@ -69,6 +71,7 @@
 <div id="difficult" style="display: none">${difficult}</div>
 <div id="style" style="display: none">${style}</div>
 <div id="type" style="display: none">${videotype}</div>
+<div id="starteamname" style="display: none">${video.author.name}</div>
 
 <div class="container">
     <h1>查看与修改舞蹈视频信息</h1>
@@ -88,13 +91,22 @@
                     <input type="text" class="form-control" name="title" id="title" placeholder="${video.title}">
                 </div>
 
-                <div style="display: none">
+                <!--<div style="display: none">
                     <input type="text" name="authorname" value="${video.author.name}">
                 </div>
 
                 <div class="form-group">
                     <label for="authorname">舞蹈视频作者名字</label>
                     <input type="text" class="form-control" id="authorname" placeholder="${video.author.name}" disabled="disabled">
+                </div>-->
+
+                <div class="form-group">
+                    <label for="authorname">关联的明星舞队---<div style="color: green; display: inline; font-size: 18pt">原本为${video.author.name}</div></label>
+                    <select data-toggle="select" name="authorname" id="authorname" class="form-control select select-success mrs mbm">
+                        <c:forEach var="author" items="${authors}">
+                            <option value="${author.name}">${author.name}</option>
+                        </c:forEach>
+                    </select>
                 </div>
 
                 <div style="display: none">

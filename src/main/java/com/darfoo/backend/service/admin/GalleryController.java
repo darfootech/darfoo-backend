@@ -66,6 +66,7 @@ public class GalleryController {
         String videoType = videoKey.split("\\.")[1];
         modelMap.addAttribute("videotype", videoType);
         modelMap.addAttribute("video", video);
+        modelMap.addAttribute("authors", authorDao.getAllAuthor());
         return "singlevideo";
     }
 
@@ -101,6 +102,7 @@ public class GalleryController {
         String videoType = videoKey.split("\\.")[1];
         modelMap.addAttribute("videotype", videoType);
         modelMap.addAttribute("tutorial", tutorial);
+        modelMap.addAttribute("authors", authorDao.getAllAuthor());
         return "singletutorial";
     }
 
