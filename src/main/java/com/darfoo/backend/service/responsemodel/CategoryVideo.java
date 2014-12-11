@@ -14,7 +14,7 @@ public class CategoryVideo {
 
     public CategoryVideo(Integer id, String title, String author_name, String image_url, String video_url, Long update_timestamp) {
         this.id = id;
-        this.title = title;
+        this.title = title + " - " + author_name;
         this.author_name = author_name;
         this.image_url = image_url;
         this.video_url = video_url;

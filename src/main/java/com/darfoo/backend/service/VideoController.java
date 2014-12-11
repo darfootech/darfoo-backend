@@ -44,7 +44,11 @@ public class VideoController {
         String video_url = targetVideo.getVideo_key();
         String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
         String video_title = targetVideo.getTitle();
-        return new SingleVideo(video_id, video_title, video_download_url);
+        String author_name = "";
+        if (targetVideo.getAuthor() != null){
+            author_name = " - " + targetVideo.getAuthor().getName();
+        }
+        return new SingleVideo(video_id, video_title + author_name, video_download_url);
     }
 
     @RequestMapping(value = "/tutorial/{id}", method = RequestMethod.GET)
@@ -56,7 +60,11 @@ public class VideoController {
         String video_url = tutorial.getVideo_key();
         String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
         String video_title = tutorial.getTitle();
-        return new SingleVideo(video_id, video_title, video_download_url);
+        String author_name = "";
+        if (tutorial.getAuthor() != null){
+            author_name = " - " + tutorial.getAuthor().getName();
+        }
+        return new SingleVideo(video_id, video_title + author_name, video_download_url);
     }
 
     //http://localhost:8080/darfoobackend/rest/resources/video/search/s
@@ -70,12 +78,16 @@ public class VideoController {
         for (Video video : videos){
             int id = video.getId();
             String title = video.getTitle();
+            String author_name = "";
+            if (video.getAuthor() != null){
+                author_name = " - " + video.getAuthor().getName();
+            }
             String image_url = video.getImage().getImage_key();
             String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String video_url = video.getVideo_key();
             String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new SearchVideo(id, title, image_download_url, video_download_url, update_timestamp));
+            result.add(new SearchVideo(id, title + author_name, image_download_url, video_download_url, update_timestamp));
         }
         return result;
     }
@@ -91,12 +103,16 @@ public class VideoController {
         for (Education video : videos){
             int id = video.getId();
             String title = video.getTitle();
+            String author_name = "";
+            if (video.getAuthor() != null){
+                author_name = " - " + video.getAuthor().getName();
+            }
             String image_url = video.getImage().getImage_key();
             String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String video_url = video.getVideo_key();
             String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new SearchVideo(id, title, image_download_url, video_download_url, update_timestamp));
+            result.add(new SearchVideo(id, title + author_name, image_download_url, video_download_url, update_timestamp));
         }
         return result;
     }
@@ -112,10 +128,14 @@ public class VideoController {
             String image_url = video.getImage().getImage_key();
             String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String video_title = video.getTitle();
+            String author_name = "";
+            if (video.getAuthor() != null){
+                author_name = " - " + video.getAuthor().getName();
+            }
             String video_url = video.getVideo_key();
             String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new IndexVideo(video_id, video_title, image_download_url, video_download_url, update_timestamp));
+            result.add(new IndexVideo(video_id, video_title + author_name, image_download_url, video_download_url, update_timestamp));
         }
         return result;
     }
@@ -131,10 +151,14 @@ public class VideoController {
             String image_url = video.getImage().getImage_key();
             String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String video_title = video.getTitle();
+            String author_name = "";
+            if (video.getAuthor() != null){
+                author_name = " - " + video.getAuthor().getName();
+            }
             String video_url = video.getVideo_key();
             String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new IndexVideo(video_id, video_title, image_download_url, video_download_url, update_timestamp));
+            result.add(new IndexVideo(video_id, video_title + author_name, image_download_url, video_download_url, update_timestamp));
         }
         return result;
     }
@@ -183,7 +207,7 @@ public class VideoController {
         return result;
     }
 
-    //http://localhost:8080/darfoobackend/rest/resources/video/category/teach/0-0-0-0
+    //http://localhost:8080/darfoobackend/rest/resources/video/category/tutorial/0-0-0-0
     //根据类别获取教学视频
     @RequestMapping(value = "/category/tutorial/{categories}", method = RequestMethod.GET)
     public
