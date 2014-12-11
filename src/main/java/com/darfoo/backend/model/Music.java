@@ -142,7 +142,12 @@ public class Music implements Serializable {
     	if(author == null){
     		sb.append("\nauthor:null");
     	}else{
-    		sb.append("\nauthor:"+author.getName()+"  演唱家信息:"+author.getDescription()+" 作者图片:"+author.getImage().getImage_key());
+    		sb.append("\nauthor:"+author.getName()+"  演唱家信息:"+author.getDescription());
+    		if(author.getImage() == null){
+    			sb.append(" 作者图片:"+null);
+    		}else{
+    			sb.append(" 作者图片:"+author.getImage().getImage_key());
+    		}
     	}
     	if(image == null){
     		sb.append("\n视频图片:null");

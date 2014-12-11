@@ -23,6 +23,7 @@ import com.darfoo.backend.model.Image;
 import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.EducationCategory;
 import com.darfoo.backend.model.Education;
+import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.UpdateCheckResponse;
 import com.darfoo.backend.model.Video;
 
@@ -185,5 +186,46 @@ public class EducationDaoTests {
 	public void deleteEducation(){
 		int res = educationDao.deleteEducationById(5);
 		System.out.println(CRUDEvent.getResponse(res));
+	}
+	
+	/**
+	 * education中 插入/更新 music
+	 * **/
+	@Test
+	public void insertorUpdateMusic(){
+		Integer vId = 1;  
+		Integer mId = 1;
+		System.out.println(CRUDEvent.getResponse(educationDao.insertOrUpdateMusic(vId, mId)));
+	}
+	
+	/**
+	 * 从education中查询对应的music(只能查到唯一一个)
+	 * **/
+	@Test
+	public void getMusicFromEducation(){
+		Integer vId = 1;
+		Integer mId = 3;
+		//先为education的id为vId的记录添加一个music
+		System.out.println(CRUDEvent.getResponse(educationDao.insertOrUpdateMusic(vId, mId))+" 往id为"+vId+"的education记录中插入id为"+mId+"的music");
+		//查询
+		Music music = educationDao.getMusic(vId);
+		if(music != null){
+			System.out.println(music.toString(true));
+		}else{
+			System.out.println("id为"+vId+"对应的education还未包含相应的music");
+		}
+	}
+	
+	/**
+	 * 删除video中的music(将MUSIC_ID设为空)
+	 * **/
+	@Test
+	public void deleteMusicFromVideo(){
+		Integer vId = 1;
+		Integer mId = 3;
+		//先插入或更新一个music到education中
+		System.out.println(CRUDEvent.getResponse(educationDao.insertOrUpdateMusic(vId, mId)));
+		//删除刚插入的那个education中的music
+		System.out.println(CRUDEvent.getResponse(educationDao.deleteMusicFromEducation(vId)));
 	}
 }

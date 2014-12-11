@@ -58,8 +58,21 @@ public class Education implements Serializable {
 //    String type;
 //    Long interval;
 //    Long size;
+	@ManyToOne(targetEntity=Music.class)
+	@JoinColumn(name="MUSIC_ID",referencedColumnName="id",updatable=true,nullable=true)
+	Music music;
 	
-    public Education() {
+    public Music getMusic() {
+		return music;
+	}
+
+
+	public void setMusic(Music music) {
+		this.music = music;
+	}
+
+
+	public Education() {
 
     }
 
