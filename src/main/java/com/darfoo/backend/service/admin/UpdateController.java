@@ -390,6 +390,36 @@ public class UpdateController {
         }
     }
 
+    @RequestMapping(value = "/admin/author/updateimage/{id}", method = RequestMethod.GET)
+    public String updateAuthorImage(@PathVariable String id, ModelMap modelMap){
+        modelMap.addAttribute("authorid", Integer.parseInt(id));
+        return "updateauthorimage";
+    }
+
+    @RequestMapping(value = "/admin/author/updateimageresource", method = RequestMethod.POST)
+    public String updateAuthorImageResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request){
+        int id = Integer.parseInt(request.getParameter("id"));
+        String imagekey = authorDao.getAuthor(id).getImage().getImage_key();
+
+        System.out.println(id + " " + imagekey);
+
+        ServiceUtils.deleteResource(imagekey);
+
+        String imageStatusCode = "";
+
+        try {
+            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (imageStatusCode.equals("200")){
+            return "success";
+        }else{
+            return "fail";
+        }
+    }
+
     @RequestMapping(value = "/admin/team/update", method = RequestMethod.POST)
     public @ResponseBody String updateTeam(HttpServletRequest request, HttpSession session) {
         String name = request.getParameter("name");

@@ -161,6 +161,7 @@ public class GalleryController {
         session.setAttribute("authordescription", author.getDescription());
 
         modelMap.addAttribute("author", author);
+        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(author.getImage().getImage_key()));
         return "singleauthor";
     }
 
