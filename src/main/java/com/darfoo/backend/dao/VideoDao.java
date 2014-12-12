@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Image;
+import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.model.VideoCategory;
 import com.darfoo.backend.model.Video;
@@ -483,4 +484,81 @@ public class VideoDao {
         return s_videos;
 	}
 	
+	
+	/**
+	 * 为video添加一个对应的music(插入操作用更新替代)
+	 * @param vId 对应的视频资源id
+	 * @param mId music对应的id
+	 * */
+	public int insertOrUpdateMusic(Integer vId,Integer mId){
+		int res = 0;
+		try{
+			Session session =sf.getCurrentSession();
+			Video video = (Video)session.get(Video.class,vId);
+			if(video != null){
+				Music music = (Music)session.createCriteria(Music.class).add(Restrictions.eq("id", mId)).uniqueResult();
+				if(music==null){
+					System.out.println("被更新的music的id在music表中未发现对应记录，请先完成music的插入");
+					res = CRUDEvent.UPDATE_MUSIC_NOTFOUND;
+				}else{
+					video.setMusic(music);
+					res = CRUDEvent.UPDATE_SUCCESS;
+				}				
+			}else{
+				System.out.println("vid对应的video未找到");
+				res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
+			}
+			
+		}catch(Exception e){
+			res = CRUDEvent.UPDATE_FAIL;
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	
+	/**
+	 * 获取video对应的music
+	 * @param vId 对应的视频资源id
+	 * @return music对应的Music;没有就为null
+	 * **/
+	public Music getMusic(Integer vId){
+		Music music = null;
+		try{
+			Session session = sf.getCurrentSession();
+			Video video = (Video)session.get(Video.class, vId);
+			if(video != null){
+				music = video.getMusic();
+				music.trigLazyLoad(); //促发对category的加载
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return music;
+	}
+	
+	/**
+	 * 删除video中的music(就是将MUSIC_ID字段设为null)
+	 * @param vId video的Id
+	 * **/
+	public int deleteMusicFromVideo(Integer vId){
+		int res = 0;
+		try{
+			Session session = sf.getCurrentSession();
+			Video video = (Video)session.get(Video.class, vId);
+			if(video != null){
+				if(! (video.getMusic() == null))				
+					video.setMusic(null);
+				else{
+					System.out.println("music_id 已经为null");
+				}
+				res = CRUDEvent.DELETE_SUCCESS;
+			}else{
+				res = CRUDEvent.DELETE_NOTFOUND;
+			}
+		}catch(Exception e){
+			res = CRUDEvent.DELETE_FAIL;
+		}
+		return res;
+	}
 }

@@ -19,6 +19,7 @@ import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Image;
+import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.model.VideoCategory;
 import com.darfoo.backend.model.UpdateCheckResponse;
@@ -241,4 +242,45 @@ public class VideoDaoTests {
 		}
         System.out.println("总共查到"+s_videos.size());
     }
+	
+	/**
+	 * video中 插入/更新 music
+	 * **/
+	@Test
+	public void insertorUpdateMusic(){
+		Integer vId = 1;  
+		Integer mId = 6;
+		System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId)));
+	}
+	
+	/**
+	 * 从video中查询对应的music(只能查到唯一一个)
+	 * **/
+	@Test
+	public void getMusicFromVideo(){
+		Integer vId = 1;
+		Integer mId = 3;
+		//先插入或更新一个music到video中
+		System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId))+" 往Id为"+vId+"的video记录中插入music_id为"+mId);
+		Music music = videoDao.getMusic(vId);		
+		if(music != null){
+			System.out.println(music.toString(true));
+		}else{
+			System.out.println("id为"+vId+"对应的video还未包含相应的music");
+		}
+	}
+	
+	/**
+	 * 删除video中的music(将MUSIC_ID设为空)
+	 * **/
+	@Test
+	public void deleteMusicFromVideo(){
+		Integer vId = 1;
+		Integer mId = 3;
+		//先插入或更新一个music到video中
+		System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId)));
+		//删除刚插入的那个video中的music
+		System.out.println(CRUDEvent.getResponse(videoDao.deleteMusicFromVideo(vId)));
+	}
+	
 }
