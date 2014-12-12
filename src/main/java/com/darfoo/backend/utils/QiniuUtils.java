@@ -8,6 +8,7 @@ import com.qiniu.api.io.PutRet;
 import com.qiniu.api.resumableio.ResumeableIoApi;
 import com.qiniu.api.rs.GetPolicy;
 import com.qiniu.api.rs.PutPolicy;
+import com.qiniu.api.rs.RSClient;
 import com.qiniu.api.rs.URLUtils;
 
 import java.io.File;
@@ -80,5 +81,14 @@ public class QiniuUtils {
         }catch (Exception e){
             return e.getMessage();
         }
+    }
+
+    public void deleteResource(String key){
+        Config.ACCESS_KEY = "bnMvAStYBsL5AjYM3UXbpGalrectRZZF88Y6fZ-X";
+        Config.SECRET_KEY = "eMZK5q9HI1EXe7KzNtsyKJZJPHEfh96XcHvDigyG";
+        String bucketName = "zjdxlab410yy";
+        Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
+        RSClient client = new RSClient(mac);
+        client.delete(bucketName, key);
     }
 }

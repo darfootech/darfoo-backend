@@ -64,6 +64,10 @@
             }
         })
     }
+
+    function updateimage(){
+        window.location.href = "/darfoobackend/rest/admin/video/updateimage/" + $("#videoid").text();
+    }
 </script>
 
 <div id="videoid" style="display: none">${video.id}</div>
@@ -166,8 +170,13 @@
                     <input type="text" class="form-control" name="videoletter" id="videoletter" value="${letter}">
                 </div>
 
+                <div class="form-group">
+                    <img src="${imageurl}" width="600" height="600">
+                </div>
+
                 <button type="button" class="btn btn-default" onclick="update()">更新舞蹈视频信息</button>
                 <button type="button" class="btn btn-default" onclick="kickout()">删除舞蹈视频</button>
+                <button type="button" class="btn btn-default" onclick="updateimage()">更新舞蹈视频封面图片</button>
             </form>
         </div>
     </div>

@@ -5,12 +5,13 @@ import com.darfoo.backend.model.*;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -152,6 +153,36 @@ public class UpdateController {
         }else{
             System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
             return 502+"";
+        }
+    }
+
+    @RequestMapping(value = "/admin/video/updateimage/{id}", method = RequestMethod.GET)
+    public String updateVideoImage(@PathVariable String id, ModelMap modelMap){
+        modelMap.addAttribute("videoid", Integer.parseInt(id));
+        return "updatevideoimage";
+    }
+
+    @RequestMapping(value = "/admin/video/updateimageresource", method = RequestMethod.POST)
+    public String updateVideoImageResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request){
+        int id = Integer.parseInt(request.getParameter("id"));
+        String imagekey = videoDao.getVideoByVideoId(id).getImage().getImage_key();
+
+        System.out.println(id + " " + imagekey);
+
+        ServiceUtils.deleteResource(imagekey);
+
+        String imageStatusCode = "";
+
+        try {
+            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (imageStatusCode.equals("200")){
+            return "success";
+        }else{
+            return "fail";
         }
     }
 
