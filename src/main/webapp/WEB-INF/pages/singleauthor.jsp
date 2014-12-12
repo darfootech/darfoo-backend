@@ -104,7 +104,7 @@
 
                 <button type="button" class="btn btn-default" onclick="update()">更新作者信息</button>
                 <button type="button" class="btn btn-default" onclick="kickout()">删除作者</button>
-                <button type="button" class="btn btn-default" onclick="updateimage()">更新舞蹈视频封面图片</button>
+                <button type="button" class="btn btn-default" onclick="updateimage()">更新明星舞队封面图片</button>
             </form>
         </div>
     </div>

@@ -139,7 +139,7 @@
 
                 <button type="button" class="btn btn-default" onclick="update()">更新舞蹈伴奏信息</button>
                 <button type="button" class="btn btn-default" onclick="kickout()">删除舞蹈伴奏</button>
-                <button type="button" class="btn btn-default" onclick="updateimage()">更新舞蹈视频封面图片</button>
+                <button type="button" class="btn btn-default" onclick="updateimage()">更新舞蹈伴奏封面图片</button>
             </form>
         </div>
     </div>
