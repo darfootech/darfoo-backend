@@ -107,6 +107,7 @@ public class GalleryController {
         modelMap.addAttribute("videotype", videoType);
         modelMap.addAttribute("tutorial", tutorial);
         modelMap.addAttribute("authors", authorDao.getAllAuthor());
+        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(tutorial.getImage().getImage_key()));
         return "singletutorial";
     }
 
