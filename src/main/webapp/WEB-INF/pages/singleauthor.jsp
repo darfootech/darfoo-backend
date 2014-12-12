@@ -54,6 +54,10 @@
             }
         })
     }
+
+    function updateimage(){
+        window.location.href = "/darfoobackend/rest/admin/author/updateimage/" + $("#authorid").text();
+    }
 </script>
 
 <div id="authorid" style="display: none">${author.id}</div>
@@ -94,8 +98,13 @@
                     </div>
                 </c:if>
 
+                <div class="form-group">
+                    <img src="${imageurl}" width="600" height="600">
+                </div>
+
                 <button type="button" class="btn btn-default" onclick="update()">更新作者信息</button>
                 <button type="button" class="btn btn-default" onclick="kickout()">删除作者</button>
+                <button type="button" class="btn btn-default" onclick="updateimage()">更新舞蹈视频封面图片</button>
             </form>
         </div>
     </div>

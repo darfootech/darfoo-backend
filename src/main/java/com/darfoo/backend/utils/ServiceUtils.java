@@ -79,4 +79,7 @@ public class ServiceUtils {
     }
 
 
+    public static void deleteResource(String key){
+        qiniuUtils.deleteResource(key);
+    }
 }

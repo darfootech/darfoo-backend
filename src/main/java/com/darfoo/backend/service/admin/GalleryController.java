@@ -2,6 +2,7 @@ package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.model.*;
+import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -31,6 +32,8 @@ public class GalleryController {
     AuthorDao authorDao;
     @Autowired
     DanceDao danceDao;
+
+    QiniuUtils qiniuUtils = new QiniuUtils();
 
     @RequestMapping(value = "/admin/video/all", method = RequestMethod.GET)
     public String showAllVideo(ModelMap modelMap, HttpSession session){
@@ -66,6 +69,8 @@ public class GalleryController {
         String videoType = videoKey.split("\\.")[1];
         modelMap.addAttribute("videotype", videoType);
         modelMap.addAttribute("video", video);
+        modelMap.addAttribute("authors", authorDao.getAllAuthor());
+        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(video.getImage().getImage_key()));
         return "singlevideo";
     }
 
@@ -101,6 +106,8 @@ public class GalleryController {
         String videoType = videoKey.split("\\.")[1];
         modelMap.addAttribute("videotype", videoType);
         modelMap.addAttribute("tutorial", tutorial);
+        modelMap.addAttribute("authors", authorDao.getAllAuthor());
+        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(tutorial.getImage().getImage_key()));
         return "singletutorial";
     }
 
@@ -133,6 +140,7 @@ public class GalleryController {
             }
         }
         modelMap.addAttribute("music", music);
+        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(music.getImage().getImage_key()));
         return "singlemusic";
     }
 
@@ -153,6 +161,7 @@ public class GalleryController {
         session.setAttribute("authordescription", author.getDescription());
 
         modelMap.addAttribute("author", author);
+        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(author.getImage().getImage_key()));
         return "singleauthor";
     }
 

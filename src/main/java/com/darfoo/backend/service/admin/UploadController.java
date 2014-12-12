@@ -341,6 +341,7 @@ public class UploadController {
     public String uploadVideo(ModelMap modelMap, HttpSession session){
         session.setAttribute("resource", "video");
         modelMap.addAttribute("resource", "video");
+        modelMap.addAttribute("authors", authorDao.getAllAuthor());
         return "uploadvideo";
     }
 
@@ -476,6 +477,7 @@ public class UploadController {
     public String uploadTutorial(ModelMap modelMap, HttpSession session){
         session.setAttribute("resource", "tutorial");
         modelMap.addAttribute("resource", "tutorial");
+        modelMap.addAttribute("authors", authorDao.getAllAuthor());
         return "uploadtutorial";
     }
 

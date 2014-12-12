@@ -38,10 +38,21 @@
                     <label for="title">教学视频标题(也就是上传视频文件的文件名,不需要后缀)</label>
                     <input type="text" class="form-control" name="title" id="title" placeholder="请输入教学视频标题">
                 </div>
-                <div class="form-group">
+
+                <!--<div class="form-group">
                     <label for="authorname">教学视频作者名字</label>
                     <input type="text" class="form-control" name="authorname" id="authorname" placeholder="请输入教学视频作者名字">
+                </div>-->
+
+                <div class="form-group">
+                    <label for="authorname">舞蹈教学关联的明星舞队</label>
+                    <select data-toggle="select" name="authorname" id="authorname" class="form-control select select-success mrs mbm">
+                        <c:forEach var="author" items="${authors}">
+                            <option value="${author.name}">${author.name}</option>
+                        </c:forEach>
+                    </select>
                 </div>
+
                 <div class="form-group">
                     <label for="imagekey">教学视频封面图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
                     <input type="text" class="form-control" name="imagekey" id="imagekey" placeholder="请输入教学视频封面图片名称">
