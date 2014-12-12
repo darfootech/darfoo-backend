@@ -140,6 +140,7 @@ public class GalleryController {
             }
         }
         modelMap.addAttribute("music", music);
+        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(music.getImage().getImage_key()));
         return "singlemusic";
     }
 

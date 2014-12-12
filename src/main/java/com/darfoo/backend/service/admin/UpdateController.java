@@ -309,6 +309,36 @@ public class UpdateController {
         }
     }
 
+    @RequestMapping(value = "/admin/music/updateimage/{id}", method = RequestMethod.GET)
+    public String updateMusicImage(@PathVariable String id, ModelMap modelMap){
+        modelMap.addAttribute("musicid", Integer.parseInt(id));
+        return "updatemusicimage";
+    }
+
+    @RequestMapping(value = "/admin/music/updateimageresource", method = RequestMethod.POST)
+    public String updateMusicImageResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request){
+        int id = Integer.parseInt(request.getParameter("id"));
+        String imagekey = musicDao.getMusicByMusicId(id).getImage().getImage_key();
+
+        System.out.println(id + " " + imagekey);
+
+        ServiceUtils.deleteResource(imagekey);
+
+        String imageStatusCode = "";
+
+        try {
+            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (imageStatusCode.equals("200")){
+            return "success";
+        }else{
+            return "fail";
+        }
+    }
+
     @RequestMapping(value = "/admin/author/update", method = RequestMethod.POST)
     public @ResponseBody String updateAuthor(HttpServletRequest request, HttpSession session) {
         String name = request.getParameter("name");
