@@ -76,6 +76,7 @@
                         <li><a href="/darfoobackend/rest/admin/tutorial/all">查看修改舞蹈教程</a></li>
                         <li><a href="/darfoobackend/rest/admin/music/all">查看修改舞蹈伴奏</a></li>
                         <li><a href="/darfoobackend/rest/admin/author/all">查看修改明星舞队</a></li>
+                        <li><a href="/darfoobackend/rest/admin/connectmusic/all">关联舞蹈伴奏和舞蹈视频</a></li>
                         <!--<li><a href="/darfoobackend/rest/admin/team/all">查看修改舞队</a></li>-->
                     </ul>
                 </li>
