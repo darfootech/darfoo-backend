@@ -144,7 +144,7 @@ public class VideoController {
     public
     @ResponseBody
     List<IndexVideo> getIndexVideos() {
-        List<Video> latestVideos = videoDao.getLatestVideos(7);
+        List<Video> latestVideos = videoDao.getVideosByNewest(7);
         List<IndexVideo> result = new ArrayList<IndexVideo>();
         for (Video video : latestVideos) {
             int video_id = video.getId();

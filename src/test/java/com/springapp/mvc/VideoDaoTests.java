@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.darfoo.backend.dao.AuthorDao;
 import com.darfoo.backend.dao.ImageDao;
+import com.darfoo.backend.dao.ModelUtils;
 import com.darfoo.backend.service.responsemodel.VideoCates;
 
 import org.junit.Test;
@@ -140,16 +141,7 @@ public class VideoDaoTests {
 		}
 		System.out.println("time elapse:"+(System.currentTimeMillis()-start)/1000f);		
 	}
-	@Test
-	public void getLastestVideos(){
-		long start = System.currentTimeMillis();
-		List<Video> videos = videoDao.getLatestVideos(7);
-		for(Video video : videos){
-			System.out.println(video.toString(true));
-			System.out.println("——————————————————————————————————————");
-		}
-		System.out.println("time elapse:"+(System.currentTimeMillis()-start)/1000f);		
-	}
+	
 	@Test
 	public void getVideosByCategories(){
 		long start = System.currentTimeMillis();
@@ -283,4 +275,46 @@ public class VideoDaoTests {
 		System.out.println(CRUDEvent.getResponse(videoDao.deleteMusicFromVideo(vId)));
 	}
 	
+	
+	/**
+	 * 更新点击量
+	 * **/
+	@Test
+	public void updateVideoHotest(){
+		Integer id = 1;
+		int n=1;
+		//int n = -5;
+		System.out.println(CRUDEvent.getResponse(videoDao.updateVideoHotest(id, n)));
+		
+	}
+	
+	/**
+	 * 按照热度排序从大到小，获取前number个video
+	 * **/
+	@Test
+	public void getVideosByHotest(){
+		int number = 20;
+		List<Video> videos = videoDao.getVideosByHotest(number);
+		System.out.println("---------返回"+videos.size()+"个视频---------");
+		for(Video v : videos){
+			System.out.println("热度值---->"+v.getHotest());
+			System.out.println(v.toString(true));
+			System.out.println("---------------------------");
+		}
+	}
+	
+	/**
+	 * 获取最新的number个video
+	 * **/
+	@Test
+	public void getVideosByNewest(){
+		int number = 20;
+		List<Video> videos = videoDao.getVideosByNewest(number);
+		System.out.println("---------返回"+videos.size()+"个视频---------");
+		for(Video v : videos){
+			System.out.println("更新时间---->"+ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
+			System.out.println(v.toString(true));
+			System.out.println("---------------------------");
+		}
+	}
 }

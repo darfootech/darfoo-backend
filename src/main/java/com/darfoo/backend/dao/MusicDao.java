@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 
 import com.darfoo.backend.model.*;
+
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
@@ -15,8 +16,10 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Music;
+import com.darfoo.backend.model.Video;
 
 @Component
 @SuppressWarnings("unchecked")
@@ -420,5 +423,81 @@ public class MusicDao {
 
         Collections.reverse(s_musics);
         return s_musics;
+	}
+	
+	/**
+	 * music 的点击量更新
+	 * 点击量自增N(自增1就设为1)
+	 * @param id music的id
+	 * @param n  增加的值(通常设为1)
+	 * **/
+	public int updateMusicHotest(Integer id,int n){
+		int res = 0;
+		try{
+			Session session = sf.getCurrentSession();
+			Music music = (Music)session.get(Music.class, id);
+			if(music == null){
+				res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
+			}else{
+				Long hotest = music.getHotest();
+				if(hotest == null){
+					hotest = 1L;  //若没有点击量记录，则设为1
+				}else{
+					hotest += n;
+					if(hotest <= 0 )
+						hotest = 0L;  //若你把n设为了负数，那么最小点击量不会低于0
+				}
+				music.setHotest(hotest);
+				res = CRUDEvent.UPDATE_SUCCESS;
+			}
+		}catch(Exception e){
+			res = CRUDEvent.UPDATE_FAIL;
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	/**
+	 * 按热度排序，从热度最大到最小排序返回
+	 * @param 获得热度排名前number个
+	 * **/
+	public List<Music>  getMusicsByHotest(int number){
+		List<Music> l_music = new ArrayList<Music>();
+		try{
+			Session session = sf.getCurrentSession();
+			Criteria c = session.createCriteria(Music.class);
+			c.addOrder(Order.desc("hotest"));//安热度递减排序
+			c.setMaxResults(number);
+			c.setReadOnly(true);
+			l_music = c.list();
+			for(Music m : l_music){
+				m.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return l_music;
+	}
+	
+	/**
+	 * 获得最新的number个音频
+	 * @param 获得排名前number个
+	 * **/
+	public List<Music>  getMusicsByNewest(int number){
+		List<Music> musics = new ArrayList<Music>();
+		try{
+			Session session = sf.getCurrentSession();
+			Criteria c = session.createCriteria(Music.class);
+			c.addOrder(Order.desc("update_timestamp"));//按最新时间排序
+			c.setMaxResults(number);
+			c.setReadOnly(true);
+			musics = c.list();
+			for(Music m : musics){
+				m.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return musics;
 	}
 }
