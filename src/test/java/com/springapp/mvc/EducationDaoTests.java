@@ -236,10 +236,9 @@ public class EducationDaoTests {
 	@Test
 	public void updateEducationHotest(){
 		Integer id = 1;
-		int n=1;
+		int n = 1;
 		//int n = -5;
 		System.out.println(CRUDEvent.getResponse(educationDao.updateEducationHotest(id, n)));
-		
 	}
 	
 	/**

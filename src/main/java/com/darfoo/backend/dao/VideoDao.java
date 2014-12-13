@@ -638,4 +638,43 @@ public class VideoDao {
 		}
 		return videos;
 	}
+
+    /**
+     * 根据musicid来获得与之关联的所有video
+     * @param musicid
+     * @return
+     */
+    public List<Video> getVideosByMusicId(int musicid){
+        List<Video> videos = null;
+        try{
+            Session session = sf.getCurrentSession();
+            String sql = "select * from video where music_id=:musicid order by id desc";
+            videos = (List<Video>)session.createSQLQuery(sql).addEntity(Video.class).setInteger("musicid", musicid).list();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return videos;
+    }
+
+    /**
+     * 根据musicid来获得不与之关联的所有video
+     * @param musicid
+     * @return
+     */
+    public List<Video> getVideosWithoutMusicId(int musicid){
+        List<Video> videos = null;
+        try{
+            Session session = sf.getCurrentSession();
+            String sql = "select * from video where music_id is null union select * from video where music_id <> :musicid order by id desc";
+            videos = (List<Video>)session.createSQLQuery(sql).addEntity(Video.class).setInteger("musicid", musicid).list();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return videos;
+    }
+
+    public void disconnectVideoMusic(int videoid, int musicid){
+        System.out.println(CRUDEvent.getResponse(insertOrUpdateMusic(videoid, musicid)));
+        System.out.println(CRUDEvent.getResponse(deleteMusicFromVideo(videoid)));
+    }
 }

@@ -240,7 +240,7 @@ public class VideoDaoTests {
 	 * **/
 	@Test
 	public void insertorUpdateMusic(){
-		Integer vId = 1;  
+		Integer vId = 1;
 		Integer mId = 6;
 		System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId)));
 	}
@@ -251,9 +251,9 @@ public class VideoDaoTests {
 	@Test
 	public void getMusicFromVideo(){
 		Integer vId = 1;
-		Integer mId = 3;
+		//Integer mId = 6;
 		//先插入或更新一个music到video中
-		System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId))+" 往Id为"+vId+"的video记录中插入music_id为"+mId);
+		//System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId))+" 往Id为"+vId+"的video记录中插入music_id为"+mId);
 		Music music = videoDao.getMusic(vId);		
 		if(music != null){
 			System.out.println(music.toString(true));
@@ -268,24 +268,29 @@ public class VideoDaoTests {
 	@Test
 	public void deleteMusicFromVideo(){
 		Integer vId = 1;
-		Integer mId = 3;
+		Integer mId = 6;
 		//先插入或更新一个music到video中
 		System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId)));
 		//删除刚插入的那个video中的music
 		System.out.println(CRUDEvent.getResponse(videoDao.deleteMusicFromVideo(vId)));
 	}
-	
-	
+
+    @Test
+    public void disconnectVideoMusic(){
+        Integer vId = 1;
+        Integer mId = 6;
+        videoDao.disconnectVideoMusic(vId, mId);
+    }
+
 	/**
 	 * 更新点击量
 	 * **/
 	@Test
 	public void updateVideoHotest(){
 		Integer id = 1;
-		int n=1;
+		int n = 1;
 		//int n = -5;
 		System.out.println(CRUDEvent.getResponse(videoDao.updateVideoHotest(id, n)));
-		
 	}
 	
 	/**
@@ -317,4 +322,34 @@ public class VideoDaoTests {
 			System.out.println("---------------------------");
 		}
 	}
+
+    /**
+     * 根据musicid获得所有与之关联的video
+     */
+    @Test
+    public void getVideosByMusicId(){
+        Integer mId = 6;
+        List<Video> videos = videoDao.getVideosByMusicId(mId);
+        System.out.println("---------返回"+videos.size()+"个视频---------");
+        for(Video v : videos){
+            System.out.println("更新时间---->"+ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
+            System.out.println(v.getTitle());
+            System.out.println("---------------------------");
+        }
+    }
+
+    /**
+     * 根据musicid获得所有不与之关联的video
+     */
+    @Test
+    public void getVideosWithoutMusicId(){
+        Integer mId = 6;
+        List<Video> videos = videoDao.getVideosWithoutMusicId(mId);
+        System.out.println("---------返回"+videos.size()+"个视频---------");
+        for(Video v : videos){
+            System.out.println("更新时间---->"+ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
+            System.out.println(v.getTitle());
+            System.out.println("---------------------------");
+        }
+    }
 }
