@@ -6,12 +6,22 @@ package com.darfoo.backend.service.responsemodel;
 public class SingleMusic {
     Integer id;
     String music_url;
+    String authorname;
     String title;
 
-    public SingleMusic(Integer id, String music_url, String title) {
+    public SingleMusic(Integer id, String music_url, String authorname, String title) {
         this.id = id;
         this.music_url = music_url;
+        this.authorname = authorname;
         this.title = title;
+    }
+
+    public String getAuthorname() {
+        return authorname;
+    }
+
+    public void setAuthorname(String authorname) {
+        this.authorname = authorname;
     }
 
     public Integer getId() {

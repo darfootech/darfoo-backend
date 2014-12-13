@@ -7,13 +7,23 @@ public class HotMusic {
     Integer id;
     String title;
     String music_url;
+    String authorname;
     Long update_timestamp;
 
-    public HotMusic(Integer id, String title, String music_url, Long update_timestamp) {
+    public HotMusic(Integer id, String title, String music_url, String authorname, Long update_timestamp) {
         this.id = id;
         this.title = title;
         this.music_url = music_url;
+        this.authorname = authorname;
         this.update_timestamp = update_timestamp;
+    }
+
+    public String getAuthorname() {
+        return authorname;
+    }
+
+    public void setAuthorname(String authorname) {
+        this.authorname = authorname;
     }
 
     public String getMusic_url() {

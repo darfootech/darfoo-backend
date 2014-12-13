@@ -11,14 +11,24 @@ public class CategoryMusic {
     String image_url;
     String music_url;
     String title;
+    String authorname;
     Long update_timestamp;
 
-    public CategoryMusic(Integer id, String image_url, String music_url, String title, Long update_timestamp) {
+    public CategoryMusic(Integer id, String image_url, String music_url, String title, String authorname, Long update_timestamp) {
         this.id = id;
         this.image_url = image_url;
         this.music_url = music_url;
         this.title = title;
+        this.authorname = authorname;
         this.update_timestamp = update_timestamp;
+    }
+
+    public String getAuthorname() {
+        return authorname;
+    }
+
+    public void setAuthorname(String authorname) {
+        this.authorname = authorname;
     }
 
     public String getMusic_url() {
