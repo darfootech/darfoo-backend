@@ -3,6 +3,7 @@ package com.darfoo.backend.service.admin;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Music;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -41,16 +42,28 @@ public class ConnectController {
     }
 
     @RequestMapping(value = "/admin/connectmusic/addconnects", method = RequestMethod.POST, consumes = "application/json", headers = "content-type=application/x-www-form-urlencoded")
-    public @ResponseBody String addConnections(HttpServletRequest request){
+    public @ResponseBody String addConnections(HttpServletRequest request, HttpSession session){
         String idss = request.getParameter("vids");
         System.out.println(idss);
+        int currentmusicid = (Integer)session.getAttribute("connectmusicid");
+        System.out.println("current music id: " + currentmusicid);
+        String[] videoids = idss.split(",");
+        for (int i=0; i<videoids.length; i++){
+            videoDao.insertOrUpdateMusic(Integer.parseInt(videoids[i]), currentmusicid);
+        }
         return 200+"";
     }
 
     @RequestMapping(value = "/admin/connectmusic/delconnects", method = RequestMethod.POST, consumes = "application/json", headers = "content-type=application/x-www-form-urlencoded")
-    public @ResponseBody String delConnections(HttpServletRequest request){
+    public @ResponseBody String delConnections(HttpServletRequest request, HttpSession session){
         String idss = request.getParameter("vids");
         System.out.println(idss);
+        int currentmusicid = (Integer)session.getAttribute("connectmusicid");
+        System.out.println("current music id: " + currentmusicid);
+        String[] videoids = idss.split(",");
+        for (int i=0; i<videoids.length; i++){
+            videoDao.disconnectVideoMusic(Integer.parseInt(videoids[i]), currentmusicid);
+        }
         return 200+"";
     }
 

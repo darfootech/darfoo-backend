@@ -240,8 +240,8 @@ public class VideoDaoTests {
 	 * **/
 	@Test
 	public void insertorUpdateMusic(){
-		Integer vId = 2;
-		Integer mId = 9;
+		Integer vId = 1;
+		Integer mId = 6;
 		System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId)));
 	}
 	
@@ -251,7 +251,7 @@ public class VideoDaoTests {
 	@Test
 	public void getMusicFromVideo(){
 		Integer vId = 1;
-		Integer mId = 3;
+		Integer mId = 6;
 		//先插入或更新一个music到video中
 		System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId))+" 往Id为"+vId+"的video记录中插入music_id为"+mId);
 		Music music = videoDao.getMusic(vId);		
@@ -268,14 +268,20 @@ public class VideoDaoTests {
 	@Test
 	public void deleteMusicFromVideo(){
 		Integer vId = 1;
-		Integer mId = 3;
+		Integer mId = 6;
 		//先插入或更新一个music到video中
 		System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId)));
 		//删除刚插入的那个video中的music
 		System.out.println(CRUDEvent.getResponse(videoDao.deleteMusicFromVideo(vId)));
 	}
-	
-	
+
+    @Test
+    public void disconnectVideoMusic(){
+        Integer vId = 1;
+        Integer mId = 6;
+        videoDao.disconnectVideoMusic(vId, mId);
+    }
+
 	/**
 	 * 更新点击量
 	 * **/

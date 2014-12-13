@@ -672,4 +672,9 @@ public class VideoDao {
         }
         return videos;
     }
+
+    public void disconnectVideoMusic(int videoid, int musicid){
+        System.out.println(CRUDEvent.getResponse(insertOrUpdateMusic(videoid, musicid)));
+        System.out.println(CRUDEvent.getResponse(deleteMusicFromVideo(videoid)));
+    }
 }
