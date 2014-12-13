@@ -39,9 +39,14 @@ public class ConnectController {
 
     @RequestMapping(value = "/admin/connectmusic/addconnects", method = RequestMethod.POST, consumes = "application/json", headers = "content-type=application/x-www-form-urlencoded")
     public @ResponseBody String addConnections(HttpServletRequest request){
-        //String[] ids = request.getParameterValues("eids");
         String idss = request.getParameter("vids");
-        //System.out.println(ids.length);
+        System.out.println(idss);
+        return 200+"";
+    }
+
+    @RequestMapping(value = "/admin/connectmusic/delconnects", method = RequestMethod.POST, consumes = "application/json", headers = "content-type=application/x-www-form-urlencoded")
+    public @ResponseBody String delConnections(HttpServletRequest request){
+        String idss = request.getParameter("vids");
         System.out.println(idss);
         return 200+"";
     }

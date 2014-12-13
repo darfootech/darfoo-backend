@@ -57,13 +57,9 @@
                 $.post("/darfoobackend/rest/admin/connectmusic/addconnects", {
                     'vids': add_recommendevents.join(',')
                 }, function(data){
-                    if(data.status == 1){
+                    if(data == 200){
                         window.location.reload();
-                    }
-                    if(data.status == -1){
-                        alert("最多只能推荐四个活动");
-                    }
-                    if(data.status == 0){
+                    }else{
                         alert("操作失败");
                     }
                 }, "json");
@@ -74,10 +70,10 @@
             if(delete_recommendevents.length == 0){
                 alert("还没有选择要取消推荐的活动");
             }else{
-                $.post("/manage/deleteRecommendEvent", {
-                    'eids': delete_recommendevents
+                $.post("/darfoobackend/rest/admin/connectmusic/delconnects", {
+                    'vids': delete_recommendevents.join(',')
                 }, function(data){
-                    if(data.status == 1){
+                    if(data == 200){
                         window.location.reload();
                     }else{
                         alert("操作失败");
