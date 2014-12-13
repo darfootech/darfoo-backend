@@ -21,6 +21,14 @@ cd $darfoo_home
 qrsync conf.json
 ```
 
-#### todo
+## todo
 
-* 自动化创建数据库和迁移数据表
+#### 自动化创建数据库和迁移数据表
+
+#### 并发
+
+* nginx + multi tomcat
+* jetty
+* redis缓存，数据库读写分离，多个主从mysql服务
+
+
