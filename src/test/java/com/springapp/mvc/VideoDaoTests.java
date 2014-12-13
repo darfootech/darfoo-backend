@@ -240,8 +240,8 @@ public class VideoDaoTests {
 	 * **/
 	@Test
 	public void insertorUpdateMusic(){
-		Integer vId = 1;  
-		Integer mId = 6;
+		Integer vId = 2;
+		Integer mId = 9;
 		System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId)));
 	}
 	
@@ -317,4 +317,34 @@ public class VideoDaoTests {
 			System.out.println("---------------------------");
 		}
 	}
+
+    /**
+     * 根据musicid获得所有与之关联的video
+     */
+    @Test
+    public void getVideosByMusicId(){
+        Integer mId = 6;
+        List<Video> videos = videoDao.getVideosByMusicId(mId);
+        System.out.println("---------返回"+videos.size()+"个视频---------");
+        for(Video v : videos){
+            System.out.println("更新时间---->"+ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
+            System.out.println(v.getTitle());
+            System.out.println("---------------------------");
+        }
+    }
+
+    /**
+     * 根据musicid获得所有不与之关联的video
+     */
+    @Test
+    public void getVideosWithoutMusicId(){
+        Integer mId = 6;
+        List<Video> videos = videoDao.getVideosWithoutMusicId(mId);
+        System.out.println("---------返回"+videos.size()+"个视频---------");
+        for(Video v : videos){
+            System.out.println("更新时间---->"+ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
+            System.out.println(v.getTitle());
+            System.out.println("---------------------------");
+        }
+    }
 }
