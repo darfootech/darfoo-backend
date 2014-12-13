@@ -8,14 +8,24 @@ public class SearchVideo {
     String title;
     String image_url;
     String video_url;
+    String authorname;
     Long update_timestamp;
 
-    public SearchVideo(Integer id, String title, String image_url, String video_url, Long update_timestamp) {
+    public SearchVideo(Integer id, String title, String image_url, String video_url, String authorname, Long update_timestamp) {
         this.id = id;
         this.title = title;
         this.image_url = image_url;
         this.video_url = video_url;
+        this.authorname = authorname;
         this.update_timestamp = update_timestamp;
+    }
+
+    public String getAuthorname() {
+        return authorname;
+    }
+
+    public void setAuthorname(String authorname) {
+        this.authorname = authorname;
     }
 
     public String getImage_url() {

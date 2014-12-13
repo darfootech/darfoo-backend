@@ -1,0 +1,54 @@
+package com.darfoo.backend.Interceptors;
+
+import com.darfoo.backend.dao.VideoDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * Created by zjh on 14-12-13.
+ */
+
+/*用来拦截请求单个视频，伴奏，教程资源的点击，用来累计每一个资源记录的点击量，从而综合更新日期和点击量做热门推荐*/
+public class HotClickInterceptor extends HandlerInterceptorAdapter {
+    //截取数字
+    public String getNumbers(String content) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(content);
+        while (matcher.find()) {
+            return matcher.group(0);
+        }
+        return "";
+    }
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String uri = request.getRequestURI();
+        System.out.println("current uri is: " + uri + "\n");
+
+        if (uri.matches("(.*)/resources/video/\\d+$")){
+            String videoid = getNumbers(uri);
+            System.out.println("video clicked id is: " + videoid + "\n");
+            return true;
+        }
+
+        if (uri.matches("(.*)/resources/video/tutorial/\\d+$")){
+            String tutorialid = getNumbers(uri);
+            System.out.println("tutorial clicked id is: " + tutorialid + "\n");
+            return true;
+        }
+
+        if (uri.matches("(.*)/resources/music/\\d+$")){
+            String musicid = getNumbers(uri);
+            System.out.println("music clicked id is: " + musicid + "\n");
+            return true;
+        }
+
+        System.out.print("no resource clicked" + "\n");
+        return true;
+    }
+}
