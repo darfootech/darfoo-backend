@@ -251,9 +251,9 @@ public class VideoDaoTests {
 	@Test
 	public void getMusicFromVideo(){
 		Integer vId = 1;
-		Integer mId = 6;
+		//Integer mId = 6;
 		//先插入或更新一个music到video中
-		System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId))+" 往Id为"+vId+"的video记录中插入music_id为"+mId);
+		//System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId))+" 往Id为"+vId+"的video记录中插入music_id为"+mId);
 		Music music = videoDao.getMusic(vId);		
 		if(music != null){
 			System.out.println(music.toString(true));

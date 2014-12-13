@@ -190,8 +190,8 @@ public class MusicDaoTests {
 	 * **/
 	@Test
 	public void updateMusicHotest(){
-		Integer id = 2;
-		int n=123124;
+		Integer id = 1;
+		int n=1;
 		//int n = -5;
 		System.out.println(CRUDEvent.getResponse(musicDao.updateMusicHotest(id, n)));
 		
