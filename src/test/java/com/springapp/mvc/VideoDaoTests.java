@@ -288,10 +288,9 @@ public class VideoDaoTests {
 	@Test
 	public void updateVideoHotest(){
 		Integer id = 1;
-		int n=1;
+		int n = 1;
 		//int n = -5;
 		System.out.println(CRUDEvent.getResponse(videoDao.updateVideoHotest(id, n)));
-		
 	}
 	
 	/**
