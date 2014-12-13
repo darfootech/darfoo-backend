@@ -33,6 +33,10 @@
             <mvc:mapping path="/**"/>
             <bean class="com.darfoo.backend.Interceptors.LoginInterceptor"/>
         </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.darfoo.backend.Interceptors.HotClickInterceptor"/>
+        </mvc:interceptor>
     </mvc:interceptors>
 
 </beans>
