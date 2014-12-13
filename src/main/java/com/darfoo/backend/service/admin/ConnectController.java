@@ -30,10 +30,13 @@ public class ConnectController {
 
     @RequestMapping(value = "/admin/connectmusic/single/{id}", method = RequestMethod.GET)
     public String connectMusicSingle(@PathVariable String id, ModelMap modelMap, HttpSession session){
-        Music music = musicDao.getMusicByMusicId(Integer.parseInt(id));
-        session.setAttribute("connectmusicid", Integer.parseInt(id));
+        int musicid = Integer.parseInt(id);
+        System.out.println("current music id: " + musicid);
+        Music music = musicDao.getMusicByMusicId(musicid);
+        session.setAttribute("connectmusicid", musicid);
         modelMap.addAttribute("music", music);
-        modelMap.addAttribute("videos", videoDao.getAllVideo());
+        modelMap.addAttribute("connectvideos", videoDao.getVideosByMusicId(musicid));
+        modelMap.addAttribute("notconnectvideos", videoDao.getVideosWithoutMusicId(musicid));
         return "connectionsinglemusic";
     }
 
