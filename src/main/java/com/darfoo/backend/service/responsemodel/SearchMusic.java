@@ -8,14 +8,24 @@ public class SearchMusic {
     String title;
     String image_url;
     String music_url;
+    String authorname;
     Long update_timestamp;
 
-    public SearchMusic(Integer id, String title, String image_url, String music_url, Long update_timestamp) {
+    public SearchMusic(Integer id, String title, String image_url, String music_url, String authorname, Long update_timestamp) {
         this.id = id;
         this.title = title;
         this.image_url = image_url;
         this.music_url = music_url;
+        this.authorname = authorname;
         this.update_timestamp = update_timestamp;
+    }
+
+    public String getAuthorname() {
+        return authorname;
+    }
+
+    public void setAuthorname(String authorname) {
+        this.authorname = authorname;
     }
 
     public String getImage_url() {

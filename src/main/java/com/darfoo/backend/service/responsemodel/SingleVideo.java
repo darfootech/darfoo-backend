@@ -7,12 +7,22 @@ package com.darfoo.backend.service.responsemodel;
 public class SingleVideo {
     Integer id;
     String title;
+    String authorname;
     String video_url;
 
-    public SingleVideo(Integer id, String title, String video_url) {
+    public SingleVideo(Integer id, String title, String authorname, String video_url) {
         this.id = id;
         this.title = title;
+        this.authorname = authorname;
         this.video_url = video_url;
+    }
+
+    public String getAuthorname() {
+        return authorname;
+    }
+
+    public void setAuthorname(String authorname) {
+        this.authorname = authorname;
     }
 
     public Integer getId() {
