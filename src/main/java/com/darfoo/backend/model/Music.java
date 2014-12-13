@@ -56,8 +56,21 @@ public class Music implements Serializable {
 	@Column(name="UPDATE_TIMESTAMP",nullable=false,columnDefinition="bigint(64) not null")
     Long update_timestamp;
 
+	//点击量
+	@Column(name="HOTEST",nullable=true,updatable=true,columnDefinition="bigint(64) default 0")
+	Long hotest;  
+	
+    public Long getHotest() {
+		return hotest;
+	}
 
-    public Music() {
+
+	public void setHotest(Long hotest) {
+		this.hotest = hotest;
+	}
+
+
+	public Music() {
     }
     
 

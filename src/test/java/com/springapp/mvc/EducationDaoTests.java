@@ -8,6 +8,7 @@ import java.util.Set;
 import com.darfoo.backend.dao.AuthorDao;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.ImageDao;
+import com.darfoo.backend.dao.ModelUtils;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -227,5 +228,47 @@ public class EducationDaoTests {
 		System.out.println(CRUDEvent.getResponse(educationDao.insertOrUpdateMusic(vId, mId)));
 		//删除刚插入的那个education中的music
 		System.out.println(CRUDEvent.getResponse(educationDao.deleteMusicFromEducation(vId)));
+	}
+	
+	/**
+	 * 更新点击量
+	 * **/
+	@Test
+	public void updateEducationHotest(){
+		Integer id = 1;
+		int n=1;
+		//int n = -5;
+		System.out.println(CRUDEvent.getResponse(educationDao.updateEducationHotest(id, n)));
+		
+	}
+	
+	/**
+	 * 按照热度排序从大到小，获取前number个video
+	 * **/
+	@Test
+	public void getEducationsByHotest(){
+		int number = 20;
+		List<Education> educations = educationDao.getEducationsByHotest(number);
+		System.out.println("---------返回"+educations.size()+"个视频---------");
+		for(Education v : educations){
+			System.out.println("热度值---->"+v.getHotest());
+			System.out.println(v.toString(true));
+			System.out.println("---------------------------");
+		}
+	}
+	
+	/**
+	 * 获取最新的number个education
+	 * **/
+	@Test
+	public void getEducationsByNewest(){
+		int number = 20;
+		List<Education> educations = educationDao.getEducationsByNewest(number);
+		System.out.println("---------返回"+educations.size()+"个视频---------");
+		for(Education v : educations){
+			System.out.println("更新时间---->"+ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
+			System.out.println(v.toString(true));
+			System.out.println("---------------------------");
+		}
 	}
 }

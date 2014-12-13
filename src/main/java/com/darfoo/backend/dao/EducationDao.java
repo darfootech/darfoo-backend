@@ -481,4 +481,80 @@ public class EducationDao {
 		}
 		return res;
 	}
+	
+	/**
+	 * education 的点击量更新
+	 * 点击量自增N(自增1就设为1)
+	 * @param id education的id
+	 * @param n  增加的值(通常设为1)
+	 * **/
+	public int updateEducationHotest(Integer id,int n){
+		int res = 0;
+		try{
+			Session session = sf.getCurrentSession();
+			Education education = (Education)session.get(Education.class, id);
+			if(education == null){
+				res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
+			}else{
+				Long hotest = education.getHotest();
+				if(hotest == null){
+					hotest = 1L;  //若没有点击量记录，则设为1
+				}else{
+					hotest += n;
+					if(hotest <= 0 )
+						hotest = 0L;  //若你把n设为了负数，那么最小点击量不会低于0
+				}
+				education.setHotest(hotest);
+				res = CRUDEvent.UPDATE_SUCCESS;
+			}
+		}catch(Exception e){
+			res = CRUDEvent.UPDATE_FAIL;
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	/**
+	 * 按热度排序，从热度最大到最小排序返回
+	 * @param 获得热度排名前number个
+	 * **/
+	public List<Education>  getEducationsByHotest(int number){
+		List<Education> educations = new ArrayList<Education>();
+		try{
+			Session session = sf.getCurrentSession();
+			Criteria c = session.createCriteria(Education.class);
+			c.addOrder(Order.desc("hotest"));//安热度递减排序
+			c.setMaxResults(number);
+			c.setReadOnly(true);
+			educations = c.list();
+			for(Education e : educations){
+				e.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return educations;
+	}
+	
+	/**
+	 * 获得最新的number个教学视频
+	 * @param 获得排名前number个
+	 * **/
+	public List<Education>  getEducationsByNewest(int number){
+		List<Education> educations = new ArrayList<Education>();
+		try{
+			Session session = sf.getCurrentSession();
+			Criteria c = session.createCriteria(Education.class);
+			c.addOrder(Order.desc("update_timestamp"));//按最新时间排序
+			c.setMaxResults(number);
+			c.setReadOnly(true);
+			educations = c.list();
+			for(Education e : educations){
+				e.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return educations;
+	}
 }

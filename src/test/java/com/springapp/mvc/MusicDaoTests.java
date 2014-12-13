@@ -8,6 +8,7 @@ import java.util.Set;
 import com.darfoo.backend.dao.AuthorDao;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.ImageDao;
+import com.darfoo.backend.dao.ModelUtils;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +26,7 @@ import com.darfoo.backend.model.MusicCategory;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.UpdateCheckResponse;
 import com.darfoo.backend.model.Music;
+import com.darfoo.backend.model.Video;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
@@ -182,4 +184,46 @@ public class MusicDaoTests {
     public void deleteVideoCascade(){
         System.out.println(CRUDEvent.getResponse(musicDao.deleteMusicById(14)));
     }
+    
+	/**
+	 * 更新点击量
+	 * **/
+	@Test
+	public void updateMusicHotest(){
+		Integer id = 2;
+		int n=123124;
+		//int n = -5;
+		System.out.println(CRUDEvent.getResponse(musicDao.updateMusicHotest(id, n)));
+		
+	}
+	
+	/**
+	 * 按照热度排序从大到小，获取前number个video
+	 * **/
+	@Test
+	public void getMusicsByHotest(){
+		int number = 20;
+		List<Music> musics = musicDao.getMusicsByHotest(number);
+		System.out.println("---------返回"+musics.size()+"个视频---------");
+		for(Music v : musics){
+			System.out.println("热度值---->"+v.getHotest());
+			System.out.println(v.toString(true));
+			System.out.println("---------------------------");
+		}
+	}
+	
+	/**
+	 * 获取最新的number个音频
+	 * **/
+	@Test
+	public void getMusicsByNewest(){
+		int number = 20;
+		List<Music> musics = musicDao.getMusicsByNewest(number);
+		System.out.println("---------返回"+musics.size()+"个视频---------");
+		for(Music v : musics){
+			System.out.println("更新时间---->"+ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
+			System.out.println(v.toString(true));
+			System.out.println("---------------------------");
+		}
+	}
 }

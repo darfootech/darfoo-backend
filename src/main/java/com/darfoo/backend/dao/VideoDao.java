@@ -188,28 +188,29 @@ public class VideoDao {
 	 * @return List<Video> l_video 返回一个包含多个video对象的List
 	 * @return video中的categories可以获取
 	 * **/
-	public List<Video>  getLatestVideos(int number){
-		List<Video> l_video = new ArrayList<Video>();
-		try{
-			Session session = sf.getCurrentSession();
-			Criteria c = session.createCriteria(Video.class).setProjection(Projections.property("update_timestamp")).addOrder(Order.desc("update_timestamp"));
-			c.setReadOnly(true);
-			c.setMaxResults(number);
-			List<Long> l_timestamp = c.list();
-			if(l_timestamp.size() > 0){
-				c = session.createCriteria(Video.class).add(Restrictions.in("update_timestamp", l_timestamp)).addOrder(Order.desc("update_timestamp"));
-				c.setReadOnly(true);
-				//c.setFetchMode("categories", FetchMode.JOIN);  
-				l_video = c.list();
-				for(Video v : l_video){
-					v.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
-				}
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return l_video;
-	}
+	//此方法用getVideosByNewest代替
+//	public List<Video>  getLatetVideos(int number){
+//		List<Video> l_video = new ArrayList<Video>();
+//		try{
+//			Session session = sf.getCurrentSession();
+//			Criteria c = session.createCriteria(Video.class).setProjection(Projections.property("update_timestamp")).addOrder(Order.desc("update_timestamp"));
+//			c.setReadOnly(true);
+//			c.setMaxResults(number);
+//			List<Long> l_timestamp = c.list();
+//			if(l_timestamp.size() > 0){
+//				c = session.createCriteria(Video.class).add(Restrictions.in("update_timestamp", l_timestamp)).addOrder(Order.desc("update_timestamp"));
+//				c.setReadOnly(true);
+//				//c.setFetchMode("categories", FetchMode.JOIN);  
+//				l_video = c.list();
+//				for(Video v : l_video){
+//					v.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
+//				}
+//			}
+//		}catch(Exception e){
+//			e.printStackTrace();
+//		}
+//		return l_video;
+//	}
 	
 	/**
 	 * 根据类别获取视频列表(我要上网—视频页面)
@@ -560,5 +561,81 @@ public class VideoDao {
 			res = CRUDEvent.DELETE_FAIL;
 		}
 		return res;
+	}
+	
+	/**
+	 * video 的点击量更新
+	 * 点击量自增N(自增1就设为1)
+	 * @param id video的id
+	 * @param n  增加的值(通常设为1)
+	 * **/
+	public int updateVideoHotest(Integer id,int n){
+		int res = 0;
+		try{
+			Session session = sf.getCurrentSession();
+			Video video = (Video)session.get(Video.class, id);
+			if(video == null){
+				res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
+			}else{
+				Long hotest = video.getHotest();
+				if(hotest == null){
+					hotest = 1L;  //若没有点击量记录，则设为1
+				}else{
+					hotest += n;
+					if(hotest <= 0 )
+						hotest = 0L;  //若你把n设为了负数，那么最小点击量不会低于0
+				}
+				video.setHotest(hotest);
+				res = CRUDEvent.UPDATE_SUCCESS;
+			}
+		}catch(Exception e){
+			res = CRUDEvent.UPDATE_FAIL;
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	/**
+	 * 按热度排序，从热度最大到最小排序返回
+	 * @param 获得热度排名前number个
+	 * **/
+	public List<Video>  getVideosByHotest(int number){
+		List<Video> l_video = new ArrayList<Video>();
+		try{
+			Session session = sf.getCurrentSession();
+			Criteria c = session.createCriteria(Video.class);
+			c.addOrder(Order.desc("hotest"));//安热度递减排序
+			c.setMaxResults(number);
+			c.setReadOnly(true);
+			l_video = c.list();
+			for(Video v : l_video){
+				v.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return l_video;
+	}
+	
+	/**
+	 * 获得最新的number个video
+	 * @param 获得排名前number个
+	 * **/
+	public List<Video>  getVideosByNewest(int number){
+		List<Video> videos = new ArrayList<Video>();
+		try{
+			Session session = sf.getCurrentSession();
+			Criteria c = session.createCriteria(Video.class);
+			c.addOrder(Order.desc("update_timestamp"));//按最新时间排序
+			c.setMaxResults(number);
+			c.setReadOnly(true);
+			videos = c.list();
+			for(Video v : videos){
+				v.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return videos;
 	}
 }

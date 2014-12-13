@@ -66,8 +66,22 @@ public class Video implements Serializable {
 	@JoinColumn(name="MUSIC_ID",referencedColumnName="id",updatable=true,nullable=true)
 	Music music;
 	
+	//点击量
+	@Column(name="HOTEST",nullable=true,updatable=true,columnDefinition="bigint(64) default 0")
+	Long hotest;  
+	
     public Music getMusic() {
 		return music;
+	}
+
+
+	public Long getHotest() {
+		return hotest;
+	}
+
+
+	public void setHotest(Long hotest) {
+		this.hotest = hotest;
 	}
 
 
@@ -152,7 +166,12 @@ public class Video implements Serializable {
     	if(author == null){
     		sb.append("\nauthor:null");
     	}else{
-    		sb.append("\nauthor:"+author.getName()+"  演唱家信息:"+author.getDescription()+" 作者图片:"+author.getImage().getImage_key());
+    		sb.append("\nauthor:"+author.getName()+"  演唱家信息:"+author.getDescription());
+    		if(author.getImage() == null){
+    			sb.append(" 作者图片:"+null);
+    		}else{
+    			sb.append(" 作者图片:"+author.getImage().getImage_key());
+    		}
     	}
     	if(image == null){
     		sb.append("\n视频图片:null");
