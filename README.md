@@ -31,4 +31,10 @@ qrsync conf.json
 * jetty
 * redis缓存，数据库读写分离，多个主从mysql服务
 
+#### 日志服务(etl)
 
+做数据分析 记录所有行为 点击 播放 异常
+
+#### 非service 一个线上site
+
+* angular no jsp jstl anymore 任务完全移交前端组
