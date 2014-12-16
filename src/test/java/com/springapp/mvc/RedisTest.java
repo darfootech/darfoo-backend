@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author http://blog.csdn.net/java2000_wl 
  * @version <b>1.0</b> 
  */
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/redis-context.xml")
 public class RedisTest extends AbstractJUnit4SpringContextTests {
@@ -35,9 +36,10 @@ public class RedisTest extends AbstractJUnit4SpringContextTests {
     @Test
     public void testAddUser() {
         User user = new User();
-        user.setId("user1");
+        user.setId("user3");
         user.setName("java2000_wl");
         boolean result = userDao.add(user);
+        System.out.println("insert result: " + result);
         Assert.assertTrue(result);
     }
 
