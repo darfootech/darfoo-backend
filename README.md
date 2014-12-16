@@ -29,7 +29,9 @@ qrsync conf.json
 
 * nginx + multi tomcat
 * jetty
-* redis缓存，数据库读写分离，多个主从mysql服务 (关于redis的使用，初步思路就是请求过的链接就把结果放redis里面，后面再请求相同的就直接从redis里拿)
+* redis缓存 (关于redis的使用，初步思路就是请求过的链接就把结果放redis里面，后面再请求相同的就直接从redis里拿)
+* 数据库读写分离，多个主从mysql服务
+* 建立mysql连接池也能抗一抗
 
 #### 日志服务(etl)
 
