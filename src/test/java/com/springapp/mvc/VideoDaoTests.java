@@ -328,7 +328,7 @@ public class VideoDaoTests {
      */
     @Test
     public void getVideosByMusicId(){
-        Integer mId = 6;
+        Integer mId = 25;
         List<Video> videos = videoDao.getVideosByMusicId(mId);
         System.out.println("---------返回"+videos.size()+"个视频---------");
         for(Video v : videos){
@@ -343,7 +343,7 @@ public class VideoDaoTests {
      */
     @Test
     public void getVideosWithoutMusicId(){
-        Integer mId = 6;
+        Integer mId = 25;
         List<Video> videos = videoDao.getVideosWithoutMusicId(mId);
         System.out.println("---------返回"+videos.size()+"个视频---------");
         for(Video v : videos){

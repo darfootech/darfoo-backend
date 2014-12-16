@@ -4,6 +4,7 @@ import com.darfoo.backend.dao.EducationDao;
 import com.darfoo.backend.dao.SearchDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Education;
+import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.*;
 import com.darfoo.backend.utils.QiniuUtils;
@@ -65,6 +66,25 @@ public class VideoController {
             author_name = tutorial.getAuthor().getName();
         }
         return new SingleVideo(video_id, video_title, author_name, video_download_url);
+    }
+
+    @RequestMapping(value = "/getmusic/{id}", method = RequestMethod.GET)
+    public @ResponseBody SingleMusic getMusicByVideoId(@PathVariable String id){
+        int currentVideoid = Integer.parseInt(id);
+        Music targetMusic = videoDao.getMusic(currentVideoid);
+        if (targetMusic != null){
+            int music_id = targetMusic.getId();
+            String music_url = targetMusic.getMusic_key() + ".mp3";
+            String music_download_url = qiniuUtils.getQiniuResourceUrl(music_url);
+            String title = targetMusic.getTitle();
+            String author_name = "";
+            if (targetMusic.getAuthor() != null){
+                author_name = targetMusic.getAuthor().getName();
+            }
+            return new SingleMusic(music_id, music_download_url, author_name, title);
+        }else{
+            return new SingleMusic(-1, "", "", "");
+        }
     }
 
     //http://localhost:8080/darfoobackend/rest/resources/video/search/s

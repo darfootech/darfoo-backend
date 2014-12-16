@@ -29,6 +29,12 @@ qrsync conf.json
 
 * nginx + multi tomcat
 * jetty
-* redis缓存，数据库读写分离，多个主从mysql服务
+* redis缓存，数据库读写分离，多个主从mysql服务 (关于redis的使用，初步思路就是请求过的链接就把结果放redis里面，后面再请求相同的就直接从redis里拿)
 
+#### 日志服务(etl)
 
+做数据分析 记录所有行为 点击 播放 异常
+
+#### 非service 一个线上site
+
+* angular no jsp jstl anymore 任务完全移交前端组
