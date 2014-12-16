@@ -67,6 +67,15 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
+        if (uri.matches("(.*)/resources/video/getmusic/\\d+$")){
+            int videoid = Integer.parseInt(getNumbers(uri));
+            int musicid = videoDao.getMusic(videoid).getId();
+            System.out.println("music clicked id is: " + musicid + "\n");
+            int acc = 1;
+            System.out.println(CRUDEvent.getResponse(musicDao.updateMusicHotest(musicid, acc)));
+            return true;
+        }
+
         System.out.print("no resource clicked" + "\n");
         return true;
     }
