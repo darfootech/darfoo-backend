@@ -72,15 +72,19 @@ public class VideoController {
     public @ResponseBody SingleMusic getMusicByVideoId(@PathVariable String id){
         int currentVideoid = Integer.parseInt(id);
         Music targetMusic = videoDao.getMusic(currentVideoid);
-        int music_id = targetMusic.getId();
-        String music_url = targetMusic.getMusic_key() + ".mp3";
-        String music_download_url = qiniuUtils.getQiniuResourceUrl(music_url);
-        String title = targetMusic.getTitle();
-        String author_name = "";
-        if (targetMusic.getAuthor() != null){
-            author_name = targetMusic.getAuthor().getName();
+        if (targetMusic != null){
+            int music_id = targetMusic.getId();
+            String music_url = targetMusic.getMusic_key() + ".mp3";
+            String music_download_url = qiniuUtils.getQiniuResourceUrl(music_url);
+            String title = targetMusic.getTitle();
+            String author_name = "";
+            if (targetMusic.getAuthor() != null){
+                author_name = targetMusic.getAuthor().getName();
+            }
+            return new SingleMusic(music_id, music_download_url, author_name, title);
+        }else{
+            return new SingleMusic(-1, "", "", "");
         }
-        return new SingleMusic(music_id, music_download_url, author_name, title);
     }
 
     //http://localhost:8080/darfoobackend/rest/resources/video/search/s

@@ -530,7 +530,9 @@ public class VideoDao {
 			Video video = (Video)session.get(Video.class, vId);
 			if(video != null){
 				music = video.getMusic();
-				music.trigLazyLoad(); //促发对category的加载
+                if (music != null){
+                    music.trigLazyLoad(); //促发对category的加载
+                }
 			}
 		}catch(Exception e){
 			e.printStackTrace();

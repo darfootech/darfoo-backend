@@ -4,6 +4,7 @@ import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.EducationDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.model.Music;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -69,11 +70,17 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
 
         if (uri.matches("(.*)/resources/video/getmusic/\\d+$")){
             int videoid = Integer.parseInt(getNumbers(uri));
-            int musicid = videoDao.getMusic(videoid).getId();
-            System.out.println("music clicked id is: " + musicid + "\n");
-            int acc = 1;
-            System.out.println(CRUDEvent.getResponse(musicDao.updateMusicHotest(musicid, acc)));
-            return true;
+            Music music = videoDao.getMusic(videoid);
+            if (music != null){
+                int musicid = music.getId();
+                System.out.println("music clicked id is: " + musicid + "\n");
+                int acc = 1;
+                System.out.println(CRUDEvent.getResponse(musicDao.updateMusicHotest(musicid, acc)));
+                return true;
+            }else{
+                System.out.println("no music connect to this video: " + videoid);
+                return true;
+            }
         }
 
         System.out.print("no resource clicked" + "\n");
