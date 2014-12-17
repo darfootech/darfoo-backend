@@ -31,4 +31,10 @@ public class VideoCacheTests {
         boolean result = videoCacheDao.add(video);
         System.out.println(result);
     }
+
+    @Test
+    public void testDeletevideo(){
+        String key = "1";
+        videoCacheDao.delete(key);
+    }
 }
