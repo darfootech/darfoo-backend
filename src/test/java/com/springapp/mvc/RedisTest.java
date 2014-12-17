@@ -124,10 +124,11 @@ public class RedisTest extends AbstractJUnit4SpringContextTests {
      */
     @Test
     public void testGetUser() {
-        String id = "user1";
+        String id = "user10";
         User user = userDao.get(id);
+        System.out.println(user.getName());
         Assert.assertNotNull(user);
-        Assert.assertEquals(user.getName(), "java2000_wl");
+        Assert.assertEquals(user.getName(), "java2000_wl10");
     }
 
     @Test
