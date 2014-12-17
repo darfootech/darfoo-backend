@@ -90,7 +90,7 @@
                     <input type="text" class="form-control" id="imagekey" placeholder="${author.image.image_key}" disabled="disabled">
                 </div>
 
-                <c:if test="${empty author.image}">
+                <c:if test="${empty author.image || updateauthorimage == 1}">
                     <h3>该作者还没有上传图片,请上传</h3>
                     <div class="form-group">
                         <label for="newimagekey">作者图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>

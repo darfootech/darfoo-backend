@@ -163,6 +163,9 @@ public class GalleryController {
         modelMap.addAttribute("author", author);
         if (author.getImage() != null){
             modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(author.getImage().getImage_key()));
+            if (author.getImage().getImage_key().equals("")){
+                modelMap.addAttribute("updateauthorimage", 1);
+            }
         }else{
             modelMap.addAttribute("imageurl", "");
         }
