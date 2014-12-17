@@ -132,7 +132,7 @@ public class RedisTests extends AbstractJUnit4SpringContextTests {
 
     @Test
     public void deleteDB(){
-        userDao.deleteCurrentDB();
+        System.out.println(userDao.deleteCurrentDB());
     }
 
     /**
