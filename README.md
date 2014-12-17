@@ -12,6 +12,13 @@
 * 利用`/src/main/resources/dardoo.sql`建立数据表
 * 运行`/src/main/java/com/springapp/mvc/App.java`来检查hibernate支持是否成功
 
+## 持久化配置文件
+
+in `src/main/resources/`
+
+* cp datasource.properties.example datasource.properties
+* cp redis.properties.example redis.properties
+
 ## 批量上传视频和音频文件
 
 由于服务器带宽原因，上传大文件非常慢，如果让人肉上传人员一次提交信息一次上传一个视频单次上传会让人疯掉，所以就创建一个视频，教程，伴奏的时候，图片直接上传七牛，音频，视频都先保存在服务器上，然后每一天上传完之后由后台人员来用七牛的命令行上传工具批量上传一天上传的音频视频文件
@@ -29,7 +36,9 @@ qrsync conf.json
 
 * nginx + multi tomcat
 * jetty
-* redis缓存，数据库读写分离，多个主从mysql服务 (关于redis的使用，初步思路就是请求过的链接就把结果放redis里面，后面再请求相同的就直接从redis里拿)
+* redis缓存 (关于redis的使用，初步思路就是请求过的链接就把结果放redis里面，后面再请求相同的就直接从redis里拿)
+* 数据库读写分离，多个主从mysql服务
+* 建立mysql连接池也能抗一抗
 
 #### 日志服务(etl)
 

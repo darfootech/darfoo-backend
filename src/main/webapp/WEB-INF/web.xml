@@ -26,6 +26,7 @@
         <param-value>
         	/WEB-INF/mvc-dispatcher-servlet.xml
         	/WEB-INF/springmvc-hibernate.xml
+            /WEB-INF/redis-context.xml
         </param-value>
     </context-param>
 
