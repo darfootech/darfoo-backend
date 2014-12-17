@@ -360,6 +360,7 @@ public class UpdateController {
                 image = new Image();
                 image.setImage_key(newimagekey);
                 imageDao.insertSingleImage(image);
+                session.setAttribute("authorImage", newimagekey);
             }else{
                 System.out.println("图片已存在，不可以进行插入了，是否需要修改");
                 return 505+"";

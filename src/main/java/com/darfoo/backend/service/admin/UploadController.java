@@ -572,6 +572,7 @@ public class UploadController {
     public String createAuthorResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session){
         //upload
         String imagekey = (String)session.getAttribute("authorImage");
+        System.out.println("imagekey in session: " + imagekey);
 
         String imageResourceName = imageresource.getOriginalFilename();
 
