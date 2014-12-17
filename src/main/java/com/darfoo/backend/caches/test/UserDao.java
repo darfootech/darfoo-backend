@@ -1,6 +1,5 @@
-package com.darfoo.backend.caches;
+package com.darfoo.backend.caches.test;
 
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -12,8 +11,6 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.util.Assert;
 
 import com.darfoo.backend.caches.AbstractBaseRedisDao;
-import com.darfoo.backend.caches.IUserDao;
-import com.darfoo.backend.caches.User;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -158,7 +155,13 @@ public class UserDao extends AbstractBaseRedisDao<String, User> implements IUser
         if (!auth.equals("")){
             jedis.auth(auth);
         }
-        jedis.flushDB();
-        jedis.close();
+
+        try {
+            jedis.flushDB();
+        }catch (Exception e){
+            System.out.println("jedis java socket time out");
+        }finally {
+            jedis.close();
+        }
     }
 }

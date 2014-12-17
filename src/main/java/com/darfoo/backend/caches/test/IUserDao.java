@@ -1,8 +1,6 @@
-package com.darfoo.backend.caches;
+package com.darfoo.backend.caches.test;
 
 import java.util.List;
-
-import com.darfoo.backend.caches.User;
 
 /**
  * @author http://blog.csdn.net/java2000_wl 

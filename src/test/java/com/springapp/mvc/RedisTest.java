@@ -3,7 +3,6 @@ package com.springapp.mvc;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.darfoo.backend.caches.UserDao;
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -12,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
-import com.darfoo.backend.caches.IUserDao;
-import com.darfoo.backend.caches.User;
+import com.darfoo.backend.caches.test.IUserDao;
+import com.darfoo.backend.caches.test.User;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**

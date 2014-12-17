@@ -1,4 +1,4 @@
-package com.darfoo.backend.caches;
+package com.darfoo.backend.caches.test;
 
 import java.io.Serializable;
 
