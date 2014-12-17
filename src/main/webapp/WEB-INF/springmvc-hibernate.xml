@@ -27,7 +27,8 @@
 		<property name="maxIdleTime" value="${datasource.maxIdleTime}"/>
 	</bean>
 	
-	<!-- PropertyPlaceholderConfigurer(容器后处理器的一个实现类,属性占位符配置器) -->
+	<context:property-placeholder location="classpath:datasource.properties"  />
+	<!--  
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
@@ -35,7 +36,7 @@
 			</list>
 		</property>
 	</bean>
-	
+	-->
 	<!-- 定义session Factory -->
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" >
 		<property name="dataSource" ref="dataSource"/>

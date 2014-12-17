@@ -15,8 +15,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({
-        "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml",
-        "file:src/main/webapp/WEB-INF/redis-context.xml"
+	"file:src/main/webapp/WEB-INF/pre-deal.xml",
+	"file:src/main/webapp/WEB-INF/redis-context.xml",
+    "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml"     
 })
 public class VideoCacheTests {
     @Autowired

@@ -25,6 +25,7 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
         	/WEB-INF/mvc-dispatcher-servlet.xml
+        	/WEB-INF/pre-deal.xml
         	/WEB-INF/springmvc-hibernate.xml
             /WEB-INF/redis-context.xml
         </param-value>
