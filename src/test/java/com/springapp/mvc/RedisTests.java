@@ -23,7 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/redis-context.xml")
-public class RedisTest extends AbstractJUnit4SpringContextTests {
+public class RedisTests extends AbstractJUnit4SpringContextTests {
 
     @Autowired
     private IUserDao userDao;
