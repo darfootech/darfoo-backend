@@ -89,7 +89,7 @@ public class RedisTest extends AbstractJUnit4SpringContextTests {
     @Test
     public void testUpdate() {
         User user = new User();
-        user.setId("user1");
+        user.setId("user10");
         user.setName("new_password");
         boolean result = userDao.update(user);
         Assert.assertTrue(result);
@@ -101,7 +101,7 @@ public class RedisTest extends AbstractJUnit4SpringContextTests {
      */
     @Test
     public void testDelete() {
-        String key = "user1";
+        String key = "user10";
         userDao.delete(key);
     }
 
@@ -112,7 +112,7 @@ public class RedisTest extends AbstractJUnit4SpringContextTests {
     @Test
     public void testDeletes() {
         List<String> list = new ArrayList<String>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 1000000; i < 1500000; i++) {
             list.add("user" + i);
         }
         userDao.delete(list);
@@ -128,6 +128,11 @@ public class RedisTest extends AbstractJUnit4SpringContextTests {
         User user = userDao.get(id);
         Assert.assertNotNull(user);
         Assert.assertEquals(user.getName(), "java2000_wl");
+    }
+
+    @Test
+    public void deleteDB(){
+        userDao.deleteCurrentDB();
     }
 
     /**

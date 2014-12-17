@@ -55,4 +55,6 @@ public interface IUserDao {
      * @return
      */
     User get(String keyId);
+
+    void deleteCurrentDB();
 }

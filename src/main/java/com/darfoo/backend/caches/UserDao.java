@@ -1,7 +1,9 @@
 package com.darfoo.backend.caches;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -12,6 +14,7 @@ import org.springframework.util.Assert;
 import com.darfoo.backend.caches.AbstractBaseRedisDao;
 import com.darfoo.backend.caches.IUserDao;
 import com.darfoo.backend.caches.User;
+import redis.clients.jedis.Jedis;
 
 /**
  * Dao
@@ -127,5 +130,35 @@ public class UserDao extends AbstractBaseRedisDao<String, User> implements IUser
             }
         });
         return result;
+    }
+
+    public void deleteCurrentDB(){
+        Properties properties = new Properties();
+
+        String host = "";
+        String auth = "";
+        int port = -1;
+        int timeout = -1;
+
+        try {
+            properties.load(UserDao.class.getClassLoader().getResourceAsStream("redis.properties"));
+            host = properties.getProperty("redis.host");
+            auth = properties.getProperty("redis.pass");
+            port = Integer.parseInt(properties.getProperty("redis.port"));
+            timeout = Integer.parseInt(properties.getProperty("redis.maxWait"));
+            System.out.println(host);
+            System.out.println(auth);
+            System.out.println(port);
+            System.out.println(timeout);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        Jedis jedis = new Jedis(host, port, timeout);
+        if (!auth.equals("")){
+            jedis.auth(auth);
+        }
+        jedis.flushDB();
+        jedis.close();
     }
 }
