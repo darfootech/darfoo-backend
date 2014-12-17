@@ -13,6 +13,8 @@
                     window.location.href = "/darfoobackend/rest/resources/authorresource/new"
                 }else if(data == "501"){
                     alert("相同名字的作者已经存在");
+                }else if(data == "508"){
+                    alert("请填写并上传作者相关的图片");
                 }else{
                     alert("创建作者失败")
                 }
