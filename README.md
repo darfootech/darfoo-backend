@@ -27,6 +27,11 @@ in `src/main/resources/`
 cd $darfoo_home
 qrsync conf.json
 ```
+##Spring中加载多个propertyplaceholder出现错误
+多个配置文件各自包含placeholder,后加载的配置文件无法加载placeholder中对应的prop文件
+解决方法:
+1）单独写一个配置文件，专门用来加载props;
+2)网上找到的方法，设置ignoreUnresolvablePlaceholders属性为true;（http://blog.sina.com.cn/s/blog_82a09f100101as0i.html）
 
 ## todo
 
