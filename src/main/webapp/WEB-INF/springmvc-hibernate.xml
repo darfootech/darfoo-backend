@@ -27,7 +27,7 @@
 		<property name="maxIdleTime" value="${datasource.maxIdleTime}"/>
 	</bean>
 	
-	<context:property-placeholder location="classpath:datasource.properties"  />
+	<context:property-placeholder location="classpath:datasource.properties" />
 	<!--  
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">

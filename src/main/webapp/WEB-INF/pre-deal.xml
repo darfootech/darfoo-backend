@@ -7,7 +7,7 @@
 			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- load prop files -->
-    <context:property-placeholder location="classpath:redis.properties,classpath:datasource.properties"  />
+    <context:property-placeholder location="classpath:redis.properties,classpath:datasource.properties" />
     <!--<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
