@@ -1,8 +1,11 @@
 package com.springapp.mvc;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.darfoo.backend.caches.RedisClient;
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -141,5 +144,21 @@ public class RedisTests extends AbstractJUnit4SpringContextTests {
      */
     public void setUserDao(IUserDao userDao) {
         this.userDao = userDao;
+    }
+
+    @Test
+    public void insertMap(){
+        HashMap<String, String> userMap = new HashMap<String, String>();
+        userMap.put("name", "cleantha333");
+        userMap.put("id", "3");
+        String key = "clea3";
+        userDao.hmset(key, userMap);
+    }
+
+    @Test
+    public void getMap(){
+        String key = "clea3";
+        String field = "id";
+        System.out.println(userDao.hget(key, field));
     }
 }
