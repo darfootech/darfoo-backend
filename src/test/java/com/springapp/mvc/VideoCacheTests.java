@@ -34,7 +34,14 @@ public class VideoCacheTests {
 
     @Test
     public void testDeletevideo(){
-        String key = "1";
+        String key = "video-1";
         videoCacheDao.delete(key);
     }
+
+    @Test
+    public void insertVideo(){
+        Video video = videoDao.getVideoByVideoId(1);
+        System.out.println(videoCacheDao.insert(video));
+    }
+
 }

@@ -31,6 +31,8 @@
         <property name="connectionFactory" 	ref="connectionFactory" />
     </bean>
 
+    <bean id="commonRedisClient" class="com.darfoo.backend.caches.CommonRedisClient" />
+
     <bean id="userDao" class="com.darfoo.backend.caches.test.UserDao" />
     <bean id="videoCacheDao" class="com.darfoo.backend.caches.dao.VideoCacheDao"/>
 </beans>
