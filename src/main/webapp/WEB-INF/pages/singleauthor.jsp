@@ -20,6 +20,8 @@
                     alert("相同名字的作者已经存在了，请修改作者名字")
                 }else if(data == "505"){
                     alert("相同名字的图片已经存在了，请修改图片名字");
+                }else if(data == "508"){
+                    alert("请填写并上传作者相关的图片");
                 }else{
                     alert("更新作者信息失败");
                 }
@@ -90,7 +92,7 @@
                     <input type="text" class="form-control" id="imagekey" placeholder="${author.image.image_key}" disabled="disabled">
                 </div>
 
-                <c:if test="${empty author.image}">
+                <c:if test="${empty author.image || updateauthorimage == 1}">
                     <h3>该作者还没有上传图片,请上传</h3>
                     <div class="form-group">
                         <label for="newimagekey">作者图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>

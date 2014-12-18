@@ -81,6 +81,12 @@ public class UploadController {
             return resultMap;
         }
 
+        if (imagekey.equals("")){
+            resultMap.put("statuscode", 508);
+            resultMap.put("insertid", -1);
+            return resultMap;
+        }
+
         Image image = imageDao.getImageByName(imagekey);
         if (image == null){
             System.out.println("图片不存在，可以进行插入");
@@ -158,6 +164,12 @@ public class UploadController {
             return resultMap;
         }
 
+        if (imagekey.equals("")){
+            resultMap.put("statuscode", 508);
+            resultMap.put("insertid", -1);
+            return resultMap;
+        }
+
         Image image = imageDao.getImageByName(imagekey);
         if (image == null){
             System.out.println("图片不存在，可以进行插入");
@@ -228,6 +240,12 @@ public class UploadController {
             return resultMap;
         }
 
+        if (imagekey.equals("")){
+            resultMap.put("statuscode", 508);
+            resultMap.put("insertid", -1);
+            return resultMap;
+        }
+
         Image image = imageDao.getImageByName(imagekey);
         if (image == null){
             System.out.println("图片不存在，可以进行插入");
@@ -284,6 +302,10 @@ public class UploadController {
             return 501;
         }else{
             System.out.println("无该author记录，可以创建");
+        }
+
+        if (imagekey.equals("")){
+            return 508;
         }
 
         Image image = imageDao.getImageByName(imagekey);
@@ -572,6 +594,7 @@ public class UploadController {
     public String createAuthorResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session){
         //upload
         String imagekey = (String)session.getAttribute("authorImage");
+        System.out.println("imagekey in session: " + imagekey);
 
         String imageResourceName = imageresource.getOriginalFilename();
 
