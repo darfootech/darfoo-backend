@@ -8,6 +8,7 @@ import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.EducationDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Video;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,16 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
             String tutorialid = getNumbers(uri);
             System.out.println("tutorial cache id is: " + tutorialid + "\n");
             int tid = Integer.parseInt(tutorialid);
+            String key = "tutorial-" + tid;
+            boolean isExists = commonRedisClient.exists(key);
+            if (isExists){
+                System.out.println("resource already in cache");
+                response.sendRedirect(request.getContextPath() + "/rest/cache/tutorial/" + tid);
+            }else{
+                System.out.println("resource not in cache");
+                Education tutorial = educationDao.getEducationVideoById(tid);
+                tutorialCacheDao.insert(tutorial);
+            }
             return true;
         }
 
