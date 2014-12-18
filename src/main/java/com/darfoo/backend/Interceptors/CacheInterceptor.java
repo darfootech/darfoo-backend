@@ -92,6 +92,16 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
             String musicid = getNumbers(uri);
             System.out.println("music cache id is: " + musicid + "\n");
             int mid = Integer.parseInt(musicid);
+            String key = "music-" + mid;
+            boolean isExists = commonRedisClient.exists(key);
+            if (isExists){
+                System.out.println("resource already in cache");
+                response.sendRedirect(request.getContextPath() + "/rest/cache/music/" + mid);
+            }else{
+                System.out.println("resource not in cache");
+                Music music = musicDao.getMusicByMusicId(mid);
+                musicCacheDao.insert(music);
+            }
             return true;
         }
         /*end of single resource cache*/
