@@ -41,16 +41,6 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
         return result;
     }
 
-    public void delete(String key) {
-        List<String> list = new ArrayList<String>();
-        list.add(key);
-        delete(list);
-    }
-
-    public void delete(List<String> keys) {
-        redisTemplate.delete(keys);
-    }
-
     public boolean insert(Video video){
         Integer id = video.getId();
         String key = "video-" + id;

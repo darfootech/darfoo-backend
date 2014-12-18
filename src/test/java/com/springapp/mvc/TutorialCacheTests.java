@@ -1,8 +1,9 @@
 package com.springapp.mvc;
 
 import com.darfoo.backend.caches.CommonRedisClient;
-import com.darfoo.backend.caches.dao.VideoCacheDao;
-import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.caches.dao.TutorialCacheDao;
+import com.darfoo.backend.dao.EducationDao;
+import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Video;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * Created by zjh on 14-12-17.
+ * Created by zjh on 14-12-18.
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -20,31 +21,23 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
         "file:src/main/webapp/WEB-INF/redis-context.xml",
         "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml"
 })
-public class VideoCacheTests {
+public class TutorialCacheTests {
     @Autowired
-    VideoDao videoDao;
+    EducationDao educationDao;
     @Autowired
-    VideoCacheDao videoCacheDao;
+    TutorialCacheDao tutorialCacheDao;
     @Autowired
     CommonRedisClient redisClient;
 
     @Test
-    public void testAddVideo(){
-        Video video = videoDao.getVideoByVideoId(1);
-        boolean result = videoCacheDao.add(video);
-        System.out.println(result);
-    }
-
-    @Test
-    public void testDeleteVideo(){
-        String key = "video-1";
+    public void testDeleteTutorial(){
+        String key = "tutorial-1";
         redisClient.delete(key);
     }
 
     @Test
-    public void insertVideo(){
-        Video video = videoDao.getVideoByVideoId(1);
-        System.out.println(videoCacheDao.insert(video));
+    public void insertTutorial(){
+        Education tutorial = educationDao.getEducationVideoById(1);
+        System.out.println(tutorialCacheDao.insert(tutorial));
     }
-
 }
