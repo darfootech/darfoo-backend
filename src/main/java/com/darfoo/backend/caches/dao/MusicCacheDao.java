@@ -3,6 +3,7 @@ package com.darfoo.backend.caches.dao;
 import com.darfoo.backend.caches.AbstractBaseRedisDao;
 import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.model.Music;
+import com.darfoo.backend.service.responsemodel.SingleMusic;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -35,5 +36,13 @@ public class MusicCacheDao extends AbstractBaseRedisDao<String, Music> {
         }else{
             return false;
         }
+    }
+
+    public SingleMusic getSingleMusic(Integer id){
+        String key = "music-" + id;
+        String title = commonRedisClient.hget(key, "title");
+        String authorname = commonRedisClient.hget(key, "authorname");
+        String musicurl = commonRedisClient.hget(key, "musicurl");
+        return new SingleMusic(id, musicurl, authorname, title);
     }
 }

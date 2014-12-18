@@ -4,6 +4,7 @@ import com.darfoo.backend.caches.AbstractBaseRedisDao;
 import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Video;
+import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -38,5 +39,13 @@ public class TutorialCacheDao extends AbstractBaseRedisDao<String, Education> {
         }else{
             return false;
         }
+    }
+
+    public SingleVideo getSingleTutorial(Integer id){
+        String key = "tutorial-" + id;
+        String title = commonRedisClient.hget(key, "title");
+        String authorname = commonRedisClient.hget(key, "authorname");
+        String tutorialurl = commonRedisClient.hget(key, "tutorialurl");
+        return new SingleVideo(id, title, authorname, tutorialurl);
     }
 }

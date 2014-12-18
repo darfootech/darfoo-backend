@@ -5,6 +5,7 @@ import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.dao.EducationDao;
 import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Video;
+import com.darfoo.backend.service.responsemodel.SingleVideo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,4 +41,12 @@ public class TutorialCacheTests {
         Education tutorial = educationDao.getEducationVideoById(1);
         System.out.println(tutorialCacheDao.insert(tutorial));
     }
+
+    @Test
+    public void getSingleTutorial(){
+        Integer id = 1;
+        SingleVideo tutorial = tutorialCacheDao.getSingleTutorial(id);
+        System.out.println(tutorial.getTitle());
+    }
+
 }

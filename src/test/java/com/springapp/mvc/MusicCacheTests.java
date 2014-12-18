@@ -7,6 +7,7 @@ import com.darfoo.backend.dao.EducationDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Music;
+import com.darfoo.backend.service.responsemodel.SingleMusic;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,4 +43,12 @@ public class MusicCacheTests {
         Music music = musicDao.getMusicByMusicId(1);
         System.out.println(musicCacheDao.insert(music));
     }
+
+    @Test
+    public void getSingleMusic(){
+        Integer id = 1;
+        SingleMusic music = musicCacheDao.getSingleMusic(id);
+        System.out.println(music.getTitle());
+    }
+
 }
