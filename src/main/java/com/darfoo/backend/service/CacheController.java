@@ -1,5 +1,8 @@
 package com.darfoo.backend.service;
 
+import com.darfoo.backend.caches.dao.VideoCacheDao;
+import com.darfoo.backend.service.responsemodel.SingleVideo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/cache")
 public class CacheController {
-    /*@RequestMapping(value = "/video/{id}", method = RequestMethod.GET)
-    public @ResponseBody getSingleVideoFromCache(@PathVariable String id){
+    @Autowired
+    VideoCacheDao videoCacheDao;
 
-    }*/
+    @RequestMapping(value = "/video/{id}", method = RequestMethod.GET)
+    public @ResponseBody
+    SingleVideo getSingleVideoFromCache(@PathVariable String id){
+        Integer vid = Integer.parseInt(id);
+        return videoCacheDao.getSingleVideo(vid);
+    }
 }

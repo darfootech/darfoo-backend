@@ -60,8 +60,10 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
             String key = "video-" + vid;
             boolean isExists = commonRedisClient.exists(key);
             if (isExists){
+                System.out.println("resource already in cache");
                 response.sendRedirect(request.getContextPath() + "/rest/cache/video/" + vid);
             }else{
+                System.out.println("resource not in cache");
                 Video video = videoDao.getVideoByVideoId(vid);
                 videoCacheDao.insert(video);
             }
@@ -84,6 +86,7 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
         /*end of single resource cache*/
 
         System.out.print("no cache resource clicked" + "\n");
-        return false;
+        /*这里如果不是true就会无法显示页面*/
+        return true;
     }
 }
