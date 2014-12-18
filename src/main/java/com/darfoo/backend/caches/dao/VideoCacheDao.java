@@ -3,6 +3,7 @@ package com.darfoo.backend.caches.dao;
 import com.darfoo.backend.caches.AbstractBaseRedisDao;
 import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.model.Video;
+import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -60,5 +61,13 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
         }else{
             return false;
         }
+    }
+
+    public SingleVideo getSingleVideo(Integer id){
+        String key = "video-" + id;
+        String title = commonRedisClient.hget(key, "title");
+        String authorname = commonRedisClient.hget(key, "authorname");
+        String videourl = commonRedisClient.hget(key, "videourl");
+        return new SingleVideo(id, title, authorname, videourl);
     }
 }

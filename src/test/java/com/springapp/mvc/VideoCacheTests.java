@@ -4,6 +4,7 @@ import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Video;
+import com.darfoo.backend.service.responsemodel.SingleVideo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,13 @@ public class VideoCacheTests {
     public void insertVideo(){
         Video video = videoDao.getVideoByVideoId(1);
         System.out.println(videoCacheDao.insert(video));
+    }
+
+    @Test
+    public void getSingleVideo(){
+        Integer id = 1;
+        SingleVideo video = videoCacheDao.getSingleVideo(id);
+        System.out.println(video.getTitle());
     }
 
 }
