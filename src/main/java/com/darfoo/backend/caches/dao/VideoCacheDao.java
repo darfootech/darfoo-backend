@@ -68,6 +68,7 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
         String title = commonRedisClient.hget(key, "title");
         String authorname = commonRedisClient.hget(key, "authorname");
         String videourl = commonRedisClient.hget(key, "videourl");
-        return new SingleVideo(id, title, authorname, videourl);
+        String imageurl = commonRedisClient.hget(key, "imageurl");
+        return new SingleVideo(id, title, authorname, videourl, imageurl);
     }
 }

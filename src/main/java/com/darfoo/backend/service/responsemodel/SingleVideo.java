@@ -9,12 +9,22 @@ public class SingleVideo {
     String title;
     String authorname;
     String video_url;
+    String image_url;
 
-    public SingleVideo(Integer id, String title, String authorname, String video_url) {
+    public SingleVideo(Integer id, String title, String authorname, String video_url, String image_url) {
         this.id = id;
         this.title = title;
         this.authorname = authorname;
         this.video_url = video_url;
+        this.image_url = image_url;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 
     public String getAuthorname() {
