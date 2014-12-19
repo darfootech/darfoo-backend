@@ -37,6 +37,10 @@
             <mvc:mapping path="/**"/>
             <bean class="com.darfoo.backend.Interceptors.HotClickInterceptor"/>
         </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.darfoo.backend.Interceptors.CacheInterceptor"/>
+        </mvc:interceptor>
     </mvc:interceptors>
 
     <!-- 引入同文件夹下的redis属性配置文件 -->

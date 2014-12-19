@@ -1,5 +1,7 @@
 package com.darfoo.backend.caches.test;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -55,4 +57,10 @@ public interface IUserDao {
     User get(String keyId);
 
     boolean deleteCurrentDB();
+
+    public void hmset(String key, HashMap param);
+
+    public Collection<String> hmget(String key, Collection<String> fields);
+
+    public String hget(String key, String field);
 }

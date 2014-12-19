@@ -1,6 +1,8 @@
 package com.darfoo.backend.caches.test;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
@@ -135,5 +137,17 @@ public class UserDao extends AbstractBaseRedisDao<String, User> implements IUser
                 return true;
             }
         });
+    }
+
+    public void hmset(String key, HashMap param) {
+        redisTemplate.opsForHash().putAll(key, param);
+    }
+
+    public Collection<String> hmget(String key, Collection<String> fields) {
+        return redisTemplate.<String, String>opsForHash().multiGet(key, fields);
+    }
+
+    public String hget(String key, String field) {
+        return redisTemplate.<String, String>opsForHash().get(key, field);
     }
 }
