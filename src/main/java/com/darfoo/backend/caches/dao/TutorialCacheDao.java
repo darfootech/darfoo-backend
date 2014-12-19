@@ -46,6 +46,7 @@ public class TutorialCacheDao extends AbstractBaseRedisDao<String, Education> {
         String title = commonRedisClient.hget(key, "title");
         String authorname = commonRedisClient.hget(key, "authorname");
         String tutorialurl = commonRedisClient.hget(key, "tutorialurl");
-        return new SingleVideo(id, title, authorname, tutorialurl);
+        String imageurl = commonRedisClient.hget(key, "imageurl");
+        return new SingleVideo(id, title, authorname, tutorialurl, imageurl);
     }
 }
