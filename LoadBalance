@@ -1,0 +1,11 @@
+#2014/12/9
+goal: nginx deals with statics whereas tomcats for dynamics;
+
+服务器上已经有一个tomcat，位于/usr/local/darfoo/apache-tomcat-7.0.47,它的http connect端口为8080 shutdown端口为8005 AJP端口为8009 (conf/server.xml)
+现在/usr/local/darfoo再配置两个用于负载均衡的tomcat,版本同第一个，分别叫tomcatbak1,tomcatbak2  (manager-gui  user:darfoo  password:darfoodarfoo)
+tomcatbak1 http connect端口为8081 shutdown端口为8006 AJP端口为8010  
+tomcatbak2 http connect端口为8082 shutdown端口为8007 AJP端口为8011
+现将darfoobackend应用放在/usr/local/darfoo/webapps下面  ,在tomcatbak1,tomcatbak2的conf/Catalina/localhost下面加了配置文件darfoobackend.xml,用于找到该应用路径。
+这样通过112.134.68.27:8081/及112.134.68.27:8082/ 也可以访问该应用。
+
+之后便是要在nginx下面增加负载均衡，最近较忙,待调试（明天）
