@@ -29,7 +29,7 @@ nginx中在server{}中添加
                 }
 启动nginx及两个tomcat,访问http://192.168.1.33/darfoobackend/rest/login	并刷新，可以看到原来"后台登陆"的位置会出现"后台登陆@tomcat1"与"后台登陆@tomcat2"的交替.
 之后主要要修改nginx配置文件的参数。
- 
+
 我在本地测试多个tomcat时并没有发现这个问题，但是报另一个异常
 a.2014-12-20 20:03:30.145 INFO  com.mchange.v2.uid.UidUtils.generateVmId:75行 
 - Failed to get local InetAddress for VMID. This is unlikely to matter. At all. We'll add some extra randomness
@@ -48,12 +48,11 @@ b.严重: The web application [/darfoobackend] registered the JDBC driver [com.m
 
 这个异常并不影响系统的正常使用TAT，所以得继续查找问题的原因。
 ----------------------------------------------------------------------------
-现在在darfoo服务器上配置了nginx+3个tomcat，tomcat的http connector端口分别为8080 8081 8082
+现在在darfoo服务器上配置了nginx+3个tomcat
 nginx的配置文件主要是加了upstream配置，具体在/opt/nginx/conf/nginx.conf
 tomcat主要改动在于darfoobackend应用文件的位置，已经从原来的webapps目录中转移到外部的/usr/local/darfoo/webapps/darfoobackend,
 然后在3个tomcat的conf/Catalina/localhost下面加了配置文件darfoobackend.xml,用于找到该应用的外部路径。
 （吉卉需要修改下之前的自动部署的脚本。把war包传到/usr/local/darfoo/webapps/下面，再解压缩为darfoobackend）
-  
-
+tomcat的http connector端口分别为8080 8081 8082
 
 
