@@ -8,4 +8,13 @@ mvn package -Dmaven.test.skip=true
 rm -rf /usr/local/darfoo/webapps/darfoobackend
 rm /usr/local/darfoo/webapps/darfoobackend.war
 cp target/darfoobackend.war /usr/local/darfoo/webapps
-catalina.sh run
+mkdir /usr/local/darfoo/webapps/darfoobackend
+cp target/darfoobackend.war /usr/local/darfoo/webapps/darfoobackend
+cd /usr/local/darfoo/webapps/darfoobackend
+jar -xvf darfoobackend.war
+rm darfoobackend.war
+ps -ef | grep tomcat | awk '{print $2}' | xargs kill -9;
+/usr/local/darfoo/tomcat_bak1/bin/startup.sh
+/usr/local/darfoo/tomcat_bak2/bin/startup.sh
+/usr/local/darfoo/apache-tomcat-7.0.47/bin/startup.sh
+#catalina.sh run
