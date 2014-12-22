@@ -38,6 +38,13 @@ public class DownloadController {
     @Autowired
     MusicDao musicDao;
 
+    public byte[] mergeByteArray(byte[] bomHead, byte[] fileBytes){
+        byte[] download = new byte[bomHead.length + fileBytes.length];
+        System.arraycopy(bomHead, 0, download, 0, bomHead.length);
+        System.arraycopy(fileBytes, 0, download, bomHead.length, fileBytes.length);
+        return download;
+    }
+
     public void writeVideosToCSV(){
         List<Video> videos = videoDao.getAllVideo();
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
@@ -116,7 +123,10 @@ public class DownloadController {
         String fileName = new String("video.csv".getBytes("UTF-8"), "iso-8859-1");//为了解决中文名称乱码问题
         headers.setContentDispositionFormData("attachment", fileName);
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
+        byte[] fileBytes = FileUtils.readFileToByteArray(file);
+        byte[] bomHead = new byte[] { (byte) 0xEF, (byte) 0xBB,(byte) 0xBF };
+        byte[] download = mergeByteArray(bomHead, fileBytes);
+        return new ResponseEntity<byte[]>(download,
                 headers, HttpStatus.CREATED);
     }
 
@@ -192,7 +202,10 @@ public class DownloadController {
         String fileName = new String("tutorial.csv".getBytes("UTF-8"), "iso-8859-1");//为了解决中文名称乱码问题
         headers.setContentDispositionFormData("attachment", fileName);
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
+        byte[] fileBytes = FileUtils.readFileToByteArray(file);
+        byte[] bomHead = new byte[] { (byte) 0xEF, (byte) 0xBB,(byte) 0xBF };
+        byte[] download = mergeByteArray(bomHead, fileBytes);
+        return new ResponseEntity<byte[]>(download,
                 headers, HttpStatus.CREATED);
     }
 
@@ -263,7 +276,10 @@ public class DownloadController {
         String fileName = new String("music.csv".getBytes("UTF-8"), "iso-8859-1");//为了解决中文名称乱码问题
         headers.setContentDispositionFormData("attachment", fileName);
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
+        byte[] fileBytes = FileUtils.readFileToByteArray(file);
+        byte[] bomHead = new byte[] { (byte) 0xEF, (byte) 0xBB,(byte) 0xBF };
+        byte[] download = mergeByteArray(bomHead, fileBytes);
+        return new ResponseEntity<byte[]>(download,
                 headers, HttpStatus.CREATED);
     }
 }
