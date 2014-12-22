@@ -2,6 +2,7 @@ package com.darfoo.backend.service;
 
 import com.darfoo.backend.service.responsemodel.UploadStatus;
 import com.darfoo.backend.service.responsemodel.UploadToken;
+import com.darfoo.backend.utils.CryptUtils;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/uploadresource")
 public class UploadResourceController {
-
+    CryptUtils cryptUtils = new CryptUtils();
     QiniuUtils qiniuUtils = new QiniuUtils();
 
     /**
@@ -29,7 +30,9 @@ public class UploadResourceController {
     public @ResponseBody
     UploadToken getUploadToken(){
         String token = qiniuUtils.getToken();
-        return new UploadToken(token);
+        System.out.println("origin token -> " + token);
+        String encryptToken = cryptUtils.base64EncodeStr(token);
+        return new UploadToken(encryptToken);
     }
 
     /**
