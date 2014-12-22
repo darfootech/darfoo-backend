@@ -175,19 +175,23 @@
         </dependency>
 
 
+
         <!-- for base64 -->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.10</version>
 		</dependency>
+
         
         <dependency>
         	<groupId>commons-io</groupId>
         	<artifactId>commons-io</artifactId>
         	<version>1.3.2</version>
 
-        </dependency>
+	</dependency>
+
+
     </dependencies>
     <build>
         <finalName>darfoobackend</finalName>
