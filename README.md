@@ -34,6 +34,27 @@ qrsync conf.json
 1. 单独写一个配置文件，专门用来加载props
 2. 网上找到的方法，设置ignoreUnresolvablePlaceholders属性为true [solution](http://blog.sina.com.cn/s/blog_82a09f100101as0i.html)
 
+## 压力测试
+
+* webbench(debian/ubuntu/centos)
+
+```
+# install
+sudo apt-get intall ctags
+wget  http://home.tiscali.cz/~cz210552/distfiles/webbench-1.5.tar.gz
+tar zxvf webbench-1.5.tar.gz
+cd webbench-1.5
+make
+sudo make install
+
+# how to use
+webbench -c 500 -t 30 http://targeturl # 在30秒内用500个并发连接去请求目标url
+```
+
+然后直接在命令行中看压力测试结果就好，这个工具较老但是使用比较简单
+
+[需要关闭ddos保护](http://help.aliyun.com/view/11108300_13444171.html)
+
 ## todo
 
 #### 自动化创建数据库和迁移数据表
