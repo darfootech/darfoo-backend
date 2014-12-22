@@ -1,5 +1,6 @@
 package com.darfoo.backend.utils;
 
+import com.qiniu.api.auth.AuthException;
 import com.qiniu.api.auth.digest.Mac;
 import com.qiniu.api.config.Config;
 import com.qiniu.api.io.IoApi;
@@ -10,6 +11,7 @@ import com.qiniu.api.rs.GetPolicy;
 import com.qiniu.api.rs.PutPolicy;
 import com.qiniu.api.rs.RSClient;
 import com.qiniu.api.rs.URLUtils;
+import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,6 +29,21 @@ public class QiniuUtils {
         Config.SECRET_KEY = "eMZK5q9HI1EXe7KzNtsyKJZJPHEfh96XcHvDigyG";
         this.bucketName = "zjdxlab410yy";
         this.mimeType = null;
+    }
+
+    public String getToken(){
+        PutPolicy policy = new PutPolicy(bucketName);
+        Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
+        try {
+            String upToken = policy.token(mac);
+            return upToken;
+        } catch (AuthException e) {
+            e.printStackTrace();
+            return "error";
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "error";
+        }
     }
 
     //key就是七牛云上的文件名字
