@@ -48,7 +48,7 @@ make
 sudo make install
 
 # how to use
-webbench -c 500 -t 30 http://targeturl # 在30秒内用500个并发连接去请求目标url
+webbench -c 100 -t 30 http://112.124.68.27/rest/resources/video/index #在30秒内用100个并发连接去请求视频首页
 ```
 
 然后直接在命令行中看压力测试结果就好，这个工具较老但是使用比较简单
