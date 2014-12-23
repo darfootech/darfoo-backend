@@ -54,11 +54,18 @@ location / {
 
 我在本地测试多个tomcat时并没有发现这个问题，但是报另一个异常
 
+* errorA
+
 ```
-a.2014-12-20 20:03:30.145 INFO  com.mchange.v2.uid.UidUtils.generateVmId:75行 
+2014-12-20 20:03:30.145 INFO  com.mchange.v2.uid.UidUtils.generateVmId:75行 
 - Failed to get local InetAddress for VMID. This is unlikely to matter. At all. We'll add some extra randomness
 java.net.UnknownHostException: centos.tomcat: centos.tomcat: 未知的名称或服务(非主要~解决方法:/etc/hosts中为127.0.0.1增添一个domain  centos.tomcat即可)
-b.严重: The web application [/darfoobackend] registered the JDBC driver [com.mysql.jdbc.Driver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
+```
+
+* errorB
+
+```
+严重: The web application [/darfoobackend] registered the JDBC driver [com.mysql.jdbc.Driver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
 十二月 20, 2014 8:02:14 下午 org.apache.catalina.loader.WebappClassLoader clearReferencesThreads
 ```
 
