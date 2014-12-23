@@ -55,6 +55,20 @@ webbench -c 100 -t 30 http://112.124.68.27/rest/resources/video/index #在30秒�
 
 [需要关闭ddos保护](http://help.aliyun.com/view/11108300_13444171.html)
 
+## 线上部署
+
+```
+./product.sh
+```
+
+```
+ps aux | grep tomcat
+```
+
+看三个tomcat进程是否已经全部停止
+
+分别进入`darfoo`,`darfoo1`,`darfoo2`三个session运行三个tomcat的`catalina.sh run`这样既有实时log又能看现在流量压到哪一个tomcat上
+
 ## todo
 
 #### 自动化创建数据库和迁移数据表
