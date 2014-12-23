@@ -62,7 +62,7 @@ location / {
 java.net.UnknownHostException: centos.tomcat: centos.tomcat: 未知的名称或服务(非主要~解决方法:/etc/hosts中为127.0.0.1增添一个domain  centos.tomcat即可)
 ```
 
-* errorB
+* errorB(只有关闭tomcat时会出现)
 
 ```
 严重: The web application [/darfoobackend] registered the JDBC driver [com.mysql.jdbc.Driver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
