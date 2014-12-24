@@ -72,7 +72,7 @@ ps aux | grep tomcat
 
 ## workflow
 
-1. 如果自己的`pull request`还没有被merge那么使用
+* 有时候(具体啥情况会出现还不知)如果自己的`pull request`还没有被merge那么使用
 
 ```
 git pull --rebase origin master
@@ -92,7 +92,7 @@ git pull --rebase origin master
 git pull origin master
 ```
 
-2. 如何安全的工作
+* 如何安全的工作
 
 每次编码之前先检查自己的pr是否被merge
 
@@ -112,11 +112,11 @@ git branch -D localtest
 git push origin xxx_dev
 ```
 
-3. 解决冲突
+* 解决冲突
 
 这些冲突都需要在localtest中解决
 
-如果自己的pr还没有被merge就使用pull --rebase会产生冲突，这个时候需要去掉这些新的冲突回到rebase之前然后使用git pull
+有时候(具体出现原因还在调查)如果自己的pr还没有被merge就使用pull --rebase会产生冲突，这个时候需要去掉这些新的冲突回到rebase之前然后使用git pull
 
 ```
 git rebase --abort # 去掉因为错误rebase而导致的冲突
