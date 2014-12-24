@@ -27,6 +27,7 @@ in `src/main/resources/`
 cd $darfoo_home
 qrsync conf.json
 ```
+
 ## Spring中加载多个propertyplaceholder出现错误
 多个配置文件各自包含placeholder,后加载的配置文件无法加载placeholder中对应的prop文件
 解决方法:
@@ -68,6 +69,77 @@ ps aux | grep tomcat
 看三个tomcat进程是否已经全部停止
 
 分别进入`darfoo`,`darfoo1`,`darfoo2`三个session运行三个tomcat的`catalina.sh run`这样既有实时log又能看现在流量压到哪一个tomcat上
+
+## workflow
+
+* 有时候(具体啥情况会出现还不知)如果自己的`pull request`还没有被merge那么使用
+
+```
+git pull --rebase origin master
+```
+
+还是会出现冲突
+
+所以一种比较好的方式是工作之前先看看自己的pr有没有被合并，如果被合并了就使用
+
+```
+git pull --rebase origin master
+```
+
+如果没有被合并就使用
+
+```
+git pull origin master
+```
+
+* 如何安全的工作
+
+每次编码之前先检查自己的pr是否被merge
+
+然后在本地开一个测试分支，然后再pull或者pull --rebase
+
+```
+git checkout -b localtest
+git pull / pull --rebase origin master
+```
+
+解决了冲突以后切换回自己的开发分支，然后合并测试分支，然后push远端开发分支
+
+```
+git checkout xx_dev
+git merge localtest
+git branch -D localtest
+git push origin xxx_dev
+```
+
+* 解决冲突
+
+这些冲突都需要在localtest中解决
+
+有时候(具体出现原因还在调查)如果自己的pr还没有被merge就使用pull --rebase会产生冲突，这个时候需要去掉这些新的冲突回到rebase之前然后使用git pull
+
+```
+git rebase --abort # 去掉因为错误rebase而导致的冲突
+```
+
+使用git pull会产生冲突，解决方法
+
+```
+git pull origin master
+modify conflict files
+git commit 
+```
+
+如果自己的pr被merge了，使用pull --rebase还是会有冲突，解决方法
+
+```
+git pull --rebase origin master
+modify conflict files
+git add .
+git rebase --continue # 如果所有冲突都解决了，continue之后会从一个怪异的分支回到之前的分支
+```
+
+时刻用`git status`查看当前状态和提示信息
 
 ## todo
 
