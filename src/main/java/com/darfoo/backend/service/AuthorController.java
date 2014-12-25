@@ -5,9 +5,14 @@ package com.darfoo.backend.service;
  */
 
 import com.darfoo.backend.dao.AuthorDao;
+import com.darfoo.backend.dao.EducationDao;
+import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Author;
+import com.darfoo.backend.model.Education;
+import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.IndexAuthor;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
+import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,12 +23,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/resources/author")
 public class AuthorController {
     @Autowired
     AuthorDao authorDao;
+    @Autowired
+    VideoDao videoDao;
+    @Autowired
+    EducationDao educationDao;
 
     QiniuUtils qiniuUtils = new QiniuUtils();
 
@@ -65,6 +75,36 @@ public class AuthorController {
             String description = author.getDescription();
             result.add(new IndexAuthor(id, image_download_url, title, description));
         }
+        return result;
+    }
+
+    @RequestMapping(value = "/videos/{id}", method = RequestMethod.GET)
+    @ResponseBody public List<SingleVideo> getVideoListForAuthor(@PathVariable String id){
+        int aid = Integer.parseInt(id);
+
+        Author author = authorDao.getAuthor(aid);
+        String authorname = author.getName();
+
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        List<Video> videos = videoDao.getVideosByAuthorId(aid);
+        List<Education> tutorials = educationDao.getTutorialsByAuthorId(aid);
+
+        for (Video video : videos){
+            int vid = video.getId();
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video.getVideo_key());
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(video.getImage().getImage_key());
+            String title = video.getTitle();
+            result.add(new SingleVideo(vid, title, authorname, video_download_url, image_download_url));
+        }
+
+        for (Education tutorial : tutorials){
+            int tid = tutorial.getId();
+            String tutorial_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getVideo_key());
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getImage().getImage_key());
+            String title = tutorial.getTitle();
+            result.add(new SingleVideo(tid, title, authorname, tutorial_download_url, image_download_url));
+        }
+
         return result;
     }
 }

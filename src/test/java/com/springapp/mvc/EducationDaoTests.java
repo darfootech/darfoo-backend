@@ -270,4 +270,19 @@ public class EducationDaoTests {
 			System.out.println("---------------------------");
 		}
 	}
+
+    /**
+     * 根据authorid获得所有与之关联的video
+     */
+    @Test
+    public void getTutorialsByAuthorId(){
+        Integer aId = 2;
+        List<Education> tutorials = educationDao.getTutorialsByAuthorId(aId);
+        System.out.println("---------返回"+tutorials.size()+"个视频---------");
+        for(Education v : tutorials){
+            System.out.println("更新时间---->"+ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
+            System.out.println(v.getTitle());
+            System.out.println("---------------------------");
+        }
+    }
 }

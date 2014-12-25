@@ -557,4 +557,21 @@ public class EducationDao {
 		}
 		return educations;
 	}
+
+    /**
+     * 根据authorid来获得与之关联的所有tutorial
+     * @param authorid
+     * @return
+     */
+    public List<Education> getTutorialsByAuthorId(int authorid){
+        List<Education> tutorials = null;
+        try{
+            Session session = sf.getCurrentSession();
+            String sql = "select * from education where author_id=:authorid order by id desc";
+            tutorials = (List<Education>)session.createSQLQuery(sql).addEntity(Education.class).setInteger("authorid", authorid).list();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return tutorials;
+    }
 }
