@@ -8,6 +8,7 @@ import com.darfoo.backend.dao.AuthorDao;
 import com.darfoo.backend.model.Author;
 import com.darfoo.backend.service.responsemodel.IndexAuthor;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
+import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/resources/author")
@@ -66,5 +68,12 @@ public class AuthorController {
             result.add(new IndexAuthor(id, image_download_url, title, description));
         }
         return result;
+    }
+
+    @RequestMapping(value = "/videos/{id}", method = RequestMethod.GET)
+    @ResponseBody public List<SingleVideo> getVideoListForAuthor(@PathVariable String id){
+        List<SingleVideo> videos = new ArrayList<SingleVideo>();
+
+        return videos;
     }
 }

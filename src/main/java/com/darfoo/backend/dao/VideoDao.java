@@ -659,6 +659,23 @@ public class VideoDao {
     }
 
     /**
+     * 根据authorid来获得与之关联的所有video
+     * @param authorid
+     * @return
+     */
+    public List<Video> getVideosByAuthorId(int authorid){
+        List<Video> videos = null;
+        try{
+            Session session = sf.getCurrentSession();
+            String sql = "select * from video where author_id=:authorid order by id desc";
+            videos = (List<Video>)session.createSQLQuery(sql).addEntity(Video.class).setInteger("authorid", authorid).list();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return videos;
+    }
+
+    /**
      * 根据musicid来获得不与之关联的所有video
      * @param musicid
      * @return

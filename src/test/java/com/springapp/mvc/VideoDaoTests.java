@@ -343,8 +343,23 @@ public class VideoDaoTests {
      */
     @Test
     public void getVideosWithoutMusicId(){
-        Integer mId = 25;
-        List<Video> videos = videoDao.getVideosWithoutMusicId(mId);
+        Integer mId = 1;
+        List<Video> videos = videoDao.getVideosByAuthorId(mId);
+        System.out.println("---------返回"+videos.size()+"个视频---------");
+        for(Video v : videos){
+            System.out.println("更新时间---->"+ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
+            System.out.println(v.getTitle());
+            System.out.println("---------------------------");
+        }
+    }
+
+    /**
+     * 根据authorid获得所有与之关联的video
+     */
+    @Test
+    public void getVideosByAuthorId(){
+        Integer aId = 1;
+        List<Video> videos = videoDao.getVideosWithoutMusicId(aId);
         System.out.println("---------返回"+videos.size()+"个视频---------");
         for(Video v : videos){
             System.out.println("更新时间---->"+ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
