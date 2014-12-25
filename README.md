@@ -141,6 +141,8 @@ git rebase --continue # 如果所有冲突都解决了，continue之后会从一
 
 时刻用`git status`查看当前状态和提示信息
 
+开始写代码之前pull一次，写完代码准备push之前pull一次
+
 ## todo
 
 #### 自动化创建数据库和迁移数据表
@@ -160,3 +162,24 @@ git rebase --continue # 如果所有冲突都解决了，continue之后会从一
 #### 非service 一个线上site
 
 * angular no jsp jstl anymore 任务完全移交前端组
+
+## how to deploy
+
+* 数据库和缓存层配置文件
+
+```
+cp datasource.properties.example datasource.properties
+cp redis.properties.example redis.properties
+```
+
+* 开启redis
+
+```
+redis-server
+```
+
+* 开始部署
+
+```
+./product.sh
+```
