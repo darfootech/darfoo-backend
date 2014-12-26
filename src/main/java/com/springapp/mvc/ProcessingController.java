@@ -85,6 +85,33 @@ public class ProcessingController {
         return deferredResult;
     }
 
+    @RequestMapping(value = "/nonblockprocessjson", method = RequestMethod.GET)
+    public @ResponseBody DeferredResult<ProcessStatusJson> nonBlockingProcessingJson(HttpServletRequest request){
+        int minMs = Integer.parseInt(request.getParameter("minMs"));
+        int maxMs = Integer.parseInt(request.getParameter("maxMs"));
+
+        long reqId = lastRequestId.getAndIncrement();
+        long concReqs = concurrentRequests.getAndIncrement();
+
+        updateStatistics(reqId, concReqs);
+
+        int processingTimeMs = calculateProcessingTime(minMs, maxMs);
+
+        System.out.println(concReqs + ": Start non-blocking request #" + reqId + ", processing time: " + processingTimeMs + " ms.");
+
+        // Create the deferredResult and initiate a callback object, task, with it
+        DeferredResult<ProcessStatusJson> deferredResult = new DeferredResult<ProcessStatusJson>();
+        ProcessTaskJson task = new ProcessTaskJson(reqId, concurrentRequests, processingTimeMs, deferredResult);
+
+        // Schedule the task for asynch completion in the future
+        timer.schedule(task, processingTimeMs);
+
+        System.out.println(concReqs + ": Processing of non-blocking request #" + reqId + " leave the request thread");
+
+        // Return to let go of the precious thread we are holding on to...
+        return deferredResult;
+    }
+
     private void updateStatistics(long reqId, long concReqs) {
         if (concReqs > maxConcurrentRequests) {
             maxConcurrentRequests = concReqs;
