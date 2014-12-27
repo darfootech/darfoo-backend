@@ -70,6 +70,47 @@ ps aux | grep tomcat
 
 分别进入`darfoo`,`darfoo1`,`darfoo2`三个session运行三个tomcat的`catalina.sh run`这样既有实时log又能看现在流量压到哪一个tomcat上
 
+## redis监控
+
+* Gemfile
+
+```
+source 'https://ruby.taobao.org/'
+gem 'redis-stat', '0.4.8'
+```
+
+and
+
+```
+bundle install
+```
+
+then
+
+```
+redis-stat -a password --server
+```
+
+and visit the `serverhost:63790` to get redis server info on the web or just watch it on the command line
+
+## 服务器进程监控(tomcat)
+
+* 使用newrelic for java
+
+references
+
+* [new-relic-java](https://docs.newrelic.com/docs/agents/java-agent/getting-started/new-relic-java)
+* [java-agent-self-installer](https://docs.newrelic.com/docs/agents/java-agent/installation/java-agent-self-installer)
+* [setup](https://rpm.newrelic.com/accounts/856739/applications/setup)
+
+```
+unzip newrelic-java-3.12.1.zip -d $tomcat-root-path
+cd $tomcat-root-path/newrelic
+java -jar newrelic.jar install
+# modify newrelic.yml -> change app name
+# restart tomcat process
+```
+
 ## workflow
 
 * 有时候(具体啥情况会出现还不知)如果自己的`pull request`还没有被merge那么使用
