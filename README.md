@@ -111,6 +111,26 @@ java -jar newrelic.jar install
 # restart tomcat process
 ```
 
+## load test
+
+* tools
+
+[gobench](https://github.com/cmpxchg16/gobench)
+[wrk](https://github.com/wg/wrk)
+
+* use wrk examples
+
+```
+./wrk -c 10 -t 4 -d 10 http://localhost:8080/darfoobackend/rest/loadtest/normal/nocache/1
+./wrk -c 10 -t 4 -d 10 http://localhost:8080/darfoobackend/rest/loadtest/normal/cache/1
+./wrk -c 10 -t 4 -d 10 http://localhost:8080/darfoobackend/rest/loadtest/async/nocache/1
+./wrk -c 10 -t 4 -d 10 http://localhost:8080/darfoobackend/rest/loadtest/async/cache/1
+./wrk -c 10 -t 4 -d 10 http://localhost:8080/darfoobackend/rest/loadtest/deferred/nocache
+./wrk -c 10 -t 4 -d 10 http://localhost:8080/darfoobackend/rest/loadtest/deferred/cache
+./wrk -c 10 -t 4 -d 10 http://localhost/darfoobackend/rest/loadtest/normal/cache/1
+./wrk -c 10 -t 4 -d 10 http://localhost/darfoobackend/rest/loadtest/async/cache/1
+```
+
 ## workflow
 
 * 有时候(具体啥情况会出现还不知)如果自己的`pull request`还没有被merge那么使用
