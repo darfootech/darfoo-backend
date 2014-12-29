@@ -211,10 +211,17 @@ git rebase --continue # 如果所有冲突都解决了，continue之后会从一
 #### 并发
 
 * nginx + multi tomcat
-* jetty
+* jetty netty
 * redis缓存 (关于redis的使用，初步思路就是请求过的链接就把结果放redis里面，后面再请求相同的就直接从redis里拿，定时flush) 一些搜索结果更应该放入缓存，耗时的级联查询等等
 * 数据库读写分离，多个主从mysql服务
 * 建立mysql连接池也能抗一抗
+* other techstack(已经测试了其他两种方案，效果不错)
+* 升级带宽
+
+#### security
+
+* safe dog on linux
+* https for auth
 
 #### 日志服务(etl)
 
