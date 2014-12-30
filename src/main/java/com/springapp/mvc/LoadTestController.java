@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -59,12 +61,12 @@ public class LoadTestController {
         return new SingleVideo(video_id, video_title, author_name, video_url, image_url);
     }
 
-    @RequestMapping(value = "/normalint/nocache/{id}", method = RequestMethod.GET)
+    //=> 和normal差不都
+    @RequestMapping(value = "/yanormal/nocache/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
-    SingleVideo normalintnocache(@PathVariable("id") Integer id) {
+    SingleVideo yanormalnocache(@PathVariable Integer id) {
         Video targetVideo = videoDao.getVideoByVideoId(id);
-        int video_id = targetVideo.getId();
         String video_url = targetVideo.getVideo_key();
         String image_url = targetVideo.getImage().getImage_key();
         String video_title = targetVideo.getTitle();
@@ -72,7 +74,29 @@ public class LoadTestController {
         if (targetVideo.getAuthor() != null){
             author_name = targetVideo.getAuthor().getName();
         }
-        return new SingleVideo(video_id, video_title, author_name, video_url, image_url);
+        return new SingleVideo(id, video_title, author_name, video_url, image_url);
+    }
+
+    //=> 和normal差不多
+    @RequestMapping(value = "/yanormalmap/nocache/{id}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    Map<String, Object> yanormalmapnocache(@PathVariable Integer id) {
+        Video targetVideo = videoDao.getVideoByVideoId(id);
+        Map<String, Object> result = new HashMap<String, Object>();
+        String video_url = targetVideo.getVideo_key();
+        String image_url = targetVideo.getImage().getImage_key();
+        String video_title = targetVideo.getTitle();
+        String author_name = "";
+        if (targetVideo.getAuthor() != null){
+            author_name = targetVideo.getAuthor().getName();
+        }
+        result.put("id", id);
+        result.put("title", video_title);
+        result.put("video_url", video_url);
+        result.put("image_url", image_url);
+        result.put("authorname", author_name);
+        return result;
     }
 
     /*
