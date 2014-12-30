@@ -120,9 +120,26 @@ public class LoadTestController {
     */
     @RequestMapping(value = "/normal/cache/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    SingleVideo normalcache(@PathVariable String id){
-        Integer vid = Integer.parseInt(id);
-        return videoCacheDao.getSingleVideo(vid);
+    SingleVideo normalcache(@PathVariable Integer id){
+        //Integer vid = Integer.parseInt(id);
+        return videoCacheDao.getSingleVideo(id);
+    }
+
+    /*
+    Running 10s test @ http://localhost:8080/darfoobackend/rest/loadtest/normal/cachepool/1
+      4 threads and 10 connections
+      Thread Stats   Avg      Stdev     Max   +/- Stdev
+        Latency     4.09ms    2.95ms  60.06ms   95.36%
+        Req/Sec   553.38    145.52     1.11k    65.04%
+      21088 requests in 10.00s, 5.39MB read
+    Requests/sec:   2108.79
+    Transfer/sec:    552.29KB
+    */
+    @RequestMapping(value = "/normal/cachepool/{id}", method = RequestMethod.GET)
+    public @ResponseBody
+    SingleVideo normalcachepool(@PathVariable Integer id){
+        //Integer vid = Integer.parseInt(id);
+        return videoCacheDao.getSingleVideoFromPool(id);
     }
 
     /*

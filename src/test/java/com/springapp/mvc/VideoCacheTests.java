@@ -55,4 +55,10 @@ public class VideoCacheTests {
         System.out.println(video.getTitle());
     }
 
+    @Test
+    public void getSingleVideoFromPool(){
+        Integer id = 1;
+        SingleVideo video = videoCacheDao.getSingleVideoFromPool(id);
+        System.out.println(video.getTitle());
+    }
 }

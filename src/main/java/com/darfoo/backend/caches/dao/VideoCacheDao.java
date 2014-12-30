@@ -10,7 +10,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
+import java.awt.image.TileObserver;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,6 +26,8 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
     QiniuUtils qiniuUtils = new QiniuUtils();
     @Autowired
     CommonRedisClient commonRedisClient;
+    @Autowired
+    JedisPool jedisPool;
 
     public boolean add(final Video video){
         boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {
@@ -70,5 +75,24 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
         String videourl = commonRedisClient.hget(key, "videourl");
         String imageurl = commonRedisClient.hget(key, "imageurl");
         return new SingleVideo(id, title, authorname, videourl, imageurl);
+    }
+
+    public SingleVideo getSingleVideoFromPool(Integer id){
+        Jedis jedis = null;
+        try {
+            String key = "video-" + id;
+            jedis = jedisPool.getResource();
+            String title = jedis.hget(key, "title");
+            String authorname = jedis.hget(key, "authorname");
+            String videourl = jedis.hget(key, "videourl");
+            String imageurl = jedis.hget(key, "imageurl");
+            //System.out.println(title + " - " + authorname + " - " + videourl + " - " + imageurl);
+            return new SingleVideo(id, title, authorname, videourl, imageurl);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }finally {
+            jedisPool.returnResource(jedis);
+        }
     }
 }
