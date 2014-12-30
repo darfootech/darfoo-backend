@@ -11,21 +11,21 @@ public class SearchVideo {
     String author_name;
     Long update_timestamp;
 
-    public SearchVideo(Integer id, String title, String image_url, String video_url, String authorname, Long update_timestamp) {
+    public SearchVideo(Integer id, String title, String image_url, String video_url, String author_name, Long update_timestamp) {
         this.id = id;
         this.title = title;
         this.image_url = image_url;
         this.video_url = video_url;
-        this.author_name = authorname;
+        this.author_name = author_name;
         this.update_timestamp = update_timestamp;
     }
 
-    public String getAuthorname() {
+    public String getAuthor_name() {
         return author_name;
     }
 
-    public void setAuthorname(String authorname) {
-        this.author_name = authorname;
+    public void setAuthor_name(String author_name) {
+        this.author_name = author_name;
     }
 
     public String getImage_url() {
