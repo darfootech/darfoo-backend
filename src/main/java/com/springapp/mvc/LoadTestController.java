@@ -59,6 +59,22 @@ public class LoadTestController {
         return new SingleVideo(video_id, video_title, author_name, video_url, image_url);
     }
 
+    @RequestMapping(value = "/normalint/nocache/{id}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    SingleVideo normalintnocache(@PathVariable("id") Integer id) {
+        Video targetVideo = videoDao.getVideoByVideoId(id);
+        int video_id = targetVideo.getId();
+        String video_url = targetVideo.getVideo_key();
+        String image_url = targetVideo.getImage().getImage_key();
+        String video_title = targetVideo.getTitle();
+        String author_name = "";
+        if (targetVideo.getAuthor() != null){
+            author_name = targetVideo.getAuthor().getName();
+        }
+        return new SingleVideo(video_id, video_title, author_name, video_url, image_url);
+    }
+
     /*
     Running 10s test @ http://localhost:8080/darfoobackend/rest/loadtest/normal/cache/1
       4 threads and 10 connections
