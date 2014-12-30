@@ -225,4 +225,15 @@ public class MusicDaoTests {
 			System.out.println("---------------------------");
 		}
 	}
+	
+	/**
+	 * 更新authorName(Music) 
+	 * **/
+	@Test
+	public void updateAuthorName(){
+		//Integer id = 10;  //UPDATE_MUSIC_NOTFOUND
+		Integer id = 1;
+		String  newAuthorName = "吉卉";
+		System.out.println(CRUDEvent.getResponse(musicDao.updateAuthorName(id, newAuthorName)));
+	}
 }

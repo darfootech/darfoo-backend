@@ -437,7 +437,7 @@ public class MusicDao {
 			Session session = sf.getCurrentSession();
 			Music music = (Music)session.get(Music.class, id);
 			if(music == null){
-				res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
+				res = CRUDEvent.UPDATE_MUSIC_NOTFOUND;
 			}else{
 				Long hotest = music.getHotest();
 				if(hotest == null){
@@ -499,5 +499,28 @@ public class MusicDao {
 			e.printStackTrace();
 		}
 		return musics;
+	}
+	
+	/**
+	 * 更新Music的AUTHOR_NAME
+	 * @param id muisc_id
+	 * @param newAuthorName 新的作者名
+	 * */
+	public int updateAuthorName(Integer id,String newAuthorName){
+		int res = 0;
+		try{
+			Session session = sf.getCurrentSession();
+			Music music = (Music)session.get(Music.class, id);
+			if(music == null){
+				res = CRUDEvent.UPDATE_MUSIC_NOTFOUND;				
+			}else{
+				music.setAuthorName(newAuthorName);//更新作者名字
+				res = CRUDEvent.UPDATE_SUCCESS;
+			}
+		}catch(Exception e){
+			res = CRUDEvent.UPDATE_FAIL;
+			e.printStackTrace();
+		}
+		return res;
 	}
 }

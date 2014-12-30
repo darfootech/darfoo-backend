@@ -60,7 +60,20 @@ public class Music implements Serializable {
 	@Column(name="HOTEST",nullable=true,updatable=true,columnDefinition="bigint(64) default 0")
 	Long hotest;  
 	
-    public Long getHotest() {
+	@Column(name="AUTHOR_NAME",nullable=true,columnDefinition="varchar(255) not null")
+	String authorName;
+	
+    public String getAuthorName() {
+		return authorName;
+	}
+
+
+	public void setAuthorName(String authorName) {
+		this.authorName = authorName;
+	}
+
+
+	public Long getHotest() {
 		return hotest;
 	}
 
