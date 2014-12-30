@@ -1,6 +1,7 @@
 redis.host=112.124.68.27
 redis.port=6379
 redis.pass=Darfoo@tech
+redis.timeout=2000
 
 redis.maxIdle=300
 redis.maxActive=600
