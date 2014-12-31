@@ -15,11 +15,11 @@
                 }else if(data == "505"){
                     alert("请确保伴奏首字母填写的是一个不区分大小写的英文字母");
                 }else if(data == "503"){
-                    alert("已经有相同标题的舞蹈伴奏了，请修改舞蹈伴奏标题");
+                    alert("伴奏标题和作者名字组合已存在，请修改舞蹈伴奏标题");
                 }else if(data == "502"){
                     alert("相同名字的图片已经存在了，请修改上传图片的名字");
                 }else if(data == "501"){
-                    alert("无法找到默认作者，不可以创建伴奏");
+                    alert("无法找到默认作者或者默认图片，不可以创建伴奏");
                 }else if(data == "508"){
                     alert("请填写并上传舞蹈伴奏相关的图片");
                 }else{
@@ -43,19 +43,19 @@
                     <input type="text" class="form-control" name="title" id="title" placeholder="请输入舞蹈伴奏标题">
                 </div>
 
-                <div style="display: none">
+                <!--<div style="display: none">
                     <input type="text" name="authorname" value="nothing">
-                </div>
-
-                <!--<div class="form-group">
-                    <label for="authorname">舞蹈伴奏作者名字</label>
-                    <input type="text" class="form-control" name="authorname" id="authorname" placeholder="请输入舞蹈伴奏作者名字">
                 </div>-->
 
                 <div class="form-group">
+                    <label for="authorname">舞蹈伴奏作者名字</label>
+                    <input type="text" class="form-control" name="authorname" id="authorname" placeholder="请输入舞蹈伴奏作者名字">
+                </div>
+
+                <!--<div class="form-group">
                     <label for="imagekey">舞蹈伴奏封面图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
                     <input type="text" class="form-control" name="imagekey" id="imagekey" placeholder="请输入舞蹈伴奏封面图片名称">
-                </div>
+                </div>-->
 
                 <div class="form-group">
                     <label for="musicbeat">舞蹈伴奏节拍</label>

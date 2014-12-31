@@ -47,7 +47,7 @@ public class MusicDaoTests {
 	public void insertSingleMusic(){
         String musicTitle = "ccccc";
         //String imagekey = System.currentTimeMillis() + ".jpg";
-        String authorname = "cleantha";
+        String authorname = "吉卉";
 
         /*Image image = imageDao.getImageByName(imagekey);
         if (image == null){

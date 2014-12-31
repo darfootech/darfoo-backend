@@ -234,7 +234,7 @@ public class UploadController {
         if (queryMusic == null){
             System.out.println("伴奏名字和作者名字组合不存在，可以进行插入");
         }else{
-            System.out.println(queryMusic.toString(true));
+            //System.out.println(queryMusic.toString());
             System.out.println("伴奏名字和作者名字组合已存在，不可以进行插入了，是否需要修改");
             resultMap.put("statuscode", 503);
             resultMap.put("insertid", -1);
@@ -292,6 +292,7 @@ public class UploadController {
         s_mCategory.add(letter);
         music.setTitle(musictitle);
         music.setMusic_key(musictitle);
+        music.setAuthorName(authorname);
         music.setUpdate_timestamp(System.currentTimeMillis());
         int insertStatus = musicDao.insertSingleMusic(music);
         if (insertStatus == -1){
@@ -451,14 +452,16 @@ public class UploadController {
     public @ResponseBody String createMusic(HttpServletRequest request, HttpSession session){
         String musicTitle = request.getParameter("title");
         String authorName = request.getParameter("authorname");
-        String imagekey = request.getParameter("imagekey");
+        //String imagekey = request.getParameter("imagekey");
         String musicBeat = request.getParameter("musicbeat");
         String musicStyle = request.getParameter("musicstyle");
         String musicLetter = request.getParameter("musicletter").toUpperCase();
         Long update_timestamp = System.currentTimeMillis() / 1000;
-        System.out.println("requests: " + musicTitle + " " + authorName + " " + imagekey + " " + musicBeat + " " + musicStyle + " " + musicLetter + " " + update_timestamp);
+        //System.out.println("requests: " + musicTitle + " " + authorName + " " + imagekey + " " + musicBeat + " " + musicStyle + " " + musicLetter + " " + update_timestamp);
+        System.out.println("requests: " + musicTitle + " " + authorName + " " +  " " + musicBeat + " " + musicStyle + " " + musicLetter + " " + update_timestamp);
 
-        HashMap<String, Integer> resultMap = this.insertSingleMusic(musicTitle, authorName, imagekey, musicBeat, musicStyle, musicLetter);
+        //HashMap<String, Integer> resultMap = this.insertSingleMusic(musicTitle, authorName, imagekey, musicBeat, musicStyle, musicLetter);
+        HashMap<String, Integer> resultMap = this.insertSingleMusic(musicTitle, authorName, "", musicBeat, musicStyle, musicLetter);
         int statusCode = resultMap.get("statuscode");
         System.out.println("status code is: " + statusCode);
         if (statusCode != 200){
@@ -466,7 +469,7 @@ public class UploadController {
         }else{
             int insertid = resultMap.get("insertid");
             session.setAttribute("musicTitle", musicTitle + "-" + insertid + ".mp3");
-            session.setAttribute("musicImage", imagekey);
+            //session.setAttribute("musicImage", imagekey);
             return statusCode+"";
         }
     }
@@ -498,6 +501,30 @@ public class UploadController {
         }
 
         if (musicStatusCode.equals("200") && imageStatusCode.equals("200")){
+            return "success";
+        }else{
+            return "fail";
+        }
+    }
+
+    @RequestMapping("/resources/musicresourcenopic/create")
+    public String createMusicResourceNoPic(@RequestParam("musicresource") CommonsMultipartFile musicresource, HttpSession session){
+        //upload
+        String musicTitle = (String)session.getAttribute("musicTitle");
+
+        String videoResourceName = musicresource.getOriginalFilename();
+
+        System.out.println("musicresourcename -> " + videoResourceName);
+
+        String musicStatusCode = "";
+
+        try {
+            musicStatusCode = ServiceUtils.uploadLargeResource(musicresource, musicTitle);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (musicStatusCode.equals("200")){
             return "success";
         }else{
             return "fail";
