@@ -45,8 +45,9 @@ public class MusicDaoTests {
 	
 	@Test
 	public void insertSingleMusic(){
-        String musicTitle = "Sexy Love33321";
-        String imagekey = "T-ara325521.jpg";
+        String musicTitle = "ccccc";
+        String imagekey = System.currentTimeMillis() + ".jpg";
+        String authorname = "cleantha";
 
         Image image = imageDao.getImageByName(imagekey);
         if (image == null){
@@ -59,12 +60,22 @@ public class MusicDaoTests {
             return;
         }
 
-        Music queryMusic = musicDao.getMusicByMusicTitle(musicTitle);
+        /*Music queryMusic = musicDao.getMusicByMusicTitle(musicTitle);
         if (queryMusic == null){
             System.out.println("伴奏不存在，可以进行插入");
         }else{
             System.out.println(queryMusic.toString(true));
             System.out.println("伴奏已存在，不可以进行插入了，是否需要修改");
+            return;
+        }*/
+
+        //伴奏title可以重名,但是不可能出现authorname和title都一样的情况,也就是一个作者名字对应的伴奏中不会出现重名的情况
+        Music queryMusic = musicDao.getMusicByTitleAuthorName(musicTitle, authorname);
+        if (queryMusic == null){
+            System.out.println("伴奏名字和作者名字组合不存在，可以进行插入");
+        }else{
+            System.out.println(queryMusic.toString());
+            System.out.println("伴奏名字和作者名字组合已存在，不可以进行插入了，是否需要修改");
             return;
         }
 
@@ -90,6 +101,7 @@ public class MusicDaoTests {
 		music.setTitle(musicTitle);
 		music.setMusic_key(musicTitle);
 		music.setUpdate_timestamp(System.currentTimeMillis());
+        music.setAuthorName(authorname);
 		int insertStatus = musicDao.insertSingleMusic(music);
         if (insertStatus == -1){
             System.out.println("插入伴奏失败");
@@ -103,8 +115,14 @@ public class MusicDaoTests {
 	@Test
 	public void getMusicByMusicId(){
 		long start = System.currentTimeMillis();
-		Music music = musicDao.getMusicByMusicId(3);
+		Music music = musicDao.getMusicByMusicId(30);
 		System.out.println(music.toString(true));
+        String authorname = music.getAuthorName();
+        if (authorname.equals("")){
+            System.out.println("authorname is empty please fill it");
+        }else{
+            System.out.println("authorname -> " + music.getAuthorName());
+        }
 		System.out.println("time elapse:"+(System.currentTimeMillis()-start)/1000f);
 	}
 	
@@ -232,7 +250,7 @@ public class MusicDaoTests {
 	@Test
 	public void updateAuthorName(){
 		//Integer id = 10;  //UPDATE_MUSIC_NOTFOUND
-		Integer id = 1;
+		Integer id = 30;
 		String  newAuthorName = "吉卉";
 		System.out.println(CRUDEvent.getResponse(musicDao.updateAuthorName(id, newAuthorName)));
 	}

@@ -1,6 +1,5 @@
 package com.darfoo.backend.dao;
 
-import java.io.Serializable;
 import java.util.*;
 
 import com.darfoo.backend.model.*;
@@ -10,16 +9,12 @@ import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Music;
-import com.darfoo.backend.model.Music;
-import com.darfoo.backend.model.Video;
 
 @Component
 @SuppressWarnings("unchecked")
@@ -506,13 +501,13 @@ public class MusicDao {
 	 * @param id muisc_id
 	 * @param newAuthorName 新的作者名
 	 * */
-	public int updateAuthorName(Integer id,String newAuthorName){
+	public int updateAuthorName(Integer id, String newAuthorName){
 		int res = 0;
 		try{
 			Session session = sf.getCurrentSession();
 			Music music = (Music)session.get(Music.class, id);
 			if(music == null){
-				res = CRUDEvent.UPDATE_MUSIC_NOTFOUND;				
+				res = CRUDEvent.UPDATE_MUSIC_NOTFOUND;
 			}else{
 				music.setAuthorName(newAuthorName);//更新作者名字
 				res = CRUDEvent.UPDATE_SUCCESS;
@@ -523,4 +518,21 @@ public class MusicDao {
 		}
 		return res;
 	}
+
+    /**
+     * 获取单个music的信息
+     * 根据music的title和authorname来获得music对象
+     * @return music 返回一个music的实例对象(包含关联表中的数据)，详细请看Music.java类
+     * **/
+    public Music getMusicByTitleAuthorName(String title, String authorname){
+        Music music = null;
+        try{
+            Session session = sf.getCurrentSession();
+            String sql = "select * from music where title=:title and author_name=:authorname";
+            music = (Music)session.createSQLQuery(sql).addEntity(Music.class).setString("title", title).setString("authorname", authorname).uniqueResult();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return music;
+    }
 }
