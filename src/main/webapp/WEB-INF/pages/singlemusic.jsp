@@ -11,7 +11,7 @@
     });
 
     function update(){
-        var createmusicUrl = "/darfoobackend/rest/admin/music/update";
+        var createmusicUrl = "/darfoobackend/rest/admin/music/updatenopic";
         $.ajax({
             type : "POST",
             url : createmusicUrl,
@@ -89,22 +89,26 @@
                 </div>
 
                 <div style="display: none">
-                    <input type="text" name="authorname" value="${music.author.name}">
+                    <input type="text" name="authorobjectname" value="${music.author.name}">
+                </div>
+
+                <div style="display: none">
+                    <input type="text" name="originauthorname" value="${music.authorName}">
                 </div>
 
                 <div class="form-group">
                     <label for="authorname">舞蹈伴奏作者名字</label>
-                    <input type="text" class="form-control" id="authorname" placeholder="${music.author.name}" disabled="disabled">
+                    <input type="text" class="form-control" name="authorname" id="authorname" placeholder="${music.authorName}">
                 </div>
 
                 <div style="display: none">
                     <input type="text" name="imagekey" value="${music.image.image_key}">
                 </div>
 
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label for="imagekey">舞蹈伴奏封面图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
                     <input type="text" class="form-control" id="imagekey" placeholder="${music.image.image_key}" disabled="disabled">
-                </div>
+                </div>-->
 
                 <div class="form-group">
                     <label for="musicbeat">舞蹈速度---<div style="color: green; display: inline; font-size: 18pt">原本为${beat}</div></label>
@@ -135,13 +139,13 @@
                     <input type="text" class="form-control" name="musicletter" id="musicletter" value="${letter}">
                 </div>
 
-                <div class="form-group">
+                <!--<div class="form-group">
                     <img src="${imageurl}" width="600" height="600">
-                </div>
+                </div>-->
 
                 <button type="button" class="btn btn-default" onclick="update()">更新舞蹈伴奏信息</button>
                 <button type="button" class="btn btn-default" onclick="kickout()">删除舞蹈伴奏</button>
-                <button type="button" class="btn btn-default" onclick="updateimage()">更新舞蹈伴奏封面图片</button>
+                <!--<button type="button" class="btn btn-default" onclick="updateimage()">更新舞蹈伴奏封面图片</button>-->
             </form>
         </div>
     </div>

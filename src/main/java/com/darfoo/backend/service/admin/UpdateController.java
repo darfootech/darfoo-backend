@@ -101,6 +101,18 @@ public class UpdateController {
         }
     }
 
+    public int checkMusicTitleAuthorNameDuplicate(String musicTitle, String authorName){
+        Music queryMusic = musicDao.getMusicByTitleAuthorName(musicTitle, authorName);
+        if (queryMusic == null){
+            System.out.println("伴奏名字和作者名字组合不存在，可以进行插入");
+            return 1;
+        }else{
+            System.out.println(queryMusic.toString());
+            System.out.println("伴奏名字和作者名字组合已存在，不可以进行插入了，是否需要修改");
+            return 0;
+        }
+    }
+
     @RequestMapping(value = "/admin/video/update", method = RequestMethod.POST)
     public @ResponseBody String updateVideo(HttpServletRequest request, HttpSession session){
         String videoTitle = request.getParameter("title");
@@ -299,6 +311,63 @@ public class UpdateController {
             //updateIsReady为true表示可以进行更新操作
             String status = CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, authorName, imageKey,categoryTitles,System.currentTimeMillis()));
             if (status.equals("UPDATE_SUCCESS")) {
+                return 200 + "";
+            } else {
+                return 503 + "";
+            }
+        } else {
+            System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
+            return 501 + "";
+        }
+    }
+
+    @RequestMapping(value = "/admin/music/updatenopic", method = RequestMethod.POST)
+    public @ResponseBody String updateMusicNoPic(HttpServletRequest request, HttpSession session) {
+        String musicTitle = request.getParameter("title");
+        String originTitle = request.getParameter("origintitle");
+        String authorName = request.getParameter("authorname");
+        String originAuthorName = request.getParameter("originauthorname");
+        String authorObjectName = request.getParameter("authorobjectname");
+        String imageKey = request.getParameter("imagekey");
+        String musicBeat = request.getParameter("musicbeat");
+        String musicStyle = request.getParameter("musicstyle");
+        String musicLetter = request.getParameter("musicletter").toUpperCase();
+
+        if (musicTitle.equals("")){
+            musicTitle = originTitle;
+        }
+        if (authorName.equals("")){
+            authorName = originAuthorName;
+        }
+
+        System.out.println("requests: " + musicTitle + " " + authorName + " " + imageKey + " " + musicBeat + " " + musicStyle + " " + musicLetter);
+
+        boolean isSingleLetter = ServiceUtils.isSingleCharacter(musicLetter);
+        if (isSingleLetter){
+            System.out.println("是单个大写字母");
+        }else{
+            System.out.println("不是单个大写字母");
+            return 505+"";
+        }
+
+        int duplicateCode = checkMusicTitleAuthorNameDuplicate(musicTitle, authorName);
+        if (duplicateCode == 0){
+            return 501+"";
+        }
+
+        Integer vid = Integer.parseInt(request.getParameter("id"));
+        UpdateCheckResponse response = musicDao.updateMusicCheck(vid, authorObjectName, imageKey); //先检查图片和作者姓名是否已经存在
+        System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
+        Set<String> categoryTitles = new HashSet<String>();
+        categoryTitles.add(musicBeat);
+        categoryTitles.add(musicStyle);
+        categoryTitles.add(musicLetter.toUpperCase());
+
+        if(response.updateIsReady()){
+            //updateIsReady为true表示可以进行更新操作
+            String status = CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, authorObjectName, imageKey,categoryTitles,System.currentTimeMillis()));
+            String updateAuthorNameStatus = CRUDEvent.getResponse(musicDao.updateAuthorName(vid, authorName));
+            if (status.equals("UPDATE_SUCCESS") && updateAuthorNameStatus.equals("UPDATE_SUCCESS")) {
                 return 200 + "";
             } else {
                 return 503 + "";
