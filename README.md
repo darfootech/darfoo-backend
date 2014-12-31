@@ -217,6 +217,10 @@ git rebase --continue # 如果所有冲突都解决了，continue之后会从一
 * 建立mysql连接池也能抗一抗
 * other techstack(已经测试了其他两种方案，效果不错)
 * 升级带宽
+* 添置服务器一台肯定不够
+* jvm参数调整
+* nginx参数配置
+* 后面很有可能改成play或者go来些service(看下nginx能不能分发确定的请求)
 
 #### security
 
