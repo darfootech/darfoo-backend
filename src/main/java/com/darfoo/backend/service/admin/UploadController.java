@@ -229,24 +229,25 @@ public class UploadController {
             return resultMap;
         }
 
-        Music queryMusic = musicDao.getMusicByMusicTitle(musictitle);
+        //伴奏title可以重名,但是不可能出现authorname和title都一样的情况,也就是一个作者名字对应的伴奏中不会出现重名的情况
+        Music queryMusic = musicDao.getMusicByTitleAuthorName(musictitle, authorname);
         if (queryMusic == null){
-            System.out.println("伴奏不存在，可以进行插入");
+            System.out.println("伴奏名字和作者名字组合不存在，可以进行插入");
         }else{
             System.out.println(queryMusic.toString(true));
-            System.out.println("伴奏已存在，不可以进行插入了，是否需要修改");
+            System.out.println("伴奏名字和作者名字组合已存在，不可以进行插入了，是否需要修改");
             resultMap.put("statuscode", 503);
             resultMap.put("insertid", -1);
             return resultMap;
         }
 
-        if (imagekey.equals("")){
+        /*if (imagekey.equals("")){
             resultMap.put("statuscode", 508);
             resultMap.put("insertid", -1);
             return resultMap;
-        }
+        }*/
 
-        Image image = imageDao.getImageByName(imagekey);
+        /*Image image = imageDao.getImageByName(imagekey);
         if (image == null){
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
@@ -257,7 +258,7 @@ public class UploadController {
             resultMap.put("statuscode", 502);
             resultMap.put("insertid", -1);
             return resultMap;
-        }
+        }*/
 
         Music music = new Music();
         if (authorDao.getAllAuthor().size() == 0){
@@ -268,7 +269,17 @@ public class UploadController {
             System.out.println("可以找到默认作者，可以创建伴奏");
             music.setAuthor(authorDao.getAllAuthor().get(0));
         }
-        music.setImage(image);
+
+        if (imageDao.getAllImage().size() == 0){
+            System.out.println("无法找到默认图片，不可以创建伴奏");
+            resultMap.put("statuscode", 501);
+            resultMap.put("insertid", -1);
+        }else{
+            System.out.println("可以找到默认图片，可以创建伴奏");
+            music.setImage(imageDao.getAllImage().get(0));
+        }
+
+        //music.setImage(image);
         MusicCategory beat = new MusicCategory();
         MusicCategory style = new MusicCategory();
         MusicCategory letter = new MusicCategory();

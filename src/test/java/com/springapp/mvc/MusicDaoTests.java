@@ -46,10 +46,10 @@ public class MusicDaoTests {
 	@Test
 	public void insertSingleMusic(){
         String musicTitle = "ccccc";
-        String imagekey = System.currentTimeMillis() + ".jpg";
+        //String imagekey = System.currentTimeMillis() + ".jpg";
         String authorname = "cleantha";
 
-        Image image = imageDao.getImageByName(imagekey);
+        /*Image image = imageDao.getImageByName(imagekey);
         if (image == null){
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
@@ -58,7 +58,7 @@ public class MusicDaoTests {
         }else{
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
             return;
-        }
+        }*/
 
         /*Music queryMusic = musicDao.getMusicByMusicTitle(musicTitle);
         if (queryMusic == null){
@@ -87,7 +87,15 @@ public class MusicDaoTests {
             System.out.println("可以找到默认作者，可以创建伴奏");
             music.setAuthor(authorDao.getAllAuthor().get(0));
         }
-		music.setImage(image);
+
+        if (imageDao.getAllImage().size() == 0){
+            System.out.println("无法找到默认图片，不可以创建伴奏");
+            return;
+        }else{
+            System.out.println("可以找到默认图片，可以创建伴奏");
+            music.setImage(imageDao.getAllImage().get(0));
+        }
+		//music.setImage(image);
 		MusicCategory c1 = new MusicCategory();	
 		MusicCategory c2 = new MusicCategory();	
 		MusicCategory c3 = new MusicCategory();	
