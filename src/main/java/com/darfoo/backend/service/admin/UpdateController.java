@@ -333,13 +333,6 @@ public class UpdateController {
         String musicStyle = request.getParameter("musicstyle");
         String musicLetter = request.getParameter("musicletter").toUpperCase();
 
-        if (musicTitle.equals("")){
-            musicTitle = originTitle;
-        }
-        if (authorName.equals("")){
-            authorName = originAuthorName;
-        }
-
         System.out.println("requests: " + musicTitle + " " + authorName + " " + imageKey + " " + musicBeat + " " + musicStyle + " " + musicLetter);
 
         boolean isSingleLetter = ServiceUtils.isSingleCharacter(musicLetter);
@@ -362,6 +355,13 @@ public class UpdateController {
         categoryTitles.add(musicBeat);
         categoryTitles.add(musicStyle);
         categoryTitles.add(musicLetter.toUpperCase());
+
+        if (musicTitle.equals("")){
+            musicTitle = originTitle;
+        }
+        if (authorName.equals("")){
+            authorName = originAuthorName;
+        }
 
         if(response.updateIsReady()){
             //updateIsReady为true表示可以进行更新操作
