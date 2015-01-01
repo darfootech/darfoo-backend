@@ -36,4 +36,30 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+    <!--handler error and direct to error page-->
+    <!--<error-page>
+        <error-code>404</error-code>
+        <location>/error/404</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error/500</location>
+    </error-page>-->
+
+    <!-- 捕获常见的两种error -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error/500.jsp</location>
+    </error-page>
+
+    <!-- 未捕获的错误，同样可指定其它异常类，或自定义异常类 -->
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/error/uncaughtexception.jsp</location>
+    </error-page>
+
 </web-app>

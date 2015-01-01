@@ -45,6 +45,9 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         }else if(uri.contains("test")){
             System.out.println("测试");
             return true;
+        }else if(uri.contains("error") || uri.contains("jsp")){
+            System.out.println("出错啦");
+            return true;
         }else if(request.getSession() != null && request.getSession().getAttribute("loginUser") != null && request.getSession().getAttribute("loginUser").equals("cleantha")) {
             // 其他情况判断session中是否有key，有的话继续用户的操作
             System.out.println("在管理资源");
