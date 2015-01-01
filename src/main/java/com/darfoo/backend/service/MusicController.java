@@ -39,15 +39,16 @@ public class MusicController {
         Music targetMusic = musicDao.getMusicByMusicId(Integer.parseInt(id));
         int music_id = targetMusic.getId();
         String music_url = targetMusic.getMusic_key() + ".mp3";
-        String image_url = targetMusic.getImage().getImage_key();
+        //String image_url = targetMusic.getImage().getImage_key();
         String music_download_url = qiniuUtils.getQiniuResourceUrl(music_url);
-        String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
+        //String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
         String title = targetMusic.getTitle();
         String author_name = "";
         if (targetMusic.getAuthor() != null){
             author_name = targetMusic.getAuthor().getName();
         }
-        return new SingleMusic(music_id, music_download_url, image_download_url, author_name, title);
+        //return new SingleMusic(music_id, music_download_url, image_download_url, author_name, title);
+        return new SingleMusic(music_id, music_download_url, author_name, title);
     }
 
     //http://localhost:8080/darfoobackend/rest/resources/music/search/s
@@ -65,12 +66,13 @@ public class MusicController {
             if (music.getAuthor() != null){
                 author_name = music.getAuthor().getName();
             }
-            String image_url = music.getImage().getImage_key();
-            String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
+            //String image_url = music.getImage().getImage_key();
+            //String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String music_url = music.getMusic_key() + ".mp3";
             String music_download_url = qiniuUtils.getQiniuResourceUrl(music_url);
             Long update_timestamp = music.getUpdate_timestamp();
-            result.add(new SearchMusic(id, title, image_download_url, music_download_url, author_name, update_timestamp));
+            //result.add(new SearchMusic(id, title, image_download_url, music_download_url, author_name, update_timestamp));
+            result.add(new SearchMusic(id, title, music_download_url, author_name, update_timestamp));
         }
         return result;
     }
@@ -119,8 +121,8 @@ public class MusicController {
         List<CategoryMusic> result = new ArrayList<CategoryMusic>();
         for (Music music : musics){
             int music_id = music.getId();
-            String image_url = music.getImage().getImage_key();
-            String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
+            //String image_url = music.getImage().getImage_key();
+            //String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String title = music.getTitle();
             String author_name = "";
             if (music.getAuthor() != null){
@@ -129,7 +131,8 @@ public class MusicController {
             String music_url = music.getMusic_key() + ".mp3";
             String music_download_url = qiniuUtils.getQiniuResourceUrl(music_url);
             Long update_timestamp = music.getUpdate_timestamp();
-            result.add(new CategoryMusic(music_id, image_download_url, music_download_url, title, author_name, update_timestamp));
+            //result.add(new CategoryMusic(music_id, image_download_url, music_download_url, title, author_name, update_timestamp));
+            result.add(new CategoryMusic(music_id, music_download_url, title, author_name, update_timestamp));
         }
         return result;
     }

@@ -6,15 +6,23 @@ package com.darfoo.backend.service.responsemodel;
 public class SearchMusic {
     Integer id;
     String title;
-    String image_url;
+    //String image_url;
     String music_url;
     String authorname;
     Long update_timestamp;
 
-    public SearchMusic(Integer id, String title, String image_url, String music_url, String authorname, Long update_timestamp) {
+    /*public SearchMusic(Integer id, String title, String image_url, String music_url, String authorname, Long update_timestamp) {
         this.id = id;
         this.title = title;
         this.image_url = image_url;
+        this.music_url = music_url;
+        this.authorname = authorname;
+        this.update_timestamp = update_timestamp;
+    }*/
+
+    public SearchMusic(Integer id, String title, String music_url, String authorname, Long update_timestamp) {
+        this.id = id;
+        this.title = title;
         this.music_url = music_url;
         this.authorname = authorname;
         this.update_timestamp = update_timestamp;
@@ -28,13 +36,13 @@ public class SearchMusic {
         this.authorname = authorname;
     }
 
-    public String getImage_url() {
+    /*public String getImage_url() {
         return image_url;
     }
 
     public void setImage_url(String image_url) {
         this.image_url = image_url;
-    }
+    }*/
 
     public String getMusic_url() {
         return music_url;

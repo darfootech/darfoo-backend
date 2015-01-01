@@ -79,17 +79,18 @@ public class VideoController {
         if (targetMusic != null){
             int music_id = targetMusic.getId();
             String music_url = targetMusic.getMusic_key() + ".mp3";
-            String image_url = targetMusic.getImage().getImage_key();
+            //String image_url = targetMusic.getImage().getImage_key();
             String music_download_url = qiniuUtils.getQiniuResourceUrl(music_url);
-            String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
+            //String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String title = targetMusic.getTitle();
             String author_name = "";
             if (targetMusic.getAuthor() != null){
                 author_name = targetMusic.getAuthor().getName();
             }
-            return new SingleMusic(music_id, music_download_url, image_download_url, author_name, title);
+            //return new SingleMusic(music_id, music_download_url, image_download_url, author_name, title);
+            return new SingleMusic(music_id, music_download_url, author_name, title);
         }else{
-            return new SingleMusic(-1, "", "", "", "");
+            return new SingleMusic(-1, "", "", "");
         }
     }
 

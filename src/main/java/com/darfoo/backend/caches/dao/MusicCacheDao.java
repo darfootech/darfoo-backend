@@ -43,7 +43,8 @@ public class MusicCacheDao extends AbstractBaseRedisDao<String, Music> {
         String title = commonRedisClient.hget(key, "title");
         String authorname = commonRedisClient.hget(key, "authorname");
         String musicurl = commonRedisClient.hget(key, "musicurl");
-        String imageurl = commonRedisClient.hget(key, "imageurl");
-        return new SingleMusic(id, musicurl, imageurl, authorname, title);
+        //String imageurl = commonRedisClient.hget(key, "imageurl");
+        //return new SingleMusic(id, musicurl, imageurl, authorname, title);
+        return new SingleMusic(id, musicurl, authorname, title);
     }
 }
