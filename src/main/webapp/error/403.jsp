@@ -2,7 +2,7 @@
   Created by IntelliJ IDEA.
   User: zjh
   Date: 15-1-1
-  Time: 下午3:51
+  Time: 下午5:05
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -11,6 +11,6 @@
     <title></title>
 </head>
 <body>
-    出错啦
+    资源不存在
 </body>
 </html>
