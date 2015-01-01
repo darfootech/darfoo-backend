@@ -36,10 +36,4 @@ public class AppTests {
             e.printStackTrace();
         }
     }
-    
-    @Test
-    public void json(){
-    	
-    
-    }
 }

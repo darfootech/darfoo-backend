@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +39,13 @@ public class DownloadController {
     EducationDao educationDao;
     @Autowired
     MusicDao musicDao;
+
+    public String timestampTodatetime(long timestampfromdb){
+        Timestamp timestamp = new Timestamp(timestampfromdb);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //System.out.println(simpleDateFormat.format(timestamp));
+        return simpleDateFormat.format(timestamp);
+    }
 
     public byte[] mergeByteArray(byte[] bomHead, byte[] fileBytes){
         byte[] download = new byte[bomHead.length + fileBytes.length];
@@ -101,6 +110,9 @@ public class DownloadController {
                 }else{
                     itemData.add("没有填首字母");
                 }
+
+                itemData.add(timestampTodatetime(video.getUpdate_timestamp()));
+
                 printer.printRecord(itemData);
             }
             //close the printer
@@ -180,6 +192,8 @@ public class DownloadController {
                     itemData.add("没有填教程风格");
                 }
 
+                itemData.add(timestampTodatetime(tutorial.getUpdate_timestamp()));
+
                 printer.printRecord(itemData);
             }
             //close the printer
@@ -254,6 +268,9 @@ public class DownloadController {
                 }else{
                     itemData.add("没有填首字母");
                 }
+
+                itemData.add(timestampTodatetime(music.getUpdate_timestamp()));
+
                 printer.printRecord(itemData);
             }
             //close the printer
