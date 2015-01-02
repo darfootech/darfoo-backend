@@ -147,7 +147,8 @@ public class AuthorDaoTests {
             String video_download_url = qiniuUtils.getQiniuResourceUrl(video.getVideo_key());
             String image_download_url = qiniuUtils.getQiniuResourceUrl(video.getImage().getImage_key());
             String title = video.getTitle();
-            result.add(new SingleVideo(vid, title, authorname, video_download_url, image_download_url));
+            long timestamp = video.getUpdate_timestamp();
+            result.add(new SingleVideo(vid, title, authorname, video_download_url, image_download_url, timestamp));
         }
 
         for (Education tutorial : tutorials){
@@ -155,7 +156,8 @@ public class AuthorDaoTests {
             String tutorial_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getVideo_key());
             String image_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getImage().getImage_key());
             String title = tutorial.getTitle();
-            result.add(new SingleVideo(tid, title, authorname, tutorial_download_url, image_download_url));
+            long timestamp = tutorial.getUpdate_timestamp();
+            result.add(new SingleVideo(tid, title, authorname, tutorial_download_url, image_download_url, timestamp));
         }
 
         for (SingleVideo video : result){

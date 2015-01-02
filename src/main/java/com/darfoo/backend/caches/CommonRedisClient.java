@@ -1,5 +1,9 @@
 package com.darfoo.backend.caches;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
+
 import java.util.*;
 
 /**
@@ -73,5 +77,19 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String>{
      */
     public Set<String> smembers(String key) {
         return redisTemplate.opsForSet().members(key);
+    }
+
+    /**
+     * 清空redis缓存
+     * @return
+     */
+    public boolean deleteCurrentDB(){
+        return redisTemplate.execute(new RedisCallback<Boolean>() {
+            public Boolean doInRedis(RedisConnection connection)
+                    throws DataAccessException {
+                connection.flushDb();
+                return true;
+            }
+        });
     }
 }

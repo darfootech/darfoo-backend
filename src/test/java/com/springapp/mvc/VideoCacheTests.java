@@ -50,7 +50,7 @@ public class VideoCacheTests {
     @Test
     public void insertVideo(){
         Video video = videoDao.getVideoByVideoId(1);
-        System.out.println(videoCacheDao.insert(video));
+        System.out.println(videoCacheDao.insertSingleVideo(video));
     }
 
     @Test
@@ -72,9 +72,9 @@ public class VideoCacheTests {
         List<Video> latestVideos = videoDao.getVideosByNewest(7);
         for (Video video : latestVideos){
             int vid = video.getId();
-            long result = redisClient.sadd("videoindex", "vi-"+vid);
+            long result = redisClient.sadd("videoindex", "video-"+vid);
             Video indexVideo = videoDao.getVideoByVideoId(vid);
-            videoCacheDao.insertIndex(indexVideo);
+            videoCacheDao.insertSingleVideo(indexVideo);
             System.out.println("insert result -> " + result);
         }
     }
@@ -82,10 +82,11 @@ public class VideoCacheTests {
     @Test
     public void getIndexVideos(){
         Set<String> latestVideos = redisClient.smembers("videoindex");
-        List<IndexVideo> result = new ArrayList<IndexVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (String vkey : latestVideos){
             System.out.println("vkey -> " + vkey);
-            IndexVideo video = videoCacheDao.getIndexVideo(vkey);
+            int vid = Integer.parseInt(vkey.split("-")[1]);
+            SingleVideo video = videoCacheDao.getSingleVideo(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
@@ -98,9 +99,9 @@ public class VideoCacheTests {
         List<Video> recommendVideos = videoDao.getRecommendVideos(7);
         for (Video video : recommendVideos){
             int vid = video.getId();
-            long result = redisClient.sadd("videorecommend", "vr-"+vid);
+            long result = redisClient.sadd("videorecommend", "video-"+vid);
             Video indexVideo = videoDao.getVideoByVideoId(vid);
-            videoCacheDao.insertRecommend(indexVideo);
+            videoCacheDao.insertSingleVideo(indexVideo);
             System.out.println("insert result -> " + result);
         }
     }
@@ -108,10 +109,11 @@ public class VideoCacheTests {
     @Test
     public void getRecommendVideos(){
         Set<String> recommendVideos = redisClient.smembers("videorecommend");
-        List<IndexVideo> result = new ArrayList<IndexVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (String vkey : recommendVideos){
             System.out.println("vkey -> " + vkey);
-            IndexVideo video = videoCacheDao.getIndexVideo(vkey);
+            int vid = Integer.parseInt(vkey.split("-")[1]);
+            SingleVideo video = videoCacheDao.getSingleVideo(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }

@@ -39,7 +39,7 @@ public class TutorialCacheTests {
     @Test
     public void insertTutorial(){
         Education tutorial = educationDao.getEducationVideoById(1);
-        System.out.println(tutorialCacheDao.insert(tutorial));
+        System.out.println(tutorialCacheDao.insertSingleTutorial(tutorial));
     }
 
     @Test

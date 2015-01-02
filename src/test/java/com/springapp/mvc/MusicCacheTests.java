@@ -41,7 +41,7 @@ public class MusicCacheTests {
     @Test
     public void insertMusic(){
         Music music = musicDao.getMusicByMusicId(1);
-        System.out.println(musicCacheDao.insert(music));
+        System.out.println(musicCacheDao.insertSingleMusic(music));
     }
 
     @Test

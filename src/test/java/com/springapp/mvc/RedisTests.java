@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.caches.RedisClient;
 import junit.framework.Assert;
 
@@ -30,6 +31,8 @@ public class RedisTests extends AbstractJUnit4SpringContextTests {
 
     @Autowired
     private IUserDao userDao;
+    @Autowired
+    CommonRedisClient redisClient;
 
     /**
      * 新增
@@ -160,5 +163,10 @@ public class RedisTests extends AbstractJUnit4SpringContextTests {
         String key = "clea3";
         String field = "id";
         System.out.println(userDao.hget(key, field));
+    }
+
+    @Test
+    public void removeAllFromDB(){
+        System.out.println(redisClient.deleteCurrentDB());
     }
 }
