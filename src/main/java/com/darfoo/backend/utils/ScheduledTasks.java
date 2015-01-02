@@ -1,5 +1,7 @@
 package com.darfoo.backend.utils;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.darfoo.backend.caches.CommonRedisClient;
@@ -22,8 +24,16 @@ public class ScheduledTasks {
     }*/
 
     //=>暂时一天清空一次redis缓存
-    @Scheduled(fixedRate = 86400000)
+    @Scheduled(fixedRate = 10000)
     public void flushRedisCache(){
-        System.out.println("flushredis -> " + redisClient.deleteCurrentDB());
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        // S is the millisecond
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currenttime = simpleDateFormat.format(timestamp).split(" ")[1];
+        if (currenttime.equals("00:00:00")){
+            System.out.println("flushredis -> " + redisClient.deleteCurrentDB());
+        }else{
+            System.out.println(currenttime);
+        }
     }
 }
