@@ -3,6 +3,7 @@ package com.darfoo.backend.caches.dao;
 import com.darfoo.backend.caches.AbstractBaseRedisDao;
 import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.model.Video;
+import com.darfoo.backend.service.responsemodel.IndexVideo;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,11 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
         return result;
     }
 
+    /**
+     * 为单个视频资源进行缓存
+     * @param video
+     * @return
+     */
     public boolean insert(Video video){
         Integer id = video.getId();
         String key = "video-" + id;
@@ -61,6 +67,34 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
             videoMap.put("videourl", video_download_url);
             videoMap.put("imageurl", image_download_url);
             videoMap.put("authorname", authorname);
+            commonRedisClient.hmset(key, videoMap);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * 为首页视频资源进行缓存
+     * @param video
+     * @return
+     */
+    public boolean insertIndex(Video video){
+        Integer id = video.getId();
+        String key = "vi-" + id;
+        if (!commonRedisClient.exists(key)){
+            String title = video.getTitle();
+            HashMap<String, String> videoMap = new HashMap<String, String>();
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video.getVideo_key());
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(video.getImage().getImage_key());
+            String authorname = video.getAuthor().getName();
+            Long timestamp = video.getUpdate_timestamp();
+            videoMap.put("id", id.toString());
+            videoMap.put("title", title);
+            videoMap.put("videourl", video_download_url);
+            videoMap.put("imageurl", image_download_url);
+            videoMap.put("authorname", authorname);
+            videoMap.put("timestamp", timestamp.toString());
             commonRedisClient.hmset(key, videoMap);
             return true;
         }else{
@@ -94,5 +128,15 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
         }finally {
             jedisPool.returnResource(jedis);
         }
+    }
+
+    public IndexVideo getIndexVideo(String key){
+        int id = Integer.parseInt(key.split("-")[1]);
+        String title = commonRedisClient.hget(key, "title");
+        String authorname = commonRedisClient.hget(key, "authorname");
+        String videourl = commonRedisClient.hget(key, "videourl");
+        String imageurl = commonRedisClient.hget(key, "imageurl");
+        Long timestamp = Long.parseLong(commonRedisClient.hget(key, "timestamp"));
+        return new IndexVideo(id, title, imageurl, videourl, authorname, timestamp);
     }
 }

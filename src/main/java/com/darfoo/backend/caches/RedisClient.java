@@ -185,10 +185,10 @@ public class RedisClient {
         redisTemplate.watch(keys);
     }
 
-    /*public Boolean sadd(String key, String value) {
+    public Long sadd(String key, String value) {
         return redisTemplate.opsForSet().add(key, value);
 
-    }*/
+    }
 
     public Long scard(String key) {
         return redisTemplate.opsForSet().size(key);

@@ -1,9 +1,6 @@
 package com.darfoo.backend.caches;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by zjh on 14-12-18.
@@ -57,5 +54,24 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String>{
      */
     public void delete(List<String> keys) {
         redisTemplate.delete(keys);
+    }
+
+    /**
+     * 像某一个key指向的set中插入内容
+     * @param key
+     * @param value
+     * @return
+     */
+    public Long sadd(String key, String value) {
+        return redisTemplate.opsForSet().add(key, value);
+    }
+
+    /**
+     * 获取某一个key指向的set中的所有内容
+     * @param key
+     * @return
+     */
+    public Set<String> smembers(String key) {
+        return redisTemplate.opsForSet().members(key);
     }
 }

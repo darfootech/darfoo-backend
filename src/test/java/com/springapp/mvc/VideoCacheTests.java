@@ -4,12 +4,17 @@ import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Video;
+import com.darfoo.backend.service.responsemodel.IndexVideo;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by zjh on 14-12-17.
@@ -60,5 +65,31 @@ public class VideoCacheTests {
         Integer id = 1;
         SingleVideo video = videoCacheDao.getSingleVideoFromPool(id);
         System.out.println(video.getTitle());
+    }
+
+    @Test
+    public void cacheIndexVideos(){
+        List<Video> latestVideos = videoDao.getVideosByNewest(7);
+        for (Video video : latestVideos){
+            int vid = video.getId();
+            long result = redisClient.sadd("videoindex", "vi-"+vid);
+            Video indexVideo = videoDao.getVideoByVideoId(vid);
+            videoCacheDao.insertIndex(indexVideo);
+            System.out.println("insert result -> " + result);
+        }
+    }
+
+    @Test
+    public void getIndexVideos(){
+        Set<String> latestVideos = redisClient.smembers("videoindex");
+        List<IndexVideo> result = new ArrayList<IndexVideo>();
+        for (String vkey : latestVideos){
+            System.out.println("vkey -> " + vkey);
+            IndexVideo video = videoCacheDao.getIndexVideo(vkey);
+            System.out.println("title -> " + video.getTitle());
+            result.add(video);
+        }
+
+        System.out.println(result.size());
     }
 }
