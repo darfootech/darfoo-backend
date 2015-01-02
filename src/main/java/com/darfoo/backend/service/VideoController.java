@@ -106,11 +106,11 @@ public class VideoController {
     //http://localhost:8080/darfoobackend/rest/resources/video/search/s
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public @ResponseBody
-    List<SearchVideo> searchVideo(HttpServletRequest request){
+    List<SingleVideo> searchVideo(HttpServletRequest request){
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
         List<Video> videos = searchDao.getVideoBySearch(searchContent);
-        List<SearchVideo> result = new ArrayList<SearchVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (Video video : videos){
             int id = video.getId();
             String title = video.getTitle();
@@ -123,7 +123,7 @@ public class VideoController {
             String video_url = video.getVideo_key();
             String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new SearchVideo(id, title, image_download_url, video_download_url, author_name, update_timestamp));
+            result.add(new SingleVideo(id, title, author_name, video_download_url, image_download_url, update_timestamp));
         }
         return result;
     }
@@ -131,11 +131,11 @@ public class VideoController {
     //http://localhost:8080/darfoobackend/rest/resources/video/tutorial/search/heart
     @RequestMapping(value = "/tutorial/search", method = RequestMethod.GET)
     public @ResponseBody
-    List<SearchVideo> searchTutorial(HttpServletRequest request){
+    List<SingleVideo> searchTutorial(HttpServletRequest request){
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
         List<Education> videos = searchDao.getEducationBySearch(searchContent);
-        List<SearchVideo> result = new ArrayList<SearchVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (Education video : videos){
             int id = video.getId();
             String title = video.getTitle();
@@ -148,7 +148,7 @@ public class VideoController {
             String video_url = video.getVideo_key();
             String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new SearchVideo(id, title, image_download_url, video_download_url, author_name, update_timestamp));
+            result.add(new SingleVideo(id, title, author_name, video_download_url, image_download_url, update_timestamp));
         }
         return result;
     }
@@ -156,9 +156,9 @@ public class VideoController {
     @RequestMapping("/recommend")
     public
     @ResponseBody
-    List<IndexVideo> getRecmmendVideos() {
+    List<SingleVideo> getRecmmendVideos() {
         List<Video> recommendVideos = videoDao.getRecommendVideos(7);
-        List<IndexVideo> result = new ArrayList<IndexVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (Video video : recommendVideos) {
             int video_id = video.getId();
             String image_url = video.getImage().getImage_key();
@@ -171,7 +171,7 @@ public class VideoController {
             String video_url = video.getVideo_key();
             String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new IndexVideo(video_id, video_title, image_download_url, video_download_url, author_name, update_timestamp));
+            result.add(new SingleVideo(video_id, video_title, author_name, video_download_url, image_download_url, update_timestamp));
         }
         return result;
     }
@@ -179,21 +179,22 @@ public class VideoController {
     @RequestMapping("/cache/recommend")
     public
     @ResponseBody
-    List<IndexVideo> cacheRecmmendVideos() {
+    List<SingleVideo> cacheRecmmendVideos() {
         List<Video> recommendVideos = videoDao.getRecommendVideos(7);
         for (Video video : recommendVideos){
             int vid = video.getId();
-            long result = redisClient.sadd("videorecommend", "vr-"+vid);
+            long result = redisClient.sadd("videorecommend", "video-"+vid);
             Video indexVideo = videoDao.getVideoByVideoId(vid);
-            videoCacheDao.insertRecommend(indexVideo);
-            //System.out.println("insert result -> " + result);
+            videoCacheDao.insertSingleVideo(indexVideo);
+            System.out.println("insert result -> " + result);
         }
         Set<String> recommendVideoKeys = redisClient.smembers("videorecommend");
-        List<IndexVideo> result = new ArrayList<IndexVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (String vkey : recommendVideoKeys){
-            //System.out.println("vkey -> " + vkey);
-            IndexVideo video = videoCacheDao.getIndexVideo(vkey);
-            //System.out.println("title -> " + video.getTitle());
+            System.out.println("vkey -> " + vkey);
+            int vid = Integer.parseInt(vkey.split("-")[1]);
+            SingleVideo video = videoCacheDao.getSingleVideo(vid);
+            System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
         return result;
@@ -202,9 +203,9 @@ public class VideoController {
     @RequestMapping("/index")
     public
     @ResponseBody
-    List<IndexVideo> getIndexVideos() {
+    List<SingleVideo> getIndexVideos() {
         List<Video> latestVideos = videoDao.getVideosByNewest(7);
-        List<IndexVideo> result = new ArrayList<IndexVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (Video video : latestVideos) {
             int video_id = video.getId();
             String image_url = video.getImage().getImage_key();
@@ -217,7 +218,7 @@ public class VideoController {
             String video_url = video.getVideo_key();
             String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new IndexVideo(video_id, video_title, image_download_url, video_download_url, author_name, update_timestamp));
+            result.add(new SingleVideo(video_id, video_title, author_name, video_download_url, image_download_url, update_timestamp));
         }
         return result;
     }
@@ -225,22 +226,22 @@ public class VideoController {
     @RequestMapping("/cache/index")
     public
     @ResponseBody
-    List<IndexVideo> cacheIndexVideos() {
+    List<SingleVideo> cacheIndexVideos() {
         List<Video> latestVideos = videoDao.getVideosByNewest(7);
         for (Video video : latestVideos){
             int vid = video.getId();
-            long result = redisClient.sadd("videoindex", "vi-"+vid);
+            long result = redisClient.sadd("videoindex", "video-"+vid);
             Video indexVideo = videoDao.getVideoByVideoId(vid);
-            videoCacheDao.insertIndex(indexVideo);
-            //System.out.println("insert result -> " + result);
+            videoCacheDao.insertSingleVideo(indexVideo);
+            System.out.println("insert result -> " + result);
         }
-
         Set<String> latestVideoKeys = redisClient.smembers("videoindex");
-        List<IndexVideo> result = new ArrayList<IndexVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (String vkey : latestVideoKeys){
-            //System.out.println("vkey -> " + vkey);
-            IndexVideo video = videoCacheDao.getIndexVideo(vkey);
-            //System.out.println("title -> " + video.getTitle());
+            System.out.println("vkey -> " + vkey);
+            int vid = Integer.parseInt(vkey.split("-")[1]);
+            SingleVideo video = videoCacheDao.getSingleVideo(vid);
+            System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
 
@@ -252,7 +253,7 @@ public class VideoController {
     @RequestMapping(value = "/category/{categories}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<CategoryVideo> getVideosByCategories(@PathVariable String categories) {
+    List<SingleVideo> getVideosByCategories(@PathVariable String categories) {
         //System.out.println("categories request is " + categories + " !!!!!!!!!!");
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
@@ -276,7 +277,7 @@ public class VideoController {
         //System.out.println(targetCategories.toString());
 
         List<Video> targetVideos = videoDao.getVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
-        List<CategoryVideo> result = new ArrayList<CategoryVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (Video video : targetVideos) {
             int video_id = video.getId();
             String image_url = "";
@@ -294,7 +295,7 @@ public class VideoController {
                 author_name = video.getAuthor().getName();
             }
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new CategoryVideo(video_id, video_title, author_name, image_download_url, video_download_url, update_timestamp));
+            result.add(new SingleVideo(video_id, video_title, author_name, video_download_url, image_download_url, update_timestamp));
         }
         return result;
     }
@@ -304,7 +305,7 @@ public class VideoController {
     @RequestMapping(value = "/category/tutorial/{categories}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<CategoryVideo> getTutorialVideosByCategories(@PathVariable String categories) {
+    List<SingleVideo> getTutorialVideosByCategories(@PathVariable String categories) {
         //System.out.println("categories request is " + categories + " !!!!!!!!!!");
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
@@ -328,7 +329,7 @@ public class VideoController {
         //System.out.println(targetCategories.toString());
 
         List<Education> targetVideos = educationDao.getEducationVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
-        List<CategoryVideo> result = new ArrayList<CategoryVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (Education video : targetVideos) {
             int video_id = video.getId();
             String image_url = "";
@@ -346,7 +347,7 @@ public class VideoController {
             String video_url = video.getVideo_key();
             String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
             Long update_timestamp = video.getUpdate_timestamp();
-            result.add(new CategoryVideo(video_id, video_title, author_name, image_download_url, video_download_url, update_timestamp));
+            result.add(new SingleVideo(video_id, video_title, author_name, video_download_url, image_download_url, update_timestamp));
         }
         return result;
     }

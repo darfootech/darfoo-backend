@@ -55,11 +55,11 @@ public class MusicController {
     //http://localhost:8080/darfoobackend/rest/resources/music/search/s
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public @ResponseBody
-    List<SearchMusic> searchMusic(HttpServletRequest request){
+    List<SingleMusic> searchMusic(HttpServletRequest request){
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
         List<Music> musics = searchDao.getMusicBySearch(searchContent);
-        List<SearchMusic> result = new ArrayList<SearchMusic>();
+        List<SingleMusic> result = new ArrayList<SingleMusic>();
         for (Music music : musics){
             int id = music.getId();
             String title = music.getTitle();
@@ -73,16 +73,16 @@ public class MusicController {
             String music_download_url = qiniuUtils.getQiniuResourceUrl(music_url);
             Long update_timestamp = music.getUpdate_timestamp();
             //result.add(new SearchMusic(id, title, image_download_url, music_download_url, author_name, update_timestamp));
-            result.add(new SearchMusic(id, title, music_download_url, author_name, update_timestamp));
+            result.add(new SingleMusic(id, title, author_name, music_download_url, update_timestamp));
         }
         return result;
     }
 
     @RequestMapping("/hottest")
     public @ResponseBody
-    List<HotMusic> getHottestMusics(){
+    List<SingleMusic> getHottestMusics(){
         List<Music> musics = musicDao.getHottestMusics(5);
-        List<HotMusic> result = new ArrayList<HotMusic>();
+        List<SingleMusic> result = new ArrayList<SingleMusic>();
         for (Music music : musics){
             int id = music.getId();
             String title = music.getTitle();
@@ -93,7 +93,7 @@ public class MusicController {
             String music_url = music.getMusic_key() + ".mp3";
             String music_download_url = qiniuUtils.getQiniuResourceUrl(music_url);
             Long update_timestamp = music.getUpdate_timestamp();
-            result.add(new HotMusic(id, title, music_download_url, author_name, update_timestamp));
+            result.add(new SingleMusic(id, title, author_name, music_download_url, update_timestamp));
         }
         return result;
     }
@@ -101,7 +101,7 @@ public class MusicController {
     //http://localhost:8080/darfoobackend/rest/resources/music/category/1-0-0
     @RequestMapping(value = "/category/{categories}", method = RequestMethod.GET)
     public @ResponseBody
-    List<CategoryMusic> getMusicByCategories(@PathVariable String categories){
+    List<SingleMusic> getMusicByCategories(@PathVariable String categories){
         //System.out.println("category request is " + categories + " !!!!!!!!!");
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
@@ -119,7 +119,7 @@ public class MusicController {
         }
 
         List<Music> musics = musicDao.getMusicsByCategories(ServiceUtils.convertList2Array(targetCategories));
-        List<CategoryMusic> result = new ArrayList<CategoryMusic>();
+        List<SingleMusic> result = new ArrayList<SingleMusic>();
         for (Music music : musics){
             int music_id = music.getId();
             //String image_url = music.getImage().getImage_key();
@@ -133,7 +133,7 @@ public class MusicController {
             String music_download_url = qiniuUtils.getQiniuResourceUrl(music_url);
             Long update_timestamp = music.getUpdate_timestamp();
             //result.add(new CategoryMusic(music_id, image_download_url, music_download_url, title, author_name, update_timestamp));
-            result.add(new CategoryMusic(music_id, music_download_url, title, author_name, update_timestamp));
+            result.add(new SingleMusic(music_id, title, author_name, music_download_url, update_timestamp));
         }
         return result;
     }

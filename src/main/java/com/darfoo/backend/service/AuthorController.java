@@ -39,8 +39,8 @@ public class AuthorController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public @ResponseBody
-    SingleAuthor getSingleAuthor(@PathVariable String id){
-        Author targetAuthor = authorDao.getAuthor(Integer.parseInt(id));
+    SingleAuthor getSingleAuthor(@PathVariable Integer id){
+        Author targetAuthor = authorDao.getAuthor(id);
         String name = targetAuthor.getName();
         String description = targetAuthor.getDescription();
         String image_url = "";
@@ -48,13 +48,13 @@ public class AuthorController {
             image_url = targetAuthor.getImage().getImage_key();
         }
         String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
-        return new SingleAuthor(Integer.parseInt(id), image_download_url, name, description);
+        return new SingleAuthor(id, name, description, image_download_url);
     }
 
     @RequestMapping("/index")
     public
     @ResponseBody
-    List<IndexAuthor> getIndexAuthor(){
+    List<SingleAuthor> getIndexAuthor(){
         List<Author> authors = authorDao.getAllAuthor();
 
         /*int returnCount = 7;
@@ -63,7 +63,7 @@ public class AuthorController {
             returnAuthors.add(authors.get(i));
         }*/
 
-        List<IndexAuthor> result = new ArrayList<IndexAuthor>();
+        List<SingleAuthor> result = new ArrayList<SingleAuthor>();
         for (Author author : authors){
             int id = author.getId();
             String image_url = "";
@@ -73,7 +73,7 @@ public class AuthorController {
             String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String title = author.getName();
             String description = author.getDescription();
-            result.add(new IndexAuthor(id, image_download_url, title, description));
+            result.add(new SingleAuthor(id, title, description, image_download_url));
         }
         return result;
     }
