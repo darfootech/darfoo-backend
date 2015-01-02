@@ -59,7 +59,7 @@ public class VideoController {
             author_name = targetVideo.getAuthor().getName();
         }
         long update_timestamp = targetVideo.getUpdate_timestamp();
-        return new SingleVideo(id, video_title, author_name, video_url, image_url, update_timestamp);
+        return new SingleVideo(id, video_title, author_name, video_download_url, image_download_url, update_timestamp);
     }
 
     @RequestMapping(value = "/tutorial/{id}", method = RequestMethod.GET)
@@ -103,7 +103,7 @@ public class VideoController {
         }
     }
 
-    //http://localhost:8080/darfoobackend/rest/resources/video/search/s
+    //http://localhost:8080/darfoobackend/rest/resources/video/search?search=s
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public @ResponseBody
     List<SingleVideo> searchVideo(HttpServletRequest request){
@@ -128,7 +128,7 @@ public class VideoController {
         return result;
     }
 
-    //http://localhost:8080/darfoobackend/rest/resources/video/tutorial/search/heart
+    //http://localhost:8080/darfoobackend/rest/resources/video/tutorial/search?search=heart
     @RequestMapping(value = "/tutorial/search", method = RequestMethod.GET)
     public @ResponseBody
     List<SingleVideo> searchTutorial(HttpServletRequest request){

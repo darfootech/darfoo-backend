@@ -52,7 +52,7 @@ public class MusicController {
         return new SingleMusic(music_id, title, music_download_url, author_name, update_timestamp);
     }
 
-    //http://localhost:8080/darfoobackend/rest/resources/music/search/s
+    //http://localhost:8080/darfoobackend/rest/resources/music/search?search=s
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public @ResponseBody
     List<SingleMusic> searchMusic(HttpServletRequest request){
