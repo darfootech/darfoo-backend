@@ -61,9 +61,12 @@
     </mvc:interceptors>
 
     <task:annotation-driven />
+
     <!--不使用bean则不会有定时服务，但是一旦有了bean那么就会一个问题就是到了定时执行的时候会出现两次操作-->
     <!--定时服务后面可以作为定时清理redis，清理session的cronjob-->
-    <!--<bean id="reportCurrentTime" class="com.springapp.mvc.ScheduledTasks"/>-->
+    <!--<bean id="reportCurrentTime" class="com.darfoo.backend.utils.ScheduledTasks"/>-->
+    <bean id="flushRedisCache" class="com.darfoo.backend.utils.ScheduledTasks"/>
+
     <!-- 引入同文件夹下的redis属性配置文件 -->
     <!--<import resource="redis-context.xml"/>-->
 
