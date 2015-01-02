@@ -20,7 +20,7 @@ public class TutorialCacheDao extends AbstractBaseRedisDao<String, Education> {
     @Autowired
     CommonRedisClient commonRedisClient;
 
-    public boolean insert(Education tutorial){
+    public boolean insertSingleTutorial(Education tutorial){
         Integer id = tutorial.getId();
         String key = "tutorial-" + id;
         if (!commonRedisClient.exists(key)){
@@ -29,11 +29,13 @@ public class TutorialCacheDao extends AbstractBaseRedisDao<String, Education> {
             String video_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getVideo_key());
             String image_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getImage().getImage_key());
             String authorname = tutorial.getAuthor().getName();
+            Long timestamp = tutorial.getUpdate_timestamp();
             videoMap.put("id", id.toString());
             videoMap.put("title", title);
-            videoMap.put("tutorialurl", video_download_url);
-            videoMap.put("imageurl", image_download_url);
+            videoMap.put("video_url", video_download_url);
+            videoMap.put("image_url", image_download_url);
             videoMap.put("authorname", authorname);
+            videoMap.put("update_timestamp", timestamp.toString());
             commonRedisClient.hmset(key, videoMap);
             return true;
         }else{
@@ -45,8 +47,9 @@ public class TutorialCacheDao extends AbstractBaseRedisDao<String, Education> {
         String key = "tutorial-" + id;
         String title = commonRedisClient.hget(key, "title");
         String authorname = commonRedisClient.hget(key, "authorname");
-        String tutorialurl = commonRedisClient.hget(key, "tutorialurl");
-        String imageurl = commonRedisClient.hget(key, "imageurl");
-        return new SingleVideo(id, title, authorname, tutorialurl, imageurl);
+        String tutorialurl = commonRedisClient.hget(key, "video_url");
+        String imageurl = commonRedisClient.hget(key, "image_url");
+        long timestamp = Long.parseLong(commonRedisClient.hget(key, "update_timestamp"));
+        return new SingleVideo(id, title, authorname, tutorialurl, imageurl, timestamp);
     }
 }

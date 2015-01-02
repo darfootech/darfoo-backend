@@ -10,13 +10,23 @@ public class SingleVideo {
     String authorname;
     String video_url;
     String image_url;
+    Long update_timestamp;
 
-    public SingleVideo(Integer id, String title, String authorname, String video_url, String image_url) {
+    public SingleVideo(Integer id, String title, String authorname, String video_url, String image_url, Long update_timestamp) {
         this.id = id;
         this.title = title;
         this.authorname = authorname;
         this.video_url = video_url;
         this.image_url = image_url;
+        this.update_timestamp = update_timestamp;
+    }
+
+    public Long getUpdate_timestamp() {
+        return update_timestamp;
+    }
+
+    public void setUpdate_timestamp(Long update_timestamp) {
+        this.update_timestamp = update_timestamp;
     }
 
     public String getImage_url() {

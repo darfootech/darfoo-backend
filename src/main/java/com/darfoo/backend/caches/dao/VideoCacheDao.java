@@ -53,7 +53,7 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
      * @param video
      * @return
      */
-    public boolean insert(Video video){
+    public boolean insertSingleVideo(Video video){
         Integer id = video.getId();
         String key = "video-" + id;
         if (!commonRedisClient.exists(key)){
@@ -62,11 +62,13 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
             String video_download_url = qiniuUtils.getQiniuResourceUrl(video.getVideo_key());
             String image_download_url = qiniuUtils.getQiniuResourceUrl(video.getImage().getImage_key());
             String authorname = video.getAuthor().getName();
+            String update_timestamp = video.getUpdate_timestamp().toString();
             videoMap.put("id", id.toString());
             videoMap.put("title", title);
-            videoMap.put("videourl", video_download_url);
-            videoMap.put("imageurl", image_download_url);
+            videoMap.put("video_url", video_download_url);
+            videoMap.put("image_url", image_download_url);
             videoMap.put("authorname", authorname);
+            videoMap.put("update_timestamp", update_timestamp);
             commonRedisClient.hmset(key, videoMap);
             return true;
         }else{
@@ -134,9 +136,10 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
         String key = "video-" + id;
         String title = commonRedisClient.hget(key, "title");
         String authorname = commonRedisClient.hget(key, "authorname");
-        String videourl = commonRedisClient.hget(key, "videourl");
-        String imageurl = commonRedisClient.hget(key, "imageurl");
-        return new SingleVideo(id, title, authorname, videourl, imageurl);
+        String videourl = commonRedisClient.hget(key, "video_url");
+        String imageurl = commonRedisClient.hget(key, "image_url");
+        String timestamp = commonRedisClient.hget(key, "update_timestamp");
+        return new SingleVideo(id, title, authorname, videourl, imageurl, Long.parseLong(timestamp));
     }
 
     public SingleVideo getSingleVideoFromPool(Integer id){
@@ -146,10 +149,11 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
             jedis = jedisPool.getResource();
             String title = jedis.hget(key, "title");
             String authorname = jedis.hget(key, "authorname");
-            String videourl = jedis.hget(key, "videourl");
-            String imageurl = jedis.hget(key, "imageurl");
+            String videourl = jedis.hget(key, "video_url");
+            String imageurl = jedis.hget(key, "image_url");
             //System.out.println(title + " - " + authorname + " - " + videourl + " - " + imageurl);
-            return new SingleVideo(id, title, authorname, videourl, imageurl);
+            String timestamp = commonRedisClient.hget(key, "update_timestamp");
+            return new SingleVideo(id, title, authorname, videourl, imageurl, Long.parseLong(timestamp));
         }catch (Exception e){
             e.printStackTrace();
             return null;

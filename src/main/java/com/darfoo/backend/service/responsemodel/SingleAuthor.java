@@ -5,15 +5,15 @@ package com.darfoo.backend.service.responsemodel;
  */
 public class SingleAuthor {
     Integer id;
-    String image_url;
-    String title;
+    String name;
     String description;
+    String image_url;
 
-    public SingleAuthor(Integer id, String image_url, String title, String description) {
+    public SingleAuthor(Integer id, String name, String description, String image_url) {
         this.id = id;
-        this.image_url = image_url;
-        this.title = title;
+        this.name = name;
         this.description = description;
+        this.image_url = image_url;
     }
 
     public String getDescription() {
@@ -40,11 +40,11 @@ public class SingleAuthor {
         this.image_url = image_url;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 }

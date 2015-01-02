@@ -22,7 +22,7 @@ public class HelloController {
     @ResponseBody public Map<String, Object> returnJson(){
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("code", true);
-        map.put("video", new SingleVideo(3, "title", "ccc", "videourl", "imageurl"));
+        map.put("video", new SingleVideo(3, "title", "ccc", "videourl", "imageurl", 0L));
         return map;
     }
 
@@ -31,7 +31,7 @@ public class HelloController {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("code", true);
-        map.put("video", new SingleVideo(3, "title", "ccc", "videourl", "imageurl"));
+        map.put("video", new SingleVideo(3, "title", "ccc", "videourl", "imageurl", 0L));
         list.add(map);
         list.add(map);
         list.add(map);

@@ -14,6 +14,7 @@ import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import scala.xml.parsing.XhtmlEntities;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -46,9 +47,8 @@ public class VideoController {
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public
     @ResponseBody
-    SingleVideo getSingleVideo(@PathVariable String id) {
-        Video targetVideo = videoDao.getVideoByVideoId(Integer.parseInt(id));
-        int video_id = targetVideo.getId();
+    SingleVideo getSingleVideo(@PathVariable Integer id) {
+        Video targetVideo = videoDao.getVideoByVideoId(id);
         String video_url = targetVideo.getVideo_key();
         String image_url = targetVideo.getImage().getImage_key();
         String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
@@ -58,15 +58,15 @@ public class VideoController {
         if (targetVideo.getAuthor() != null){
             author_name = targetVideo.getAuthor().getName();
         }
-        return new SingleVideo(video_id, video_title, author_name, video_download_url, image_download_url);
+        long update_timestamp = targetVideo.getUpdate_timestamp();
+        return new SingleVideo(id, video_title, author_name, video_url, image_url, update_timestamp);
     }
 
     @RequestMapping(value = "/tutorial/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
-    SingleVideo getSingleTutorialVideo(@PathVariable String id){
-        Education tutorial = educationDao.getEducationVideoById(Integer.parseInt(id));
-        int video_id = tutorial.getId();
+    SingleVideo getSingleTutorialVideo(@PathVariable Integer id){
+        Education tutorial = educationDao.getEducationVideoById(id);
         String video_url = tutorial.getVideo_key();
         String image_url = tutorial.getImage().getImage_key();
         String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
@@ -76,7 +76,8 @@ public class VideoController {
         if (tutorial.getAuthor() != null){
             author_name = tutorial.getAuthor().getName();
         }
-        return new SingleVideo(video_id, video_title, author_name, video_download_url, image_download_url);
+        long update_timestamp = tutorial.getUpdate_timestamp();
+        return new SingleVideo(id, video_title, author_name, video_download_url, image_download_url, update_timestamp);
     }
 
     @RequestMapping(value = "/getmusic/{id}", method = RequestMethod.GET)
@@ -95,9 +96,10 @@ public class VideoController {
                 author_name = targetMusic.getAuthor().getName();
             }
             //return new SingleMusic(music_id, music_download_url, image_download_url, author_name, title);
-            return new SingleMusic(music_id, music_download_url, author_name, title);
+            long update_timestamp = targetMusic.getUpdate_timestamp();
+            return new SingleMusic(music_id, title, author_name, music_download_url, update_timestamp);
         }else{
-            return new SingleMusic(-1, "", "", "");
+            return new SingleMusic(-1, "", "", "", 0L);
         }
     }
 

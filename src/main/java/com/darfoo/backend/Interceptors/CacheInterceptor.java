@@ -66,7 +66,7 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
             }else{
                 System.out.println("resource not in cache");
                 Video video = videoDao.getVideoByVideoId(vid);
-                videoCacheDao.insert(video);
+                videoCacheDao.insertSingleVideo(video);
             }
             return true;
         }
@@ -83,7 +83,7 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
             }else{
                 System.out.println("resource not in cache");
                 Education tutorial = educationDao.getEducationVideoById(tid);
-                tutorialCacheDao.insert(tutorial);
+                tutorialCacheDao.insertSingleTutorial(tutorial);
             }
             return true;
         }
@@ -100,7 +100,7 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
             }else{
                 System.out.println("resource not in cache");
                 Music music = musicDao.getMusicByMusicId(mid);
-                musicCacheDao.insert(music);
+                musicCacheDao.insertSingleMusic(music);
             }
             return true;
         }

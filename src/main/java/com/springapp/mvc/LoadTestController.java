@@ -57,7 +57,8 @@ public class LoadTestController {
         if (targetVideo.getAuthor() != null){
             author_name = targetVideo.getAuthor().getName();
         }
-        return new SingleVideo(video_id, video_title, author_name, video_url, image_url);
+        long timestamp = targetVideo.getUpdate_timestamp();
+        return new SingleVideo(video_id, video_title, author_name, video_url, image_url, timestamp);
     }
 
     /*
@@ -104,7 +105,8 @@ public class LoadTestController {
         if (targetVideo.getAuthor() != null){
             author_name = targetVideo.getAuthor().getName();
         }
-        return new SingleVideo(id, video_title, author_name, video_url, image_url);
+        long timestamp = targetVideo.getUpdate_timestamp();
+        return new SingleVideo(id, video_title, author_name, video_url, image_url, timestamp);
     }
 
     //=> 和normal差不多
@@ -200,7 +202,8 @@ public class LoadTestController {
                 if (targetVideo.getAuthor() != null){
                     author_name = targetVideo.getAuthor().getName();
                 }
-                return new SingleVideo(video_id, video_title, author_name, video_url, image_url);
+                long timestamp = targetVideo.getUpdate_timestamp();
+                return new SingleVideo(video_id, video_title, author_name, video_url, image_url, timestamp);
             }
         };
     }
@@ -291,7 +294,8 @@ public class LoadTestController {
                 if (targetVideo.getAuthor() != null){
                     author_name = targetVideo.getAuthor().getName();
                 }
-                response.setResult(new SingleVideo(video_id, video_title, author_name, video_url, image_url));
+                long timestamp = targetVideo.getUpdate_timestamp();
+                response.setResult(new SingleVideo(video_id, video_title, author_name, video_url, image_url, timestamp));
                 responseQueue.remove(response);
             }
         }

@@ -47,8 +47,9 @@ public class MusicController {
         if (targetMusic.getAuthor() != null){
             author_name = targetMusic.getAuthor().getName();
         }
+        long update_timestamp = targetMusic.getUpdate_timestamp();
         //return new SingleMusic(music_id, music_download_url, image_download_url, author_name, title);
-        return new SingleMusic(music_id, music_download_url, author_name, title);
+        return new SingleMusic(music_id, title, music_download_url, author_name, update_timestamp);
     }
 
     //http://localhost:8080/darfoobackend/rest/resources/music/search/s
