@@ -92,4 +92,30 @@ public class VideoCacheTests {
 
         System.out.println(result.size());
     }
+
+    @Test
+    public void cacheRecommendVideos(){
+        List<Video> recommendVideos = videoDao.getRecommendVideos(7);
+        for (Video video : recommendVideos){
+            int vid = video.getId();
+            long result = redisClient.sadd("videorecommend", "vr-"+vid);
+            Video indexVideo = videoDao.getVideoByVideoId(vid);
+            videoCacheDao.insertRecommend(indexVideo);
+            System.out.println("insert result -> " + result);
+        }
+    }
+
+    @Test
+    public void getRecommendVideos(){
+        Set<String> recommendVideos = redisClient.smembers("videorecommend");
+        List<IndexVideo> result = new ArrayList<IndexVideo>();
+        for (String vkey : recommendVideos){
+            System.out.println("vkey -> " + vkey);
+            IndexVideo video = videoCacheDao.getIndexVideo(vkey);
+            System.out.println("title -> " + video.getTitle());
+            result.add(video);
+        }
+
+        System.out.println(result.size());
+    }
 }

@@ -1,5 +1,7 @@
 package com.darfoo.backend.service;
 
+import com.darfoo.backend.caches.CommonRedisClient;
+import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.EducationDao;
 import com.darfoo.backend.dao.SearchDao;
 import com.darfoo.backend.dao.VideoDao;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by zjh on 14-11-16.
@@ -30,6 +33,10 @@ public class VideoController {
     EducationDao educationDao;
     @Autowired
     SearchDao searchDao;
+    @Autowired
+    CommonRedisClient redisClient;
+    @Autowired
+    VideoCacheDao videoCacheDao;
 
     QiniuUtils qiniuUtils = new QiniuUtils();
     VideoCates videoCates = new VideoCates();
@@ -167,6 +174,29 @@ public class VideoController {
         return result;
     }
 
+    @RequestMapping("/cache/recommend")
+    public
+    @ResponseBody
+    List<IndexVideo> cacheRecmmendVideos() {
+        List<Video> recommendVideos = videoDao.getRecommendVideos(7);
+        for (Video video : recommendVideos){
+            int vid = video.getId();
+            long result = redisClient.sadd("videorecommend", "vr-"+vid);
+            Video indexVideo = videoDao.getVideoByVideoId(vid);
+            videoCacheDao.insertRecommend(indexVideo);
+            //System.out.println("insert result -> " + result);
+        }
+        Set<String> recommendVideoKeys = redisClient.smembers("videorecommend");
+        List<IndexVideo> result = new ArrayList<IndexVideo>();
+        for (String vkey : recommendVideoKeys){
+            //System.out.println("vkey -> " + vkey);
+            IndexVideo video = videoCacheDao.getIndexVideo(vkey);
+            //System.out.println("title -> " + video.getTitle());
+            result.add(video);
+        }
+        return result;
+    }
+
     @RequestMapping("/index")
     public
     @ResponseBody
@@ -187,6 +217,31 @@ public class VideoController {
             Long update_timestamp = video.getUpdate_timestamp();
             result.add(new IndexVideo(video_id, video_title, image_download_url, video_download_url, author_name, update_timestamp));
         }
+        return result;
+    }
+
+    @RequestMapping("/cache/index")
+    public
+    @ResponseBody
+    List<IndexVideo> cacheIndexVideos() {
+        List<Video> latestVideos = videoDao.getVideosByNewest(7);
+        for (Video video : latestVideos){
+            int vid = video.getId();
+            long result = redisClient.sadd("videoindex", "vi-"+vid);
+            Video indexVideo = videoDao.getVideoByVideoId(vid);
+            videoCacheDao.insertIndex(indexVideo);
+            //System.out.println("insert result -> " + result);
+        }
+
+        Set<String> latestVideoKeys = redisClient.smembers("videoindex");
+        List<IndexVideo> result = new ArrayList<IndexVideo>();
+        for (String vkey : latestVideoKeys){
+            //System.out.println("vkey -> " + vkey);
+            IndexVideo video = videoCacheDao.getIndexVideo(vkey);
+            //System.out.println("title -> " + video.getTitle());
+            result.add(video);
+        }
+
         return result;
     }
 

@@ -102,6 +102,34 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
         }
     }
 
+    /**
+     * 为首页推荐视频资源进行缓存
+     * @param video
+     * @return
+     */
+    public boolean insertRecommend(Video video){
+        Integer id = video.getId();
+        String key = "vr-" + id;
+        if (!commonRedisClient.exists(key)){
+            String title = video.getTitle();
+            HashMap<String, String> videoMap = new HashMap<String, String>();
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video.getVideo_key());
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(video.getImage().getImage_key());
+            String authorname = video.getAuthor().getName();
+            Long timestamp = video.getUpdate_timestamp();
+            videoMap.put("id", id.toString());
+            videoMap.put("title", title);
+            videoMap.put("videourl", video_download_url);
+            videoMap.put("imageurl", image_download_url);
+            videoMap.put("authorname", authorname);
+            videoMap.put("timestamp", timestamp.toString());
+            commonRedisClient.hmset(key, videoMap);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public SingleVideo getSingleVideo(Integer id){
         String key = "video-" + id;
         String title = commonRedisClient.hget(key, "title");
