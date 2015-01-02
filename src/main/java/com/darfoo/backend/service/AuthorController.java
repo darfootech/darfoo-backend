@@ -6,6 +6,7 @@ package com.darfoo.backend.service;
 
 import com.darfoo.backend.dao.AuthorDao;
 import com.darfoo.backend.dao.EducationDao;
+import com.darfoo.backend.dao.SearchDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Education;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,8 @@ public class AuthorController {
     VideoDao videoDao;
     @Autowired
     EducationDao educationDao;
+    @Autowired
+    SearchDao searchDao;
 
     QiniuUtils qiniuUtils = new QiniuUtils();
 
@@ -107,6 +111,25 @@ public class AuthorController {
             result.add(new SingleVideo(tid, title, authorname, tutorial_download_url, image_download_url, update_timestamp));
         }
 
+        return result;
+    }
+
+    //http://localhost:8080/darfoobackend/rest/resources/video/author/search?search=heart
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public @ResponseBody
+    List<SingleAuthor> searchTutorial(HttpServletRequest request){
+        String searchContent = request.getParameter("search");
+        System.out.println(searchContent);
+        List<Author> authors = searchDao.getAuthorBySearch(searchContent);
+        List<SingleAuthor> result = new ArrayList<SingleAuthor>();
+        for (Author author : authors){
+            int id = author.getId();
+            String name = author.getName();
+            String description = author.getDescription();
+            String image_url = author.getImage().getImage_key();
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
+            result.add(new SingleAuthor(id, name, description, image_download_url));
+        }
         return result;
     }
 }

@@ -2,6 +2,7 @@ package com.springapp.mvc;
 
 import java.util.List;
 
+import com.darfoo.backend.model.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.darfoo.backend.dao.DanceDao;
 import com.darfoo.backend.dao.SearchDao;
-import com.darfoo.backend.model.DanceGroup;
-import com.darfoo.backend.model.DanceGroupImage;
-import com.darfoo.backend.model.Education;
-import com.darfoo.backend.model.Music;
-import com.darfoo.backend.model.Video;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
@@ -43,7 +39,7 @@ public class SearchDaoTests {
 	}
 	
 	@Test
-	public void searchEducationVideo(){
+	public void searchEducation(){
 		String searchContent = "heart";
 		List<Education> l = searchDao.getEducationBySearch(searchContent);
 		for(Education v : l){
@@ -51,4 +47,14 @@ public class SearchDaoTests {
 			System.out.println("————————————————————————————————");
 		}
 	}
+
+    @Test
+    public void searchAuthor(){
+        String searchContent = "周";
+        List<Author> l = searchDao.getAuthorBySearch(searchContent);
+        for(Author v : l){
+            System.out.println(v.toString());
+            System.out.println("————————————————————————————————");
+        }
+    }
 }
