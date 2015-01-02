@@ -34,10 +34,6 @@ public class VideoController {
     EducationDao educationDao;
     @Autowired
     SearchDao searchDao;
-    @Autowired
-    CommonRedisClient redisClient;
-    @Autowired
-    VideoCacheDao videoCacheDao;
 
     QiniuUtils qiniuUtils = new QiniuUtils();
     VideoCates videoCates = new VideoCates();
@@ -176,30 +172,6 @@ public class VideoController {
         return result;
     }
 
-    @RequestMapping("/cache/recommend")
-    public
-    @ResponseBody
-    List<SingleVideo> cacheRecmmendVideos() {
-        List<Video> recommendVideos = videoDao.getRecommendVideos(7);
-        for (Video video : recommendVideos){
-            int vid = video.getId();
-            long result = redisClient.sadd("videorecommend", "video-"+vid);
-            Video indexVideo = videoDao.getVideoByVideoId(vid);
-            videoCacheDao.insertSingleVideo(indexVideo);
-            System.out.println("insert result -> " + result);
-        }
-        Set<String> recommendVideoKeys = redisClient.smembers("videorecommend");
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
-        for (String vkey : recommendVideoKeys){
-            System.out.println("vkey -> " + vkey);
-            int vid = Integer.parseInt(vkey.split("-")[1]);
-            SingleVideo video = videoCacheDao.getSingleVideo(vid);
-            System.out.println("title -> " + video.getTitle());
-            result.add(video);
-        }
-        return result;
-    }
-
     @RequestMapping("/index")
     public
     @ResponseBody
@@ -220,31 +192,6 @@ public class VideoController {
             Long update_timestamp = video.getUpdate_timestamp();
             result.add(new SingleVideo(video_id, video_title, author_name, video_download_url, image_download_url, update_timestamp));
         }
-        return result;
-    }
-
-    @RequestMapping("/cache/index")
-    public
-    @ResponseBody
-    List<SingleVideo> cacheIndexVideos() {
-        List<Video> latestVideos = videoDao.getVideosByNewest(7);
-        for (Video video : latestVideos){
-            int vid = video.getId();
-            long result = redisClient.sadd("videoindex", "video-"+vid);
-            Video indexVideo = videoDao.getVideoByVideoId(vid);
-            videoCacheDao.insertSingleVideo(indexVideo);
-            System.out.println("insert result -> " + result);
-        }
-        Set<String> latestVideoKeys = redisClient.smembers("videoindex");
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
-        for (String vkey : latestVideoKeys){
-            System.out.println("vkey -> " + vkey);
-            int vid = Integer.parseInt(vkey.split("-")[1]);
-            SingleVideo video = videoCacheDao.getSingleVideo(vid);
-            System.out.println("title -> " + video.getTitle());
-            result.add(video);
-        }
-
         return result;
     }
 

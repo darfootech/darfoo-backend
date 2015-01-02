@@ -6,6 +6,8 @@ import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.IndexVideo;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
+import com.darfoo.backend.service.responsemodel.VideoCates;
+import com.darfoo.backend.utils.ServiceUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,8 @@ public class VideoCacheTests {
     VideoCacheDao videoCacheDao;
     @Autowired
     CommonRedisClient redisClient;
+
+    VideoCates videoCates = new VideoCates();
 
     @Test
     public void testAddVideo(){
@@ -73,8 +77,7 @@ public class VideoCacheTests {
         for (Video video : latestVideos){
             int vid = video.getId();
             long result = redisClient.sadd("videoindex", "video-"+vid);
-            Video indexVideo = videoDao.getVideoByVideoId(vid);
-            videoCacheDao.insertSingleVideo(indexVideo);
+            videoCacheDao.insertSingleVideo(video);
             System.out.println("insert result -> " + result);
         }
     }
@@ -100,8 +103,7 @@ public class VideoCacheTests {
         for (Video video : recommendVideos){
             int vid = video.getId();
             long result = redisClient.sadd("videorecommend", "video-"+vid);
-            Video indexVideo = videoDao.getVideoByVideoId(vid);
-            videoCacheDao.insertSingleVideo(indexVideo);
+            videoCacheDao.insertSingleVideo(video);
             System.out.println("insert result -> " + result);
         }
     }
@@ -111,6 +113,55 @@ public class VideoCacheTests {
         Set<String> recommendVideos = redisClient.smembers("videorecommend");
         List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (String vkey : recommendVideos){
+            System.out.println("vkey -> " + vkey);
+            int vid = Integer.parseInt(vkey.split("-")[1]);
+            SingleVideo video = videoCacheDao.getSingleVideo(vid);
+            System.out.println("title -> " + video.getTitle());
+            result.add(video);
+        }
+
+        System.out.println(result.size());
+    }
+
+    @Test
+    public void cacheCategory(){
+        String categories = "2-0-0-0";
+        String[] requestCategories = categories.split("-");
+        List<String> targetCategories = new ArrayList<String>();
+        if (!requestCategories[0].equals("0")) {
+            String speedCate = videoCates.getSpeedCategory().get(requestCategories[0]);
+            targetCategories.add(speedCate);
+        }
+        if (!requestCategories[1].equals("0")) {
+            String difficultyCate = videoCates.getDifficultyCategory().get(requestCategories[1]);
+            targetCategories.add(difficultyCate);
+        }
+        if (!requestCategories[2].equals("0")) {
+            String styleCate = videoCates.getStyleCategory().get(requestCategories[2]);
+            targetCategories.add(styleCate);
+        }
+        if (!requestCategories[3].equals("0")) {
+            String letterCate = requestCategories[3];
+            targetCategories.add(letterCate);
+        }
+
+        //System.out.println(targetCategories.toString());
+
+        List<Video> targetVideos = videoDao.getVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
+        for (Video video : targetVideos) {
+            int vid = video.getId();
+            long result = redisClient.sadd("videocategory"+categories, "video-"+vid);
+            videoCacheDao.insertSingleVideo(video);
+            System.out.println("insert result -> " + result);
+        }
+    }
+
+    @Test
+    public void getCategory(){
+        String categories = "2-0-0-0";
+        Set<String> categoryVideoKeys = redisClient.smembers("videocategory"+categories);
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        for (String vkey : categoryVideoKeys){
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
             SingleVideo video = videoCacheDao.getSingleVideo(vid);
