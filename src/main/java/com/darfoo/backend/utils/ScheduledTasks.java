@@ -24,13 +24,14 @@ public class ScheduledTasks {
     }*/
 
     //=>暂时一天清空一次redis缓存
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 600000)
     public void flushRedisCache(){
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         // S is the millisecond
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currenttime = simpleDateFormat.format(timestamp).split(" ")[1];
-        if (currenttime.equals("00:00:00")){
+        String currenthour = currenttime.split(":")[0];
+        if (currenthour.equals("00")){
             System.out.println("flushredis -> " + redisClient.deleteCurrentDB());
         }else{
             System.out.println(currenttime);
