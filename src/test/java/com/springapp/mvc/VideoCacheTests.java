@@ -125,7 +125,7 @@ public class VideoCacheTests {
 
     @Test
     public void cacheCategory(){
-        String categories = "2-0-0-0";
+        String categories = "0-0-0-0";
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
         if (!requestCategories[0].equals("0")) {
@@ -150,7 +150,7 @@ public class VideoCacheTests {
         List<Video> targetVideos = videoDao.getVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
         for (Video video : targetVideos) {
             int vid = video.getId();
-            long result = redisClient.sadd("videocategory"+categories, "video-"+vid);
+            long result = redisClient.sadd("videocategory" + categories, "video-" + vid);
             videoCacheDao.insertSingleVideo(video);
             System.out.println("insert result -> " + result);
         }
@@ -158,8 +158,8 @@ public class VideoCacheTests {
 
     @Test
     public void getCategory(){
-        String categories = "2-0-0-0";
-        Set<String> categoryVideoKeys = redisClient.smembers("videocategory"+categories);
+        String categories = "0-0-0-0";
+        Set<String> categoryVideoKeys = redisClient.smembers("videocategory" + categories);
         List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (String vkey : categoryVideoKeys){
             System.out.println("vkey -> " + vkey);

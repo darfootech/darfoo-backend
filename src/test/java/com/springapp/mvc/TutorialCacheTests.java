@@ -6,11 +6,17 @@ import com.darfoo.backend.dao.EducationDao;
 import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
+import com.darfoo.backend.service.responsemodel.TutorialCates;
+import com.darfoo.backend.utils.ServiceUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by zjh on 14-12-18.
@@ -29,6 +35,8 @@ public class TutorialCacheTests {
     TutorialCacheDao tutorialCacheDao;
     @Autowired
     CommonRedisClient redisClient;
+
+    TutorialCates tutorialCates = new TutorialCates();
 
     @Test
     public void testDeleteTutorial(){
@@ -49,4 +57,46 @@ public class TutorialCacheTests {
         System.out.println(tutorial.getTitle());
     }
 
+    @Test
+    public void cacheCategory(){
+        String categories = "0-0-0-0";
+        String[] requestCategories = categories.split("-");
+        List<String> targetCategories = new ArrayList<String>();
+        if (!requestCategories[0].equals("0")) {
+            String speedCate = tutorialCates.getSpeedCategory().get(requestCategories[0]);
+            targetCategories.add(speedCate);
+        }
+        if (!requestCategories[1].equals("0")) {
+            String difficultyCate = tutorialCates.getDifficultyCategory().get(requestCategories[1]);
+            targetCategories.add(difficultyCate);
+        }
+        if (!requestCategories[2].equals("0")) {
+            String styleCate = tutorialCates.getStyleCategory().get(requestCategories[2]);
+            targetCategories.add(styleCate);
+        }
+
+        List<Education> targetVideos = educationDao.getEducationVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
+        for (Education video : targetVideos) {
+            int vid = video.getId();
+            long result = redisClient.sadd("tutorialcategory" + categories, "tutorial-" + vid);
+            tutorialCacheDao.insertSingleTutorial(video);
+            System.out.println("insert result -> " + result);
+        }
+    }
+
+    @Test
+    public void getCategory(){
+        String categories = "0-0-0-0";
+        Set<String> categoryVideoKeys = redisClient.smembers("tutorialcategory" + categories);
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        for (String vkey : categoryVideoKeys){
+            System.out.println("vkey -> " + vkey);
+            int vid = Integer.parseInt(vkey.split("-")[1]);
+            SingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
+            System.out.println("title -> " + video.getTitle());
+            result.add(video);
+        }
+
+        System.out.println(result.size());
+    }
 }

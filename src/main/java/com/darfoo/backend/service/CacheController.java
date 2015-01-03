@@ -7,9 +7,11 @@ import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.EducationDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
+import com.darfoo.backend.service.responsemodel.TutorialCates;
 import com.darfoo.backend.service.responsemodel.VideoCates;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,7 @@ public class CacheController {
     CommonRedisClient redisClient;
 
     VideoCates videoCates = new VideoCates();
+    TutorialCates tutorialCates = new TutorialCates();
 
     @RequestMapping(value = "/video/{id}", method = RequestMethod.GET)
     public
@@ -147,17 +150,57 @@ public class CacheController {
         List<Video> targetVideos = videoDao.getVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
         for (Video video : targetVideos) {
             int vid = video.getId();
-            long result = redisClient.sadd("videocategory"+categories, "video-"+vid);
+            long result = redisClient.sadd("videocategory" + categories, "video-" + vid);
             videoCacheDao.insertSingleVideo(video);
             System.out.println("insert result -> " + result);
         }
 
-        Set<String> categoryVideoKeys = redisClient.smembers("videocategory"+categories);
+        Set<String> categoryVideoKeys = redisClient.smembers("videocategory" + categories);
         List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (String vkey : categoryVideoKeys){
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
             SingleVideo video = videoCacheDao.getSingleVideo(vid);
+            System.out.println("title -> " + video.getTitle());
+            result.add(video);
+        }
+
+        return result;
+    }
+
+    @RequestMapping(value = "/tutorial/category/{categories}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List<SingleVideo> getTutorialsByCategories(@PathVariable String categories) {
+        String[] requestCategories = categories.split("-");
+        List<String> targetCategories = new ArrayList<String>();
+        if (!requestCategories[0].equals("0")) {
+            String speedCate = tutorialCates.getSpeedCategory().get(requestCategories[0]);
+            targetCategories.add(speedCate);
+        }
+        if (!requestCategories[1].equals("0")) {
+            String difficultyCate = tutorialCates.getDifficultyCategory().get(requestCategories[1]);
+            targetCategories.add(difficultyCate);
+        }
+        if (!requestCategories[2].equals("0")) {
+            String styleCate = tutorialCates.getStyleCategory().get(requestCategories[2]);
+            targetCategories.add(styleCate);
+        }
+
+        List<Education> targetVideos = educationDao.getEducationVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
+        for (Education video : targetVideos) {
+            int vid = video.getId();
+            long result = redisClient.sadd("tutorialcategory" + categories, "tutorial-" + vid);
+            tutorialCacheDao.insertSingleTutorial(video);
+            System.out.println("insert result -> " + result);
+        }
+
+        Set<String> categoryVideoKeys = redisClient.smembers("tutorialcategory" + categories);
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        for (String vkey : categoryVideoKeys){
+            System.out.println("vkey -> " + vkey);
+            int vid = Integer.parseInt(vkey.split("-")[1]);
+            SingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
