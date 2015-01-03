@@ -260,4 +260,43 @@ public class CacheController {
         }
         return result;
     }
+
+    @RequestMapping(value = "/author/videos/{id}", method = RequestMethod.GET)
+    @ResponseBody public List<SingleVideo> getVideoListForAuthor(@PathVariable Integer id){
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        List<Video> videos = videoDao.getVideosByAuthorId(id);
+        List<Education> tutorials = educationDao.getTutorialsByAuthorId(id);
+
+        for (Video video : videos){
+            int vid = video.getId();
+            long status = redisClient.sadd("authorvideos" + id, "video-" + vid);
+            videoCacheDao.insertSingleVideo(video);
+            System.out.println("insert result -> " + status);
+        }
+
+        for (Education tutorial : tutorials){
+            int tid = tutorial.getId();
+            long status = redisClient.sadd("authorvideos" + id, "tutorial-" + tid);
+            tutorialCacheDao.insertSingleTutorial(tutorial);
+            System.out.println("insert result -> " + status);
+        }
+
+        Set<String> authorVideoKeys = redisClient.smembers("authorvideos" + id);
+        for (String key : authorVideoKeys){
+            System.out.println("key -> " + key);
+            int vtid = Integer.parseInt(key.split("-")[1]);
+            String vtflag = key.split("-")[0];
+            if (vtflag.equals("video")){
+                SingleVideo video = videoCacheDao.getSingleVideo(vtid);
+                result.add(video);
+            }else if (vtflag.equals("tutorial")){
+                SingleVideo tutorial = tutorialCacheDao.getSingleTutorial(vtid);
+                result.add(tutorial);
+            }else {
+                System.out.println("something is wrong");
+            }
+        }
+
+        return result;
+    }
 }

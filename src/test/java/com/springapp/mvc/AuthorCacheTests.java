@@ -2,9 +2,16 @@ package com.springapp.mvc;
 
 import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.caches.dao.AuthorCacheDao;
+import com.darfoo.backend.caches.dao.TutorialCacheDao;
+import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.AuthorDao;
+import com.darfoo.backend.dao.EducationDao;
+import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Author;
+import com.darfoo.backend.model.Education;
+import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
+import com.darfoo.backend.service.responsemodel.SingleVideo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +37,14 @@ public class AuthorCacheTests {
     AuthorDao authorDao;
     @Autowired
     AuthorCacheDao authorCacheDao;
+    @Autowired
+    VideoDao videoDao;
+    @Autowired
+    VideoCacheDao videoCacheDao;
+    @Autowired
+    EducationDao educationDao;
+    @Autowired
+    TutorialCacheDao tutorialCacheDao;
     @Autowired
     CommonRedisClient redisClient;
 
@@ -64,6 +79,46 @@ public class AuthorCacheTests {
             SingleAuthor author = authorCacheDao.getSingleAuthor(id);
             System.out.println("name -> " + author.getName());
             result.add(author);
+        }
+
+        System.out.println(result.size());
+    }
+
+    @Test
+    public void cacheAuthorVideos(){
+        int id = 11;
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        List<Video> videos = videoDao.getVideosByAuthorId(id);
+        List<Education> tutorials = educationDao.getTutorialsByAuthorId(id);
+
+        for (Video video : videos){
+            int vid = video.getId();
+            long status = redisClient.sadd("authorvideos" + id, "video-" + vid);
+            videoCacheDao.insertSingleVideo(video);
+            System.out.println("insert result -> " + status);
+        }
+
+        for (Education tutorial : tutorials){
+            int tid = tutorial.getId();
+            long status = redisClient.sadd("authorvideos" + id, "tutorial-" + tid);
+            tutorialCacheDao.insertSingleTutorial(tutorial);
+            System.out.println("insert result -> " + status);
+        }
+
+        Set<String> authorVideoKeys = redisClient.smembers("authorvideos" + id);
+        for (String key : authorVideoKeys){
+            System.out.println("key -> " + key);
+            int vtid = Integer.parseInt(key.split("-")[1]);
+            String vtflag = key.split("-")[0];
+            if (vtflag.equals("video")){
+                SingleVideo video = videoCacheDao.getSingleVideo(vtid);
+                result.add(video);
+            }else if (vtflag.equals("tutorial")){
+                SingleVideo tutorial = tutorialCacheDao.getSingleTutorial(vtid);
+                result.add(tutorial);
+            }else {
+                System.out.println("something is wrong");
+            }
         }
 
         System.out.println(result.size());
