@@ -64,7 +64,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             System.out.println("music clicked id is: " + musicid + "\n");
             int mid = Integer.parseInt(musicid);
             int acc = 1;
-            System.out.println(CRUDEvent.getResponse(musicDao.updateMusicHotest(mid, acc)));
+            System.out.println(CRUDEvent.getResponse(musicDao.updateMusicHottest(mid, acc)));
             return true;
         }
 
@@ -75,7 +75,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
                 int musicid = music.getId();
                 System.out.println("music clicked id is: " + musicid + "\n");
                 int acc = 1;
-                System.out.println(CRUDEvent.getResponse(musicDao.updateMusicHotest(musicid, acc)));
+                System.out.println(CRUDEvent.getResponse(musicDao.updateMusicHottest(musicid, acc)));
                 return true;
             }else{
                 System.out.println("no music connect to this video: " + videoid);

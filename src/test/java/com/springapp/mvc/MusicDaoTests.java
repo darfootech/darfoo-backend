@@ -219,7 +219,7 @@ public class MusicDaoTests {
 		Integer id = 1;
 		int n = 1;
 		//int n = -5;
-		System.out.println(CRUDEvent.getResponse(musicDao.updateMusicHotest(id, n)));
+		System.out.println(CRUDEvent.getResponse(musicDao.updateMusicHottest(id, n)));
 	}
 	
 	/**
@@ -228,7 +228,7 @@ public class MusicDaoTests {
 	@Test
 	public void getMusicsByHotest(){
 		int number = 20;
-		List<Music> musics = musicDao.getMusicsByHotest(number);
+		List<Music> musics = musicDao.getMusicsByHottest(number);
 		System.out.println("---------返回"+musics.size()+"个视频---------");
 		for(Music v : musics){
 			System.out.println("热度值---->"+v.getHotest());

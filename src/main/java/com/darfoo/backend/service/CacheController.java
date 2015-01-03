@@ -254,6 +254,31 @@ public class CacheController {
         return result;
     }
 
+
+    @RequestMapping("/music/hottest")
+    public @ResponseBody
+    List<SingleMusic> getHottestMusics(){
+        List<Music> musics = musicDao.getMusicsByHottest(5);
+        List<SingleMusic> result = new ArrayList<SingleMusic>();
+        for (Music music : musics){
+            int mid = music.getId();
+            long status = redisClient.sadd("musichottest", "music-" + mid);
+            musicCacheDao.insertSingleMusic(music);
+            System.out.println("insert result -> " + status);
+        }
+
+        Set<String> hottestMusicKeys = redisClient.smembers("musichottest");
+        for (String vkey : hottestMusicKeys){
+            System.out.println("vkey -> " + vkey);
+            int mid = Integer.parseInt(vkey.split("-")[1]);
+            SingleMusic music = musicCacheDao.getSingleMusic(mid);
+            System.out.println("title -> " + music.getTitle());
+            result.add(music);
+        }
+
+        return result;
+    }
+
     @RequestMapping(value = "/video/getmusic/{id}", method = RequestMethod.GET)
     public @ResponseBody SingleMusic getMusicByVideoId(@PathVariable Integer id){
         Music targetMusic = videoDao.getMusic(id);
@@ -340,4 +365,5 @@ public class CacheController {
 
         return result;
     }
+
 }

@@ -140,7 +140,7 @@ public class MusicDao {
 
     /**
 	 * 获取热门歌曲排行榜(暂时不排)
-	 * @param number 推荐歌曲数量(暂时定为3个)
+	 * @param number 推荐歌曲数量<del>(暂时定为3个)</del>
 	 * @return List<Music> l_music 返回一个包含多个music对象的List
 	 **/
 	public List<Music> getHottestMusics(int number){
@@ -426,7 +426,7 @@ public class MusicDao {
 	 * @param id music的id
 	 * @param n  增加的值(通常设为1)
 	 * **/
-	public int updateMusicHotest(Integer id,int n){
+	public int updateMusicHottest(Integer id,int n){
 		int res = 0;
 		try{
 			Session session = sf.getCurrentSession();
@@ -456,7 +456,7 @@ public class MusicDao {
 	 * 按热度排序，从热度最大到最小排序返回
 	 * @param 获得热度排名前number个
 	 * **/
-	public List<Music>  getMusicsByHotest(int number){
+	public List<Music>  getMusicsByHottest(int number){
 		List<Music> l_music = new ArrayList<Music>();
 		try{
 			Session session = sf.getCurrentSession();

@@ -81,7 +81,7 @@ public class MusicController {
     @RequestMapping("/hottest")
     public @ResponseBody
     List<SingleMusic> getHottestMusics(){
-        List<Music> musics = musicDao.getHottestMusics(5);
+        List<Music> musics = musicDao.getMusicsByHottest(5);
         List<SingleMusic> result = new ArrayList<SingleMusic>();
         for (Music music : musics){
             int id = music.getId();

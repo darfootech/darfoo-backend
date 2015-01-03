@@ -98,4 +98,25 @@ public class MusicCacheTests {
         System.out.println(result.size());
     }
 
+    @Test
+    public void cacheHottestMusics(){
+        List<Music> musics = musicDao.getMusicsByHottest(5);
+        List<SingleMusic> result = new ArrayList<SingleMusic>();
+        for (Music music : musics){
+            int mid = music.getId();
+            long status = redisClient.sadd("musichottest", "music-" + mid);
+            musicCacheDao.insertSingleMusic(music);
+            System.out.println("insert result -> " + status);
+        }
+
+        Set<String> hottestMusicKeys = redisClient.smembers("musichottest");
+        for (String vkey : hottestMusicKeys){
+            System.out.println("vkey -> " + vkey);
+            int mid = Integer.parseInt(vkey.split("-")[1]);
+            SingleMusic music = musicCacheDao.getSingleMusic(mid);
+            System.out.println("title -> " + music.getTitle());
+            result.add(music);
+        }
+        System.out.println(result.size());
+    }
 }
