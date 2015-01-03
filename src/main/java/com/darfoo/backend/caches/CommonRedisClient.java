@@ -10,6 +10,16 @@ import java.util.*;
  * Created by zjh on 14-12-18.
  */
 public class CommonRedisClient extends AbstractBaseRedisDao<String, String>{
+
+    /**
+     * 单键值队存储
+     * @param key
+     * @param value
+     */
+    public void set(String key, String value) {
+        redisTemplate.opsForValue().set(key, value);
+    }
+
     /**
      * 按键值对存入
      * @param key

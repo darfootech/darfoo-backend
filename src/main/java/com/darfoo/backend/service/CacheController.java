@@ -8,6 +8,7 @@ import com.darfoo.backend.dao.EducationDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Education;
+import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
@@ -207,4 +208,19 @@ public class CacheController {
 
         return result;
     }
+
+    @RequestMapping(value = "/video/getmusic/{id}", method = RequestMethod.GET)
+    public @ResponseBody SingleMusic getMusicByVideoId(@PathVariable Integer id){
+        Music targetMusic = videoDao.getMusic(id);
+        if (targetMusic != null){
+            int music_id = targetMusic.getId();
+            videoCacheDao.insertMusic(id, music_id);
+            Music music = musicDao.getMusicByMusicId(music_id);
+            System.out.println(musicCacheDao.insertSingleMusic(music));
+            return musicCacheDao.getSingleMusic(music_id);
+        }else{
+            return new SingleMusic(-1, "", "", "", 0L);
+        }
+    }
+
 }

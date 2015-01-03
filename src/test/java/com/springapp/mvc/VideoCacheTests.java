@@ -1,10 +1,12 @@
 package com.springapp.mvc;
 
 import com.darfoo.backend.caches.CommonRedisClient;
+import com.darfoo.backend.caches.dao.MusicCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
+import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Video;
-import com.darfoo.backend.service.responsemodel.IndexVideo;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.service.responsemodel.VideoCates;
 import com.darfoo.backend.utils.ServiceUtils;
@@ -33,6 +35,10 @@ public class VideoCacheTests {
     VideoDao videoDao;
     @Autowired
     VideoCacheDao videoCacheDao;
+    @Autowired
+    MusicDao musicDao;
+    @Autowired
+    MusicCacheDao musicCacheDao;
     @Autowired
     CommonRedisClient redisClient;
 
@@ -170,5 +176,19 @@ public class VideoCacheTests {
         }
 
         System.out.println(result.size());
+    }
+
+    @Test
+    public void cacheAndGetMusic(){
+        int id = 1;
+        Music targetMusic = videoDao.getMusic(id);
+        if (targetMusic != null){
+            int music_id = targetMusic.getId();
+            videoCacheDao.insertMusic(id, music_id);
+            Music music = musicDao.getMusicByMusicId(music_id);
+            System.out.println(musicCacheDao.insertSingleMusic(music));
+        }else{
+            System.out.println("没有关联伴奏");
+        }
     }
 }

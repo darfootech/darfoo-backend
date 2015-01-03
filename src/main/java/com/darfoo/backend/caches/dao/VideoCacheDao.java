@@ -2,6 +2,7 @@ package com.darfoo.backend.caches.dao;
 
 import com.darfoo.backend.caches.AbstractBaseRedisDao;
 import com.darfoo.backend.caches.CommonRedisClient;
+import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.IndexVideo;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
@@ -70,6 +71,16 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
             videoMap.put("authorname", authorname);
             videoMap.put("update_timestamp", update_timestamp);
             commonRedisClient.hmset(key, videoMap);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public boolean insertMusic(int vid, int mid){
+        String key = "videomusic-" + vid;
+        if (!commonRedisClient.exists(key)){
+            commonRedisClient.set(key, mid+"");
             return true;
         }else{
             return false;
