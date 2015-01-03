@@ -82,7 +82,7 @@ public class VideoCacheTests {
         List<Video> latestVideos = videoDao.getVideosByNewest(7);
         for (Video video : latestVideos){
             int vid = video.getId();
-            long result = redisClient.sadd("videoindex", "video-"+vid);
+            long result = redisClient.sadd("videoindex", "video-" + vid);
             videoCacheDao.insertSingleVideo(video);
             System.out.println("insert result -> " + result);
         }
@@ -108,7 +108,7 @@ public class VideoCacheTests {
         List<Video> recommendVideos = videoDao.getRecommendVideos(7);
         for (Video video : recommendVideos){
             int vid = video.getId();
-            long result = redisClient.sadd("videorecommend", "video-"+vid);
+            long result = redisClient.sadd("videorecommend", "video-" + vid);
             videoCacheDao.insertSingleVideo(video);
             System.out.println("insert result -> " + result);
         }

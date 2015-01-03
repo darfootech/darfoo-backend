@@ -236,4 +236,28 @@ public class CacheController {
         SingleAuthor result = authorCacheDao.getSingleAuthor(id);
         return result;
     }
+
+    @RequestMapping(value = "/author/index", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List<SingleAuthor> cacheIndexAuthors() {
+        List<Author> authors = authorDao.getAllAuthor();
+        for (Author author : authors){
+            int id = author.getId();
+            long result = redisClient.sadd("authorindex", "author-" + id);
+            authorCacheDao.insertSingleAuthor(author);
+            System.out.println("insert result -> " + result);
+        }
+
+        Set<String> indexAuthorKeys = redisClient.smembers("authorindex");
+        List<SingleAuthor> result = new ArrayList<SingleAuthor>();
+        for (String key : indexAuthorKeys){
+            System.out.println("key -> " + key);
+            int id = Integer.parseInt(key.split("-")[1]);
+            SingleAuthor author = authorCacheDao.getSingleAuthor(id);
+            System.out.println("name -> " + author.getName());
+            result.add(author);
+        }
+        return result;
+    }
 }
