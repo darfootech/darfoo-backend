@@ -7,12 +7,18 @@ import com.darfoo.backend.dao.EducationDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Music;
+import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
+import com.darfoo.backend.utils.ServiceUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by zjh on 14-12-18.
@@ -32,6 +38,8 @@ public class MusicCacheTests {
     @Autowired
     CommonRedisClient redisClient;
 
+    MusicCates musicCates = new MusicCates();
+
     @Test
     public void testDeleteMusic(){
         String key = "music-1";
@@ -49,6 +57,45 @@ public class MusicCacheTests {
         Integer id = 1;
         SingleMusic music = musicCacheDao.getSingleMusic(id);
         System.out.println(music.getTitle());
+    }
+
+    @Test
+    public void cacheCategory(){
+        String categories = "1-0-0";
+        String[] requestCategories = categories.split("-");
+        List<String> targetCategories = new ArrayList<String>();
+        if (!requestCategories[0].equals("0")){
+            String beatCate = musicCates.getBeatCategory().get(requestCategories[0]);
+            targetCategories.add(beatCate);
+        }
+        if (!requestCategories[1].equals("0")){
+            String styleCate = musicCates.getStyleCategory().get(requestCategories[1]);
+            targetCategories.add(styleCate);
+        }
+        if (!requestCategories[2].equals("0")){
+            String letterCate = requestCategories[2];
+            targetCategories.add(letterCate);
+        }
+
+        List<Music> musics = musicDao.getMusicsByCategories(ServiceUtils.convertList2Array(targetCategories));
+        List<SingleMusic> result = new ArrayList<SingleMusic>();
+        for (Music music : musics){
+            int mid = music.getId();
+            long status = redisClient.sadd("musiccategory" + categories, "music-" + mid);
+            musicCacheDao.insertSingleMusic(music);
+            System.out.println("insert result -> " + status);
+        }
+
+        Set<String> categoryMusicKeys = redisClient.smembers("musiccategory" + categories);
+        for (String vkey : categoryMusicKeys){
+            System.out.println("vkey -> " + vkey);
+            int mid = Integer.parseInt(vkey.split("-")[1]);
+            SingleMusic music = musicCacheDao.getSingleMusic(mid);
+            System.out.println("title -> " + music.getTitle());
+            result.add(music);
+        }
+
+        System.out.println(result.size());
     }
 
 }

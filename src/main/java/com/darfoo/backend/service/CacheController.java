@@ -54,6 +54,7 @@ public class CacheController {
 
     VideoCates videoCates = new VideoCates();
     TutorialCates tutorialCates = new TutorialCates();
+    MusicCates musicCates = new MusicCates();
 
     @RequestMapping(value = "/video/{id}", method = RequestMethod.GET)
     public
@@ -208,6 +209,46 @@ public class CacheController {
             SingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
+        }
+
+        return result;
+    }
+
+    @RequestMapping(value = "/music/category/{categories}", method = RequestMethod.GET)
+    public @ResponseBody
+    List<SingleMusic> getMusicByCategories(@PathVariable String categories){
+        //System.out.println("category request is " + categories + " !!!!!!!!!");
+        String[] requestCategories = categories.split("-");
+        List<String> targetCategories = new ArrayList<String>();
+        if (!requestCategories[0].equals("0")){
+            String beatCate = musicCates.getBeatCategory().get(requestCategories[0]);
+            targetCategories.add(beatCate);
+        }
+        if (!requestCategories[1].equals("0")){
+            String styleCate = musicCates.getStyleCategory().get(requestCategories[1]);
+            targetCategories.add(styleCate);
+        }
+        if (!requestCategories[2].equals("0")){
+            String letterCate = requestCategories[2];
+            targetCategories.add(letterCate);
+        }
+
+        List<Music> musics = musicDao.getMusicsByCategories(ServiceUtils.convertList2Array(targetCategories));
+        List<SingleMusic> result = new ArrayList<SingleMusic>();
+        for (Music music : musics){
+            int mid = music.getId();
+            long status = redisClient.sadd("musiccategory" + categories, "music-" + mid);
+            musicCacheDao.insertSingleMusic(music);
+            System.out.println("insert result -> " + status);
+        }
+
+        Set<String> categoryMusicKeys = redisClient.smembers("musiccategory" + categories);
+        for (String vkey : categoryMusicKeys){
+            System.out.println("vkey -> " + vkey);
+            int mid = Integer.parseInt(vkey.split("-")[1]);
+            SingleMusic music = musicCacheDao.getSingleMusic(mid);
+            System.out.println("title -> " + music.getTitle());
+            result.add(music);
         }
 
         return result;
