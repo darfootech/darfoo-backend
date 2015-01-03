@@ -47,4 +47,5 @@
     <bean id="videoCacheDao" class="com.darfoo.backend.caches.dao.VideoCacheDao" />
     <bean id="tutorialCacheDao" class="com.darfoo.backend.caches.dao.TutorialCacheDao" />
     <bean id="musicCacheDao" class="com.darfoo.backend.caches.dao.MusicCacheDao" />
+    <bean id="authorCacheDao" class="com.darfoo.backend.caches.dao.AuthorCacheDao" />
 </beans>

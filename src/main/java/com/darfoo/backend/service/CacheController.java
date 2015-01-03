@@ -1,19 +1,19 @@
 package com.darfoo.backend.service;
 
 import com.darfoo.backend.caches.CommonRedisClient;
+import com.darfoo.backend.caches.dao.AuthorCacheDao;
 import com.darfoo.backend.caches.dao.MusicCacheDao;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
+import com.darfoo.backend.dao.AuthorDao;
 import com.darfoo.backend.dao.EducationDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Video;
-import com.darfoo.backend.service.responsemodel.SingleMusic;
-import com.darfoo.backend.service.responsemodel.SingleVideo;
-import com.darfoo.backend.service.responsemodel.TutorialCates;
-import com.darfoo.backend.service.responsemodel.VideoCates;
+import com.darfoo.backend.service.responsemodel.*;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,6 +45,10 @@ public class CacheController {
     MusicCacheDao musicCacheDao;
     @Autowired
     MusicDao musicDao;
+    @Autowired
+    AuthorCacheDao authorCacheDao;
+    @Autowired
+    AuthorDao authorDao;
     @Autowired
     CommonRedisClient redisClient;
 
@@ -223,4 +227,13 @@ public class CacheController {
         }
     }
 
+    @RequestMapping(value = "/author/{id}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    SingleAuthor cacheSingleAuthor(@PathVariable Integer id) {
+        Author author = authorDao.getAuthor(id);
+        System.out.println(authorCacheDao.insertSingleAuthor(author));
+        SingleAuthor result = authorCacheDao.getSingleAuthor(id);
+        return result;
+    }
 }
