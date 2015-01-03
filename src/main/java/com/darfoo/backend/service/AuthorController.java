@@ -114,10 +114,10 @@ public class AuthorController {
         return result;
     }
 
-    //http://localhost:8080/darfoobackend/rest/resources/video/author/search?search=heart
+    //http://localhost:8080/darfoobackend/rest/resources/author/search?search=heart
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public @ResponseBody
-    List<SingleAuthor> searchTutorial(HttpServletRequest request){
+    List<SingleAuthor> searchAuthor(HttpServletRequest request){
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
         List<Author> authors = searchDao.getAuthorBySearch(searchContent);
