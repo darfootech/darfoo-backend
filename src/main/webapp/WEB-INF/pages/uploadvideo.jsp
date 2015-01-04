@@ -31,6 +31,33 @@
             }
         })
     }
+
+    $(function(){
+        $.ajax({
+            url: '/darfoobackend/rest/resources/music/all/service',
+            type: 'GET',
+            //beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            data: {},
+            success: function(response) {
+                console.log(response);
+
+                var states = new Bloodhound({
+                    datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.word); },
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    limit: 4,
+                    local: response
+                });
+
+                states.initialize();
+
+                $('input.typeahead-only').typeahead(null, {
+                    name: 'states',
+                    displayKey: 'word',
+                    source: states.ttAdapter()
+                });
+            }
+        });
+    });
 </script>
 
 <div class="container">
@@ -108,6 +135,11 @@
                 <div class="form-group">
                     <label for="videoletter">视频首字母(大小写均可)</label>
                     <input type="text" class="form-control" name="videoletter" id="videoletter" placeholder="请输入舞蹈视频首字母,大小写均可">
+                </div>
+
+                <h5 class="demo-panel-title">Typeahead only</h5>
+                <div class="form-group">
+                    <input class="form-control typeahead-only input-lg" type="text" id="typeahead-demo-01" />
                 </div>
 
                 <button type="button" class="btn btn-default" onclick="start()">提交舞蹈视频信息</button>

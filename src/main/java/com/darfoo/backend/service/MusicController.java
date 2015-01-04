@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/resources/music")
@@ -97,6 +99,19 @@ public class MusicController {
             String music_download_url = qiniuUtils.getQiniuResourceUrl(music_url);
             Long update_timestamp = music.getUpdate_timestamp();
             result.add(new SingleMusic(id, title, author_name, music_download_url, update_timestamp));
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/all/service", method = RequestMethod.GET)
+    public @ResponseBody
+    List<HashMap<String, Object>> getAllMusicService(){
+        List<Music> musics = musicDao.getAllMusic();
+        List<HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
+        for (Music music : musics){
+            HashMap<String, Object> item = new HashMap<String, Object>();
+            item.put("word", music.getTitle());
+            result.add(item);
         }
         return result;
     }

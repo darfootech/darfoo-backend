@@ -575,4 +575,9 @@ public class EducationDao {
         }
         return tutorials;
     }
+
+    public void disconnectTutorialMusic(int videoid, int musicid){
+        System.out.println(CRUDEvent.getResponse(insertOrUpdateMusic(videoid, musicid)));
+        System.out.println(CRUDEvent.getResponse(deleteMusicFromEducation(videoid)));
+    }
 }
