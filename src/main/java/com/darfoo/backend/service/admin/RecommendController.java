@@ -6,14 +6,13 @@ import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.utils.FileUtils;
 import com.darfoo.backend.utils.QiniuUtils;
+import com.darfoo.backend.utils.ServiceUtils;
 import org.omg.CORBA.StringHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -249,5 +248,53 @@ public class RecommendController {
         modelMap.addAttribute("video", tutorial);
         modelMap.addAttribute("imageurl", imageurl);
         return "updaterecommendimagetutorial";
+    }
+
+    @RequestMapping("/admin/recommend/video/updateimage")
+    public String updateRecommendVideoPic(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session){
+        //upload
+        String imagekey = (String)session.getAttribute("imagekey");
+
+        String videoResourceName = imageresource.getOriginalFilename();
+
+        System.out.println("imageresource -> " + videoResourceName);
+
+        String imageStatusCode = "";
+
+        try {
+            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (imageStatusCode.equals("200")){
+            return "success";
+        }else{
+            return "fail";
+        }
+    }
+
+    @RequestMapping("/admin/recommend/tutorial/updateimage")
+    public String updateRecommendTutorialPic(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session){
+        //upload
+        String imagekey = (String)session.getAttribute("imagekey");
+
+        String videoResourceName = imageresource.getOriginalFilename();
+
+        System.out.println("imageresource -> " + videoResourceName);
+
+        String imageStatusCode = "";
+
+        try {
+            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (imageStatusCode.equals("200")){
+            return "success";
+        }else{
+            return "fail";
+        }
     }
 }

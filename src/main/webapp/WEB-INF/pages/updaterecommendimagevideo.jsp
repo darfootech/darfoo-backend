@@ -5,10 +5,10 @@
     <h1>查看与修改推荐舞蹈视频封面图片</h1>
     <div class="row">
         <div class="col-md-12">
-            <form role="form" id="createvideoform" name="createvideoform">
-                <div style="display: none">
+            <form role="form" action="/darfoobackend/rest/admin/recommend/video/updateimage" method="post" id="createvideoform" name="createvideoform" enctype="multipart/form-data">
+                <!--<div style="display: none">
                     <input type="text" name="id" value="${video.id}">
-                </div>
+                </div>-->
 
                 <div class="form-group">
                     <label for="title">舞蹈视频标题</label>
