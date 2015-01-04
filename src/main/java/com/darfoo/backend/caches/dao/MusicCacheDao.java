@@ -25,7 +25,8 @@ public class MusicCacheDao extends AbstractBaseRedisDao<String, Music> {
             HashMap<String, String> musicMap = new HashMap<String, String>();
             String music_download_url = qiniuUtils.getQiniuResourceUrl(music.getMusic_key());
             //String image_download_url = qiniuUtils.getQiniuResourceUrl(music.getImage().getImage_key());
-            String authorname = music.getAuthor().getName();
+            //String authorname = music.getAuthor().getName();
+            String authorname = music.getAuthorName();
             String timestamp = music.getUpdate_timestamp().toString();
             musicMap.put("id", id.toString());
             musicMap.put("title", title);
