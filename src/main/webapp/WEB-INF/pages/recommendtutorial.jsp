@@ -52,9 +52,9 @@
 
         $("#addrecommendevent").click(function(){
             if(add_recommendevents.length == 0){
-                alert("还没有选择要推荐的活动");
+                alert("还没有选择要推荐的舞蹈教程");
             }else{
-                $.post("/darfoobackend/rest/admin/connectmusic/addconnects", {
+                $.post("/darfoobackend/rest/admin/recommend/addtutorials", {
                     'vids': add_recommendevents.join(',')
                 }, function(data){
                     if(data == 200){
@@ -68,9 +68,9 @@
 
         $("#deleterecommendevent").click(function(){
             if(delete_recommendevents.length == 0){
-                alert("还没有选择要取消推荐的活动");
+                alert("还没有选择要取消推荐的舞蹈教程");
             }else{
-                $.post("/darfoobackend/rest/admin/connectmusic/delconnects", {
+                $.post("/darfoobackend/rest/admin/recommend/deltutorials", {
                     'vids': delete_recommendevents.join(',')
                 }, function(data){
                     if(data == 200){

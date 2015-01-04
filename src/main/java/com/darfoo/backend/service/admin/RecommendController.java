@@ -143,7 +143,7 @@ public class RecommendController {
 
     @RequestMapping(value = "/admin/recommend/addvideos", method = RequestMethod.POST, consumes = "application/json", headers = "content-type=application/x-www-form-urlencoded")
     public @ResponseBody
-    String addConnections(HttpServletRequest request, HttpSession session){
+    String addVideos(HttpServletRequest request, HttpSession session){
         String idss = request.getParameter("vids");
         System.out.println(idss);
         String[] videoids = idss.split(",");
@@ -156,7 +156,7 @@ public class RecommendController {
     }
 
     @RequestMapping(value = "/admin/recommend/delvideos", method = RequestMethod.POST, consumes = "application/json", headers = "content-type=application/x-www-form-urlencoded")
-    public @ResponseBody String delConnections(HttpServletRequest request, HttpSession session){
+    public @ResponseBody String delVideos(HttpServletRequest request, HttpSession session){
         String idss = request.getParameter("vids");
         System.out.println(idss);
         String[] videoids = idss.split(",");
@@ -181,4 +181,30 @@ public class RecommendController {
         return "recommendtutorial";
     }
 
+    @RequestMapping(value = "/admin/recommend/addtutorials", method = RequestMethod.POST, consumes = "application/json", headers = "content-type=application/x-www-form-urlencoded")
+    public @ResponseBody
+    String addTutorials(HttpServletRequest request, HttpSession session){
+        String idss = request.getParameter("vids");
+        System.out.println(idss);
+        String[] videoids = idss.split(",");
+        List<Integer> videoidList = new ArrayList<Integer>();
+        for (int i=0; i<videoids.length; i++){
+            videoidList.add(Integer.parseInt(videoids[i]));
+        }
+        setRecommendList(videoidList, "tutorial");
+        return 200+"";
+    }
+
+    @RequestMapping(value = "/admin/recommend/deltutorials", method = RequestMethod.POST, consumes = "application/json", headers = "content-type=application/x-www-form-urlencoded")
+    public @ResponseBody String delTutorials(HttpServletRequest request, HttpSession session){
+        String idss = request.getParameter("vids");
+        System.out.println(idss);
+        String[] videoids = idss.split(",");
+        List<Integer> videoidList = new ArrayList<Integer>();
+        for (int i=0; i<videoids.length; i++){
+            videoidList.add(Integer.parseInt(videoids[i]));
+        }
+        updateRecommendList(videoidList, "tutorial");
+        return 200+"";
+    }
 }

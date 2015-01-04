@@ -52,7 +52,7 @@
 
         $("#addrecommendevent").click(function(){
             if(add_recommendevents.length == 0){
-                alert("还没有选择要推荐的活动");
+                alert("还没有选择要推荐的舞蹈视频");
             }else{
                 $.post("/darfoobackend/rest/admin/recommend/addvideos", {
                     'vids': add_recommendevents.join(',')
@@ -68,7 +68,7 @@
 
         $("#deleterecommendevent").click(function(){
             if(delete_recommendevents.length == 0){
-                alert("还没有选择要取消推荐的活动");
+                alert("还没有选择要取消推荐的舞蹈视频");
             }else{
                 $.post("/darfoobackend/rest/admin/recommend/delvideos", {
                     'vids': delete_recommendevents.join(',')
