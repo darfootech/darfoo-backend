@@ -43,6 +43,29 @@ public class TutorialCacheDao extends AbstractBaseRedisDao<String, Education> {
         }
     }
 
+    public boolean insertRecommendTutorial(Education tutorial){
+        Integer id = tutorial.getId();
+        String key = "recommendvideo-" + id;
+        if (!commonRedisClient.exists(key)){
+            String title = tutorial.getTitle();
+            HashMap<String, String> videoMap = new HashMap<String, String>();
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getVideo_key());
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getVideo_key() + "@@recommendtutorial.png");
+            String authorname = tutorial.getAuthor().getName();
+            Long timestamp = tutorial.getUpdate_timestamp();
+            videoMap.put("id", id.toString());
+            videoMap.put("title", title);
+            videoMap.put("video_url", video_download_url);
+            videoMap.put("image_url", image_download_url);
+            videoMap.put("authorname", authorname);
+            videoMap.put("update_timestamp", timestamp.toString());
+            commonRedisClient.hmset(key, videoMap);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public SingleVideo getSingleTutorial(Integer id){
         String key = "tutorial-" + id;
         String title = commonRedisClient.hget(key, "title");

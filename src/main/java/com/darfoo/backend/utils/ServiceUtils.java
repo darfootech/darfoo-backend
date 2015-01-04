@@ -2,8 +2,8 @@ package com.darfoo.backend.utils;
 
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -81,5 +81,30 @@ public class ServiceUtils {
 
     public static void deleteResource(String key){
         qiniuUtils.deleteResource(key);
+    }
+
+    public static List<Integer> getRecommendList(String flag){
+        String filename = "recommend" + flag + ".data";
+        FileUtils.createFile(filename);
+        List<Integer> videoList = new ArrayList<Integer>();
+
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8"));
+
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+                videoList.add(Integer.parseInt(line));
+            }
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return videoList;
     }
 }

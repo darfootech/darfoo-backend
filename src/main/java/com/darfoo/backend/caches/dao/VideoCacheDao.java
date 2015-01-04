@@ -77,6 +77,29 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
         }
     }
 
+    public boolean insertRecommendVideo(Video video){
+        Integer id = video.getId();
+        String key = "recommendvideo-" + id;
+        if (!commonRedisClient.exists(key)){
+            String title = video.getTitle();
+            HashMap<String, String> videoMap = new HashMap<String, String>();
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video.getVideo_key());
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(video.getVideo_key() + "@@recommendvideo.png");
+            String authorname = video.getAuthor().getName();
+            String update_timestamp = video.getUpdate_timestamp().toString();
+            videoMap.put("id", id.toString());
+            videoMap.put("title", title);
+            videoMap.put("video_url", video_download_url);
+            videoMap.put("image_url", image_download_url);
+            videoMap.put("authorname", authorname);
+            videoMap.put("update_timestamp", update_timestamp);
+            commonRedisClient.hmset(key, videoMap);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public boolean insertMusic(int vid, int mid){
         String key = "videomusic-" + vid;
         if (!commonRedisClient.exists(key)){
@@ -145,6 +168,16 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
 
     public SingleVideo getSingleVideo(Integer id){
         String key = "video-" + id;
+        String title = commonRedisClient.hget(key, "title");
+        String authorname = commonRedisClient.hget(key, "authorname");
+        String videourl = commonRedisClient.hget(key, "video_url");
+        String imageurl = commonRedisClient.hget(key, "image_url");
+        String timestamp = commonRedisClient.hget(key, "update_timestamp");
+        return new SingleVideo(id, title, authorname, videourl, imageurl, Long.parseLong(timestamp));
+    }
+
+    public SingleVideo getRecommendVideo(Integer id){
+        String key = "recommendvideo-" + id;
         String title = commonRedisClient.hget(key, "title");
         String authorname = commonRedisClient.hget(key, "authorname");
         String videourl = commonRedisClient.hget(key, "video_url");

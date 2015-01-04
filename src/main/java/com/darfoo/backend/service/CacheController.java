@@ -84,19 +84,37 @@ public class CacheController {
     public
     @ResponseBody
     List<SingleVideo> cacheRecmmendVideos() {
-        List<Video> recommendVideos = videoDao.getRecommendVideos(7);
+        List<Integer> recommendVideoids = ServiceUtils.getRecommendList("video");
+        List<Video> recommendVideos = new ArrayList<Video>();
+        for (Integer id : recommendVideoids){
+            recommendVideos.add(videoDao.getVideoByVideoId(id));
+        }
+        List<Integer> recommendTutorialids = ServiceUtils.getRecommendList("tutorial");
+        List<Education> recommendTutorials = new ArrayList<Education>();
+        for (Integer id : recommendTutorialids){
+            recommendTutorials.add(educationDao.getEducationVideoById(id));
+        }
+
         for (Video video : recommendVideos) {
             int vid = video.getId();
-            long result = redisClient.sadd("videorecommend", "video-" + vid);
-            videoCacheDao.insertSingleVideo(video);
-            System.out.println("insert result -> " + result);
+            long status = redisClient.sadd("recommend", "recommendvideo-" + vid);
+            videoCacheDao.insertRecommendVideo(video);
+            System.out.println("insert result -> " + status);
         }
-        Set<String> recommendVideoKeys = redisClient.smembers("videorecommend");
+
+        for (Education video : recommendTutorials) {
+            int vid = video.getId();
+            long status = redisClient.sadd("recommend", "recommendvideo-" + vid);
+            tutorialCacheDao.insertRecommendTutorial(video);
+            System.out.println("insert result -> " + status);
+        }
+
+        Set<String> recommendVideoKeys = redisClient.smembers("recommend");
         List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (String vkey : recommendVideoKeys) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
-            SingleVideo video = videoCacheDao.getSingleVideo(vid);
+            SingleVideo video = videoCacheDao.getRecommendVideo(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }

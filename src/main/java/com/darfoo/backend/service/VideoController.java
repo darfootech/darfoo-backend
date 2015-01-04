@@ -153,7 +153,7 @@ public class VideoController {
     public
     @ResponseBody
     List<SingleVideo> getRecmmendVideos() {
-        List<Video> recommendVideos = videoDao.getRecommendVideos(7);
+        /*List<Video> recommendVideos = videoDao.getRecommendVideos(7);
         List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (Video video : recommendVideos) {
             int video_id = video.getId();
@@ -169,6 +169,50 @@ public class VideoController {
             Long update_timestamp = video.getUpdate_timestamp();
             result.add(new SingleVideo(video_id, video_title, author_name, video_download_url, image_download_url, update_timestamp));
         }
+        return result;*/
+
+        List<Integer> recommendVideoids = ServiceUtils.getRecommendList("video");
+        List<Video> recommendVideos = new ArrayList<Video>();
+        for (Integer id : recommendVideoids){
+            recommendVideos.add(videoDao.getVideoByVideoId(id));
+        }
+        List<Integer> recommendTutorialids = ServiceUtils.getRecommendList("tutorial");
+        List<Education> recommendTutorials = new ArrayList<Education>();
+        for (Integer id : recommendTutorialids){
+            recommendTutorials.add(educationDao.getEducationVideoById(id));
+        }
+
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        for (Video video : recommendVideos) {
+            int video_id = video.getId();
+            String image_url = video.getVideo_key() + "@@recommendvideo.png";
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
+            String video_title = video.getTitle();
+            String author_name = "";
+            if (video.getAuthor() != null){
+                author_name = video.getAuthor().getName();
+            }
+            String video_url = video.getVideo_key();
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
+            Long update_timestamp = video.getUpdate_timestamp();
+            result.add(new SingleVideo(video_id, video_title, author_name, video_download_url, image_download_url, update_timestamp));
+        }
+
+        for (Education video : recommendTutorials) {
+            int video_id = video.getId();
+            String image_url = video.getVideo_key() + "@@recommendtutorial.png";
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
+            String video_title = video.getTitle();
+            String author_name = "";
+            if (video.getAuthor() != null){
+                author_name = video.getAuthor().getName();
+            }
+            String video_url = video.getVideo_key();
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
+            Long update_timestamp = video.getUpdate_timestamp();
+            result.add(new SingleVideo(video_id, video_title, author_name, video_download_url, image_download_url, update_timestamp));
+        }
+
         return result;
     }
 
