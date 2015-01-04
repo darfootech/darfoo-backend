@@ -5,10 +5,12 @@ import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.utils.FileUtils;
+import com.darfoo.backend.utils.QiniuUtils;
 import org.omg.CORBA.StringHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,6 +33,8 @@ public class RecommendController {
     VideoDao videoDao;
     @Autowired
     EducationDao educationDao;
+
+    QiniuUtils qiniuUtils = new QiniuUtils();
 
     public void setRecommendList(List<Integer> videoids, String flag){
         String filename = "recommend" + flag + ".data";
@@ -206,5 +210,44 @@ public class RecommendController {
         }
         updateRecommendList(videoidList, "tutorial");
         return 200+"";
+    }
+
+    @RequestMapping(value = "/admin/recommend/updateimage/all", method = RequestMethod.GET)
+    public String updateRecommendImage(ModelMap modelMap, HttpSession session){
+        List<Integer> recommendVideoids = getRecommendList("video");
+        List<Video> recommendVideos = new ArrayList<Video>();
+        for (Integer id : recommendVideoids){
+            recommendVideos.add(videoDao.getVideoByVideoId(id));
+        }
+        List<Integer> recommendTutorialids = getRecommendList("tutorial");
+        List<Education> recommendTutorials = new ArrayList<Education>();
+        for (Integer id : recommendTutorialids){
+            recommendTutorials.add(educationDao.getEducationVideoById(id));
+        }
+        modelMap.addAttribute("videos", recommendVideos);
+        modelMap.addAttribute("tutorials", recommendTutorials);
+        return "updaterecommendimageall";
+    }
+
+    @RequestMapping(value = "/admin/recommend/updateimage/video/{id}", method = RequestMethod.GET)
+    public String updateRecommendImageVideo(@PathVariable Integer id, ModelMap modelMap, HttpSession session){
+        Video video = videoDao.getVideoByVideoId(id);
+        String imagekey = video.getVideo_key() + "@@recommendvideo.png";
+        session.setAttribute("imagekey", imagekey);
+        String imageurl = qiniuUtils.getQiniuResourceUrl(imagekey);
+        modelMap.addAttribute("video", video);
+        modelMap.addAttribute("imageurl", imageurl);
+        return "updaterecommendimagevideo";
+    }
+
+    @RequestMapping(value = "/admin/recommend/updateimage/tutorial/{id}", method = RequestMethod.GET)
+    public String updateRecommendImageTutorial(@PathVariable Integer id, ModelMap modelMap, HttpSession session){
+        Education tutorial = educationDao.getEducationVideoById(id);
+        String imagekey = tutorial.getVideo_key() + "@@recommendtutorial.png";
+        session.setAttribute("imagekey", imagekey);
+        String imageurl = qiniuUtils.getQiniuResourceUrl(imagekey);
+        modelMap.addAttribute("video", tutorial);
+        modelMap.addAttribute("imageurl", imageurl);
+        return "updaterecommendimagetutorial";
     }
 }
