@@ -55,10 +55,10 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="<%if(resource.equals("video")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/video/new/">舞蹈视频</a></li>
+                <li class="<%if(resource.equals("video")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/video/new/">舞蹈欣赏</a></li>
                 <li class="<%if(resource.equals("tutorial")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/tutorial/new/">舞蹈教程</a></li>
                 <li class="<%if(resource.equals("music")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/music/new/">舞蹈伴奏</a></li>
-                <li class="<%if(resource.equals("author")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/author/new/">创建明星舞队</a></li>
+                <li class="<%if(resource.equals("author")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/author/new/">明星舞队</a></li>
                 <!--<li class="<%if(resource.equals("team")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/team/new/">创建舞队</a></li>-->
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">下载资源表格 <b class="caret"></b></a>
@@ -77,6 +77,7 @@
                         <li><a href="/darfoobackend/rest/admin/music/all">查看修改舞蹈伴奏</a></li>
                         <li><a href="/darfoobackend/rest/admin/author/all">查看修改明星舞队</a></li>
                         <li><a href="/darfoobackend/rest/admin/connectmusic/all">关联舞蹈伴奏和舞蹈视频</a></li>
+                        <li><a href="/darfoobackend/rest/admin/recommend">首页推荐视频(欣赏+教程)</a></li>
                         <!--<li><a href="/darfoobackend/rest/admin/team/all">查看修改舞队</a></li>-->
                     </ul>
                 </li>

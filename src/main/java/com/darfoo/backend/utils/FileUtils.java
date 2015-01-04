@@ -105,15 +105,19 @@ public class FileUtils {
             System.out.println("创建单个文件" + destFileName + "失败，目标文件不能为目录！");
             return false;
         }
-        //判断目标文件所在的目录是否存在
-        if(!file.getParentFile().exists()) {
-            //如果目标文件所在的目录不存在，则创建父目录
-            System.out.println("目标文件所在目录不存在，准备创建它！");
-            if(!file.getParentFile().mkdirs()) {
-                System.out.println("创建目标文件所在目录失败！");
-                return false;
+
+        if (destFileName.contains(File.separator)){
+            //判断目标文件所在的目录是否存在
+            if(!file.getParentFile().exists()) {
+                //如果目标文件所在的目录不存在，则创建父目录
+                System.out.println("目标文件所在目录不存在，准备创建它！");
+                if(!file.getParentFile().mkdirs()) {
+                    System.out.println("创建目标文件所在目录失败！");
+                    return false;
+                }
             }
         }
+
         //创建目标文件
         try {
             if (file.createNewFile()) {
