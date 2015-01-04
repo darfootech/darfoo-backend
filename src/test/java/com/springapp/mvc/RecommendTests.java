@@ -12,6 +12,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
@@ -19,8 +21,8 @@ public class RecommendTests {
 
     @Test
     public void addRecommendList(){
-        String[] images = {"image1", "image2", "image3"};
-        String[] videos = {"video1", "video2", "video3"};
+        String[] images = {"image4", "image5", "image6"};
+        String[] videos = {"video4", "video5", "video6"};
         String imagefilename = "recommendimage.data";
         String videofilename = "recommendvideo.data";
         FileUtils.createFile(imagefilename);
@@ -77,6 +79,112 @@ public class RecommendTests {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void setRecommendList(){
+        List<Integer> videoids = new ArrayList<Integer>();
+        videoids.add(41);
+        videoids.add(40);
+        videoids.add(39);
+        String flag = "video";
+        String filename = "recommend" + flag + ".data";
+        FileUtils.createFile(filename);
+
+        File file = new File(filename);
+
+        try {
+            FileOutputStream outputStream = new FileOutputStream(file);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (Integer videoid : videoids){
+                stringBuilder.append(videoid.toString()).append("\n");
+            }
+
+            byte[] bytes = stringBuilder.toString().getBytes();
+            outputStream.write(bytes, 0, bytes.length);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getRecommendListTest(){
+        String flag = "video";
+        String filename = "recommend" + flag + ".data";
+        FileUtils.createFile(filename);
+        List<Integer> videoList = new ArrayList<Integer>();
+
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8"));
+
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+                videoList.add(Integer.parseInt(line));
+            }
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void updateRecommendList(){
+        List<Integer> videoids = new ArrayList<Integer>();
+        videoids.add(40);
+        String flag = "video";
+        String filename = "recommend" + flag + ".data";
+        List<Integer> videoList = new ArrayList<Integer>();
+
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8"));
+
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+                videoList.add(Integer.parseInt(line));
+            }
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (videoList.size() == 0){
+            return;
+        }else{
+            FileUtils.createFile(filename);
+
+            File file = new File(filename);
+
+            try {
+                FileOutputStream outputStream = new FileOutputStream(file);
+                StringBuilder stringBuilder = new StringBuilder();
+
+                for (Integer videoid : videoList){
+                    if (!videoids.contains(videoid)){
+                        stringBuilder.append(videoid.toString()).append("\n");
+                    }
+                }
+
+                byte[] bytes = stringBuilder.toString().getBytes();
+                outputStream.write(bytes, 0, bytes.length);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

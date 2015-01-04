@@ -457,6 +457,7 @@ public class VideoDao {
 		try{
 			Session session = sf.getCurrentSession();
 			Criteria c = session.createCriteria(Video.class);
+            c.addOrder(Order.desc("id"));
 			c.setReadOnly(true);
 			c.setFetchMode("categories", FetchMode.JOIN);
 			List<Video> l_videos = c.list();  

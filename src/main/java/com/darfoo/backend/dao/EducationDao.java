@@ -381,6 +381,7 @@ public class EducationDao {
         try{
 			Session session = sf.getCurrentSession();
 			Criteria c = session.createCriteria(Education.class);
+            c.addOrder(Order.desc("id"));
 			c.setReadOnly(true);
 			c.setFetchMode("categories", FetchMode.JOIN);
 			List<Education> l_educations = c.list();  
