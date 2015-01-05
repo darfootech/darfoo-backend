@@ -6,6 +6,7 @@ import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.utils.FileUtils;
 import com.darfoo.backend.utils.QiniuUtils;
+import com.darfoo.backend.utils.RecommendManager;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.omg.CORBA.StringHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class RecommendController {
     QiniuUtils qiniuUtils = new QiniuUtils();
 
     public void setRecommendList(List<Integer> videoids, String flag){
-        String filename = "recommend" + flag + ".data";
+        String filename = RecommendManager.basepath + "recommend" + flag + ".data";
         FileUtils.createFile(filename);
 
         File file = new File(filename);
@@ -59,7 +60,7 @@ public class RecommendController {
     }
 
     public List<Integer> getRecommendList(String flag){
-        String filename = "recommend" + flag + ".data";
+        String filename = RecommendManager.basepath + "recommend" + flag + ".data";
         FileUtils.createFile(filename);
         List<Integer> videoList = new ArrayList<Integer>();
 
@@ -84,7 +85,7 @@ public class RecommendController {
     }
 
     public void updateRecommendList(List<Integer> videoids, String flag){
-        String filename = "recommend" + flag + ".data";
+        String filename = RecommendManager.basepath + "recommend" + flag + ".data";
         List<Integer> videoList = new ArrayList<Integer>();
 
         try {
