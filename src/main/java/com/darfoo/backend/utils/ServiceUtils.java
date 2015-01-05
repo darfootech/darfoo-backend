@@ -84,7 +84,7 @@ public class ServiceUtils {
     }
 
     public static List<Integer> getRecommendList(String flag){
-        String filename = "recommend" + flag + ".data";
+        String filename = RecommendManager.basepath + "recommend" + flag + ".data";
         FileUtils.createFile(filename);
         List<Integer> videoList = new ArrayList<Integer>();
 

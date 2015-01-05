@@ -4,10 +4,18 @@ package com.springapp.mvc;
  * Created by zjh on 15-1-4.
  */
 
+import com.darfoo.backend.dao.EducationDao;
+import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Video;
+import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.utils.FileUtils;
+import com.darfoo.backend.utils.QiniuUtils;
+import com.darfoo.backend.utils.RecommendManager;
+import com.darfoo.backend.utils.ServiceUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -18,6 +26,11 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class RecommendTests {
+    @Autowired
+    VideoDao videoDao;
+    @Autowired
+    EducationDao educationDao;
+    QiniuUtils qiniuUtils = new QiniuUtils();
 
     @Test
     public void addRecommendList(){
@@ -89,7 +102,7 @@ public class RecommendTests {
         videoids.add(40);
         videoids.add(39);
         String flag = "video";
-        String filename = "recommend" + flag + ".data";
+        String filename = RecommendManager.basepath + "recommend" + flag + ".data";
         FileUtils.createFile(filename);
 
         File file = new File(filename);
@@ -114,7 +127,7 @@ public class RecommendTests {
     @Test
     public void getRecommendListTest(){
         String flag = "video";
-        String filename = "recommend" + flag + ".data";
+        String filename = RecommendManager.basepath + "recommend" + flag + ".data";
         FileUtils.createFile(filename);
         List<Integer> videoList = new ArrayList<Integer>();
 
@@ -141,7 +154,7 @@ public class RecommendTests {
         List<Integer> videoids = new ArrayList<Integer>();
         videoids.add(40);
         String flag = "video";
-        String filename = "recommend" + flag + ".data";
+        String filename = RecommendManager.basepath + "recommend" + flag + ".data";
         List<Integer> videoList = new ArrayList<Integer>();
 
         try {
@@ -186,5 +199,52 @@ public class RecommendTests {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Test
+    public void yaGetRecommendList(){
+        List<Integer> recommendVideoids = ServiceUtils.getRecommendList("video");
+        List<Video> recommendVideos = new ArrayList<Video>();
+        for (Integer id : recommendVideoids){
+            recommendVideos.add(videoDao.getVideoByVideoId(id));
+        }
+        List<Integer> recommendTutorialids = ServiceUtils.getRecommendList("tutorial");
+        List<Education> recommendTutorials = new ArrayList<Education>();
+        for (Integer id : recommendTutorialids){
+            recommendTutorials.add(educationDao.getEducationVideoById(id));
+        }
+
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        for (Video video : recommendVideos) {
+            int video_id = video.getId();
+            String image_url = video.getVideo_key() + "@@recommendvideo.png";
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
+            String video_title = video.getTitle();
+            String author_name = "";
+            if (video.getAuthor() != null){
+                author_name = video.getAuthor().getName();
+            }
+            String video_url = video.getVideo_key();
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
+            Long update_timestamp = video.getUpdate_timestamp();
+            result.add(new SingleVideo(video_id, video_title, author_name, video_download_url, image_download_url, update_timestamp));
+        }
+
+        for (Education video : recommendTutorials) {
+            int video_id = video.getId();
+            String image_url = video.getVideo_key() + "@@recommendtutorial.png";
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
+            String video_title = video.getTitle();
+            String author_name = "";
+            if (video.getAuthor() != null){
+                author_name = video.getAuthor().getName();
+            }
+            String video_url = video.getVideo_key();
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
+            Long update_timestamp = video.getUpdate_timestamp();
+            result.add(new SingleVideo(video_id, video_title, author_name, video_download_url, image_download_url, update_timestamp));
+        }
+
+        System.out.println(result.size());
     }
 }

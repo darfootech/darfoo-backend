@@ -16,3 +16,4 @@ uploadresources/
 *.csv
 src/main/resources/redis.properties
 *.data
+*.conf
