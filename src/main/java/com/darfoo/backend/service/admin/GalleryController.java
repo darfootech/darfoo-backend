@@ -114,6 +114,12 @@ public class GalleryController {
         modelMap.addAttribute("tutorial", tutorial);
         modelMap.addAttribute("authors", authorDao.getAllAuthor());
         modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(tutorial.getImage().getImage_key()));
+        if (tutorial.getMusic() != null){
+            String connectmusic = tutorial.getMusic().getTitle() + "-" + tutorial.getMusic().getAuthorName();
+            modelMap.addAttribute("connectmusic", connectmusic);
+        }else{
+            modelMap.addAttribute("connectmusic", "请输入要关联的伴奏并选择");
+        }
         return "singletutorial";
     }
 

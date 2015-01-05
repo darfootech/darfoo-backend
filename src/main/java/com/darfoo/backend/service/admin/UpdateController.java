@@ -217,6 +217,9 @@ public class UpdateController {
         String videoSpeed = request.getParameter("tutorialspeed");
         String videoDifficult = request.getParameter("tutorialdifficult");
         String videoStyle = request.getParameter("tutorialstyle");
+        String connectmusic = request.getParameter("connectmusic");
+        System.out.println("connectmusic -> " + connectmusic);
+
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imageKey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle);
 
         int duplicateCode = checkTutorialTitleAuthorIdDuplicate(videoTitle, authorName);
@@ -241,6 +244,12 @@ public class UpdateController {
         if (response.updateIsReady()) {
             //updateIsReady为true表示可以进行更新操作
             String status = CRUDEvent.getResponse(educationDao.updateEducation(vid, videoTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
+
+            if (!connectmusic.equals("")){
+                int mid = Integer.parseInt(connectmusic.split("-")[2]);
+                educationDao.insertOrUpdateMusic(vid, mid);
+            }
+
             if (status.equals("UPDATE_SUCCESS")) {
                 return 200 + "";
             } else {
