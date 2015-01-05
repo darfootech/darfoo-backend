@@ -137,9 +137,9 @@
                     <input type="text" class="form-control" name="videoletter" id="videoletter" placeholder="请输入舞蹈视频首字母,大小写均可">
                 </div>
 
-                <h5 class="demo-panel-title">Typeahead only</h5>
                 <div class="form-group">
-                    <input class="form-control typeahead-only input-lg" type="text" id="typeahead-demo-01" />
+                    <label for="connectmusic">视频要关联的伴奏</label>
+                    <input class="form-control typeahead-only input-lg" name="connectmusic" type="text" id="connectmusic" placeholder="请输入要关联的伴奏并选择" />
                 </div>
 
                 <button type="button" class="btn btn-default" onclick="start()">提交舞蹈视频信息</button>
