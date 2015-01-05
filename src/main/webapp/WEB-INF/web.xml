@@ -57,7 +57,7 @@
     </error-page>
     <error-page>
         <error-code>400</error-code>
-        <location>/error/400.jsp</location>
+        <location>/error/500.jsp</location>
     </error-page>
     <error-page>
         <error-code>500</error-code>
