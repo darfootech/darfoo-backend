@@ -36,4 +36,10 @@ public class AppTests {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void testsplit(){
+        String connectmusic = "呵呵呵--10";
+        System.out.println(connectmusic.split("-")[2]);
+    }
 }

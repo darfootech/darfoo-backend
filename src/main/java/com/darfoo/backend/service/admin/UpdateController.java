@@ -124,6 +124,9 @@ public class UpdateController {
         String videoDifficult = request.getParameter("videodifficult");
         String videoStyle = request.getParameter("videostyle");
         String videoLetter = request.getParameter("videoletter").toUpperCase();
+        String connectmusic = request.getParameter("connectmusic");
+        System.out.println("connectmusic -> " + connectmusic);
+
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imageKey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + videoLetter);
 
         boolean isSingleLetter = ServiceUtils.isSingleCharacter(videoLetter);
@@ -157,6 +160,12 @@ public class UpdateController {
         if(response.updateIsReady()){
             //updateIsReady为true表示可以进行更新操作
             String status = CRUDEvent.getResponse(videoDao.updateVideo(vid, videoTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
+
+            if (!connectmusic.equals("")){
+                int mid = Integer.parseInt(connectmusic.split("-")[2]);
+                videoDao.insertOrUpdateMusic(vid, mid);
+            }
+
             if (status.equals("UPDATE_SUCCESS")){
                 return 200+"";
             }else {
