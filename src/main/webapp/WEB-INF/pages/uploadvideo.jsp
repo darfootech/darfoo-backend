@@ -138,7 +138,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="connectmusic">视频要关联的伴奏</label>
+                    <label for="connectmusic">视频要关联的伴奏(没有可以暂时不填)</label>
                     <input class="form-control typeahead-only input-lg" name="connectmusic" type="text" id="connectmusic" placeholder="请输入要关联的伴奏并选择" />
                 </div>
 

@@ -560,6 +560,9 @@ public class UploadController {
         String videoDifficult = request.getParameter("videodifficult");
         String videoStyle = request.getParameter("videostyle");
         Long update_timestamp = System.currentTimeMillis() / 1000;
+        String connectmusic = request.getParameter("connectmusic");
+        System.out.println("connectmusic -> " + connectmusic);
+
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + update_timestamp);
 
         HashMap<String, Integer> resultMap = this.insertSingleEducationVideo(videoTitle, videoType, authorName, imagekey, videoSpeed, videoDifficult, videoStyle);
@@ -571,6 +574,12 @@ public class UploadController {
             int insertid = resultMap.get("insertid");
             session.setAttribute("tutorialKey", videoTitle + "-" + insertid + "." + videoType);
             session.setAttribute("tutorialImage", imagekey);
+
+            if (!connectmusic.equals("")){
+                int mid = Integer.parseInt(connectmusic.split("-")[2]);
+                educationDao.insertOrUpdateMusic(insertid, mid);
+            }
+
             return statusCode+"";
         }
     }

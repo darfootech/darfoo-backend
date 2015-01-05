@@ -29,6 +29,33 @@
             }
         })
     }
+
+    $(function(){
+        $.ajax({
+            url: '/darfoobackend/rest/resources/music/all/service',
+            type: 'GET',
+            //beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            data: {},
+            success: function(response) {
+                console.log(response);
+
+                var states = new Bloodhound({
+                    datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.word); },
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    limit: 4,
+                    local: response
+                });
+
+                states.initialize();
+
+                $('input.typeahead-only').typeahead(null, {
+                    name: 'states',
+                    displayKey: 'word',
+                    source: states.ttAdapter()
+                });
+            }
+        });
+    });
 </script>
 
 <div class="container">
@@ -93,6 +120,11 @@
                         <option value="背面教学">背面教学</option>
                         <option value="分解教学">分解教学</option>
                     </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="connectmusic">教程要关联的伴奏(没有可以暂时不填)</label>
+                    <input class="form-control typeahead-only input-lg" name="connectmusic" type="text" id="connectmusic" placeholder="请输入要关联的伴奏并选择" />
                 </div>
 
                 <button type="button" class="btn btn-default" onclick="start()">提交教学视频信息</button>
