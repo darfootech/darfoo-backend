@@ -2,6 +2,7 @@ package com.darfoo.backend.service;
 
 import com.darfoo.backend.dao.VersionDao;
 import com.darfoo.backend.model.Version;
+import com.darfoo.backend.utils.QiniuUtils;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,12 +27,16 @@ public class VersionController {
     @Autowired
     VersionDao versionDao;
 
+    QiniuUtils qiniuUtils = new QiniuUtils();
+
     @RequestMapping(value = "/resources/version/latest", method = RequestMethod.GET)
     public @ResponseBody
     Map<String, Object> getLatestVersion(){
         Map<String, Object> result = new HashMap<String, Object>();
         Version version = versionDao.getLatestVersion();
+        String version_download_url = qiniuUtils.getQiniuResourceUrl("launcher-" + version.getVersion() + "version.apk");
         result.put("version", version.getVersion());
+        result.put("version_url", version_download_url);
         return result;
     }
 

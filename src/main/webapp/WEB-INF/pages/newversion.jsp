@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <form role="form" action="/darfoobackend/rest/admin/version/create" method="post" id="createvideoform" name="createvideoform" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="version">之前的版本为${version}</label>
+                    <label for="version">之前的版本为${latestversion}</label>
                     <input type="text" class="form-control" name="newversion" id="version" placeholder="请输入launcher的最新版本号">
                 </div>
 
