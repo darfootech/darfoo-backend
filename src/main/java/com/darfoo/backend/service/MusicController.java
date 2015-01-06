@@ -52,7 +52,7 @@ public class MusicController {
         String author_name = targetMusic.getAuthorName();
         long update_timestamp = targetMusic.getUpdate_timestamp();
         //return new SingleMusic(music_id, music_download_url, image_download_url, author_name, title);
-        return new SingleMusic(music_id, title, music_download_url, author_name, update_timestamp);
+        return new SingleMusic(music_id, title, author_name, music_download_url, update_timestamp);
     }
 
     //http://localhost:8080/darfoobackend/rest/resources/music/search?search=s

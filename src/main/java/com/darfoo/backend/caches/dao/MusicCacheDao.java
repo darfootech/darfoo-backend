@@ -49,6 +49,6 @@ public class MusicCacheDao extends AbstractBaseRedisDao<String, Music> {
         long timestamp = Long.parseLong(commonRedisClient.hget(key, "update_timestamp"));
         //String imageurl = commonRedisClient.hget(key, "imageurl");
         //return new SingleMusic(id, musicurl, imageurl, authorname, title);
-        return new SingleMusic(id, title, musicurl, authorname, timestamp);
+        return new SingleMusic(id, title, authorname, musicurl, timestamp);
     }
 }
