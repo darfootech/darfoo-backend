@@ -33,11 +33,17 @@ public class VersionController {
     public @ResponseBody
     Map<String, Object> getLatestVersion(){
         Map<String, Object> result = new HashMap<String, Object>();
-        Version version = versionDao.getLatestVersion();
-        String version_download_url = qiniuUtils.getQiniuResourceUrl("launcher-" + version.getVersion() + "version.apk");
-        result.put("version", version.getVersion());
-        result.put("version_url", version_download_url);
-        return result;
+        try {
+            Version version = versionDao.getLatestVersion();
+            String version_download_url = qiniuUtils.getQiniuResourceUrl("launcher-" + version.getVersion() + "version.apk");
+            result.put("version", version.getVersion());
+            result.put("version_url", version_download_url);
+            return result;
+        }catch (NullPointerException e){
+            result.put("version", "error");
+            result.put("version_url", "error");
+            return result;
+        }
     }
 
     @RequestMapping(value = "/admin/version/new", method = RequestMethod.GET)
