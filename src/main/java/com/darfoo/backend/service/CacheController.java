@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -386,7 +387,7 @@ public class CacheController {
 
     /*search cache*/
     //http://localhost:8080/darfoobackend/rest/resources/video/search?search=s
-    @RequestMapping(value = "/video/search", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/video/search", method = RequestMethod.GET)
     public @ResponseBody
     List<SingleVideo> searchVideo(HttpServletRequest request){
         String searchContent = request.getParameter("search");
@@ -408,6 +409,73 @@ public class CacheController {
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
+        return result;
+    }*/
+
+    @RequestMapping(value = "/video/search", method = RequestMethod.GET)
+    public @ResponseBody
+    List<SingleVideo> searchVideo(HttpServletRequest request){
+        String searchContent = request.getParameter("search");
+        System.out.println(searchContent);
+        Set<Integer> videoids = new HashSet<Integer>();
+        Set<Integer> tutorialids = new HashSet<Integer>();
+        List<Video> videos = searchDao.getVideoBySearch(searchContent);
+        List<Education> tutorials = searchDao.getEducationBySearch(searchContent);
+        for (Video video : videos){
+            videoids.add(video.getId());
+        }
+
+        for (Education tutorial : tutorials){
+            tutorialids.add(tutorial.getId());
+        }
+
+        List<Author> authors = searchDao.getAuthorBySearch(searchContent);
+        for (Author author : authors){
+            int aid = author.getId();
+            List<Video> authorvideos = videoDao.getVideosByAuthorId(aid);
+            List<Education> authortutorials = educationDao.getTutorialsByAuthorId(aid);
+            for (Video video : authorvideos){
+                videoids.add(video.getId());
+            }
+
+            for (Education tutorial : authortutorials){
+                tutorialids.add(tutorial.getId());
+            }
+        }
+
+        for (Integer vid : videoids){
+            Video video = videoDao.getVideoByVideoId(vid);
+            long status = redisClient.sadd("videosearch" + searchContent, "video-" + vid);
+            videoCacheDao.insertSingleVideo(video);
+            System.out.println("insert result -> " + status);
+        }
+
+        for (Integer tid : tutorialids){
+            Education tutorial = educationDao.getEducationVideoById(tid);
+            long status = redisClient.sadd("videosearch" + searchContent, "tutorial-" + tid);
+            tutorialCacheDao.insertSingleTutorial(tutorial);
+            System.out.println("insert result -> " + status);
+        }
+
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
+
+        Set<String> searchVideoKeys = redisClient.smembers("videosearch" + searchContent);
+        for (String key : searchVideoKeys){
+            System.out.println("key -> " + key);
+            int vid = Integer.parseInt(key.split("-")[1]);
+            String flag = key.split("-")[0];
+            if (flag.equals("video")){
+                SingleVideo video = videoCacheDao.getSingleVideo(vid);
+                System.out.println("title -> " + video.getTitle());
+                result.add(video);
+            }
+            if (flag.equals("tutorial")){
+                SingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
+                System.out.println("title -> " + video.getTitle());
+                result.add(video);
+            }
+        }
+
         return result;
     }
 
