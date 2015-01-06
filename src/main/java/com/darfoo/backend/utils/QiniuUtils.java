@@ -49,7 +49,7 @@ public class QiniuUtils {
     //key就是七牛云上的文件名字
     public String getQiniuResourceUrl(String key) {
         //String domain = "zjdxlab410yy.qiniudn.com";
-        String domain = "zjdxlab410yy.z0.glb.clouddn.com";
+        String domain = "7qnarb.com1.z0.glb.clouddn.com";
         Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
         try {
             //domain在空间设置里可以看到，每一个bucket都对应有一个域名
