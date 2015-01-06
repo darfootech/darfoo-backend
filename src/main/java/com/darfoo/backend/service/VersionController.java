@@ -42,9 +42,14 @@ public class VersionController {
 
     @RequestMapping(value = "/admin/version/new", method = RequestMethod.GET)
     public String uploadVersion(ModelMap modelMap){
-        Version latestVersion = versionDao.getLatestVersion();
-        modelMap.addAttribute("latestversion", latestVersion.getVersion());
-        return "newversion";
+        try {
+            Version latestVersion = versionDao.getLatestVersion();
+            modelMap.addAttribute("latestversion", latestVersion.getVersion());
+            return "newversion";
+        }catch (NullPointerException e){
+            modelMap.addAttribute("latestversion", "还没有launcher上传过");
+            return "newversion";
+        }
     }
 
     @RequestMapping(value = "/admin/version/create", method = RequestMethod.POST)

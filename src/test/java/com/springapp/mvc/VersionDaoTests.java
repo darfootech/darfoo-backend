@@ -26,9 +26,14 @@ public class VersionDaoTests {
         versionDao.insertVersion(v);
     }
 
+
     @Test
     public void getLatestVersion(){
-        Version latestVersion = versionDao.getLatestVersion();
-        System.out.println("latest version -> " + latestVersion.getVersion());
+        try {
+            Version latestVersion = versionDao.getLatestVersion();
+            System.out.println("latest version -> " + latestVersion.getVersion());
+        }catch (NullPointerException e){
+            System.out.println("no latest version already exists");
+        }
     }
 }
