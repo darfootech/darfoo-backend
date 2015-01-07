@@ -63,7 +63,7 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
             String video_download_url = qiniuUtils.getQiniuResourceUrl(video.getVideo_key());
             String image_download_url = qiniuUtils.getQiniuResourceUrl(video.getImage().getImage_key());
             String authorname = video.getAuthor().getName();
-            String update_timestamp = video.getUpdate_timestamp().toString();
+            String update_timestamp = (video.getUpdate_timestamp() / 1000)+"";
             videoMap.put("id", id.toString());
             videoMap.put("title", title);
             videoMap.put("video_url", video_download_url);
@@ -86,7 +86,7 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
             String video_download_url = qiniuUtils.getQiniuResourceUrl(video.getVideo_key());
             String image_download_url = qiniuUtils.getQiniuResourceUrl(video.getVideo_key() + "@@recommendvideo.png");
             String authorname = video.getAuthor().getName();
-            String update_timestamp = video.getUpdate_timestamp().toString();
+            String update_timestamp = (video.getUpdate_timestamp() / 1000)+"";
             videoMap.put("id", id.toString());
             videoMap.put("title", title);
             videoMap.put("video_url", video_download_url);

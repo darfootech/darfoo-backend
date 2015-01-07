@@ -29,7 +29,7 @@ public class TutorialCacheDao extends AbstractBaseRedisDao<String, Education> {
             String video_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getVideo_key());
             String image_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getImage().getImage_key());
             String authorname = tutorial.getAuthor().getName();
-            Long timestamp = tutorial.getUpdate_timestamp();
+            Long timestamp = tutorial.getUpdate_timestamp() / 1000;
             videoMap.put("id", id.toString());
             videoMap.put("title", title);
             videoMap.put("video_url", video_download_url);
@@ -52,7 +52,7 @@ public class TutorialCacheDao extends AbstractBaseRedisDao<String, Education> {
             String video_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getVideo_key());
             String image_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getVideo_key() + "@@recommendtutorial.png");
             String authorname = tutorial.getAuthor().getName();
-            Long timestamp = tutorial.getUpdate_timestamp();
+            Long timestamp = tutorial.getUpdate_timestamp() / 1000;
             videoMap.put("id", id.toString());
             videoMap.put("title", title);
             videoMap.put("video_url", video_download_url);
