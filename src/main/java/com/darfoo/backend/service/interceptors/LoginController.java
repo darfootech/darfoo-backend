@@ -30,10 +30,10 @@ public class LoginController {
         System.out.println(username);
         System.out.println(password);
 
-        if (username.equals("darfoo@tech") && password.equals("Oofrad@darfoo")){
+        if (username.equals("Darfoo@board") && password.equals("Oofrad@Oofrad")){
             request.getSession().setAttribute("loginUser", "cleantha");
             return "200";
-        }else if(username.equals("darfoo@upload") && password.equals("Upload@333")){
+        }else if((username.equals("darfoo@upload") && password.equals("Upload@333")) || (username.equals("darfoo@tech") && password.equals("Oofrad@darfoo"))){
             request.getSession().setAttribute("loginUser", "upload");
             return "200";
         }else{
