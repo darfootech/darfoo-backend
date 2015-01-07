@@ -18,7 +18,7 @@ public class SingleVideo {
         this.authorname = authorname;
         this.video_url = video_url;
         this.image_url = image_url;
-        this.update_timestamp = update_timestamp;
+        this.update_timestamp = update_timestamp / 1000;
     }
 
     public Long getUpdate_timestamp() {

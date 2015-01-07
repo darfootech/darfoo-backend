@@ -24,7 +24,7 @@ public class SingleMusic {
         this.title = title;
         this.authorname = authorname;
         this.music_url = music_url;
-        this.update_timestamp = update_timestamp;
+        this.update_timestamp = update_timestamp / 1000;
     }
 
     /*public String getImage_url() {
