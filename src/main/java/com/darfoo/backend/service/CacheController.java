@@ -122,7 +122,6 @@ public class CacheController {
         return result;
     }
 
-
     @RequestMapping(value = "/video/index", method = RequestMethod.GET)
     public
     @ResponseBody
@@ -272,7 +271,6 @@ public class CacheController {
 
         return result;
     }
-
 
     @RequestMapping("/music/hottest")
     public @ResponseBody

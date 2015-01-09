@@ -3,4 +3,4 @@ ssh root@112.124.68.27   'cd /home/darfoodatabase; \
                           git commit -a -m"backupdatabase";\
                           git push'
 
-cd /Users/zjh/Documents/darfoo/darfoodatabase; git pull
+cd /Users/zjh/Documents/darfoo/darfoodatabase; git pull origin master
