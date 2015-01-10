@@ -173,6 +173,8 @@ public class AuthorDaoTests {
         List<Object[]> result = authorDao.getAuthorOrderByVideoCountDesc();
         for (Object[] rows : result){
             System.out.println((Integer)rows[1] + " -> " + ((BigInteger)rows[0]).intValue());
+            Author author = authorDao.getAuthor((Integer)rows[1]);
+            System.out.println(author.getName());
         }
     }
 }
