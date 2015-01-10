@@ -1,9 +1,6 @@
 package com.springapp.mvc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.caches.RedisClient;
@@ -168,5 +165,29 @@ public class RedisTests extends AbstractJUnit4SpringContextTests {
     @Test
     public void removeAllFromDB(){
         System.out.println(redisClient.deleteCurrentDB());
+    }
+
+    @Test
+    public void testlpush(){
+        redisClient.lpush("cleantha", 3+"");
+        redisClient.lpush("cleantha", 6+"");
+        redisClient.lpush("cleantha", 9+"");
+        //List<String> values = redisClient.lrange("cleantha", 0L, 2L);
+        List<String> values = redisClient.lrange("cleantha", 0L, -1L);
+        for (String value : values){
+            System.out.println(value);
+        }
+    }
+
+    @Test
+    public void testsadd(){
+        redisClient.sadd("ccc", 3+"");
+        redisClient.sadd("ccc", 6+"");
+        redisClient.sadd("ccc", 9+"");
+
+        Set<String> values = redisClient.smembers("ccc");
+        for (String value : values){
+            System.out.println(value);
+        }
     }
 }

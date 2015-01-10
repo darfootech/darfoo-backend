@@ -90,6 +90,27 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String>{
     }
 
     /**
+     * 像某一个key指向的list中插入数据
+     * @param key
+     * @param value
+     * @return
+     */
+    public Long lpush(String key, String value) {
+        return redisTemplate.opsForList().leftPush(key, value);
+    }
+
+    /**
+     * 从key对应的list中按照首尾位置来取出元素
+     * @param key
+     * @param start
+     * @param end
+     * @return
+     */
+    public List<String> lrange(String key, Long start, Long end) {
+        return redisTemplate.opsForList().range(key, start, end);
+    }
+
+    /**
      * 清空redis缓存
      * @return
      */

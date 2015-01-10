@@ -313,7 +313,6 @@ public class RedisClient {
 
     public List<String> lrange(String key, Long start, Long end) {
         return redisTemplate.opsForList().range(key, start, end);
-
     }
 
     public Long lrem(String key, String value, Long count) {
