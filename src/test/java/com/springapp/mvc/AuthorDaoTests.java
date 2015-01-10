@@ -1,5 +1,6 @@
 package com.springapp.mvc;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -165,5 +166,13 @@ public class AuthorDaoTests {
         }
 
         System.out.println(result.size());
+    }
+
+    @Test
+    public void getAuthorOrderByVideoCountDesc(){
+        List<Object[]> result = authorDao.getAuthorOrderByVideoCountDesc();
+        for (Object[] rows : result){
+            System.out.println((Integer)rows[1] + " -> " + ((BigInteger)rows[0]).intValue());
+        }
     }
 }

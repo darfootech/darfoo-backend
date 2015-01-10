@@ -3,6 +3,7 @@ package com.darfoo.backend.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.darfoo.backend.model.*;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,9 +11,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.Image;
-import com.darfoo.backend.model.UpdateCheckResponse;
 import com.darfoo.backend.model.Author;
 
 @Component
@@ -108,6 +106,18 @@ public class AuthorDao {
 		}
 		return l_author;
 	}
+
+    public List<Object[]> getAuthorOrderByVideoCountDesc(){
+        List<Object[]> result = new ArrayList<Object[]>();
+        try {
+            Session session = sf.getCurrentSession();
+            String sql = "select vv.count + tt.count as cnt, vv.id as mid from (select IFNULL(v.cnt, 0) as count, author.id as id from author left outer join (select count(*) as cnt, author_id as mid from video group by author_id)v on author.id = v.mid order by v.cnt desc)vv left outer join (select IFNULL(t.cnt, 0) as count, author.id as id from author left outer join (select count(*) as cnt, author_id as mid from education group by author_id)t on author.id = t.mid order by t.cnt desc)tt on vv.id = tt.id order by cnt desc";
+            result = (List<Object[]>)session.createSQLQuery(sql).list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
 	
 	/**
 	 * 更新Author之前先做check(主要是对image的check) 
