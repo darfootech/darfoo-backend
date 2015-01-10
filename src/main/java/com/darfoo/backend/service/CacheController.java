@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -324,15 +325,25 @@ public class CacheController {
     public
     @ResponseBody
     List<SingleAuthor> cacheIndexAuthors() {
-        List<Author> authors = authorDao.getAllAuthor();
+        /*List<Author> authors = authorDao.getAllAuthor();
         for (Author author : authors){
             int id = author.getId();
             long result = redisClient.sadd("authorindex", "author-" + id);
             authorCacheDao.insertSingleAuthor(author);
             System.out.println("insert result -> " + result);
+        }*/
+
+        List<Object[]> authorIdAndCnt = authorDao.getAuthorOrderByVideoCountDesc();
+        for (Object[] rows : authorIdAndCnt){
+            int authorid = (Integer)rows[1];
+            System.out.println(authorid + " -> " + ((BigInteger)rows[0]).intValue());
+            Author author = authorDao.getAuthor(authorid);
+            long result = redisClient.lpush("authorindex", "author-" + authorid);
+            authorCacheDao.insertSingleAuthor(author);
+            System.out.println("insert result -> " + result);
         }
 
-        Set<String> indexAuthorKeys = redisClient.smembers("authorindex");
+        List<String> indexAuthorKeys = redisClient.lrange("authorindex", 0L, -1L);
         List<SingleAuthor> result = new ArrayList<SingleAuthor>();
         for (String key : indexAuthorKeys){
             System.out.println("key -> " + key);
