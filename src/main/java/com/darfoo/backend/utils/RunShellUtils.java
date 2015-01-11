@@ -27,4 +27,25 @@ public class RunShellUtils {
             return 0;
         }
     }
+
+    public static String runshellscriptwithresult(String scriptPath){
+        try {
+            Process ps = Runtime.getRuntime().exec(scriptPath);
+            ps.waitFor();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(ps.getInputStream()));
+            StringBuffer sb = new StringBuffer();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            String result = sb.toString();
+            System.out.println(result);
+            return result;
+        }
+        catch (Exception e) {
+            //e.printStackTrace();
+            return "";
+        }
+    }
 }

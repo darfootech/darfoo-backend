@@ -19,4 +19,10 @@ public class RunShellTests {
         String scriptpath = "./upload.sh";
         System.out.println(RunShellUtils.runshellscript(scriptpath));
     }
+
+    @Test
+    public void getresourcevolumn(){
+        String scriptpath = "./resourcevolumn.sh";
+        System.out.println(RunShellUtils.runshellscriptwithresult(scriptpath));
+    }
 }
