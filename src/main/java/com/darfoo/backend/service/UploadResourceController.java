@@ -1,15 +1,22 @@
 package com.darfoo.backend.service;
 
+import com.darfoo.backend.dao.CRUDEvent;
+import com.darfoo.backend.dao.UploadVideoDao;
+import com.darfoo.backend.model.UploadVideo;
 import com.darfoo.backend.service.responsemodel.UploadStatus;
 import com.darfoo.backend.service.responsemodel.UploadToken;
 import com.darfoo.backend.utils.CryptUtils;
 import com.darfoo.backend.utils.QiniuUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by zjh on 14-12-22.
@@ -19,6 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/uploadresource")
 public class UploadResourceController {
+    @Autowired
+    UploadVideoDao uploadVideoDao;
+
     CryptUtils cryptUtils = new CryptUtils();
     QiniuUtils qiniuUtils = new QiniuUtils();
 
@@ -36,6 +46,26 @@ public class UploadResourceController {
     }
 
     /**
+     * launcher在上传视频之前要先确定相同的videokey是否已经上传过了
+     * @param videokey
+     * @return
+     */
+    @RequestMapping(value = "prepareupload/{videokey}", method = RequestMethod.GET)
+    public @ResponseBody
+    Map<String, Object> prepareupload(@PathVariable String videokey){
+        Map<String, Object> result = new HashMap<String, Object>();
+        boolean status = uploadVideoDao.isExistVideo(videokey);
+
+        if (!status){
+            result.put("status", "ok");
+        }else{
+            result.put("status", "error");
+        }
+
+        return result;
+    }
+
+    /**
      * 当客户端成功将资源上传至七牛之后需要请求这个回调请求，将资源有关信息发送给服务器数据库
      * @param request
      * @return
@@ -43,9 +73,17 @@ public class UploadResourceController {
     @RequestMapping(value = "finishcallback", method = RequestMethod.POST)
     public @ResponseBody
     UploadStatus uploadFinishCallback(HttpServletRequest request){
-        System.out.println("post title -> " + request.getParameter("title"));
-        System.out.println("post authorid -> " + request.getParameter("authorid"));
+        int userid = Integer.parseInt(request.getParameter("userid"));
+        String videokey = request.getParameter("videokey");
+        System.out.println("post userid -> " + userid);
+        System.out.println("post authorid -> " + videokey);
 
-        return new UploadStatus("ok");
+        int status = uploadVideoDao.insertUploadVideo(new UploadVideo(videokey, userid, -1));
+
+        if (status == CRUDEvent.INSERT_SUCCESS){
+            return new UploadStatus("ok");
+        }else{
+            return new UploadStatus("error");
+        }
     }
 }
