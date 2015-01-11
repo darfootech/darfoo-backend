@@ -30,6 +30,9 @@ public class UploadVideo implements Serializable {
     @Column(name="VIDEO_ID", nullable=false, updatable=true, columnDefinition="int(11) default 0")
     Integer videoid;
 
+    public UploadVideo() {
+    }
+
     public UploadVideo(String video_key, Integer userid, Integer videoid) {
         this.video_key = video_key;
         this.userid = userid;

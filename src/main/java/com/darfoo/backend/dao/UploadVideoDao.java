@@ -36,7 +36,7 @@ public class UploadVideoDao {
             UploadVideo video = (UploadVideo)session.createSQLQuery(sql).addEntity(UploadVideo.class).setString("videokey", videokey).uniqueResult();
             isExist = (video == null) ? false : true;
         }catch(Exception e){
-            //e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
         return isExist;
@@ -70,7 +70,7 @@ public class UploadVideoDao {
      * @param videoid
      * @return
      */
-    public int updateVideoHotest(Integer id, Integer videoid){
+    public int updateRealVideoid(Integer id, Integer videoid){
         int res = 0;
         try{
             Session session = sessionFactory.getCurrentSession();
@@ -143,7 +143,7 @@ public class UploadVideoDao {
             Criteria c = session.createCriteria(UploadVideo.class);
             c.addOrder(Order.desc("id"));
             c.setReadOnly(true);
-            List<UploadVideo> l_videos = c.list();
+            s_videos = c.list();
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -159,7 +159,7 @@ public class UploadVideoDao {
         List<UploadVideo> videos = null;
         try{
             Session session = sessionFactory.getCurrentSession();
-            String sql = "select * from uploadvideo where user_id=:userid order by id desc";
+            String sql = "select * from uploadvideo where user_id=:userid and video_id > 0 order by id desc";
             videos = (List<UploadVideo>)session.createSQLQuery(sql).addEntity(UploadVideo.class).setInteger("userid", userid).list();
         }catch(Exception e){
             e.printStackTrace();
