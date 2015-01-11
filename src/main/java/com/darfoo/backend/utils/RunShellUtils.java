@@ -19,6 +19,7 @@ public class RunShellUtils {
                 sb.append(line).append("\n");
             }
             String result = sb.toString();
+            System.out.println(result);
             return 1;
         }
         catch (Exception e) {
