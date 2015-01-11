@@ -81,6 +81,7 @@
                         <li><a href="/darfoobackend/rest/admin/recommend/tutorial">首页推荐舞蹈教程</a></li>
                         <li><a href="/darfoobackend/rest/admin/recommend/updateimage/all">查看修改推荐舞蹈视频图片</a></li>
                         <li><a href="/darfoobackend/rest/admin/version/new">上传新版本launcher</a></li>
+                        <li><a href="/darfoobackend/rest/admin/runscript/upload">同步视频</a></li>
                         <!--<li><a href="/darfoobackend/rest/admin/team/all">查看修改舞队</a></li>-->
                     </ul>
                 </li>
