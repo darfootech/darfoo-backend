@@ -4,6 +4,7 @@ import com.darfoo.backend.caches.AbstractBaseRedisDao;
 import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Video;
+import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
 import com.darfoo.backend.service.responsemodel.IndexVideo;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.utils.QiniuUtils;
@@ -70,6 +71,7 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
             videoMap.put("image_url", image_download_url);
             videoMap.put("authorname", authorname);
             videoMap.put("update_timestamp", update_timestamp);
+            videoMap.put("type", 1+"");
             commonRedisClient.hmset(key, videoMap);
             return true;
         }else{
@@ -93,6 +95,7 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
             videoMap.put("image_url", image_download_url);
             videoMap.put("authorname", authorname);
             videoMap.put("update_timestamp", update_timestamp);
+            videoMap.put("type", 1+"");
             commonRedisClient.hmset(key, videoMap);
             return true;
         }else{
@@ -108,6 +111,60 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
         }else{
             return false;
         }
+    }
+
+    public CacheSingleVideo getSingleVideo(Integer id){
+        String key = "video-" + id;
+        String title = commonRedisClient.hget(key, "title");
+        String authorname = commonRedisClient.hget(key, "authorname");
+        String videourl = commonRedisClient.hget(key, "video_url");
+        String imageurl = commonRedisClient.hget(key, "image_url");
+        String timestamp = commonRedisClient.hget(key, "update_timestamp");
+        String type = commonRedisClient.hget(key, "type");
+        return new CacheSingleVideo(id, title, authorname, videourl, imageurl, Integer.parseInt(type), Long.parseLong(timestamp));
+    }
+
+    public CacheSingleVideo getRecommendVideo(Integer id){
+        String key = "recommendvideo-" + id;
+        String title = commonRedisClient.hget(key, "title");
+        String authorname = commonRedisClient.hget(key, "authorname");
+        String videourl = commonRedisClient.hget(key, "video_url");
+        String imageurl = commonRedisClient.hget(key, "image_url");
+        String timestamp = commonRedisClient.hget(key, "update_timestamp");
+        String type = commonRedisClient.hget(key, "type");
+        return new CacheSingleVideo(id, title, authorname, videourl, imageurl, Integer.parseInt(type), Long.parseLong(timestamp));
+    }
+
+    public SingleVideo getSingleVideoFromPool(Integer id){
+        Jedis jedis = null;
+        try {
+            String key = "video-" + id;
+            jedis = jedisPool.getResource();
+            String title = jedis.hget(key, "title");
+            String authorname = jedis.hget(key, "authorname");
+            String videourl = jedis.hget(key, "video_url");
+            String imageurl = jedis.hget(key, "image_url");
+            //System.out.println(title + " - " + authorname + " - " + videourl + " - " + imageurl);
+            String timestamp = commonRedisClient.hget(key, "update_timestamp");
+            return new SingleVideo(id, title, authorname, videourl, imageurl, Long.parseLong(timestamp));
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }finally {
+            jedisPool.returnResource(jedis);
+        }
+    }
+
+    /* deprecated */
+
+    public IndexVideo getIndexVideo(String key){
+        int id = Integer.parseInt(key.split("-")[1]);
+        String title = commonRedisClient.hget(key, "title");
+        String authorname = commonRedisClient.hget(key, "authorname");
+        String videourl = commonRedisClient.hget(key, "videourl");
+        String imageurl = commonRedisClient.hget(key, "imageurl");
+        Long timestamp = Long.parseLong(commonRedisClient.hget(key, "timestamp"));
+        return new IndexVideo(id, title, imageurl, videourl, authorname, timestamp);
     }
 
     /**
@@ -164,55 +221,5 @@ public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
         }else{
             return false;
         }
-    }
-
-    public SingleVideo getSingleVideo(Integer id){
-        String key = "video-" + id;
-        String title = commonRedisClient.hget(key, "title");
-        String authorname = commonRedisClient.hget(key, "authorname");
-        String videourl = commonRedisClient.hget(key, "video_url");
-        String imageurl = commonRedisClient.hget(key, "image_url");
-        String timestamp = commonRedisClient.hget(key, "update_timestamp");
-        return new SingleVideo(id, title, authorname, videourl, imageurl, Long.parseLong(timestamp));
-    }
-
-    public SingleVideo getRecommendVideo(Integer id){
-        String key = "recommendvideo-" + id;
-        String title = commonRedisClient.hget(key, "title");
-        String authorname = commonRedisClient.hget(key, "authorname");
-        String videourl = commonRedisClient.hget(key, "video_url");
-        String imageurl = commonRedisClient.hget(key, "image_url");
-        String timestamp = commonRedisClient.hget(key, "update_timestamp");
-        return new SingleVideo(id, title, authorname, videourl, imageurl, Long.parseLong(timestamp));
-    }
-
-    public SingleVideo getSingleVideoFromPool(Integer id){
-        Jedis jedis = null;
-        try {
-            String key = "video-" + id;
-            jedis = jedisPool.getResource();
-            String title = jedis.hget(key, "title");
-            String authorname = jedis.hget(key, "authorname");
-            String videourl = jedis.hget(key, "video_url");
-            String imageurl = jedis.hget(key, "image_url");
-            //System.out.println(title + " - " + authorname + " - " + videourl + " - " + imageurl);
-            String timestamp = commonRedisClient.hget(key, "update_timestamp");
-            return new SingleVideo(id, title, authorname, videourl, imageurl, Long.parseLong(timestamp));
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }finally {
-            jedisPool.returnResource(jedis);
-        }
-    }
-
-    public IndexVideo getIndexVideo(String key){
-        int id = Integer.parseInt(key.split("-")[1]);
-        String title = commonRedisClient.hget(key, "title");
-        String authorname = commonRedisClient.hget(key, "authorname");
-        String videourl = commonRedisClient.hget(key, "videourl");
-        String imageurl = commonRedisClient.hget(key, "imageurl");
-        Long timestamp = Long.parseLong(commonRedisClient.hget(key, "timestamp"));
-        return new IndexVideo(id, title, imageurl, videourl, authorname, timestamp);
     }
 }

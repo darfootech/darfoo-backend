@@ -4,6 +4,7 @@ import com.darfoo.backend.caches.AbstractBaseRedisDao;
 import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Video;
+import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,7 @@ public class TutorialCacheDao extends AbstractBaseRedisDao<String, Education> {
             videoMap.put("image_url", image_download_url);
             videoMap.put("authorname", authorname);
             videoMap.put("update_timestamp", timestamp.toString());
+            videoMap.put("type", 1+"");
             commonRedisClient.hmset(key, videoMap);
             return true;
         }else{
@@ -66,13 +68,14 @@ public class TutorialCacheDao extends AbstractBaseRedisDao<String, Education> {
         }
     }
 
-    public SingleVideo getSingleTutorial(Integer id){
+    public CacheSingleVideo getSingleTutorial(Integer id){
         String key = "tutorial-" + id;
         String title = commonRedisClient.hget(key, "title");
         String authorname = commonRedisClient.hget(key, "authorname");
         String tutorialurl = commonRedisClient.hget(key, "video_url");
         String imageurl = commonRedisClient.hget(key, "image_url");
+        Integer type = Integer.parseInt(commonRedisClient.hget(key, "type"));
         long timestamp = Long.parseLong(commonRedisClient.hget(key, "update_timestamp"));
-        return new SingleVideo(id, title, authorname, tutorialurl, imageurl, timestamp);
+        return new CacheSingleVideo(id, title, authorname, tutorialurl, imageurl, type, timestamp);
     }
 }

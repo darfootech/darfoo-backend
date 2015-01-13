@@ -3,6 +3,7 @@ package com.springapp.mvc;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Video;
+import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
 import com.darfoo.backend.service.responsemodel.IndexVideo;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class LoadTestController {
     @Autowired
     VideoCacheDao videoCacheDao;
 
-    private final Queue<DeferredResult<SingleVideo>> responseQueue = new ConcurrentLinkedQueue<DeferredResult<SingleVideo>>();
+    private final Queue<DeferredResult<CacheSingleVideo>> responseQueue = new ConcurrentLinkedQueue<DeferredResult<CacheSingleVideo>>();
 
     /*
     Running 10s test @ http://localhost:8080/darfoobackend/rest/loadtest/normal/nocache/1
@@ -152,7 +153,7 @@ public class LoadTestController {
     */
     @RequestMapping(value = "/normal/cache/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    SingleVideo normalcache(@PathVariable Integer id){
+    CacheSingleVideo normalcache(@PathVariable Integer id){
         //Integer vid = Integer.parseInt(id);
         return videoCacheDao.getSingleVideo(id);
     }
@@ -229,12 +230,12 @@ public class LoadTestController {
     */
     @RequestMapping(value = "/async/cache/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    Callable<SingleVideo> asynccache(@PathVariable String id){
+    Callable<CacheSingleVideo> asynccache(@PathVariable String id){
         final int targetid = Integer.parseInt(id);
 
-        return new Callable<SingleVideo>() {
+        return new Callable<CacheSingleVideo>() {
             @Override
-            public SingleVideo call() throws Exception {
+            public CacheSingleVideo call() throws Exception {
                 return videoCacheDao.getSingleVideo(targetid);
             }
         };
@@ -254,8 +255,8 @@ public class LoadTestController {
     @RequestMapping(value = "/deferred/nocache", method = RequestMethod.GET)
     public
     @ResponseBody
-    DeferredResult<SingleVideo> deferrednocache() {
-        DeferredResult<SingleVideo> response = new DeferredResult<SingleVideo>();
+    DeferredResult<CacheSingleVideo> deferrednocache() {
+        DeferredResult<CacheSingleVideo> response = new DeferredResult<CacheSingleVideo>();
         responseQueue.add(response);
         taskExecutor.execute(new NoCacheRunnable());
         return response;
@@ -273,8 +274,8 @@ public class LoadTestController {
     */
     @RequestMapping(value = "/deferred/cache", method = RequestMethod.GET)
     public @ResponseBody
-    DeferredResult<SingleVideo> deferredcache(){
-        DeferredResult<SingleVideo> response = new DeferredResult<SingleVideo>();
+    DeferredResult<CacheSingleVideo> deferredcache(){
+        DeferredResult<CacheSingleVideo> response = new DeferredResult<CacheSingleVideo>();
         responseQueue.add(response);
         taskExecutor.execute(new CacheRunnable());
         return response;
@@ -283,7 +284,7 @@ public class LoadTestController {
     class NoCacheRunnable implements Runnable{
         @Override
         public void run() {
-            for (DeferredResult<SingleVideo> response : responseQueue) {
+            for (DeferredResult<CacheSingleVideo> response : responseQueue) {
                 int targetid = 1;
                 Video targetVideo = videoDao.getVideoByVideoId(targetid);
                 int video_id = targetVideo.getId();
@@ -295,7 +296,7 @@ public class LoadTestController {
                     author_name = targetVideo.getAuthor().getName();
                 }
                 long timestamp = targetVideo.getUpdate_timestamp();
-                response.setResult(new SingleVideo(video_id, video_title, author_name, video_url, image_url, timestamp));
+                response.setResult(new CacheSingleVideo(video_id, video_title, author_name, video_url, image_url, 1, timestamp));
                 responseQueue.remove(response);
             }
         }
@@ -304,7 +305,7 @@ public class LoadTestController {
     class CacheRunnable implements Runnable{
         @Override
         public void run() {
-            for (DeferredResult<SingleVideo> response : responseQueue) {
+            for (DeferredResult<CacheSingleVideo> response : responseQueue) {
                 int targetid = 1;
                 response.setResult(videoCacheDao.getSingleVideo(targetid));
                 responseQueue.remove(response);
