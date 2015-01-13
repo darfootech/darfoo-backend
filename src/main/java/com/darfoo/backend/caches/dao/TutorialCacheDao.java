@@ -37,7 +37,7 @@ public class TutorialCacheDao extends AbstractBaseRedisDao<String, Education> {
             videoMap.put("image_url", image_download_url);
             videoMap.put("authorname", authorname);
             videoMap.put("update_timestamp", timestamp.toString());
-            videoMap.put("type", 1+"");
+            videoMap.put("type", 0+"");
             commonRedisClient.hmset(key, videoMap);
             return true;
         }else{
@@ -61,7 +61,7 @@ public class TutorialCacheDao extends AbstractBaseRedisDao<String, Education> {
             videoMap.put("image_url", image_download_url);
             videoMap.put("authorname", authorname);
             videoMap.put("update_timestamp", timestamp.toString());
-            videoMap.put("type", 1+"");
+            videoMap.put("type", 0+"");
             commonRedisClient.hmset(key, videoMap);
             return true;
         }else{
