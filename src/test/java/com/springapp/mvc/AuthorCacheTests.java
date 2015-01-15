@@ -10,6 +10,7 @@ import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Video;
+import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import org.junit.Test;
@@ -87,7 +88,7 @@ public class AuthorCacheTests {
     @Test
     public void cacheAuthorVideos(){
         int id = 11;
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
         List<Video> videos = videoDao.getVideosByAuthorId(id);
         List<Education> tutorials = educationDao.getTutorialsByAuthorId(id);
 
@@ -111,10 +112,10 @@ public class AuthorCacheTests {
             int vtid = Integer.parseInt(key.split("-")[1]);
             String vtflag = key.split("-")[0];
             if (vtflag.equals("video")){
-                SingleVideo video = videoCacheDao.getSingleVideo(vtid);
+                CacheSingleVideo video = videoCacheDao.getSingleVideo(vtid);
                 result.add(video);
             }else if (vtflag.equals("tutorial")){
-                SingleVideo tutorial = tutorialCacheDao.getSingleTutorial(vtid);
+                CacheSingleVideo tutorial = tutorialCacheDao.getSingleTutorial(vtid);
                 result.add(tutorial);
             }else {
                 System.out.println("something is wrong");

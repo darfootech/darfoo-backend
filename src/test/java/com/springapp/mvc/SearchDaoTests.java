@@ -11,6 +11,7 @@ import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.model.*;
+import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
@@ -101,11 +102,11 @@ public class SearchDaoTests {
         }
 
         Set<String> searchVideoKeys = redisClient.smembers("videosearch" + searchContent);
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
         for (String key : searchVideoKeys){
             System.out.println("key -> " + key);
             int vid = Integer.parseInt(key.split("-")[1]);
-            SingleVideo video = videoCacheDao.getSingleVideo(vid);
+            CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
@@ -118,7 +119,7 @@ public class SearchDaoTests {
         String searchContent = "呵呵";
         System.out.println(searchContent);
         List<Education> videos = searchDao.getEducationBySearch(searchContent);
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
         for (Education video : videos){
             int vid = video.getId();
             long status = redisClient.sadd("tutorialsearch" + searchContent, "tutorial-" + vid);
@@ -130,7 +131,7 @@ public class SearchDaoTests {
         for (String key : searchTutorialKeys){
             System.out.println("key -> " + key);
             int tid = Integer.parseInt(key.split("-")[1]);
-            SingleVideo tutorial = tutorialCacheDao.getSingleTutorial(tid);
+            CacheSingleVideo tutorial = tutorialCacheDao.getSingleTutorial(tid);
             System.out.println("title -> " + tutorial.getTitle());
             result.add(tutorial);
         }

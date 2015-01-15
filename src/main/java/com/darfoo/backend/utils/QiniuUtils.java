@@ -60,7 +60,8 @@ public class QiniuUtils {
             getPolicy.expires = 7 * 24 * 3600;
             String downloadUrl = getPolicy.makeRequest(baseUrl, mac);
             System.out.println(downloadUrl);
-            return downloadUrl;
+            //return downloadUrl;
+            return CryptUtils.encryptQiniuUrl(downloadUrl);
         } catch (Exception e) {
             //return "generate download url error";
             return e.getMessage();
