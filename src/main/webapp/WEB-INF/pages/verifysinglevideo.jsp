@@ -3,7 +3,7 @@
 
 <script>
     function start(){
-        var createVideoUrl = "/darfoobackend/rest/resources/video/create";
+        var createVideoUrl = "/darfoobackend/rest/admin/verifyvideo/verify";
         $.ajax({
             type : "POST",
             url : createVideoUrl,
@@ -67,16 +67,11 @@
             <form role="form" id="createvideoform" name="createvideoform">
                 <div class="form-group">
                     <label for="title">舞蹈视频标题</label>
-                    <input type="text" class="form-control" name="title" id="title" placeholder="${title}">
+                    <input type="text" class="form-control" name="title" id="title" value="${title}">
                 </div>
 
-                <div class="form-group">
-                    <label for="authorname">舞蹈视频关联的明星舞队</label>
-                    <select data-toggle="select" name="authorname" id="authorname" class="form-control select select-success mrs mbm">
-                        <c:forEach var="author" items="${authors}">
-                            <option value="${author.name}">${author.name}</option>
-                        </c:forEach>
-                    </select>
+                <div style="display: none">
+                    <input type="text" name="videokey" value="${videokey}">
                 </div>
 
                 <div style="display: none">

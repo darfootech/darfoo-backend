@@ -57,7 +57,7 @@ public class ImageDaoTests {
 	 * **/
 	@Test
 	public void deleteImage(){
-		Integer id = 68;
+		Integer id = 115;
 		int res = imageDao.deleteImageById(id);
 		System.out.println(CRUDEvent.getResponse(res));
 	}

@@ -4,10 +4,9 @@ package com.springapp.mvc;
  * Created by zjh on 15-1-17.
  */
 
-import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.UploadNoAuthVideoDao;
-import com.darfoo.backend.model.UploadNoAuthVideo;
-import com.darfoo.backend.model.UploadVideo;
+import com.darfoo.backend.dao.*;
+import com.darfoo.backend.model.*;
+import com.darfoo.backend.utils.ServiceUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
@@ -23,6 +24,12 @@ public class UploadNoAuthVideoDaoTests {
 
     @Autowired
     UploadNoAuthVideoDao uploadVideoDao;
+    @Autowired
+    AuthorDao authorDao;
+    @Autowired
+    ImageDao imageDao;
+    @Autowired
+    VideoDao videoDao;
 
     @Test
     public void isExistVideo(){
@@ -90,5 +97,91 @@ public class UploadNoAuthVideoDaoTests {
         int id = 1;
         int result = uploadVideoDao.deleteVideoById(id);
         Assert.assertEquals(CRUDEvent.DELETE_SUCCESS, result);
+    }
+
+    @Test
+    public void insertSingleVideo(){
+        String videotitle = "cleantha33";
+        String imagekey = "cleantha0-1421489883812-30:ad:05:01:a6:83.mp3";
+        String authorname = "user-macaddress";
+        String videotype = "mp4";
+        String videospeed = "较快";
+        String videodifficult = "简单";
+        String videostyle = "欢快";
+        String videoletter = "A";
+
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+
+        boolean isSingleLetter = ServiceUtils.isSingleCharacter(videoletter);
+        if (isSingleLetter){
+            System.out.println("是单个大写字母");
+        }else{
+            System.out.println("不是单个大写字母");
+            resultMap.put("statuscode", 505);
+            resultMap.put("insertid", -1);
+        }
+
+        if (imagekey.equals("")){
+            resultMap.put("statuscode", 508);
+            resultMap.put("insertid", -1);
+        }
+
+        Image image = imageDao.getImageByName(imagekey);
+        if (image == null){
+            System.out.println("图片不存在，可以进行插入");
+            image = new Image();
+            image.setImage_key(imagekey);
+            imageDao.insertSingleImage(image);
+        }else{
+            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+            resultMap.put("statuscode", 502);
+            resultMap.put("insertid", -1);
+        }
+
+        Author targetAuthor = authorDao.getAuthor(authorname);
+        if(targetAuthor != null){
+            System.out.println(targetAuthor.getName());
+        }
+        else{
+            targetAuthor = new Author();
+            targetAuthor.setName(authorname);
+            targetAuthor.setDescription("userdescription");
+            targetAuthor.setImage(image);
+            authorDao.insertAuthor(targetAuthor);
+        }
+
+        Video video = new Video();
+        video.setAuthor(targetAuthor);
+        Image img = new Image();
+        img.setImage_key(imagekey);
+        video.setImage(img);
+        VideoCategory speed = new VideoCategory();
+        VideoCategory difficult = new VideoCategory();
+        VideoCategory style = new VideoCategory();
+        VideoCategory letter = new VideoCategory();
+        speed.setTitle(videospeed);
+        difficult.setTitle(videodifficult);
+        style.setTitle(videostyle);
+        letter.setTitle(videoletter);
+        Set<VideoCategory> s_vCategory = video.getCategories();
+        s_vCategory.add(speed);
+        s_vCategory.add(difficult);
+        s_vCategory.add(style);
+        s_vCategory.add(letter);
+        video.setTitle(videotitle);
+        video.setVideo_key(videotitle);
+        video.setUpdate_timestamp(System.currentTimeMillis());
+        int insertStatus = videoDao.insertSingleVideo(video);
+        if (insertStatus == -1){
+            System.out.println("插入视频失败");
+        }else{
+            System.out.println("插入视频成功，视频id是" + insertStatus);
+        }
+
+        videoDao.updateVideoKeyById(insertStatus, videotitle + "-" + insertStatus + "." + videotype);
+
+        resultMap.put("statuscode", 200);
+        resultMap.put("insertid", insertStatus);
+        System.out.println(resultMap.get("statuscode"));
     }
 }
