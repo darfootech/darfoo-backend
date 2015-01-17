@@ -32,6 +32,31 @@
         })
     }
 
+    function kickout(){
+        var videoid = $("#videoid").text();
+
+        var targeturl = "/darfoobackend/rest/admin/verifyvideo/delete";
+
+        $.ajax({
+            type : "POST",
+            url : targeturl,
+            data : {"id":videoid},
+            success : function(data){
+                if(data == "200"){
+                    alert("删除视频信息成功");
+                    window.location.href = "/darfoobackend/rest/admin/verifyvideo/all"
+                }else if(data == "505"){
+                    alert("删除视频信息失败");
+                }else{
+                    alert("删除视频信息失败");
+                }
+            },
+            error : function(){
+                alert("删除视频信息失败");
+            }
+        })
+    }
+
     $(function(){
         $.ajax({
             url: '/darfoobackend/rest/resources/music/all/service',
@@ -59,6 +84,8 @@
         });
     });
 </script>
+
+<div id="videoid" style="display: none">${videoid}</div>
 
 <div class="container">
     <h1>填写舞蹈视频信息</h1>
@@ -138,6 +165,7 @@
                 </div>
 
                 <button type="button" class="btn btn-default" onclick="start()">提交舞蹈视频信息</button>
+                <button type="button" class="btn btn-default" onclick="kickout()">删除舞蹈视频</button>
             </form>
         </div>
     </div>

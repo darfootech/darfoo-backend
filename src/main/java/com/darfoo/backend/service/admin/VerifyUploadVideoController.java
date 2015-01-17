@@ -1,9 +1,6 @@
 package com.darfoo.backend.service.admin;
 
-import com.darfoo.backend.dao.AuthorDao;
-import com.darfoo.backend.dao.ImageDao;
-import com.darfoo.backend.dao.UploadNoAuthVideoDao;
-import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.dao.*;
 import com.darfoo.backend.model.*;
 import com.darfoo.backend.utils.QiniuUtils;
 import com.darfoo.backend.utils.ServiceUtils;
@@ -52,6 +49,7 @@ public class VerifyUploadVideoController {
         session.setAttribute("uploadvideoid", id);
         session.setAttribute("uploadmacaddr", video.getMac_addr());
 
+        modelMap.addAttribute("videoid", id);
         modelMap.addAttribute("title", video.getVideotitle());
         modelMap.addAttribute("videokey", video.getVideo_key());
         modelMap.addAttribute("imagekey", video.getImage_key());
@@ -175,6 +173,18 @@ public class VerifyUploadVideoController {
             }
 
             return statusCode+"";
+        }
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public @ResponseBody
+    String deleteVideo(HttpServletRequest request){
+        Integer vid = Integer.parseInt(request.getParameter("id"));
+        String status = CRUDEvent.getResponse(uploadNoAuthVideoDao.deleteVideoById(vid));
+        if (status.equals("DELETE_SUCCESS")){
+            return 200+"";
+        }else{
+            return 505+"";
         }
     }
 }
