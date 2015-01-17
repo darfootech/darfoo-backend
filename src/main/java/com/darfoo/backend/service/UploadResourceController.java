@@ -1,7 +1,9 @@
 package com.darfoo.backend.service;
 
 import com.darfoo.backend.dao.CRUDEvent;
+import com.darfoo.backend.dao.UploadNoAuthVideoDao;
 import com.darfoo.backend.dao.UploadVideoDao;
+import com.darfoo.backend.model.UploadNoAuthVideo;
 import com.darfoo.backend.model.UploadVideo;
 import com.darfoo.backend.service.responsemodel.UploadStatus;
 import com.darfoo.backend.service.responsemodel.UploadToken;
@@ -28,6 +30,7 @@ import java.util.Map;
 public class UploadResourceController {
     @Autowired
     UploadVideoDao uploadVideoDao;
+    UploadNoAuthVideoDao uploadNoAuthVideoDao;
 
     CryptUtils cryptUtils = new CryptUtils();
     QiniuUtils qiniuUtils = new QiniuUtils();
@@ -79,6 +82,25 @@ public class UploadResourceController {
         System.out.println("post authorid -> " + videokey);
 
         int status = uploadVideoDao.insertUploadVideo(new UploadVideo(videokey, userid, -1));
+
+        if (status == CRUDEvent.INSERT_SUCCESS){
+            return new UploadStatus("ok");
+        }else{
+            return new UploadStatus("error");
+        }
+    }
+
+    /**
+     * 第一版不使用用户验证 自动批量上传
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "finishcallbackna", method = RequestMethod.POST)
+    public @ResponseBody UploadStatus uploadFinishCallbackWithoutAuth(HttpServletRequest request){
+        String videokey = request.getParameter("videokey");
+        String macaddr = videokey.split("\\.")[0].split("-")[2];
+
+        int status = uploadNoAuthVideoDao.insertUploadVideo(new UploadNoAuthVideo(videokey, macaddr, -1));
 
         if (status == CRUDEvent.INSERT_SUCCESS){
             return new UploadStatus("ok");
