@@ -18,6 +18,10 @@ public class UploadNoAuthVideo implements Serializable {
     @Column(name = "VIDEO_KEY", unique = true, nullable = false, columnDefinition = "varchar(255) not null")
     String video_key;
 
+    //图片资源在七牛上的标识
+    @Column(name = "IMAGE_KEY", unique = true, nullable = false, columnDefinition = "varchar(255) not null")
+    String image_key;
+
     //上传机器的mac地址
     @Column(name = "MAC_ADDR", nullable = false, updatable = true, columnDefinition = "varchar(255) not null")
     String mac_addr;
@@ -33,8 +37,9 @@ public class UploadNoAuthVideo implements Serializable {
     public UploadNoAuthVideo() {
     }
 
-    public UploadNoAuthVideo(String video_key, String mac_addr, String videotitle, Integer videoid) {
+    public UploadNoAuthVideo(String video_key, String image_key, String mac_addr, String videotitle, Integer videoid) {
         this.video_key = video_key;
+        this.image_key = image_key;
         this.mac_addr = mac_addr;
         this.videotitle = videotitle;
         this.videoid = videoid;
@@ -78,5 +83,13 @@ public class UploadNoAuthVideo implements Serializable {
 
     public void setVideotitle(String videotitle) {
         this.videotitle = videotitle;
+    }
+
+    public String getImage_key() {
+        return image_key;
+    }
+
+    public void setImage_key(String image_key) {
+        this.image_key = image_key;
     }
 }

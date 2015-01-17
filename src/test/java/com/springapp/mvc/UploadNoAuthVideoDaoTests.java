@@ -34,12 +34,13 @@ public class UploadNoAuthVideoDaoTests {
     @Test
     public void insertUploadVideo(){
         String videokey = "cleantha33-" + System.currentTimeMillis() + "-30:ad:05:01:a6:83.mp4";
+        String imagekey = "cleantha0-" + System.currentTimeMillis() + "-30:ad:05:01:a6:83.mp3";
         System.out.println(videokey);
         int videoid = -1;
         String macaddr = videokey.split("\\.")[0].split("-")[2];
         String videotitle = videokey.split("\\.")[0].split("-")[0];
 
-        int result = uploadVideoDao.insertUploadVideo(new UploadNoAuthVideo(videokey, macaddr, videotitle, videoid));
+        int result = uploadVideoDao.insertUploadVideo(new UploadNoAuthVideo(videokey, imagekey, macaddr, videotitle, videoid));
         Assert.assertEquals(CRUDEvent.INSERT_SUCCESS, result);
     }
 

@@ -1,5 +1,6 @@
 package com.darfoo.backend.service.admin;
 
+import com.darfoo.backend.dao.AuthorDao;
 import com.darfoo.backend.dao.UploadNoAuthVideoDao;
 import com.darfoo.backend.model.UploadNoAuthVideo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import java.util.List;
 @RequestMapping("/admin/verifyvideo")
 public class VerifyUploadVideoController {
     @Autowired
+    AuthorDao authorDao;
+    @Autowired
     UploadNoAuthVideoDao uploadNoAuthVideoDao;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
@@ -32,6 +35,7 @@ public class VerifyUploadVideoController {
     public String singleUnVerifyVideos(@PathVariable Integer id, ModelMap modelMap){
         UploadNoAuthVideo video = uploadNoAuthVideoDao.getUploadVideoById(id);
         modelMap.addAttribute("title", video.getVideotitle());
+        modelMap.addAttribute("authors", authorDao.getAllAuthor());
         return "verifysinglevideo";
     }
 }
