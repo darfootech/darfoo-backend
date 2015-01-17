@@ -27,6 +27,7 @@ public class UploadNoAuthVideoDaoTests {
     @Test
     public void insertUploadVideo(){
         String videokey = "cleantha33-" + System.currentTimeMillis() + "-30:ad:05:01:a6:83.mp4";
+        System.out.println(videokey);
         int videoid = -1;
         String macaddr = videokey.split("\\.")[0].split("-")[2];
         int result = uploadVideoDao.insertUploadVideo(new UploadNoAuthVideo(videokey, macaddr, videoid));

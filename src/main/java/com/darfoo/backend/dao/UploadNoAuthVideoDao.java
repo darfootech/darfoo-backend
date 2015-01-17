@@ -37,6 +37,7 @@ public class UploadNoAuthVideoDao {
             Integer id = (Integer)(session.save(video));
             res = (id > 0) ? CRUDEvent.INSERT_SUCCESS : CRUDEvent.INSERT_FAIL;
         }catch(Exception e){
+            //e.printStackTrace();
             res = CRUDEvent.CRUD_EXCETION;
             //throw new RuntimeException("rollback");
         }

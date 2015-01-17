@@ -30,9 +30,9 @@ import java.util.Map;
 public class UploadResourceController {
     @Autowired
     UploadVideoDao uploadVideoDao;
+    @Autowired
     UploadNoAuthVideoDao uploadNoAuthVideoDao;
 
-    CryptUtils cryptUtils = new CryptUtils();
     QiniuUtils qiniuUtils = new QiniuUtils();
 
     /**
@@ -44,7 +44,7 @@ public class UploadResourceController {
     UploadToken getUploadToken(){
         String token = qiniuUtils.getToken();
         System.out.println("origin token -> " + token);
-        String encryptToken = cryptUtils.base64EncodeStr(token);
+        String encryptToken = CryptUtils.base64EncodeStr(token);
         return new UploadToken(encryptToken);
     }
 
@@ -99,6 +99,8 @@ public class UploadResourceController {
     public @ResponseBody UploadStatus uploadFinishCallbackWithoutAuth(HttpServletRequest request){
         String videokey = request.getParameter("videokey");
         String macaddr = videokey.split("\\.")[0].split("-")[2];
+        System.out.println("videokey -> " + videokey);
+        System.out.println("macaddr -> " + macaddr);
 
         int status = uploadNoAuthVideoDao.insertUploadVideo(new UploadNoAuthVideo(videokey, macaddr, -1));
 
