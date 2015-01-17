@@ -26,6 +26,25 @@ public class UploadNoAuthVideoDao {
     /*因为上传的video-key中带有了时间戳所以不会发生key重名*/
 
     /**
+     * 查看是否已经有相同的标识的视频被上传了
+     * @param videokey
+     * @return
+     */
+    public boolean isExistVideo(String videokey){
+        boolean isExist = true;
+        try{
+            Session session = sessionFactory.getCurrentSession();
+            String sql = "select * from uploadnoauthvideo where video_key=:videokey";
+            UploadNoAuthVideo video = (UploadNoAuthVideo)session.createSQLQuery(sql).addEntity(UploadNoAuthVideo.class).setString("videokey", videokey).uniqueResult();
+            isExist = (video == null) ? false : true;
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return isExist;
+    }
+
+    /**
      * 插入单个上传的视频
      * @param video
      * @return
@@ -33,9 +52,14 @@ public class UploadNoAuthVideoDao {
     public int insertUploadVideo(UploadNoAuthVideo video){
         int res = 0;
         try{
-            Session session = sessionFactory.getCurrentSession();
-            Integer id = (Integer)(session.save(video));
-            res = (id > 0) ? CRUDEvent.INSERT_SUCCESS : CRUDEvent.INSERT_FAIL;
+            boolean isExist = isExistVideo(video.getVideo_key());
+            if(isExist){
+                res = CRUDEvent.INSERT_REPEAT;
+            }else {
+                Session session = sessionFactory.getCurrentSession();
+                Integer id = (Integer) (session.save(video));
+                res = (id > 0) ? CRUDEvent.INSERT_SUCCESS : CRUDEvent.INSERT_FAIL;
+            }
         }catch(Exception e){
             //e.printStackTrace();
             res = CRUDEvent.CRUD_EXCETION;

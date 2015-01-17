@@ -25,6 +25,13 @@ public class UploadNoAuthVideoDaoTests {
     UploadNoAuthVideoDao uploadVideoDao;
 
     @Test
+    public void isExistVideo(){
+        //String videokey = "cleantha33-1421475655469-30:ad:05:01:a6:83.mp4";
+        String videokey = "cleantha";
+        System.out.println("is exists -> " + uploadVideoDao.isExistVideo(videokey));
+    }
+
+    @Test
     public void insertUploadVideo(){
         String videokey = "cleantha33-" + System.currentTimeMillis() + "-30:ad:05:01:a6:83.mp4";
         System.out.println(videokey);
