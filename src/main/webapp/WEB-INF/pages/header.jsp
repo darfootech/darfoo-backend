@@ -30,9 +30,6 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/darfoobackend/resources/js/flat-ui.min.js"></script>
 
-    <link href="http://vjs.zencdn.net/4.10/video-js.css" rel="stylesheet">
-    <script src="http://vjs.zencdn.net/4.10/video.js"></script>
-
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
     <!--[if lt IE 9]>
     <script src="/darfoobackend/resources/js/vendor/html5shiv.js"></script>

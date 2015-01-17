@@ -66,14 +66,9 @@
         <div class="col-md-12">
             <form role="form" id="createvideoform" name="createvideoform">
                 <div class="form-group">
-                    <label for="title">舞蹈视频标题(也就是上传视频文件的文件名,不需要后缀)</label>
-                    <input type="text" class="form-control" name="title" id="title" placeholder="请输入舞蹈视频标题">
+                    <label for="title">舞蹈视频标题</label>
+                    <input type="text" class="form-control" name="title" id="title" placeholder="${title}">
                 </div>
-
-                <!--<div class="form-group">
-                    <label for="authorname">舞蹈视频作者名字</label>
-                    <input type="text" class="form-control" name="authorname" id="authorname" placeholder="请输入舞蹈视频作者名字">
-                </div>-->
 
                 <div class="form-group">
                     <label for="authorname">舞蹈视频关联的明星舞队</label>
@@ -84,28 +79,22 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="imagekey">舞蹈视频封面图片预览</label>
-                    <img src="${imageurl}" name="imagekey" id="imagekey" width="600" height="600">
+                <div style="display: none">
+                    <input type="text" name="imagekey" value="${imagekey}">
                 </div>
 
                 <div class="form-group">
-                    <label for="imagekey">舞蹈视频预览</label>
-                    <video id="MY_VIDEO_1" class="video-js vjs-default-skin" controls preload="auto" width="640" height="264" poster="MY_VIDEO_POSTER.jpg" data-setup="{}">
-                        <source src="" type='video/'>
+                    <label for="imagekey">舞蹈视频封面图片预览</label>
+                    <img src="${imageurl}" id="imagekey" width="600" height="600" style="display:block">
+                </div>
 
-                        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
-                            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                        </p>
-                    </video>
+                <div class="form-group">
+                    <a href="${videourl}" target="_blank">点击此处预览舞蹈视频</a>
                 </div>
 
                 <div class="form-group">
                     <label for="videotype">舞蹈视频文件格式</label>
-                    <select data-toggle="select" name="videotype" id="videotype" class="form-control select select-success mrs mbm">
-                        <option value="mp4">mp4</option>
-                        <option value="flv">flv</option>
-                    </select>
+                    <input type="text" class="form-control" name="videotype" id="videotype" value="${videotype}" disabled="disabled">
                 </div>
 
                 <div class="form-group">
