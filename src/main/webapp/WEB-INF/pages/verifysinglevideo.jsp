@@ -85,8 +85,19 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="imagekey">舞蹈视频封面图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
-                    <input type="text" class="form-control" name="imagekey" id="imagekey" placeholder="请输入舞蹈视频封面图片名称">
+                    <label for="imagekey">舞蹈视频封面图片预览</label>
+                    <img src="${imageurl}" name="imagekey" id="imagekey" width="600" height="600">
+                </div>
+
+                <div class="form-group">
+                    <label for="imagekey">舞蹈视频预览</label>
+                    <video id="MY_VIDEO_1" class="video-js vjs-default-skin" controls preload="auto" width="640" height="264" poster="MY_VIDEO_POSTER.jpg" data-setup="{}">
+                        <source src="" type='video/'>
+
+                        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
+                            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                        </p>
+                    </video>
                 </div>
 
                 <div class="form-group">

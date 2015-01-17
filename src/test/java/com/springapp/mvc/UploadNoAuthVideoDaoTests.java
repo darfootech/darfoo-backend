@@ -39,8 +39,9 @@ public class UploadNoAuthVideoDaoTests {
         int videoid = -1;
         String macaddr = videokey.split("\\.")[0].split("-")[2];
         String videotitle = videokey.split("\\.")[0].split("-")[0];
+        String videotype = videokey.split("\\.")[1];
 
-        int result = uploadVideoDao.insertUploadVideo(new UploadNoAuthVideo(videokey, imagekey, macaddr, videotitle, videoid));
+        int result = uploadVideoDao.insertUploadVideo(new UploadNoAuthVideo(videokey, imagekey, macaddr, videotitle, videotype, videoid));
         Assert.assertEquals(CRUDEvent.INSERT_SUCCESS, result);
     }
 

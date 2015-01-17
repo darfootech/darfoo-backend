@@ -3,6 +3,7 @@ package com.darfoo.backend.service.admin;
 import com.darfoo.backend.dao.AuthorDao;
 import com.darfoo.backend.dao.UploadNoAuthVideoDao;
 import com.darfoo.backend.model.UploadNoAuthVideo;
+import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -24,6 +25,8 @@ public class VerifyUploadVideoController {
     @Autowired
     UploadNoAuthVideoDao uploadNoAuthVideoDao;
 
+    QiniuUtils qiniuUtils = new QiniuUtils();
+
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public String allUnVerifyVideos(ModelMap modelMap){
         List<UploadNoAuthVideo> videos = uploadNoAuthVideoDao.getAllUnVerifyVideos();
@@ -35,6 +38,8 @@ public class VerifyUploadVideoController {
     public String singleUnVerifyVideos(@PathVariable Integer id, ModelMap modelMap){
         UploadNoAuthVideo video = uploadNoAuthVideoDao.getUploadVideoById(id);
         modelMap.addAttribute("title", video.getVideotitle());
+        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw(video.getImage_key()));
+        modelMap.addAttribute("videourl", qiniuUtils.getQiniuResourceUrlRaw(video.getVideo_key()));
         modelMap.addAttribute("authors", authorDao.getAllAuthor());
         return "verifysinglevideo";
     }

@@ -30,6 +30,10 @@ public class UploadNoAuthVideo implements Serializable {
     @Column(name = "VIDEO_TITLE", nullable = false, updatable = true, columnDefinition = "varchar(255) not null")
     String videotitle;
 
+    //上传视频的类型
+    @Column(name = "VIDEO_TYPE", nullable = false, updatable = true, columnDefinition = "varchar(255) not null")
+    String videotype;
+
     //对应最后真正到视频库里的视频id
     @Column(name = "VIDEO_ID", nullable = false, updatable = true, columnDefinition = "int(11) default 0")
     Integer videoid;
@@ -37,11 +41,12 @@ public class UploadNoAuthVideo implements Serializable {
     public UploadNoAuthVideo() {
     }
 
-    public UploadNoAuthVideo(String video_key, String image_key, String mac_addr, String videotitle, Integer videoid) {
+    public UploadNoAuthVideo(String video_key, String image_key, String mac_addr, String videotitle, String videotype, Integer videoid) {
         this.video_key = video_key;
         this.image_key = image_key;
         this.mac_addr = mac_addr;
         this.videotitle = videotitle;
+        this.videotype = videotype;
         this.videoid = videoid;
     }
 
@@ -91,5 +96,13 @@ public class UploadNoAuthVideo implements Serializable {
 
     public void setImage_key(String image_key) {
         this.image_key = image_key;
+    }
+
+    public String getVideotype() {
+        return videotype;
+    }
+
+    public void setVideotype(String videotype) {
+        this.videotype = videotype;
     }
 }

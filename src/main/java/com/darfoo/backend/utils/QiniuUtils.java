@@ -68,6 +68,27 @@ public class QiniuUtils {
         }
     }
 
+    //key就是七牛云上的文件名字
+    public String getQiniuResourceUrlRaw(String key) {
+        //String domain = "zjdxlab410yy.qiniudn.com";
+        String domain = "7qnarb.com1.z0.glb.clouddn.com";
+        Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
+        try {
+            //domain在空间设置里可以看到，每一个bucket都对应有一个域名
+            //所谓的key其实就是上传的文件名字
+            String baseUrl = URLUtils.makeBaseUrl(domain, key);
+            GetPolicy getPolicy = new GetPolicy();
+            //过期时间为一周
+            getPolicy.expires = 7 * 24 * 3600;
+            String downloadUrl = getPolicy.makeRequest(baseUrl, mac);
+            System.out.println(downloadUrl);
+            return downloadUrl;
+        } catch (Exception e) {
+            //return "generate download url error";
+            return e.getMessage();
+        }
+    }
+
     public String uploadResource(String fileLocation, String fileName) {
         System.out.println("start to upload resource to qiniu server");
         Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);

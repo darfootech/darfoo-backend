@@ -70,7 +70,7 @@ public class GalleryController {
         modelMap.addAttribute("videotype", videoType);
         modelMap.addAttribute("video", video);
         modelMap.addAttribute("authors", authorDao.getAllAuthor());
-        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(video.getImage().getImage_key()));
+        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw(video.getImage().getImage_key()));
         if (video.getMusic() != null){
             String connectmusic = video.getMusic().getTitle() + "-" + video.getMusic().getAuthorName();
             modelMap.addAttribute("connectmusic", connectmusic);
@@ -113,7 +113,7 @@ public class GalleryController {
         modelMap.addAttribute("videotype", videoType);
         modelMap.addAttribute("tutorial", tutorial);
         modelMap.addAttribute("authors", authorDao.getAllAuthor());
-        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(tutorial.getImage().getImage_key()));
+        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw(tutorial.getImage().getImage_key()));
         if (tutorial.getMusic() != null){
             String connectmusic = tutorial.getMusic().getTitle() + "-" + tutorial.getMusic().getAuthorName();
             modelMap.addAttribute("connectmusic", connectmusic);
@@ -152,7 +152,7 @@ public class GalleryController {
             }
         }
         modelMap.addAttribute("music", music);
-        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(music.getImage().getImage_key()));
+        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw(music.getImage().getImage_key()));
         return "singlemusic";
     }
 
@@ -174,7 +174,7 @@ public class GalleryController {
 
         modelMap.addAttribute("author", author);
         if (author.getImage() != null){
-            modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(author.getImage().getImage_key()));
+            modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw(author.getImage().getImage_key()));
             if (author.getImage().getImage_key().equals("")){
                 modelMap.addAttribute("updateauthorimage", 1);
             }
