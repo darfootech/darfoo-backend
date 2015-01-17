@@ -83,7 +83,7 @@
                         <li><a href="/darfoobackend/rest/admin/version/new">上传新版本launcher</a></li>
                         <li><a href="/darfoobackend/rest/admin/runscript/upload">同步视频</a></li>
                         <li><a href="/darfoobackend/rest/admin/runscript/resourcevolumn">查看已有视频容量</a></li>
-                        <!--<li><a href="/darfoobackend/rest/admin/team/all">查看修改舞队</a></li>-->
+                        <li><a href="/darfoobackend/rest/admin/verifyvideo/all">审核上传视频</a></li>
                     </ul>
                 </li>
             </ul>

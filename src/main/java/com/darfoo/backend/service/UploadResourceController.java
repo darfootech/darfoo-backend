@@ -99,10 +99,13 @@ public class UploadResourceController {
     public @ResponseBody UploadStatus uploadFinishCallbackWithoutAuth(HttpServletRequest request){
         String videokey = request.getParameter("videokey");
         String macaddr = videokey.split("\\.")[0].split("-")[2];
+        String videotitle = videokey.split("\\.")[0].split("-")[0];
+
         System.out.println("videokey -> " + videokey);
         System.out.println("macaddr -> " + macaddr);
+        System.out.println("videotitle -> " + videotitle);
 
-        int status = uploadNoAuthVideoDao.insertUploadVideo(new UploadNoAuthVideo(videokey, macaddr, -1));
+        int status = uploadNoAuthVideoDao.insertUploadVideo(new UploadNoAuthVideo(videokey, macaddr, videotitle, -1));
 
         if (status == CRUDEvent.INSERT_SUCCESS){
             return new UploadStatus("ok");
