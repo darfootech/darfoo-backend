@@ -65,6 +65,14 @@ public class UploadNoAuthVideoDaoTests {
     }
 
     @Test
+    public void getAllUnVerifyVideos(){
+        List<UploadNoAuthVideo> videos = uploadVideoDao.getAllUnVerifyVideos();
+        for (UploadNoAuthVideo video : videos){
+            System.out.println(video.getVideo_key());
+        }
+    }
+
+    @Test
     public void getVideosByMacAddr(){
         String macaddr = "30:ad:05:01:a6:83";
         List<UploadNoAuthVideo> videos = uploadVideoDao.getVideosByMacAddr(macaddr);

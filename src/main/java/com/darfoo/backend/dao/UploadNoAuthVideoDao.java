@@ -14,6 +14,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.beans.Expression;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -145,6 +146,25 @@ public class UploadNoAuthVideoDao {
             Session session = sessionFactory.getCurrentSession();
             Criteria c = session.createCriteria(UploadNoAuthVideo.class);
             c.addOrder(Order.desc("id"));
+            c.setReadOnly(true);
+            s_videos = c.list();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return s_videos;
+    }
+
+    /**
+     * 获得所有未审核过的上传视频
+     * @return
+     */
+    public List<UploadNoAuthVideo> getAllUnVerifyVideos(){
+        List<UploadNoAuthVideo> s_videos = new ArrayList<UploadNoAuthVideo>();
+        try{
+            Session session = sessionFactory.getCurrentSession();
+            Criteria c = session.createCriteria(UploadNoAuthVideo.class);
+            c.addOrder(Order.desc("id"));
+            c.add(Restrictions.lt("videoid", 0));
             c.setReadOnly(true);
             s_videos = c.list();
         }catch(Exception e){
