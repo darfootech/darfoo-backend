@@ -51,8 +51,8 @@ public class AuthorDaoTests {
 	
 	@Test
 	public void insertAuthor(){
-        String authorName = "四号3";
-        String imagekey = "dg111";
+        String authorName = System.currentTimeMillis()+"";
+        String imagekey = System.currentTimeMillis() + "dg111";
 
         if(authorDao.isExistAuthor(authorName)){
             System.out.println("已存在，不能创建新作者");
@@ -79,6 +79,39 @@ public class AuthorDaoTests {
 		int res = authorDao.insertAuthor(author);
 		System.out.println(CRUDEvent.getResponse(res));
 	}
+
+    @Test
+    public void batchInsertAuthor(){
+        for (int i = 0; i< 18; i++){
+            String authorName = System.currentTimeMillis()+"";
+            String imagekey = System.currentTimeMillis() + "dg111";
+
+            if(authorDao.isExistAuthor(authorName)){
+                System.out.println("已存在，不能创建新作者");
+                return;
+            }else{
+                System.out.println("无该author记录，可以创建新作者");
+            }
+
+            Image image = imageDao.getImageByName(imagekey);
+            if (image == null){
+                System.out.println("图片不存在，可以进行插入");
+                image = new Image();
+                image.setImage_key(imagekey);
+                imageDao.insertSingleImage(image);
+            }else{
+                System.out.println("图片已存在，不可以进行插入了，是否需要修改");
+                return;
+            }
+
+            Author author = new Author();
+            author.setName(authorName);
+            author.setDescription("台湾人气偶像组合");
+            author.setImage(image);
+            int res = authorDao.insertAuthor(author);
+            System.out.println(CRUDEvent.getResponse(res));
+        }
+    }
 	
 	/**
 	 * 更新作者，先对image进行是否存在的检测，再更新
@@ -176,5 +209,16 @@ public class AuthorDaoTests {
             Author author = authorDao.getAuthor((Integer)rows[1]);
             System.out.println(author.getName());
         }
+    }
+
+    @Test
+    public void getAuthorOrderByVideoCountDescByPage(){
+        List<Object[]> result = authorDao.getAuthorOrderByVideoCountDescByPage(1);
+        for (Object[] rows : result){
+            System.out.println((Integer)rows[1] + " -> " + ((BigInteger)rows[0]).intValue());
+            Author author = authorDao.getAuthor((Integer)rows[1]);
+            System.out.println(author.getName());
+        }
+        System.out.println("result size -> " + result.size());
     }
 }

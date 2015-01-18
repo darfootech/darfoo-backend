@@ -1,10 +1,12 @@
 package com.darfoo.backend.dao;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.darfoo.backend.model.*;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -18,8 +20,10 @@ import com.darfoo.backend.model.Author;
 public class AuthorDao {
 	@Autowired
 	SessionFactory sf;
-	
-	/**
+
+    private int pageSize = 15;
+
+    /**
 	 * 通过id得到Author对象
 	 * @param id 传入要判断的作者的id
 	 * @return 表中已经存在该name对应的作者信息,返回Author对象;反之，返回一个null
@@ -118,7 +122,7 @@ public class AuthorDao {
         }
         return result;
     }
-	
+
 	/**
 	 * 更新Author之前先做check(主要是对image的check) 
 	 * @param id 需要更新的对象对应的id
@@ -221,4 +225,33 @@ public class AuthorDao {
 		}
 		return res;
 	}
+
+    /*分页机制*/
+    public long getPageCount(){
+        List<Author> l_author = new ArrayList<Author>();
+        try{
+            Session session = sf.getCurrentSession();
+            String sql = "select * from author order by id desc";
+            l_author = session.createSQLQuery(sql).addEntity(Author.class).list();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return l_author.size();
+    }
+
+    public List<Object[]> getAuthorOrderByVideoCountDescByPage(int pageNo) {
+        List<Object[]> result = new ArrayList<Object[]>();
+        try {
+            Session session = sf.getCurrentSession();
+            String sql = "select vv.count + tt.count as cnt, vv.id as aid from (select IFNULL(v.cnt, 0) as count, author.id as id from author left outer join (select count(*) as cnt, author_id as mid from video group by author_id)v on author.id = v.mid order by v.cnt desc)vv left outer join (select IFNULL(t.cnt, 0) as count, author.id as id from author left outer join (select count(*) as cnt, author_id as mid from education group by author_id)t on author.id = t.mid order by t.cnt desc)tt on vv.id = tt.id order by cnt desc";
+            SQLQuery query = session.createSQLQuery(sql);
+            query.setFirstResult((pageNo - 1) * pageSize);
+            query.setMaxResults(pageSize);
+            result = (List<Object[]>) query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Collections.reverse(result);
+        return result;
+    }
 }
