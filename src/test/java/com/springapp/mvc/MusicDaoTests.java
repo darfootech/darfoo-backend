@@ -262,4 +262,20 @@ public class MusicDaoTests {
 		String  newAuthorName = "吉卉";
 		System.out.println(CRUDEvent.getResponse(musicDao.updateAuthorName(id, newAuthorName)));
 	}
+
+    @Test
+    public void getTutorialsByCategoriesByPage() {
+        long start = System.currentTimeMillis();
+        String[] categories = {};//无条件限制
+        //String[] categories = {"四拍","情歌风","D"}; //满足所有条件
+        //String[] categories = {"四拍"}; //满足个别条件
+        //String[] categories = {"四拍","情歌风","0"};//最后一个条件不满足
+        List<Music> musics = musicDao.getMusicsByCategoriesByPage(categories, 1);
+        for(Music music : musics){
+            System.out.println(music.getId());
+            System.out.println("——————————————————————————————————————");
+        }
+        System.out.println("最终满足的music数量>>>>>>>>>>>>>>>>>>>>>"+musics.size());
+        System.out.println("time elapse:"+(System.currentTimeMillis()-start)/1000f);
+    }
 }
