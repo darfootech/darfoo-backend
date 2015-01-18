@@ -696,6 +696,79 @@ public class CacheController {
         return result;
     }
 
+    @RequestMapping(value = "/video/search/page/{page}", method = RequestMethod.GET)
+    public @ResponseBody
+    List<CacheSingleVideo> searchVideoByPage(@PathVariable Integer page, HttpServletRequest request){
+        String searchContent = request.getParameter("search");
+        System.out.println(searchContent);
+        Set<Integer> videoids = new HashSet<Integer>();
+        Set<Integer> tutorialids = new HashSet<Integer>();
+        List<Video> videos = searchDao.getVideoBySearch(searchContent);
+        List<Education> tutorials = searchDao.getEducationBySearch(searchContent);
+        for (Video video : videos){
+            videoids.add(video.getId());
+        }
+
+        for (Education tutorial : tutorials){
+            tutorialids.add(tutorial.getId());
+        }
+
+        List<Author> authors = searchDao.getAuthorBySearch(searchContent);
+        for (Author author : authors){
+            int aid = author.getId();
+            List<Video> authorvideos = videoDao.getVideosByAuthorId(aid);
+            List<Education> authortutorials = educationDao.getTutorialsByAuthorId(aid);
+            for (Video video : authorvideos){
+                videoids.add(video.getId());
+            }
+
+            for (Education tutorial : authortutorials){
+                tutorialids.add(tutorial.getId());
+            }
+        }
+
+        int pageSize = 12;
+        String rediskey = "videosearch" + searchContent + "page";
+
+        long start = (page-1) * pageSize;
+        long end = page * pageSize - 1;
+
+        for (Integer vid : videoids){
+            Video video = videoDao.getVideoByVideoId(vid);
+            long status = redisClient.lpush(rediskey, "video-" + vid);
+            videoCacheDao.insertSingleVideo(video);
+            System.out.println("insert result -> " + status);
+        }
+
+        for (Integer tid : tutorialids){
+            Education tutorial = educationDao.getEducationVideoById(tid);
+            long status = redisClient.lpush(rediskey, "tutorial-" + tid);
+            tutorialCacheDao.insertSingleTutorial(tutorial);
+            System.out.println("insert result -> " + status);
+        }
+
+        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+
+        List<String> searchVideoKeys = redisClient.lrange(rediskey, start, end);
+        for (String key : searchVideoKeys){
+            System.out.println("key -> " + key);
+            int vid = Integer.parseInt(key.split("-")[1]);
+            String flag = key.split("-")[0];
+            if (flag.equals("video")){
+                CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
+                System.out.println("title -> " + video.getTitle());
+                result.add(video);
+            }
+            if (flag.equals("tutorial")){
+                CacheSingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
+                System.out.println("title -> " + video.getTitle());
+                result.add(video);
+            }
+        }
+
+        return result;
+    }
+
     //http://localhost:8080/darfoobackend/rest/resources/video/tutorial/search?search=heart
     @RequestMapping(value = "/tutorial/search", method = RequestMethod.GET)
     public @ResponseBody
@@ -739,6 +812,39 @@ public class CacheController {
         }
 
         Set<String> searchMusicKeys = redisClient.smembers("musicsearch" + searchContent);
+        for (String key : searchMusicKeys){
+            System.out.println("key -> " + key);
+            int mid = Integer.parseInt(key.split("-")[1]);
+            SingleMusic music = musicCacheDao.getSingleMusic(mid);
+            System.out.println("title -> " + music.getTitle());
+            result.add(music);
+        }
+
+        return result;
+    }
+
+    @RequestMapping(value = "/music/search/page/{page}", method = RequestMethod.GET)
+    public @ResponseBody
+    List<SingleMusic> searchMusic(@PathVariable Integer page, HttpServletRequest request){
+        String searchContent = request.getParameter("search");
+        System.out.println(searchContent);
+        List<Music> musics = searchDao.getMusicBySearch(searchContent);
+        List<SingleMusic> result = new ArrayList<SingleMusic>();
+
+        int pageSize = 22;
+        String rediskey = "musicsearch" + searchContent + "page";
+
+        long start = (page-1) * pageSize;
+        long end = page * pageSize - 1;
+
+        for (Music music : musics){
+            int mid = music.getId();
+            long status = redisClient.lpush(rediskey, "music-" + mid);
+            musicCacheDao.insertSingleMusic(music);
+            System.out.println("insert result -> " + status);
+        }
+
+        List<String> searchMusicKeys = redisClient.lrange(rediskey, start, end);
         for (String key : searchMusicKeys){
             System.out.println("key -> " + key);
             int mid = Integer.parseInt(key.split("-")[1]);

@@ -22,7 +22,7 @@ public class MusicDao {
 	@Autowired
 	private SessionFactory sf;
 
-    private int pageSize = 12;
+    private int pageSize = 22;
 
     //插入所有music(categories)的类型
 	public void insertAllMusicCategories(){
