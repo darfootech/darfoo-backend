@@ -21,8 +21,10 @@ import com.darfoo.backend.model.Education;
 public class EducationDao {
 	@Autowired
 	private SessionFactory sf;
-	
-	//插入所有education(视频)的类型  (暂时将名师教学这个选项去掉)
+
+    private int pageSize = 12;
+
+    //插入所有education(视频)的类型  (暂时将名师教学这个选项去掉)
 	public void insertAllEducationCategories(){
 		String[] categories = {"快","中","慢",    //按速度
 				"简单","适中","稍难",					//按难度  
@@ -579,5 +581,133 @@ public class EducationDao {
     public void disconnectTutorialMusic(int videoid, int musicid){
         System.out.println(CRUDEvent.getResponse(insertOrUpdateMusic(videoid, musicid)));
         System.out.println(CRUDEvent.getResponse(deleteMusicFromEducation(videoid)));
+    }
+
+    /*分页机制*/
+    public long getPageCountByCategories(String[] categories){
+        List<Education> l_video = new ArrayList<Education>();
+        try{
+            Session session = sf.getCurrentSession();
+            List<Integer> l_interact_id = new ArrayList<Integer>();  //存符合部分条件的video id
+            Criteria c;
+            for(int i=0;i<categories.length;i++){
+                c = session.createCriteria(Education.class).setProjection(Projections.property("id"));
+                c.createCriteria("categories").add(Restrictions.eq("title", categories[i]));
+                c.setReadOnly(true);
+                List<Integer> l_id = c.list();
+                System.out.println("满足条件 "+categories[i]+" 的enducation video数量》》》"+l_id.size() );
+                for(Integer j : l_id){
+                    System.out.print(j+"#");
+                }
+                System.out.println();
+                if(l_id.size() == 0){
+                    //只要有一项查询结果长度为0，说明视频表无法满足该种类组合，返回一个空的List<Education>对象,长度为0
+                    l_video = new ArrayList<Education>();
+                    l_interact_id.clear();//清空
+                    break;
+                }else{
+                    if(l_interact_id.size() == 0){
+                        l_interact_id = l_id;
+                        continue;
+                    }else{
+                        l_interact_id.retainAll(l_id);
+                        boolean hasItersection = l_interact_id.size()>0?true:false;
+                        if(!hasItersection){
+                            //之前查询的结果与当前的无交集，说明视频表无法满足该种类组合，返回一个空的List<Education>对象,长度为0
+                            l_video = new ArrayList<Education>();
+                            break;
+                        }
+                    }
+                }
+            }
+            if(categories.length==0){
+                //categories长度为0，即没有筛选条件,返回所有视频
+                c = session.createCriteria(Education.class);
+                c.setReadOnly(true);
+                l_video = c.list();
+            }else if(l_interact_id.size() > 0){
+                //交集内的id数量大于0个
+                c = session.createCriteria(Education.class).add(Restrictions.in("id", l_interact_id));
+                c.setReadOnly(true);
+                l_video = c.list();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return (l_video.size() / pageSize) + 1;
+    }
+
+    public List<Education> getTutorialsByCategoriesByPage(String[] categories, int pageNo){
+        List<Education> l_video = new ArrayList<Education>();
+
+        if (pageNo > getPageCountByCategories(categories)) {
+            return l_video;
+        }
+
+        try{
+            Session session = sf.getCurrentSession();
+            List<Integer> l_interact_id = new ArrayList<Integer>();  //存符合部分条件的video id
+            Criteria c;
+            for(int i=0;i<categories.length;i++){
+                c = session.createCriteria(Education.class).setProjection(Projections.property("id"));
+                c.createCriteria("categories").add(Restrictions.eq("title", categories[i]));
+
+                /*分页机制*/
+                c.setFirstResult((pageNo - 1) * pageSize);
+                c.setMaxResults(pageSize);
+
+                c.addOrder(Order.desc("id"));
+
+                c.setReadOnly(true);
+                List<Integer> l_id = c.list();
+                System.out.println("满足条件 "+categories[i]+" 的enducation video数量》》》"+l_id.size() );
+                for(Integer j : l_id){
+                    System.out.print(j+"#");
+                }
+                System.out.println();
+                if(l_id.size() == 0){
+                    //只要有一项查询结果长度为0，说明视频表无法满足该种类组合，返回一个空的List<Education>对象,长度为0
+                    l_video = new ArrayList<Education>();
+                    l_interact_id.clear();//清空
+                    break;
+                }else{
+                    if(l_interact_id.size() == 0){
+                        l_interact_id = l_id;
+                        continue;
+                    }else{
+                        l_interact_id.retainAll(l_id);
+                        boolean hasItersection = l_interact_id.size()>0?true:false;
+                        if(!hasItersection){
+                            //之前查询的结果与当前的无交集，说明视频表无法满足该种类组合，返回一个空的List<Education>对象,长度为0
+                            l_video = new ArrayList<Education>();
+                            break;
+                        }
+                    }
+                }
+            }
+            if(categories.length==0){
+                //categories长度为0，即没有筛选条件,返回所有视频
+                c = session.createCriteria(Education.class);
+                c.setFirstResult((pageNo - 1) * pageSize);
+                c.setMaxResults(pageSize);
+                c.addOrder(Order.desc("id"));
+                c.setReadOnly(true);
+                l_video = c.list();
+            }else if(l_interact_id.size() > 0){
+                //交集内的id数量大于0个
+                c = session.createCriteria(Education.class).add(Restrictions.in("id", l_interact_id));
+                c.setFirstResult((pageNo - 1) * pageSize);
+                c.setMaxResults(pageSize);
+                c.addOrder(Order.desc("id"));
+                c.setReadOnly(true);
+                l_video = c.list();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        Collections.reverse(l_video);
+        return l_video;
     }
 }

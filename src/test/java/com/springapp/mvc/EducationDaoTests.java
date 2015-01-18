@@ -285,4 +285,19 @@ public class EducationDaoTests {
             System.out.println("---------------------------");
         }
     }
+
+    @Test
+    public void getTutorialsByCategoriesByPage() {
+        long start = System.currentTimeMillis();
+        String[] categories = {};//无条件限制
+        //String[] categories = {"较快","稍难","情歌风","S"}; //满条件限制
+        //String[] categories = {"快", "分解教学"};
+        List<Education> videos = educationDao.getTutorialsByCategoriesByPage(categories, 1);
+        for (Education video : videos) {
+            System.out.println(video.getId());
+            System.out.println("——————————————————————————————————————");
+        }
+        System.out.println("最终满足的video数量>>>>>>>>>>>>>>>>>>>>>" + videos.size());
+        System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
+    }
 }
