@@ -280,6 +280,46 @@ public class CacheController {
         return result;
     }
 
+    @RequestMapping(value = "/tutorial/category/{categories}/page/{page}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List<CacheSingleVideo> getTutorialsByCategoriesByPage(@PathVariable String categories, @PathVariable Integer page) {
+        String[] requestCategories = categories.split("-");
+        List<String> targetCategories = new ArrayList<String>();
+        if (!requestCategories[0].equals("0")) {
+            String speedCate = tutorialCates.getSpeedCategory().get(requestCategories[0]);
+            targetCategories.add(speedCate);
+        }
+        if (!requestCategories[1].equals("0")) {
+            String difficultyCate = tutorialCates.getDifficultyCategory().get(requestCategories[1]);
+            targetCategories.add(difficultyCate);
+        }
+        if (!requestCategories[2].equals("0")) {
+            String styleCate = tutorialCates.getStyleCategory().get(requestCategories[2]);
+            targetCategories.add(styleCate);
+        }
+
+        List<Education> targetVideos = educationDao.getTutorialsByCategoriesByPage(ServiceUtils.convertList2Array(targetCategories), page);
+        for (Education video : targetVideos) {
+            int vid = video.getId();
+            long result = redisClient.lpush("tutorialcategory" + categories + "page" + page, "tutorial-" + vid);
+            tutorialCacheDao.insertSingleTutorial(video);
+            System.out.println("insert result -> " + result);
+        }
+
+        List<String> categoryVideoKeys = redisClient.lrange("tutorialcategory" + categories + "page" + page, 0L, -1L);
+        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+        for (String vkey : categoryVideoKeys){
+            System.out.println("vkey -> " + vkey);
+            int vid = Integer.parseInt(vkey.split("-")[1]);
+            CacheSingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
+            System.out.println("title -> " + video.getTitle());
+            result.add(video);
+        }
+
+        return result;
+    }
+
     @RequestMapping(value = "/music/category/{categories}", method = RequestMethod.GET)
     public @ResponseBody
     List<SingleMusic> getMusicByCategories(@PathVariable String categories){
