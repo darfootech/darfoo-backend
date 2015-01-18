@@ -189,8 +189,11 @@ public class VideoDaoTests {
 	
 	@Test
 	public void deleteVideoCascade(){
-		System.out.println(CRUDEvent.getResponse(videoDao.deleteVideoById(23)));
-	}
+		System.out.println(CRUDEvent.getResponse(videoDao.deleteVideoById(48)));
+        System.out.println(CRUDEvent.getResponse(videoDao.deleteVideoById(49)));
+        System.out.println(CRUDEvent.getResponse(videoDao.deleteVideoById(50)));
+        System.out.println(CRUDEvent.getResponse(videoDao.deleteVideoById(51)));
+    }
 	
 	/**
 	 * 更新操作可以参考这个测试
@@ -393,7 +396,7 @@ public class VideoDaoTests {
         //String[] categories = {"较快","稍难","情歌风","S"}; //满足所有条件
         //String[] categories = {"较快","普通","优美","0"}; //有一个条件不满足
         String[] categories = {"较快"};//满足单个条件
-        List<Video> videos = videoDao.getVideosByCategoriesByPage(categories, 4);
+        List<Video> videos = videoDao.getVideosByCategoriesByPage(categories, 1);
         for (Video video : videos) {
             System.out.println(video.getId());
             System.out.println("——————————————————————————————————————");

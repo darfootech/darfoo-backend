@@ -260,18 +260,20 @@ public class VideoDao {
 			if(categories.length==0){
 				//categories长度为0，即没有筛选条件,返回所有视频
 				c = session.createCriteria(Video.class);
+                //c.addOrder(Order.desc("id"));
 				c.setReadOnly(true);
 				l_video = c.list();
 			}else if(l_interact_id.size() > 0){
 				//交集内的id数量大于0个
 				c = session.createCriteria(Video.class).add(Restrictions.in("id", l_interact_id));
+                //c.addOrder(Order.desc("id"));
 				c.setReadOnly(true);
 				l_video = c.list();
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-        Collections.reverse(l_video);
+        //Collections.reverse(l_video);
         return l_video;
 	}
 	
@@ -852,11 +854,17 @@ public class VideoDao {
             if (categories.length == 0) {
                 //categories长度为0，即没有筛选条件,返回所有视频
                 c = session.createCriteria(Video.class);
+                c.setFirstResult((pageNo - 1) * pageSize);
+                c.setMaxResults(pageSize);
+                c.addOrder(Order.desc("id"));
                 c.setReadOnly(true);
                 l_video = c.list();
             } else if (l_interact_id.size() > 0) {
                 //交集内的id数量大于0个
                 c = session.createCriteria(Video.class).add(Restrictions.in("id", l_interact_id));
+                c.setFirstResult((pageNo - 1) * pageSize);
+                c.setMaxResults(pageSize);
+                c.addOrder(Order.desc("id"));
                 c.setReadOnly(true);
                 l_video = c.list();
             }

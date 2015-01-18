@@ -193,6 +193,53 @@ public class CacheController {
         return result;
     }
 
+
+    @RequestMapping(value = "/video/category/{categories}/page/{page}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List<CacheSingleVideo> getVideosByCategoriesByPage(@PathVariable String categories, @PathVariable Integer page) {
+        String[] requestCategories = categories.split("-");
+        List<String> targetCategories = new ArrayList<String>();
+        if (!requestCategories[0].equals("0")) {
+            String speedCate = videoCates.getSpeedCategory().get(requestCategories[0]);
+            targetCategories.add(speedCate);
+        }
+        if (!requestCategories[1].equals("0")) {
+            String difficultyCate = videoCates.getDifficultyCategory().get(requestCategories[1]);
+            targetCategories.add(difficultyCate);
+        }
+        if (!requestCategories[2].equals("0")) {
+            String styleCate = videoCates.getStyleCategory().get(requestCategories[2]);
+            targetCategories.add(styleCate);
+        }
+        if (!requestCategories[3].equals("0")) {
+            String letterCate = requestCategories[3];
+            targetCategories.add(letterCate);
+        }
+
+        List<Video> targetVideos = videoDao.getVideosByCategoriesByPage(ServiceUtils.convertList2Array(targetCategories), page);
+        System.out.println("target video size -> " + targetVideos.size());
+
+        for (Video video : targetVideos) {
+            int vid = video.getId();
+            long result = redisClient.lpush("videocategory" + categories + "page" + page, "video-" + vid);
+            videoCacheDao.insertSingleVideo(video);
+            System.out.println("insert result -> " + result);
+        }
+
+        List<String> categoryVideoKeys = redisClient.lrange("videocategory" + categories + "page" + page, 0L, -1L);
+        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+        for (String vkey : categoryVideoKeys){
+            System.out.println("vkey -> " + vkey);
+            int vid = Integer.parseInt(vkey.split("-")[1]);
+            CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
+            System.out.println("title -> " + video.getTitle());
+            result.add(video);
+        }
+
+        return result;
+    }
+
     @RequestMapping(value = "/tutorial/category/{categories}", method = RequestMethod.GET)
     public
     @ResponseBody
