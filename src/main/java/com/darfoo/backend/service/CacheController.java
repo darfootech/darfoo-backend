@@ -555,6 +555,53 @@ public class CacheController {
         return result;
     }
 
+    @RequestMapping(value = "/author/videos/{id}/page/{page}", method = RequestMethod.GET)
+    @ResponseBody public List<CacheSingleVideo> getVideoListForAuthorByPage(@PathVariable Integer id, @PathVariable Integer page){
+        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+        List<Video> videos = videoDao.getVideosByAuthorId(id);
+        List<Education> tutorials = educationDao.getTutorialsByAuthorId(id);
+
+        int pageSize = 12;
+        String rediskey = "authorvideos" + id + "page";
+
+        for (Video video : videos){
+            int vid = video.getId();
+            long status = redisClient.lpush(rediskey, "video-" + vid);
+            videoCacheDao.insertSingleVideo(video);
+            System.out.println("insert result -> " + status);
+        }
+
+        for (Education tutorial : tutorials){
+            int tid = tutorial.getId();
+            long status = redisClient.lpush(rediskey, "tutorial-" + tid);
+            tutorialCacheDao.insertSingleTutorial(tutorial);
+            System.out.println("insert result -> " + status);
+        }
+
+        long start = (page-1) * pageSize;
+        long end = page * pageSize - 1;
+
+        List<String> authorVideoKeys = redisClient.lrange(rediskey, start, end);
+        for (String key : authorVideoKeys){
+            System.out.println("key -> " + key);
+            int vtid = Integer.parseInt(key.split("-")[1]);
+            String vtflag = key.split("-")[0];
+            if (vtflag.equals("video")){
+                CacheSingleVideo video = videoCacheDao.getSingleVideo(vtid);
+                result.add(video);
+            }else if (vtflag.equals("tutorial")){
+                CacheSingleVideo tutorial = tutorialCacheDao.getSingleTutorial(vtid);
+                result.add(tutorial);
+            }else {
+                System.out.println("something is wrong");
+            }
+        }
+
+        System.out.println("videolist size -> " + result.size());
+
+        return result;
+    }
+
     /*search cache*/
     //http://localhost:8080/darfoobackend/rest/resources/video/search?search=s
     /*@RequestMapping(value = "/video/search", method = RequestMethod.GET)
