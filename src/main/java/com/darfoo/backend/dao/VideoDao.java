@@ -697,4 +697,46 @@ public class VideoDao {
         System.out.println(CRUDEvent.getResponse(insertOrUpdateMusic(videoid, musicid)));
         System.out.println(CRUDEvent.getResponse(deleteMusicFromVideo(videoid)));
     }
+
+    /*分页加载机制*/
+
+    public long getPageCount(int pageSize){
+        long result = 0;
+        try {
+            Session session = sf.getCurrentSession();
+            Criteria criteria = session.createCriteria(Video.class);
+
+            // 获取根据条件分页查询的总行数
+            result = (Long) criteria.setProjection(
+                    Projections.rowCount()).uniqueResult();
+            criteria.setProjection(null);
+
+            return (result / pageSize) + 1;
+        } catch (RuntimeException re) {
+            re.printStackTrace();
+            return result;
+        }
+    }
+
+    public List<Video> getVideosByPage(int pageNo, int pageSize) {
+        List<Video> result = new ArrayList<Video>();
+
+        if (pageNo > getPageCount(pageSize)){
+            return result;
+        }
+
+        try {
+            Session session = sf.getCurrentSession();
+            Criteria criteria = session.createCriteria(Video.class);
+
+            criteria.setFirstResult((pageNo - 1) * pageSize);
+            criteria.setMaxResults(pageSize);
+
+            result = criteria.list();
+            return result;
+        } catch (RuntimeException re) {
+            //re.printStackTrace();
+            return result;
+        }
+    }
 }

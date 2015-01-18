@@ -367,4 +367,15 @@ public class VideoDaoTests {
             System.out.println("---------------------------");
         }
     }
+
+    @Test
+    public void getPageCount(){
+        System.out.println("pagecount -> " + videoDao.getPageCount(12));
+    }
+
+    @Test
+    public void getVideosByPage(){
+        List<Video> result = videoDao.getVideosByPage(5, 12);
+        System.out.println(result.size());
+    }
 }
