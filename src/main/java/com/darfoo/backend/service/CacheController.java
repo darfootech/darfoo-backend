@@ -482,6 +482,40 @@ public class CacheController {
         return result;
     }
 
+    @RequestMapping(value = "/author/index/page/{page}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List<SingleAuthor> cacheIndexAuthorsByPage(@PathVariable Integer page) {
+        /*List<Author> authors = authorDao.getAllAuthor();
+        for (Author author : authors){
+            int id = author.getId();
+            long result = redisClient.sadd("authorindex", "author-" + id);
+            authorCacheDao.insertSingleAuthor(author);
+            System.out.println("insert result -> " + result);
+        }*/
+
+        List<Object[]> authorIdAndCnt = authorDao.getAuthorOrderByVideoCountDescByPage(page);
+        for (Object[] rows : authorIdAndCnt){
+            int authorid = (Integer)rows[1];
+            System.out.println(authorid + " -> " + ((BigInteger)rows[0]).intValue());
+            Author author = authorDao.getAuthor(authorid);
+            long result = redisClient.lpush("authorindexpage" + page, "author-" + authorid);
+            authorCacheDao.insertSingleAuthor(author);
+            System.out.println("insert result -> " + result);
+        }
+
+        List<String> indexAuthorKeys = redisClient.lrange("authorindexpage" + page, 0L, -1L);
+        List<SingleAuthor> result = new ArrayList<SingleAuthor>();
+        for (String key : indexAuthorKeys){
+            System.out.println("key -> " + key);
+            int id = Integer.parseInt(key.split("-")[1]);
+            SingleAuthor author = authorCacheDao.getSingleAuthor(id);
+            System.out.println("name -> " + author.getName());
+            result.add(author);
+        }
+        return result;
+    }
+
     @RequestMapping(value = "/author/videos/{id}", method = RequestMethod.GET)
     @ResponseBody public List<CacheSingleVideo> getVideoListForAuthor(@PathVariable Integer id){
         List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
