@@ -152,7 +152,7 @@ public class VideoDaoTests {
 		List<Video> videos = videoDao.getVideosByCategories(categories);
 		System.out.println("最终满足的video数量>>>>>>>>>>>>>>>>>>>>>"+videos.size());
 		for(Video video : videos){
-			System.out.println(video.toString());
+			System.out.println(video.getId());
 			System.out.println("——————————————————————————————————————");
 		}
 		System.out.println("time elapse:"+(System.currentTimeMillis()-start)/1000f);	
@@ -377,5 +377,28 @@ public class VideoDaoTests {
     public void getVideosByPage(){
         List<Video> result = videoDao.getVideosByPage(5, 12);
         System.out.println(result.size());
+    }
+
+    @Test
+    public void getPageCountByCategories(){
+        String[] categories = {};//无条件限制
+        //String[] categories = {"较快"};//满足单个条件
+        System.out.println("pagecount -> " + videoDao.getPageCountByCategories(categories));
+    }
+
+    @Test
+    public void getVideosByCategoriesByPage() {
+        long start = System.currentTimeMillis();
+        //String[] categories = {};//无条件限制
+        //String[] categories = {"较快","稍难","情歌风","S"}; //满足所有条件
+        //String[] categories = {"较快","普通","优美","0"}; //有一个条件不满足
+        String[] categories = {"较快"};//满足单个条件
+        List<Video> videos = videoDao.getVideosByCategoriesByPage(categories, 4);
+        for (Video video : videos) {
+            System.out.println(video.getId());
+            System.out.println("——————————————————————————————————————");
+        }
+        System.out.println("最终满足的video数量>>>>>>>>>>>>>>>>>>>>>" + videos.size());
+        System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }
 }
