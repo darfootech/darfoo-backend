@@ -360,6 +360,46 @@ public class CacheController {
         return result;
     }
 
+    @RequestMapping(value = "/music/category/{categories}/page/{page}", method = RequestMethod.GET)
+    public @ResponseBody
+    List<SingleMusic> getMusicByCategoriesByPage(@PathVariable String categories, @PathVariable Integer page){
+        //System.out.println("category request is " + categories + " !!!!!!!!!");
+        String[] requestCategories = categories.split("-");
+        List<String> targetCategories = new ArrayList<String>();
+        if (!requestCategories[0].equals("0")){
+            String beatCate = musicCates.getBeatCategory().get(requestCategories[0]);
+            targetCategories.add(beatCate);
+        }
+        if (!requestCategories[1].equals("0")){
+            String styleCate = musicCates.getStyleCategory().get(requestCategories[1]);
+            targetCategories.add(styleCate);
+        }
+        if (!requestCategories[2].equals("0")){
+            String letterCate = requestCategories[2];
+            targetCategories.add(letterCate);
+        }
+
+        List<Music> musics = musicDao.getMusicsByCategoriesByPage(ServiceUtils.convertList2Array(targetCategories), page);
+        List<SingleMusic> result = new ArrayList<SingleMusic>();
+        for (Music music : musics){
+            int mid = music.getId();
+            long status = redisClient.lpush("musiccategory" + categories + "page" + page, "music-" + mid);
+            musicCacheDao.insertSingleMusic(music);
+            System.out.println("insert result -> " + status);
+        }
+
+        List<String> categoryMusicKeys = redisClient.lrange("musiccategory" + categories + "page" + page, 0L, -1L);
+        for (String vkey : categoryMusicKeys){
+            System.out.println("vkey -> " + vkey);
+            int mid = Integer.parseInt(vkey.split("-")[1]);
+            SingleMusic music = musicCacheDao.getSingleMusic(mid);
+            System.out.println("title -> " + music.getTitle());
+            result.add(music);
+        }
+
+        return result;
+    }
+
     @RequestMapping("/music/hottest")
     public @ResponseBody
     List<SingleMusic> getHottestMusics(){
