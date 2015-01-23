@@ -1,9 +1,6 @@
 package com.darfoo.backend.Interceptors;
 
-import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.EducationDao;
-import com.darfoo.backend.dao.MusicDao;
-import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.dao.*;
 import com.darfoo.backend.model.Music;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -25,6 +22,8 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
     EducationDao educationDao;
     @Autowired
     MusicDao musicDao;
+    @Autowired
+    AuthorDao authorDao;
 
     //截取数字
     public String getNumbers(String content) {
@@ -65,6 +64,15 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             int mid = Integer.parseInt(musicid);
             int acc = 1;
             System.out.println(CRUDEvent.getResponse(musicDao.updateMusicHottest(mid, acc)));
+            return true;
+        }
+
+        if (uri.matches("(.*)/resources/author/\\d+$")){
+            String authorid = getNumbers(uri);
+            System.out.println("author clicked id is: " + authorid + "\n");
+            int aid = Integer.parseInt(authorid);
+            int acc = 1;
+            System.out.println(CRUDEvent.getResponse(authorDao.updateAuthorHottest(aid, acc)));
             return true;
         }
 
