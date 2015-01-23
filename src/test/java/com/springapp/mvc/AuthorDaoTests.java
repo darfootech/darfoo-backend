@@ -221,4 +221,23 @@ public class AuthorDaoTests {
         }
         System.out.println("result size -> " + result.size());
     }
+
+    @Test
+    public void updateVideoHottest(){
+        Integer id = 1;
+        int n = 1;
+        System.out.println(CRUDEvent.getResponse(authorDao.updateAuthorHottest(id, n)));
+    }
+
+    @Test
+    public void getVideosByHottest() {
+        int number = 20;
+        List<Author> authors = authorDao.getAuthorsByHottest(number);
+        System.out.println("---------返回" + authors.size() + "个视频---------");
+        for (Author a : authors) {
+            System.out.println(a.getName());
+            System.out.println("热度值---->" + a.getHottest());
+            System.out.println("---------------------------");
+        }
+    }
 }

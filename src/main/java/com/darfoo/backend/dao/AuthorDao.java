@@ -9,6 +9,7 @@ import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -253,5 +254,46 @@ public class AuthorDao {
         }
         Collections.reverse(result);
         return result;
+    }
+
+    public int updateAuthorHottest(Integer id,int n){
+        int res = 0;
+        try{
+            Session session = sf.getCurrentSession();
+            Author author = (Author)session.get(Author.class, id);
+            if(author == null){
+                res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
+            }else{
+                Long Hottest = author.getHottest();
+                if(Hottest == null){
+                    Hottest = 1L;  //若没有点击量记录，则设为1
+                }else{
+                    Hottest += n;
+                    if(Hottest <= 0 )
+                        Hottest = 0L;  //若你把n设为了负数，那么最小点击量不会低于0
+                }
+                author.setHottest(Hottest);
+                res = CRUDEvent.UPDATE_SUCCESS;
+            }
+        }catch(Exception e){
+            res = CRUDEvent.UPDATE_FAIL;
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    public List<Author>  getAuthorsByHottest(int number){
+        List<Author> l_author = new ArrayList<Author>();
+        try{
+            Session session = sf.getCurrentSession();
+            Criteria c = session.createCriteria(Author.class);
+            c.addOrder(Order.desc("HOTTEST"));//安热度递减排序
+            c.setMaxResults(number);
+            c.setReadOnly(true);
+            l_author = c.list();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return l_author;
     }
 }

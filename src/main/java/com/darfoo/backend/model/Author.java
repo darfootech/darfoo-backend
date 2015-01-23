@@ -25,24 +25,36 @@ import org.hibernate.annotations.GenericGenerator;
  * Created by zjh on 14-11-16.
  */
 @Entity
-@Table(name="author")
+@Table(name = "author")
 public class Author implements Serializable {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY) //引用下面名为mysql的主键生成方式
-    Integer id;
-	@Column(name="NAME",nullable=false,columnDefinition="varchar(255) not null")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //引用下面名为mysql的主键生成方式
+            Integer id;
+    @Column(name = "NAME", nullable = false, columnDefinition = "varchar(255) not null")
     String name;
-	@Column(name="DESCRIPTION",nullable=false,columnDefinition="varchar(255) not null")
+    @Column(name = "DESCRIPTION", nullable = false, columnDefinition = "varchar(255) not null")
     String description;
-	
-	//暂时弄成单向对应关系
-	@OneToOne(targetEntity=Image.class,fetch=FetchType.EAGER)
-	@Cascade(value={CascadeType.MERGE,CascadeType.PERSIST,CascadeType.SAVE_UPDATE})
-	@JoinColumn(name="IMAGE_ID",referencedColumnName="id",updatable=true)
-	Image image;
-	
+
+    //暂时弄成单向对应关系
+    @OneToOne(targetEntity = Image.class, fetch = FetchType.EAGER)
+    @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE})
+    @JoinColumn(name = "IMAGE_ID", referencedColumnName = "id", updatable = true)
+    Image image;
+
+    //点击量
+    @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
+    Long hottest;
+
     public Author() {
 
+    }
+
+    public Long getHottest() {
+        return hottest;
+    }
+
+    public void setHottest(Long hottest) {
+        this.hottest = hottest;
     }
 
     public Integer getId() {
@@ -68,19 +80,19 @@ public class Author implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     public Image getImage() {
-		return image;
-	}
+        return image;
+    }
 
-	public void setImage(Image image) {
-		this.image = image;
-	}
+    public void setImage(Image image) {
+        this.image = image;
+    }
 
-	@Override
-    public String toString(){
-    	StringBuilder sb = new StringBuilder();
-    	sb.append(this.getId()+" "+this.getName()+" "+this.getDescription()+" "+this.getImage().getImage_key());
-    	return sb.toString();
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getId() + " " + this.getName() + " " + this.getDescription() + " " + this.getImage().getImage_key());
+        return sb.toString();
     }
 }

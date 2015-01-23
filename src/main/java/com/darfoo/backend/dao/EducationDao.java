@@ -526,7 +526,7 @@ public class EducationDao {
 		try{
 			Session session = sf.getCurrentSession();
 			Criteria c = session.createCriteria(Education.class);
-			c.addOrder(Order.desc("Hottest"));//安热度递减排序
+			c.addOrder(Order.desc("hottest"));//安热度递减排序
 			c.setMaxResults(number);
 			c.setReadOnly(true);
 			educations = c.list();
