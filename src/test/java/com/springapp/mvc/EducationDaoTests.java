@@ -234,23 +234,23 @@ public class EducationDaoTests {
 	 * 更新点击量
 	 * **/
 	@Test
-	public void updateEducationHotest(){
+	public void updateEducationHottest(){
 		Integer id = 1;
 		int n = 1;
 		//int n = -5;
-		System.out.println(CRUDEvent.getResponse(educationDao.updateEducationHotest(id, n)));
+		System.out.println(CRUDEvent.getResponse(educationDao.updateEducationHottest(id, n)));
 	}
 	
 	/**
 	 * 按照热度排序从大到小，获取前number个video
 	 * **/
 	@Test
-	public void getEducationsByHotest(){
+	public void getEducationsByHottest(){
 		int number = 20;
-		List<Education> educations = educationDao.getEducationsByHotest(number);
+		List<Education> educations = educationDao.getEducationsByHottest(number);
 		System.out.println("---------返回"+educations.size()+"个视频---------");
 		for(Education v : educations){
-			System.out.println("热度值---->"+v.getHotest());
+			System.out.println("热度值---->"+v.getHottest());
 			System.out.println(v.toString(true));
 			System.out.println("---------------------------");
 		}

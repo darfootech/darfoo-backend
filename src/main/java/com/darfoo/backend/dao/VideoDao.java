@@ -579,7 +579,7 @@ public class VideoDao {
 	 * @param id video的id
 	 * @param n  增加的值(通常设为1)
 	 * **/
-	public int updateVideoHotest(Integer id,int n){
+	public int updateVideoHottest(Integer id,int n){
 		int res = 0;
 		try{
 			Session session = sf.getCurrentSession();
@@ -587,15 +587,15 @@ public class VideoDao {
 			if(video == null){
 				res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
 			}else{
-				Long hotest = video.getHotest();
-				if(hotest == null){
-					hotest = 1L;  //若没有点击量记录，则设为1
+				Long Hottest = video.getHottest();
+				if(Hottest == null){
+					Hottest = 1L;  //若没有点击量记录，则设为1
 				}else{
-					hotest += n;
-					if(hotest <= 0 )
-						hotest = 0L;  //若你把n设为了负数，那么最小点击量不会低于0
+					Hottest += n;
+					if(Hottest <= 0 )
+						Hottest = 0L;  //若你把n设为了负数，那么最小点击量不会低于0
 				}
-				video.setHotest(hotest);
+				video.setHottest(Hottest);
 				res = CRUDEvent.UPDATE_SUCCESS;
 			}
 		}catch(Exception e){
@@ -609,12 +609,12 @@ public class VideoDao {
 	 * 按热度排序，从热度最大到最小排序返回
 	 * @param 获得热度排名前number个
 	 * **/
-	public List<Video>  getVideosByHotest(int number){
+	public List<Video>  getVideosByHottest(int number){
 		List<Video> l_video = new ArrayList<Video>();
 		try{
 			Session session = sf.getCurrentSession();
 			Criteria c = session.createCriteria(Video.class);
-			c.addOrder(Order.desc("hotest"));//安热度递减排序
+			c.addOrder(Order.desc("Hottest"));//安热度递减排序
 			c.setMaxResults(number);
 			c.setReadOnly(true);
 			l_video = c.list();

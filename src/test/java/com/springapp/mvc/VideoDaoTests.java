@@ -289,23 +289,23 @@ public class VideoDaoTests {
 	 * 更新点击量
 	 * **/
 	@Test
-	public void updateVideoHotest(){
-		Integer id = 1;
+	public void updateVideoHottest(){
+		Integer id = 40;
 		int n = 1;
 		//int n = -5;
-		System.out.println(CRUDEvent.getResponse(videoDao.updateVideoHotest(id, n)));
+		System.out.println(CRUDEvent.getResponse(videoDao.updateVideoHottest(id, n)));
 	}
 	
 	/**
 	 * 按照热度排序从大到小，获取前number个video
 	 * **/
 	@Test
-	public void getVideosByHotest(){
+	public void getVideosByHottest(){
 		int number = 20;
-		List<Video> videos = videoDao.getVideosByHotest(number);
+		List<Video> videos = videoDao.getVideosByHottest(number);
 		System.out.println("---------返回"+videos.size()+"个视频---------");
 		for(Video v : videos){
-			System.out.println("热度值---->"+v.getHotest());
+			System.out.println("热度值---->"+v.getHottest());
 			System.out.println(v.toString(true));
 			System.out.println("---------------------------");
 		}

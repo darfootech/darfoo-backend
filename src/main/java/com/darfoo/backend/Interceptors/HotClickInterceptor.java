@@ -46,7 +46,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             System.out.println("video clicked id is: " + videoid + "\n");
             int vid = Integer.parseInt(videoid);
             int acc = 1;
-            System.out.println(CRUDEvent.getResponse(videoDao.updateVideoHotest(vid, acc)));
+            System.out.println(CRUDEvent.getResponse(videoDao.updateVideoHottest(vid, acc)));
             return true;
         }
 
@@ -55,7 +55,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             System.out.println("tutorial clicked id is: " + tutorialid + "\n");
             int tid = Integer.parseInt(tutorialid);
             int acc = 1;
-            System.out.println(CRUDEvent.getResponse(educationDao.updateEducationHotest(tid, acc)));
+            System.out.println(CRUDEvent.getResponse(educationDao.updateEducationHottest(tid, acc)));
             return true;
         }
 

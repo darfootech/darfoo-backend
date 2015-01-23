@@ -491,7 +491,7 @@ public class EducationDao {
 	 * @param id education的id
 	 * @param n  增加的值(通常设为1)
 	 * **/
-	public int updateEducationHotest(Integer id,int n){
+	public int updateEducationHottest(Integer id,int n){
 		int res = 0;
 		try{
 			Session session = sf.getCurrentSession();
@@ -499,15 +499,15 @@ public class EducationDao {
 			if(education == null){
 				res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
 			}else{
-				Long hotest = education.getHotest();
-				if(hotest == null){
-					hotest = 1L;  //若没有点击量记录，则设为1
+				Long Hottest = education.getHottest();
+				if(Hottest == null){
+					Hottest = 1L;  //若没有点击量记录，则设为1
 				}else{
-					hotest += n;
-					if(hotest <= 0 )
-						hotest = 0L;  //若你把n设为了负数，那么最小点击量不会低于0
+					Hottest += n;
+					if(Hottest <= 0 )
+						Hottest = 0L;  //若你把n设为了负数，那么最小点击量不会低于0
 				}
-				education.setHotest(hotest);
+				education.setHottest(Hottest);
 				res = CRUDEvent.UPDATE_SUCCESS;
 			}
 		}catch(Exception e){
@@ -521,12 +521,12 @@ public class EducationDao {
 	 * 按热度排序，从热度最大到最小排序返回
 	 * @param 获得热度排名前number个
 	 * **/
-	public List<Education>  getEducationsByHotest(int number){
+	public List<Education>  getEducationsByHottest(int number){
 		List<Education> educations = new ArrayList<Education>();
 		try{
 			Session session = sf.getCurrentSession();
 			Criteria c = session.createCriteria(Education.class);
-			c.addOrder(Order.desc("hotest"));//安热度递减排序
+			c.addOrder(Order.desc("Hottest"));//安热度递减排序
 			c.setMaxResults(number);
 			c.setReadOnly(true);
 			educations = c.list();

@@ -215,7 +215,7 @@ public class MusicDaoTests {
 	 * 更新点击量
 	 * **/
 	@Test
-	public void updateMusicHotest(){
+	public void updateMusicHottest(){
 		Integer id = 1;
 		int n = 1;
 		//int n = -5;
@@ -226,12 +226,12 @@ public class MusicDaoTests {
 	 * 按照热度排序从大到小，获取前number个video
 	 * **/
 	@Test
-	public void getMusicsByHotest(){
+	public void getMusicsByHottest(){
 		int number = 20;
 		List<Music> musics = musicDao.getMusicsByHottest(number);
 		System.out.println("---------返回"+musics.size()+"个视频---------");
 		for(Music v : musics){
-			System.out.println("热度值---->"+v.getHotest());
+			System.out.println("热度值---->"+v.getHottest());
 			System.out.println(v.toString(true));
 			System.out.println("---------------------------");
 		}
