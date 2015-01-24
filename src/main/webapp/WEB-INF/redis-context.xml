@@ -8,7 +8,7 @@
 			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:property-placeholder location="classpath:redis.properties" />
+    <context:property-placeholder location="classpath:redis.properties"/>
     <!--<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
@@ -19,14 +19,14 @@
 
     <!-- redis连接池的配置 -->
     <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
-        <property name="maxIdle" value="${redis.maxIdle}" />
-        <property name="maxTotal" value="${redis.maxActive}" />
-        <property name="maxWaitMillis" value="${redis.maxWait}" />
-        <property name="testOnBorrow" value="${redis.testOnBorrow}" />
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <property name="maxTotal" value="${redis.maxActive}"/>
+        <property name="maxWaitMillis" value="${redis.maxWait}"/>
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
     </bean>
 
     <!-- redis的连接池pool，不是必选项：timeout/password  -->
-    <bean id = "jedisPool" class="redis.clients.jedis.JedisPool">
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
         <constructor-arg index="0" ref="poolConfig"/>
         <constructor-arg index="1" value="${redis.host}"/>
         <constructor-arg index="2" value="${redis.port}" type="int"/>
@@ -35,17 +35,17 @@
     </bean>
 
     <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-          p:hostName="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}"  p:poolConfig-ref="poolConfig"/>
+          p:hostName="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}" p:poolConfig-ref="poolConfig"/>
 
     <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
-        <property name="connectionFactory" 	ref="connectionFactory" />
+        <property name="connectionFactory" ref="connectionFactory"/>
     </bean>
 
-    <bean id="commonRedisClient" class="com.darfoo.backend.caches.CommonRedisClient" />
+    <bean id="commonRedisClient" class="com.darfoo.backend.caches.CommonRedisClient"/>
 
-    <bean id="userDao" class="com.darfoo.backend.caches.test.UserDao" />
-    <bean id="videoCacheDao" class="com.darfoo.backend.caches.dao.VideoCacheDao" />
-    <bean id="tutorialCacheDao" class="com.darfoo.backend.caches.dao.TutorialCacheDao" />
-    <bean id="musicCacheDao" class="com.darfoo.backend.caches.dao.MusicCacheDao" />
-    <bean id="authorCacheDao" class="com.darfoo.backend.caches.dao.AuthorCacheDao" />
+    <bean id="userDao" class="com.darfoo.backend.caches.test.UserDao"/>
+    <bean id="videoCacheDao" class="com.darfoo.backend.caches.dao.VideoCacheDao"/>
+    <bean id="tutorialCacheDao" class="com.darfoo.backend.caches.dao.TutorialCacheDao"/>
+    <bean id="musicCacheDao" class="com.darfoo.backend.caches.dao.MusicCacheDao"/>
+    <bean id="authorCacheDao" class="com.darfoo.backend.caches.dao.AuthorCacheDao"/>
 </beans>

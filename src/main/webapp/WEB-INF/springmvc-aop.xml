@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Spring配置文件的根元素，使用spring-beans-3.0.xsd语义约束 -->
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.springframework.org/schema/beans"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context-3.0.xsd
 	http://www.springframework.org/schema/aop
-	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd " >
-	
-	<context:component-scan base-package="com.darfoo.backend.aop"></context:component-scan>
-	<!-- AOP  -->
-	<aop:aspectj-autoproxy />
-	
-	<!--xml conf 示例-->
-<!--<bean id="aspectBean" class="com.chou.spring.domain.Interceptor"/>  
-          
-	<aop:config proxy-target-class="false">  
-		<aop:aspect ref="aspectBean">  
-			定义切入点  
-			<aop:pointcut id="myAspect"   
-				expression="execution(public * com.chou.spring.bean..*.domain(..))" />  
-  
-			前置通知  
-			<aop:before pointcut-ref="myAspect" method="prepareDomain"/>  
-          
-			后置通知  
-			<aop:after-returning pointcut-ref="myAspect" method="afterReturning"/>  
-			<aop:after-throwing pointcut-ref="myAspect" method="afterThrowing"/>  
-			<aop:after pointcut-ref="myAspect" method="afterDomain"/>  
-  
-			环绕通知  
-			<aop:around method="around"  
-				pointcut="execution(* com.chou.spring.bean..*.sayAround(..))"/>  
-		</aop:aspect>  
-	</aop:config>   -->
+	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd ">
+
+    <context:component-scan base-package="com.darfoo.backend.aop"></context:component-scan>
+    <!-- AOP  -->
+    <aop:aspectj-autoproxy/>
+
+    <!--xml conf 示例-->
+    <!--<bean id="aspectBean" class="com.chou.spring.domain.Interceptor"/>
+
+        <aop:config proxy-target-class="false">
+            <aop:aspect ref="aspectBean">
+                定义切入点
+                <aop:pointcut id="myAspect"
+                    expression="execution(public * com.chou.spring.bean..*.domain(..))" />
+
+                前置通知
+                <aop:before pointcut-ref="myAspect" method="prepareDomain"/>
+
+                后置通知
+                <aop:after-returning pointcut-ref="myAspect" method="afterReturning"/>
+                <aop:after-throwing pointcut-ref="myAspect" method="afterThrowing"/>
+                <aop:after pointcut-ref="myAspect" method="afterDomain"/>
+
+                环绕通知
+                <aop:around method="around"
+                    pointcut="execution(* com.chou.spring.bean..*.sayAround(..))"/>
+            </aop:aspect>
+        </aop:config>   -->
 
 </beans>

@@ -14,9 +14,9 @@
 
     <!--<context:component-scan base-package="com.darfoo.backend.service" />
     <context:component-scan base-package="com.springapp.mvc" />-->
-    <context:component-scan base-package="com.darfoo.backend.service, com.springapp.mvc" />
+    <context:component-scan base-package="com.darfoo.backend.service, com.springapp.mvc"/>
 
-    <mvc:annotation-driven />
+    <mvc:annotation-driven/>
 
     <mvc:default-servlet-handler/>
 
@@ -25,7 +25,7 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-    <mvc:resources mapping="/resources/**" location="/resources/" />
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="524288000"/>
@@ -34,15 +34,15 @@
     </bean>
 
     <!-- 配置线程池 -->
-    <bean id ="taskExecutor"  class ="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" >
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
         <!-- 线程池维护线程的最少数量 -->
-        <property name ="corePoolSize" value ="5" />
+        <property name="corePoolSize" value="5"/>
         <!-- 线程池维护线程所允许的空闲时间 -->
-        <property name ="keepAliveSeconds" value ="30000" />
+        <property name="keepAliveSeconds" value="30000"/>
         <!-- 线程池维护线程的最大数量 -->
-        <property name ="maxPoolSize" value ="1000" />
+        <property name="maxPoolSize" value="1000"/>
         <!-- 线程池所使用的缓冲队列 -->
-        <property name ="queueCapacity" value ="200" />
+        <property name="queueCapacity" value="200"/>
     </bean>
 
     <mvc:interceptors>
@@ -60,7 +60,7 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
-    <task:annotation-driven />
+    <task:annotation-driven/>
 
     <!--不使用bean则不会有定时服务，但是一旦有了bean那么就会一个问题就是到了定时执行的时候会出现两次操作-->
     <!--定时服务后面可以作为定时清理redis，清理session的cronjob-->
