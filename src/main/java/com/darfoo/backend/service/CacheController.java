@@ -193,7 +193,6 @@ public class CacheController {
         return result;
     }
 
-
     @RequestMapping(value = "/video/category/{categories}/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
@@ -878,6 +877,74 @@ public class CacheController {
             SingleAuthor author = authorCacheDao.getSingleAuthor(aid);
             System.out.println("name -> " + author.getName());
             result.add(author);
+        }
+
+        return result;
+    }
+
+    @RequestMapping(value = "/video/sidebar/{id}", method = RequestMethod.GET)
+    public @ResponseBody List<CacheSingleVideo> getSidebarVideos(@PathVariable Integer id){
+        List<Video> sidebarVideos = videoDao.getSideBarVideos(id);
+        for (Video video : sidebarVideos) {
+            int vid = video.getId();
+            long result = redisClient.lpush("videosidebar", "video-" + vid);
+            videoCacheDao.insertSingleVideo(video);
+            System.out.println("insert result -> " + result);
+        }
+        List<String> sideBarVideoKeys = redisClient.lrange("videosidebar", 0L, -1L);
+        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+        for (String vkey : sideBarVideoKeys) {
+            System.out.println("vkey -> " + vkey);
+            int vid = Integer.parseInt(vkey.split("-")[1]);
+            CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
+            System.out.println("title -> " + video.getTitle());
+            result.add(video);
+        }
+
+        return result;
+    }
+
+    @RequestMapping(value = "/tutorial/sidebar/{id}", method = RequestMethod.GET)
+    public @ResponseBody List<CacheSingleVideo> getSidebarTutorials(@PathVariable Integer id){
+        List<Education> sidebarTutorials = educationDao.getSideBarTutorials(id);
+        for (Education video : sidebarTutorials) {
+            int vid = video.getId();
+            long result = redisClient.lpush("tutorialsidebar", "tutorial-" + vid);
+            tutorialCacheDao.insertSingleTutorial(video);
+            System.out.println("insert result -> " + result);
+        }
+
+        List<String> categoryVideoKeys = redisClient.lrange("tutorialsidebar", 0L, -1L);
+        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+        for (String vkey : categoryVideoKeys){
+            System.out.println("vkey -> " + vkey);
+            int vid = Integer.parseInt(vkey.split("-")[1]);
+            CacheSingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
+            System.out.println("title -> " + video.getTitle());
+            result.add(video);
+        }
+
+        return result;
+    }
+
+    @RequestMapping(value = "/music/sidebar/{id}", method = RequestMethod.GET)
+    public @ResponseBody List<SingleMusic> getSidebarMusics(@PathVariable Integer id){
+        List<Music> musics = musicDao.getSideBarMusics(id);
+        List<SingleMusic> result = new ArrayList<SingleMusic>();
+        for (Music music : musics){
+            int mid = music.getId();
+            long status = redisClient.lpush("musicsidebar", "music-" + mid);
+            musicCacheDao.insertSingleMusic(music);
+            System.out.println("insert result -> " + status);
+        }
+
+        List<String> sidebarMusicKeys = redisClient.lrange("musicsidebar", 0L, -1L);
+        for (String vkey : sidebarMusicKeys){
+            System.out.println("vkey -> " + vkey);
+            int mid = Integer.parseInt(vkey.split("-")[1]);
+            SingleMusic music = musicCacheDao.getSingleMusic(mid);
+            System.out.println("title -> " + music.getTitle());
+            result.add(music);
         }
 
         return result;
