@@ -425,6 +425,30 @@ public class EducationDao {
         return s_educations;
     }
 
+    public List<Education> getAllTutorialsWithoutId(Integer tutorialid) {
+        List<Education> s_tutorials = new ArrayList<Education>();
+        try {
+            Session session = sf.getCurrentSession();
+            Criteria c = session.createCriteria(Education.class);
+            c.add(Restrictions.not(Restrictions.eq("id", tutorialid)));
+            c.addOrder(Order.desc("id"));
+            c.setReadOnly(true);
+            c.setFetchMode("categories", FetchMode.JOIN);
+            List<Education> l_tutorials = c.list();
+            if (l_tutorials.size() > 0) {
+                //去除重复的video
+                for (Education tutorial : l_tutorials) {
+                    if (!s_tutorials.contains(tutorial)) {
+                        s_tutorials.add(tutorial);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return s_tutorials;
+    }
+
     /**
      * 为education添加一个对应的music(插入操作用更新替代)
      *
@@ -736,5 +760,28 @@ public class EducationDao {
 
         Collections.reverse(l_video);
         return l_video;
+    }
+
+    public List<Education> getSideBarTutorials(Integer tutorialid) {
+        List<Education> result = new ArrayList<Education>();
+        int authorid = getEducationVideoById(tutorialid).getAuthor().getId();
+        List<Education> sameAuthorTutorials = getTutorialsByAuthorId(authorid);
+        int sameAuthorLen = sameAuthorTutorials.size();
+        if (sameAuthorLen > 5) {
+            Collections.shuffle(sameAuthorTutorials);
+            for (int i = 0; i < 5; i++) {
+                result.add(sameAuthorTutorials.get(i));
+            }
+        } else if (sameAuthorLen == 5) {
+            result = sameAuthorTutorials;
+        } else {
+            List<Education> allTutorials = getAllTutorialsWithoutId(tutorialid);
+            Collections.shuffle(allTutorials);
+            for (int i = 0; i < 5 - sameAuthorLen; i++) {
+                sameAuthorTutorials.add(allTutorials.get(i));
+            }
+            result = sameAuthorTutorials;
+        }
+        return result;
     }
 }

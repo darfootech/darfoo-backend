@@ -308,4 +308,22 @@ public class EducationDaoTests {
         System.out.println("最终满足的video数量>>>>>>>>>>>>>>>>>>>>>" + videos.size());
         System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }
+
+    @Test
+    public void getAllTutorialsWithoutId() {
+        int vid = 1;
+        List<Education> allvideos = educationDao.getAllTutorialsWithoutId(vid);
+        for (Education video : allvideos) {
+            System.out.println(video.getId());
+        }
+    }
+
+    @Test
+    public void getSideBarTutorials() {
+        List<Education> result = educationDao.getSideBarTutorials(1);
+        System.out.println(result.size());
+        for (Education video : result) {
+            System.out.println(video.getTitle() + "-" + video.getId());
+        }
+    }
 }
