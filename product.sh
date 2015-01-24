@@ -1,3 +1,4 @@
+git pull --rebase upstream release
 ## just for the production env to automatic deploy the project on remote server
 rm -rf target/
 mvn package -Dmaven.test.skip=true
