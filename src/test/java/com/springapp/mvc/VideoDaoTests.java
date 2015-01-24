@@ -411,4 +411,22 @@ public class VideoDaoTests {
         System.out.println("最终满足的video数量>>>>>>>>>>>>>>>>>>>>>" + videos.size());
         System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }
+
+    @Test
+    public void getAllVideosWithoutId(){
+        int vid = 1;
+        List<Video> allvideos = videoDao.getAllVideosWithoutId(vid);
+        for (Video video : allvideos){
+            System.out.println(video.getId());
+        }
+    }
+
+    @Test
+    public void getSideBarVideos(){
+        List<Video> result = videoDao.getSideBarVideos(1);
+        System.out.println(result.size());
+        for (Video video : result){
+            System.out.println(video.getTitle() + "-" + video.getId());
+        }
+    }
 }
