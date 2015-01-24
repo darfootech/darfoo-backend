@@ -16,43 +16,43 @@ public class VersionDao {
     @Autowired
     SessionFactory sessionFactory;
 
-    public boolean isExistVersion(String version){
+    public boolean isExistVersion(String version) {
         boolean isExist = true;
-        try{
+        try {
             Session session = sessionFactory.getCurrentSession();
             String sql = "select * from version where version=:version";
-            Version author = (Version)session.createSQLQuery(sql).addEntity(Version.class).setString("version", version).uniqueResult();
-            isExist = (author==null)?false:true;
-        }catch(Exception e){
+            Version author = (Version) session.createSQLQuery(sql).addEntity(Version.class).setString("version", version).uniqueResult();
+            isExist = (author == null) ? false : true;
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return isExist;
     }
 
-    public Version getLatestVersion(){
+    public Version getLatestVersion() {
         Version version = null;
         try {
             Session session = sessionFactory.getCurrentSession();
             String sql = "SELECT * FROM version ORDER BY id DESC LIMIT 1";
-            version = (Version)session.createSQLQuery(sql).addEntity(Version.class).uniqueResult();
-        }catch (Exception e){
+            version = (Version) session.createSQLQuery(sql).addEntity(Version.class).uniqueResult();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return version;
     }
 
-    public int insertVersion(Version version){
+    public int insertVersion(Version version) {
         int res = 0;
-        try{
+        try {
             boolean isExist = isExistVersion(version.getVersion());
-            if(isExist){
+            if (isExist) {
                 res = CRUDEvent.INSERT_REPEAT;
-            }else{
+            } else {
                 Session session = sessionFactory.getCurrentSession();
-                Integer id = (Integer)(session.save(version));
-                res = (id>0)?CRUDEvent.INSERT_SUCCESS:CRUDEvent.INSERT_FAIL;
+                Integer id = (Integer) (session.save(version));
+                res = (id > 0) ? CRUDEvent.INSERT_SUCCESS : CRUDEvent.INSERT_FAIL;
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             res = CRUDEvent.CRUD_EXCETION;
             //throw new RuntimeException("rollback");
         }
