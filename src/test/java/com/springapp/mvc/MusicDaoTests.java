@@ -285,4 +285,22 @@ public class MusicDaoTests {
         System.out.println("最终满足的music数量>>>>>>>>>>>>>>>>>>>>>" + musics.size());
         System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }
+
+    @Test
+    public void getAllMusicsWithoutId() {
+        int vid = 1;
+        List<Music> allmusics = musicDao.getAllMusicsWithoutId(vid);
+        for (Music music : allmusics) {
+            System.out.println(music.getId());
+        }
+    }
+
+    @Test
+    public void getSideBarMusics() {
+        List<Music> result = musicDao.getSideBarMusics(27);
+        System.out.println(result.size());
+        for (Music music : result) {
+            System.out.println(music.getTitle() + "-" + music.getId());
+        }
+    }
 }

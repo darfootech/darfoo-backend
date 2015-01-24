@@ -762,6 +762,14 @@ public class EducationDao {
         return l_video;
     }
 
+    /**
+     * 获得播放页面右侧的相关教程
+     * 获取原则 ->
+     * 从相同明星舞队中随机选取5个
+     * 如果相同明星舞队中教程个数不足则从所有教程中随机选出对应个数来填充
+     * @param tutorialid
+     * @return
+     */
     public List<Education> getSideBarTutorials(Integer tutorialid) {
         List<Education> result = new ArrayList<Education>();
         int authorid = getEducationVideoById(tutorialid).getAuthor().getId();
