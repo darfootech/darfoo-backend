@@ -32,14 +32,14 @@ public class UploadNoAuthVideoDaoTests {
     VideoDao videoDao;
 
     @Test
-    public void isExistVideo(){
+    public void isExistVideo() {
         //String videokey = "cleantha33-1421475655469-30:ad:05:01:a6:83.mp4";
         String videokey = "cleantha";
         System.out.println("is exists -> " + uploadVideoDao.isExistVideo(videokey));
     }
 
     @Test
-    public void insertUploadVideo(){
+    public void insertUploadVideo() {
         String videokey = "cleantha33-" + System.currentTimeMillis() + "-30:ad:05:01:a6:83.mp4";
         String imagekey = "cleantha0-" + System.currentTimeMillis() + "-30:ad:05:01:a6:83.mp3";
         System.out.println(videokey);
@@ -53,7 +53,7 @@ public class UploadNoAuthVideoDaoTests {
     }
 
     @Test
-    public void updateRealVideoId(){
+    public void updateRealVideoId() {
         int id = 2;
         int videoid = 6;
         int result = uploadVideoDao.updateRealVideoid(id, videoid);
@@ -61,46 +61,46 @@ public class UploadNoAuthVideoDaoTests {
     }
 
     @Test
-    public void getUploadVideoById(){
+    public void getUploadVideoById() {
         int id = 1;
         UploadNoAuthVideo video = uploadVideoDao.getUploadVideoById(id);
         System.out.println(video.getVideo_key());
     }
 
     @Test
-    public void getAllVideo(){
+    public void getAllVideo() {
         List<UploadNoAuthVideo> videos = uploadVideoDao.getAllVideo();
-        for (UploadNoAuthVideo video : videos){
+        for (UploadNoAuthVideo video : videos) {
             System.out.println(video.getVideo_key());
         }
     }
 
     @Test
-    public void getAllUnVerifyVideos(){
+    public void getAllUnVerifyVideos() {
         List<UploadNoAuthVideo> videos = uploadVideoDao.getAllUnVerifyVideos();
-        for (UploadNoAuthVideo video : videos){
+        for (UploadNoAuthVideo video : videos) {
             System.out.println(video.getVideo_key());
         }
     }
 
     @Test
-    public void getVideosByMacAddr(){
+    public void getVideosByMacAddr() {
         String macaddr = "30:ad:05:01:a6:83";
         List<UploadNoAuthVideo> videos = uploadVideoDao.getVideosByMacAddr(macaddr);
-        for (UploadNoAuthVideo video : videos){
+        for (UploadNoAuthVideo video : videos) {
             System.out.println(video.getVideo_key());
         }
     }
 
     @Test
-    public void deleteVideoById(){
+    public void deleteVideoById() {
         int id = 1;
         int result = uploadVideoDao.deleteVideoById(id);
         Assert.assertEquals(CRUDEvent.DELETE_SUCCESS, result);
     }
 
     @Test
-    public void insertSingleVideo(){
+    public void insertSingleVideo() {
         String videotitle = "cleantha33";
         String imagekey = "cleantha0-1421489883812-30:ad:05:01:a6:83.mp3";
         String authorname = "user-macaddress";
@@ -113,36 +113,35 @@ public class UploadNoAuthVideoDaoTests {
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
         boolean isSingleLetter = ServiceUtils.isSingleCharacter(videoletter);
-        if (isSingleLetter){
+        if (isSingleLetter) {
             System.out.println("是单个大写字母");
-        }else{
+        } else {
             System.out.println("不是单个大写字母");
             resultMap.put("statuscode", 505);
             resultMap.put("insertid", -1);
         }
 
-        if (imagekey.equals("")){
+        if (imagekey.equals("")) {
             resultMap.put("statuscode", 508);
             resultMap.put("insertid", -1);
         }
 
         Image image = imageDao.getImageByName(imagekey);
-        if (image == null){
+        if (image == null) {
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
             image.setImage_key(imagekey);
             imageDao.insertSingleImage(image);
-        }else{
+        } else {
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
             resultMap.put("statuscode", 502);
             resultMap.put("insertid", -1);
         }
 
         Author targetAuthor = authorDao.getAuthor(authorname);
-        if(targetAuthor != null){
+        if (targetAuthor != null) {
             System.out.println(targetAuthor.getName());
-        }
-        else{
+        } else {
             targetAuthor = new Author();
             targetAuthor.setName(authorname);
             targetAuthor.setDescription("userdescription");
@@ -172,9 +171,9 @@ public class UploadNoAuthVideoDaoTests {
         video.setVideo_key(videotitle);
         video.setUpdate_timestamp(System.currentTimeMillis());
         int insertStatus = videoDao.insertSingleVideo(video);
-        if (insertStatus == -1){
+        if (insertStatus == -1) {
             System.out.println("插入视频失败");
-        }else{
+        } else {
             System.out.println("插入视频成功，视频id是" + insertStatus);
         }
 

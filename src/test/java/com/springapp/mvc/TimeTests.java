@@ -17,7 +17,7 @@ import java.util.Date;
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class TimeTests {
     @Test
-    public void timestamp2datetime(){
+    public void timestamp2datetime() {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         Date date = new Date(timestamp.getTime());
 
@@ -29,7 +29,7 @@ public class TimeTests {
     }
 
     @Test
-    public void getTimestampFromdb(){
+    public void getTimestampFromdb() {
         long timestampfromdb = 1416646629950L;
         Timestamp timestamp = new Timestamp(timestampfromdb);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

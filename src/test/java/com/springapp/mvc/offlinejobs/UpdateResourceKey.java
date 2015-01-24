@@ -28,27 +28,27 @@ public class UpdateResourceKey {
     EducationDao educationDao;
 
     @Test
-    public void updateVideoKey(){
+    public void updateVideoKey() {
         List<Video> s_videos;
         s_videos = videoDao.getAllVideo();
-        for(Video video : s_videos){
+        for (Video video : s_videos) {
             int videoid = video.getId();
             String videokey = video.getVideo_key() + ".mp4";
             videoDao.updateVideoKeyById(videoid, videokey);
         }
-        System.out.println("总共查到"+s_videos.size());
+        System.out.println("总共查到" + s_videos.size());
     }
 
     @Test
-    public void updateTutorialKey(){
+    public void updateTutorialKey() {
         List<Education> s_educations;
         s_educations = educationDao.getAllEducation();
-        for(Education tutorial : s_educations){
+        for (Education tutorial : s_educations) {
             int tutorialid = tutorial.getId();
             String tutorialkey = tutorial.getVideo_key() + ".mp4";
             educationDao.updateVideoKeyById(tutorialid, tutorialkey);
         }
-        System.out.println("总共查到"+s_educations.size());
+        System.out.println("总共查到" + s_educations.size());
     }
 
 }

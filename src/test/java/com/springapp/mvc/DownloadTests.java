@@ -35,7 +35,7 @@ public class DownloadTests {
     MusicDao musicDao;
 
     @Test
-    public void writeVideosToCSV(){
+    public void writeVideosToCSV() {
         List<Video> videos = videoDao.getAllVideo();
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
         CSVPrinter printer = null;
@@ -44,23 +44,23 @@ public class DownloadTests {
             printer = new CSVPrinter(out, format.withDelimiter(','));
             System.out.println("********");
             printer.printRecord("视频标题", "明星舞队名称", "舞蹈速度", "舞蹈难度", "舞蹈风格", "首字母");
-            for(Video video : videos){
+            for (Video video : videos) {
                 HashMap<String, String> styleMap = new HashMap<String, String>();
                 Set<VideoCategory> categories = video.getCategories();
-                for (VideoCategory category : categories){
+                for (VideoCategory category : categories) {
                     int categoryid = category.getId();
                     String categorytitle = category.getTitle();
                     System.out.println(categoryid);
                     System.out.println(categorytitle);
-                    if (categoryid >= 1 && categoryid <= 3){
+                    if (categoryid >= 1 && categoryid <= 3) {
                         styleMap.put("speed", category.getTitle());
-                    }else if(categoryid >= 4 && categoryid <= 6){
+                    } else if (categoryid >= 4 && categoryid <= 6) {
                         styleMap.put("difficult", category.getTitle());
-                    }else if(categoryid >= 7 && categoryid <= 17){
+                    } else if (categoryid >= 7 && categoryid <= 17) {
                         styleMap.put("style", category.getTitle());
-                    }else if(categoryid >= 18 && categoryid <= 43){
+                    } else if (categoryid >= 18 && categoryid <= 43) {
                         styleMap.put("letter", category.getTitle());
-                    }else{
+                    } else {
                         System.out.println("something is wrong with the category");
                     }
                 }
@@ -68,27 +68,27 @@ public class DownloadTests {
                 itemData.add(video.getTitle());
                 if (video.getAuthor() != null) {
                     itemData.add(video.getAuthor().getName());
-                }else{
+                } else {
                     itemData.add("没有关联明星舞队");
                 }
                 if (styleMap.get("speed") != null) {
                     itemData.add(styleMap.get("speed"));
-                }else{
+                } else {
                     itemData.add("没有填视频速度");
                 }
                 if (styleMap.get("difficult") != null) {
                     itemData.add(styleMap.get("difficult"));
-                }else{
+                } else {
                     itemData.add("没有填视频难度");
                 }
                 if (styleMap.get("style") != null) {
                     itemData.add(styleMap.get("style"));
-                }else{
+                } else {
                     itemData.add("没有填视频风格");
                 }
                 if (styleMap.get("letter") != null) {
                     itemData.add(styleMap.get("letter"));
-                }else{
+                } else {
                     itemData.add("没有填首字母");
                 }
                 printer.printRecord(itemData);
@@ -104,7 +104,7 @@ public class DownloadTests {
     }
 
     @Test
-    public void writeTutorialsToCSV(){
+    public void writeTutorialsToCSV() {
         List<Education> educations = educationDao.getAllEducation();
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
         CSVPrinter printer = null;
@@ -113,21 +113,21 @@ public class DownloadTests {
             printer = new CSVPrinter(out, format.withDelimiter(','));
             System.out.println("********");
             printer.printRecord("教程标题", "明星舞队名称", "舞蹈速度", "舞蹈难度", "舞蹈风格");
-            for(Education tutorial : educations){
+            for (Education tutorial : educations) {
                 HashMap<String, String> styleMap = new HashMap<String, String>();
                 Set<EducationCategory> categories = tutorial.getCategories();
-                for (EducationCategory category : categories){
+                for (EducationCategory category : categories) {
                     int categoryid = category.getId();
                     String categorytitle = category.getTitle();
                     System.out.println(categoryid);
                     System.out.println(categorytitle);
-                    if (categorytitle.equals("快") || categorytitle.equals("中") || categorytitle.equals("慢")){
+                    if (categorytitle.equals("快") || categorytitle.equals("中") || categorytitle.equals("慢")) {
                         styleMap.put("speed", categorytitle);
-                    }else if(categorytitle.equals("简单") || categorytitle.equals("适中") || categorytitle.equals("稍难")){
+                    } else if (categorytitle.equals("简单") || categorytitle.equals("适中") || categorytitle.equals("稍难")) {
                         styleMap.put("difficult", categorytitle);
-                    }else if(categorytitle.equals("背面教学") || categorytitle.equals("分解教学") || categorytitle.equals("队形表演")){
+                    } else if (categorytitle.equals("背面教学") || categorytitle.equals("分解教学") || categorytitle.equals("队形表演")) {
                         styleMap.put("style", categorytitle);
-                    }else{
+                    } else {
                         System.out.println("something is wrong with the category");
                     }
                 }
@@ -135,22 +135,22 @@ public class DownloadTests {
                 itemData.add(tutorial.getTitle());
                 if (tutorial.getAuthor() != null) {
                     itemData.add(tutorial.getAuthor().getName());
-                }else{
+                } else {
                     itemData.add("没有关联明星舞队");
                 }
                 if (styleMap.get("speed") != null) {
                     itemData.add(styleMap.get("speed"));
-                }else{
+                } else {
                     itemData.add("没有填教程速度");
                 }
                 if (styleMap.get("difficult") != null) {
                     itemData.add(styleMap.get("difficult"));
-                }else{
+                } else {
                     itemData.add("没有填教程难度");
                 }
                 if (styleMap.get("style") != null) {
                     itemData.add(styleMap.get("style"));
-                }else{
+                } else {
                     itemData.add("没有填教程风格");
                 }
 
@@ -167,7 +167,7 @@ public class DownloadTests {
     }
 
     @Test
-    public void writeMusicsToCSV(){
+    public void writeMusicsToCSV() {
         List<Music> musics = musicDao.getAllMusic();
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
         CSVPrinter printer = null;
@@ -176,21 +176,21 @@ public class DownloadTests {
             printer = new CSVPrinter(out, format.withDelimiter(','));
             System.out.println("********");
             printer.printRecord("伴奏标题", "舞蹈节奏", "舞蹈风格", "首字母");
-            for(Music music : musics){
+            for (Music music : musics) {
                 HashMap<String, String> styleMap = new HashMap<String, String>();
                 Set<MusicCategory> categories = music.getCategories();
-                for (MusicCategory category : categories){
+                for (MusicCategory category : categories) {
                     int categoryid = category.getId();
                     String categorytitle = category.getTitle();
                     System.out.println(categoryid);
                     System.out.println(categorytitle);
-                    if (categoryid >= 1 && categoryid <= 4){
+                    if (categoryid >= 1 && categoryid <= 4) {
                         styleMap.put("beat", categorytitle);
-                    }else if(categoryid >= 5 && categoryid <= 12){
+                    } else if (categoryid >= 5 && categoryid <= 12) {
                         styleMap.put("style", categorytitle);
-                    }else if(categoryid >= 13 && categoryid <= 38){
+                    } else if (categoryid >= 13 && categoryid <= 38) {
                         styleMap.put("letter", categorytitle);
-                    }else{
+                    } else {
                         System.out.println("something is wrong with the category");
                     }
                 }
@@ -199,17 +199,17 @@ public class DownloadTests {
 
                 if (styleMap.get("beat") != null) {
                     itemData.add(styleMap.get("beat"));
-                }else{
+                } else {
                     itemData.add("没有填舞蹈节奏");
                 }
                 if (styleMap.get("style") != null) {
                     itemData.add(styleMap.get("style"));
-                }else{
+                } else {
                     itemData.add("没有填舞蹈风格");
                 }
                 if (styleMap.get("letter") != null) {
                     itemData.add(styleMap.get("letter"));
-                }else{
+                } else {
                     itemData.add("没有填首字母");
                 }
                 printer.printRecord(itemData);

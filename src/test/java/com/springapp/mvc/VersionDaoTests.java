@@ -19,7 +19,7 @@ public class VersionDaoTests {
     VersionDao versionDao;
 
     @Test
-    public void insertNewVersion(){
+    public void insertNewVersion() {
         String version = "1.0.9";
         Version v = new Version();
         v.setVersion(version);
@@ -28,11 +28,11 @@ public class VersionDaoTests {
 
 
     @Test
-    public void getLatestVersion(){
+    public void getLatestVersion() {
         try {
             Version latestVersion = versionDao.getLatestVersion();
             System.out.println("latest version -> " + latestVersion.getVersion());
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println("no latest version already exists");
         }
     }

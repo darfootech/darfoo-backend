@@ -50,22 +50,22 @@ public class AuthorCacheTests {
     CommonRedisClient redisClient;
 
     @Test
-    public void cacheSingleAuthor(){
+    public void cacheSingleAuthor() {
         Author author = authorDao.getAuthor(1);
         System.out.println(authorCacheDao.insertSingleAuthor(author));
     }
 
     @Test
-    public void getSingleAuthor(){
+    public void getSingleAuthor() {
         Integer id = 1;
         SingleAuthor author = authorCacheDao.getSingleAuthor(id);
         System.out.println(author.getName());
     }
 
     @Test
-    public void cacheIndexAuthors(){
+    public void cacheIndexAuthors() {
         List<Author> authors = authorDao.getAllAuthor();
-        for (Author author : authors){
+        for (Author author : authors) {
             int id = author.getId();
             long result = redisClient.sadd("authorindex", "author-" + id);
             authorCacheDao.insertSingleAuthor(author);
@@ -74,7 +74,7 @@ public class AuthorCacheTests {
 
         Set<String> indexAuthorKeys = redisClient.smembers("authorindex");
         List<SingleAuthor> result = new ArrayList<SingleAuthor>();
-        for (String key : indexAuthorKeys){
+        for (String key : indexAuthorKeys) {
             System.out.println("key -> " + key);
             int id = Integer.parseInt(key.split("-")[1]);
             SingleAuthor author = authorCacheDao.getSingleAuthor(id);
@@ -86,20 +86,20 @@ public class AuthorCacheTests {
     }
 
     @Test
-    public void cacheAuthorVideos(){
+    public void cacheAuthorVideos() {
         int id = 11;
         List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
         List<Video> videos = videoDao.getVideosByAuthorId(id);
         List<Education> tutorials = educationDao.getTutorialsByAuthorId(id);
 
-        for (Video video : videos){
+        for (Video video : videos) {
             int vid = video.getId();
             long status = redisClient.sadd("authorvideos" + id, "video-" + vid);
             videoCacheDao.insertSingleVideo(video);
             System.out.println("insert result -> " + status);
         }
 
-        for (Education tutorial : tutorials){
+        for (Education tutorial : tutorials) {
             int tid = tutorial.getId();
             long status = redisClient.sadd("authorvideos" + id, "tutorial-" + tid);
             tutorialCacheDao.insertSingleTutorial(tutorial);
@@ -107,17 +107,17 @@ public class AuthorCacheTests {
         }
 
         Set<String> authorVideoKeys = redisClient.smembers("authorvideos" + id);
-        for (String key : authorVideoKeys){
+        for (String key : authorVideoKeys) {
             System.out.println("key -> " + key);
             int vtid = Integer.parseInt(key.split("-")[1]);
             String vtflag = key.split("-")[0];
-            if (vtflag.equals("video")){
+            if (vtflag.equals("video")) {
                 CacheSingleVideo video = videoCacheDao.getSingleVideo(vtid);
                 result.add(video);
-            }else if (vtflag.equals("tutorial")){
+            } else if (vtflag.equals("tutorial")) {
                 CacheSingleVideo tutorial = tutorialCacheDao.getSingleTutorial(vtid);
                 result.add(tutorial);
-            }else {
+            } else {
                 System.out.println("something is wrong");
             }
         }

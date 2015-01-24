@@ -40,26 +40,26 @@ public class TutorialCacheTests {
     TutorialCates tutorialCates = new TutorialCates();
 
     @Test
-    public void testDeleteTutorial(){
+    public void testDeleteTutorial() {
         String key = "tutorial-1";
         redisClient.delete(key);
     }
 
     @Test
-    public void insertTutorial(){
+    public void insertTutorial() {
         Education tutorial = educationDao.getEducationVideoById(1);
         System.out.println(tutorialCacheDao.insertSingleTutorial(tutorial));
     }
 
     @Test
-    public void getSingleTutorial(){
+    public void getSingleTutorial() {
         Integer id = 1;
         CacheSingleVideo tutorial = tutorialCacheDao.getSingleTutorial(id);
         System.out.println(tutorial.getTitle());
     }
 
     @Test
-    public void cacheCategory(){
+    public void cacheCategory() {
         String categories = "0-0-0-0";
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
@@ -86,11 +86,11 @@ public class TutorialCacheTests {
     }
 
     @Test
-    public void getCategory(){
+    public void getCategory() {
         String categories = "0-0-0-0";
         Set<String> categoryVideoKeys = redisClient.smembers("tutorialcategory" + categories);
         List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
-        for (String vkey : categoryVideoKeys){
+        for (String vkey : categoryVideoKeys) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
             CacheSingleVideo video = tutorialCacheDao.getSingleTutorial(vid);

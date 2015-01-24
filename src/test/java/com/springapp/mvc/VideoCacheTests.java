@@ -46,42 +46,42 @@ public class VideoCacheTests {
     VideoCates videoCates = new VideoCates();
 
     @Test
-    public void testAddVideo(){
+    public void testAddVideo() {
         Video video = videoDao.getVideoByVideoId(1);
         boolean result = videoCacheDao.add(video);
         System.out.println(result);
     }
 
     @Test
-    public void testDeleteVideo(){
+    public void testDeleteVideo() {
         String key = "video-1";
         redisClient.delete(key);
     }
 
     @Test
-    public void insertVideo(){
+    public void insertVideo() {
         Video video = videoDao.getVideoByVideoId(1);
         System.out.println(videoCacheDao.insertSingleVideo(video));
     }
 
     @Test
-    public void getSingleVideo(){
+    public void getSingleVideo() {
         Integer id = 1;
         CacheSingleVideo video = videoCacheDao.getSingleVideo(id);
         System.out.println(video.getTitle());
     }
 
     @Test
-    public void getSingleVideoFromPool(){
+    public void getSingleVideoFromPool() {
         Integer id = 1;
         SingleVideo video = videoCacheDao.getSingleVideoFromPool(id);
         System.out.println(video.getTitle());
     }
 
     @Test
-    public void cacheIndexVideos(){
+    public void cacheIndexVideos() {
         List<Video> latestVideos = videoDao.getVideosByNewest(7);
-        for (Video video : latestVideos){
+        for (Video video : latestVideos) {
             int vid = video.getId();
             long result = redisClient.sadd("videoindex", "video-" + vid);
             videoCacheDao.insertSingleVideo(video);
@@ -90,10 +90,10 @@ public class VideoCacheTests {
     }
 
     @Test
-    public void getIndexVideos(){
+    public void getIndexVideos() {
         Set<String> latestVideos = redisClient.smembers("videoindex");
         List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
-        for (String vkey : latestVideos){
+        for (String vkey : latestVideos) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
             CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
@@ -105,9 +105,9 @@ public class VideoCacheTests {
     }
 
     @Test
-    public void cacheRecommendVideos(){
+    public void cacheRecommendVideos() {
         List<Video> recommendVideos = videoDao.getRecommendVideos(7);
-        for (Video video : recommendVideos){
+        for (Video video : recommendVideos) {
             int vid = video.getId();
             long result = redisClient.sadd("videorecommend", "video-" + vid);
             videoCacheDao.insertSingleVideo(video);
@@ -116,10 +116,10 @@ public class VideoCacheTests {
     }
 
     @Test
-    public void getRecommendVideos(){
+    public void getRecommendVideos() {
         Set<String> recommendVideos = redisClient.smembers("videorecommend");
         List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
-        for (String vkey : recommendVideos){
+        for (String vkey : recommendVideos) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
             CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
@@ -131,7 +131,7 @@ public class VideoCacheTests {
     }
 
     @Test
-    public void cacheCategory(){
+    public void cacheCategory() {
         String categories = "0-0-0-0";
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
@@ -164,11 +164,11 @@ public class VideoCacheTests {
     }
 
     @Test
-    public void getCategory(){
+    public void getCategory() {
         String categories = "0-0-0-0";
         Set<String> categoryVideoKeys = redisClient.smembers("videocategory" + categories);
         List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
-        for (String vkey : categoryVideoKeys){
+        for (String vkey : categoryVideoKeys) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
             CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
@@ -180,15 +180,15 @@ public class VideoCacheTests {
     }
 
     @Test
-    public void cacheAndGetMusic(){
+    public void cacheAndGetMusic() {
         int id = 1;
         Music targetMusic = videoDao.getMusic(id);
-        if (targetMusic != null){
+        if (targetMusic != null) {
             int music_id = targetMusic.getId();
             videoCacheDao.insertMusic(id, music_id);
             Music music = musicDao.getMusicByMusicId(music_id);
             System.out.println(musicCacheDao.insertSingleMusic(music));
-        }else{
+        } else {
             System.out.println("没有关联伴奏");
         }
     }

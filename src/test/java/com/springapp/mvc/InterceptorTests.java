@@ -26,7 +26,7 @@ public class InterceptorTests {
     }
 
     @Test
-    public void getNumberFromUri(){
+    public void getNumberFromUri() {
         String uri = "/darfoobackend/rest/resources/video/33";
         System.out.println(uri.matches("(.*)/resources/video/\\d+$"));
         System.out.println(getNumbers(uri));

@@ -41,7 +41,7 @@ public class DeleteTrashResource {
     @Autowired
     ImageDao imageDao;
 
-    public List<String> getFileList(){
+    public List<String> getFileList() {
         Config.ACCESS_KEY = "bnMvAStYBsL5AjYM3UXbpGalrectRZZF88Y6fZ-X";
         Config.SECRET_KEY = "eMZK5q9HI1EXe7KzNtsyKJZJPHEfh96XcHvDigyG";
         String bucketName = "zjdxlab410yy";
@@ -66,14 +66,14 @@ public class DeleteTrashResource {
         }
 
         List<String> remoteList = new ArrayList<String>();
-        for (ListItem item : all){
+        for (ListItem item : all) {
             System.out.println(item.key);
             remoteList.add(item.key);
         }
         return remoteList;
     }
 
-    public void deleteResource(String key){
+    public void deleteResource(String key) {
         Config.ACCESS_KEY = "bnMvAStYBsL5AjYM3UXbpGalrectRZZF88Y6fZ-X";
         Config.SECRET_KEY = "eMZK5q9HI1EXe7KzNtsyKJZJPHEfh96XcHvDigyG";
         String bucketName = "zjdxlab410yy";
@@ -83,22 +83,22 @@ public class DeleteTrashResource {
     }
 
     @Test
-    public void deleteTrashResource(){
+    public void deleteTrashResource() {
         List<String> keyList = new ArrayList<String>();
 
-        for (Video video : videoDao.getAllVideo()){
+        for (Video video : videoDao.getAllVideo()) {
             keyList.add(video.getVideo_key());
         }
 
-        for (Education education : educationDao.getAllEducation()){
+        for (Education education : educationDao.getAllEducation()) {
             keyList.add(education.getVideo_key());
         }
 
-        for (Music music : musicDao.getAllMusic()){
+        for (Music music : musicDao.getAllMusic()) {
             keyList.add(music.getMusic_key() + ".mp3");
         }
 
-        for (Image image : imageDao.getAllImage()){
+        for (Image image : imageDao.getAllImage()) {
             keyList.add(image.getImage_key());
         }
 
@@ -107,8 +107,8 @@ public class DeleteTrashResource {
         }*/
 
         List<String> remoteList = getFileList();
-        for (String key : remoteList){
-            if (!keyList.contains(key)){
+        for (String key : remoteList) {
+            if (!keyList.contains(key)) {
                 deleteResource(key);
             }
         }

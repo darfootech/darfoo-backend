@@ -22,7 +22,7 @@ public class RedisPoolTests {
     JedisPool jedisPool;
 
     @Test
-    public void getVideoObject(){
+    public void getVideoObject() {
         Jedis jedis = null;
         try {
             int vid = 1;
@@ -34,9 +34,9 @@ public class RedisPoolTests {
             String imageurl = jedis.hget(key, "imageurl");
 
             System.out.println(title + " - " + authorname + " - " + videourl + " - " + imageurl);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             jedisPool.returnResource(jedis);
         }
     }

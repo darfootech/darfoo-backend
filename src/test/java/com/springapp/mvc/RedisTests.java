@@ -18,8 +18,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * 测试
- * @author http://blog.csdn.net/java2000_wl 
- * @version <b>1.0</b> 
+ *
+ * @author http://blog.csdn.net/java2000_wl
+ * @version <b>1.0</b>
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -62,7 +63,7 @@ public class RedisTests extends AbstractJUnit4SpringContextTests {
         for (User user : list) {
             userDao.add(user);
         }
-        System.out.println(System.currentTimeMillis() -  begin);
+        System.out.println(System.currentTimeMillis() - begin);
     }
 
     /**
@@ -134,12 +135,13 @@ public class RedisTests extends AbstractJUnit4SpringContextTests {
     }
 
     @Test
-    public void deleteDB(){
+    public void deleteDB() {
         System.out.println(userDao.deleteCurrentDB());
     }
 
     /**
      * 设置userDao
+     *
      * @param userDao the userDao to set
      */
     public void setUserDao(IUserDao userDao) {
@@ -147,7 +149,7 @@ public class RedisTests extends AbstractJUnit4SpringContextTests {
     }
 
     @Test
-    public void insertMap(){
+    public void insertMap() {
         HashMap<String, String> userMap = new HashMap<String, String>();
         userMap.put("name", "cleantha333");
         userMap.put("id", "3");
@@ -156,37 +158,37 @@ public class RedisTests extends AbstractJUnit4SpringContextTests {
     }
 
     @Test
-    public void getMap(){
+    public void getMap() {
         String key = "clea3";
         String field = "id";
         System.out.println(userDao.hget(key, field));
     }
 
     @Test
-    public void removeAllFromDB(){
+    public void removeAllFromDB() {
         System.out.println(redisClient.deleteCurrentDB());
     }
 
     @Test
-    public void testlpush(){
-        redisClient.lpush("cleantha", 3+"");
-        redisClient.lpush("cleantha", 6+"");
-        redisClient.lpush("cleantha", 9+"");
+    public void testlpush() {
+        redisClient.lpush("cleantha", 3 + "");
+        redisClient.lpush("cleantha", 6 + "");
+        redisClient.lpush("cleantha", 9 + "");
         //List<String> values = redisClient.lrange("cleantha", 0L, 2L);
         List<String> values = redisClient.lrange("cleantha", 0L, -1L);
-        for (String value : values){
+        for (String value : values) {
             System.out.println(value);
         }
     }
 
     @Test
-    public void testsadd(){
-        redisClient.sadd("ccc", 3+"");
-        redisClient.sadd("ccc", 6+"");
-        redisClient.sadd("ccc", 9+"");
+    public void testsadd() {
+        redisClient.sadd("ccc", 3 + "");
+        redisClient.sadd("ccc", 6 + "");
+        redisClient.sadd("ccc", 9 + "");
 
         Set<String> values = redisClient.smembers("ccc");
-        for (String value : values){
+        for (String value : values) {
             System.out.println(value);
         }
     }

@@ -33,7 +33,7 @@ public class RecommendTests {
     QiniuUtils qiniuUtils = new QiniuUtils();
 
     @Test
-    public void addRecommendList(){
+    public void addRecommendList() {
         String[] images = {"image4", "image5", "image6"};
         String[] videos = {"video4", "video5", "video6"};
         String imagefilename = "recommendimage.data";
@@ -49,11 +49,11 @@ public class RecommendTests {
             FileOutputStream videoos = new FileOutputStream(videofile);
             StringBuilder imagesb = new StringBuilder();
             StringBuilder videosb = new StringBuilder();
-            for (int i=0; i<images.length; i++){
+            for (int i = 0; i < images.length; i++) {
                 imagesb.append(images[i]).append("\n");
             }
 
-            for (int i=0; i<videos.length; i++){
+            for (int i = 0; i < videos.length; i++) {
                 videosb.append(videos[i]).append("\n");
             }
 
@@ -69,7 +69,7 @@ public class RecommendTests {
     }
 
     @Test
-    public void getRecommendList(){
+    public void getRecommendList() {
         String imagefilename = "recommendimage.data";
         String videofilename = "recommendvideo.data";
 
@@ -96,7 +96,7 @@ public class RecommendTests {
     }
 
     @Test
-    public void setRecommendList(){
+    public void setRecommendList() {
         List<Integer> videoids = new ArrayList<Integer>();
         videoids.add(41);
         videoids.add(40);
@@ -111,7 +111,7 @@ public class RecommendTests {
             FileOutputStream outputStream = new FileOutputStream(file);
             StringBuilder stringBuilder = new StringBuilder();
 
-            for (Integer videoid : videoids){
+            for (Integer videoid : videoids) {
                 stringBuilder.append(videoid.toString()).append("\n");
             }
 
@@ -125,7 +125,7 @@ public class RecommendTests {
     }
 
     @Test
-    public void getRecommendListTest(){
+    public void getRecommendListTest() {
         String flag = "video";
         String filename = RecommendManager.basepath + "recommend" + flag + ".data";
         FileUtils.createFile(filename);
@@ -150,7 +150,7 @@ public class RecommendTests {
     }
 
     @Test
-    public void updateRecommendList(){
+    public void updateRecommendList() {
         List<Integer> videoids = new ArrayList<Integer>();
         videoids.add(40);
         String flag = "video";
@@ -174,9 +174,9 @@ public class RecommendTests {
             e.printStackTrace();
         }
 
-        if (videoList.size() == 0){
+        if (videoList.size() == 0) {
             return;
-        }else{
+        } else {
             FileUtils.createFile(filename);
 
             File file = new File(filename);
@@ -185,8 +185,8 @@ public class RecommendTests {
                 FileOutputStream outputStream = new FileOutputStream(file);
                 StringBuilder stringBuilder = new StringBuilder();
 
-                for (Integer videoid : videoList){
-                    if (!videoids.contains(videoid)){
+                for (Integer videoid : videoList) {
+                    if (!videoids.contains(videoid)) {
                         stringBuilder.append(videoid.toString()).append("\n");
                     }
                 }
@@ -202,15 +202,15 @@ public class RecommendTests {
     }
 
     @Test
-    public void yaGetRecommendList(){
+    public void yaGetRecommendList() {
         List<Integer> recommendVideoids = ServiceUtils.getRecommendList("video");
         List<Video> recommendVideos = new ArrayList<Video>();
-        for (Integer id : recommendVideoids){
+        for (Integer id : recommendVideoids) {
             recommendVideos.add(videoDao.getVideoByVideoId(id));
         }
         List<Integer> recommendTutorialids = ServiceUtils.getRecommendList("tutorial");
         List<Education> recommendTutorials = new ArrayList<Education>();
-        for (Integer id : recommendTutorialids){
+        for (Integer id : recommendTutorialids) {
             recommendTutorials.add(educationDao.getEducationVideoById(id));
         }
 
@@ -221,7 +221,7 @@ public class RecommendTests {
             String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String video_title = video.getTitle();
             String author_name = "";
-            if (video.getAuthor() != null){
+            if (video.getAuthor() != null) {
                 author_name = video.getAuthor().getName();
             }
             String video_url = video.getVideo_key();
@@ -236,7 +236,7 @@ public class RecommendTests {
             String image_download_url = qiniuUtils.getQiniuResourceUrl(image_url);
             String video_title = video.getTitle();
             String author_name = "";
-            if (video.getAuthor() != null){
+            if (video.getAuthor() != null) {
                 author_name = video.getAuthor().getName();
             }
             String video_url = video.getVideo_key();

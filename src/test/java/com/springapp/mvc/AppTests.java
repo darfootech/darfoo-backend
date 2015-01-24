@@ -20,7 +20,7 @@ import com.darfoo.backend.model.DanceGroupImage;
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class AppTests {
     @Test
-    public void testMap2Json(){
+    public void testMap2Json() {
         ObjectMapper mapper = new ObjectMapper();
         String json = "";
 
@@ -32,13 +32,13 @@ public class AppTests {
         try {
             json = mapper.writeValueAsString(map);
             System.out.println(json);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    public void testsplit(){
+    public void testsplit() {
         String connectmusic = "呵呵呵--10";
         System.out.println(connectmusic.split("-")[2]);
     }

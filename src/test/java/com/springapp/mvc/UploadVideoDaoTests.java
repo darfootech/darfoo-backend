@@ -23,13 +23,13 @@ public class UploadVideoDaoTests {
     UploadVideoDao uploadVideoDao;
 
     @Test
-    public void isExistVideo(){
+    public void isExistVideo() {
         String videokey = "cleantha";
         System.out.println("is exists -> " + uploadVideoDao.isExistVideo(videokey));
     }
 
     @Test
-    public void insertUploadVideo(){
+    public void insertUploadVideo() {
         int userid = 3;
         int videoid = -1;
         String videokey = "cleantha33";
@@ -43,7 +43,7 @@ public class UploadVideoDaoTests {
     }
 
     @Test
-    public void updateRealVideoId(){
+    public void updateRealVideoId() {
         int id = 1;
         int videoid = 3;
         int result = uploadVideoDao.updateRealVideoid(id, videoid);
@@ -51,31 +51,31 @@ public class UploadVideoDaoTests {
     }
 
     @Test
-    public void getUploadVideoById(){
+    public void getUploadVideoById() {
         int id = 1;
         UploadVideo video = uploadVideoDao.getUploadVideoById(id);
         System.out.println(video.getVideo_key());
     }
 
     @Test
-    public void getAllVideo(){
+    public void getAllVideo() {
         List<UploadVideo> videos = uploadVideoDao.getAllVideo();
-        for (UploadVideo video : videos){
+        for (UploadVideo video : videos) {
             System.out.println(video.getVideo_key());
         }
     }
 
     @Test
-    public void getVideosByUserId(){
+    public void getVideosByUserId() {
         int userid = 3;
         List<UploadVideo> videos = uploadVideoDao.getVideosByUserId(userid);
-        for (UploadVideo video : videos){
+        for (UploadVideo video : videos) {
             System.out.println(video.getVideo_key());
         }
     }
 
     @Test
-    public void deleteVideoById(){
+    public void deleteVideoById() {
         int id = 4;
         int result = uploadVideoDao.deleteVideoById(id);
         Assert.assertEquals(CRUDEvent.DELETE_SUCCESS, result);

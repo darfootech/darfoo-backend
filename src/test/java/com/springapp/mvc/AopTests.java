@@ -10,13 +10,14 @@ import com.darfoo.backend.dao.VideoDao;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({
-		"file:src/main/webapp/WEB-INF/springmvc-hibernate.xml",
-		"file:src/main/webapp/WEB-INF/springmvc-aop.xml"})
+        "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml",
+        "file:src/main/webapp/WEB-INF/springmvc-aop.xml"})
 public class AopTests {
-	@Autowired
-	VideoDao videoDao;
-	@Test
-	public void test(){
-		System.out.println(videoDao.getAllVideo());
-	}
+    @Autowired
+    VideoDao videoDao;
+
+    @Test
+    public void test() {
+        System.out.println(videoDao.getAllVideo());
+    }
 }
