@@ -8,15 +8,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="dancegroupimage")
+@Table(name = "dancegroupimage")
 public class DanceGroupImage {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-	@Column(name="IMAGE_KEY",unique=true,nullable=false,columnDefinition="varchar(255) not null")
+    @Column(name = "IMAGE_KEY", unique = true, nullable = false, columnDefinition = "varchar(255) not null")
     String image_key;
-	
-	public String getImage_key() {
+
+    public String getImage_key() {
         return image_key;
     }
 
@@ -27,7 +27,8 @@ public class DanceGroupImage {
     public Integer getId() {
         return id;
     }
-	public void setId(Integer id) {
-		this.id = id;
-	}
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

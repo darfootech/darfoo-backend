@@ -22,21 +22,21 @@ import org.hibernate.annotations.CascadeType;
  * Created by zjh on 14-11-16.
  */
 @Entity
-@Table(name="videocategory")
+@Table(name = "videocategory")
 public class VideoCategory implements Serializable {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-	@Column(name="TITLE",unique=true,nullable=false,columnDefinition="varchar(255) not null")
+    @Column(name = "TITLE", unique = true, nullable = false, columnDefinition = "varchar(255) not null")
     String title;
-	@Column(name="DESCRIPTION",nullable=false,columnDefinition="varchar(255) not null")
+    @Column(name = "DESCRIPTION", nullable = false, columnDefinition = "varchar(255) not null")
     String description;
-	//建立与video表的多对多关系
-	@ManyToMany(mappedBy="categories",targetEntity=Video.class)
+    //建立与video表的多对多关系
+    @ManyToMany(mappedBy = "categories", targetEntity = Video.class)
 //	@Cascade(value={CascadeType.DELETE,CascadeType.REMOVE})
 //	@JoinTable(name="video_category",joinColumns={@JoinColumn(name="category_id",referencedColumnName="id",nullable=false,columnDefinition="int(11) not null")},
 //	inverseJoinColumns={@JoinColumn(name="video_id",nullable=false,columnDefinition="int(11) not null")})
-    Set<Video>  videos = new HashSet<Video>();
+            Set<Video> videos = new HashSet<Video>();
 
     public VideoCategory() {
     }
@@ -65,13 +65,13 @@ public class VideoCategory implements Serializable {
         this.description = description;
     }
 
-	public Set<Video> getVideos() {
-		return videos;
-	}
+    public Set<Video> getVideos() {
+        return videos;
+    }
 
-	public void setVideos(Set<Video> videos) {
-		this.videos = videos;
-	}
+    public void setVideos(Set<Video> videos) {
+        this.videos = videos;
+    }
 
 
 }
