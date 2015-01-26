@@ -8,8 +8,8 @@ env.roledefs = {
 backend_project_dir = '/home/darfoo-backend'
 war_dir = '/usr/local/darfoo/webapps/darfoobackend'
 tomcat_dir = '/usr/local/darfoo/apache-tomcat-7.0.47/bin'
-tomcat_one_dir = '/usr/local/darfoo/tomcat_bak1/bin/'
-tomcat_two_dir = '/usr/local/darfoo/tomcat_bak2/bin/'
+tomcat_one_dir = '/usr/local/darfoo/tomcat_bak1/bin'
+tomcat_two_dir = '/usr/local/darfoo/tomcat_bak2/bin'
 
 @roles('backendserver')
 def shutdownTomcats():
@@ -42,12 +42,14 @@ def updateCodeAndRebuild():
 @roles('backendserver')
 def deploy():
     with cd(tomcat_dir):
-        run('./startup.sh')
+        run('set -m; ./startup.sh')
     with cd(tomcat_one_dir):
-        run('./startup.sh')
+        run('set -m; ./startup.sh')
     with cd(tomcat_two_dir):
-        run('./startup.sh')
+        run('set -m; ./startup.sh')
 
+    run('service nginx restart')
+    
     print green("deploy success")
 
 def backend():

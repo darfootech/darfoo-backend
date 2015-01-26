@@ -256,3 +256,9 @@ redis-server
 ```
 ./product.sh
 ```
+
+* 使用fabric自动部署
+
+```
+fab -f autodeploy.py backend
+```
