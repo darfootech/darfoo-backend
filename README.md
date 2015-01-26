@@ -259,7 +259,4 @@ redis-server
 
 * 使用fabric自动部署
 
-```
-#fab -f autodeploy.py backend
-./deploy.sh
-```
+使用deploy项目中的脚本来自动化部署
