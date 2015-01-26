@@ -17,3 +17,5 @@ uploadresources/
 src/main/resources/redis.properties
 *.data
 *.conf
+*.pyc
+*.pyo
