@@ -271,7 +271,7 @@ public class MusicDaoTests {
     }
 
     @Test
-    public void getTutorialsByCategoriesByPage() {
+    public void getMusicsByCategoriesByPage() {
         long start = System.currentTimeMillis();
         String[] categories = {};//无条件限制
         //String[] categories = {"四拍","情歌风","D"}; //满足所有条件
@@ -284,6 +284,25 @@ public class MusicDaoTests {
         }
         System.out.println("最终满足的music数量>>>>>>>>>>>>>>>>>>>>>" + musics.size());
         System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
+    }
+
+    @Test
+    public void isDuplicateWithPageQuery() {
+        String[] categories = {};//无条件限制
+        int pagecount = (int) musicDao.getPageCountByCategories(categories);
+        Set<Integer> idSet = new HashSet<Integer>();
+        for (int i = 0; i < pagecount; i++) {
+            List<Music> musics = musicDao.getMusicsByCategoriesByPage(categories, i+1);
+            for (Music music : musics) {
+                System.out.println(music.getId());
+                idSet.add(music.getId());
+                System.out.println("——————————————————————————————————————");
+            }
+            System.out.println("最终满足的music数量>>>>>>>>>>>>>>>>>>>>>" + musics.size());
+        }
+
+        System.out.println("music count -> " + musicDao.getAllMusic().size());
+        System.out.println("music count -> " + idSet.size());
     }
 
     @Test

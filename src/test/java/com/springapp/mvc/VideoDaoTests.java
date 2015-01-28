@@ -244,7 +244,7 @@ public class VideoDaoTests {
      * *
      */
     @Test
-    public void insertorUpdateMusic() {
+    public void insertOrUpdateMusic() {
         Integer vId = 1;
         Integer mId = 6;
         System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId)));

@@ -310,6 +310,23 @@ public class EducationDaoTests {
     }
 
     @Test
+    public void isDuplicateWithPageQuery(){
+        String[] categories = {};//无条件限制
+        int pagecout = (int) educationDao.getPageCountByCategories(categories);
+        Set<Integer> idSet = new HashSet<Integer>();
+        for (int i=0; i<pagecout; i++){
+            List<Education> videos = educationDao.getTutorialsByCategoriesByPage(categories, i + 1);
+            for (Education video : videos) {
+                System.out.println(video.getId());
+                idSet.add(video.getId());
+                System.out.println("——————————————————————————————————————");
+            }
+        }
+        System.out.println("education count -> " + educationDao.getAllEducation().size());
+        System.out.println("education count -> " + idSet.size());
+    }
+
+    @Test
     public void getAllTutorialsWithoutId() {
         int vid = 1;
         List<Education> allvideos = educationDao.getAllTutorialsWithoutId(vid);
