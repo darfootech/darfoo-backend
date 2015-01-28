@@ -10,6 +10,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -247,26 +248,39 @@ public class AuthorDao {
 
     /*分页机制*/
     public long getPageCount() {
-        List<Author> l_author = new ArrayList<Author>();
+        long result = 0;
         try {
             Session session = sf.getCurrentSession();
-            String sql = "select * from author order by id desc";
-            l_author = session.createSQLQuery(sql).addEntity(Author.class).list();
-        } catch (Exception e) {
-            e.printStackTrace();
+            Criteria criteria = session.createCriteria(Author.class);
+
+            // 获取根据条件分页查询的总行数
+            result = (Long) criteria.setProjection(
+                    Projections.rowCount()).uniqueResult();
+            criteria.setProjection(null);
+
+            return (result / pageSize) + 1;
+        } catch (RuntimeException re) {
+            re.printStackTrace();
+            return result;
         }
-        return l_author.size();
     }
 
     public List<Object[]> getAuthorOrderByVideoCountDescByPage(int pageNo) {
         List<Object[]> result = new ArrayList<Object[]>();
         try {
             Session session = sf.getCurrentSession();
+            //String sql = "select vv.count + tt.count as cnt, vv.id as aid from (select IFNULL(v.cnt, 0) as count, author.id as id from author left outer join (select count(*) as cnt, author_id as mid from video group by author_id)v on author.id = v.mid order by v.cnt desc)vv left outer join (select IFNULL(t.cnt, 0) as count, author.id as id from author left outer join (select count(*) as cnt, author_id as mid from education group by author_id)t on author.id = t.mid order by t.cnt desc)tt on vv.id = tt.id order by cnt desc limit " + pageSize + " offset " + (pageNo - 1) * pageSize;
             String sql = "select vv.count + tt.count as cnt, vv.id as aid from (select IFNULL(v.cnt, 0) as count, author.id as id from author left outer join (select count(*) as cnt, author_id as mid from video group by author_id)v on author.id = v.mid order by v.cnt desc)vv left outer join (select IFNULL(t.cnt, 0) as count, author.id as id from author left outer join (select count(*) as cnt, author_id as mid from education group by author_id)t on author.id = t.mid order by t.cnt desc)tt on vv.id = tt.id order by cnt desc";
             SQLQuery query = session.createSQLQuery(sql);
-            query.setFirstResult((pageNo - 1) * pageSize);
-            query.setMaxResults(pageSize);
-            result = (List<Object[]>) query.list();
+            //query.setFirstResult((pageNo - 1) * pageSize);
+            //query.setMaxResults(pageSize);
+            if (pageNo < getPageCount()) {
+                result = ((List<Object[]>) query.list()).subList((pageNo - 1) * pageSize, pageNo * pageSize);
+            } else if (pageNo == getPageCount()) {
+                result = ((List<Object[]>) query.list()).subList((pageNo - 1) * pageSize, query.list().size());
+            } else {
+                System.out.println("out of bound");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

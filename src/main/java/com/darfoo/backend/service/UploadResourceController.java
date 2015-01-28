@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,21 +98,27 @@ public class UploadResourceController {
      */
     @RequestMapping(value = "finishcallbackna", method = RequestMethod.POST)
     public @ResponseBody UploadStatus uploadFinishCallbackWithoutAuth(HttpServletRequest request){
-        String videokey = request.getParameter("videokey");
-        String imagekey = request.getParameter("imagekey");
-        String macaddr = videokey.split("\\.")[0].split("-")[2];
-        String videotitle = videokey.split("\\.")[0].split("-")[0];
-        String videotype = videokey.split("\\.")[1];
+        try {
+            request.setCharacterEncoding("UTF-8");
+            String videokey = request.getParameter("videokey");
+            String imagekey = request.getParameter("imagekey");
+            String macaddr = videokey.split("\\.")[0].split("-")[2];
+            String videotitle = videokey.split("\\.")[0].split("-")[0];
+            String videotype = videokey.split("\\.")[1];
 
-        System.out.println("videokey -> " + videokey);
-        System.out.println("macaddr -> " + macaddr);
-        System.out.println("videotitle -> " + videotitle);
+            System.out.println("videokey -> " + videokey);
+            System.out.println("macaddr -> " + macaddr);
+            System.out.println("videotitle -> " + videotitle);
 
-        int status = uploadNoAuthVideoDao.insertUploadVideo(new UploadNoAuthVideo(videokey, imagekey, macaddr, videotitle, videotype, -1));
+            int status = uploadNoAuthVideoDao.insertUploadVideo(new UploadNoAuthVideo(videokey, imagekey, macaddr, videotitle, videotype, -1));
 
-        if (status == CRUDEvent.INSERT_SUCCESS){
-            return new UploadStatus("ok");
-        }else{
+            if (status == CRUDEvent.INSERT_SUCCESS){
+                return new UploadStatus("ok");
+            }else{
+                return new UploadStatus("error");
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
             return new UploadStatus("error");
         }
     }

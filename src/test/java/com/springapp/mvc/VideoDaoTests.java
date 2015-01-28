@@ -413,6 +413,23 @@ public class VideoDaoTests {
     }
 
     @Test
+    public void isDuplicateWithPageQuery() {
+        String[] categories = {};//满足单个条件
+        int pagecount = (int) videoDao.getPageCountByCategories(categories);
+        Set<Integer> idSet = new HashSet<Integer>();
+        for (int i = 0; i < pagecount; i++) {
+            List<Video> videos = videoDao.getVideosByCategoriesByPage(categories, i + 1);
+            for (Video video : videos) {
+                System.out.println(video.getId());
+                idSet.add(video.getId());
+            }
+        }
+
+        System.out.println("video count -> " + videoDao.getAllVideo().size());
+        System.out.println("video count -> " + idSet.size());
+    }
+
+    @Test
     public void getAllVideosWithoutId() {
         int vid = 1;
         List<Video> allvideos = videoDao.getAllVideosWithoutId(vid);

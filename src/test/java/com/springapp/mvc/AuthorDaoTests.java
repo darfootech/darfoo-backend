@@ -1,9 +1,7 @@
 package com.springapp.mvc;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.model.*;
@@ -214,13 +212,50 @@ public class AuthorDaoTests {
 
     @Test
     public void getAuthorOrderByVideoCountDescByPage() {
-        List<Object[]> result = authorDao.getAuthorOrderByVideoCountDescByPage(1);
+        List<Object[]> result = authorDao.getAuthorOrderByVideoCountDescByPage(2);
         for (Object[] rows : result) {
             System.out.println((Integer) rows[1] + " -> " + ((BigInteger) rows[0]).intValue());
             Author author = authorDao.getAuthor((Integer) rows[1]);
             System.out.println(author.getName());
         }
         System.out.println("result size -> " + result.size());
+    }
+
+    @Test
+    public void getAllPages() {
+        System.out.println("pagecount -> " + authorDao.getPageCount());
+    }
+
+    @Test
+    public void sublistTest(){
+        List<Integer> test = new ArrayList<Integer>();
+        test.add(1);
+        test.add(2);
+        test.add(3);
+
+        List<Integer> subtest = test.subList(0, 1);
+        for (Integer id : subtest){
+            System.out.println(id);
+        }
+    }
+
+    @Test
+    public void isDuplicateWithPageQuery() {
+        int pagesize = (int) authorDao.getPageCount();
+        Set<Integer> idSet = new HashSet<Integer>();
+        for (int i = 0; i < pagesize; i++) {
+            List<Object[]> result = authorDao.getAuthorOrderByVideoCountDescByPage(i + 1);
+            for (Object[] rows : result) {
+                System.out.println((Integer) rows[1] + " -> " + ((BigInteger) rows[0]).intValue());
+                Author author = authorDao.getAuthor((Integer) rows[1]);
+                System.out.println(author.getName());
+                idSet.add((Integer) rows[1]);
+            }
+            System.out.println("result size -> " + result.size());
+        }
+
+        System.out.println("author count -> " + authorDao.getAuthorOrderByVideoCountDesc().size());
+        System.out.println("author count -> " + idSet.size());
     }
 
     @Test
