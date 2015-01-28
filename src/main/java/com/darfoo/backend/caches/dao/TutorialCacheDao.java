@@ -27,8 +27,8 @@ public class TutorialCacheDao extends AbstractBaseRedisDao<String, Education> {
         if (!commonRedisClient.exists(key)){
             String title = tutorial.getTitle();
             HashMap<String, String> videoMap = new HashMap<String, String>();
-            String video_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getVideo_key());
-            String image_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getImage().getImage_key());
+            String video_download_url = qiniuUtils.getQiniuResourceUrlByType(tutorial.getVideo_key(), "video");
+            String image_download_url = qiniuUtils.getQiniuResourceUrlByType(tutorial.getImage().getImage_key(), "image");
             String authorname = tutorial.getAuthor().getName();
             Long timestamp = tutorial.getUpdate_timestamp() / 1000;
             videoMap.put("id", id.toString());
@@ -51,8 +51,8 @@ public class TutorialCacheDao extends AbstractBaseRedisDao<String, Education> {
         if (!commonRedisClient.exists(key)){
             String title = tutorial.getTitle();
             HashMap<String, String> videoMap = new HashMap<String, String>();
-            String video_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getVideo_key());
-            String image_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getVideo_key() + "@@recommendtutorial.png");
+            String video_download_url = qiniuUtils.getQiniuResourceUrlByType(tutorial.getVideo_key(), "video");
+            String image_download_url = qiniuUtils.getQiniuResourceUrlByType(tutorial.getVideo_key() + "@@recommendtutorial.png", "image");
             String authorname = tutorial.getAuthor().getName();
             Long timestamp = tutorial.getUpdate_timestamp() / 1000;
             videoMap.put("id", id.toString());

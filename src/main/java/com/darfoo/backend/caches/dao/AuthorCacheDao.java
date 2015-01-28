@@ -30,7 +30,7 @@ public class AuthorCacheDao  extends AbstractBaseRedisDao<String, Author> {
             HashMap<String, String> videoMap = new HashMap<String, String>();
             String image_download_url = "";
             if (author.getImage() != null){
-                image_download_url = qiniuUtils.getQiniuResourceUrl(author.getImage().getImage_key());
+                image_download_url = qiniuUtils.getQiniuResourceUrlByType(author.getImage().getImage_key(), "image");
             }
             String description = author.getDescription();
             videoMap.put("id", id.toString());

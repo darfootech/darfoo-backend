@@ -31,7 +31,7 @@ public class QiniuUtils {
         this.mimeType = null;
     }
 
-    public String getToken(){
+    public String getToken() {
         PutPolicy policy = new PutPolicy(bucketName);
         Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
         try {
@@ -43,6 +43,34 @@ public class QiniuUtils {
         } catch (JSONException e) {
             e.printStackTrace();
             return "error";
+        }
+    }
+
+    //key就是七牛云上的文件名字
+    //根据type来判断资源链接是否需要加密 暂时图片资源链接不需要加密
+    public String getQiniuResourceUrlByType(String key, String type) {
+        //String domain = "zjdxlab410yy.qiniudn.com";
+        String domain = "7qnarb.com1.z0.glb.clouddn.com";
+        Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
+        try {
+            //domain在空间设置里可以看到，每一个bucket都对应有一个域名
+            //所谓的key其实就是上传的文件名字
+            String baseUrl = URLUtils.makeBaseUrl(domain, key);
+            GetPolicy getPolicy = new GetPolicy();
+            //过期时间为一周
+            getPolicy.expires = 7 * 24 * 3600;
+            String downloadUrl = getPolicy.makeRequest(baseUrl, mac);
+            System.out.println(downloadUrl);
+            if (type.equals("video") || type.equals("music")) {
+                return CryptUtils.encryptQiniuUrl(downloadUrl);
+            } else if (type.equals("image")) {
+                return downloadUrl;
+            } else {
+                return downloadUrl;
+            }
+        } catch (Exception e) {
+            //return "generate download url error";
+            return e.getMessage();
         }
     }
 
@@ -60,8 +88,7 @@ public class QiniuUtils {
             getPolicy.expires = 7 * 24 * 3600;
             String downloadUrl = getPolicy.makeRequest(baseUrl, mac);
             System.out.println(downloadUrl);
-            //return downloadUrl;
-            return CryptUtils.encryptQiniuUrl(downloadUrl);
+            return downloadUrl;
         } catch (Exception e) {
             //return "generate download url error";
             return e.getMessage();
@@ -107,7 +134,7 @@ public class QiniuUtils {
     }
 
     //尝试使用断点续传和并行分块上传
-    public String uploadResourceStream(String fileLocation, String fileName){
+    public String uploadResourceStream(String fileLocation, String fileName) {
         System.out.println("start to upload resource to qiniu server");
         Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
         PutPolicy putPolicy = new PutPolicy(this.bucketName);
@@ -118,12 +145,12 @@ public class QiniuUtils {
             FileInputStream fis = new FileInputStream(new File(fileLocation));
             PutRet ret = ResumeableIoApi.put(fis, upToken, key, this.mimeType);
             return ret.getStatusCode() + "";
-        }catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
     }
 
-    public void deleteResource(String key){
+    public void deleteResource(String key) {
         Config.ACCESS_KEY = "bnMvAStYBsL5AjYM3UXbpGalrectRZZF88Y6fZ-X";
         Config.SECRET_KEY = "eMZK5q9HI1EXe7KzNtsyKJZJPHEfh96XcHvDigyG";
         String bucketName = "zjdxlab410yy";
