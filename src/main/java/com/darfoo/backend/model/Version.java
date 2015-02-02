@@ -15,6 +15,10 @@ public class Version implements Serializable {
     @Column(name = "version", nullable = false, columnDefinition = "varchar(255) not null")
     String version;
 
+    //分为debug和release两种模式 debug是一版launcher上线之后先测试更新的接口 不影响正常用户 等测试成功上传release的launcher供正常用户下载更新
+    @Column(name = "type", nullable = false, columnDefinition = "varchar() not null")
+    String type;
+
     public Integer getId() {
         return id;
     }
@@ -29,5 +33,13 @@ public class Version implements Serializable {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

@@ -21,8 +21,8 @@ public class VersionDao {
         try {
             Session session = sessionFactory.getCurrentSession();
             String sql = "select * from version where version=:version";
-            Version author = (Version) session.createSQLQuery(sql).addEntity(Version.class).setString("version", version).uniqueResult();
-            isExist = (author == null) ? false : true;
+            Version v = (Version) session.createSQLQuery(sql).addEntity(Version.class).setString("version", version).uniqueResult();
+            isExist = (v == null) ? false : true;
         } catch (Exception e) {
             e.printStackTrace();
         }

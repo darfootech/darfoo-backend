@@ -20,9 +20,11 @@ public class VersionDaoTests {
 
     @Test
     public void insertNewVersion() {
-        String version = "1.0.9";
+        String version = "9";
+        String type = "debug";
         Version v = new Version();
         v.setVersion(version);
+        v.setType(type);
         versionDao.insertVersion(v);
     }
 
@@ -35,5 +37,14 @@ public class VersionDaoTests {
         } catch (NullPointerException e) {
             System.out.println("no latest version already exists");
         }
+    }
+
+    @Test
+    public void getLatestReleaseVersion() {
+
+    }
+
+    @Test
+    public void getLatestDebugVersion() {
     }
 }
