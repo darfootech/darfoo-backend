@@ -1,0 +1,6 @@
+{
+    "src":"/usr/local/darfoo/apache-tomcat-7.0.47/bin/uploadresources",
+    "dest":"qiniu:access_key=bnMvAStYBsL5AjYM3UXbpGalrectRZZF88Y6fZ-X&secret_key=eMZK5q9HI1EXe7KzNtsyKJZJPHEfh96XcHvDigyG&bucket=zjdxlab410yy",
+    "deletable":0,
+    "debug_level":1
+}
