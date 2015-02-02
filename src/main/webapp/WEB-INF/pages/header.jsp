@@ -80,7 +80,8 @@
                         <li><a href="/darfoobackend/rest/admin/recommend/video">首页推荐舞蹈欣赏</a></li>
                         <li><a href="/darfoobackend/rest/admin/recommend/tutorial">首页推荐舞蹈教程</a></li>
                         <li><a href="/darfoobackend/rest/admin/recommend/updateimage/all">查看修改推荐舞蹈视频图片</a></li>
-                        <li><a href="/darfoobackend/rest/admin/version/new">上传新版本launcher</a></li>
+                        <li><a href="/darfoobackend/rest/admin/version/release/new">上传新发布版本launcher</a></li>
+                        <li><a href="/darfoobackend/rest/admin/version/debug/new">上传新调试版本launcher</a></li>
                         <li><a href="/darfoobackend/rest/admin/runscript/upload">同步视频</a></li>
                         <li><a href="/darfoobackend/rest/admin/runscript/resourcevolumn">查看已有视频容量</a></li>
                         <li><a href="/darfoobackend/rest/admin/verifyvideo/all">审核上传视频</a></li>

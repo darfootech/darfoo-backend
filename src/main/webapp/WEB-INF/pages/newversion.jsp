@@ -30,7 +30,7 @@
     <h1>上传新版launcher文件</h1>
     <div class="row">
         <div class="col-md-12">
-            <form role="form" action="/darfoobackend/rest/admin/version/create" method="post" id="uploadlauncher" name="uploadlauncher" enctype="multipart/form-data">
+            <form role="form" action="/darfoobackend/rest/admin/version/${type}/create" method="post" id="uploadlauncher" name="uploadlauncher" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="version">之前的版本为${latestversion}</label>
                     <input type="text" class="form-control" name="newversion" id="version" placeholder="请输入launcher的最新版本号,版本号必须为阿拉伯数字并且比之前的版本号大">
