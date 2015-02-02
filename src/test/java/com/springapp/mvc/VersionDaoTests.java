@@ -21,18 +21,17 @@ public class VersionDaoTests {
     @Test
     public void insertNewVersion() {
         String version = "9";
-        String type = "debug";
+        String type = "release";
         Version v = new Version();
         v.setVersion(version);
         v.setType(type);
         versionDao.insertVersion(v);
     }
 
-
     @Test
-    public void getLatestVersion() {
+    public void getLatestReleaseVersion() {
         try {
-            Version latestVersion = versionDao.getLatestVersion();
+            Version latestVersion = versionDao.getLatestReleaseVersion();
             System.out.println("latest version -> " + latestVersion.getVersion());
         } catch (NullPointerException e) {
             System.out.println("no latest version already exists");
@@ -40,11 +39,12 @@ public class VersionDaoTests {
     }
 
     @Test
-    public void getLatestReleaseVersion() {
-
-    }
-
-    @Test
     public void getLatestDebugVersion() {
+        try {
+            Version latestVersion = versionDao.getLatestDebugVersion();
+            System.out.println("latest version -> " + latestVersion.getVersion());
+        } catch (NullPointerException e) {
+            System.out.println("no latest version already exists");
+        }
     }
 }
