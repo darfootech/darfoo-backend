@@ -51,7 +51,7 @@
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
             </button>
-            <a class="navbar-brand" href="/darfoobackend/rest/resources/video/new/">大福资源上传后台</a>
+            <a class="navbar-brand" href="/darfoobackend/rest/resources/video/new/">33</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
