@@ -20,6 +20,10 @@ in `src/main/resources/`
 * cp redis.properties.example redis.properties
 * cp recommend.conf.example recommend.conf
 
+in root directory
+
+cp admin.properties.example -> admin.properties
+
 ## 批量上传视频和音频文件
 
 由于服务器带宽原因，上传大文件非常慢，如果让人肉上传人员一次提交信息一次上传一个视频单次上传会让人疯掉，所以就创建一个视频，教程，伴奏的时候，图片直接上传七牛，音频，视频都先保存在服务器上，然后每一天上传完之后由后台人员来用七牛的命令行上传工具批量上传一天上传的音频视频文件
