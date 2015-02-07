@@ -1,5 +1,6 @@
 package com.darfoo.backend.Interceptors;
 
+import com.darfoo.backend.utils.DashboardUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,11 +23,15 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             return true;
         }else if(uri.endsWith("/login/") || uri.endsWith("/login")) {
             // 进入登录页面，判断session中是否有key，有的话重定向到首页，否则进入登录界面
-            System.out.println("在请求登陆页面");
-            if(request.getSession() != null && request.getSession().getAttribute("loginUser") != null) {
-                response.sendRedirect(request.getContextPath() + "/rest/resources/video/new");
-            } else {
-                return true;
+            if (DashboardUtils.isDashboardOpened()){
+                System.out.println("在请求登陆页面");
+                if(request.getSession() != null && request.getSession().getAttribute("loginUser") != null) {
+                    response.sendRedirect(request.getContextPath() + "/rest/resources/video/new");
+                } else {
+                    return true;
+                }
+            }else {
+                return false;
             }
         }else if (uri.contains("/resources/") && (uri.contains("new") || uri.contains("create"))){
             //上传资源需要一个低权限的用户
