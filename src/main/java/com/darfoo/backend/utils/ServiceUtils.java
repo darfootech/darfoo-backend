@@ -46,7 +46,7 @@ public class ServiceUtils {
 
     //=> 小文件直接上传七牛服务器
     public static String uploadSmallResource(CommonsMultipartFile file, String fileName) throws IOException {
-        String dirName = new Date().getTime() + file.getOriginalFilename() + "/";
+        String dirName = "uploadresources/" + new Date().getTime() + file.getOriginalFilename() + "/";
 
         long startTime=System.currentTimeMillis();
         //System.out.println("fileName："+file.getOriginalFilename());
