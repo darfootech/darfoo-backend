@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.beans.Expression;
+import java.util.List;
 
 /**
  * Created by zjh on 15-1-6.
@@ -43,7 +44,10 @@ public class VersionDao {
             Criteria criteria = session.createCriteria(Version.class);
             criteria.add(Restrictions.eq("type", "release"));
             criteria.addOrder(Order.desc("id"));
-            version = (Version) criteria.uniqueResult();
+            List result = criteria.list();
+            if (result.size() > 0){
+                version = (Version) criteria.list().get(0);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -57,7 +61,10 @@ public class VersionDao {
             Criteria criteria = session.createCriteria(Version.class);
             criteria.add(Restrictions.eq("type", "debug"));
             criteria.addOrder(Order.desc("id"));
-            version = (Version) criteria.uniqueResult();
+            List result = criteria.list();
+            if (result.size() > 0){
+                version = (Version) criteria.list().get(0);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
