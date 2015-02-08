@@ -86,7 +86,7 @@ public class CacheController {
     public
     @ResponseBody
     List<CacheSingleVideo> cacheRecmmendVideos() {
-        List<Integer> recommendVideoids = ServiceUtils.getRecommendList("video");
+        /*List<Integer> recommendVideoids = ServiceUtils.getRecommendList("video");
         List<Video> recommendVideos = new ArrayList<Video>();
         for (Integer id : recommendVideoids){
             recommendVideos.add(videoDao.getVideoByVideoId(id));
@@ -95,7 +95,10 @@ public class CacheController {
         List<Education> recommendTutorials = new ArrayList<Education>();
         for (Integer id : recommendTutorialids){
             recommendTutorials.add(educationDao.getEducationVideoById(id));
-        }
+        }*/
+
+        List<Video> recommendVideos = videoDao.getRecommendVideos();
+        List<Education> recommendTutorials = educationDao.getRecommendTutorials();
 
         for (Video video : recommendVideos) {
             int vid = video.getId();
