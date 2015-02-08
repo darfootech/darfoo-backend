@@ -343,4 +343,22 @@ public class EducationDaoTests {
             System.out.println(video.getTitle() + "-" + video.getId());
         }
     }
+
+    @Test
+    public void doRecommendTutorial() {
+        educationDao.doRecommendTutorial(1);
+    }
+
+    @Test
+    public void unRecommendTutorial() {
+        educationDao.unRecommendTutorial(1);
+    }
+
+    @Test
+    public void yaGetRecommendTutorials() {
+        List<Education> tutorials = educationDao.getRecommendTutorials();
+        for (Education tutorial : tutorials) {
+            System.out.println(tutorial.getTitle());
+        }
+    }
 }

@@ -767,6 +767,7 @@ public class EducationDao {
      * 获取原则 ->
      * 从相同明星舞队中随机选取5个
      * 如果相同明星舞队中教程个数不足则从所有教程中随机选出对应个数来填充
+     *
      * @param tutorialid
      * @return
      */
@@ -791,5 +792,56 @@ public class EducationDao {
             result = sameAuthorTutorials;
         }
         return result;
+    }
+
+    /*推荐舞蹈教学视频*/
+    public int doRecommendTutorial(Integer id) {
+        int res = 0;
+        try {
+            Session session = sf.getCurrentSession();
+            Education tutorial = (Education) session.get(Education.class, id);
+            if (tutorial == null) {
+                res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
+            } else {
+                tutorial.setRecommend(1);
+                res = CRUDEvent.UPDATE_SUCCESS;
+            }
+        } catch (Exception e) {
+            res = CRUDEvent.UPDATE_FAIL;
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    public int unRecommendTutorial(Integer id) {
+        int res = 0;
+        try {
+            Session session = sf.getCurrentSession();
+            Education tutorial = (Education) session.get(Education.class, id);
+            if (tutorial == null) {
+                res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
+            } else {
+                tutorial.setRecommend(0);
+                res = CRUDEvent.UPDATE_SUCCESS;
+            }
+        } catch (Exception e) {
+            res = CRUDEvent.UPDATE_FAIL;
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    public List<Education> getRecommendTutorials() {
+        List<Education> videos = null;
+        try {
+            Session session = sf.getCurrentSession();
+            Criteria c = session.createCriteria(Education.class);
+            c.setReadOnly(true);
+            c.add(Restrictions.eq("recommend", 1));
+            videos = c.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return videos;
     }
 }

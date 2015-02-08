@@ -932,6 +932,7 @@ public class VideoDao {
      * 获取原则 ->
      * 从相同明星舞队中随机选取5个
      * 如果相同明星舞队中视频个数不足则从所有视频中随机选出对应个数来填充
+     *
      * @param videoid
      * @return
      */
@@ -1008,5 +1009,4 @@ public class VideoDao {
         }
         return videos;
     }
-
 }

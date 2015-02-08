@@ -66,6 +66,17 @@ public class Education implements Serializable {
     @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
     Long hottest;
 
+    @Column(name = "RECOMMEND", nullable = true, updatable = true, columnDefinition = "int default 0")
+    Integer recommend;
+
+    public Integer getRecommend() {
+        return recommend;
+    }
+
+    public void setRecommend(Integer recommend) {
+        this.recommend = recommend;
+    }
+
     public Music getMusic() {
         return music;
     }
