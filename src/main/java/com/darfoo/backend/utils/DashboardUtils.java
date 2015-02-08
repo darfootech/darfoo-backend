@@ -13,7 +13,7 @@ public class DashboardUtils {
         Properties properties = new Properties();
         InputStream inputStream = null;
         try {
-            inputStream = new FileInputStream(propname);
+            inputStream = DashboardUtils.class.getClassLoader().getResourceAsStream(propname);
             properties.load(inputStream);
             String status = properties.getProperty("open");
             inputStream.close();
@@ -35,7 +35,8 @@ public class DashboardUtils {
     public static void setOpenStatus(String status) {
         Properties properties = new Properties();
         try {
-            FileOutputStream outputStream = new FileOutputStream(propname);
+            String file = DashboardUtils.class.getClassLoader().getResource(propname).getFile();
+            FileOutputStream outputStream = new FileOutputStream(file);
             properties.setProperty("open", status);
             properties.store(outputStream, "config admin properties");
             outputStream.close();

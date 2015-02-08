@@ -15,7 +15,7 @@ public class ConfTests {
         InputStream inputStream = null;
         String propname = "admin.properties";
         try {
-            inputStream = new FileInputStream(propname);
+            inputStream = getClass().getClassLoader().getResourceAsStream(propname);
             properties.load(inputStream);
             System.out.println(properties.getProperty("open"));
             inputStream.close();
@@ -31,7 +31,9 @@ public class ConfTests {
         Properties properties = new Properties();
         String propname = "admin.properties";
         try {
-            FileOutputStream outputStream = new FileOutputStream(propname);
+            String file = getClass().getClassLoader().getResource(propname).getFile();
+            System.out.println(file);
+            FileOutputStream outputStream = new FileOutputStream(file);
             properties.setProperty("open", "true");
             properties.store(outputStream, "config admin properties");
             outputStream.close();
