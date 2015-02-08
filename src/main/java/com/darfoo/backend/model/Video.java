@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.typesafe.config.ConfigException;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -69,6 +70,17 @@ public class Video implements Serializable {
     //点击量
     @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
     Long hottest;
+
+    @Column(name = "RECOMMEND", nullable = true, updatable = true, columnDefinition = "int default 0")
+    Integer recommend;
+
+    public Integer getRecommend() {
+        return recommend;
+    }
+
+    public void setRecommend(Integer recommend) {
+        this.recommend = recommend;
+    }
 
     public Music getMusic() {
         return music;

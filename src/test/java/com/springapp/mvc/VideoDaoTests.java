@@ -446,4 +446,22 @@ public class VideoDaoTests {
             System.out.println(video.getTitle() + "-" + video.getId());
         }
     }
+
+    @Test
+    public void doRecommendVideo() {
+        videoDao.doRecommendVideo(1);
+    }
+
+    @Test
+    public void unRecommendVideo() {
+        videoDao.unRecommendVideo(1);
+    }
+
+    @Test
+    public void yaGetRecommendVideos() {
+        List<Video> videos = videoDao.getRecommendVideos();
+        for (Video video : videos) {
+            System.out.println(video.getTitle());
+        }
+    }
 }
