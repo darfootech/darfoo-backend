@@ -449,7 +449,10 @@ public class VideoDaoTests {
 
     @Test
     public void doRecommendVideo() {
-        videoDao.doRecommendVideo(1);
+        int[] vids = {359, 360, 358, 348, 300, 138, 128};
+        for (Integer id : vids) {
+            videoDao.doRecommendVideo(id);
+        }
     }
 
     @Test
