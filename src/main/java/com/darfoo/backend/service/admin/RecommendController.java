@@ -135,11 +135,12 @@ public class RecommendController {
     @RequestMapping(value = "/admin/recommend/video", method = RequestMethod.GET)
     public String recommendVideo(ModelMap modelMap, HttpSession session){
         List<Video> allVideos = videoDao.getAllVideo();
-        List<Integer> videoids = getRecommendList("video");
+        /*List<Integer> videoids = getRecommendList("video");
         List<Video> recommendVideos = new ArrayList<Video>();
         for (Integer vid : videoids){
             recommendVideos.add(videoDao.getVideoByVideoId(vid));
-        }
+        }*/
+        List<Video> recommendVideos = videoDao.getRecommendVideos();
         modelMap.addAttribute("allvideos", allVideos);
         modelMap.addAttribute("recommendvideos", recommendVideos);
         return "recommendvideo";
@@ -151,11 +152,12 @@ public class RecommendController {
         String idss = request.getParameter("vids");
         System.out.println(idss);
         String[] videoids = idss.split(",");
-        List<Integer> videoidList = new ArrayList<Integer>();
+        //List<Integer> videoidList = new ArrayList<Integer>();
         for (int i=0; i<videoids.length; i++){
-            videoidList.add(Integer.parseInt(videoids[i]));
+            //videoidList.add(Integer.parseInt(videoids[i]));
+            videoDao.doRecommendVideo(Integer.parseInt(videoids[i]));
         }
-        setRecommendList(videoidList, "video");
+        //setRecommendList(videoidList, "video");
         return 200+"";
     }
 
@@ -164,22 +166,24 @@ public class RecommendController {
         String idss = request.getParameter("vids");
         System.out.println(idss);
         String[] videoids = idss.split(",");
-        List<Integer> videoidList = new ArrayList<Integer>();
+        //List<Integer> videoidList = new ArrayList<Integer>();
         for (int i=0; i<videoids.length; i++){
-            videoidList.add(Integer.parseInt(videoids[i]));
+            //videoidList.add(Integer.parseInt(videoids[i]));
+            videoDao.unRecommendVideo(Integer.parseInt(videoids[i]));
         }
-        updateRecommendList(videoidList, "video");
+        //updateRecommendList(videoidList, "video");
         return 200+"";
     }
 
     @RequestMapping(value = "/admin/recommend/tutorial", method = RequestMethod.GET)
     public String recommendTutorial(ModelMap modelMap, HttpSession session){
         List<Education> allTutorials = educationDao.getAllEducation();
-        List<Education> recommendTutorials = new ArrayList<Education>();
+        /*List<Education> recommendTutorials = new ArrayList<Education>();
         List<Integer> tutorialids = getRecommendList("tutorial");
         for (Integer tid : tutorialids){
             recommendTutorials.add(educationDao.getEducationVideoById(tid));
-        }
+        }*/
+        List<Education> recommendTutorials = educationDao.getRecommendTutorials();
         modelMap.addAttribute("alltutorials", allTutorials);
         modelMap.addAttribute("recommendtutorials", recommendTutorials);
         return "recommendtutorial";
@@ -191,11 +195,12 @@ public class RecommendController {
         String idss = request.getParameter("vids");
         System.out.println(idss);
         String[] videoids = idss.split(",");
-        List<Integer> videoidList = new ArrayList<Integer>();
+        //List<Integer> videoidList = new ArrayList<Integer>();
         for (int i=0; i<videoids.length; i++){
-            videoidList.add(Integer.parseInt(videoids[i]));
+            //videoidList.add(Integer.parseInt(videoids[i]));
+            educationDao.doRecommendTutorial(Integer.parseInt(videoids[i]));
         }
-        setRecommendList(videoidList, "tutorial");
+        //setRecommendList(videoidList, "tutorial");
         return 200+"";
     }
 
@@ -204,26 +209,29 @@ public class RecommendController {
         String idss = request.getParameter("vids");
         System.out.println(idss);
         String[] videoids = idss.split(",");
-        List<Integer> videoidList = new ArrayList<Integer>();
+        //List<Integer> videoidList = new ArrayList<Integer>();
         for (int i=0; i<videoids.length; i++){
-            videoidList.add(Integer.parseInt(videoids[i]));
+            //videoidList.add(Integer.parseInt(videoids[i]));
+            educationDao.unRecommendTutorial(Integer.parseInt(videoids[i]));
         }
-        updateRecommendList(videoidList, "tutorial");
+        //updateRecommendList(videoidList, "tutorial");
         return 200+"";
     }
 
     @RequestMapping(value = "/admin/recommend/updateimage/all", method = RequestMethod.GET)
     public String updateRecommendImage(ModelMap modelMap, HttpSession session){
-        List<Integer> recommendVideoids = getRecommendList("video");
-        List<Video> recommendVideos = new ArrayList<Video>();
-        for (Integer id : recommendVideoids){
+        //List<Integer> recommendVideoids = getRecommendList("video");
+        //List<Video> recommendVideos = new ArrayList<Video>();
+        List<Video> recommendVideos = videoDao.getRecommendVideos();
+        /*for (Integer id : recommendVideoids){
             recommendVideos.add(videoDao.getVideoByVideoId(id));
-        }
-        List<Integer> recommendTutorialids = getRecommendList("tutorial");
-        List<Education> recommendTutorials = new ArrayList<Education>();
-        for (Integer id : recommendTutorialids){
+        }*/
+        //List<Integer> recommendTutorialids = getRecommendList("tutorial");
+        //List<Education> recommendTutorials = new ArrayList<Education>();
+        /*for (Integer id : recommendTutorialids){
             recommendTutorials.add(educationDao.getEducationVideoById(id));
-        }
+        }*/
+        List<Education> recommendTutorials = educationDao.getRecommendTutorials();
         modelMap.addAttribute("videos", recommendVideos);
         modelMap.addAttribute("tutorials", recommendTutorials);
         return "updaterecommendimageall";

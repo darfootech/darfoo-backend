@@ -66,7 +66,7 @@
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
             </button>
-            <a class="navbar-brand" href="/darfoobackend/rest/login">大福资源后台登陆</a>
+            <a class="navbar-brand" href="/darfoobackend/rest/login">33</a>
         </div>
     </div>
 </div>

@@ -66,7 +66,7 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
                 </button>
-                <a class="navbar-brand" href="/darfoobackend/rest/login">大福资源后台登陆</a>
+                <a class="navbar-brand" href="/darfoobackend/rest/login">33</a>
             </div>
         </div>
     </div>
@@ -74,7 +74,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-sm-offset-4">
-                <h4>后台登陆</h4>
+                <h4>33</h4>
                 <form role="form" id="loginform" name="loginform">
                     <div class="form-group">
                         <label for="username">用户名</label>
