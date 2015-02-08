@@ -1,6 +1,9 @@
 package com.darfoo.backend.Interceptors;
 
+import com.darfoo.backend.dao.DashboardDao;
+import com.darfoo.backend.model.Dashboard;
 import com.darfoo.backend.utils.DashboardUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
  * Created by zjh on 14-12-3.
  */
 public class LoginInterceptor extends HandlerInterceptorAdapter {
+    @Autowired
+    DashboardDao dashboardDao;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 获得请求路径的uri
@@ -23,7 +29,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             return true;
         }else if(uri.endsWith("/login/") || uri.endsWith("/login")) {
             // 进入登录页面，判断session中是否有key，有的话重定向到首页，否则进入登录界面
-            if (DashboardUtils.isDashboardOpened()){
+            if (dashboardDao.isDashboardOpen()){
                 System.out.println("在请求登陆页面");
                 if(request.getSession() != null && request.getSession().getAttribute("loginUser") != null) {
                     response.sendRedirect(request.getContextPath() + "/rest/resources/video/new");

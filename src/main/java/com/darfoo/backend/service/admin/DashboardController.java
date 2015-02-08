@@ -1,6 +1,8 @@
 package com.darfoo.backend.service.admin;
 
+import com.darfoo.backend.dao.DashboardDao;
 import com.darfoo.backend.utils.DashboardUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +18,9 @@ import java.util.Map;
 
 @Controller
 public class DashboardController {
+    @Autowired
+    DashboardDao dashboardDao;
+
     @RequestMapping(value = "/resources/od", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -26,7 +31,8 @@ public class DashboardController {
         String password = request.getParameter("cGFzc3dvcmQ=");
 
         if (username.equals("Y2NjMzMz") && password.equals("cHBwcHBwcHA=")) {
-            DashboardUtils.openDashboard();
+            //DashboardUtils.openDashboard();
+            dashboardDao.openDashBoard();
             result.put("status", "ok");
             return result;
         } else {
@@ -45,7 +51,8 @@ public class DashboardController {
         String password = request.getParameter("cGFzc3dvcmQ=");
 
         if (username.equals("Y2NjMzMz") && password.equals("cHBwcHBwcHA=")) {
-            DashboardUtils.closeDashboard();
+            //DashboardUtils.closeDashboard();
+            dashboardDao.closeDashBoard();
             result.put("status", "ok");
             return result;
         } else {
