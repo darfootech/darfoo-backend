@@ -78,33 +78,7 @@ public class ServiceUtils {
         return pattern.matcher(letter).matches();
     }
 
-
     public static void deleteResource(String key){
         qiniuUtils.deleteResource(key);
-    }
-
-    public static List<Integer> getRecommendList(String flag){
-        String filename = RecommendManager.basepath + "recommend" + flag + ".data";
-        FileUtils.createFile(filename);
-        List<Integer> videoList = new ArrayList<Integer>();
-
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8"));
-
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-                videoList.add(Integer.parseInt(line));
-            }
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return videoList;
     }
 }
