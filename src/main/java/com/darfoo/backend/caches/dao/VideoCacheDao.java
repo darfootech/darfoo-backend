@@ -25,30 +25,12 @@ import java.util.List;
 /**
  * Created by zjh on 14-12-17.
  */
-public class VideoCacheDao extends AbstractBaseRedisDao<String, Video> {
+public class VideoCacheDao {
     QiniuUtils qiniuUtils = new QiniuUtils();
     @Autowired
     CommonRedisClient commonRedisClient;
     @Autowired
     JedisPool jedisPool;
-
-    public boolean add(final Video video){
-        boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {
-            @Override
-            public Boolean doInRedis(RedisConnection redisConnection) throws DataAccessException {
-                RedisSerializer<String> serializer = getRedisSerializer();
-                String video_download_url = qiniuUtils.getQiniuResourceUrlByType(video.getVideo_key(), "video");
-                String image_download_url = qiniuUtils.getQiniuResourceUrlByType(video.getImage().getImage_key(), "image");
-
-                String cacheValue = video.getTitle() + "-" + video_download_url + "-" + image_download_url + "-" + video.getAuthor().getName() + "-" + video.getUpdate_timestamp();
-
-                byte[] key = serializer.serialize("video-" + video.getId());
-                byte[] value = serializer.serialize(cacheValue);
-                return  redisConnection.setNX(key, value);
-            }
-        });
-        return result;
-    }
 
     /**
      * 为单个视频资源进行缓存

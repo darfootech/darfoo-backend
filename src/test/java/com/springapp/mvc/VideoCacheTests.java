@@ -46,13 +46,6 @@ public class VideoCacheTests {
     VideoCates videoCates = new VideoCates();
 
     @Test
-    public void testAddVideo() {
-        Video video = videoDao.getVideoByVideoId(1);
-        boolean result = videoCacheDao.add(video);
-        System.out.println(result);
-    }
-
-    @Test
     public void testDeleteVideo() {
         String key = "video-1";
         redisClient.delete(key);
