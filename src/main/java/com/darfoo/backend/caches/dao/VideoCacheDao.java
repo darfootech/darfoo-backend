@@ -1,101 +1,51 @@
 package com.darfoo.backend.caches.dao;
 
-import com.darfoo.backend.caches.AbstractBaseRedisDao;
+import com.darfoo.backend.caches.CacheInsertProtocol;
 import com.darfoo.backend.caches.CommonRedisClient;
-import com.darfoo.backend.model.Music;
+import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
-import com.darfoo.backend.service.responsemodel.IndexVideo;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
-import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.serializer.RedisSerializer;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-
-import java.awt.image.TileObserver;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by zjh on 14-12-17.
  */
 public class VideoCacheDao {
-    QiniuUtils qiniuUtils = new QiniuUtils();
+    @Autowired
+    VideoDao videoDao;
     @Autowired
     CommonRedisClient commonRedisClient;
     @Autowired
-    JedisPool jedisPool;
+    CacheInsertProtocol cacheInsertProtocol;
 
     /**
      * 为单个视频资源进行缓存
+     *
      * @param video
      * @return
      */
-    public boolean insertSingleVideo(Video video){
-        Integer id = video.getId();
-        String key = "video-" + id;
-        if (!commonRedisClient.exists(key)){
-            String title = video.getTitle();
-            HashMap<String, String> videoMap = new HashMap<String, String>();
-            String video_download_url = qiniuUtils.getQiniuResourceUrlByType(video.getVideo_key(), "video");
-            String image_download_url = qiniuUtils.getQiniuResourceUrlByType(video.getImage().getImage_key(), "image");
-            String authorname = video.getAuthor().getName();
-            String update_timestamp = (video.getUpdate_timestamp() / 1000)+"";
-            videoMap.put("id", id.toString());
-            videoMap.put("title", title);
-            videoMap.put("video_url", video_download_url);
-            videoMap.put("image_url", image_download_url);
-            videoMap.put("authorname", authorname);
-            videoMap.put("update_timestamp", update_timestamp);
-            videoMap.put("type", 1+"");
-            commonRedisClient.hmset(key, videoMap);
-            return true;
-        }else{
-            return false;
-        }
+    public boolean insertSingleVideo(Video video) {
+        return cacheInsertProtocol.insertResourceIntoCache(Video.class, video);
     }
 
-    public boolean insertRecommendVideo(Video video){
-        Integer id = video.getId();
-        String key = "recommendvideo-" + id;
-        if (!commonRedisClient.exists(key)){
-            String title = video.getTitle();
-            HashMap<String, String> videoMap = new HashMap<String, String>();
-            String video_download_url = qiniuUtils.getQiniuResourceUrlByType(video.getVideo_key(), "video");
-            String image_download_url = qiniuUtils.getQiniuResourceUrlByType(video.getVideo_key() + "@@recommendvideo.png", "image");
-            String authorname = video.getAuthor().getName();
-            String update_timestamp = (video.getUpdate_timestamp() / 1000)+"";
-            videoMap.put("id", id.toString());
-            videoMap.put("title", title);
-            videoMap.put("video_url", video_download_url);
-            videoMap.put("image_url", image_download_url);
-            videoMap.put("authorname", authorname);
-            videoMap.put("update_timestamp", update_timestamp);
-            videoMap.put("type", 1+"");
-            commonRedisClient.hmset(key, videoMap);
-            return true;
-        }else{
-            return false;
-        }
+    public boolean insertRecommendVideo(Video video) {
+        return cacheInsertProtocol.insertResourceIntoCache(Video.class, video);
     }
 
-    public boolean insertMusic(int vid, int mid){
+    public boolean insertMusic(int vid, int mid) {
         String key = "videomusic-" + vid;
-        if (!commonRedisClient.exists(key)){
-            commonRedisClient.set(key, mid+"");
+        if (!commonRedisClient.exists(key)) {
+            commonRedisClient.set(key, mid + "");
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public CacheSingleVideo getSingleVideo(Integer id){
+    public CacheSingleVideo getSingleVideo(Integer id) {
         String key = "video-" + id;
         String title = commonRedisClient.hget(key, "title");
         String authorname = commonRedisClient.hget(key, "authorname");
@@ -106,7 +56,7 @@ public class VideoCacheDao {
         return new CacheSingleVideo(id, title, authorname, videourl, imageurl, Integer.parseInt(type), Long.parseLong(timestamp));
     }
 
-    public CacheSingleVideo getRecommendVideo(Integer id){
+    public CacheSingleVideo getRecommendVideo(Integer id) {
         String key = "recommendvideo-" + id;
         String title = commonRedisClient.hget(key, "title");
         String authorname = commonRedisClient.hget(key, "authorname");
@@ -115,93 +65,5 @@ public class VideoCacheDao {
         String timestamp = commonRedisClient.hget(key, "update_timestamp");
         String type = commonRedisClient.hget(key, "type");
         return new CacheSingleVideo(id, title, authorname, videourl, imageurl, Integer.parseInt(type), Long.parseLong(timestamp));
-    }
-
-    public SingleVideo getSingleVideoFromPool(Integer id){
-        Jedis jedis = null;
-        try {
-            String key = "video-" + id;
-            jedis = jedisPool.getResource();
-            String title = jedis.hget(key, "title");
-            String authorname = jedis.hget(key, "authorname");
-            String videourl = jedis.hget(key, "video_url");
-            String imageurl = jedis.hget(key, "image_url");
-            //System.out.println(title + " - " + authorname + " - " + videourl + " - " + imageurl);
-            String timestamp = commonRedisClient.hget(key, "update_timestamp");
-            return new SingleVideo(id, title, authorname, videourl, imageurl, Long.parseLong(timestamp));
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }finally {
-            jedisPool.returnResource(jedis);
-        }
-    }
-
-    /* deprecated */
-
-    public IndexVideo getIndexVideo(String key){
-        int id = Integer.parseInt(key.split("-")[1]);
-        String title = commonRedisClient.hget(key, "title");
-        String authorname = commonRedisClient.hget(key, "authorname");
-        String videourl = commonRedisClient.hget(key, "videourl");
-        String imageurl = commonRedisClient.hget(key, "imageurl");
-        Long timestamp = Long.parseLong(commonRedisClient.hget(key, "timestamp"));
-        return new IndexVideo(id, title, imageurl, videourl, authorname, timestamp);
-    }
-
-    /**
-     * 为首页视频资源进行缓存
-     * @param video
-     * @return
-     */
-    public boolean insertIndex(Video video){
-        Integer id = video.getId();
-        String key = "vi-" + id;
-        if (!commonRedisClient.exists(key)){
-            String title = video.getTitle();
-            HashMap<String, String> videoMap = new HashMap<String, String>();
-            String video_download_url = qiniuUtils.getQiniuResourceUrlByType(video.getVideo_key(), "video");
-            String image_download_url = qiniuUtils.getQiniuResourceUrlByType(video.getImage().getImage_key(), "image");
-            String authorname = video.getAuthor().getName();
-            Long timestamp = video.getUpdate_timestamp();
-            videoMap.put("id", id.toString());
-            videoMap.put("title", title);
-            videoMap.put("videourl", video_download_url);
-            videoMap.put("imageurl", image_download_url);
-            videoMap.put("authorname", authorname);
-            videoMap.put("timestamp", timestamp.toString());
-            commonRedisClient.hmset(key, videoMap);
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    /**
-     * 为首页推荐视频资源进行缓存
-     * @param video
-     * @return
-     */
-    public boolean insertRecommend(Video video){
-        Integer id = video.getId();
-        String key = "vr-" + id;
-        if (!commonRedisClient.exists(key)){
-            String title = video.getTitle();
-            HashMap<String, String> videoMap = new HashMap<String, String>();
-            String video_download_url = qiniuUtils.getQiniuResourceUrlByType(video.getVideo_key(), "video");
-            String image_download_url = qiniuUtils.getQiniuResourceUrlByType(video.getImage().getImage_key(), "image");
-            String authorname = video.getAuthor().getName();
-            Long timestamp = video.getUpdate_timestamp();
-            videoMap.put("id", id.toString());
-            videoMap.put("title", title);
-            videoMap.put("videourl", video_download_url);
-            videoMap.put("imageurl", image_download_url);
-            videoMap.put("authorname", authorname);
-            videoMap.put("timestamp", timestamp.toString());
-            commonRedisClient.hmset(key, videoMap);
-            return true;
-        }else{
-            return false;
-        }
     }
 }

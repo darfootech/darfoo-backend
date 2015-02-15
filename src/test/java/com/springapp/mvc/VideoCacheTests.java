@@ -65,13 +65,6 @@ public class VideoCacheTests {
     }
 
     @Test
-    public void getSingleVideoFromPool() {
-        Integer id = 1;
-        SingleVideo video = videoCacheDao.getSingleVideoFromPool(id);
-        System.out.println(video.getTitle());
-    }
-
-    @Test
     public void cacheIndexVideos() {
         List<Video> latestVideos = videoDao.getVideosByNewest(7);
         for (Video video : latestVideos) {

@@ -41,12 +41,9 @@
         <property name="connectionFactory" ref="connectionFactory"/>
     </bean>
 
-    <!--<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>-->
-
     <bean id="commonRedisClient" class="com.darfoo.backend.caches.CommonRedisClient"/>
     <bean id="qiniuUtils" class="com.darfoo.backend.utils.QiniuUtils"/>
 
-    <bean id="userDao" class="com.darfoo.backend.caches.test.UserDao"/>
     <bean id="videoCacheDao" class="com.darfoo.backend.caches.dao.VideoCacheDao"/>
     <bean id="tutorialCacheDao" class="com.darfoo.backend.caches.dao.TutorialCacheDao"/>
     <bean id="musicCacheDao" class="com.darfoo.backend.caches.dao.MusicCacheDao"/>

@@ -28,13 +28,6 @@ public class RedisProtocolTests {
     @Test
     public void insertProtocol() {
         Video video = videoDao.getVideoByVideoId(35);
-        try {
-            //new CacheInsertProtocol().insertIntoCache(Video.class, 30, video);
-            cacheInsertProtocol.insertIntoCache(Video.class, video);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
+        cacheInsertProtocol.insertResourceIntoCache(Video.class, video);
     }
 }
