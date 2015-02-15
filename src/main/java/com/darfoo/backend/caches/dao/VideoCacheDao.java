@@ -7,6 +7,8 @@ import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
+
 /**
  * Created by zjh on 14-12-17.
  */
@@ -25,11 +27,11 @@ public class VideoCacheDao {
      * @return
      */
     public boolean insertSingleVideo(Video video) {
-        return cacheProtocol.insertResourceIntoCache(Video.class, video);
+        return cacheProtocol.insertResourceIntoCache(Video.class, video, "video");
     }
 
     public boolean insertRecommendVideo(Video video) {
-        return cacheProtocol.insertResourceIntoCache(Video.class, video);
+        return cacheProtocol.insertResourceIntoCache(Video.class, video, "recommendvideo");
     }
 
     public boolean insertMusic(int vid, int mid) {
@@ -43,24 +45,10 @@ public class VideoCacheDao {
     }
 
     public CacheSingleVideo getSingleVideo(Integer id) {
-        String key = "video-" + id;
-        String title = commonRedisClient.hget(key, "title");
-        String authorname = commonRedisClient.hget(key, "authorname");
-        String videourl = commonRedisClient.hget(key, "video_url");
-        String imageurl = commonRedisClient.hget(key, "image_url");
-        String timestamp = commonRedisClient.hget(key, "update_timestamp");
-        String type = commonRedisClient.hget(key, "type");
-        return new CacheSingleVideo(id, title, authorname, videourl, imageurl, Integer.parseInt(type), Long.parseLong(timestamp));
+        return (CacheSingleVideo) cacheProtocol.extractResourceFromCache(Video.class, CacheSingleVideo.class, id, "video");
     }
 
     public CacheSingleVideo getRecommendVideo(Integer id) {
-        String key = "recommendvideo-" + id;
-        String title = commonRedisClient.hget(key, "title");
-        String authorname = commonRedisClient.hget(key, "authorname");
-        String videourl = commonRedisClient.hget(key, "video_url");
-        String imageurl = commonRedisClient.hget(key, "image_url");
-        String timestamp = commonRedisClient.hget(key, "update_timestamp");
-        String type = commonRedisClient.hget(key, "type");
-        return new CacheSingleVideo(id, title, authorname, videourl, imageurl, Integer.parseInt(type), Long.parseLong(timestamp));
+        return (CacheSingleVideo) cacheProtocol.extractResourceFromCache(Video.class, CacheSingleVideo.class, id, "recommendvideo");
     }
 }

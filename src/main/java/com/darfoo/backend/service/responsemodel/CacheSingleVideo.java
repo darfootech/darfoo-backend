@@ -15,6 +15,8 @@ public class CacheSingleVideo {
     Integer type;
     Long update_timestamp;
 
+    public CacheSingleVideo() {}
+
     public CacheSingleVideo(Integer id, String title, String authorname, String video_url, String image_url, Integer type, Long update_timestamp) {
         this.id = id;
         this.title = title;
