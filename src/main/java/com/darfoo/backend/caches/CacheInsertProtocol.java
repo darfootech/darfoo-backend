@@ -76,7 +76,9 @@ public class CacheInsertProtocol {
                     }
                 }
             }
-
+            if (model == Video.class) {
+                cacheInsertMap.put("type", 1+"");
+            }
             commonRedisClient.hmset(cachekey, cacheInsertMap);
         }
     }
