@@ -1,14 +1,11 @@
 package com.darfoo.backend.caches.dao;
 
-import com.darfoo.backend.caches.CacheInsertProtocol;
+import com.darfoo.backend.caches.CacheProtocol;
 import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
-import com.darfoo.backend.service.responsemodel.SingleVideo;
 import org.springframework.beans.factory.annotation.Autowired;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 /**
  * Created by zjh on 14-12-17.
@@ -19,7 +16,7 @@ public class VideoCacheDao {
     @Autowired
     CommonRedisClient commonRedisClient;
     @Autowired
-    CacheInsertProtocol cacheInsertProtocol;
+    CacheProtocol cacheProtocol;
 
     /**
      * 为单个视频资源进行缓存
@@ -28,11 +25,11 @@ public class VideoCacheDao {
      * @return
      */
     public boolean insertSingleVideo(Video video) {
-        return cacheInsertProtocol.insertResourceIntoCache(Video.class, video);
+        return cacheProtocol.insertResourceIntoCache(Video.class, video);
     }
 
     public boolean insertRecommendVideo(Video video) {
-        return cacheInsertProtocol.insertResourceIntoCache(Video.class, video);
+        return cacheProtocol.insertResourceIntoCache(Video.class, video);
     }
 
     public boolean insertMusic(int vid, int mid) {

@@ -44,6 +44,15 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String>{
     }
 
     /**
+     * 根据键来一次性获取和这个键指向的所有键值对
+     * @param key
+     * @return
+     */
+    public Map<String, String> hgetAll(String key) {
+        return redisTemplate.<String, String>opsForHash().entries(key);
+    }
+
+    /**
      * 判断是否有key
      * @param key
      * @return

@@ -17,12 +17,13 @@ import redis.clients.jedis.JedisPool;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by zjh on 15-2-14.
  */
 
-public class CacheInsertProtocol {
+public class CacheProtocol {
     @Autowired
     CommonRedisClient commonRedisClient;
     @Autowired
@@ -63,12 +64,10 @@ public class CacheInsertProtocol {
                             if (field.getName().equals("image")) {
                                 Image image = (Image) field.get(object);
                                 cacheInsertMap.put("image_url", qiniuUtils.getQiniuResourceUrlByType(image.getImage_key(), "image"));
-                                System.out.println("imagekey -> " + image.getImage_key());
-                                System.out.println(qiniuUtils.getQiniuResourceUrlByType(image.getImage_key(), "image"));
+                                System.out.println("image_url -> " + qiniuUtils.getQiniuResourceUrlByType(image.getImage_key(), "image"));
                             } else {
                                 cacheInsertMap.put("video_url", qiniuUtils.getQiniuResourceUrlByType(field.get(object).toString(), "video"));
-                                System.out.println("videokey -> " + field.get(object).toString());
-                                System.out.println(field.getName() + " -> " + qiniuUtils.getQiniuResourceUrlByType(field.get(object).toString(), "video"));
+                                System.out.println("video_url -> " + field.get(object).toString());
                             }
                         } else {
                             System.out.println("something is wired");
@@ -88,5 +87,22 @@ public class CacheInsertProtocol {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public HashMap<String, String> extractResourceFromCache(Class model, Integer id) {
+        String modelName = model.getSimpleName().toLowerCase();
+        String cachekey = "";
+        if (modelName.equals("education")) {
+            cachekey = "tutorial-" + id;
+        } else {
+            cachekey = modelName + "-" + id;
+        }
+
+        if (commonRedisClient.exists(cachekey)) {
+            HashMap<String, String> result = (HashMap<String, String>) commonRedisClient.hgetAll(cachekey);
+            return result;
+        }
+
+        return null;
     }
 }
