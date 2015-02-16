@@ -1,8 +1,10 @@
 package com.springapp.mvc;
 
 import com.darfoo.backend.caches.CacheProtocol;
+import com.darfoo.backend.dao.AuthorDao;
 import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
@@ -29,6 +31,8 @@ public class RedisProtocolTests {
     VideoDao videoDao;
     @Autowired
     TutorialDao tutorialDao;
+    @Autowired
+    AuthorDao authorDao;
     @Autowired
     CacheProtocol cacheProtocol;
 
@@ -68,5 +72,11 @@ public class RedisProtocolTests {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void insertMusicResourceIntoCache() {
+        Author author = authorDao.getAuthor(15);
+        cacheProtocol.insertResourceIntoCache(Author.class, author, "author");
     }
 }

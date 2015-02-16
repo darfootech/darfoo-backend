@@ -52,10 +52,12 @@ public class CacheProtocol {
                             if (field.getName().equals("image")) {
                                 Image image = (Image) field.get(object);
                                 String image_download_url = "";
-                                if (prefix.contains("recommend")) {
-                                    image_download_url = qiniuUtils.getQiniuResourceUrlByType(image.getImage_key() + "@@recommend" + model.getName().toLowerCase() + ".png", "image");
-                                } else {
-                                    image_download_url = qiniuUtils.getQiniuResourceUrlByType(image.getImage_key(), "image");
+                                if (image != null) {
+                                    if (prefix.contains("recommend")) {
+                                        image_download_url = qiniuUtils.getQiniuResourceUrlByType(image.getImage_key() + "@@recommend" + model.getName().toLowerCase() + ".png", "image");
+                                    } else {
+                                        image_download_url = qiniuUtils.getQiniuResourceUrlByType(image.getImage_key(), "image");
+                                    }
                                 }
                                 cacheInsertMap.put("image_url", image_download_url);
                                 System.out.println("image_url -> " + image_download_url);

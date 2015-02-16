@@ -17,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.darfoo.backend.caches.CacheInsert;
+import com.darfoo.backend.caches.CacheInsertEnum;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
@@ -29,16 +31,20 @@ import org.hibernate.annotations.GenericGenerator;
 public class Author implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //引用下面名为mysql的主键生成方式
-            Integer id;
+    @CacheInsert(type = CacheInsertEnum.NORMAL)
+    Integer id;
     @Column(name = "NAME", nullable = false, columnDefinition = "varchar(255) not null")
+    @CacheInsert(type = CacheInsertEnum.NORMAL)
     String name;
     @Column(name = "DESCRIPTION", nullable = false, columnDefinition = "varchar(255) not null")
+    @CacheInsert(type = CacheInsertEnum.NORMAL)
     String description;
 
     //暂时弄成单向对应关系
     @OneToOne(targetEntity = Image.class, fetch = FetchType.EAGER)
     @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE})
     @JoinColumn(name = "IMAGE_ID", referencedColumnName = "id", updatable = true)
+    @CacheInsert(type = CacheInsertEnum.RESOURCE)
     Image image;
 
     //点击量

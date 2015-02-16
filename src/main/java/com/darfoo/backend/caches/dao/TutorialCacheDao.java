@@ -18,15 +18,15 @@ public class TutorialCacheDao extends AbstractBaseRedisDao<String, Tutorial> {
     @Autowired
     CacheProtocol cacheProtocol;
 
-    public boolean insertSingleTutorial(Tutorial tutorial){
+    public boolean insertSingleTutorial(Tutorial tutorial) {
         return cacheProtocol.insertResourceIntoCache(Tutorial.class, tutorial, "tutorial");
     }
 
-    public boolean insertRecommendTutorial(Tutorial tutorial){
+    public boolean insertRecommendTutorial(Tutorial tutorial) {
         return cacheProtocol.insertResourceIntoCache(Tutorial.class, tutorial, "recommendvideo");
     }
 
-    public CacheSingleVideo getSingleTutorial(Integer id){
+    public CacheSingleVideo getSingleTutorial(Integer id) {
         return (CacheSingleVideo) cacheProtocol.extractResourceFromCache(CacheSingleVideo.class, id, "tutorial");
     }
 }
