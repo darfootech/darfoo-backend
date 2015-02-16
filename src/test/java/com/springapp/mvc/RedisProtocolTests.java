@@ -1,7 +1,9 @@
 package com.springapp.mvc;
 
 import com.darfoo.backend.caches.CacheProtocol;
+import com.darfoo.backend.dao.EducationDao;
 import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
 import org.junit.Test;
@@ -27,17 +29,19 @@ public class RedisProtocolTests {
     @Autowired
     VideoDao videoDao;
     @Autowired
+    EducationDao educationDao;
+    @Autowired
     CacheProtocol cacheProtocol;
 
     @Test
-    public void insertResourceIntoCache() {
+    public void insertVideoResourceIntoCache() {
         Video video = videoDao.getVideoByVideoId(35);
         cacheProtocol.insertResourceIntoCache(Video.class, video, "video");
     }
 
     @Test
-    public void extractResourceFromCache() {
-        CacheSingleVideo result = (CacheSingleVideo) cacheProtocol.extractResourceFromCache(Video.class, CacheSingleVideo.class, 35, "video");
+    public void extractVideoResourceFromCache() {
+        CacheSingleVideo result = (CacheSingleVideo) cacheProtocol.extractResourceFromCache(CacheSingleVideo.class, 35, "video");
         try {
             for (Field field : CacheSingleVideo.class.getDeclaredFields()) {
                 field.setAccessible(true);
@@ -46,5 +50,11 @@ public class RedisProtocolTests {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void insertTutorialResourceIntoCache() {
+        Education tutorial = educationDao.getEducationVideoById(30);
+        cacheProtocol.insertResourceIntoCache(Education.class, tutorial, "tutorial");
     }
 }

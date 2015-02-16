@@ -1,6 +1,7 @@
 package com.darfoo.backend.caches;
 
 import com.darfoo.backend.model.Author;
+import com.darfoo.backend.model.Education;
 import com.darfoo.backend.model.Image;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.utils.QiniuUtils;
@@ -41,6 +42,8 @@ public class CacheProtocol {
                                 Author author = (Author) field.get(object);
                                 cacheInsertMap.put("authorname", author.getName());
                                 System.out.println(field.getName() + " -> " + author.getName());
+                            } else if (field.getName().equals("update_timestamp")) {
+                                cacheInsertMap.put(field.getName(), ((Long) field.get(object) / 1000) + "");
                             } else {
                                 cacheInsertMap.put(field.getName(), field.get(object).toString());
                                 System.out.println(field.getName() + " -> " + field.get(object));
@@ -48,8 +51,14 @@ public class CacheProtocol {
                         } else if (cacheInsert.type() == CacheInsertEnum.RESOURCE) {
                             if (field.getName().equals("image")) {
                                 Image image = (Image) field.get(object);
-                                cacheInsertMap.put("image_url", qiniuUtils.getQiniuResourceUrlByType(image.getImage_key(), "image"));
-                                System.out.println("image_url -> " + qiniuUtils.getQiniuResourceUrlByType(image.getImage_key(), "image"));
+                                String image_download_url = "";
+                                if (prefix.contains("recommend")) {
+                                    image_download_url = qiniuUtils.getQiniuResourceUrlByType(image.getImage_key() + "@@recommendvideo.png", "image");
+                                } else {
+                                    image_download_url = qiniuUtils.getQiniuResourceUrlByType(image.getImage_key(), "image");
+                                }
+                                cacheInsertMap.put("image_url", image_download_url);
+                                System.out.println("image_url -> " + image_download_url);
                             } else {
                                 cacheInsertMap.put("video_url", qiniuUtils.getQiniuResourceUrlByType(field.get(object).toString(), "video"));
                                 System.out.println("video_url -> " + field.get(object).toString());
@@ -61,6 +70,9 @@ public class CacheProtocol {
                 }
                 if (model == Video.class) {
                     cacheInsertMap.put("type", 1 + "");
+                }
+                if (model == Education.class) {
+                    cacheInsertMap.put("type", 0 + "");
                 }
                 commonRedisClient.hmset(cachekey, cacheInsertMap);
             }
@@ -74,7 +86,7 @@ public class CacheProtocol {
         }
     }
 
-    public Object extractResourceFromCache(Class model, Class response, Integer id, String prefix) {
+    public Object extractResourceFromCache(Class response, Integer id, String prefix) {
         try {
 
             String cachekey = prefix + "-" + id;

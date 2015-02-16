@@ -6,7 +6,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +15,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.darfoo.backend.caches.CacheInsert;
+import com.darfoo.backend.caches.CacheInsertEnum;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -25,21 +26,23 @@ import org.hibernate.annotations.CascadeType;
 @Entity
 @Table(name = "education")
 public class Education implements Serializable {
-    /*keys*/
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @CacheInsert(type = CacheInsertEnum.NORMAL)
     Integer id;
 
     //单向N-1  在educationvideo表中增加一个外键列IMAGE_ID(music的主键)
     @ManyToOne(targetEntity = Image.class)
     @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE})
     @JoinColumn(name = "IMAGE_ID", referencedColumnName = "id")
+    @CacheInsert(type = CacheInsertEnum.RESOURCE)
     Image image;
 
     //单向N-1 在educationvideo表中增加一个外键列AUTHOR_ID(author的主键)
     @ManyToOne(targetEntity = Author.class)
     @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE})
     @JoinColumn(name = "AUTHOR_ID", referencedColumnName = "id")
+    @CacheInsert(type = CacheInsertEnum.NORMAL)
     Author author;
 
     //category
@@ -47,17 +50,19 @@ public class Education implements Serializable {
     @JoinTable(name = "education_category", joinColumns = {@JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false, columnDefinition = "int(11) not null")},
             inverseJoinColumns = {@JoinColumn(name = "category_id", nullable = false, columnDefinition = "int(11) not null")})
     Set<EducationCategory> categories = new HashSet<EducationCategory>();
-    /*info*/
+
     @Column(name = "VIDEO_KEY", unique = true, nullable = false, columnDefinition = "varchar(255) not null")
+    @CacheInsert(type = CacheInsertEnum.RESOURCE)
     String video_key;
+
     @Column(name = "TITLE", nullable = false, columnDefinition = "varchar(255) not null")
+    @CacheInsert(type = CacheInsertEnum.NORMAL)
     String title;
+
     @Column(name = "UPDATE_TIMESTAMP", nullable = false, columnDefinition = "bigint(64) not null")
+    @CacheInsert(type = CacheInsertEnum.NORMAL)
     Long update_timestamp;
-    /*待定，需要视频的格式信息*/
-//    String type;
-//    Long interval;
-//    Long size;
+
     @ManyToOne(targetEntity = Music.class)
     @JoinColumn(name = "MUSIC_ID", referencedColumnName = "id", updatable = true, nullable = true)
     Music music;

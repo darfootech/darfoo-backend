@@ -45,10 +45,10 @@ public class VideoCacheDao {
     }
 
     public CacheSingleVideo getSingleVideo(Integer id) {
-        return (CacheSingleVideo) cacheProtocol.extractResourceFromCache(Video.class, CacheSingleVideo.class, id, "video");
+        return (CacheSingleVideo) cacheProtocol.extractResourceFromCache(CacheSingleVideo.class, id, "video");
     }
 
     public CacheSingleVideo getRecommendVideo(Integer id) {
-        return (CacheSingleVideo) cacheProtocol.extractResourceFromCache(Video.class, CacheSingleVideo.class, id, "recommendvideo");
+        return (CacheSingleVideo) cacheProtocol.extractResourceFromCache(CacheSingleVideo.class, id, "recommendvideo");
     }
 }
