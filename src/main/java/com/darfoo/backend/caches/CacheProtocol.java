@@ -42,6 +42,9 @@ public class CacheProtocol {
                                 Author author = (Author) field.get(object);
                                 cacheInsertMap.put("authorname", author.getName());
                                 System.out.println(field.getName() + " -> " + author.getName());
+                            } else if (field.getName().toLowerCase().equals("authorname")) {
+                                cacheInsertMap.put("authorname", field.get(object).toString());
+                                System.out.println(field.getName() + " -> " + field.get(object));
                             } else if (field.getName().equals("update_timestamp")) {
                                 cacheInsertMap.put(field.getName(), ((Long) field.get(object) / 1000) + "");
                             } else {
@@ -61,9 +64,12 @@ public class CacheProtocol {
                                 }
                                 cacheInsertMap.put("image_url", image_download_url);
                                 System.out.println("image_url -> " + image_download_url);
-                            } else {
+                            } else if (field.getName().equals("video_key")){
                                 cacheInsertMap.put("video_url", qiniuUtils.getQiniuResourceUrlByType(field.get(object).toString(), "video"));
                                 System.out.println("video_url -> " + field.get(object).toString());
+                            } else {
+                                cacheInsertMap.put("music_url", qiniuUtils.getQiniuResourceUrlByType(field.get(object).toString() + ".mp3", "music"));
+                                System.out.println("music_url -> " + field.get(object).toString());
                             }
                         } else {
                             System.out.println("something is wired");

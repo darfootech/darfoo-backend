@@ -2,13 +2,16 @@ package com.springapp.mvc;
 
 import com.darfoo.backend.caches.CacheProtocol;
 import com.darfoo.backend.dao.AuthorDao;
+import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Author;
+import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
+import com.darfoo.backend.service.responsemodel.SingleMusic;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,8 @@ public class RedisProtocolTests {
     TutorialDao tutorialDao;
     @Autowired
     AuthorDao authorDao;
+    @Autowired
+    MusicDao musicDao;
     @Autowired
     CacheProtocol cacheProtocol;
 
@@ -86,6 +91,25 @@ public class RedisProtocolTests {
         SingleAuthor result = (SingleAuthor) cacheProtocol.extractResourceFromCache(SingleAuthor.class, 15, "author");
         try {
             for (Field field : SingleAuthor.class.getDeclaredFields()) {
+                field.setAccessible(true);
+                System.out.println(field.getName() + " -> " + field.get(result));
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void insertMusicResourceFromCache() {
+        Music music = musicDao.getMusicByMusicId(30);
+        cacheProtocol.insertResourceIntoCache(Music.class, music, "music");
+    }
+
+    @Test
+    public void extractMusicResourceFromCache() {
+        SingleMusic result = (SingleMusic) cacheProtocol.extractResourceFromCache(SingleMusic.class, 30, "music");
+        try {
+            for (Field field : SingleMusic.class.getDeclaredFields()) {
                 field.setAccessible(true);
                 System.out.println(field.getName() + " -> " + field.get(result));
             }

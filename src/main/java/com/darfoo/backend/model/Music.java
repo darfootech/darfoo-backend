@@ -16,6 +16,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.darfoo.backend.caches.CacheInsert;
+import com.darfoo.backend.caches.CacheInsertEnum;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -27,6 +29,7 @@ import org.hibernate.annotations.CascadeType;
 public class Music implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @CacheInsert(type = CacheInsertEnum.NORMAL)
     Integer id;
 
     //music & musiccategory 双向N-N
@@ -48,19 +51,24 @@ public class Music implements Serializable {
     Image image;
 
     @Column(name = "TITLE", nullable = false, columnDefinition = "varchar(255) not null")
+    @CacheInsert(type = CacheInsertEnum.NORMAL)
     String title;
 
     @Column(name = "MUSIC_KEY", nullable = false, unique = true, columnDefinition = "varchar(255) not null")
+    @CacheInsert(type = CacheInsertEnum.RESOURCE)
     String music_key;
 
     @Column(name = "UPDATE_TIMESTAMP", nullable = false, columnDefinition = "bigint(64) not null")
+    @CacheInsert(type = CacheInsertEnum.NORMAL)
     Long update_timestamp;
 
     //点击量
     @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
     Long hottest;
 
+    //因为伴奏的作者不需要其他的信息 所以伴奏只需要一个作者名字就可以了
     @Column(name = "AUTHOR_NAME", nullable = true, columnDefinition = "varchar(255) not null")
+    @CacheInsert(type = CacheInsertEnum.NORMAL)
     String authorName;
 
     public String getAuthorName() {
