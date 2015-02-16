@@ -1,8 +1,6 @@
 package com.darfoo.backend.Interceptors;
 
 import com.darfoo.backend.dao.DashboardDao;
-import com.darfoo.backend.model.Dashboard;
-import com.darfoo.backend.utils.DashboardUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 

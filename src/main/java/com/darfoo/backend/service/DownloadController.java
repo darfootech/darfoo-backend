@@ -43,7 +43,6 @@ public class DownloadController {
     public String timestampTodatetime(long timestampfromdb){
         Timestamp timestamp = new Timestamp(timestampfromdb);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        //System.out.println(simpleDateFormat.format(timestamp));
         return simpleDateFormat.format(timestamp);
     }
 
@@ -115,11 +114,8 @@ public class DownloadController {
 
                 printer.printRecord(itemData);
             }
-            //close the printer
             printer.flush();
             printer.close();
-            //out.flush();
-            //out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -196,11 +192,8 @@ public class DownloadController {
 
                 printer.printRecord(itemData);
             }
-            //close the printer
             printer.flush();
             printer.close();
-            //out.flush();
-            //out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -273,11 +266,8 @@ public class DownloadController {
 
                 printer.printRecord(itemData);
             }
-            //close the printer
             printer.flush();
             printer.close();
-            //out.flush();
-            //out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
