@@ -14,8 +14,6 @@ import java.util.HashMap;
  */
 public class TutorialCacheDao extends AbstractBaseRedisDao<String, Tutorial> {
     @Autowired
-    CommonRedisClient commonRedisClient;
-    @Autowired
     CacheProtocol cacheProtocol;
 
     public boolean insertSingleTutorial(Tutorial tutorial) {

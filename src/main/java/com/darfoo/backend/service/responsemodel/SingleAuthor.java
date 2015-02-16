@@ -9,6 +9,8 @@ public class SingleAuthor {
     String description;
     String image_url;
 
+    public SingleAuthor() {}
+
     public SingleAuthor(Integer id, String name, String description, String image_url) {
         this.id = id;
         this.name = name;

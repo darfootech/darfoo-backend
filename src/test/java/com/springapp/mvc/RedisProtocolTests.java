@@ -8,6 +8,7 @@ import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
+import com.darfoo.backend.service.responsemodel.SingleAuthor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,8 +76,21 @@ public class RedisProtocolTests {
     }
 
     @Test
-    public void insertMusicResourceIntoCache() {
-        Author author = authorDao.getAuthor(15);
+    public void insertAuthorResourceIntoCache() {
+        Author author = authorDao.getAuthor(13);
         cacheProtocol.insertResourceIntoCache(Author.class, author, "author");
+    }
+
+    @Test
+    public void extractMusicResourceIntoCache() {
+        SingleAuthor result = (SingleAuthor) cacheProtocol.extractResourceFromCache(SingleAuthor.class, 15, "author");
+        try {
+            for (Field field : SingleAuthor.class.getDeclaredFields()) {
+                field.setAccessible(true);
+                System.out.println(field.getName() + " -> " + field.get(result));
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }
