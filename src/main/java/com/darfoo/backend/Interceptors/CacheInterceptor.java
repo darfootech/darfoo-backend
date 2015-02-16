@@ -4,11 +4,10 @@ import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.caches.dao.MusicCacheDao;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
-import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.EducationDao;
+import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
-import com.darfoo.backend.model.Education;
+import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Video;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
     @Autowired
     MusicDao musicDao;
     @Autowired
@@ -82,7 +81,7 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
                 response.sendRedirect(request.getContextPath() + "/rest/cache/tutorial/" + tid);
             }else{
                 System.out.println("resource not in cache");
-                Education tutorial = educationDao.getEducationVideoById(tid);
+                Tutorial tutorial = educationDao.getEducationVideoById(tid);
                 tutorialCacheDao.insertSingleTutorial(tutorial);
             }
             return true;

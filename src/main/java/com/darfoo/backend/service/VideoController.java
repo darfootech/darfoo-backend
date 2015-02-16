@@ -1,11 +1,9 @@
 package com.darfoo.backend.service;
 
-import com.darfoo.backend.caches.CommonRedisClient;
-import com.darfoo.backend.caches.dao.VideoCacheDao;
-import com.darfoo.backend.dao.EducationDao;
+import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.SearchDao;
 import com.darfoo.backend.dao.VideoDao;
-import com.darfoo.backend.model.Education;
+import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.*;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by zjh on 14-11-16.
@@ -30,7 +27,7 @@ public class VideoController {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
     @Autowired
     SearchDao searchDao;
 
@@ -61,7 +58,7 @@ public class VideoController {
     public
     @ResponseBody
     SingleVideo getSingleTutorialVideo(@PathVariable Integer id){
-        Education tutorial = educationDao.getEducationVideoById(id);
+        Tutorial tutorial = educationDao.getEducationVideoById(id);
         String video_url = tutorial.getVideo_key();
         String image_url = tutorial.getImage().getImage_key();
         String video_download_url = qiniuUtils.getQiniuResourceUrl(video_url);
@@ -129,9 +126,9 @@ public class VideoController {
     List<SingleVideo> searchTutorial(HttpServletRequest request){
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
-        List<Education> videos = searchDao.getEducationBySearch(searchContent);
+        List<Tutorial> videos = searchDao.getEducationBySearch(searchContent);
         List<SingleVideo> result = new ArrayList<SingleVideo>();
-        for (Education video : videos){
+        for (Tutorial video : videos){
             int id = video.getId();
             String title = video.getTitle();
             String author_name = "";
@@ -251,9 +248,9 @@ public class VideoController {
 
         //System.out.println(targetCategories.toString());
 
-        List<Education> targetVideos = educationDao.getEducationVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
+        List<Tutorial> targetVideos = educationDao.getEducationVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
         List<SingleVideo> result = new ArrayList<SingleVideo>();
-        for (Education video : targetVideos) {
+        for (Tutorial video : targetVideos) {
             int video_id = video.getId();
             String image_url = "";
             if (video.getImage() != null){

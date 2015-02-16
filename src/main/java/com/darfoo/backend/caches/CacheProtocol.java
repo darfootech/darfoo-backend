@@ -1,7 +1,7 @@
 package com.darfoo.backend.caches;
 
 import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.Education;
+import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Image;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.utils.QiniuUtils;
@@ -53,7 +53,7 @@ public class CacheProtocol {
                                 Image image = (Image) field.get(object);
                                 String image_download_url = "";
                                 if (prefix.contains("recommend")) {
-                                    image_download_url = qiniuUtils.getQiniuResourceUrlByType(image.getImage_key() + "@@recommendvideo.png", "image");
+                                    image_download_url = qiniuUtils.getQiniuResourceUrlByType(image.getImage_key() + "@@recommend" + model.getName().toLowerCase() + ".png", "image");
                                 } else {
                                     image_download_url = qiniuUtils.getQiniuResourceUrlByType(image.getImage_key(), "image");
                                 }
@@ -71,7 +71,7 @@ public class CacheProtocol {
                 if (model == Video.class) {
                     cacheInsertMap.put("type", 1 + "");
                 }
-                if (model == Education.class) {
+                if (model == Tutorial.class) {
                     cacheInsertMap.put("type", 0 + "");
                 }
                 commonRedisClient.hmset(cachekey, cacheInsertMap);

@@ -19,7 +19,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
     @Autowired
     MusicDao musicDao;
     @Autowired

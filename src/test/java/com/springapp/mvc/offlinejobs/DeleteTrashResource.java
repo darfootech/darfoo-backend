@@ -1,10 +1,10 @@
 package com.springapp.mvc.offlinejobs;
 
-import com.darfoo.backend.dao.EducationDao;
+import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.ImageDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
-import com.darfoo.backend.model.Education;
+import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Image;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Video;
@@ -35,7 +35,7 @@ public class DeleteTrashResource {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
     @Autowired
     MusicDao musicDao;
     @Autowired
@@ -90,7 +90,7 @@ public class DeleteTrashResource {
             keyList.add(video.getVideo_key());
         }
 
-        for (Education education : educationDao.getAllEducation()) {
+        for (Tutorial education : educationDao.getAllEducation()) {
             keyList.add(education.getVideo_key());
         }
 

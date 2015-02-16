@@ -24,7 +24,7 @@ public class UpdateController {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
     @Autowired
     MusicDao musicDao;
     @Autowired
@@ -67,7 +67,7 @@ public class UpdateController {
         }
 
         int authorid = a.getId();
-        Education queryVideo = educationDao.getEducationByTitleAuthorId(tutorialTitle, authorid);
+        Tutorial queryVideo = educationDao.getEducationByTitleAuthorId(tutorialTitle, authorid);
         if (queryVideo == null){
             System.out.println("教程和作者id组合不存在，可以进行插入");
             return 1;

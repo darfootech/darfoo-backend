@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -31,7 +30,7 @@ public class UploadController {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
     @Autowired
     ImageDao imageDao;
     @Autowired
@@ -152,7 +151,7 @@ public class UploadController {
         }
 
         int authorid = targetAuthor.getId();
-        Education queryVideo = educationDao.getEducationByTitleAuthorId(videotitle, authorid);
+        Tutorial queryVideo = educationDao.getEducationByTitleAuthorId(videotitle, authorid);
         if (queryVideo == null){
             System.out.println("教程和作者id组合不存在，可以进行插入");
         }else{
@@ -183,18 +182,18 @@ public class UploadController {
             return resultMap;
         }
 
-        Education video = new Education();
+        Tutorial video = new Tutorial();
         video.setAuthor(targetAuthor);
         Image img = new Image();
         img.setImage_key(imagekey);
         video.setImage(img);
-        EducationCategory speed = new EducationCategory();
-        EducationCategory difficult = new EducationCategory();
-        EducationCategory style = new EducationCategory();
+        TutorialCategory speed = new TutorialCategory();
+        TutorialCategory difficult = new TutorialCategory();
+        TutorialCategory style = new TutorialCategory();
         speed.setTitle(videospeed);
         difficult.setTitle(videodifficult);
         style.setTitle(videostyle);
-        Set<EducationCategory> s_eCategory = video.getCategories();
+        Set<TutorialCategory> s_eCategory = video.getCategories();
         s_eCategory.add(speed);
         s_eCategory.add(difficult);
         s_eCategory.add(style);

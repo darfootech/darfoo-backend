@@ -25,7 +25,7 @@ public class GalleryController {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
     @Autowired
     MusicDao musicDao;
     @Autowired
@@ -82,7 +82,7 @@ public class GalleryController {
 
     @RequestMapping(value = "/admin/tutorial/all", method = RequestMethod.GET)
     public String showAllTutorial(ModelMap modelMap, HttpSession session){
-        List<Education> s_tutorial = new ArrayList<Education>();
+        List<Tutorial> s_tutorial = new ArrayList<Tutorial>();
         s_tutorial = educationDao.getAllEducation();
         modelMap.addAttribute("alltutorials", s_tutorial);
         return "alltutorial";
@@ -91,9 +91,9 @@ public class GalleryController {
     @RequestMapping(value = "/admin/tutorial/{id}", method = RequestMethod.GET)
     public String showSingleTutorial(@PathVariable String id, ModelMap modelMap){
         System.out.println(Integer.parseInt(id));
-        Education tutorial = educationDao.getEducationVideoById(Integer.parseInt(id));
-        Set<EducationCategory> categories = tutorial.getCategories();
-        for (EducationCategory category : categories){
+        Tutorial tutorial = educationDao.getEducationVideoById(Integer.parseInt(id));
+        Set<TutorialCategory> categories = tutorial.getCategories();
+        for (TutorialCategory category : categories){
             int categoryid = category.getId();
             String categorytitle = category.getTitle();
             System.out.println(categoryid);

@@ -14,7 +14,6 @@ import com.darfoo.backend.model.*;
 import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
-import com.darfoo.backend.service.responsemodel.SingleVideo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class SearchDaoTests {
     @Autowired
     VideoCacheDao videoCacheDao;
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
     @Autowired
     TutorialCacheDao tutorialCacheDao;
     @Autowired
@@ -72,8 +71,8 @@ public class SearchDaoTests {
     @Test
     public void searchEducation() {
         String searchContent = "heart";
-        List<Education> l = searchDao.getEducationBySearch(searchContent);
-        for (Education v : l) {
+        List<Tutorial> l = searchDao.getEducationBySearch(searchContent);
+        for (Tutorial v : l) {
             System.out.println(v.toString());
             System.out.println("————————————————————————————————");
         }
@@ -118,9 +117,9 @@ public class SearchDaoTests {
     public void cacheSearchTutorial() {
         String searchContent = "呵呵";
         System.out.println(searchContent);
-        List<Education> videos = searchDao.getEducationBySearch(searchContent);
+        List<Tutorial> videos = searchDao.getEducationBySearch(searchContent);
         List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
-        for (Education video : videos) {
+        for (Tutorial video : videos) {
             int vid = video.getId();
             long status = redisClient.sadd("tutorialsearch" + searchContent, "tutorial-" + vid);
             tutorialCacheDao.insertSingleTutorial(video);

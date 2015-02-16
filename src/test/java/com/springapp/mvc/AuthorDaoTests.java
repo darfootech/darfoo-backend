@@ -21,7 +21,7 @@ public class AuthorDaoTests {
     @Autowired
     ImageDao imageDao;
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
     @Autowired
     VideoDao videoDao;
 
@@ -173,7 +173,7 @@ public class AuthorDaoTests {
 
         List<SingleVideo> result = new ArrayList<SingleVideo>();
         List<Video> videos = videoDao.getVideosByAuthorId(aid);
-        List<Education> tutorials = educationDao.getTutorialsByAuthorId(aid);
+        List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(aid);
 
         for (Video video : videos) {
             int vid = video.getId();
@@ -184,7 +184,7 @@ public class AuthorDaoTests {
             result.add(new SingleVideo(vid, title, authorname, video_download_url, image_download_url, timestamp));
         }
 
-        for (Education tutorial : tutorials) {
+        for (Tutorial tutorial : tutorials) {
             int tid = tutorial.getId();
             String tutorial_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getVideo_key());
             String image_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getImage().getImage_key());

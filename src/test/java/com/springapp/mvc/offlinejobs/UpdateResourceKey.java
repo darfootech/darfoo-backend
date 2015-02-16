@@ -1,8 +1,8 @@
 package com.springapp.mvc.offlinejobs;
 
-import com.darfoo.backend.dao.EducationDao;
+import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.VideoDao;
-import com.darfoo.backend.model.Education;
+import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Video;
 
 import org.junit.Test;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +24,7 @@ public class UpdateResourceKey {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
 
     @Test
     public void updateVideoKey() {
@@ -41,9 +40,9 @@ public class UpdateResourceKey {
 
     @Test
     public void updateTutorialKey() {
-        List<Education> s_educations;
+        List<Tutorial> s_educations;
         s_educations = educationDao.getAllEducation();
-        for (Education tutorial : s_educations) {
+        for (Tutorial tutorial : s_educations) {
             int tutorialid = tutorial.getId();
             String tutorialkey = tutorial.getVideo_key() + ".mp4";
             educationDao.updateVideoKeyById(tutorialid, tutorialkey);

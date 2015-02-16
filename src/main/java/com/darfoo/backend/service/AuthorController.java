@@ -5,13 +5,12 @@ package com.darfoo.backend.service;
  */
 
 import com.darfoo.backend.dao.AuthorDao;
-import com.darfoo.backend.dao.EducationDao;
+import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.SearchDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.Education;
+import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Video;
-import com.darfoo.backend.service.responsemodel.IndexAuthor;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.utils.QiniuUtils;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/resources/author")
@@ -35,7 +33,7 @@ public class AuthorController {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
     @Autowired
     SearchDao searchDao;
 
@@ -91,7 +89,7 @@ public class AuthorController {
 
         List<SingleVideo> result = new ArrayList<SingleVideo>();
         List<Video> videos = videoDao.getVideosByAuthorId(aid);
-        List<Education> tutorials = educationDao.getTutorialsByAuthorId(aid);
+        List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(aid);
 
         for (Video video : videos){
             int vid = video.getId();
@@ -102,7 +100,7 @@ public class AuthorController {
             result.add(new SingleVideo(vid, title, authorname, video_download_url, image_download_url, update_timestamp));
         }
 
-        for (Education tutorial : tutorials){
+        for (Tutorial tutorial : tutorials){
             int tid = tutorial.getId();
             String tutorial_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getVideo_key());
             String image_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getImage().getImage_key());

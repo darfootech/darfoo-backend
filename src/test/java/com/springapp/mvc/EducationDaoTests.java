@@ -10,30 +10,23 @@ import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.ImageDao;
 import com.darfoo.backend.dao.ModelUtils;
 
+import com.darfoo.backend.model.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.darfoo.backend.dao.EducationDao;
-import com.darfoo.backend.dao.VideoDao;
-import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.EducationCategory;
-import com.darfoo.backend.model.Image;
-import com.darfoo.backend.model.Education;
-import com.darfoo.backend.model.EducationCategory;
-import com.darfoo.backend.model.Education;
-import com.darfoo.backend.model.Music;
-import com.darfoo.backend.model.UpdateCheckResponse;
-import com.darfoo.backend.model.Video;
+import com.darfoo.backend.dao.TutorialDao;
+import com.darfoo.backend.model.Tutorial;
+import com.darfoo.backend.model.TutorialCategory;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class EducationDaoTests {
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
     @Autowired
     AuthorDao authorDao;
     @Autowired
@@ -70,7 +63,7 @@ public class EducationDaoTests {
         }
 
         int authorid = a.getId();
-        Education queryVideo = educationDao.getEducationByTitleAuthorId(title, authorid);
+        Tutorial queryVideo = educationDao.getEducationByTitleAuthorId(title, authorid);
         if (queryVideo == null) {
             System.out.println("教程和作者id组合不存在，可以进行插入");
         } else {
@@ -80,16 +73,16 @@ public class EducationDaoTests {
             return;
         }
 
-        Education video = new Education();
+        Tutorial video = new Tutorial();
         video.setAuthor(a);
         video.setImage(image);
-        EducationCategory c1 = new EducationCategory();
-        EducationCategory c2 = new EducationCategory();
-        EducationCategory c3 = new EducationCategory();
+        TutorialCategory c1 = new TutorialCategory();
+        TutorialCategory c2 = new TutorialCategory();
+        TutorialCategory c3 = new TutorialCategory();
         c1.setTitle("快");
         c2.setTitle("适中");
         c3.setTitle("分解教学");
-        Set<EducationCategory> s_eCategory = video.getCategories();
+        Set<TutorialCategory> s_eCategory = video.getCategories();
         s_eCategory.add(c1);
         s_eCategory.add(c2);
         s_eCategory.add(c3);
@@ -108,7 +101,7 @@ public class EducationDaoTests {
 
     @Test
     public void getEducationVideoById() {
-        Education video = educationDao.getEducationVideoById(1);
+        Tutorial video = educationDao.getEducationVideoById(1);
         if (video != null) {
             System.out.println(video.toString(true));
         } else {
@@ -122,9 +115,9 @@ public class EducationDaoTests {
         String[] categories = {};//无条件限制
         //String[] categories = {"较快","稍难","情歌风","S"}; //满条件限制
         //String[] categories = {"快","分解教学"};
-        List<Education> videos = educationDao.getEducationVideosByCategories(categories);
+        List<Tutorial> videos = educationDao.getEducationVideosByCategories(categories);
         System.out.println("最终满足的video数量>>>>>>>>>>>>>>>>>>>>>" + videos.size());
-        for (Education video : videos) {
+        for (Tutorial video : videos) {
             System.out.println(video.toString());
             System.out.println("——————————————————————————————————————");
         }
@@ -170,10 +163,10 @@ public class EducationDaoTests {
      */
     @Test
     public void getAllEducations() {
-        List<Education> s_educations = new ArrayList<Education>();
+        List<Tutorial> s_educations = new ArrayList<Tutorial>();
         s_educations = educationDao.getAllEducation();
         System.out.println("总共查到" + s_educations.size());
-        for (Education video : s_educations) {
+        for (Tutorial video : s_educations) {
             System.out.println("----------------");
             System.out.println("id: " + video.getId());
             System.out.println(video.toString(true));
@@ -254,9 +247,9 @@ public class EducationDaoTests {
     @Test
     public void getEducationsByHottest() {
         int number = 20;
-        List<Education> educations = educationDao.getEducationsByHottest(number);
+        List<Tutorial> educations = educationDao.getEducationsByHottest(number);
         System.out.println("---------返回" + educations.size() + "个视频---------");
-        for (Education v : educations) {
+        for (Tutorial v : educations) {
             System.out.println("热度值---->" + v.getHottest());
             System.out.println(v.toString(true));
             System.out.println("---------------------------");
@@ -270,9 +263,9 @@ public class EducationDaoTests {
     @Test
     public void getEducationsByNewest() {
         int number = 20;
-        List<Education> educations = educationDao.getEducationsByNewest(number);
+        List<Tutorial> educations = educationDao.getEducationsByNewest(number);
         System.out.println("---------返回" + educations.size() + "个视频---------");
-        for (Education v : educations) {
+        for (Tutorial v : educations) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
             System.out.println(v.toString(true));
             System.out.println("---------------------------");
@@ -285,9 +278,9 @@ public class EducationDaoTests {
     @Test
     public void getTutorialsByAuthorId() {
         Integer aId = 2;
-        List<Education> tutorials = educationDao.getTutorialsByAuthorId(aId);
+        List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(aId);
         System.out.println("---------返回" + tutorials.size() + "个视频---------");
-        for (Education v : tutorials) {
+        for (Tutorial v : tutorials) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
             System.out.println(v.getTitle());
             System.out.println("---------------------------");
@@ -300,8 +293,8 @@ public class EducationDaoTests {
         String[] categories = {};//无条件限制
         //String[] categories = {"较快","稍难","情歌风","S"}; //满条件限制
         //String[] categories = {"快", "分解教学"};
-        List<Education> videos = educationDao.getTutorialsByCategoriesByPage(categories, 1);
-        for (Education video : videos) {
+        List<Tutorial> videos = educationDao.getTutorialsByCategoriesByPage(categories, 1);
+        for (Tutorial video : videos) {
             System.out.println(video.getId());
             System.out.println("——————————————————————————————————————");
         }
@@ -315,8 +308,8 @@ public class EducationDaoTests {
         int pagecout = (int) educationDao.getPageCountByCategories(categories);
         Set<Integer> idSet = new HashSet<Integer>();
         for (int i=0; i<pagecout; i++){
-            List<Education> videos = educationDao.getTutorialsByCategoriesByPage(categories, i + 1);
-            for (Education video : videos) {
+            List<Tutorial> videos = educationDao.getTutorialsByCategoriesByPage(categories, i + 1);
+            for (Tutorial video : videos) {
                 System.out.println(video.getId());
                 idSet.add(video.getId());
                 System.out.println("——————————————————————————————————————");
@@ -329,17 +322,17 @@ public class EducationDaoTests {
     @Test
     public void getAllTutorialsWithoutId() {
         int vid = 1;
-        List<Education> allvideos = educationDao.getAllTutorialsWithoutId(vid);
-        for (Education video : allvideos) {
+        List<Tutorial> allvideos = educationDao.getAllTutorialsWithoutId(vid);
+        for (Tutorial video : allvideos) {
             System.out.println(video.getId());
         }
     }
 
     @Test
     public void getSideBarTutorials() {
-        List<Education> result = educationDao.getSideBarTutorials(1);
+        List<Tutorial> result = educationDao.getSideBarTutorials(1);
         System.out.println(result.size());
-        for (Education video : result) {
+        for (Tutorial video : result) {
             System.out.println(video.getTitle() + "-" + video.getId());
         }
     }
@@ -356,8 +349,8 @@ public class EducationDaoTests {
 
     @Test
     public void yaGetRecommendTutorials() {
-        List<Education> tutorials = educationDao.getRecommendTutorials();
-        for (Education tutorial : tutorials) {
+        List<Tutorial> tutorials = educationDao.getRecommendTutorials();
+        for (Tutorial tutorial : tutorials) {
             System.out.println(tutorial.getTitle());
         }
     }

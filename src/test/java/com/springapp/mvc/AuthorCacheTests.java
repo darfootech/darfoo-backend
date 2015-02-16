@@ -5,14 +5,13 @@ import com.darfoo.backend.caches.dao.AuthorCacheDao;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.AuthorDao;
-import com.darfoo.backend.dao.EducationDao;
+import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.Education;
+import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
-import com.darfoo.backend.service.responsemodel.SingleVideo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +42,7 @@ public class AuthorCacheTests {
     @Autowired
     VideoCacheDao videoCacheDao;
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
     @Autowired
     TutorialCacheDao tutorialCacheDao;
     @Autowired
@@ -90,7 +89,7 @@ public class AuthorCacheTests {
         int id = 11;
         List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
         List<Video> videos = videoDao.getVideosByAuthorId(id);
-        List<Education> tutorials = educationDao.getTutorialsByAuthorId(id);
+        List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(id);
 
         for (Video video : videos) {
             int vid = video.getId();
@@ -99,7 +98,7 @@ public class AuthorCacheTests {
             System.out.println("insert result -> " + status);
         }
 
-        for (Education tutorial : tutorials) {
+        for (Tutorial tutorial : tutorials) {
             int tid = tutorial.getId();
             long status = redisClient.sadd("authorvideos" + id, "tutorial-" + tid);
             tutorialCacheDao.insertSingleTutorial(tutorial);

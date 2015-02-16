@@ -1,8 +1,8 @@
 package com.darfoo.backend.service.admin;
 
-import com.darfoo.backend.dao.EducationDao;
+import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.VideoDao;
-import com.darfoo.backend.model.Education;
+import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.utils.QiniuUtils;
 import com.darfoo.backend.utils.ServiceUtils;
@@ -28,7 +28,7 @@ public class RecommendController {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
 
     QiniuUtils qiniuUtils = new QiniuUtils();
 
@@ -67,8 +67,8 @@ public class RecommendController {
 
     @RequestMapping(value = "/admin/recommend/tutorial", method = RequestMethod.GET)
     public String recommendTutorial(ModelMap modelMap, HttpSession session){
-        List<Education> allTutorials = educationDao.getAllEducation();
-        List<Education> recommendTutorials = educationDao.getRecommendTutorials();
+        List<Tutorial> allTutorials = educationDao.getAllEducation();
+        List<Tutorial> recommendTutorials = educationDao.getRecommendTutorials();
         modelMap.addAttribute("alltutorials", allTutorials);
         modelMap.addAttribute("recommendtutorials", recommendTutorials);
         return "recommendtutorial";
@@ -100,7 +100,7 @@ public class RecommendController {
     @RequestMapping(value = "/admin/recommend/updateimage/all", method = RequestMethod.GET)
     public String updateRecommendImage(ModelMap modelMap, HttpSession session){
         List<Video> recommendVideos = videoDao.getRecommendVideos();
-        List<Education> recommendTutorials = educationDao.getRecommendTutorials();
+        List<Tutorial> recommendTutorials = educationDao.getRecommendTutorials();
         modelMap.addAttribute("videos", recommendVideos);
         modelMap.addAttribute("tutorials", recommendTutorials);
         return "updaterecommendimageall";
@@ -119,7 +119,7 @@ public class RecommendController {
 
     @RequestMapping(value = "/admin/recommend/updateimage/tutorial/{id}", method = RequestMethod.GET)
     public String updateRecommendImageTutorial(@PathVariable Integer id, ModelMap modelMap, HttpSession session){
-        Education tutorial = educationDao.getEducationVideoById(id);
+        Tutorial tutorial = educationDao.getEducationVideoById(id);
         String imagekey = tutorial.getVideo_key() + "@@recommendtutorial.png";
         session.setAttribute("imagekey", imagekey);
         String imageurl = qiniuUtils.getQiniuResourceUrl(imagekey);

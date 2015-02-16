@@ -7,7 +7,7 @@ import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.Education;
+import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.service.responsemodel.*;
@@ -40,7 +40,7 @@ public class CacheController {
     @Autowired
     TutorialCacheDao tutorialCacheDao;
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
     @Autowired
     MusicCacheDao musicCacheDao;
     @Autowired
@@ -87,7 +87,7 @@ public class CacheController {
     @ResponseBody
     List<CacheSingleVideo> cacheRecmmendVideos() {
         List<Video> recommendVideos = videoDao.getRecommendVideos();
-        List<Education> recommendTutorials = educationDao.getRecommendTutorials();
+        List<Tutorial> recommendTutorials = educationDao.getRecommendTutorials();
 
         for (Video video : recommendVideos) {
             int vid = video.getId();
@@ -96,7 +96,7 @@ public class CacheController {
             System.out.println("insert result -> " + status);
         }
 
-        for (Education video : recommendTutorials) {
+        for (Tutorial video : recommendTutorials) {
             int vid = video.getId();
             long status = redisClient.sadd("recommend", "recommendvideo-" + vid);
             tutorialCacheDao.insertRecommendTutorial(video);
@@ -250,8 +250,8 @@ public class CacheController {
             targetCategories.add(styleCate);
         }
 
-        List<Education> targetVideos = educationDao.getEducationVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
-        for (Education video : targetVideos) {
+        List<Tutorial> targetVideos = educationDao.getEducationVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
+        for (Tutorial video : targetVideos) {
             int vid = video.getId();
             long result = redisClient.sadd("tutorialcategory" + categories, "tutorial-" + vid);
             tutorialCacheDao.insertSingleTutorial(video);
@@ -290,8 +290,8 @@ public class CacheController {
             targetCategories.add(styleCate);
         }
 
-        List<Education> targetVideos = educationDao.getTutorialsByCategoriesByPage(ServiceUtils.convertList2Array(targetCategories), page);
-        for (Education video : targetVideos) {
+        List<Tutorial> targetVideos = educationDao.getTutorialsByCategoriesByPage(ServiceUtils.convertList2Array(targetCategories), page);
+        for (Tutorial video : targetVideos) {
             int vid = video.getId();
             long result = redisClient.lpush("tutorialcategory" + categories + "page" + page, "tutorial-" + vid);
             tutorialCacheDao.insertSingleTutorial(video);
@@ -511,7 +511,7 @@ public class CacheController {
     @ResponseBody public List<CacheSingleVideo> getVideoListForAuthor(@PathVariable Integer id){
         List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
         List<Video> videos = videoDao.getVideosByAuthorId(id);
-        List<Education> tutorials = educationDao.getTutorialsByAuthorId(id);
+        List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(id);
 
         for (Video video : videos){
             int vid = video.getId();
@@ -520,7 +520,7 @@ public class CacheController {
             System.out.println("insert result -> " + status);
         }
 
-        for (Education tutorial : tutorials){
+        for (Tutorial tutorial : tutorials){
             int tid = tutorial.getId();
             long status = redisClient.sadd("authorvideos" + id, "tutorial-" + tid);
             tutorialCacheDao.insertSingleTutorial(tutorial);
@@ -550,7 +550,7 @@ public class CacheController {
     @ResponseBody public List<CacheSingleVideo> getVideoListForAuthorByPage(@PathVariable Integer id, @PathVariable Integer page){
         List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
         List<Video> videos = videoDao.getVideosByAuthorId(id);
-        List<Education> tutorials = educationDao.getTutorialsByAuthorId(id);
+        List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(id);
 
         int pageSize = 12;
         String rediskey = "authorvideos" + id + "page";
@@ -562,7 +562,7 @@ public class CacheController {
             System.out.println("insert result -> " + status);
         }
 
-        for (Education tutorial : tutorials){
+        for (Tutorial tutorial : tutorials){
             int tid = tutorial.getId();
             long status = redisClient.lpush(rediskey, "tutorial-" + tid);
             tutorialCacheDao.insertSingleTutorial(tutorial);
@@ -628,12 +628,12 @@ public class CacheController {
         Set<Integer> videoids = new HashSet<Integer>();
         Set<Integer> tutorialids = new HashSet<Integer>();
         List<Video> videos = searchDao.getVideoBySearch(searchContent);
-        List<Education> tutorials = searchDao.getEducationBySearch(searchContent);
+        List<Tutorial> tutorials = searchDao.getEducationBySearch(searchContent);
         for (Video video : videos){
             videoids.add(video.getId());
         }
 
-        for (Education tutorial : tutorials){
+        for (Tutorial tutorial : tutorials){
             tutorialids.add(tutorial.getId());
         }
 
@@ -641,12 +641,12 @@ public class CacheController {
         for (Author author : authors){
             int aid = author.getId();
             List<Video> authorvideos = videoDao.getVideosByAuthorId(aid);
-            List<Education> authortutorials = educationDao.getTutorialsByAuthorId(aid);
+            List<Tutorial> authortutorials = educationDao.getTutorialsByAuthorId(aid);
             for (Video video : authorvideos){
                 videoids.add(video.getId());
             }
 
-            for (Education tutorial : authortutorials){
+            for (Tutorial tutorial : authortutorials){
                 tutorialids.add(tutorial.getId());
             }
         }
@@ -659,7 +659,7 @@ public class CacheController {
         }
 
         for (Integer tid : tutorialids){
-            Education tutorial = educationDao.getEducationVideoById(tid);
+            Tutorial tutorial = educationDao.getEducationVideoById(tid);
             long status = redisClient.sadd("videosearch" + searchContent, "tutorial-" + tid);
             tutorialCacheDao.insertSingleTutorial(tutorial);
             System.out.println("insert result -> " + status);
@@ -695,12 +695,12 @@ public class CacheController {
         Set<Integer> videoids = new HashSet<Integer>();
         Set<Integer> tutorialids = new HashSet<Integer>();
         List<Video> videos = searchDao.getVideoBySearch(searchContent);
-        List<Education> tutorials = searchDao.getEducationBySearch(searchContent);
+        List<Tutorial> tutorials = searchDao.getEducationBySearch(searchContent);
         for (Video video : videos){
             videoids.add(video.getId());
         }
 
-        for (Education tutorial : tutorials){
+        for (Tutorial tutorial : tutorials){
             tutorialids.add(tutorial.getId());
         }
 
@@ -708,12 +708,12 @@ public class CacheController {
         for (Author author : authors){
             int aid = author.getId();
             List<Video> authorvideos = videoDao.getVideosByAuthorId(aid);
-            List<Education> authortutorials = educationDao.getTutorialsByAuthorId(aid);
+            List<Tutorial> authortutorials = educationDao.getTutorialsByAuthorId(aid);
             for (Video video : authorvideos){
                 videoids.add(video.getId());
             }
 
-            for (Education tutorial : authortutorials){
+            for (Tutorial tutorial : authortutorials){
                 tutorialids.add(tutorial.getId());
             }
         }
@@ -732,7 +732,7 @@ public class CacheController {
         }
 
         for (Integer tid : tutorialids){
-            Education tutorial = educationDao.getEducationVideoById(tid);
+            Tutorial tutorial = educationDao.getEducationVideoById(tid);
             long status = redisClient.lpush(rediskey, "tutorial-" + tid);
             tutorialCacheDao.insertSingleTutorial(tutorial);
             System.out.println("insert result -> " + status);
@@ -766,9 +766,9 @@ public class CacheController {
     List<CacheSingleVideo> searchTutorial(HttpServletRequest request){
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
-        List<Education> videos = searchDao.getEducationBySearch(searchContent);
+        List<Tutorial> videos = searchDao.getEducationBySearch(searchContent);
         List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
-        for (Education video : videos){
+        for (Tutorial video : videos){
             int vid = video.getId();
             long status = redisClient.sadd("tutorialsearch" + searchContent, "tutorial-" + vid);
             tutorialCacheDao.insertSingleTutorial(video);
@@ -899,9 +899,9 @@ public class CacheController {
 
     @RequestMapping(value = "/tutorial/sidebar/{id}", method = RequestMethod.GET)
     public @ResponseBody List<CacheSingleVideo> getSidebarTutorials(@PathVariable Integer id){
-        List<Education> sidebarTutorials = educationDao.getSideBarTutorials(id);
+        List<Tutorial> sidebarTutorials = educationDao.getSideBarTutorials(id);
         String rediskey = "tutorialsidebar" + id;
-        for (Education video : sidebarTutorials) {
+        for (Tutorial video : sidebarTutorials) {
             int vid = video.getId();
             long result = redisClient.lpush(rediskey, "tutorial-" + vid);
             tutorialCacheDao.insertSingleTutorial(video);

@@ -25,7 +25,7 @@ import org.hibernate.annotations.CascadeType;
  */
 @Entity
 @Table(name = "education")
-public class Education implements Serializable {
+public class Tutorial implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @CacheInsert(type = CacheInsertEnum.NORMAL)
@@ -46,10 +46,10 @@ public class Education implements Serializable {
     Author author;
 
     //category
-    @ManyToMany(targetEntity = EducationCategory.class)
+    @ManyToMany(targetEntity = TutorialCategory.class)
     @JoinTable(name = "education_category", joinColumns = {@JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false, columnDefinition = "int(11) not null")},
             inverseJoinColumns = {@JoinColumn(name = "category_id", nullable = false, columnDefinition = "int(11) not null")})
-    Set<EducationCategory> categories = new HashSet<EducationCategory>();
+    Set<TutorialCategory> categories = new HashSet<TutorialCategory>();
 
     @Column(name = "VIDEO_KEY", unique = true, nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
@@ -98,7 +98,7 @@ public class Education implements Serializable {
         this.music = music;
     }
 
-    public Education() {
+    public Tutorial() {
 
     }
 
@@ -114,11 +114,11 @@ public class Education implements Serializable {
         this.author = author;
     }
 
-    public Set<EducationCategory> getCategories() {
+    public Set<TutorialCategory> getCategories() {
         return categories;
     }
 
-    public void setCategories(Set<EducationCategory> categories) {
+    public void setCategories(Set<TutorialCategory> categories) {
         this.categories = categories;
     }
 
@@ -180,7 +180,7 @@ public class Education implements Serializable {
             if (categories == null) {
                 sb.append("种类为空");
             } else {
-                for (EducationCategory category : categories) {
+                for (TutorialCategory category : categories) {
                     sb.append("\n").append("种类:" + category.title + " 描述:" + category.description);
                 }
             }
@@ -189,7 +189,7 @@ public class Education implements Serializable {
     }
 
     public void trigLazyLoad() {
-        for (EducationCategory category : categories)
+        for (TutorialCategory category : categories)
             ;
     }
 }

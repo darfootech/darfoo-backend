@@ -10,8 +10,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -20,7 +18,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "educationcategory")
-public class EducationCategory implements Serializable {
+public class TutorialCategory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
@@ -32,9 +30,9 @@ public class EducationCategory implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "categories")
 //	@JoinTable(name="education_category",joinColumns={@JoinColumn(name="category_id",referencedColumnName="id",nullable=false,columnDefinition="int(11) not null")},
 //	inverseJoinColumns={@JoinColumn(name="video_id",nullable=false,columnDefinition="int(11) not null")})
-            Set<Education> videos = new HashSet<Education>();
+            Set<Tutorial> videos = new HashSet<Tutorial>();
 
-    public EducationCategory() {
+    public TutorialCategory() {
     }
 
     public Integer getId() {
@@ -61,11 +59,11 @@ public class EducationCategory implements Serializable {
         this.description = description;
     }
 
-    public Set<Education> getVideos() {
+    public Set<Tutorial> getVideos() {
         return videos;
     }
 
-    public void setVideos(Set<Education> videos) {
+    public void setVideos(Set<Tutorial> videos) {
         this.videos = videos;
     }
 

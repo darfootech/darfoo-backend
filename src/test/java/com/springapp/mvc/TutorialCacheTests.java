@@ -2,11 +2,9 @@ package com.springapp.mvc;
 
 import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
-import com.darfoo.backend.dao.EducationDao;
-import com.darfoo.backend.model.Education;
-import com.darfoo.backend.model.Video;
+import com.darfoo.backend.dao.TutorialDao;
+import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
-import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.service.responsemodel.TutorialCates;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.junit.Test;
@@ -31,7 +29,7 @@ import java.util.Set;
 })
 public class TutorialCacheTests {
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
     @Autowired
     TutorialCacheDao tutorialCacheDao;
     @Autowired
@@ -47,7 +45,7 @@ public class TutorialCacheTests {
 
     @Test
     public void insertTutorial() {
-        Education tutorial = educationDao.getEducationVideoById(1);
+        Tutorial tutorial = educationDao.getEducationVideoById(1);
         System.out.println(tutorialCacheDao.insertSingleTutorial(tutorial));
     }
 
@@ -76,8 +74,8 @@ public class TutorialCacheTests {
             targetCategories.add(styleCate);
         }
 
-        List<Education> targetVideos = educationDao.getEducationVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
-        for (Education video : targetVideos) {
+        List<Tutorial> targetVideos = educationDao.getEducationVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
+        for (Tutorial video : targetVideos) {
             int vid = video.getId();
             long result = redisClient.sadd("tutorialcategory" + categories, "tutorial-" + vid);
             tutorialCacheDao.insertSingleTutorial(video);

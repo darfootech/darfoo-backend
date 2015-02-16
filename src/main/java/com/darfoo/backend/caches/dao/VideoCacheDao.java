@@ -14,8 +14,6 @@ import java.util.HashMap;
  */
 public class VideoCacheDao {
     @Autowired
-    VideoDao videoDao;
-    @Autowired
     CommonRedisClient commonRedisClient;
     @Autowired
     CacheProtocol cacheProtocol;

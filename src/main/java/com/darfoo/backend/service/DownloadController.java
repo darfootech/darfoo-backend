@@ -1,6 +1,6 @@
 package com.darfoo.backend.service;
 
-import com.darfoo.backend.dao.EducationDao;
+import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.*;
@@ -36,7 +36,7 @@ public class DownloadController {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    EducationDao educationDao;
+    TutorialDao educationDao;
     @Autowired
     MusicDao musicDao;
 
@@ -143,7 +143,7 @@ public class DownloadController {
     }
 
     public void writeTutorialsToCSV(){
-        List<Education> educations = educationDao.getAllEducation();
+        List<Tutorial> educations = educationDao.getAllEducation();
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
         CSVPrinter printer = null;
         try {
@@ -151,10 +151,10 @@ public class DownloadController {
             printer = new CSVPrinter(out, format.withDelimiter(','));
             System.out.println("********");
             printer.printRecord("教程标题", "明星舞队名称", "舞蹈速度", "舞蹈难度", "舞蹈风格");
-            for(Education tutorial : educations){
+            for(Tutorial tutorial : educations){
                 HashMap<String, String> styleMap = new HashMap<String, String>();
-                Set<EducationCategory> categories = tutorial.getCategories();
-                for (EducationCategory category : categories){
+                Set<TutorialCategory> categories = tutorial.getCategories();
+                for (TutorialCategory category : categories){
                     int categoryid = category.getId();
                     String categorytitle = category.getTitle();
                     System.out.println(categoryid);
