@@ -1,7 +1,6 @@
 package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.DashboardDao;
-import com.darfoo.backend.utils.DashboardUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +30,6 @@ public class DashboardController {
         String password = request.getParameter("cGFzc3dvcmQ=");
 
         if (username.equals("Y2NjMzMz") && password.equals("cHBwcHBwcHA=")) {
-            //DashboardUtils.openDashboard();
             dashboardDao.openDashBoard();
             result.put("status", "ok");
             return result;
@@ -51,7 +49,6 @@ public class DashboardController {
         String password = request.getParameter("cGFzc3dvcmQ=");
 
         if (username.equals("Y2NjMzMz") && password.equals("cHBwcHBwcHA=")) {
-            //DashboardUtils.closeDashboard();
             dashboardDao.closeDashBoard();
             result.put("status", "ok");
             return result;

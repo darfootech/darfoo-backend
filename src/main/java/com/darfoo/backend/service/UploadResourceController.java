@@ -33,8 +33,8 @@ public class UploadResourceController {
     UploadVideoDao uploadVideoDao;
     @Autowired
     UploadNoAuthVideoDao uploadNoAuthVideoDao;
-
-    QiniuUtils qiniuUtils = new QiniuUtils();
+    @Autowired
+    QiniuUtils qiniuUtils;
 
     /**
      * 获取上传qiniu云的token凭证
