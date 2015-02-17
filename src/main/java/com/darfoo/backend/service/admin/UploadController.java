@@ -35,10 +35,6 @@ public class UploadController {
     ImageDao imageDao;
     @Autowired
     MusicDao musicDao;
-    @Autowired
-    DanceDao danceDao;
-    @Autowired
-    DanceGroupImageDao danceGroupImageDao;
 
     public HashMap<String, Integer> insertSingleVideo(String videotitle, String videotype, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter){
         System.out.println(authorname);
@@ -335,36 +331,6 @@ public class UploadController {
         author.setDescription(description);
         author.setImage(image);
         authorDao.insertAuthor(author);
-
-        return 200;
-    }
-
-    public int insertSingleDanceGroup(String groupname, String description, String imagekey){
-        boolean isGroupExists = danceDao.isDanceGroupExists(groupname);
-        if (isGroupExists){
-            System.out.println("舞队已存在");
-            return 501;
-        }else{
-            System.out.println("舞队不存在，可以新建舞队");
-        }
-
-        DanceGroupImage image = danceGroupImageDao.getImageByName(imagekey);
-        if (image == null){
-            System.out.println("图片不存在，可以进行插入");
-            image = new DanceGroupImage();
-            image.setImage_key(imagekey);
-            danceGroupImageDao.insertSingleImage(image);
-        }else{
-            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
-            return 503;
-        }
-
-        DanceGroup group = new DanceGroup();
-        group.setName(groupname);
-        group.setDescription(description);
-        group.setUpdate_timestamp(System.currentTimeMillis());
-        group.setImage(image);
-        danceDao.insertSingleDanceGroup(group);
 
         return 200;
     }
@@ -670,57 +636,4 @@ public class UploadController {
         }
     }
     /*end of author part*/
-
-    /*team part*/
-    //新建舞队
-    @RequestMapping(value = "/resources/team/new", method = RequestMethod.GET)
-    public String uploadTeam(ModelMap modelMap, HttpSession session){
-        session.setAttribute("resource", "team");
-        modelMap.addAttribute("resource", "team");
-        return "uploadteam";
-    }
-
-    @RequestMapping(value = "/resources/team/create", method = RequestMethod.POST)
-    public @ResponseBody String createTeam(HttpServletRequest request, HttpSession session){
-        String name = request.getParameter("name");
-        String description = request.getParameter("description");
-        String imagekey = request.getParameter("imagekey");
-        Long update_timestamp = System.currentTimeMillis() / 1000;
-        System.out.println("requests: " + name + " " + description + " " + imagekey + " " + update_timestamp);
-
-        session.setAttribute("dancegroupImage", imagekey);
-
-        int statusCode = this.insertSingleDanceGroup(name, description, imagekey);
-        return statusCode+"";
-    }
-
-    @RequestMapping(value = "/resources/teamresource/new", method = RequestMethod.GET)
-    public String uploadTeamResource(){
-        return "uploadteamresource";
-    }
-
-    @RequestMapping("/resources/teamresource/create")
-    public String createTeamResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session){
-        //upload
-        String imagekey = (String)session.getAttribute("dancegroupImage");
-
-        String imageResourceName = imageresource.getOriginalFilename();
-
-        System.out.println(imageResourceName);
-
-        String imageStatusCode = "";
-
-        try {
-            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (imageStatusCode.equals("200")){
-            return "success";
-        }else{
-            return "fail";
-        }
-    }
-    /*end of team part*/
 }

@@ -24,8 +24,6 @@ public class DeleteController {
     @Autowired
     MusicDao musicDao;
     @Autowired
-    DanceDao dancedao;
-    @Autowired
     AuthorDao authorDao;
 
     @RequestMapping(value = "/admin/video/delete", method = RequestMethod.POST)
@@ -71,19 +69,6 @@ public class DeleteController {
     String deleteAuthor(HttpServletRequest request, HttpSession session){
         Integer id = Integer.parseInt(request.getParameter("id"));
         String status = CRUDEvent.getResponse(authorDao.deleteAuthorById(id));
-        System.out.println(status);
-        if (status.equals("DELETE_SUCCESS")){
-            return 200+"";
-        }else{
-            return 505+"";
-        }
-    }
-
-    @RequestMapping(value = "/admin/team/delete", method = RequestMethod.POST)
-    public @ResponseBody
-    String deleteTeam(HttpServletRequest request, HttpSession session){
-        Integer id = Integer.parseInt(request.getParameter("id"));
-        String status = CRUDEvent.getResponse(dancedao.deleteDanceGroupById(id));
         System.out.println(status);
         if (status.equals("DELETE_SUCCESS")){
             return 200+"";

@@ -31,8 +31,6 @@ public class GalleryController {
     @Autowired
     AuthorDao authorDao;
     @Autowired
-    DanceDao danceDao;
-    @Autowired
     CommonDao commonDao;
     @Autowired
     QiniuUtils qiniuUtils;
@@ -180,25 +178,5 @@ public class GalleryController {
             modelMap.addAttribute("imageurl", "");
         }
         return "singleauthor";
-    }
-
-    @RequestMapping(value = "/admin/team/all", method = RequestMethod.GET)
-    public String showAllDanceGroup(ModelMap modelMap, HttpSession session) {
-        List<DanceGroup> s_team = new ArrayList<DanceGroup>();
-        s_team = danceDao.getAllDanceGourp();
-        modelMap.addAttribute("allteams", s_team);
-        return "allteam";
-    }
-
-    @RequestMapping(value = "/admin/team/{id}", method = RequestMethod.GET)
-    public String showSingleDanceGroup(@PathVariable String id, ModelMap modelMap, HttpSession session) {
-        System.out.println(Integer.parseInt(id));
-        DanceGroup danceGroup = danceDao.getTeamById(Integer.parseInt(id));
-
-        session.setAttribute("teamname", danceGroup.getName());
-        session.setAttribute("teamdescription", danceGroup.getDescription());
-
-        modelMap.addAttribute("team", danceGroup);
-        return "singleteam";
     }
 }
