@@ -412,7 +412,7 @@ public class UpdateController {
     @RequestMapping(value = "/admin/music/updateimageresource", method = RequestMethod.POST)
     public String updateMusicImageResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request) {
         int id = Integer.parseInt(request.getParameter("id"));
-        String imagekey = musicDao.getMusicByMusicId(id).getImage().getImage_key();
+        String imagekey = ((Music) commonDao.getResourceById(Music.class, id)).getImage().getImage_key();
 
         System.out.println(id + " " + imagekey);
 

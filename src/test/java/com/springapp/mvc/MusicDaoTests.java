@@ -5,10 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.darfoo.backend.dao.AuthorDao;
-import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.ImageDao;
-import com.darfoo.backend.dao.ModelUtils;
+import com.darfoo.backend.dao.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Image;
 import com.darfoo.backend.model.Music;
@@ -37,6 +33,8 @@ public class MusicDaoTests {
     AuthorDao authorDao;
     @Autowired
     ImageDao imageDao;
+    @Autowired
+    CommonDao commonDao;
 
     @Test
     public void insertAllMusicCategories() {
@@ -48,26 +46,6 @@ public class MusicDaoTests {
         String musicTitle = "ccccc";
         //String imagekey = System.currentTimeMillis() + ".jpg";
         String authorname = "吉卉";
-
-        /*Image image = imageDao.getImageByName(imagekey);
-        if (image == null){
-            System.out.println("图片不存在，可以进行插入");
-            image = new Image();
-            image.setImage_key(imagekey);
-            imageDao.insertSingleImage(image);
-        }else{
-            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
-            return;
-        }*/
-
-        /*Music queryMusic = musicDao.getMusicByMusicTitle(musicTitle);
-        if (queryMusic == null){
-            System.out.println("伴奏不存在，可以进行插入");
-        }else{
-            System.out.println(queryMusic.toString(true));
-            System.out.println("伴奏已存在，不可以进行插入了，是否需要修改");
-            return;
-        }*/
 
         //伴奏title可以重名,但是不可能出现authorname和title都一样的情况,也就是一个作者名字对应的伴奏中不会出现重名的情况
         Music queryMusic = musicDao.getMusicByTitleAuthorName(musicTitle, authorname);
@@ -123,7 +101,7 @@ public class MusicDaoTests {
     @Test
     public void getMusicByMusicId() {
         long start = System.currentTimeMillis();
-        Music music = musicDao.getMusicByMusicId(30);
+        Music music = (Music) commonDao.getResourceById(Music.class, 30);
         System.out.println(music.toString(true));
         String authorname = music.getAuthorName();
         if (authorname.equals("")) {
@@ -292,7 +270,7 @@ public class MusicDaoTests {
         int pagecount = (int) musicDao.getPageCountByCategories(categories);
         Set<Integer> idSet = new HashSet<Integer>();
         for (int i = 0; i < pagecount; i++) {
-            List<Music> musics = musicDao.getMusicsByCategoriesByPage(categories, i+1);
+            List<Music> musics = musicDao.getMusicsByCategoriesByPage(categories, i + 1);
             for (Music music : musics) {
                 System.out.println(music.getId());
                 idSet.add(music.getId());

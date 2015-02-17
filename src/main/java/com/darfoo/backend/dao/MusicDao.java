@@ -21,6 +21,8 @@ import com.darfoo.backend.model.Music;
 public class MusicDao {
     @Autowired
     private SessionFactory sf;
+    @Autowired
+    CommonDao commonDao;
 
     private int pageSize = 22;
 
@@ -80,29 +82,6 @@ public class MusicDao {
             e.printStackTrace();
             return -1;
         }
-    }
-
-    /**
-     * 获取单个music的信息
-     * 根据music的id来获得music对象
-     *
-     * @return music 返回一个Music的实例对象(包含关联表中的数据)，详细请看Music.java类
-     * *
-     */
-    public Music getMusicByMusicId(Integer vid) {
-        Music music = null;
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Music.class);
-            c.setReadOnly(true);
-            c.add(Restrictions.eq("id", vid));
-            //设置JOIN mode，这样categories会直接加载到music类中
-            c.setFetchMode("categories", FetchMode.JOIN);
-            music = (Music) c.uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return music;
     }
 
     /**
@@ -306,12 +285,6 @@ public class MusicDao {
                         }
                     }
                 }
-//				if(title !=null){
-//					if(!title.equals(oldVideo.getTitle())){
-//						System.out.println("修改title就意味着修改key，也就表示需要修改云端存着的资源的key,还不如直接插入一个新的");
-//						response.setTitleUpdate(1);
-//					}
-//				}			
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -732,12 +705,13 @@ public class MusicDao {
      * 获取原则 ->
      * 从相同名字的明星舞队中随机选取5个
      * 如果相同名字明星舞队中伴奏个数不足则从所有伴奏中随机选出对应个数来填充
+     *
      * @param musicid
      * @return
      */
     public List<Music> getSideBarMusics(Integer musicid) {
         List<Music> result = new ArrayList<Music>();
-        String authorname = getMusicByMusicId(musicid).getAuthorName();
+        String authorname = ((Music) commonDao.getResourceById(Music.class, musicid)).getAuthorName();
         List<Music> sameAuthorMusics = getMusicsByAuthorName(authorname);
         int sameAuthorLen = sameAuthorMusics.size();
         if (sameAuthorLen > 5) {

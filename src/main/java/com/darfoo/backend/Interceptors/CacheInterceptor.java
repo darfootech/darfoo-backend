@@ -101,7 +101,7 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
                 response.sendRedirect(request.getContextPath() + "/rest/cache/music/" + mid);
             } else {
                 System.out.println("resource not in cache");
-                Music music = musicDao.getMusicByMusicId(mid);
+                Music music = (Music) commonDao.getResourceById(Music.class, mid);
                 musicCacheDao.insertSingleMusic(music);
             }
             return true;

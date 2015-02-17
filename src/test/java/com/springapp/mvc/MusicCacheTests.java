@@ -2,6 +2,7 @@ package com.springapp.mvc;
 
 import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.caches.dao.MusicCacheDao;
+import com.darfoo.backend.dao.CommonDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.service.responsemodel.MusicCates;
@@ -34,6 +35,8 @@ public class MusicCacheTests {
     MusicCacheDao musicCacheDao;
     @Autowired
     CommonRedisClient redisClient;
+    @Autowired
+    CommonDao commonDao;
 
     MusicCates musicCates = new MusicCates();
 
@@ -45,7 +48,7 @@ public class MusicCacheTests {
 
     @Test
     public void insertMusic() {
-        Music music = musicDao.getMusicByMusicId(1);
+        Music music = (Music) commonDao.getResourceById(Music.class, 1);
         System.out.println(musicCacheDao.insertSingleMusic(music));
     }
 

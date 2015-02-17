@@ -174,7 +174,7 @@ public class VideoCacheTests {
         if (targetMusic != null) {
             int music_id = targetMusic.getId();
             videoCacheDao.insertMusic(id, music_id);
-            Music music = musicDao.getMusicByMusicId(music_id);
+            Music music = (Music) commonDao.getResourceById(Music.class, music_id);
             System.out.println(musicCacheDao.insertSingleMusic(music));
         } else {
             System.out.println("没有关联伴奏");

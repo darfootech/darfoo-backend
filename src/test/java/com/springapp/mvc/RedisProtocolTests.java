@@ -86,7 +86,7 @@ public class RedisProtocolTests {
     }
 
     @Test
-    public void extractMusicResourceIntoCache() {
+    public void extractAuthorResourceFromCache() {
         SingleAuthor result = (SingleAuthor) cacheProtocol.extractResourceFromCache(SingleAuthor.class, 15, "author");
         try {
             for (Field field : SingleAuthor.class.getDeclaredFields()) {
@@ -99,8 +99,8 @@ public class RedisProtocolTests {
     }
 
     @Test
-    public void insertMusicResourceFromCache() {
-        Music music = musicDao.getMusicByMusicId(30);
+    public void insertMusicResourceIntoCache() {
+        Music music = (Music) commonDao.getResourceById(Music.class, 30);
         cacheProtocol.insertResourceIntoCache(Music.class, music, "music");
     }
 

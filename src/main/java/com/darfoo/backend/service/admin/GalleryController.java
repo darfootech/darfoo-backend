@@ -132,9 +132,8 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/music/{id}", method = RequestMethod.GET)
-    public String showSingleMusic(@PathVariable String id, ModelMap modelMap) {
-        System.out.println(Integer.parseInt(id));
-        Music music = musicDao.getMusicByMusicId(Integer.parseInt(id));
+    public String showSingleMusic(@PathVariable Integer id, ModelMap modelMap) {
+        Music music = (Music) commonDao.getResourceById(Music.class, id);
         Set<MusicCategory> categories = music.getCategories();
         for (MusicCategory category : categories) {
             int categoryid = category.getId();
