@@ -35,7 +35,7 @@ public class UpdateController {
     CommonDao commonDao;
 
     public int checkVideoTitleAuthorIdDuplicate(String videoTitle, String authorName) {
-        Author a = authorDao.getAuthor(authorName);
+        Author a = (Author) commonDao.getResourceByTitleOrName(Author.class, authorName, "name");
         if (a != null) {
             System.out.println(a.getName());
         } else {
@@ -57,7 +57,7 @@ public class UpdateController {
     }
 
     public int checkTutorialTitleAuthorIdDuplicate(String tutorialTitle, String authorName) {
-        Author a = authorDao.getAuthor(authorName);
+        Author a = (Author) commonDao.getResourceByTitleOrName(Author.class, authorName, "name");
         if (a != null) {
             System.out.println(a.getName());
         } else {
@@ -78,7 +78,7 @@ public class UpdateController {
     }
 
     public int checkMusicTitleAuthorIdDuplicate(String musicTitle, String authorName) {
-        Author a = authorDao.getAuthor(authorName);
+        Author a = (Author) commonDao.getResourceByTitleOrName(Author.class, authorName, "name");
         if (a != null) {
             System.out.println(a.getName());
         } else {

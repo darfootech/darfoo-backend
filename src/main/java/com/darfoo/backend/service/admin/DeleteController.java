@@ -1,6 +1,7 @@
 package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.*;
+import com.darfoo.backend.model.Video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,12 +26,14 @@ public class DeleteController {
     MusicDao musicDao;
     @Autowired
     AuthorDao authorDao;
+    @Autowired
+    CommonDao commonDao;
 
     @RequestMapping(value = "/admin/video/delete", method = RequestMethod.POST)
     public @ResponseBody
     String deleteVideo(HttpServletRequest request, HttpSession session){
         Integer vid = Integer.parseInt(request.getParameter("id"));
-        String status = CRUDEvent.getResponse(videoDao.deleteVideoById(vid));
+        String status = CRUDEvent.getResponse(commonDao.deleteResourceById(Video.class, vid));
         if (status.equals("DELETE_SUCCESS")){
             return 200+"";
         }else{

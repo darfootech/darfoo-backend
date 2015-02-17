@@ -33,18 +33,20 @@ public class VerifyUploadVideoController {
     VideoDao videoDao;
     @Autowired
     UploadNoAuthVideoDao uploadNoAuthVideoDao;
-
-    QiniuUtils qiniuUtils = new QiniuUtils();
+    @Autowired
+    CommonDao commonDao;
+    @Autowired
+    QiniuUtils qiniuUtils;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public String allUnVerifyVideos(ModelMap modelMap){
+    public String allUnVerifyVideos(ModelMap modelMap) {
         List<UploadNoAuthVideo> videos = uploadNoAuthVideoDao.getAllUnVerifyVideos();
         modelMap.addAttribute("allvideos", videos);
         return "verifyallvideo";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String singleUnVerifyVideos(@PathVariable Integer id, ModelMap modelMap, HttpSession session){
+    public String singleUnVerifyVideos(@PathVariable Integer id, ModelMap modelMap, HttpSession session) {
         UploadNoAuthVideo video = uploadNoAuthVideoDao.getUploadVideoById(id);
         session.setAttribute("uploadvideoid", id);
         session.setAttribute("uploadmacaddr", video.getMac_addr());
@@ -61,43 +63,42 @@ public class VerifyUploadVideoController {
         return "verifysinglevideo";
     }
 
-    public HashMap<String, Integer> insertSingleVideo(String videokey, String videotitle, String videotype, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter){
+    public HashMap<String, Integer> insertSingleVideo(String videokey, String videotitle, String videotype, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter) {
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
         boolean isSingleLetter = ServiceUtils.isSingleCharacter(videoletter);
-        if (isSingleLetter){
+        if (isSingleLetter) {
             System.out.println("是单个大写字母");
-        }else{
+        } else {
             System.out.println("不是单个大写字母");
             resultMap.put("statuscode", 505);
             resultMap.put("insertid", -1);
             return resultMap;
         }
 
-        if (imagekey.equals("")){
+        if (imagekey.equals("")) {
             resultMap.put("statuscode", 508);
             resultMap.put("insertid", -1);
             return resultMap;
         }
 
         Image image = imageDao.getImageByName(imagekey);
-        if (image == null){
+        if (image == null) {
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
             image.setImage_key(imagekey);
             imageDao.insertSingleImage(image);
-        }else{
+        } else {
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
             resultMap.put("statuscode", 502);
             resultMap.put("insertid", -1);
             return resultMap;
         }
 
-        Author targetAuthor = authorDao.getAuthor(authorname);
-        if(targetAuthor != null){
+        Author targetAuthor = (Author) commonDao.getResourceByTitleOrName(Author.class, authorname, "name");
+        if (targetAuthor != null) {
             System.out.println(targetAuthor.getName());
-        }
-        else{
+        } else {
             targetAuthor = new Author();
             targetAuthor.setName(authorname);
             targetAuthor.setDescription("userdescription");
@@ -127,9 +128,9 @@ public class VerifyUploadVideoController {
         video.setVideo_key(videokey);
         video.setUpdate_timestamp(System.currentTimeMillis());
         int insertStatus = videoDao.insertSingleVideo(video);
-        if (insertStatus == -1){
+        if (insertStatus == -1) {
             System.out.println("插入视频失败");
-        }else{
+        } else {
             System.out.println("插入视频成功，视频id是" + insertStatus);
         }
 
@@ -139,8 +140,9 @@ public class VerifyUploadVideoController {
     }
 
     @RequestMapping(value = "/verify", method = RequestMethod.POST)
-    public @ResponseBody
-    String verifyUploadVideo(HttpServletRequest request, HttpSession session){
+    public
+    @ResponseBody
+    String verifyUploadVideo(HttpServletRequest request, HttpSession session) {
         String videoTitle = request.getParameter("title");
         String videoKey = request.getParameter("videokey");
         String videoType = request.getParameter("videotype");
@@ -155,36 +157,37 @@ public class VerifyUploadVideoController {
         Long update_timestamp = System.currentTimeMillis() / 1000;
         System.out.println("requests: " + videoKey + " " + videoTitle + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + videoLetter + " " + update_timestamp);
 
-        String authorname = "user-" + (String)session.getAttribute("uploadmacaddr");
+        String authorname = "user-" + (String) session.getAttribute("uploadmacaddr");
 
         HashMap<String, Integer> resultMap = this.insertSingleVideo(videoKey, videoTitle, videoType, authorname, imagekey, videoSpeed, videoDifficult, videoStyle, videoLetter);
         int statusCode = resultMap.get("statuscode");
         System.out.println("status code is: " + statusCode);
-        if (statusCode != 200){
-            return statusCode+"";
-        }else{
+        if (statusCode != 200) {
+            return statusCode + "";
+        } else {
             int insertid = resultMap.get("insertid");
-            int uploadvideoid = (Integer)session.getAttribute("uploadvideoid");
+            int uploadvideoid = (Integer) session.getAttribute("uploadvideoid");
             uploadNoAuthVideoDao.updateRealVideoid(uploadvideoid, insertid);
 
-            if (!connectmusic.equals("")){
+            if (!connectmusic.equals("")) {
                 int mid = Integer.parseInt(connectmusic.split("-")[2]);
                 videoDao.insertOrUpdateMusic(insertid, mid);
             }
 
-            return statusCode+"";
+            return statusCode + "";
         }
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public @ResponseBody
-    String deleteVideo(HttpServletRequest request){
+    public
+    @ResponseBody
+    String deleteVideo(HttpServletRequest request) {
         Integer vid = Integer.parseInt(request.getParameter("id"));
         String status = CRUDEvent.getResponse(uploadNoAuthVideoDao.deleteVideoById(vid));
-        if (status.equals("DELETE_SUCCESS")){
-            return 200+"";
-        }else{
-            return 505+"";
+        if (status.equals("DELETE_SUCCESS")) {
+            return 200 + "";
+        } else {
+            return 505 + "";
         }
     }
 }

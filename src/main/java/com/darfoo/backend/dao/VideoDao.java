@@ -35,10 +35,13 @@ public class VideoDao {
 
     //插入所有video(视频)的类型
     public void insertAllVideoCategories() {
-        String[] categories = {"较快", "适中", "较慢",    //按速度
+        String[] categories = {
+                "较快", "适中", "较慢",    //按速度
                 "简单", "普通", "稍难",                    //按难度  (将"适中"改为"普通"，否则会出现unique的错误org.hibernate.exception.ConstraintViolationException， com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException)
                 "欢快", "活泼", "优美", "情歌风", "红歌风", "草原风", "戏曲风", "印巴风", "江南风", "民歌风", "儿歌风",  //按风格
-                "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+                "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+        };
+
         try {
             Session session = sf.getCurrentSession();
             for (String category : categories) {
@@ -90,29 +93,6 @@ public class VideoDao {
             e.printStackTrace();
             return -1;
         }
-    }
-
-    /**
-     * 获取单个video的信息
-     * 根据video的title来获得video对象
-     *
-     * @return video 返回一个video的实例对象(包含关联表中的数据)，详细请看Video.java类
-     * *
-     */
-    public Video getVideoByVideoTitle(String title) {
-        Video video = null;
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Video.class);
-            c.setReadOnly(true);
-            c.add(Restrictions.eq("title", title));
-            //设置JOIN mode，这样categories会直接加载到video类中
-            c.setFetchMode("categories", FetchMode.JOIN);
-            video = (Video) c.uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return video;
     }
 
     /**
@@ -170,35 +150,6 @@ public class VideoDao {
         }
         return l_video;
     }
-    /**
-     * 获取首页最新视频 信息
-     * @param number 最新视频的数量
-     * @return List<Video> l_video 返回一个包含多个video对象的List
-     * @return video中的categories可以获取
-     * **/
-    //此方法用getVideosByNewest代替
-//	public List<Video>  getLatetVideos(int number){
-//		List<Video> l_video = new ArrayList<Video>();
-//		try{
-//			Session session = sf.getCurrentSession();
-//			Criteria c = session.createCriteria(Video.class).setProjection(Projections.property("update_timestamp")).addOrder(Order.desc("update_timestamp"));
-//			c.setReadOnly(true);
-//			c.setMaxResults(number);
-//			List<Long> l_timestamp = c.list();
-//			if(l_timestamp.size() > 0){
-//				c = session.createCriteria(Video.class).add(Restrictions.in("update_timestamp", l_timestamp)).addOrder(Order.desc("update_timestamp"));
-//				c.setReadOnly(true);
-//				//c.setFetchMode("categories", FetchMode.JOIN);  
-//				l_video = c.list();
-//				for(Video v : l_video){
-//					v.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
-//				}
-//			}
-//		}catch(Exception e){
-//			e.printStackTrace();
-//		}
-//		return l_video;
-//	}
 
     /**
      * 根据类别获取视频列表(我要上网—视频页面)
@@ -266,51 +217,6 @@ public class VideoDao {
     }
 
     /**
-     * 根据id删除单个视频
-     * videocategory表不受影响
-     * **/
-//	public int deleteVideoById(Integer id){
-//		int result = 0;
-//		try{
-//			Session session = sf.getCurrentSession();
-//			//先删除关联表中的关联
-//			String sql1 = "delete from video_category where video_id=:video_id";
-//			//关联成功删除后再删除video表中的记录
-//			String sql2 = "delete from video where id=:id";
-//			//返回受影响的行数(由于一般情况下一个video对应4个种类,所以为4行)
-//			int res = session.createSQLQuery(sql1).setInteger("video_id", id).executeUpdate();  
-//			if(res > 0){
-//				result = session.createSQLQuery(sql2).setInteger("id", id).executeUpdate();
-//			}
-//		}catch(Exception e){
-//			e.printStackTrace();
-//		}
-//		return result;
-//	}
-
-    /**
-     * 删除(video和关系表中的值)
-     * *
-     */
-    public int deleteVideoById(Integer id) {
-        int res = 0;
-        try {
-            Session session = sf.getCurrentSession();
-            Video video = (Video) session.get(Video.class, id);
-            if (video == null) {
-                res = CRUDEvent.DELETE_NOTFOUND;
-            } else {
-                session.delete(video);
-                res = CRUDEvent.DELETE_SUCCESS;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            res = CRUDEvent.DELETE_FAIL;
-        }
-        return res;
-    }
-
-    /**
      * 更新Video之前先做check(主要是对author和image的check)
      *
      * @param id         需要更新的对象对应的id
@@ -351,12 +257,6 @@ public class VideoDao {
                         }
                     }
                 }
-//				if(title !=null){
-//					if(!title.equals(oldVideo.getTitle())){
-//						System.out.println("修改title就意味着修改key，也就表示需要修改云端存着的资源的key,还不如直接插入一个新的");
-//						response.setTitleUpdate(1);
-//					}
-//				}			
             }
         } catch (Exception e) {
             e.printStackTrace();

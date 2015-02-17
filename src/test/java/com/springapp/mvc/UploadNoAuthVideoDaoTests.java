@@ -30,6 +30,8 @@ public class UploadNoAuthVideoDaoTests {
     ImageDao imageDao;
     @Autowired
     VideoDao videoDao;
+    @Autowired
+    CommonDao commonDao;
 
     @Test
     public void isExistVideo() {
@@ -138,7 +140,7 @@ public class UploadNoAuthVideoDaoTests {
             resultMap.put("insertid", -1);
         }
 
-        Author targetAuthor = authorDao.getAuthor(authorname);
+        Author targetAuthor = (Author) commonDao.getResourceByTitleOrName(Author.class, authorname, "name");
         if (targetAuthor != null) {
             System.out.println(targetAuthor.getName());
         } else {

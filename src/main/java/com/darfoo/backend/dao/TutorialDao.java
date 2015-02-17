@@ -85,29 +85,6 @@ public class TutorialDao {
     }
 
     /**
-     * 获取单个enducation video的信息
-     * 根据video的title来获得video对象
-     *
-     * @return video 返回一个video的实例对象(包含关联表中的数据),详细看Education类
-     * *
-     */
-    public Tutorial getEducationVideoByTitle(String title) {
-        Tutorial video = null;
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Tutorial.class);
-            c.setReadOnly(true);
-            c.add(Restrictions.eq("title", title));
-            //设置JOIN mode，这样categories会直接加载到video类中
-            c.setFetchMode("categories", FetchMode.JOIN);
-            video = (Tutorial) c.uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return video;
-    }
-
-    /**
      * 获取单个tutorial的信息
      * 根据tutorial的title和作者id来获得tutorial对象
      *
@@ -269,12 +246,6 @@ public class TutorialDao {
                         }
                     }
                 }
-//				if(title !=null){
-//					if(!title.equals(oldVideo.getTitle())){
-//						System.out.println("修改title就意味着修改key，也就表示需要修改云端存着的资源的key,还不如直接插入一个新的");
-//						response.setTitleUpdate(1);
-//					}
-//				}			
             }
         } catch (Exception e) {
             e.printStackTrace();

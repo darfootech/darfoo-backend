@@ -47,7 +47,7 @@ public class VideoDaoTests {
         String authorName = "周杰伦";
         String imagekey = "滨崎步311.jpg";
 
-        Author a = authorDao.getAuthor(authorName);
+        Author a = (Author) commonDao.getResourceByTitleOrName(Author.class, authorName, "name");
         if (a != null) {
             System.out.println(a.getName());
         } else {
@@ -119,7 +119,7 @@ public class VideoDaoTests {
     @Test
     public void getVideoByVideoTitle() {
         long start = System.currentTimeMillis();
-        Video video = videoDao.getVideoByVideoTitle("ccc");
+        Video video = (Video) commonDao.getResourceByTitleOrName(Video.class, "ccc", "title");
         if (video == null) {
             System.out.println("对象不存在，可以进行插入");
         } else {
@@ -187,10 +187,7 @@ public class VideoDaoTests {
 
     @Test
     public void deleteVideoCascade() {
-        System.out.println(CRUDEvent.getResponse(videoDao.deleteVideoById(48)));
-        System.out.println(CRUDEvent.getResponse(videoDao.deleteVideoById(49)));
-        System.out.println(CRUDEvent.getResponse(videoDao.deleteVideoById(50)));
-        System.out.println(CRUDEvent.getResponse(videoDao.deleteVideoById(51)));
+        System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Video.class, 40)));
     }
 
     /**

@@ -32,7 +32,7 @@ public class AuthorDaoTests {
     @Test
     public void getAuthorByName() {
         String name = "T-ara";
-        Author a = authorDao.getAuthor(name);
+        Author a = (Author) commonDao.getResourceByTitleOrName(Author.class, name, "name");
         if (a != null)
             System.out.println(a.getName());
         else

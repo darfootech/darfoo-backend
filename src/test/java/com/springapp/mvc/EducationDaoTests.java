@@ -41,7 +41,7 @@ public class EducationDaoTests {
         String authorName = "周杰伦";
         String imagekey = "仓木麻衣3321.jpg";
 
-        Author a = authorDao.getAuthor(authorName);
+        Author a = (Author) commonDao.getResourceByTitleOrName(Author.class, authorName, "name");
         if (a != null) {
             System.out.println(a.getName());
         } else {
