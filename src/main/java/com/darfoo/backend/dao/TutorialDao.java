@@ -20,6 +20,8 @@ import com.darfoo.backend.model.Tutorial;
 public class TutorialDao {
     @Autowired
     private SessionFactory sf;
+    @Autowired
+    CommonDao commonDao;
 
     private int pageSize = 12;
 
@@ -80,29 +82,6 @@ public class TutorialDao {
             e.printStackTrace();
             return -1;
         }
-    }
-
-    /**
-     * 获取单个enducation video的信息
-     * 根据video的id来获得video对象
-     *
-     * @return video 返回一个video的实例对象(包含关联表中的数据),详细看Education类
-     * *
-     */
-    public Tutorial getEducationVideoById(Integer vid) {
-        Tutorial video = null;
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Tutorial.class);
-            c.setReadOnly(true);
-            c.add(Restrictions.eq("id", vid));
-            //设置JOIN mode，这样categories会直接加载到video类中
-            c.setFetchMode("categories", FetchMode.JOIN);
-            video = (Tutorial) c.uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return video;
     }
 
     /**
@@ -772,7 +751,7 @@ public class TutorialDao {
      */
     public List<Tutorial> getSideBarTutorials(Integer tutorialid) {
         List<Tutorial> result = new ArrayList<Tutorial>();
-        int authorid = getEducationVideoById(tutorialid).getAuthor().getId();
+        int authorid = ((Tutorial) commonDao.getResourceById(Tutorial.class, tutorialid)).getAuthor().getId();
         List<Tutorial> sameAuthorTutorials = getTutorialsByAuthorId(authorid);
         int sameAuthorLen = sameAuthorTutorials.size();
         if (sameAuthorLen > 5) {

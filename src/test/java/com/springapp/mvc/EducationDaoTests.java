@@ -5,10 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.darfoo.backend.dao.AuthorDao;
-import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.ImageDao;
-import com.darfoo.backend.dao.ModelUtils;
+import com.darfoo.backend.dao.*;
 
 import com.darfoo.backend.model.*;
 import org.junit.Test;
@@ -17,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.TutorialCategory;
 
@@ -31,6 +27,8 @@ public class EducationDaoTests {
     AuthorDao authorDao;
     @Autowired
     ImageDao imageDao;
+    @Autowired
+    CommonDao commonDao;
 
     @Test
     public void insertAllEducationCategories() {
@@ -101,7 +99,7 @@ public class EducationDaoTests {
 
     @Test
     public void getEducationVideoById() {
-        Tutorial video = educationDao.getEducationVideoById(1);
+        Tutorial video = (Tutorial) commonDao.getResourceById(Tutorial.class, 1);
         if (video != null) {
             System.out.println(video.toString(true));
         } else {
@@ -303,11 +301,11 @@ public class EducationDaoTests {
     }
 
     @Test
-    public void isDuplicateWithPageQuery(){
+    public void isDuplicateWithPageQuery() {
         String[] categories = {};//无条件限制
         int pagecout = (int) educationDao.getPageCountByCategories(categories);
         Set<Integer> idSet = new HashSet<Integer>();
-        for (int i=0; i<pagecout; i++){
+        for (int i = 0; i < pagecout; i++) {
             List<Tutorial> videos = educationDao.getTutorialsByCategoriesByPage(categories, i + 1);
             for (Tutorial video : videos) {
                 System.out.println(video.getId());

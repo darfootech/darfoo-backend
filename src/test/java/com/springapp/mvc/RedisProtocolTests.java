@@ -62,7 +62,7 @@ public class RedisProtocolTests {
 
     @Test
     public void insertTutorialResourceIntoCache() {
-        Tutorial tutorial = tutorialDao.getEducationVideoById(30);
+        Tutorial tutorial = (Tutorial) commonDao.getResourceById(Tutorial.class, 30);
         cacheProtocol.insertResourceIntoCache(Tutorial.class, tutorial, "tutorial");
     }
 

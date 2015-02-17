@@ -84,7 +84,7 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
                 response.sendRedirect(request.getContextPath() + "/rest/cache/tutorial/" + tid);
             } else {
                 System.out.println("resource not in cache");
-                Tutorial tutorial = educationDao.getEducationVideoById(tid);
+                Tutorial tutorial = (Tutorial) commonDao.getResourceById(Tutorial.class, tid);
                 tutorialCacheDao.insertSingleTutorial(tutorial);
             }
             return true;

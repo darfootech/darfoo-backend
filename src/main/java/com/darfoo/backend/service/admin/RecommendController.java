@@ -128,7 +128,7 @@ public class RecommendController {
 
     @RequestMapping(value = "/admin/recommend/updateimage/tutorial/{id}", method = RequestMethod.GET)
     public String updateRecommendImageTutorial(@PathVariable Integer id, ModelMap modelMap, HttpSession session) {
-        Tutorial tutorial = educationDao.getEducationVideoById(id);
+        Tutorial tutorial = (Tutorial) commonDao.getResourceById(Tutorial.class, id);
         String imagekey = tutorial.getVideo_key() + "@@recommendtutorial.png";
         session.setAttribute("imagekey", imagekey);
         String imageurl = qiniuUtils.getQiniuResourceUrl(imagekey);

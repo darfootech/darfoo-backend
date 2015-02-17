@@ -238,7 +238,7 @@ public class UpdateController {
         categoryTitles.add(videoDifficult);
         categoryTitles.add(videoStyle);
 
-        String newTutorialKey = educationDao.getEducationVideoById(vid).getVideo_key().split("\\.")[0] + "." + videoType;
+        String newTutorialKey = ((Tutorial) commonDao.getResourceById(Tutorial.class, vid)).getVideo_key().split("\\.")[0] + "." + videoType;
         educationDao.updateVideoKeyById(vid, newTutorialKey);
 
         if (videoTitle.equals("")) {
@@ -273,7 +273,7 @@ public class UpdateController {
     @RequestMapping(value = "/admin/tutorial/updateimageresource", method = RequestMethod.POST)
     public String updateTutorialImageResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request) {
         int id = Integer.parseInt(request.getParameter("id"));
-        String imagekey = educationDao.getEducationVideoById(id).getImage().getImage_key();
+        String imagekey = ((Tutorial) commonDao.getResourceById(Tutorial.class, id)).getImage().getImage_key();
 
         System.out.println(id + " " + imagekey);
 

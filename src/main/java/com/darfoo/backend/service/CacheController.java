@@ -669,7 +669,7 @@ public class CacheController {
         }
 
         for (Integer tid : tutorialids) {
-            Tutorial tutorial = educationDao.getEducationVideoById(tid);
+            Tutorial tutorial = (Tutorial) commonDao.getResourceById(Tutorial.class, tid);
             long status = redisClient.sadd("videosearch" + searchContent, "tutorial-" + tid);
             tutorialCacheDao.insertSingleTutorial(tutorial);
             System.out.println("insert result -> " + status);
@@ -743,7 +743,7 @@ public class CacheController {
         }
 
         for (Integer tid : tutorialids) {
-            Tutorial tutorial = educationDao.getEducationVideoById(tid);
+            Tutorial tutorial = (Tutorial) commonDao.getResourceById(Tutorial.class, tid);
             long status = redisClient.lpush(rediskey, "tutorial-" + tid);
             tutorialCacheDao.insertSingleTutorial(tutorial);
             System.out.println("insert result -> " + status);

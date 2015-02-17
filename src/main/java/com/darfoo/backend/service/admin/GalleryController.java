@@ -46,9 +46,8 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/video/{id}", method = RequestMethod.GET)
-    public String showSingleVideo(@PathVariable String id, ModelMap modelMap) {
-        System.out.println(Integer.parseInt(id));
-        Video video = (Video) commonDao.getResourceById(Video.class, Integer.parseInt(id));
+    public String showSingleVideo(@PathVariable Integer id, ModelMap modelMap) {
+        Video video = (Video) commonDao.getResourceById(Video.class, id);
         Set<VideoCategory> categories = video.getCategories();
         for (VideoCategory category : categories) {
             int categoryid = category.getId();
@@ -91,9 +90,8 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/tutorial/{id}", method = RequestMethod.GET)
-    public String showSingleTutorial(@PathVariable String id, ModelMap modelMap) {
-        System.out.println(Integer.parseInt(id));
-        Tutorial tutorial = educationDao.getEducationVideoById(Integer.parseInt(id));
+    public String showSingleTutorial(@PathVariable Integer id, ModelMap modelMap) {
+        Tutorial tutorial = (Tutorial) commonDao.getResourceById(Tutorial.class, id);
         Set<TutorialCategory> categories = tutorial.getCategories();
         for (TutorialCategory category : categories) {
             int categoryid = category.getId();

@@ -2,6 +2,7 @@ package com.springapp.mvc;
 
 import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
+import com.darfoo.backend.dao.CommonDao;
 import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
@@ -34,6 +35,8 @@ public class TutorialCacheTests {
     TutorialCacheDao tutorialCacheDao;
     @Autowired
     CommonRedisClient redisClient;
+    @Autowired
+    CommonDao commonDao;
 
     TutorialCates tutorialCates = new TutorialCates();
 
@@ -45,7 +48,7 @@ public class TutorialCacheTests {
 
     @Test
     public void insertTutorial() {
-        Tutorial tutorial = educationDao.getEducationVideoById(1);
+        Tutorial tutorial = (Tutorial) commonDao.getResourceById(Tutorial.class, 1);
         System.out.println(tutorialCacheDao.insertSingleTutorial(tutorial));
     }
 
