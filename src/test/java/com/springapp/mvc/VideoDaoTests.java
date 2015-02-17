@@ -225,12 +225,11 @@ public class VideoDaoTests {
      */
     @Test
     public void getAllVideos() {
-        List<Video> s_videos = new ArrayList<Video>();
-        s_videos = videoDao.getAllVideo();
+        List<Video> s_videos = commonDao.getAllResource(Video.class);
         for (Video video : s_videos) {
             System.out.println("----------------");
             System.out.println("videois: " + video.getId());
-            System.out.println(video.toString(true));
+            //System.out.println(video.toString(true));
         }
         System.out.println("总共查到" + s_videos.size());
     }
@@ -421,7 +420,7 @@ public class VideoDaoTests {
             }
         }
 
-        System.out.println("video count -> " + videoDao.getAllVideo().size());
+        System.out.println("video count -> " + commonDao.getAllResource(Video.class).size());
         System.out.println("video count -> " + idSet.size());
     }
 

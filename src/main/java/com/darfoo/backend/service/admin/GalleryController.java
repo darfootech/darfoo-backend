@@ -37,8 +37,7 @@ public class GalleryController {
 
     @RequestMapping(value = "/admin/video/all", method = RequestMethod.GET)
     public String showAllVideo(ModelMap modelMap, HttpSession session) {
-        List<Video> s_videos = new ArrayList<Video>();
-        s_videos = videoDao.getAllVideo();
+        List<Video> s_videos = commonDao.getAllResource(Video.class);
         modelMap.addAttribute("allvideos", s_videos);
         return "allvideo";
     }

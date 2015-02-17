@@ -349,45 +349,6 @@ public class VideoDao {
         return res;
     }
 
-    /**
-     * 获得所有Video对象
-     * *
-     */
-    public List<Video> getAllVideo() {
-        List<Video> s_videos = new ArrayList<Video>();
-        Map<Integer, Video> videoSortMap = new HashMap<Integer, Video>();
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Video.class);
-            c.addOrder(Order.desc("id"));
-            c.setReadOnly(true);
-            c.setFetchMode("categories", FetchMode.JOIN);
-            List<Video> l_videos = c.list();
-            if (l_videos.size() > 0) {
-                //去除重复的video
-                for (Video video : l_videos) {
-                    videoSortMap.put(video.getId(), video);
-                    /*if (!s_videos.contains(video)){
-                        s_videos.add(video);
-                    }*/
-                }
-            }
-
-            List<Integer> sortedKeys = new ArrayList(videoSortMap.keySet());
-            Collections.sort(sortedKeys);
-
-            for (Integer index : sortedKeys) {
-                s_videos.add(videoSortMap.get(index));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Collections.reverse(s_videos);
-        return s_videos;
-    }
-
     public List<Video> getAllVideosWithoutId(Integer videoid) {
         List<Video> s_videos = new ArrayList<Video>();
         try {

@@ -7,8 +7,13 @@ import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by zjh on 15-2-17.
@@ -18,6 +23,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class CommonDao {
     @Autowired
     private SessionFactory sessionFactory;
+
+    private boolean ifHasCategoryResource(Class resource) {
+        if (resource == Video.class || resource == Tutorial.class || resource == Music.class) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     /**
      * 获取单个资源的信息
@@ -31,11 +45,28 @@ public class CommonDao {
             Criteria criteria = session.createCriteria(resource);
             criteria.setReadOnly(true);
             criteria.add(Restrictions.eq("id", vid));
-            if (resource == Video.class || resource == Tutorial.class || resource == Music.class) {
+            if (ifHasCategoryResource(resource)) {
                 //设置JOIN mode，这样categories会直接加载到返回的实例中
                 criteria.setFetchMode("categories", FetchMode.JOIN);
             }
             return criteria.uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List getAllResource(Class resource) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Criteria criteria = session.createCriteria(resource);
+            criteria.addOrder(Order.desc("id"));
+            criteria.setReadOnly(true);
+            //如果fetch了就会出现duplicate的情况 反正需要得到类别的时候直接从单个资源那里fetch就行了
+            /*if (ifHasCategoryResource(resource)) {
+                criteria.setFetchMode("categories", FetchMode.JOIN);
+            }*/
+            return criteria.list();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -59,7 +90,7 @@ public class CommonDao {
             } else if (type.equals("name")) {
                 criteria.add(Restrictions.eq("name", titlename));
             }
-            if (resource == Video.class || resource == Tutorial.class || resource == Music.class) {
+            if (ifHasCategoryResource(resource)) {
                 //设置JOIN mode，这样categories会直接加载到返回的实例中
                 criteria.setFetchMode("categories", FetchMode.JOIN);
             }

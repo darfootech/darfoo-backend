@@ -1,5 +1,6 @@
 package com.darfoo.backend.service;
 
+import com.darfoo.backend.dao.CommonDao;
 import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
@@ -39,6 +40,8 @@ public class DownloadController {
     TutorialDao educationDao;
     @Autowired
     MusicDao musicDao;
+    @Autowired
+    CommonDao commonDao;
 
     public String timestampTodatetime(long timestampfromdb){
         Timestamp timestamp = new Timestamp(timestampfromdb);
@@ -54,7 +57,7 @@ public class DownloadController {
     }
 
     public void writeVideosToCSV(){
-        List<Video> videos = videoDao.getAllVideo();
+        List<Video> videos = commonDao.getAllResource(Video.class);
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
         CSVPrinter printer = null;
         try {

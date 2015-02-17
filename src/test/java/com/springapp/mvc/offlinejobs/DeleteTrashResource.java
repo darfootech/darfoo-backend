@@ -1,9 +1,6 @@
 package com.springapp.mvc.offlinejobs;
 
-import com.darfoo.backend.dao.TutorialDao;
-import com.darfoo.backend.dao.ImageDao;
-import com.darfoo.backend.dao.MusicDao;
-import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.dao.*;
 import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Image;
 import com.darfoo.backend.model.Music;
@@ -40,6 +37,8 @@ public class DeleteTrashResource {
     MusicDao musicDao;
     @Autowired
     ImageDao imageDao;
+    @Autowired
+    CommonDao commonDao;
 
     public List<String> getFileList() {
         Config.ACCESS_KEY = "bnMvAStYBsL5AjYM3UXbpGalrectRZZF88Y6fZ-X";
@@ -86,7 +85,8 @@ public class DeleteTrashResource {
     public void deleteTrashResource() {
         List<String> keyList = new ArrayList<String>();
 
-        for (Video video : videoDao.getAllVideo()) {
+        List<Video> videoList = commonDao.getAllResource(Video.class);
+        for (Video video : videoList) {
             keyList.add(video.getVideo_key());
         }
 

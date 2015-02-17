@@ -38,7 +38,7 @@ public class RecommendController {
 
     @RequestMapping(value = "/admin/recommend/video", method = RequestMethod.GET)
     public String recommendVideo(ModelMap modelMap, HttpSession session) {
-        List<Video> allVideos = videoDao.getAllVideo();
+        List<Video> allVideos = commonDao.getAllResource(Video.class);
         List<Video> recommendVideos = videoDao.getRecommendVideos();
         modelMap.addAttribute("allvideos", allVideos);
         modelMap.addAttribute("recommendvideos", recommendVideos);

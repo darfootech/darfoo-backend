@@ -1,5 +1,6 @@
 package com.springapp.mvc.offlinejobs;
 
+import com.darfoo.backend.dao.CommonDao;
 import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Tutorial;
@@ -25,11 +26,12 @@ public class UpdateResourceKey {
     VideoDao videoDao;
     @Autowired
     TutorialDao educationDao;
+    @Autowired
+    CommonDao commonDao;
 
     @Test
     public void updateVideoKey() {
-        List<Video> s_videos;
-        s_videos = videoDao.getAllVideo();
+        List<Video> s_videos = commonDao.getAllResource(Video.class);
         for (Video video : s_videos) {
             int videoid = video.getId();
             String videokey = video.getVideo_key() + ".mp4";

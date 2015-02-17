@@ -4,6 +4,7 @@ package com.springapp.mvc;
  * Created by zjh on 14-12-11.
  */
 
+import com.darfoo.backend.dao.CommonDao;
 import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
@@ -33,10 +34,12 @@ public class DownloadTests {
     TutorialDao educationDao;
     @Autowired
     MusicDao musicDao;
+    @Autowired
+    CommonDao commonDao;
 
     @Test
     public void writeVideosToCSV() {
-        List<Video> videos = videoDao.getAllVideo();
+        List<Video> videos = commonDao.getAllResource(Video.class);
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
         CSVPrinter printer = null;
         try {
