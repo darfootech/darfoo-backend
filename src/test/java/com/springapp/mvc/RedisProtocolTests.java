@@ -29,14 +29,6 @@ import java.lang.reflect.Field;
 })
 public class RedisProtocolTests {
     @Autowired
-    VideoDao videoDao;
-    @Autowired
-    TutorialDao tutorialDao;
-    @Autowired
-    AuthorDao authorDao;
-    @Autowired
-    MusicDao musicDao;
-    @Autowired
     CommonDao commonDao;
     @Autowired
     CacheProtocol cacheProtocol;
@@ -81,7 +73,7 @@ public class RedisProtocolTests {
 
     @Test
     public void insertAuthorResourceIntoCache() {
-        Author author = authorDao.getAuthor(13);
+        Author author = (Author) commonDao.getResourceById(Author.class, 13);
         cacheProtocol.insertResourceIntoCache(Author.class, author, "author");
     }
 

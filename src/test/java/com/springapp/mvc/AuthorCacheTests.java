@@ -5,6 +5,7 @@ import com.darfoo.backend.caches.dao.AuthorCacheDao;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.AuthorDao;
+import com.darfoo.backend.dao.CommonDao;
 import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Author;
@@ -47,10 +48,12 @@ public class AuthorCacheTests {
     TutorialCacheDao tutorialCacheDao;
     @Autowired
     CommonRedisClient redisClient;
+    @Autowired
+    CommonDao commonDao;
 
     @Test
     public void cacheSingleAuthor() {
-        Author author = authorDao.getAuthor(1);
+        Author author = (Author) commonDao.getResourceById(Author.class, 1);
         System.out.println(authorCacheDao.insertSingleAuthor(author));
     }
 

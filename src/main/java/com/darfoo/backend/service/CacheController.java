@@ -440,7 +440,7 @@ public class CacheController {
     public
     @ResponseBody
     SingleAuthor cacheSingleAuthor(@PathVariable Integer id) {
-        Author author = authorDao.getAuthor(id);
+        Author author = (Author) commonDao.getResourceById(Author.class, id);
         System.out.println(authorCacheDao.insertSingleAuthor(author));
         SingleAuthor result = authorCacheDao.getSingleAuthor(id);
         return result;
@@ -462,7 +462,7 @@ public class CacheController {
         for (Object[] rows : authorIdAndCnt) {
             int authorid = (Integer) rows[1];
             System.out.println(authorid + " -> " + ((BigInteger) rows[0]).intValue());
-            Author author = authorDao.getAuthor(authorid);
+            Author author = (Author) commonDao.getResourceById(Author.class, authorid);
             long result = redisClient.lpush("authorindex", "author-" + authorid);
             authorCacheDao.insertSingleAuthor(author);
             System.out.println("insert result -> " + result);
@@ -496,7 +496,7 @@ public class CacheController {
         for (Object[] rows : authorIdAndCnt) {
             int authorid = (Integer) rows[1];
             System.out.println(authorid + " -> " + ((BigInteger) rows[0]).intValue());
-            Author author = authorDao.getAuthor(authorid);
+            Author author = (Author) commonDao.getResourceById(Author.class, authorid);
             long result = redisClient.lpush("authorindexpage" + page, "author-" + authorid);
             authorCacheDao.insertSingleAuthor(author);
             System.out.println("insert result -> " + result);

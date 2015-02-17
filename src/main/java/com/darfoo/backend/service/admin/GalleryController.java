@@ -164,9 +164,8 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/author/{id}", method = RequestMethod.GET)
-    public String showSingleAuthor(@PathVariable String id, ModelMap modelMap, HttpSession session) {
-        System.out.println(Integer.parseInt(id));
-        Author author = authorDao.getAuthor(Integer.parseInt(id));
+    public String showSingleAuthor(@PathVariable Integer id, ModelMap modelMap, HttpSession session) {
+        Author author = (Author) commonDao.getResourceById(Author.class, id);
 
         session.setAttribute("authorname", author.getName());
         session.setAttribute("authordescription", author.getDescription());

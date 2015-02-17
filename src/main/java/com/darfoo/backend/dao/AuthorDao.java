@@ -26,25 +26,6 @@ public class AuthorDao {
     private int pageSize = 15;
 
     /**
-     * 通过id得到Author对象
-     *
-     * @param id 传入要判断的作者的id
-     * @return 表中已经存在该name对应的作者信息, 返回Author对象;反之，返回一个null
-     * *
-     */
-    public Author getAuthor(Integer id) {
-        Author author = null;
-        try {
-            Session session = sf.getCurrentSession();
-            String sql = "select * from author where id=:id";
-            author = (Author) session.createSQLQuery(sql).addEntity(Author.class).setInteger("id", id).uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return author;
-    }
-
-    /**
      * 通过name得到Author对象
      *
      * @param name 传入要判断的作者的name

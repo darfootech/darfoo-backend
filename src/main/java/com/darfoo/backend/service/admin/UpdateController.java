@@ -496,7 +496,7 @@ public class UpdateController {
     @RequestMapping(value = "/admin/author/updateimageresource", method = RequestMethod.POST)
     public String updateAuthorImageResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request) {
         int id = Integer.parseInt(request.getParameter("id"));
-        String imagekey = authorDao.getAuthor(id).getImage().getImage_key();
+        String imagekey = ((Author) commonDao.getResourceById(Author.class, id)).getImage().getImage_key();
 
         System.out.println(id + " " + imagekey);
 

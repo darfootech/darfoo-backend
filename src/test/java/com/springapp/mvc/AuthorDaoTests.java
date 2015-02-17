@@ -24,6 +24,8 @@ public class AuthorDaoTests {
     TutorialDao educationDao;
     @Autowired
     VideoDao videoDao;
+    @Autowired
+    CommonDao commonDao;
 
     QiniuUtils qiniuUtils = new QiniuUtils();
 
@@ -168,7 +170,7 @@ public class AuthorDaoTests {
     public void getVideoResourceByAuthorid() {
         int aid = 2;
 
-        Author author = authorDao.getAuthor(aid);
+        Author author = (Author) commonDao.getResourceById(Author.class, aid);
         String authorname = author.getName();
 
         List<SingleVideo> result = new ArrayList<SingleVideo>();
@@ -205,7 +207,7 @@ public class AuthorDaoTests {
         List<Object[]> result = authorDao.getAuthorOrderByVideoCountDesc();
         for (Object[] rows : result) {
             System.out.println((Integer) rows[1] + " -> " + ((BigInteger) rows[0]).intValue());
-            Author author = authorDao.getAuthor((Integer) rows[1]);
+            Author author = (Author) commonDao.getResourceById(Author.class, (Integer) rows[1]);
             System.out.println(author.getName());
         }
     }
@@ -215,7 +217,7 @@ public class AuthorDaoTests {
         List<Object[]> result = authorDao.getAuthorOrderByVideoCountDescByPage(2);
         for (Object[] rows : result) {
             System.out.println((Integer) rows[1] + " -> " + ((BigInteger) rows[0]).intValue());
-            Author author = authorDao.getAuthor((Integer) rows[1]);
+            Author author = (Author) commonDao.getResourceById(Author.class, (Integer) rows[1]);
             System.out.println(author.getName());
         }
         System.out.println("result size -> " + result.size());
@@ -247,7 +249,7 @@ public class AuthorDaoTests {
             List<Object[]> result = authorDao.getAuthorOrderByVideoCountDescByPage(i + 1);
             for (Object[] rows : result) {
                 System.out.println((Integer) rows[1] + " -> " + ((BigInteger) rows[0]).intValue());
-                Author author = authorDao.getAuthor((Integer) rows[1]);
+                Author author = (Author) commonDao.getResourceById(Author.class, (Integer) rows[1]);
                 System.out.println(author.getName());
                 idSet.add((Integer) rows[1]);
             }
