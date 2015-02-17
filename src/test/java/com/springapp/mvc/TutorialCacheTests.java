@@ -4,7 +4,7 @@ import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.model.Tutorial;
-import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
+import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.service.responsemodel.TutorialCates;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.junit.Test;
@@ -52,7 +52,7 @@ public class TutorialCacheTests {
     @Test
     public void getSingleTutorial() {
         Integer id = 1;
-        CacheSingleVideo tutorial = tutorialCacheDao.getSingleTutorial(id);
+        SingleVideo tutorial = tutorialCacheDao.getSingleTutorial(id);
         System.out.println(tutorial.getTitle());
     }
 
@@ -87,11 +87,11 @@ public class TutorialCacheTests {
     public void getCategory() {
         String categories = "0-0-0-0";
         Set<String> categoryVideoKeys = redisClient.smembers("tutorialcategory" + categories);
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (String vkey : categoryVideoKeys) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
-            CacheSingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
+            SingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }

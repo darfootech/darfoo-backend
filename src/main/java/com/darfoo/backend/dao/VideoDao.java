@@ -28,6 +28,8 @@ import com.darfoo.backend.model.UpdateCheckResponse;
 public class VideoDao {
     @Autowired
     private SessionFactory sf;
+    @Autowired
+    CommonDao commonDao;
 
     private int pageSize = 12;
 
@@ -88,29 +90,6 @@ public class VideoDao {
             e.printStackTrace();
             return -1;
         }
-    }
-
-    /**
-     * 获取单个video的信息
-     * 根据video的id来获得video对象
-     *
-     * @return video 返回一个video的实例对象(包含关联表中的数据)，详细请看Video.java类
-     * *
-     */
-    public Video getVideoByVideoId(Integer vid) {
-        Video video = null;
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Video.class);
-            c.setReadOnly(true);
-            c.add(Restrictions.eq("id", vid));
-            //设置JOIN mode，这样categories会直接加载到video类中
-            c.setFetchMode("categories", FetchMode.JOIN);
-            video = (Video) c.uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return video;
     }
 
     /**
@@ -938,7 +917,7 @@ public class VideoDao {
      */
     public List<Video> getSideBarVideos(Integer videoid) {
         List<Video> result = new ArrayList<Video>();
-        int authorid = getVideoByVideoId(videoid).getAuthor().getId();
+        int authorid = ((Video) commonDao.getResourceById(Video.class, videoid)).getAuthor().getId();
         List<Video> sameAuthorVideos = getVideosByAuthorId(authorid);
         int sameAuthorLen = sameAuthorVideos.size();
         if (sameAuthorLen > 5) {

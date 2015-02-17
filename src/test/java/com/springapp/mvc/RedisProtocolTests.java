@@ -1,15 +1,12 @@
 package com.springapp.mvc;
 
 import com.darfoo.backend.caches.CacheProtocol;
-import com.darfoo.backend.dao.AuthorDao;
-import com.darfoo.backend.dao.MusicDao;
-import com.darfoo.backend.dao.TutorialDao;
-import com.darfoo.backend.dao.VideoDao;
+import com.darfoo.backend.dao.*;
 import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Video;
-import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
+import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
 import org.junit.Test;
@@ -40,19 +37,21 @@ public class RedisProtocolTests {
     @Autowired
     MusicDao musicDao;
     @Autowired
+    CommonDao commonDao;
+    @Autowired
     CacheProtocol cacheProtocol;
 
     @Test
     public void insertVideoResourceIntoCache() {
-        Video video = videoDao.getVideoByVideoId(35);
+        Video video = (Video) commonDao.getResourceById(Video.class, 35);
         cacheProtocol.insertResourceIntoCache(Video.class, video, "video");
     }
 
     @Test
     public void extractVideoResourceFromCache() {
-        CacheSingleVideo result = (CacheSingleVideo) cacheProtocol.extractResourceFromCache(CacheSingleVideo.class, 35, "video");
+        SingleVideo result = (SingleVideo) cacheProtocol.extractResourceFromCache(SingleVideo.class, 35, "video");
         try {
-            for (Field field : CacheSingleVideo.class.getDeclaredFields()) {
+            for (Field field : SingleVideo.class.getDeclaredFields()) {
                 field.setAccessible(true);
                 System.out.println(field.getName() + " -> " + field.get(result));
             }
@@ -69,9 +68,9 @@ public class RedisProtocolTests {
 
     @Test
     public void extractTutorialResourceFromCache() {
-        CacheSingleVideo result = (CacheSingleVideo) cacheProtocol.extractResourceFromCache(CacheSingleVideo.class, 30, "tutorial");
+        SingleVideo result = (SingleVideo) cacheProtocol.extractResourceFromCache(SingleVideo.class, 30, "tutorial");
         try {
-            for (Field field : CacheSingleVideo.class.getDeclaredFields()) {
+            for (Field field : SingleVideo.class.getDeclaredFields()) {
                 field.setAccessible(true);
                 System.out.println(field.getName() + " -> " + field.get(result));
             }

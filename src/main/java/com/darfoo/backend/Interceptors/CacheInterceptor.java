@@ -4,6 +4,7 @@ import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.caches.dao.MusicCacheDao;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
+import com.darfoo.backend.dao.CommonDao;
 import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
@@ -36,6 +37,8 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
     MusicCacheDao musicCacheDao;
     @Autowired
     CommonRedisClient commonRedisClient;
+    @Autowired
+    CommonDao commonDao;
 
     //截取数字
     public String getNumbers(String content) {
@@ -53,33 +56,33 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
         System.out.println("current cache uri is: " + uri + "\n");
 
         /*将单一资源的请求结果放入缓存*/
-        if (uri.matches("(.*)/resources/video/\\d+$")){
+        if (uri.matches("(.*)/resources/video/\\d+$")) {
             String videoid = getNumbers(uri);
             System.out.println("video cache id is: " + videoid + "\n");
             int vid = Integer.parseInt(videoid);
             String key = "video-" + vid;
             boolean isExists = commonRedisClient.exists(key);
-            if (isExists){
+            if (isExists) {
                 System.out.println("resource already in cache");
                 response.sendRedirect(request.getContextPath() + "/rest/cache/video/" + vid);
-            }else{
+            } else {
                 System.out.println("resource not in cache");
-                Video video = videoDao.getVideoByVideoId(vid);
+                Video video = (Video) commonDao.getResourceById(Video.class, vid);
                 videoCacheDao.insertSingleVideo(video);
             }
             return true;
         }
 
-        if (uri.matches("(.*)/resources/video/tutorial/\\d+$")){
+        if (uri.matches("(.*)/resources/video/tutorial/\\d+$")) {
             String tutorialid = getNumbers(uri);
             System.out.println("tutorial cache id is: " + tutorialid + "\n");
             int tid = Integer.parseInt(tutorialid);
             String key = "tutorial-" + tid;
             boolean isExists = commonRedisClient.exists(key);
-            if (isExists){
+            if (isExists) {
                 System.out.println("resource already in cache");
                 response.sendRedirect(request.getContextPath() + "/rest/cache/tutorial/" + tid);
-            }else{
+            } else {
                 System.out.println("resource not in cache");
                 Tutorial tutorial = educationDao.getEducationVideoById(tid);
                 tutorialCacheDao.insertSingleTutorial(tutorial);
@@ -87,16 +90,16 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        if (uri.matches("(.*)/resources/music/\\d+$")){
+        if (uri.matches("(.*)/resources/music/\\d+$")) {
             String musicid = getNumbers(uri);
             System.out.println("music cache id is: " + musicid + "\n");
             int mid = Integer.parseInt(musicid);
             String key = "music-" + mid;
             boolean isExists = commonRedisClient.exists(key);
-            if (isExists){
+            if (isExists) {
                 System.out.println("resource already in cache");
                 response.sendRedirect(request.getContextPath() + "/rest/cache/music/" + mid);
-            }else{
+            } else {
                 System.out.println("resource not in cache");
                 Music music = musicDao.getMusicByMusicId(mid);
                 musicCacheDao.insertSingleMusic(music);

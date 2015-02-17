@@ -3,11 +3,11 @@ package com.springapp.mvc;
 import com.darfoo.backend.caches.CommonRedisClient;
 import com.darfoo.backend.caches.dao.MusicCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
+import com.darfoo.backend.dao.CommonDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Video;
-import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.service.responsemodel.VideoCates;
 import com.darfoo.backend.utils.ServiceUtils;
@@ -42,6 +42,8 @@ public class VideoCacheTests {
     MusicCacheDao musicCacheDao;
     @Autowired
     CommonRedisClient redisClient;
+    @Autowired
+    CommonDao commonDao;
 
     VideoCates videoCates = new VideoCates();
 
@@ -53,14 +55,14 @@ public class VideoCacheTests {
 
     @Test
     public void insertVideo() {
-        Video video = videoDao.getVideoByVideoId(1);
+        Video video = (Video) commonDao.getResourceById(Video.class, 1);
         System.out.println(videoCacheDao.insertSingleVideo(video));
     }
 
     @Test
     public void getSingleVideo() {
         Integer id = 1;
-        CacheSingleVideo video = videoCacheDao.getSingleVideo(id);
+        SingleVideo video = videoCacheDao.getSingleVideo(id);
         System.out.println(video.getTitle());
     }
 
@@ -78,11 +80,11 @@ public class VideoCacheTests {
     @Test
     public void getIndexVideos() {
         Set<String> latestVideos = redisClient.smembers("videoindex");
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (String vkey : latestVideos) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
-            CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
+            SingleVideo video = videoCacheDao.getSingleVideo(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
@@ -104,11 +106,11 @@ public class VideoCacheTests {
     @Test
     public void getRecommendVideos() {
         Set<String> recommendVideos = redisClient.smembers("videorecommend");
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (String vkey : recommendVideos) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
-            CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
+            SingleVideo video = videoCacheDao.getSingleVideo(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
@@ -153,11 +155,11 @@ public class VideoCacheTests {
     public void getCategory() {
         String categories = "0-0-0-0";
         Set<String> categoryVideoKeys = redisClient.smembers("videocategory" + categories);
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (String vkey : categoryVideoKeys) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
-            CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
+            SingleVideo video = videoCacheDao.getSingleVideo(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }

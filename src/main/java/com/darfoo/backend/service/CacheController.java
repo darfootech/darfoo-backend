@@ -53,6 +53,8 @@ public class CacheController {
     SearchDao searchDao;
     @Autowired
     CommonRedisClient redisClient;
+    @Autowired
+    CommonDao commonDao;
 
     VideoCates videoCates = new VideoCates();
     TutorialCates tutorialCates = new TutorialCates();
@@ -61,7 +63,7 @@ public class CacheController {
     @RequestMapping(value = "/video/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
-    CacheSingleVideo getSingleVideoFromCache(@PathVariable String id) {
+    SingleVideo getSingleVideoFromCache(@PathVariable String id) {
         Integer vid = Integer.parseInt(id);
         return videoCacheDao.getSingleVideo(vid);
     }
@@ -69,7 +71,7 @@ public class CacheController {
     @RequestMapping(value = "/tutorial/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
-    CacheSingleVideo getSingleTutorialFromCache(@PathVariable String id) {
+    SingleVideo getSingleTutorialFromCache(@PathVariable String id) {
         Integer tid = Integer.parseInt(id);
         return tutorialCacheDao.getSingleTutorial(tid);
     }
@@ -85,7 +87,7 @@ public class CacheController {
     @RequestMapping(value = "/video/recommend", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<CacheSingleVideo> cacheRecmmendVideos() {
+    List<SingleVideo> cacheRecmmendVideos() {
         List<Video> recommendVideos = videoDao.getRecommendVideos();
         List<Tutorial> recommendTutorials = educationDao.getRecommendTutorials();
 
@@ -104,11 +106,11 @@ public class CacheController {
         }
 
         Set<String> recommendVideoKeys = redisClient.smembers("recommend");
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (String vkey : recommendVideoKeys) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
-            CacheSingleVideo video = videoCacheDao.getRecommendVideo(vid);
+            SingleVideo video = videoCacheDao.getRecommendVideo(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
@@ -118,7 +120,7 @@ public class CacheController {
     @RequestMapping(value = "/video/index", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<CacheSingleVideo> cacheIndexVideos() {
+    List<SingleVideo> cacheIndexVideos() {
         List<Video> latestVideos = videoDao.getVideosByNewest(12);
         for (Video video : latestVideos) {
             int vid = video.getId();
@@ -127,11 +129,11 @@ public class CacheController {
             System.out.println("insert result -> " + result);
         }
         Set<String> latestVideoKeys = redisClient.smembers("videoindex");
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (String vkey : latestVideoKeys) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
-            CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
+            SingleVideo video = videoCacheDao.getSingleVideo(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
@@ -142,7 +144,7 @@ public class CacheController {
     @RequestMapping(value = "/video/category/{categories}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<CacheSingleVideo> getVideosByCategories(@PathVariable String categories) {
+    List<SingleVideo> getVideosByCategories(@PathVariable String categories) {
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
         if (!requestCategories[0].equals("0")) {
@@ -173,11 +175,11 @@ public class CacheController {
         }
 
         Set<String> categoryVideoKeys = redisClient.smembers("videocategory" + categories);
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
-        for (String vkey : categoryVideoKeys){
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        for (String vkey : categoryVideoKeys) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
-            CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
+            SingleVideo video = videoCacheDao.getSingleVideo(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
@@ -188,7 +190,7 @@ public class CacheController {
     @RequestMapping(value = "/video/category/{categories}/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<CacheSingleVideo> getVideosByCategoriesByPage(@PathVariable String categories, @PathVariable Integer page) {
+    List<SingleVideo> getVideosByCategoriesByPage(@PathVariable String categories, @PathVariable Integer page) {
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
         if (!requestCategories[0].equals("0")) {
@@ -219,11 +221,11 @@ public class CacheController {
         }
 
         List<String> categoryVideoKeys = redisClient.lrange("videocategory" + categories + "page" + page, 0L, -1L);
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
-        for (String vkey : categoryVideoKeys){
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        for (String vkey : categoryVideoKeys) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
-            CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
+            SingleVideo video = videoCacheDao.getSingleVideo(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
@@ -234,7 +236,7 @@ public class CacheController {
     @RequestMapping(value = "/tutorial/category/{categories}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<CacheSingleVideo> getTutorialsByCategories(@PathVariable String categories) {
+    List<SingleVideo> getTutorialsByCategories(@PathVariable String categories) {
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
         if (!requestCategories[0].equals("0")) {
@@ -259,11 +261,11 @@ public class CacheController {
         }
 
         Set<String> categoryVideoKeys = redisClient.smembers("tutorialcategory" + categories);
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
-        for (String vkey : categoryVideoKeys){
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        for (String vkey : categoryVideoKeys) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
-            CacheSingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
+            SingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
@@ -274,7 +276,7 @@ public class CacheController {
     @RequestMapping(value = "/tutorial/category/{categories}/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<CacheSingleVideo> getTutorialsByCategoriesByPage(@PathVariable String categories, @PathVariable Integer page) {
+    List<SingleVideo> getTutorialsByCategoriesByPage(@PathVariable String categories, @PathVariable Integer page) {
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
         if (!requestCategories[0].equals("0")) {
@@ -299,11 +301,11 @@ public class CacheController {
         }
 
         List<String> categoryVideoKeys = redisClient.lrange("tutorialcategory" + categories + "page" + page, 0L, -1L);
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
-        for (String vkey : categoryVideoKeys){
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        for (String vkey : categoryVideoKeys) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
-            CacheSingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
+            SingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
@@ -312,27 +314,28 @@ public class CacheController {
     }
 
     @RequestMapping(value = "/music/category/{categories}", method = RequestMethod.GET)
-    public @ResponseBody
-    List<SingleMusic> getMusicByCategories(@PathVariable String categories){
+    public
+    @ResponseBody
+    List<SingleMusic> getMusicByCategories(@PathVariable String categories) {
         //System.out.println("category request is " + categories + " !!!!!!!!!");
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
-        if (!requestCategories[0].equals("0")){
+        if (!requestCategories[0].equals("0")) {
             String beatCate = musicCates.getBeatCategory().get(requestCategories[0]);
             targetCategories.add(beatCate);
         }
-        if (!requestCategories[1].equals("0")){
+        if (!requestCategories[1].equals("0")) {
             String styleCate = musicCates.getStyleCategory().get(requestCategories[1]);
             targetCategories.add(styleCate);
         }
-        if (!requestCategories[2].equals("0")){
+        if (!requestCategories[2].equals("0")) {
             String letterCate = requestCategories[2];
             targetCategories.add(letterCate);
         }
 
         List<Music> musics = musicDao.getMusicsByCategories(ServiceUtils.convertList2Array(targetCategories));
         List<SingleMusic> result = new ArrayList<SingleMusic>();
-        for (Music music : musics){
+        for (Music music : musics) {
             int mid = music.getId();
             long status = redisClient.sadd("musiccategory" + categories, "music-" + mid);
             musicCacheDao.insertSingleMusic(music);
@@ -340,7 +343,7 @@ public class CacheController {
         }
 
         Set<String> categoryMusicKeys = redisClient.smembers("musiccategory" + categories);
-        for (String vkey : categoryMusicKeys){
+        for (String vkey : categoryMusicKeys) {
             System.out.println("vkey -> " + vkey);
             int mid = Integer.parseInt(vkey.split("-")[1]);
             SingleMusic music = musicCacheDao.getSingleMusic(mid);
@@ -352,27 +355,28 @@ public class CacheController {
     }
 
     @RequestMapping(value = "/music/category/{categories}/page/{page}", method = RequestMethod.GET)
-    public @ResponseBody
-    List<SingleMusic> getMusicByCategoriesByPage(@PathVariable String categories, @PathVariable Integer page){
+    public
+    @ResponseBody
+    List<SingleMusic> getMusicByCategoriesByPage(@PathVariable String categories, @PathVariable Integer page) {
         //System.out.println("category request is " + categories + " !!!!!!!!!");
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
-        if (!requestCategories[0].equals("0")){
+        if (!requestCategories[0].equals("0")) {
             String beatCate = musicCates.getBeatCategory().get(requestCategories[0]);
             targetCategories.add(beatCate);
         }
-        if (!requestCategories[1].equals("0")){
+        if (!requestCategories[1].equals("0")) {
             String styleCate = musicCates.getStyleCategory().get(requestCategories[1]);
             targetCategories.add(styleCate);
         }
-        if (!requestCategories[2].equals("0")){
+        if (!requestCategories[2].equals("0")) {
             String letterCate = requestCategories[2];
             targetCategories.add(letterCate);
         }
 
         List<Music> musics = musicDao.getMusicsByCategoriesByPage(ServiceUtils.convertList2Array(targetCategories), page);
         List<SingleMusic> result = new ArrayList<SingleMusic>();
-        for (Music music : musics){
+        for (Music music : musics) {
             int mid = music.getId();
             long status = redisClient.lpush("musiccategory" + categories + "page" + page, "music-" + mid);
             musicCacheDao.insertSingleMusic(music);
@@ -380,7 +384,7 @@ public class CacheController {
         }
 
         List<String> categoryMusicKeys = redisClient.lrange("musiccategory" + categories + "page" + page, 0L, -1L);
-        for (String vkey : categoryMusicKeys){
+        for (String vkey : categoryMusicKeys) {
             System.out.println("vkey -> " + vkey);
             int mid = Integer.parseInt(vkey.split("-")[1]);
             SingleMusic music = musicCacheDao.getSingleMusic(mid);
@@ -392,11 +396,12 @@ public class CacheController {
     }
 
     @RequestMapping("/music/hottest")
-    public @ResponseBody
-    List<SingleMusic> getHottestMusics(){
+    public
+    @ResponseBody
+    List<SingleMusic> getHottestMusics() {
         List<Music> musics = musicDao.getMusicsByHottest(5);
         List<SingleMusic> result = new ArrayList<SingleMusic>();
-        for (Music music : musics){
+        for (Music music : musics) {
             int mid = music.getId();
             long status = redisClient.sadd("musichottest", "music-" + mid);
             musicCacheDao.insertSingleMusic(music);
@@ -404,7 +409,7 @@ public class CacheController {
         }
 
         Set<String> hottestMusicKeys = redisClient.smembers("musichottest");
-        for (String vkey : hottestMusicKeys){
+        for (String vkey : hottestMusicKeys) {
             System.out.println("vkey -> " + vkey);
             int mid = Integer.parseInt(vkey.split("-")[1]);
             SingleMusic music = musicCacheDao.getSingleMusic(mid);
@@ -416,15 +421,17 @@ public class CacheController {
     }
 
     @RequestMapping(value = "/video/getmusic/{id}", method = RequestMethod.GET)
-    public @ResponseBody SingleMusic getMusicByVideoId(@PathVariable Integer id){
+    public
+    @ResponseBody
+    SingleMusic getMusicByVideoId(@PathVariable Integer id) {
         Music targetMusic = videoDao.getMusic(id);
-        if (targetMusic != null){
+        if (targetMusic != null) {
             int music_id = targetMusic.getId();
             videoCacheDao.insertMusic(id, music_id);
             Music music = musicDao.getMusicByMusicId(music_id);
             System.out.println(musicCacheDao.insertSingleMusic(music));
             return musicCacheDao.getSingleMusic(music_id);
-        }else{
+        } else {
             return new SingleMusic(-1, "", "", "", 0L);
         }
     }
@@ -452,9 +459,9 @@ public class CacheController {
         }*/
 
         List<Object[]> authorIdAndCnt = authorDao.getAuthorOrderByVideoCountDesc();
-        for (Object[] rows : authorIdAndCnt){
-            int authorid = (Integer)rows[1];
-            System.out.println(authorid + " -> " + ((BigInteger)rows[0]).intValue());
+        for (Object[] rows : authorIdAndCnt) {
+            int authorid = (Integer) rows[1];
+            System.out.println(authorid + " -> " + ((BigInteger) rows[0]).intValue());
             Author author = authorDao.getAuthor(authorid);
             long result = redisClient.lpush("authorindex", "author-" + authorid);
             authorCacheDao.insertSingleAuthor(author);
@@ -463,7 +470,7 @@ public class CacheController {
 
         List<String> indexAuthorKeys = redisClient.lrange("authorindex", 0L, -1L);
         List<SingleAuthor> result = new ArrayList<SingleAuthor>();
-        for (String key : indexAuthorKeys){
+        for (String key : indexAuthorKeys) {
             System.out.println("key -> " + key);
             int id = Integer.parseInt(key.split("-")[1]);
             SingleAuthor author = authorCacheDao.getSingleAuthor(id);
@@ -486,9 +493,9 @@ public class CacheController {
         }*/
 
         List<Object[]> authorIdAndCnt = authorDao.getAuthorOrderByVideoCountDescByPage(page);
-        for (Object[] rows : authorIdAndCnt){
-            int authorid = (Integer)rows[1];
-            System.out.println(authorid + " -> " + ((BigInteger)rows[0]).intValue());
+        for (Object[] rows : authorIdAndCnt) {
+            int authorid = (Integer) rows[1];
+            System.out.println(authorid + " -> " + ((BigInteger) rows[0]).intValue());
             Author author = authorDao.getAuthor(authorid);
             long result = redisClient.lpush("authorindexpage" + page, "author-" + authorid);
             authorCacheDao.insertSingleAuthor(author);
@@ -497,7 +504,7 @@ public class CacheController {
 
         List<String> indexAuthorKeys = redisClient.lrange("authorindexpage" + page, 0L, -1L);
         List<SingleAuthor> result = new ArrayList<SingleAuthor>();
-        for (String key : indexAuthorKeys){
+        for (String key : indexAuthorKeys) {
             System.out.println("key -> " + key);
             int id = Integer.parseInt(key.split("-")[1]);
             SingleAuthor author = authorCacheDao.getSingleAuthor(id);
@@ -508,19 +515,20 @@ public class CacheController {
     }
 
     @RequestMapping(value = "/author/videos/{id}", method = RequestMethod.GET)
-    @ResponseBody public List<CacheSingleVideo> getVideoListForAuthor(@PathVariable Integer id){
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+    @ResponseBody
+    public List<SingleVideo> getVideoListForAuthor(@PathVariable Integer id) {
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         List<Video> videos = videoDao.getVideosByAuthorId(id);
         List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(id);
 
-        for (Video video : videos){
+        for (Video video : videos) {
             int vid = video.getId();
             long status = redisClient.sadd("authorvideos" + id, "video-" + vid);
             videoCacheDao.insertSingleVideo(video);
             System.out.println("insert result -> " + status);
         }
 
-        for (Tutorial tutorial : tutorials){
+        for (Tutorial tutorial : tutorials) {
             int tid = tutorial.getId();
             long status = redisClient.sadd("authorvideos" + id, "tutorial-" + tid);
             tutorialCacheDao.insertSingleTutorial(tutorial);
@@ -528,17 +536,17 @@ public class CacheController {
         }
 
         Set<String> authorVideoKeys = redisClient.smembers("authorvideos" + id);
-        for (String key : authorVideoKeys){
+        for (String key : authorVideoKeys) {
             System.out.println("key -> " + key);
             int vtid = Integer.parseInt(key.split("-")[1]);
             String vtflag = key.split("-")[0];
-            if (vtflag.equals("video")){
-                CacheSingleVideo video = videoCacheDao.getSingleVideo(vtid);
+            if (vtflag.equals("video")) {
+                SingleVideo video = videoCacheDao.getSingleVideo(vtid);
                 result.add(video);
-            }else if (vtflag.equals("tutorial")){
-                CacheSingleVideo tutorial = tutorialCacheDao.getSingleTutorial(vtid);
+            } else if (vtflag.equals("tutorial")) {
+                SingleVideo tutorial = tutorialCacheDao.getSingleTutorial(vtid);
                 result.add(tutorial);
-            }else {
+            } else {
                 System.out.println("something is wrong");
             }
         }
@@ -547,43 +555,44 @@ public class CacheController {
     }
 
     @RequestMapping(value = "/author/videos/{id}/page/{page}", method = RequestMethod.GET)
-    @ResponseBody public List<CacheSingleVideo> getVideoListForAuthorByPage(@PathVariable Integer id, @PathVariable Integer page){
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+    @ResponseBody
+    public List<SingleVideo> getVideoListForAuthorByPage(@PathVariable Integer id, @PathVariable Integer page) {
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         List<Video> videos = videoDao.getVideosByAuthorId(id);
         List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(id);
 
         int pageSize = 12;
         String rediskey = "authorvideos" + id + "page";
 
-        for (Video video : videos){
+        for (Video video : videos) {
             int vid = video.getId();
             long status = redisClient.lpush(rediskey, "video-" + vid);
             videoCacheDao.insertSingleVideo(video);
             System.out.println("insert result -> " + status);
         }
 
-        for (Tutorial tutorial : tutorials){
+        for (Tutorial tutorial : tutorials) {
             int tid = tutorial.getId();
             long status = redisClient.lpush(rediskey, "tutorial-" + tid);
             tutorialCacheDao.insertSingleTutorial(tutorial);
             System.out.println("insert result -> " + status);
         }
 
-        long start = (page-1) * pageSize;
+        long start = (page - 1) * pageSize;
         long end = page * pageSize - 1;
 
         List<String> authorVideoKeys = redisClient.lrange(rediskey, start, end);
-        for (String key : authorVideoKeys){
+        for (String key : authorVideoKeys) {
             System.out.println("key -> " + key);
             int vtid = Integer.parseInt(key.split("-")[1]);
             String vtflag = key.split("-")[0];
-            if (vtflag.equals("video")){
-                CacheSingleVideo video = videoCacheDao.getSingleVideo(vtid);
+            if (vtflag.equals("video")) {
+                SingleVideo video = videoCacheDao.getSingleVideo(vtid);
                 result.add(video);
-            }else if (vtflag.equals("tutorial")){
-                CacheSingleVideo tutorial = tutorialCacheDao.getSingleTutorial(vtid);
+            } else if (vtflag.equals("tutorial")) {
+                SingleVideo tutorial = tutorialCacheDao.getSingleTutorial(vtid);
                 result.add(tutorial);
-            }else {
+            } else {
                 System.out.println("something is wrong");
             }
         }
@@ -621,64 +630,65 @@ public class CacheController {
     }*/
 
     @RequestMapping(value = "/video/search", method = RequestMethod.GET)
-    public @ResponseBody
-    List<CacheSingleVideo> searchVideo(HttpServletRequest request){
+    public
+    @ResponseBody
+    List<SingleVideo> searchVideo(HttpServletRequest request) {
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
         Set<Integer> videoids = new HashSet<Integer>();
         Set<Integer> tutorialids = new HashSet<Integer>();
         List<Video> videos = searchDao.getVideoBySearch(searchContent);
         List<Tutorial> tutorials = searchDao.getEducationBySearch(searchContent);
-        for (Video video : videos){
+        for (Video video : videos) {
             videoids.add(video.getId());
         }
 
-        for (Tutorial tutorial : tutorials){
+        for (Tutorial tutorial : tutorials) {
             tutorialids.add(tutorial.getId());
         }
 
         List<Author> authors = searchDao.getAuthorBySearch(searchContent);
-        for (Author author : authors){
+        for (Author author : authors) {
             int aid = author.getId();
             List<Video> authorvideos = videoDao.getVideosByAuthorId(aid);
             List<Tutorial> authortutorials = educationDao.getTutorialsByAuthorId(aid);
-            for (Video video : authorvideos){
+            for (Video video : authorvideos) {
                 videoids.add(video.getId());
             }
 
-            for (Tutorial tutorial : authortutorials){
+            for (Tutorial tutorial : authortutorials) {
                 tutorialids.add(tutorial.getId());
             }
         }
 
-        for (Integer vid : videoids){
-            Video video = videoDao.getVideoByVideoId(vid);
+        for (Integer vid : videoids) {
+            Video video = (Video) commonDao.getResourceById(Video.class, vid);
             long status = redisClient.sadd("videosearch" + searchContent, "video-" + vid);
             videoCacheDao.insertSingleVideo(video);
             System.out.println("insert result -> " + status);
         }
 
-        for (Integer tid : tutorialids){
+        for (Integer tid : tutorialids) {
             Tutorial tutorial = educationDao.getEducationVideoById(tid);
             long status = redisClient.sadd("videosearch" + searchContent, "tutorial-" + tid);
             tutorialCacheDao.insertSingleTutorial(tutorial);
             System.out.println("insert result -> " + status);
         }
 
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
 
         Set<String> searchVideoKeys = redisClient.smembers("videosearch" + searchContent);
-        for (String key : searchVideoKeys){
+        for (String key : searchVideoKeys) {
             System.out.println("key -> " + key);
             int vid = Integer.parseInt(key.split("-")[1]);
             String flag = key.split("-")[0];
-            if (flag.equals("video")){
-                CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
+            if (flag.equals("video")) {
+                SingleVideo video = videoCacheDao.getSingleVideo(vid);
                 System.out.println("title -> " + video.getTitle());
                 result.add(video);
             }
-            if (flag.equals("tutorial")){
-                CacheSingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
+            if (flag.equals("tutorial")) {
+                SingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
                 System.out.println("title -> " + video.getTitle());
                 result.add(video);
             }
@@ -688,32 +698,33 @@ public class CacheController {
     }
 
     @RequestMapping(value = "/video/search/page/{page}", method = RequestMethod.GET)
-    public @ResponseBody
-    List<CacheSingleVideo> searchVideoByPage(@PathVariable Integer page, HttpServletRequest request){
+    public
+    @ResponseBody
+    List<SingleVideo> searchVideoByPage(@PathVariable Integer page, HttpServletRequest request) {
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
         Set<Integer> videoids = new HashSet<Integer>();
         Set<Integer> tutorialids = new HashSet<Integer>();
         List<Video> videos = searchDao.getVideoBySearch(searchContent);
         List<Tutorial> tutorials = searchDao.getEducationBySearch(searchContent);
-        for (Video video : videos){
+        for (Video video : videos) {
             videoids.add(video.getId());
         }
 
-        for (Tutorial tutorial : tutorials){
+        for (Tutorial tutorial : tutorials) {
             tutorialids.add(tutorial.getId());
         }
 
         List<Author> authors = searchDao.getAuthorBySearch(searchContent);
-        for (Author author : authors){
+        for (Author author : authors) {
             int aid = author.getId();
             List<Video> authorvideos = videoDao.getVideosByAuthorId(aid);
             List<Tutorial> authortutorials = educationDao.getTutorialsByAuthorId(aid);
-            for (Video video : authorvideos){
+            for (Video video : authorvideos) {
                 videoids.add(video.getId());
             }
 
-            for (Tutorial tutorial : authortutorials){
+            for (Tutorial tutorial : authortutorials) {
                 tutorialids.add(tutorial.getId());
             }
         }
@@ -721,37 +732,37 @@ public class CacheController {
         int pageSize = 12;
         String rediskey = "videosearch" + searchContent + "page";
 
-        long start = (page-1) * pageSize;
+        long start = (page - 1) * pageSize;
         long end = page * pageSize - 1;
 
-        for (Integer vid : videoids){
-            Video video = videoDao.getVideoByVideoId(vid);
+        for (Integer vid : videoids) {
+            Video video = (Video) commonDao.getResourceById(Video.class, vid);
             long status = redisClient.lpush(rediskey, "video-" + vid);
             videoCacheDao.insertSingleVideo(video);
             System.out.println("insert result -> " + status);
         }
 
-        for (Integer tid : tutorialids){
+        for (Integer tid : tutorialids) {
             Tutorial tutorial = educationDao.getEducationVideoById(tid);
             long status = redisClient.lpush(rediskey, "tutorial-" + tid);
             tutorialCacheDao.insertSingleTutorial(tutorial);
             System.out.println("insert result -> " + status);
         }
 
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
 
         List<String> searchVideoKeys = redisClient.lrange(rediskey, start, end);
-        for (String key : searchVideoKeys){
+        for (String key : searchVideoKeys) {
             System.out.println("key -> " + key);
             int vid = Integer.parseInt(key.split("-")[1]);
             String flag = key.split("-")[0];
-            if (flag.equals("video")){
-                CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
+            if (flag.equals("video")) {
+                SingleVideo video = videoCacheDao.getSingleVideo(vid);
                 System.out.println("title -> " + video.getTitle());
                 result.add(video);
             }
-            if (flag.equals("tutorial")){
-                CacheSingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
+            if (flag.equals("tutorial")) {
+                SingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
                 System.out.println("title -> " + video.getTitle());
                 result.add(video);
             }
@@ -762,13 +773,14 @@ public class CacheController {
 
     //http://localhost:8080/darfoobackend/rest/resources/video/tutorial/search?search=heart
     @RequestMapping(value = "/tutorial/search", method = RequestMethod.GET)
-    public @ResponseBody
-    List<CacheSingleVideo> searchTutorial(HttpServletRequest request){
+    public
+    @ResponseBody
+    List<SingleVideo> searchTutorial(HttpServletRequest request) {
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
         List<Tutorial> videos = searchDao.getEducationBySearch(searchContent);
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
-        for (Tutorial video : videos){
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        for (Tutorial video : videos) {
             int vid = video.getId();
             long status = redisClient.sadd("tutorialsearch" + searchContent, "tutorial-" + vid);
             tutorialCacheDao.insertSingleTutorial(video);
@@ -776,10 +788,10 @@ public class CacheController {
         }
 
         Set<String> searchTutorialKeys = redisClient.smembers("tutorialsearch" + searchContent);
-        for (String key : searchTutorialKeys){
+        for (String key : searchTutorialKeys) {
             System.out.println("key -> " + key);
             int tid = Integer.parseInt(key.split("-")[1]);
-            CacheSingleVideo tutorial = tutorialCacheDao.getSingleTutorial(tid);
+            SingleVideo tutorial = tutorialCacheDao.getSingleTutorial(tid);
             System.out.println("title -> " + tutorial.getTitle());
             result.add(tutorial);
         }
@@ -789,13 +801,14 @@ public class CacheController {
 
     //http://localhost:8080/darfoobackend/rest/resources/music/search?search=s
     @RequestMapping(value = "/music/search", method = RequestMethod.GET)
-    public @ResponseBody
-    List<SingleMusic> searchMusic(HttpServletRequest request){
+    public
+    @ResponseBody
+    List<SingleMusic> searchMusic(HttpServletRequest request) {
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
         List<Music> musics = searchDao.getMusicBySearch(searchContent);
         List<SingleMusic> result = new ArrayList<SingleMusic>();
-        for (Music music : musics){
+        for (Music music : musics) {
             int mid = music.getId();
             long status = redisClient.sadd("musicsearch" + searchContent, "music-" + mid);
             musicCacheDao.insertSingleMusic(music);
@@ -803,7 +816,7 @@ public class CacheController {
         }
 
         Set<String> searchMusicKeys = redisClient.smembers("musicsearch" + searchContent);
-        for (String key : searchMusicKeys){
+        for (String key : searchMusicKeys) {
             System.out.println("key -> " + key);
             int mid = Integer.parseInt(key.split("-")[1]);
             SingleMusic music = musicCacheDao.getSingleMusic(mid);
@@ -815,8 +828,9 @@ public class CacheController {
     }
 
     @RequestMapping(value = "/music/search/page/{page}", method = RequestMethod.GET)
-    public @ResponseBody
-    List<SingleMusic> searchMusic(@PathVariable Integer page, HttpServletRequest request){
+    public
+    @ResponseBody
+    List<SingleMusic> searchMusic(@PathVariable Integer page, HttpServletRequest request) {
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
         List<Music> musics = searchDao.getMusicBySearch(searchContent);
@@ -825,10 +839,10 @@ public class CacheController {
         int pageSize = 22;
         String rediskey = "musicsearch" + searchContent + "page";
 
-        long start = (page-1) * pageSize;
+        long start = (page - 1) * pageSize;
         long end = page * pageSize - 1;
 
-        for (Music music : musics){
+        for (Music music : musics) {
             int mid = music.getId();
             long status = redisClient.lpush(rediskey, "music-" + mid);
             musicCacheDao.insertSingleMusic(music);
@@ -836,7 +850,7 @@ public class CacheController {
         }
 
         List<String> searchMusicKeys = redisClient.lrange(rediskey, start, end);
-        for (String key : searchMusicKeys){
+        for (String key : searchMusicKeys) {
             System.out.println("key -> " + key);
             int mid = Integer.parseInt(key.split("-")[1]);
             SingleMusic music = musicCacheDao.getSingleMusic(mid);
@@ -849,13 +863,14 @@ public class CacheController {
 
     //http://localhost:8080/darfoobackend/rest/resources/author/search?search=heart
     @RequestMapping(value = "/author/search", method = RequestMethod.GET)
-    public @ResponseBody
-    List<SingleAuthor> searchAuthor(HttpServletRequest request){
+    public
+    @ResponseBody
+    List<SingleAuthor> searchAuthor(HttpServletRequest request) {
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
         List<Author> authors = searchDao.getAuthorBySearch(searchContent);
         List<SingleAuthor> result = new ArrayList<SingleAuthor>();
-        for (Author author : authors){
+        for (Author author : authors) {
             int aid = author.getId();
             long status = redisClient.sadd("authorsearch" + searchContent, "author-" + aid);
             authorCacheDao.insertSingleAuthor(author);
@@ -863,7 +878,7 @@ public class CacheController {
         }
 
         Set<String> searchAuthorKeys = redisClient.smembers("authorsearch" + searchContent);
-        for (String key : searchAuthorKeys){
+        for (String key : searchAuthorKeys) {
             System.out.println("key -> " + key);
             int aid = Integer.parseInt(key.split("-")[1]);
             SingleAuthor author = authorCacheDao.getSingleAuthor(aid);
@@ -875,7 +890,9 @@ public class CacheController {
     }
 
     @RequestMapping(value = "/video/sidebar/{id}", method = RequestMethod.GET)
-    public @ResponseBody List<CacheSingleVideo> getSidebarVideos(@PathVariable Integer id){
+    public
+    @ResponseBody
+    List<SingleVideo> getSidebarVideos(@PathVariable Integer id) {
         List<Video> sidebarVideos = videoDao.getSideBarVideos(id);
         String rediskey = "videosidebar" + id;
         for (Video video : sidebarVideos) {
@@ -885,11 +902,11 @@ public class CacheController {
             System.out.println("insert result -> " + result);
         }
         List<String> sideBarVideoKeys = redisClient.lrange(rediskey, 0L, -1L);
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (String vkey : sideBarVideoKeys) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
-            CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
+            SingleVideo video = videoCacheDao.getSingleVideo(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
@@ -898,7 +915,9 @@ public class CacheController {
     }
 
     @RequestMapping(value = "/tutorial/sidebar/{id}", method = RequestMethod.GET)
-    public @ResponseBody List<CacheSingleVideo> getSidebarTutorials(@PathVariable Integer id){
+    public
+    @ResponseBody
+    List<SingleVideo> getSidebarTutorials(@PathVariable Integer id) {
         List<Tutorial> sidebarTutorials = educationDao.getSideBarTutorials(id);
         String rediskey = "tutorialsidebar" + id;
         for (Tutorial video : sidebarTutorials) {
@@ -909,11 +928,11 @@ public class CacheController {
         }
 
         List<String> sidebarTutorialKeys = redisClient.lrange(rediskey, 0L, -1L);
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
-        for (String vkey : sidebarTutorialKeys){
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        for (String vkey : sidebarTutorialKeys) {
             System.out.println("vkey -> " + vkey);
             int vid = Integer.parseInt(vkey.split("-")[1]);
-            CacheSingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
+            SingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
@@ -922,11 +941,13 @@ public class CacheController {
     }
 
     @RequestMapping(value = "/music/sidebar/{id}", method = RequestMethod.GET)
-    public @ResponseBody List<SingleMusic> getSidebarMusics(@PathVariable Integer id){
+    public
+    @ResponseBody
+    List<SingleMusic> getSidebarMusics(@PathVariable Integer id) {
         List<Music> musics = musicDao.getSideBarMusics(id);
         List<SingleMusic> result = new ArrayList<SingleMusic>();
         String rediskey = "musicsidebar" + id;
-        for (Music music : musics){
+        for (Music music : musics) {
             int mid = music.getId();
             long status = redisClient.lpush(rediskey, "music-" + mid);
             musicCacheDao.insertSingleMusic(music);
@@ -934,7 +955,7 @@ public class CacheController {
         }
 
         List<String> sidebarMusicKeys = redisClient.lrange(rediskey, 0L, -1L);
-        for (String vkey : sidebarMusicKeys){
+        for (String vkey : sidebarMusicKeys) {
             System.out.println("vkey -> " + vkey);
             int mid = Integer.parseInt(vkey.split("-")[1]);
             SingleMusic music = musicCacheDao.getSingleMusic(mid);

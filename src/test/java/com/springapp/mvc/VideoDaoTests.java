@@ -5,9 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.darfoo.backend.dao.AuthorDao;
-import com.darfoo.backend.dao.ImageDao;
-import com.darfoo.backend.dao.ModelUtils;
+import com.darfoo.backend.dao.*;
 import com.darfoo.backend.service.responsemodel.VideoCates;
 
 import org.junit.Test;
@@ -16,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Image;
 import com.darfoo.backend.model.Music;
@@ -35,6 +31,9 @@ public class VideoDaoTests {
     AuthorDao authorDao;
     @Autowired
     ImageDao imageDao;
+    @Autowired
+    CommonDao commonDao;
+
     VideoCates videoCates = new VideoCates();
 
     @Test
@@ -112,7 +111,7 @@ public class VideoDaoTests {
     @Test
     public void getVideoByVideoId() {
         long start = System.currentTimeMillis();
-        Video video = videoDao.getVideoByVideoId(2);
+        Video video = (Video) commonDao.getResourceById(Video.class, 2);
         System.out.println(video.toString(true));
         System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }

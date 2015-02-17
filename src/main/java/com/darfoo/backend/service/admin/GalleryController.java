@@ -32,11 +32,13 @@ public class GalleryController {
     AuthorDao authorDao;
     @Autowired
     DanceDao danceDao;
-
-    QiniuUtils qiniuUtils = new QiniuUtils();
+    @Autowired
+    CommonDao commonDao;
+    @Autowired
+    QiniuUtils qiniuUtils;
 
     @RequestMapping(value = "/admin/video/all", method = RequestMethod.GET)
-    public String showAllVideo(ModelMap modelMap, HttpSession session){
+    public String showAllVideo(ModelMap modelMap, HttpSession session) {
         List<Video> s_videos = new ArrayList<Video>();
         s_videos = videoDao.getAllVideo();
         modelMap.addAttribute("allvideos", s_videos);
@@ -44,24 +46,24 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/video/{id}", method = RequestMethod.GET)
-    public String showSingleVideo(@PathVariable String id, ModelMap modelMap){
+    public String showSingleVideo(@PathVariable String id, ModelMap modelMap) {
         System.out.println(Integer.parseInt(id));
-        Video video = videoDao.getVideoByVideoId(Integer.parseInt(id));
+        Video video = (Video) commonDao.getResourceById(Video.class, Integer.parseInt(id));
         Set<VideoCategory> categories = video.getCategories();
-        for (VideoCategory category : categories){
+        for (VideoCategory category : categories) {
             int categoryid = category.getId();
             String categorytitle = category.getTitle();
             System.out.println(categoryid);
             System.out.println(categorytitle);
-            if (categoryid >= 1 && categoryid <= 3){
+            if (categoryid >= 1 && categoryid <= 3) {
                 modelMap.addAttribute("speed", category.getTitle());
-            }else if(categoryid >= 4 && categoryid <= 6){
+            } else if (categoryid >= 4 && categoryid <= 6) {
                 modelMap.addAttribute("difficult", category.getTitle());
-            }else if(categoryid >= 7 && categoryid <= 17){
+            } else if (categoryid >= 7 && categoryid <= 17) {
                 modelMap.addAttribute("style", category.getTitle());
-            }else if(categoryid >= 18 && categoryid <= 43){
+            } else if (categoryid >= 18 && categoryid <= 43) {
                 modelMap.addAttribute("letter", category.getTitle());
-            }else{
+            } else {
                 System.out.println("something is wrong with the category");
             }
         }
@@ -71,17 +73,17 @@ public class GalleryController {
         modelMap.addAttribute("video", video);
         modelMap.addAttribute("authors", authorDao.getAllAuthor());
         modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw(video.getImage().getImage_key()));
-        if (video.getMusic() != null){
+        if (video.getMusic() != null) {
             String connectmusic = video.getMusic().getTitle() + "-" + video.getMusic().getAuthorName();
             modelMap.addAttribute("connectmusic", connectmusic);
-        }else{
+        } else {
             modelMap.addAttribute("connectmusic", "请输入要关联的伴奏并选择");
         }
         return "singlevideo";
     }
 
     @RequestMapping(value = "/admin/tutorial/all", method = RequestMethod.GET)
-    public String showAllTutorial(ModelMap modelMap, HttpSession session){
+    public String showAllTutorial(ModelMap modelMap, HttpSession session) {
         List<Tutorial> s_tutorial = new ArrayList<Tutorial>();
         s_tutorial = educationDao.getAllEducation();
         modelMap.addAttribute("alltutorials", s_tutorial);
@@ -89,22 +91,22 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/tutorial/{id}", method = RequestMethod.GET)
-    public String showSingleTutorial(@PathVariable String id, ModelMap modelMap){
+    public String showSingleTutorial(@PathVariable String id, ModelMap modelMap) {
         System.out.println(Integer.parseInt(id));
         Tutorial tutorial = educationDao.getEducationVideoById(Integer.parseInt(id));
         Set<TutorialCategory> categories = tutorial.getCategories();
-        for (TutorialCategory category : categories){
+        for (TutorialCategory category : categories) {
             int categoryid = category.getId();
             String categorytitle = category.getTitle();
             System.out.println(categoryid);
             System.out.println(categorytitle);
-            if (categorytitle.equals("快") || categorytitle.equals("中") || categorytitle.equals("慢")){
+            if (categorytitle.equals("快") || categorytitle.equals("中") || categorytitle.equals("慢")) {
                 modelMap.addAttribute("speed", categorytitle);
-            }else if(categorytitle.equals("简单") || categorytitle.equals("适中") || categorytitle.equals("稍难")){
+            } else if (categorytitle.equals("简单") || categorytitle.equals("适中") || categorytitle.equals("稍难")) {
                 modelMap.addAttribute("difficult", categorytitle);
-            }else if(categorytitle.equals("背面教学") || categorytitle.equals("分解教学") || categorytitle.equals("队形表演")){
+            } else if (categorytitle.equals("背面教学") || categorytitle.equals("分解教学") || categorytitle.equals("队形表演")) {
                 modelMap.addAttribute("style", category.getTitle());
-            }else{
+            } else {
                 System.out.println("something is wrong with the category");
             }
         }
@@ -114,17 +116,17 @@ public class GalleryController {
         modelMap.addAttribute("tutorial", tutorial);
         modelMap.addAttribute("authors", authorDao.getAllAuthor());
         modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw(tutorial.getImage().getImage_key()));
-        if (tutorial.getMusic() != null){
+        if (tutorial.getMusic() != null) {
             String connectmusic = tutorial.getMusic().getTitle() + "-" + tutorial.getMusic().getAuthorName();
             modelMap.addAttribute("connectmusic", connectmusic);
-        }else{
+        } else {
             modelMap.addAttribute("connectmusic", "请输入要关联的伴奏并选择");
         }
         return "singletutorial";
     }
 
     @RequestMapping(value = "/admin/music/all", method = RequestMethod.GET)
-    public String showAllMusic(ModelMap modelMap, HttpSession session){
+    public String showAllMusic(ModelMap modelMap, HttpSession session) {
         List<Music> s_music = new ArrayList<Music>();
         s_music = musicDao.getAllMusic();
         modelMap.addAttribute("allmusics", s_music);
@@ -132,22 +134,22 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/music/{id}", method = RequestMethod.GET)
-    public String showSingleMusic(@PathVariable String id, ModelMap modelMap){
+    public String showSingleMusic(@PathVariable String id, ModelMap modelMap) {
         System.out.println(Integer.parseInt(id));
         Music music = musicDao.getMusicByMusicId(Integer.parseInt(id));
         Set<MusicCategory> categories = music.getCategories();
-        for (MusicCategory category : categories){
+        for (MusicCategory category : categories) {
             int categoryid = category.getId();
             String categorytitle = category.getTitle();
             System.out.println(categoryid);
             System.out.println(categorytitle);
-            if (categoryid >= 1 && categoryid <= 4){
+            if (categoryid >= 1 && categoryid <= 4) {
                 modelMap.addAttribute("beat", category.getTitle());
-            }else if(categoryid >= 5 && categoryid <= 12){
+            } else if (categoryid >= 5 && categoryid <= 12) {
                 modelMap.addAttribute("style", category.getTitle());
-            }else if(categoryid >= 13 && categoryid <= 38){
+            } else if (categoryid >= 13 && categoryid <= 38) {
                 modelMap.addAttribute("letter", category.getTitle());
-            }else{
+            } else {
                 System.out.println("something is wrong with the category");
             }
         }
@@ -157,7 +159,7 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/author/all", method = RequestMethod.GET)
-    public String showAllAuthor(ModelMap modelMap, HttpSession session){
+    public String showAllAuthor(ModelMap modelMap, HttpSession session) {
         List<Author> s_author = new ArrayList<Author>();
         s_author = authorDao.getAllAuthor();
         modelMap.addAttribute("allauthors", s_author);
@@ -165,7 +167,7 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/author/{id}", method = RequestMethod.GET)
-    public String showSingleAuthor(@PathVariable String id, ModelMap modelMap, HttpSession session){
+    public String showSingleAuthor(@PathVariable String id, ModelMap modelMap, HttpSession session) {
         System.out.println(Integer.parseInt(id));
         Author author = authorDao.getAuthor(Integer.parseInt(id));
 
@@ -173,19 +175,19 @@ public class GalleryController {
         session.setAttribute("authordescription", author.getDescription());
 
         modelMap.addAttribute("author", author);
-        if (author.getImage() != null){
+        if (author.getImage() != null) {
             modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw(author.getImage().getImage_key()));
-            if (author.getImage().getImage_key().equals("")){
+            if (author.getImage().getImage_key().equals("")) {
                 modelMap.addAttribute("updateauthorimage", 1);
             }
-        }else{
+        } else {
             modelMap.addAttribute("imageurl", "");
         }
         return "singleauthor";
     }
 
     @RequestMapping(value = "/admin/team/all", method = RequestMethod.GET)
-    public String showAllDanceGroup(ModelMap modelMap, HttpSession session){
+    public String showAllDanceGroup(ModelMap modelMap, HttpSession session) {
         List<DanceGroup> s_team = new ArrayList<DanceGroup>();
         s_team = danceDao.getAllDanceGourp();
         modelMap.addAttribute("allteams", s_team);
@@ -193,7 +195,7 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/team/{id}", method = RequestMethod.GET)
-    public String showSingleDanceGroup(@PathVariable String id, ModelMap modelMap, HttpSession session){
+    public String showSingleDanceGroup(@PathVariable String id, ModelMap modelMap, HttpSession session) {
         System.out.println(Integer.parseInt(id));
         DanceGroup danceGroup = danceDao.getTeamById(Integer.parseInt(id));
 

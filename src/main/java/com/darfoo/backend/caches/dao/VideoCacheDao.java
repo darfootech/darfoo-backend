@@ -2,12 +2,9 @@ package com.darfoo.backend.caches.dao;
 
 import com.darfoo.backend.caches.CacheProtocol;
 import com.darfoo.backend.caches.CommonRedisClient;
-import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Video;
-import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
+import com.darfoo.backend.service.responsemodel.SingleVideo;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.HashMap;
 
 /**
  * Created by zjh on 14-12-17.
@@ -42,11 +39,11 @@ public class VideoCacheDao {
         }
     }
 
-    public CacheSingleVideo getSingleVideo(Integer id) {
-        return (CacheSingleVideo) cacheProtocol.extractResourceFromCache(CacheSingleVideo.class, id, "video");
+    public SingleVideo getSingleVideo(Integer id) {
+        return (SingleVideo) cacheProtocol.extractResourceFromCache(SingleVideo.class, id, "video");
     }
 
-    public CacheSingleVideo getRecommendVideo(Integer id) {
-        return (CacheSingleVideo) cacheProtocol.extractResourceFromCache(CacheSingleVideo.class, id, "recommendvideo");
+    public SingleVideo getRecommendVideo(Integer id) {
+        return (SingleVideo) cacheProtocol.extractResourceFromCache(SingleVideo.class, id, "recommendvideo");
     }
 }

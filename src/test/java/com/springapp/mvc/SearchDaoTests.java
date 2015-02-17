@@ -11,7 +11,7 @@ import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.model.*;
-import com.darfoo.backend.service.responsemodel.CacheSingleVideo;
+import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
 import org.junit.Test;
@@ -101,11 +101,11 @@ public class SearchDaoTests {
         }
 
         Set<String> searchVideoKeys = redisClient.smembers("videosearch" + searchContent);
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (String key : searchVideoKeys) {
             System.out.println("key -> " + key);
             int vid = Integer.parseInt(key.split("-")[1]);
-            CacheSingleVideo video = videoCacheDao.getSingleVideo(vid);
+            SingleVideo video = videoCacheDao.getSingleVideo(vid);
             System.out.println("title -> " + video.getTitle());
             result.add(video);
         }
@@ -118,7 +118,7 @@ public class SearchDaoTests {
         String searchContent = "呵呵";
         System.out.println(searchContent);
         List<Tutorial> videos = searchDao.getEducationBySearch(searchContent);
-        List<CacheSingleVideo> result = new ArrayList<CacheSingleVideo>();
+        List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (Tutorial video : videos) {
             int vid = video.getId();
             long status = redisClient.sadd("tutorialsearch" + searchContent, "tutorial-" + vid);
@@ -130,7 +130,7 @@ public class SearchDaoTests {
         for (String key : searchTutorialKeys) {
             System.out.println("key -> " + key);
             int tid = Integer.parseInt(key.split("-")[1]);
-            CacheSingleVideo tutorial = tutorialCacheDao.getSingleTutorial(tid);
+            SingleVideo tutorial = tutorialCacheDao.getSingleTutorial(tid);
             System.out.println("title -> " + tutorial.getTitle());
             result.add(tutorial);
         }

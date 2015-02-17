@@ -33,23 +33,24 @@ public class UpdateController {
     DanceDao danceDao;
     @Autowired
     ImageDao imageDao;
+    @Autowired
+    CommonDao commonDao;
 
-    public int checkVideoTitleAuthorIdDuplicate(String videoTitle, String authorName){
+    public int checkVideoTitleAuthorIdDuplicate(String videoTitle, String authorName) {
         Author a = authorDao.getAuthor(authorName);
-        if(a != null){
+        if (a != null) {
             System.out.println(a.getName());
-        }
-        else{
+        } else {
             System.out.println("无该author记录");
         }
 
         int authorid = a.getId();
         //视频title可以重名,但是不可能出现视频title一样,作者id都一样的情况,也就是一个作者的作品中不会出现重名的情况
         Video queryVideo = videoDao.getVideoByTitleAuthorId(videoTitle, authorid);
-        if (queryVideo == null){
+        if (queryVideo == null) {
             System.out.println("视频名字和作者id组合不存在，可以进行插入");
             return 1;
-        }else{
+        } else {
             System.out.println(queryVideo.getId());
             System.out.println(queryVideo.getAuthor().getName());
             System.out.println("视频名字和作者id组合已存在，不可以进行插入了，是否需要修改");
@@ -57,21 +58,20 @@ public class UpdateController {
         }
     }
 
-    public int checkTutorialTitleAuthorIdDuplicate(String tutorialTitle, String authorName){
+    public int checkTutorialTitleAuthorIdDuplicate(String tutorialTitle, String authorName) {
         Author a = authorDao.getAuthor(authorName);
-        if(a != null){
+        if (a != null) {
             System.out.println(a.getName());
-        }
-        else{
+        } else {
             System.out.println("无该author记录");
         }
 
         int authorid = a.getId();
         Tutorial queryVideo = educationDao.getEducationByTitleAuthorId(tutorialTitle, authorid);
-        if (queryVideo == null){
+        if (queryVideo == null) {
             System.out.println("教程和作者id组合不存在，可以进行插入");
             return 1;
-        }else{
+        } else {
             System.out.println(queryVideo.getId());
             System.out.println(queryVideo.getAuthor().getName());
             System.out.println("教程和作者id组合已存在，不可以进行插入了，是否需要修改");
@@ -79,21 +79,20 @@ public class UpdateController {
         }
     }
 
-    public int checkMusicTitleAuthorIdDuplicate(String musicTitle, String authorName){
+    public int checkMusicTitleAuthorIdDuplicate(String musicTitle, String authorName) {
         Author a = authorDao.getAuthor(authorName);
-        if(a != null){
+        if (a != null) {
             System.out.println(a.getName());
-        }
-        else{
+        } else {
             System.out.println("无该author记录");
         }
 
         int authorid = a.getId();
         Music queryMusic = musicDao.getMusicByTitleAuthorId(musicTitle, authorid);
-        if (queryMusic == null){
+        if (queryMusic == null) {
             System.out.println("伴奏与作者id组合不存在，可以进行插入");
             return 1;
-        }else{
+        } else {
             System.out.println(queryMusic.getId());
             System.out.println(queryMusic.getAuthor().getName());
             System.out.println("伴奏与作者id组合已存在，不可以进行插入了，是否需要修改");
@@ -101,12 +100,12 @@ public class UpdateController {
         }
     }
 
-    public int checkMusicTitleAuthorNameDuplicate(String musicTitle, String authorName){
+    public int checkMusicTitleAuthorNameDuplicate(String musicTitle, String authorName) {
         Music queryMusic = musicDao.getMusicByTitleAuthorName(musicTitle, authorName);
-        if (queryMusic == null){
+        if (queryMusic == null) {
             System.out.println("伴奏名字和作者名字组合不存在，可以进行插入");
             return 1;
-        }else{
+        } else {
             System.out.println(queryMusic.toString());
             System.out.println("伴奏名字和作者名字组合已存在，不可以进行插入了，是否需要修改");
             return 0;
@@ -114,7 +113,9 @@ public class UpdateController {
     }
 
     @RequestMapping(value = "/admin/video/update", method = RequestMethod.POST)
-    public @ResponseBody String updateVideo(HttpServletRequest request, HttpSession session){
+    public
+    @ResponseBody
+    String updateVideo(HttpServletRequest request, HttpSession session) {
         String videoTitle = request.getParameter("title");
         String videoType = request.getParameter("videotype");
         String originTitle = request.getParameter("origintitle");
@@ -130,16 +131,16 @@ public class UpdateController {
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imageKey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + videoLetter);
 
         boolean isSingleLetter = ServiceUtils.isSingleCharacter(videoLetter);
-        if (isSingleLetter){
+        if (isSingleLetter) {
             System.out.println("是单个大写字母");
-        }else{
+        } else {
             System.out.println("不是单个大写字母");
-            return 505+"";
+            return 505 + "";
         }
 
         int duplicateCode = checkVideoTitleAuthorIdDuplicate(videoTitle, authorName);
-        if (duplicateCode == 0){
-            return 501+"";
+        if (duplicateCode == 0) {
+            return 501 + "";
         }
 
         Integer vid = Integer.parseInt(request.getParameter("id"));
@@ -151,42 +152,42 @@ public class UpdateController {
         categoryTitles.add(videoStyle);
         categoryTitles.add(videoLetter.toUpperCase());
 
-        String newVideoKey = videoDao.getVideoByVideoId(vid).getVideo_key().split("\\.")[0] + "." + videoType;
+        String newVideoKey = ((Video) commonDao.getResourceById(Video.class, vid)).getVideo_key().split("\\.")[0] + "." + videoType;
         videoDao.updateVideoKeyById(vid, newVideoKey);
 
-        if (videoTitle.equals("")){
+        if (videoTitle.equals("")) {
             videoTitle = originTitle;
         }
-        if(response.updateIsReady()){
+        if (response.updateIsReady()) {
             //updateIsReady为true表示可以进行更新操作
             String status = CRUDEvent.getResponse(videoDao.updateVideo(vid, videoTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
 
-            if (!connectmusic.equals("")){
+            if (!connectmusic.equals("")) {
                 int mid = Integer.parseInt(connectmusic.split("-")[2]);
                 videoDao.insertOrUpdateMusic(vid, mid);
             }
 
-            if (status.equals("UPDATE_SUCCESS")){
-                return 200+"";
-            }else {
-                return 503+"";
+            if (status.equals("UPDATE_SUCCESS")) {
+                return 200 + "";
+            } else {
+                return 503 + "";
             }
-        }else{
+        } else {
             System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
-            return 502+"";
+            return 502 + "";
         }
     }
 
     @RequestMapping(value = "/admin/video/updateimage/{id}", method = RequestMethod.GET)
-    public String updateVideoImage(@PathVariable String id, ModelMap modelMap){
+    public String updateVideoImage(@PathVariable String id, ModelMap modelMap) {
         modelMap.addAttribute("videoid", Integer.parseInt(id));
         return "updatevideoimage";
     }
 
     @RequestMapping(value = "/admin/video/updateimageresource", method = RequestMethod.POST)
-    public String updateVideoImageResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request){
+    public String updateVideoImageResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request) {
         int id = Integer.parseInt(request.getParameter("id"));
-        String imagekey = videoDao.getVideoByVideoId(id).getImage().getImage_key();
+        String imagekey = ((Video) commonDao.getResourceById(Video.class, id)).getImage().getImage_key();
 
         System.out.println(id + " " + imagekey);
 
@@ -200,15 +201,17 @@ public class UpdateController {
             e.printStackTrace();
         }
 
-        if (imageStatusCode.equals("200")){
+        if (imageStatusCode.equals("200")) {
             return "success";
-        }else{
+        } else {
             return "fail";
         }
     }
 
     @RequestMapping(value = "/admin/tutorial/update", method = RequestMethod.POST)
-    public @ResponseBody String updateTutorial(HttpServletRequest request, HttpSession session) {
+    public
+    @ResponseBody
+    String updateTutorial(HttpServletRequest request, HttpSession session) {
         String videoTitle = request.getParameter("title");
         String videoType = request.getParameter("videotype");
         String originTitle = request.getParameter("origintitle");
@@ -223,8 +226,8 @@ public class UpdateController {
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imageKey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle);
 
         int duplicateCode = checkTutorialTitleAuthorIdDuplicate(videoTitle, authorName);
-        if (duplicateCode == 0){
-            return 501+"";
+        if (duplicateCode == 0) {
+            return 501 + "";
         }
 
         Integer vid = Integer.parseInt(request.getParameter("id"));
@@ -238,14 +241,14 @@ public class UpdateController {
         String newTutorialKey = educationDao.getEducationVideoById(vid).getVideo_key().split("\\.")[0] + "." + videoType;
         educationDao.updateVideoKeyById(vid, newTutorialKey);
 
-        if (videoTitle.equals("")){
+        if (videoTitle.equals("")) {
             videoTitle = originTitle;
         }
         if (response.updateIsReady()) {
             //updateIsReady为true表示可以进行更新操作
             String status = CRUDEvent.getResponse(educationDao.updateEducation(vid, videoTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
 
-            if (!connectmusic.equals("")){
+            if (!connectmusic.equals("")) {
                 int mid = Integer.parseInt(connectmusic.split("-")[2]);
                 educationDao.insertOrUpdateMusic(vid, mid);
             }
@@ -262,13 +265,13 @@ public class UpdateController {
     }
 
     @RequestMapping(value = "/admin/tutorial/updateimage/{id}", method = RequestMethod.GET)
-    public String updateTutorialImage(@PathVariable String id, ModelMap modelMap){
+    public String updateTutorialImage(@PathVariable String id, ModelMap modelMap) {
         modelMap.addAttribute("tutorialid", Integer.parseInt(id));
         return "updatetutorialimage";
     }
 
     @RequestMapping(value = "/admin/tutorial/updateimageresource", method = RequestMethod.POST)
-    public String updateTutorialImageResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request){
+    public String updateTutorialImageResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request) {
         int id = Integer.parseInt(request.getParameter("id"));
         String imagekey = educationDao.getEducationVideoById(id).getImage().getImage_key();
 
@@ -284,15 +287,17 @@ public class UpdateController {
             e.printStackTrace();
         }
 
-        if (imageStatusCode.equals("200")){
+        if (imageStatusCode.equals("200")) {
             return "success";
-        }else{
+        } else {
             return "fail";
         }
     }
 
     @RequestMapping(value = "/admin/music/update", method = RequestMethod.POST)
-    public @ResponseBody String updateMusic(HttpServletRequest request, HttpSession session) {
+    public
+    @ResponseBody
+    String updateMusic(HttpServletRequest request, HttpSession session) {
         String musicTitle = request.getParameter("title");
         String originTitle = request.getParameter("origintitle");
         String authorName = request.getParameter("authorname");
@@ -303,16 +308,16 @@ public class UpdateController {
         System.out.println("requests: " + musicTitle + " " + authorName + " " + imageKey + " " + musicBeat + " " + musicStyle + " " + musicLetter);
 
         boolean isSingleLetter = ServiceUtils.isSingleCharacter(musicLetter);
-        if (isSingleLetter){
+        if (isSingleLetter) {
             System.out.println("是单个大写字母");
-        }else{
+        } else {
             System.out.println("不是单个大写字母");
-            return 505+"";
+            return 505 + "";
         }
 
         int duplicateCode = checkMusicTitleAuthorIdDuplicate(musicTitle, authorName);
-        if (duplicateCode == 0){
-            return 501+"";
+        if (duplicateCode == 0) {
+            return 501 + "";
         }
 
         Integer vid = Integer.parseInt(request.getParameter("id"));
@@ -322,12 +327,12 @@ public class UpdateController {
         categoryTitles.add(musicBeat);
         categoryTitles.add(musicStyle);
         categoryTitles.add(musicLetter.toUpperCase());
-        if (musicTitle.equals("")){
+        if (musicTitle.equals("")) {
             musicTitle = originTitle;
         }
-        if(response.updateIsReady()){
+        if (response.updateIsReady()) {
             //updateIsReady为true表示可以进行更新操作
-            String status = CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, authorName, imageKey,categoryTitles,System.currentTimeMillis()));
+            String status = CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
             if (status.equals("UPDATE_SUCCESS")) {
                 return 200 + "";
             } else {
@@ -340,7 +345,9 @@ public class UpdateController {
     }
 
     @RequestMapping(value = "/admin/music/updatenopic", method = RequestMethod.POST)
-    public @ResponseBody String updateMusicNoPic(HttpServletRequest request, HttpSession session) {
+    public
+    @ResponseBody
+    String updateMusicNoPic(HttpServletRequest request, HttpSession session) {
         String musicTitle = request.getParameter("title");
         String originTitle = request.getParameter("origintitle");
         String authorName = request.getParameter("authorname");
@@ -354,16 +361,16 @@ public class UpdateController {
         System.out.println("requests: " + musicTitle + " " + authorName + " " + imageKey + " " + musicBeat + " " + musicStyle + " " + musicLetter);
 
         boolean isSingleLetter = ServiceUtils.isSingleCharacter(musicLetter);
-        if (isSingleLetter){
+        if (isSingleLetter) {
             System.out.println("是单个大写字母");
-        }else{
+        } else {
             System.out.println("不是单个大写字母");
-            return 505+"";
+            return 505 + "";
         }
 
         int duplicateCode = checkMusicTitleAuthorNameDuplicate(musicTitle, authorName);
-        if (duplicateCode == 0){
-            return 501+"";
+        if (duplicateCode == 0) {
+            return 501 + "";
         }
 
         Integer vid = Integer.parseInt(request.getParameter("id"));
@@ -374,16 +381,16 @@ public class UpdateController {
         categoryTitles.add(musicStyle);
         categoryTitles.add(musicLetter.toUpperCase());
 
-        if (musicTitle.equals("")){
+        if (musicTitle.equals("")) {
             musicTitle = originTitle;
         }
-        if (authorName.equals("")){
+        if (authorName.equals("")) {
             authorName = originAuthorName;
         }
 
-        if(response.updateIsReady()){
+        if (response.updateIsReady()) {
             //updateIsReady为true表示可以进行更新操作
-            String status = CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, authorObjectName, imageKey,categoryTitles,System.currentTimeMillis()));
+            String status = CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, authorObjectName, imageKey, categoryTitles, System.currentTimeMillis()));
             String updateAuthorNameStatus = CRUDEvent.getResponse(musicDao.updateAuthorName(vid, authorName));
             if (status.equals("UPDATE_SUCCESS") && updateAuthorNameStatus.equals("UPDATE_SUCCESS")) {
                 return 200 + "";
@@ -397,13 +404,13 @@ public class UpdateController {
     }
 
     @RequestMapping(value = "/admin/music/updateimage/{id}", method = RequestMethod.GET)
-    public String updateMusicImage(@PathVariable String id, ModelMap modelMap){
+    public String updateMusicImage(@PathVariable String id, ModelMap modelMap) {
         modelMap.addAttribute("musicid", Integer.parseInt(id));
         return "updatemusicimage";
     }
 
     @RequestMapping(value = "/admin/music/updateimageresource", method = RequestMethod.POST)
-    public String updateMusicImageResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request){
+    public String updateMusicImageResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request) {
         int id = Integer.parseInt(request.getParameter("id"));
         String imagekey = musicDao.getMusicByMusicId(id).getImage().getImage_key();
 
@@ -419,47 +426,49 @@ public class UpdateController {
             e.printStackTrace();
         }
 
-        if (imageStatusCode.equals("200")){
+        if (imageStatusCode.equals("200")) {
             return "success";
-        }else{
+        } else {
             return "fail";
         }
     }
 
     @RequestMapping(value = "/admin/author/update", method = RequestMethod.POST)
-    public @ResponseBody String updateAuthor(HttpServletRequest request, HttpSession session) {
+    public
+    @ResponseBody
+    String updateAuthor(HttpServletRequest request, HttpSession session) {
         String name = request.getParameter("name");
         String description = request.getParameter("description");
         String imagekey = request.getParameter("imagekey");
         String newimagekey = request.getParameter("newimagekey");
 
-        if(authorDao.isExistAuthor(name)){
+        if (authorDao.isExistAuthor(name)) {
             System.out.println("作者已存在");
-            return 501+"";
-        }else{
+            return 501 + "";
+        } else {
             System.out.println("无该author记录，可以创建");
         }
 
-        if (newimagekey != null){
+        if (newimagekey != null) {
             Image image = imageDao.getImageByName(newimagekey);
-            if (image == null){
+            if (image == null) {
                 System.out.println("图片不存在，可以进行插入");
                 image = new Image();
                 image.setImage_key(newimagekey);
                 imageDao.insertSingleImage(image);
                 session.setAttribute("authorImage", newimagekey);
-            }else{
+            } else {
                 System.out.println("图片已存在，不可以进行插入了，是否需要修改");
-                return 505+"";
+                return 505 + "";
             }
         }
 
-        if (name.equals("")){
-            name = (String)session.getAttribute("authorname");
+        if (name.equals("")) {
+            name = (String) session.getAttribute("authorname");
         }
 
-        if (description.equals("")){
-            description = (String)session.getAttribute("authordescription");
+        if (description.equals("")) {
+            description = (String) session.getAttribute("authordescription");
         }
 
         System.out.println("requests: " + name + " " + description);
@@ -468,9 +477,9 @@ public class UpdateController {
         int res = authorDao.updateAuthor(id, name, description, newimagekey);//更新id为2的Author对象的名字
         String status = CRUDEvent.getResponse(res);
         if (status.equals("UPDATE_SUCCESS")) {
-            if (newimagekey != null){
+            if (newimagekey != null) {
                 return 201 + "";
-            }else{
+            } else {
                 return 200 + "";
             }
         } else {
@@ -479,13 +488,13 @@ public class UpdateController {
     }
 
     @RequestMapping(value = "/admin/author/updateimage/{id}", method = RequestMethod.GET)
-    public String updateAuthorImage(@PathVariable String id, ModelMap modelMap){
+    public String updateAuthorImage(@PathVariable String id, ModelMap modelMap) {
         modelMap.addAttribute("authorid", Integer.parseInt(id));
         return "updateauthorimage";
     }
 
     @RequestMapping(value = "/admin/author/updateimageresource", method = RequestMethod.POST)
-    public String updateAuthorImageResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request){
+    public String updateAuthorImageResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request) {
         int id = Integer.parseInt(request.getParameter("id"));
         String imagekey = authorDao.getAuthor(id).getImage().getImage_key();
 
@@ -501,39 +510,41 @@ public class UpdateController {
             e.printStackTrace();
         }
 
-        if (imageStatusCode.equals("200")){
+        if (imageStatusCode.equals("200")) {
             return "success";
-        }else{
+        } else {
             return "fail";
         }
     }
 
     @RequestMapping(value = "/admin/team/update", method = RequestMethod.POST)
-    public @ResponseBody String updateTeam(HttpServletRequest request, HttpSession session) {
+    public
+    @ResponseBody
+    String updateTeam(HttpServletRequest request, HttpSession session) {
         String name = request.getParameter("name");
         String description = request.getParameter("description");
         String imagekey = request.getParameter("imagekey");
 
-        if (name.equals("")){
-            name = (String)session.getAttribute("teamname");
+        if (name.equals("")) {
+            name = (String) session.getAttribute("teamname");
         }
 
-        if (description.equals("")){
-            description = (String)session.getAttribute("teamdescription");
+        if (description.equals("")) {
+            description = (String) session.getAttribute("teamdescription");
         }
 
         System.out.println("requests: " + name + " " + description + " " + imagekey);
 
         Integer id = Integer.parseInt(request.getParameter("id"));
         UpdateCheckResponse response = danceDao.updateDanceGroupCheck(id, imagekey);
-        if(response.updateIsReady()){
+        if (response.updateIsReady()) {
             String status = CRUDEvent.getResponse(danceDao.updateDanceGourp(id, name, description, imagekey, System.currentTimeMillis()));
             if (status.equals("UPDATE_SUCCESS")) {
                 return 200 + "";
             } else {
                 return 503 + "";
             }
-        }else{
+        } else {
             System.out.println("请先完成舞队图片的插入");
             return 505 + "";
         }
