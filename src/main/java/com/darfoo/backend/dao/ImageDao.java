@@ -1,20 +1,16 @@
 package com.darfoo.backend.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.darfoo.backend.model.Image;
-import com.darfoo.backend.model.Image;
 import com.darfoo.backend.model.Image;
 import com.darfoo.backend.model.UpdateCheckResponse;
-
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zjh on 14-12-1.

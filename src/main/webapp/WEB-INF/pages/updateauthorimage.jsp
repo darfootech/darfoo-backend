@@ -1,11 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@include file="header.jsp"%>
+<%@include file="header.jsp" %>
 
 <div class="container">
     <h1>更新明星舞队图片</h1>
+
     <div class="row">
         <div class="col-md-12">
-            <form role="form" action="/darfoobackend/rest/admin/author/updateimageresource" method="post" enctype="multipart/form-data">
+            <form role="form" action="/darfoobackend/rest/admin/author/updateimageresource" method="post"
+                  enctype="multipart/form-data">
                 <div style="display: none">
                     <input type="text" name="id" value="${authorid}">
                 </div>
@@ -21,4 +23,4 @@
     </div>
 </div>
 
-<%@include file="footer.jsp"%>
+<%@include file="footer.jsp" %>

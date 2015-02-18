@@ -1,10 +1,8 @@
 package com.darfoo.backend.service.interceptors;
 
-import org.omg.CORBA.Request;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,20 +21,22 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    public @ResponseBody String auth(HttpServletRequest request, HttpSession session) {
+    public
+    @ResponseBody
+    String auth(HttpServletRequest request, HttpSession session) {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
         System.out.println(username);
         System.out.println(password);
 
-        if (username.equals("Darfoo@board") && password.equals("Oofrad@Oofrad")){
+        if (username.equals("Darfoo@board") && password.equals("Oofrad@Oofrad")) {
             request.getSession().setAttribute("loginUser", "cleantha");
             return "200";
-        }else if((username.equals("darfoo@upload") && password.equals("Upload@333")) || (username.equals("darfoo@tech") && password.equals("Oofrad@darfoo"))){
+        } else if ((username.equals("darfoo@upload") && password.equals("Upload@333")) || (username.equals("darfoo@tech") && password.equals("Oofrad@darfoo"))) {
             request.getSession().setAttribute("loginUser", "upload");
             return "200";
-        }else{
+        } else {
             return "501";
         }
     }

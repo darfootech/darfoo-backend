@@ -40,7 +40,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
         String uri = request.getRequestURI();
         System.out.println("current uri is: " + uri + "\n");
 
-        if (uri.matches("(.*)/resources/video/\\d+$")){
+        if (uri.matches("(.*)/resources/video/\\d+$")) {
             String videoid = getNumbers(uri);
             System.out.println("video clicked id is: " + videoid + "\n");
             int vid = Integer.parseInt(videoid);
@@ -49,7 +49,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        if (uri.matches("(.*)/resources/video/tutorial/\\d+$")){
+        if (uri.matches("(.*)/resources/video/tutorial/\\d+$")) {
             String tutorialid = getNumbers(uri);
             System.out.println("tutorial clicked id is: " + tutorialid + "\n");
             int tid = Integer.parseInt(tutorialid);
@@ -58,7 +58,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        if (uri.matches("(.*)/resources/music/\\d+$")){
+        if (uri.matches("(.*)/resources/music/\\d+$")) {
             String musicid = getNumbers(uri);
             System.out.println("music clicked id is: " + musicid + "\n");
             int mid = Integer.parseInt(musicid);
@@ -67,7 +67,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        if (uri.matches("(.*)/resources/author/\\d+$")){
+        if (uri.matches("(.*)/resources/author/\\d+$")) {
             String authorid = getNumbers(uri);
             System.out.println("author clicked id is: " + authorid + "\n");
             int aid = Integer.parseInt(authorid);
@@ -76,16 +76,16 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        if (uri.matches("(.*)/resources/video/getmusic/\\d+$")){
+        if (uri.matches("(.*)/resources/video/getmusic/\\d+$")) {
             int videoid = Integer.parseInt(getNumbers(uri));
             Music music = videoDao.getMusic(videoid);
-            if (music != null){
+            if (music != null) {
                 int musicid = music.getId();
                 System.out.println("music clicked id is: " + musicid + "\n");
                 int acc = 1;
                 System.out.println(CRUDEvent.getResponse(musicDao.updateMusicHottest(musicid, acc)));
                 return true;
-            }else{
+            } else {
                 System.out.println("no music connect to this video: " + videoid);
                 return true;
             }

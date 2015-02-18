@@ -9,19 +9,20 @@ import java.io.IOException;
 public class FileUtils {
     /**
      * 删除文件，可以是单个文件或文件夹
-     * @param   fileName    待删除的文件名
-     * @return 文件删除成功返回true,否则返回false
+     *
+     * @param fileName 待删除的文件名
+     * @return 文件删除成功返回true, 否则返回false
      */
-    public static boolean delete(String fileName){
+    public static boolean delete(String fileName) {
         File file = new File(fileName);
-        if(!file.exists()){
-            System.out.println("删除文件失败："+fileName+"文件不存在");
+        if (!file.exists()) {
+            System.out.println("删除文件失败：" + fileName + "文件不存在");
             return false;
-        }else{
-            if(file.isFile()){
+        } else {
+            if (file.isFile()) {
 
                 return deleteFile(fileName);
-            }else{
+            } else {
                 return deleteDirectory(fileName);
             }
         }
@@ -29,75 +30,77 @@ public class FileUtils {
 
     /**
      * 删除单个文件
-     * @param   fileName    被删除文件的文件名
-     * @return 单个文件删除成功返回true,否则返回false
+     *
+     * @param fileName 被删除文件的文件名
+     * @return 单个文件删除成功返回true, 否则返回false
      */
-    public static boolean deleteFile(String fileName){
+    public static boolean deleteFile(String fileName) {
         File file = new File(fileName);
-        if(file.isFile() && file.exists()){
+        if (file.isFile() && file.exists()) {
             file.delete();
-            System.out.println("删除单个文件"+fileName+"成功！");
+            System.out.println("删除单个文件" + fileName + "成功！");
             return true;
-        }else{
-            System.out.println("删除单个文件"+fileName+"失败！");
+        } else {
+            System.out.println("删除单个文件" + fileName + "失败！");
             return false;
         }
     }
 
     /**
      * 删除目录（文件夹）以及目录下的文件
-     * @param   dir 被删除目录的文件路径
-     * @return  目录删除成功返回true,否则返回false
+     *
+     * @param dir 被删除目录的文件路径
+     * @return 目录删除成功返回true, 否则返回false
      */
-    public static boolean deleteDirectory(String dir){
+    public static boolean deleteDirectory(String dir) {
         //如果dir不以文件分隔符结尾，自动添加文件分隔符
-        if(!dir.endsWith(File.separator)){
-            dir = dir+File.separator;
+        if (!dir.endsWith(File.separator)) {
+            dir = dir + File.separator;
         }
         File dirFile = new File(dir);
         //如果dir对应的文件不存在，或者不是一个目录，则退出
-        if(!dirFile.exists() || !dirFile.isDirectory()){
-            System.out.println("删除目录失败"+dir+"目录不存在！");
+        if (!dirFile.exists() || !dirFile.isDirectory()) {
+            System.out.println("删除目录失败" + dir + "目录不存在！");
             return false;
         }
         boolean flag = true;
         //删除文件夹下的所有文件(包括子目录)
         File[] files = dirFile.listFiles();
-        for(int i=0;i<files.length;i++){
+        for (int i = 0; i < files.length; i++) {
             //删除子文件
-            if(files[i].isFile()){
+            if (files[i].isFile()) {
                 flag = deleteFile(files[i].getAbsolutePath());
-                if(!flag){
+                if (!flag) {
                     break;
                 }
             }
             //删除子目录
-            else{
+            else {
                 flag = deleteDirectory(files[i].getAbsolutePath());
-                if(!flag){
+                if (!flag) {
                     break;
                 }
             }
         }
 
-        if(!flag){
+        if (!flag) {
             System.out.println("删除目录失败");
             return false;
         }
 
         //删除当前目录
-        if(dirFile.delete()){
-            System.out.println("删除目录"+dir+"成功！");
+        if (dirFile.delete()) {
+            System.out.println("删除目录" + dir + "成功！");
             return true;
-        }else{
-            System.out.println("删除目录"+dir+"失败！");
+        } else {
+            System.out.println("删除目录" + dir + "失败！");
             return false;
         }
     }
 
     public static boolean createFile(String destFileName) {
         File file = new File(destFileName);
-        if(file.exists()) {
+        if (file.exists()) {
             System.out.println("创建单个文件" + destFileName + "失败，目标文件已存在！");
             return false;
         }
@@ -106,12 +109,12 @@ public class FileUtils {
             return false;
         }
 
-        if (destFileName.contains(File.separator)){
+        if (destFileName.contains(File.separator)) {
             //判断目标文件所在的目录是否存在
-            if(!file.getParentFile().exists()) {
+            if (!file.getParentFile().exists()) {
                 //如果目标文件所在的目录不存在，则创建父目录
                 System.out.println("目标文件所在目录不存在，准备创建它！");
-                if(!file.getParentFile().mkdirs()) {
+                if (!file.getParentFile().mkdirs()) {
                     System.out.println("创建目标文件所在目录失败！");
                     return false;
                 }
@@ -158,7 +161,7 @@ public class FileUtils {
     public static String createTempFile(String prefix, String suffix, String dirName) {
         File tempFile = null;
         if (dirName == null) {
-            try{
+            try {
                 //在默认文件夹下创建临时文件
                 tempFile = File.createTempFile(prefix, suffix);
                 //返回临时文件的路径

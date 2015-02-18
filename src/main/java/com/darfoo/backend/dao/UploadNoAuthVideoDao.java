@@ -5,7 +5,6 @@ package com.darfoo.backend.dao;
  */
 
 import com.darfoo.backend.model.UploadNoAuthVideo;
-import com.darfoo.backend.model.UploadVideo;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,7 +13,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.beans.Expression;
 import java.util.ArrayList;
 import java.util.List;
 

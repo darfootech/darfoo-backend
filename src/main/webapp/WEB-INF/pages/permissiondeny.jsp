@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    String resource = (String)session.getAttribute("resource");
+    String resource = (String) session.getAttribute("resource");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,20 +39,20 @@
 </style>
 
 <script>
-    function start(){
+    function start() {
         $.ajax({
-            type : "POST",
-            url : "/darfoobackend/rest/login/auth",
-            data : $("#loginform").serialize(),
-            success : function(data){
-                if(data == "200"){
+            type: "POST",
+            url: "/darfoobackend/rest/login/auth",
+            data: $("#loginform").serialize(),
+            success: function (data) {
+                if (data == "200") {
                     alert("登陆成功");
                     window.location.href = "/darfoobackend/rest/resources/video/new"
-                }else if(data == "501") {
+                } else if (data == "501") {
                     alert("登陆失败，用户名或者密码错误");
                 }
             },
-            error : function(){
+            error: function () {
                 alert("登陆失败，用户名或者密码错误");
             }
         })

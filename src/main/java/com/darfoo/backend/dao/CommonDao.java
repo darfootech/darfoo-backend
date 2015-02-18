@@ -15,7 +15,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -126,6 +125,7 @@ public class CommonDao {
 
     /**
      * 根据内容搜索资源
+     *
      * @param resource
      * @param searchContent
      * @return 最多返回50个结果
@@ -145,7 +145,7 @@ public class CommonDao {
             Criteria c = session.createCriteria(resource).setProjection(Projections.property("id"));
             if (ifHasCategoryResource(resource)) {
                 c.add(Restrictions.like("title", sb.toString(), MatchMode.ANYWHERE));
-            } else if (resource == Author.class){
+            } else if (resource == Author.class) {
                 c.add(Restrictions.like("name", sb.toString(), MatchMode.ANYWHERE));
             } else {
                 System.out.println("something is bad");

@@ -5,7 +5,6 @@ import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Video;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

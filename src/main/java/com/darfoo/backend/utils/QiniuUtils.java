@@ -15,7 +15,6 @@ import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.UUID;
 
 /**
  * Created by zjh on 14-11-26.

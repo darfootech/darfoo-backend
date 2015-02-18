@@ -1,6 +1,5 @@
 package com.darfoo.backend.utils;
 
-import com.mchange.util.Base64Encoder;
 import org.apache.commons.codec.binary.Base64;
 
 /**
@@ -10,7 +9,7 @@ public class CryptUtils {
     /**
      * 使用base64加密
      */
-    public static String base64EncodeStr(String plainText){
+    public static String base64EncodeStr(String plainText) {
         byte[] b = plainText.getBytes();
         Base64 base64 = new Base64();
         b = base64.encode(b);
@@ -22,7 +21,7 @@ public class CryptUtils {
     /**
      * 使用base64解密
      */
-    public static String base64DecodeStr(String encodeStr){
+    public static String base64DecodeStr(String encodeStr) {
         byte[] b = encodeStr.getBytes();
         Base64 base64 = new Base64();
         b = base64.decode(b);
@@ -31,11 +30,11 @@ public class CryptUtils {
         return s;
     }
 
-    public static String encryptQiniuUrl(String originurl){
+    public static String encryptQiniuUrl(String originurl) {
         return base64EncodeStr(base64EncodeStr(base64EncodeStr(originurl)));
     }
 
-    public static String decryptQiniuUrl(String crypturl){
+    public static String decryptQiniuUrl(String crypturl) {
         return base64DecodeStr(base64DecodeStr(base64DecodeStr(crypturl)));
     }
 }

@@ -1,11 +1,6 @@
 package com.springapp.mvc;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.darfoo.backend.dao.*;
-
 import com.darfoo.backend.model.*;
 import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
@@ -14,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.darfoo.backend.model.Tutorial;
-import com.darfoo.backend.model.TutorialCategory;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

@@ -1,8 +1,5 @@
 package com.springapp.mvc;
 
-import java.math.BigInteger;
-import java.util.*;
-
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.model.*;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
@@ -12,6 +9,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
@@ -229,14 +232,14 @@ public class AuthorDaoTests {
     }
 
     @Test
-    public void sublistTest(){
+    public void sublistTest() {
         List<Integer> test = new ArrayList<Integer>();
         test.add(1);
         test.add(2);
         test.add(3);
 
         List<Integer> subtest = test.subList(0, 1);
-        for (Integer id : subtest){
+        for (Integer id : subtest) {
             System.out.println(id);
         }
     }

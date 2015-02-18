@@ -1,14 +1,14 @@
 package com.springapp.mvc;
 
 import com.darfoo.backend.caches.CacheProtocol;
-import com.darfoo.backend.dao.*;
+import com.darfoo.backend.dao.CommonDao;
 import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Video;
-import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
+import com.darfoo.backend.service.responsemodel.SingleVideo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

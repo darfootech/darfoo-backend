@@ -30,8 +30,9 @@ public class VersionController {
     QiniuUtils qiniuUtils = new QiniuUtils();
 
     @RequestMapping(value = "/resources/version/latest", method = RequestMethod.GET)
-    public @ResponseBody
-    Map<String, Object> getLatestReleaseVersion(){
+    public
+    @ResponseBody
+    Map<String, Object> getLatestReleaseVersion() {
         Map<String, Object> result = new HashMap<String, Object>();
         try {
             Version version = versionDao.getLatestReleaseVersion();
@@ -39,7 +40,7 @@ public class VersionController {
             result.put("version", version.getVersion());
             result.put("version_url", version_download_url);
             return result;
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             result.put("version", "error");
             result.put("version_url", "error");
             return result;
@@ -47,8 +48,9 @@ public class VersionController {
     }
 
     @RequestMapping(value = "/resources/version/debug/latest", method = RequestMethod.GET)
-    public @ResponseBody
-    Map<String, Object> getLatestDebugVersion(){
+    public
+    @ResponseBody
+    Map<String, Object> getLatestDebugVersion() {
         Map<String, Object> result = new HashMap<String, Object>();
         try {
             Version version = versionDao.getLatestDebugVersion();
@@ -56,7 +58,7 @@ public class VersionController {
             result.put("version", version.getVersion());
             result.put("version_url", version_download_url);
             return result;
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             result.put("version", "error");
             result.put("version_url", "error");
             return result;
@@ -64,13 +66,13 @@ public class VersionController {
     }
 
     @RequestMapping(value = "/admin/version/release/new", method = RequestMethod.GET)
-    public String uploadReleaseVersion(ModelMap modelMap){
+    public String uploadReleaseVersion(ModelMap modelMap) {
         try {
             Version latestVersion = versionDao.getLatestReleaseVersion();
             modelMap.addAttribute("latestversion", latestVersion.getVersion());
             modelMap.addAttribute("type", "release");
             return "newversion";
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             modelMap.addAttribute("latestversion", "还没有launcher上传过");
             modelMap.addAttribute("type", "release");
             return "newversion";
@@ -78,7 +80,7 @@ public class VersionController {
     }
 
     @RequestMapping(value = "/admin/version/release/create", method = RequestMethod.POST)
-    public String createReleaseVersion(@RequestParam("versionresource") CommonsMultipartFile versionresource, HttpServletRequest request){
+    public String createReleaseVersion(@RequestParam("versionresource") CommonsMultipartFile versionresource, HttpServletRequest request) {
         String newversion = request.getParameter("newversion");
         System.out.println("newversion -> " + newversion);
         Version version = new Version();
@@ -96,21 +98,21 @@ public class VersionController {
             e.printStackTrace();
         }
 
-        if (status.equals("200")){
+        if (status.equals("200")) {
             return "success";
-        }else{
+        } else {
             return "fail";
         }
     }
 
     @RequestMapping(value = "/admin/version/debug/new", method = RequestMethod.GET)
-    public String uploadDebugVersion(ModelMap modelMap){
+    public String uploadDebugVersion(ModelMap modelMap) {
         try {
             Version latestVersion = versionDao.getLatestDebugVersion();
             modelMap.addAttribute("latestversion", latestVersion.getVersion());
             modelMap.addAttribute("type", "debug");
             return "newversion";
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             modelMap.addAttribute("latestversion", "还没有launcher上传过");
             modelMap.addAttribute("type", "debug");
             return "newversion";
@@ -118,7 +120,7 @@ public class VersionController {
     }
 
     @RequestMapping(value = "/admin/version/debug/create", method = RequestMethod.POST)
-    public String createDebugVersion(@RequestParam("versionresource") CommonsMultipartFile versionresource, HttpServletRequest request){
+    public String createDebugVersion(@RequestParam("versionresource") CommonsMultipartFile versionresource, HttpServletRequest request) {
         String newversion = request.getParameter("newversion");
         System.out.println("newversion -> " + newversion);
         Version version = new Version();
@@ -136,9 +138,9 @@ public class VersionController {
             e.printStackTrace();
         }
 
-        if (status.equals("200")){
+        if (status.equals("200")) {
             return "success";
-        }else{
+        } else {
             return "fail";
         }
     }

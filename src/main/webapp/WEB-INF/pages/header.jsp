@@ -5,10 +5,10 @@
   Time: 上午11:08
   To change this template use File | Settings | File Templates.
 --%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    String resource = (String)session.getAttribute("resource");
+    String resource = (String) session.getAttribute("resource");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,10 +55,14 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="<%if(resource.equals("video")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/video/new/">舞蹈欣赏</a></li>
-                <li class="<%if(resource.equals("tutorial")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/tutorial/new/">舞蹈教程</a></li>
-                <li class="<%if(resource.equals("music")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/music/new/">舞蹈伴奏</a></li>
-                <li class="<%if(resource.equals("author")){out.write("active");}else{out.write("");}%>"><a href="/darfoobackend/rest/resources/author/new/">明星舞队</a></li>
+                <li class="<%if(resource.equals("video")){out.write("active");}else{out.write("");}%>"><a
+                        href="/darfoobackend/rest/resources/video/new/">舞蹈欣赏</a></li>
+                <li class="<%if(resource.equals("tutorial")){out.write("active");}else{out.write("");}%>"><a
+                        href="/darfoobackend/rest/resources/tutorial/new/">舞蹈教程</a></li>
+                <li class="<%if(resource.equals("music")){out.write("active");}else{out.write("");}%>"><a
+                        href="/darfoobackend/rest/resources/music/new/">舞蹈伴奏</a></li>
+                <li class="<%if(resource.equals("author")){out.write("active");}else{out.write("");}%>"><a
+                        href="/darfoobackend/rest/resources/author/new/">明星舞队</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">下载资源表格 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -88,10 +92,10 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <% if (session != null && session.getAttribute("loginUser") != null){ %>
-                    <li class="active"><a href="/darfoobackend/rest/login/out">注销</a></li>
+                <% if (session != null && session.getAttribute("loginUser") != null) { %>
+                <li class="active"><a href="/darfoobackend/rest/login/out">注销</a></li>
                 <% } else { %>
-                    <li class="active">未登录</li>
+                <li class="active">未登录</li>
                 <% } %>
             </ul>
         </div>

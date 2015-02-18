@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
  * Created by zjh on 15-1-11.
  */
 public class RunShellUtils {
-    public static int runshellscript(String scriptPath){
+    public static int runshellscript(String scriptPath) {
         try {
             Process ps = Runtime.getRuntime().exec(scriptPath);
             ps.waitFor();
@@ -21,14 +21,13 @@ public class RunShellUtils {
             String result = sb.toString();
             System.out.println(result);
             return 1;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             //e.printStackTrace();
             return 0;
         }
     }
 
-    public static String runshellscriptwithresult(String scriptPath){
+    public static String runshellscriptwithresult(String scriptPath) {
         try {
             Process ps = Runtime.getRuntime().exec(scriptPath);
             ps.waitFor();
@@ -42,8 +41,7 @@ public class RunShellUtils {
             String result = sb.toString();
             System.out.println(result);
             return result;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             //e.printStackTrace();
             return "";
         }

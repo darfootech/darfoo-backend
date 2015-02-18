@@ -1,17 +1,16 @@
 package com.springapp.mvc;
 
-import java.util.List;
-
+import com.darfoo.backend.dao.CRUDEvent;
+import com.darfoo.backend.dao.ImageDao;
+import com.darfoo.backend.model.Image;
+import com.darfoo.backend.model.UpdateCheckResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.ImageDao;
-import com.darfoo.backend.model.Image;
-import com.darfoo.backend.model.UpdateCheckResponse;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")

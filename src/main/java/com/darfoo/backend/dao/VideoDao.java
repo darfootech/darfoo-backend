@@ -1,27 +1,17 @@
 package com.darfoo.backend.dao;
 
-import java.util.*;
-
+import com.darfoo.backend.model.*;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.exception.spi.ViolatedConstraintNameExtracter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.Image;
-import com.darfoo.backend.model.Music;
-import com.darfoo.backend.model.Video;
-import com.darfoo.backend.model.VideoCategory;
-import com.darfoo.backend.model.Video;
-import com.darfoo.backend.model.VideoCategory;
-import com.darfoo.backend.model.UpdateCheckResponse;
+import java.util.*;
 
 @Component
 @SuppressWarnings("unchecked")
@@ -154,7 +144,7 @@ public class VideoDao {
     /**
      * 根据类别获取视频列表(我要上网—视频页面)
      * $categories  (较快-简单—欢快-A) 如果用户没有选择某个类别，那么就去掉该字符串
-     *
+     * <p/>
      * params example -> categories = {"较快","简单","欢快","A"}  例如 categories = {"较快","欢快","A"} 表示有一个类别用户没有选择
      */
     public List<Video> getVideosByCategories(String[] categories) {
@@ -492,7 +482,7 @@ public class VideoDao {
 
     /**
      * 按热度排序，从热度最大到最小排序返回
-     *
+     * <p/>
      * param 获得热度排名前number个
      */
     public List<Video> getVideosByHottest(int number) {
@@ -515,7 +505,7 @@ public class VideoDao {
 
     /**
      * 获得最新的number个video
-     *
+     * <p/>
      * param 获得排名前number个
      */
     public List<Video> getVideosByNewest(int number) {

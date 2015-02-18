@@ -2,8 +2,8 @@ package com.darfoo.backend.utils;
 
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -24,19 +24,19 @@ public class ServiceUtils {
     public static String uploadLargeResource(CommonsMultipartFile file, String fileName) throws IOException {
         String dirName = "uploadresources/";
 
-        long startTime=System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         //System.out.println("fileName："+file.getOriginalFilename());
 
         //创建目录
         FileUtils.createDir(dirName);
         String path = dirName + fileName;
 
-        File newFile=new File(path);
+        File newFile = new File(path);
         //通过CommonsMultipartFile的方法直接写文件（注意这个时候）
         file.transferTo(newFile);
 
-        long endTime=System.currentTimeMillis();
-        System.out.println("方法二的运行时间："+String.valueOf(endTime-startTime)+"ms");
+        long endTime = System.currentTimeMillis();
+        System.out.println("方法二的运行时间：" + String.valueOf(endTime - startTime) + "ms");
 
         String statusCode = "200";
 
@@ -48,14 +48,14 @@ public class ServiceUtils {
     public static String uploadSmallResource(CommonsMultipartFile file, String fileName) throws IOException {
         String dirName = "uploadresources/" + new Date().getTime() + file.getOriginalFilename() + "/";
 
-        long startTime=System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         //System.out.println("fileName："+file.getOriginalFilename());
 
         //创建目录
         FileUtils.createDir(dirName);
         String path = dirName + fileName;
 
-        File newFile=new File(path);
+        File newFile = new File(path);
         //通过CommonsMultipartFile的方法直接写文件（注意这个时候）
         file.transferTo(newFile);
 
@@ -66,19 +66,19 @@ public class ServiceUtils {
         //删除目录
         FileUtils.delete(dirName);
 
-        long endTime=System.currentTimeMillis();
-        System.out.println("方法二的运行时间："+String.valueOf(endTime-startTime)+"ms");
+        long endTime = System.currentTimeMillis();
+        System.out.println("方法二的运行时间：" + String.valueOf(endTime - startTime) + "ms");
 
         return statusCode;
         //return "/success";
     }
 
-    public static boolean isSingleCharacter(String letter){
+    public static boolean isSingleCharacter(String letter) {
         Pattern pattern = Pattern.compile("[A-Z]");
         return pattern.matcher(letter).matches();
     }
 
-    public static void deleteResource(String key){
+    public static void deleteResource(String key) {
         qiniuUtils.deleteResource(key);
     }
 }

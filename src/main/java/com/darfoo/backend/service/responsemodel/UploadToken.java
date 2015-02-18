@@ -7,7 +7,7 @@ public class UploadToken {
     //token
     String tk;
 
-    public UploadToken(String token){
+    public UploadToken(String token) {
         this.tk = token;
     }
 

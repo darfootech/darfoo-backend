@@ -15,7 +15,8 @@ public class SingleVideo {
     Integer type;
     Long update_timestamp;
 
-    public SingleVideo() {}
+    public SingleVideo() {
+    }
 
     public SingleVideo(Integer id, String title, String authorname, String video_url, String image_url, Integer type, Long update_timestamp) {
         this.id = id;

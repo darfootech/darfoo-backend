@@ -1,9 +1,9 @@
 package com.springapp.mvc.offlinejobs;
 
 import com.darfoo.backend.dao.*;
-import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Image;
 import com.darfoo.backend.model.Music;
+import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Video;
 import com.qiniu.api.auth.digest.Mac;
 import com.qiniu.api.config.Config;

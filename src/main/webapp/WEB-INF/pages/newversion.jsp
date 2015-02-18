@@ -1,23 +1,23 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@include file="header.jsp"%>
+<%@include file="header.jsp" %>
 
 <script>
-    function upload(){
+    function upload() {
         var version = $("#version").val();
         var oldversion = $("#oldversion").text();
 
-        if(isNaN(version)){
+        if (isNaN(version)) {
             alert("版本号必须为阿拉伯数字");
             return;
-        }else{
-            if(!isNaN(oldversion)){
-                if(parseInt(oldversion) > parseInt(version)){
+        } else {
+            if (!isNaN(oldversion)) {
+                if (parseInt(oldversion) > parseInt(version)) {
                     alert("新的版本号必须比之前的版本号要大");
                     return;
-                }else{
+                } else {
                     $("#uploadlauncher").submit();
                 }
-            }else{
+            } else {
                 $("#uploadlauncher").submit();
             }
         }
@@ -28,12 +28,15 @@
 
 <div class="container">
     <h1>上传新版launcher文件</h1>
+
     <div class="row">
         <div class="col-md-12">
-            <form role="form" action="/darfoobackend/rest/admin/version/${type}/create" method="post" id="uploadlauncher" name="uploadlauncher" enctype="multipart/form-data">
+            <form role="form" action="/darfoobackend/rest/admin/version/${type}/create" method="post"
+                  id="uploadlauncher" name="uploadlauncher" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="version">之前的版本为${latestversion}</label>
-                    <input type="text" class="form-control" name="newversion" id="version" placeholder="请输入launcher的最新版本号,版本号必须为阿拉伯数字并且比之前的版本号大">
+                    <input type="text" class="form-control" name="newversion" id="version"
+                           placeholder="请输入launcher的最新版本号,版本号必须为阿拉伯数字并且比之前的版本号大">
                 </div>
 
                 <div class="form-group">
@@ -47,4 +50,4 @@
     </div>
 </div>
 
-<%@include file="footer.jsp"%>
+<%@include file="footer.jsp" %>

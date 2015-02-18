@@ -10,7 +10,8 @@ public class SingleMusic {
     String music_url;
     Long update_timestamp;
 
-    public SingleMusic() {}
+    public SingleMusic() {
+    }
 
     public SingleMusic(Integer id, String title, String authorname, String music_url, Long update_timestamp) {
         this.id = id;

@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    String resource = (String)session.getAttribute("resource");
+    String resource = (String) session.getAttribute("resource");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,70 +31,71 @@
     <![endif]-->
 </head>
 <body>
-    <style>
-        body {
-            min-height: 2000px;
-            padding-top: 70px;
-        }
-    </style>
+<style>
+    body {
+        min-height: 2000px;
+        padding-top: 70px;
+    }
+</style>
 
-    <script>
-        function start(){
-            $.ajax({
-                type : "POST",
-                url : "/darfoobackend/rest/login/auth",
-                data : $("#loginform").serialize(),
-                success : function(data){
-                    if(data == "200"){
-                        alert("登陆成功");
-                        window.location.href = "/darfoobackend/rest/resources/video/new"
-                    }else if(data == "501") {
-                        alert("登陆失败，用户名或者密码错误");
-                    }
-                },
-                error : function(){
+<script>
+    function start() {
+        $.ajax({
+            type: "POST",
+            url: "/darfoobackend/rest/login/auth",
+            data: $("#loginform").serialize(),
+            success: function (data) {
+                if (data == "200") {
+                    alert("登陆成功");
+                    window.location.href = "/darfoobackend/rest/resources/video/new"
+                } else if (data == "501") {
                     alert("登陆失败，用户名或者密码错误");
                 }
-            })
-        }
-    </script>
+            },
+            error: function () {
+                alert("登陆失败，用户名或者密码错误");
+            }
+        })
+    }
+</script>
 
-    <!-- Static navbar -->
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                </button>
-                <a class="navbar-brand" href="/darfoobackend/rest/login">33</a>
-            </div>
-        </div>
-    </div>
-
+<!-- Static navbar -->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
-        <div class="row">
-            <div class="col-md-4 col-sm-offset-4">
-                <h4>33</h4>
-                <form role="form" id="loginform" name="loginform">
-                    <div class="form-group">
-                        <label for="username">用户名</label>
-                        <input type="email" class="form-control" name="username" id="username" placeholder="请输入管理员用户名">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">密码</label>
-                        <input type="password" class="form-control" name="password" id="password" placeholder="请输入管理员密码">
-                    </div>
-
-                    <button type="button" class="btn btn-default" onclick="start()">登陆</button>
-                </form>
-            </div>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+            </button>
+            <a class="navbar-brand" href="/darfoobackend/rest/login">33</a>
         </div>
     </div>
+</div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="/darfoobackend/resources/js/vendor/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/darfoobackend/resources/js/flat-ui.min.js"></script>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-sm-offset-4">
+            <h4>33</h4>
 
-    </body>
+            <form role="form" id="loginform" name="loginform">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="email" class="form-control" name="username" id="username" placeholder="请输入管理员用户名">
+                </div>
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="请输入管理员密码">
+                </div>
+
+                <button type="button" class="btn btn-default" onclick="start()">登陆</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="/darfoobackend/resources/js/vendor/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/darfoobackend/resources/js/flat-ui.min.js"></script>
+
+</body>
 </html>

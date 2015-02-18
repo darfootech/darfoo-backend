@@ -1,8 +1,8 @@
 package com.darfoo.backend.caches;
 
 import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Image;
+import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Video;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +64,7 @@ public class CacheProtocol {
                                 }
                                 cacheInsertMap.put("image_url", image_download_url);
                                 System.out.println("image_url -> " + image_download_url);
-                            } else if (field.getName().equals("video_key")){
+                            } else if (field.getName().equals("video_key")) {
                                 cacheInsertMap.put("video_url", qiniuUtils.getQiniuResourceUrlByType(field.get(object).toString(), "video"));
                                 System.out.println("video_url -> " + field.get(object).toString());
                             } else {

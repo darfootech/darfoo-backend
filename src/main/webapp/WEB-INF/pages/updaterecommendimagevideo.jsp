@@ -1,11 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%@include file="header.jsp"%>
+<%@include file="header.jsp" %>
 
 <div class="container">
     <h1>查看与修改推荐舞蹈视频封面图片</h1>
+
     <div class="row">
         <div class="col-md-12">
-            <form role="form" action="/darfoobackend/rest/admin/recommend/video/updateimage" method="post" id="createvideoform" name="createvideoform" enctype="multipart/form-data">
+            <form role="form" action="/darfoobackend/rest/admin/recommend/video/updateimage" method="post"
+                  id="createvideoform" name="createvideoform" enctype="multipart/form-data">
                 <!--<div style="display: none">
                     <input type="text" name="id" value="${video.id}">
                 </div>-->
@@ -17,7 +19,8 @@
 
                 <div class="form-group">
                     <label for="authorname">关联的明星舞队</label>
-                    <input type="text" id="authorname" class="form-control" value="${video.author.name}" disabled="disabled">
+                    <input type="text" id="authorname" class="form-control" value="${video.author.name}"
+                           disabled="disabled">
                 </div>
 
                 <div class="form-group">
@@ -36,4 +39,4 @@
 </div>
 
 
-<%@include file="footer.jsp"%>
+<%@include file="footer.jsp" %>

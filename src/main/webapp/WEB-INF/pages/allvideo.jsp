@@ -1,8 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%@include file="header.jsp"%>
+<%@include file="header.jsp" %>
 
 <div class="container">
     <h6>总共有${allvideos.size()}个舞蹈视频</h6>
+
     <div class="row">
         <div class="col-md-12">
             <c:if test="${not empty allvideos}">
@@ -11,7 +12,7 @@
                     <c:forEach var="video" items="${allvideos}">
                         <a style="color: #FFF" href="/darfoobackend/rest/admin/video/${video.id}">
                             <button type="button" id="${video.id}" class="btn btn-primary btn-lg btn-block">
-                                ${video.title}
+                                    ${video.title}
                             </button>
                         </a>
                         <br/>
@@ -23,4 +24,4 @@
     </div>
 </div>
 
-<%@include file="footer.jsp"%>
+<%@include file="footer.jsp" %>

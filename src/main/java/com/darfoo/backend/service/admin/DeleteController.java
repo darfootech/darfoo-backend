@@ -33,53 +33,57 @@ public class DeleteController {
     CommonDao commonDao;
 
     @RequestMapping(value = "/admin/video/delete", method = RequestMethod.POST)
-    public @ResponseBody
-    String deleteVideo(HttpServletRequest request, HttpSession session){
+    public
+    @ResponseBody
+    String deleteVideo(HttpServletRequest request, HttpSession session) {
         Integer vid = Integer.parseInt(request.getParameter("id"));
         String status = CRUDEvent.getResponse(commonDao.deleteResourceById(Video.class, vid));
-        if (status.equals("DELETE_SUCCESS")){
-            return 200+"";
-        }else{
-            return 505+"";
+        if (status.equals("DELETE_SUCCESS")) {
+            return 200 + "";
+        } else {
+            return 505 + "";
         }
     }
 
     @RequestMapping(value = "/admin/tutorial/delete", method = RequestMethod.POST)
-    public @ResponseBody
-    String deleteTutorial(HttpServletRequest request, HttpSession session){
+    public
+    @ResponseBody
+    String deleteTutorial(HttpServletRequest request, HttpSession session) {
         Integer vid = Integer.parseInt(request.getParameter("id"));
         String status = CRUDEvent.getResponse(commonDao.deleteResourceById(Tutorial.class, vid));
         System.out.println(status);
-        if (status.equals("DELETE_SUCCESS")){
-            return 200+"";
-        }else{
-            return 505+"";
+        if (status.equals("DELETE_SUCCESS")) {
+            return 200 + "";
+        } else {
+            return 505 + "";
         }
     }
 
     @RequestMapping(value = "/admin/music/delete", method = RequestMethod.POST)
-    public @ResponseBody
-    String deleteMusic(HttpServletRequest request, HttpSession session){
+    public
+    @ResponseBody
+    String deleteMusic(HttpServletRequest request, HttpSession session) {
         Integer id = Integer.parseInt(request.getParameter("id"));
         String status = CRUDEvent.getResponse(commonDao.deleteResourceById(Music.class, id));
         System.out.println(status);
-        if (status.equals("DELETE_SUCCESS")){
-            return 200+"";
-        }else{
-            return 505+"";
+        if (status.equals("DELETE_SUCCESS")) {
+            return 200 + "";
+        } else {
+            return 505 + "";
         }
     }
 
     @RequestMapping(value = "/admin/author/delete", method = RequestMethod.POST)
-    public @ResponseBody
-    String deleteAuthor(HttpServletRequest request, HttpSession session){
+    public
+    @ResponseBody
+    String deleteAuthor(HttpServletRequest request, HttpSession session) {
         Integer id = Integer.parseInt(request.getParameter("id"));
         String status = CRUDEvent.getResponse(commonDao.deleteResourceById(Author.class, id));
         System.out.println(status);
-        if (status.equals("DELETE_SUCCESS")){
-            return 200+"";
-        }else{
-            return 505+"";
+        if (status.equals("DELETE_SUCCESS")) {
+            return 200 + "";
+        } else {
+            return 505 + "";
         }
     }
 }

@@ -1,9 +1,6 @@
 package com.darfoo.backend.dao;
 
-import java.util.*;
-
 import com.darfoo.backend.model.*;
-
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
@@ -14,7 +11,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.darfoo.backend.model.Music;
+import java.util.*;
 
 @Component
 @SuppressWarnings("unchecked")
@@ -142,7 +139,7 @@ public class MusicDao {
     /**
      * 根据类别获取歌曲列表(我要上网—音乐页面中)
      * $categories  (四拍-情歌风-A) 如果用户没有选择某个类别，那么就去掉该字符串
-     *
+     * <p/>
      * param example -> categories = {"四拍","情歌风","A"}  例如 categories = {"四拍","A"} 表示有一个类别用户没有选择
      */
     public List<Music> getMusicsByCategories(String[] categories) {
@@ -391,7 +388,7 @@ public class MusicDao {
 
     /**
      * 按热度排序，从热度最大到最小排序返回
-     *
+     * <p/>
      * param 获得热度排名前number个
      */
     public List<Music> getMusicsByHottest(int number) {
@@ -414,7 +411,7 @@ public class MusicDao {
 
     /**
      * 获得最新的number个音频
-     *
+     * <p/>
      * param 获得排名前number个
      */
     public List<Music> getMusicsByNewest(int number) {

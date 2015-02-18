@@ -5,9 +5,6 @@ package com.springapp.mvc;
  */
 
 import com.darfoo.backend.dao.CommonDao;
-import com.darfoo.backend.dao.TutorialDao;
-import com.darfoo.backend.dao.MusicDao;
-import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;

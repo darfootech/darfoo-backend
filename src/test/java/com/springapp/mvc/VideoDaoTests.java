@@ -1,13 +1,8 @@
 package com.springapp.mvc;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.darfoo.backend.dao.*;
+import com.darfoo.backend.model.*;
 import com.darfoo.backend.service.responsemodel.VideoCates;
-
 import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,12 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.Image;
-import com.darfoo.backend.model.Music;
-import com.darfoo.backend.model.Video;
-import com.darfoo.backend.model.VideoCategory;
-import com.darfoo.backend.model.UpdateCheckResponse;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

@@ -1,9 +1,6 @@
 package com.darfoo.backend.dao;
 
-import java.util.*;
-
 import com.darfoo.backend.model.*;
-
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
@@ -14,7 +11,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.darfoo.backend.model.Tutorial;
+import java.util.*;
 
 @Component
 public class TutorialDao {
@@ -106,7 +103,7 @@ public class TutorialDao {
     /**
      * 根据类别获取视频列表(我要上网—视频页面) 暂时去掉名师那个种类
      * $categories  (快-简单—队形表演) 如果用户没有选择某个类别，那么就去掉该字符串
-     *
+     * <p/>
      * param example -> categories = {"快","简单","队形表演"}  例如 categories = {"快","简单"}
      */
     public List<Tutorial> getEducationVideosByCategories(String[] categories) {
@@ -437,7 +434,7 @@ public class TutorialDao {
 
     /**
      * 按热度排序，从热度最大到最小排序返回
-     *
+     * <p/>
      * param 获得热度排名前number个
      */
     public List<Tutorial> getEducationsByHottest(int number) {
@@ -460,7 +457,7 @@ public class TutorialDao {
 
     /**
      * 获得最新的number个教学视频
-     *
+     * <p/>
      * param 获得排名前number个
      */
     public List<Tutorial> getEducationsByNewest(int number) {

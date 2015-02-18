@@ -9,7 +9,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.beans.Expression;
 import java.util.List;
 
 /**
@@ -45,7 +44,7 @@ public class VersionDao {
             criteria.add(Restrictions.eq("type", "release"));
             criteria.addOrder(Order.desc("id"));
             List result = criteria.list();
-            if (result.size() > 0){
+            if (result.size() > 0) {
                 version = (Version) criteria.list().get(0);
             }
         } catch (Exception e) {
@@ -62,7 +61,7 @@ public class VersionDao {
             criteria.add(Restrictions.eq("type", "debug"));
             criteria.addOrder(Order.desc("id"));
             List result = criteria.list();
-            if (result.size() > 0){
+            if (result.size() > 0) {
                 version = (Version) criteria.list().get(0);
             }
         } catch (Exception e) {

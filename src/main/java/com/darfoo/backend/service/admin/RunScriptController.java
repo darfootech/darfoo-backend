@@ -14,18 +14,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/admin/runscript")
 public class RunScriptController {
     @RequestMapping(value = "/upload", method = RequestMethod.GET)
-    public String runUploadScript(){
+    public String runUploadScript() {
         String scriptpath = "./upload.sh";
         int status = RunShellUtils.runshellscript(scriptpath);
-        if (status == 1){
+        if (status == 1) {
             return "success";
-        }else{
+        } else {
             return "fail";
         }
     }
 
     @RequestMapping(value = "/resourcevolumn", method = RequestMethod.GET)
-    public String getResourceVolumn(ModelMap modelMap){
+    public String getResourceVolumn(ModelMap modelMap) {
         String scriptpath = "./resourcevolumn.sh";
         String volumn = RunShellUtils.runshellscriptwithresult(scriptpath);
         modelMap.put("volumn", volumn);

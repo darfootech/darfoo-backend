@@ -1,25 +1,25 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%@include file="header.jsp"%>
+<%@include file="header.jsp" %>
 
 <script>
-    function start(){
+    function start() {
         $.ajax({
-            type : "POST",
-            url : "/darfoobackend/rest/resources/author/create",
-            data : $("#createauthorform").serialize(),
-            success : function(data){
-                if(data == "200"){
+            type: "POST",
+            url: "/darfoobackend/rest/resources/author/create",
+            data: $("#createauthorform").serialize(),
+            success: function (data) {
+                if (data == "200") {
                     alert("创建作者成功");
                     window.location.href = "/darfoobackend/rest/resources/authorresource/new"
-                }else if(data == "501"){
+                } else if (data == "501") {
                     alert("相同名字的作者已经存在");
-                }else if(data == "508"){
+                } else if (data == "508") {
                     alert("请填写并上传作者相关的图片");
-                }else{
+                } else {
                     alert("创建作者失败")
                 }
             },
-            error : function(){
+            error: function () {
                 alert("创建作者失败");
             }
         })
@@ -28,6 +28,7 @@
 
 <div class="container">
     <h1>创建作者-明星舞队(视频,教程,伴奏)</h1>
+
     <div class="row">
         <div class="col-md-12">
             <form role="form" id="createauthorform" name="createauthorform">
@@ -49,4 +50,4 @@
     </div>
 </div>
 
-<%@include file="footer.jsp"%>
+<%@include file="footer.jsp" %>

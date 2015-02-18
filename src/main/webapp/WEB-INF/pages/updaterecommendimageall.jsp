@@ -1,8 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%@include file="header.jsp"%>
+<%@include file="header.jsp" %>
 
 <div class="container">
     <h6>推荐舞蹈视频</h6>
+
     <div class="row">
         <div class="col-md-12">
             <c:if test="${not empty videos}">
@@ -11,7 +12,7 @@
                     <c:forEach var="video" items="${videos}">
                         <a style="color: #FFF" href="/darfoobackend/rest/admin/recommend/updateimage/video/${video.id}">
                             <button type="button" id="${video.id}" class="btn btn-primary btn-lg btn-block">
-                                ${video.title}
+                                    ${video.title}
                             </button>
                         </a>
                         <br/>
@@ -23,13 +24,15 @@
     </div>
 
     <h6>推荐舞蹈教程</h6>
+
     <div class="row">
         <div class="col-md-12">
             <c:if test="${not empty tutorials}">
 
                 <ul>
                     <c:forEach var="video" items="${tutorials}">
-                        <a style="color: #FFF" href="/darfoobackend/rest/admin/recommend/updateimage/tutorial/${video.id}">
+                        <a style="color: #FFF"
+                           href="/darfoobackend/rest/admin/recommend/updateimage/tutorial/${video.id}">
                             <button type="button" id="${video.id}" class="btn btn-primary btn-lg btn-block">
                                     ${video.title}
                             </button>
@@ -43,4 +46,4 @@
     </div>
 </div>
 
-<%@include file="footer.jsp"%>
+<%@include file="footer.jsp" %>

@@ -38,11 +38,13 @@ public class UploadResourceController {
 
     /**
      * 获取上传qiniu云的token凭证
+     *
      * @return
      */
     @RequestMapping(value = "gettk", method = RequestMethod.GET)
-    public @ResponseBody
-    UploadToken getUploadToken(){
+    public
+    @ResponseBody
+    UploadToken getUploadToken() {
         String token = qiniuUtils.getToken();
         System.out.println("origin token -> " + token);
         String encryptToken = CryptUtils.base64EncodeStr(token);
@@ -51,18 +53,20 @@ public class UploadResourceController {
 
     /**
      * launcher在上传视频之前要先确定相同的videokey是否已经上传过了
+     *
      * @param videokey
      * @return
      */
     @RequestMapping(value = "prepareupload/{videokey}", method = RequestMethod.GET)
-    public @ResponseBody
-    Map<String, Object> prepareupload(@PathVariable String videokey){
+    public
+    @ResponseBody
+    Map<String, Object> prepareupload(@PathVariable String videokey) {
         Map<String, Object> result = new HashMap<String, Object>();
         boolean status = uploadVideoDao.isExistVideo(videokey);
 
-        if (!status){
+        if (!status) {
             result.put("status", "ok");
-        }else{
+        } else {
             result.put("status", "error");
         }
 
@@ -71,12 +75,14 @@ public class UploadResourceController {
 
     /**
      * 当客户端成功将资源上传至七牛之后需要请求这个回调请求，将资源有关信息发送给服务器数据库
+     *
      * @param request
      * @return
      */
     @RequestMapping(value = "finishcallback", method = RequestMethod.POST)
-    public @ResponseBody
-    UploadStatus uploadFinishCallback(HttpServletRequest request){
+    public
+    @ResponseBody
+    UploadStatus uploadFinishCallback(HttpServletRequest request) {
         int userid = Integer.parseInt(request.getParameter("userid"));
         String videokey = request.getParameter("videokey");
         System.out.println("post userid -> " + userid);
@@ -84,20 +90,23 @@ public class UploadResourceController {
 
         int status = uploadVideoDao.insertUploadVideo(new UploadVideo(videokey, userid, -1));
 
-        if (status == CRUDEvent.INSERT_SUCCESS){
+        if (status == CRUDEvent.INSERT_SUCCESS) {
             return new UploadStatus("ok");
-        }else{
+        } else {
             return new UploadStatus("error");
         }
     }
 
     /**
      * 第一版不使用用户验证 自动批量上传
+     *
      * @param request
      * @return
      */
     @RequestMapping(value = "finishcallbackna", method = RequestMethod.POST)
-    public @ResponseBody UploadStatus uploadFinishCallbackWithoutAuth(HttpServletRequest request){
+    public
+    @ResponseBody
+    UploadStatus uploadFinishCallbackWithoutAuth(HttpServletRequest request) {
         try {
             request.setCharacterEncoding("UTF-8");
             String videokey = request.getParameter("videokey");
@@ -112,9 +121,9 @@ public class UploadResourceController {
 
             int status = uploadNoAuthVideoDao.insertUploadVideo(new UploadNoAuthVideo(videokey, imagekey, macaddr, videotitle, videotype, -1));
 
-            if (status == CRUDEvent.INSERT_SUCCESS){
+            if (status == CRUDEvent.INSERT_SUCCESS) {
                 return new UploadStatus("ok");
-            }else{
+            } else {
                 return new UploadStatus("error");
             }
         } catch (UnsupportedEncodingException e) {
