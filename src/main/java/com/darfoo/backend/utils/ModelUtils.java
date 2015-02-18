@@ -1,4 +1,4 @@
-package com.darfoo.backend.dao;
+package com.darfoo.backend.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

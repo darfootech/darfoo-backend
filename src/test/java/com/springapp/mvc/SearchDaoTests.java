@@ -28,8 +28,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 })
 public class SearchDaoTests {
     @Autowired
-    private SearchDao searchDao;
-    @Autowired
     VideoDao videoDao;
     @Autowired
     VideoCacheDao videoCacheDao;
@@ -47,11 +45,13 @@ public class SearchDaoTests {
     AuthorCacheDao authorCacheDao;
     @Autowired
     CommonRedisClient redisClient;
+    @Autowired
+    CommonDao commonDao;
 
     @Test
     public void searchVideo() {
         String searchContent = "七里香";
-        List<Video> l_video = searchDao.getVideoBySearch(searchContent);
+        List<Video> l_video = commonDao.getResourceBySearch(Video.class, searchContent);
         for (Video v : l_video) {
             System.out.println(v.getTitle());
             System.out.println("————————————————————————————————");
@@ -61,7 +61,7 @@ public class SearchDaoTests {
     @Test
     public void searchMusic() {
         String searchContent = "dear";
-        List<Music> l = searchDao.getMusicBySearch(searchContent);
+        List<Music> l = commonDao.getResourceBySearch(Music.class, searchContent);
         for (Music v : l) {
             System.out.println(v.toString());
             System.out.println("————————————————————————————————");
@@ -69,9 +69,9 @@ public class SearchDaoTests {
     }
 
     @Test
-    public void searchEducation() {
+    public void searchTutorial() {
         String searchContent = "heart";
-        List<Tutorial> l = searchDao.getEducationBySearch(searchContent);
+        List<Tutorial> l = commonDao.getResourceBySearch(Tutorial.class, searchContent);
         for (Tutorial v : l) {
             System.out.println(v.toString());
             System.out.println("————————————————————————————————");
@@ -81,7 +81,7 @@ public class SearchDaoTests {
     @Test
     public void searchAuthor() {
         String searchContent = "周";
-        List<Author> l = searchDao.getAuthorBySearch(searchContent);
+        List<Author> l = commonDao.getResourceBySearch(Author.class, searchContent);
         for (Author v : l) {
             System.out.println(v.toString());
             System.out.println("————————————————————————————————");
@@ -92,7 +92,7 @@ public class SearchDaoTests {
     public void cacheSearchVideo() {
         String searchContent = "么么";
         System.out.println(searchContent);
-        List<Video> videos = searchDao.getVideoBySearch(searchContent);
+        List<Video> videos = commonDao.getResourceBySearch(Video.class, searchContent);
         for (Video video : videos) {
             int vid = video.getId();
             long status = redisClient.sadd("videosearch" + searchContent, "video-" + vid);
@@ -117,7 +117,7 @@ public class SearchDaoTests {
     public void cacheSearchTutorial() {
         String searchContent = "呵呵";
         System.out.println(searchContent);
-        List<Tutorial> videos = searchDao.getEducationBySearch(searchContent);
+        List<Tutorial> videos = commonDao.getResourceBySearch(Tutorial.class, searchContent);
         List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (Tutorial video : videos) {
             int vid = video.getId();
@@ -142,7 +142,7 @@ public class SearchDaoTests {
     public void cacheSearchMusic() {
         String searchContent = "呵呵";
         System.out.println(searchContent);
-        List<Music> musics = searchDao.getMusicBySearch(searchContent);
+        List<Music> musics = commonDao.getResourceBySearch(Music.class, searchContent);
         List<SingleMusic> result = new ArrayList<SingleMusic>();
         for (Music music : musics) {
             int mid = music.getId();
@@ -167,7 +167,7 @@ public class SearchDaoTests {
     public void cacheSearchAuthor() {
         String searchContent = "周";
         System.out.println(searchContent);
-        List<Author> authors = searchDao.getAuthorBySearch(searchContent);
+        List<Author> authors = commonDao.getResourceBySearch(Author.class, searchContent);
         List<SingleAuthor> result = new ArrayList<SingleAuthor>();
         for (Author author : authors) {
             int aid = author.getId();

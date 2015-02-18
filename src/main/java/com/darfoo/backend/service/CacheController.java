@@ -50,8 +50,6 @@ public class CacheController {
     @Autowired
     AuthorDao authorDao;
     @Autowired
-    SearchDao searchDao;
-    @Autowired
     CommonRedisClient redisClient;
     @Autowired
     CommonDao commonDao;
@@ -637,8 +635,8 @@ public class CacheController {
         System.out.println(searchContent);
         Set<Integer> videoids = new HashSet<Integer>();
         Set<Integer> tutorialids = new HashSet<Integer>();
-        List<Video> videos = searchDao.getVideoBySearch(searchContent);
-        List<Tutorial> tutorials = searchDao.getEducationBySearch(searchContent);
+        List<Video> videos = commonDao.getResourceBySearch(Video.class, searchContent);
+        List<Tutorial> tutorials = commonDao.getResourceBySearch(Tutorial.class, searchContent);
         for (Video video : videos) {
             videoids.add(video.getId());
         }
@@ -647,7 +645,7 @@ public class CacheController {
             tutorialids.add(tutorial.getId());
         }
 
-        List<Author> authors = searchDao.getAuthorBySearch(searchContent);
+        List<Author> authors = commonDao.getResourceBySearch(Author.class, searchContent);
         for (Author author : authors) {
             int aid = author.getId();
             List<Video> authorvideos = videoDao.getVideosByAuthorId(aid);
@@ -705,8 +703,8 @@ public class CacheController {
         System.out.println(searchContent);
         Set<Integer> videoids = new HashSet<Integer>();
         Set<Integer> tutorialids = new HashSet<Integer>();
-        List<Video> videos = searchDao.getVideoBySearch(searchContent);
-        List<Tutorial> tutorials = searchDao.getEducationBySearch(searchContent);
+        List<Video> videos = commonDao.getResourceBySearch(Video.class, searchContent);
+        List<Tutorial> tutorials = commonDao.getResourceBySearch(Tutorial.class, searchContent);
         for (Video video : videos) {
             videoids.add(video.getId());
         }
@@ -715,7 +713,7 @@ public class CacheController {
             tutorialids.add(tutorial.getId());
         }
 
-        List<Author> authors = searchDao.getAuthorBySearch(searchContent);
+        List<Author> authors = commonDao.getResourceBySearch(Author.class, searchContent);
         for (Author author : authors) {
             int aid = author.getId();
             List<Video> authorvideos = videoDao.getVideosByAuthorId(aid);
@@ -778,7 +776,7 @@ public class CacheController {
     List<SingleVideo> searchTutorial(HttpServletRequest request) {
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
-        List<Tutorial> videos = searchDao.getEducationBySearch(searchContent);
+        List<Tutorial> videos = commonDao.getResourceBySearch(Tutorial.class, searchContent);
         List<SingleVideo> result = new ArrayList<SingleVideo>();
         for (Tutorial video : videos) {
             int vid = video.getId();
@@ -806,7 +804,7 @@ public class CacheController {
     List<SingleMusic> searchMusic(HttpServletRequest request) {
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
-        List<Music> musics = searchDao.getMusicBySearch(searchContent);
+        List<Music> musics = commonDao.getResourceBySearch(Music.class, searchContent);
         List<SingleMusic> result = new ArrayList<SingleMusic>();
         for (Music music : musics) {
             int mid = music.getId();
@@ -833,7 +831,7 @@ public class CacheController {
     List<SingleMusic> searchMusic(@PathVariable Integer page, HttpServletRequest request) {
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
-        List<Music> musics = searchDao.getMusicBySearch(searchContent);
+        List<Music> musics = commonDao.getResourceBySearch(Music.class, searchContent);
         List<SingleMusic> result = new ArrayList<SingleMusic>();
 
         int pageSize = 22;
@@ -868,7 +866,7 @@ public class CacheController {
     List<SingleAuthor> searchAuthor(HttpServletRequest request) {
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
-        List<Author> authors = searchDao.getAuthorBySearch(searchContent);
+        List<Author> authors = commonDao.getResourceBySearch(Author.class, searchContent);
         List<SingleAuthor> result = new ArrayList<SingleAuthor>();
         for (Author author : authors) {
             int aid = author.getId();

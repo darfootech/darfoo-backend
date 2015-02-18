@@ -1,5 +1,6 @@
 package com.darfoo.backend.dao;
 
+import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Video;
@@ -7,7 +8,9 @@ import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -35,11 +38,12 @@ public class CommonDao {
 
     /**
      * 获取单个资源的信息
+     *
      * @param resource
      * @param vid
      * @return 抽象资源对象
      */
-    public Object getResourceById(Class resource ,Integer vid) {
+    public Object getResourceById(Class resource, Integer vid) {
         try {
             Session session = sessionFactory.getCurrentSession();
             Criteria criteria = session.createCriteria(resource);
@@ -75,12 +79,13 @@ public class CommonDao {
 
     /**
      * 根据name或者title字段的值获取资源实例
+     *
      * @param resource
      * @param titlename
      * @param type
      * @return
      */
-    public Object getResourceByTitleOrName(Class resource, String titlename, String type){
+    public Object getResourceByTitleOrName(Class resource, String titlename, String type) {
         try {
             Session session = sessionFactory.getCurrentSession();
             Criteria criteria = session.createCriteria(resource);
@@ -117,5 +122,44 @@ public class CommonDao {
             res = CRUDEvent.DELETE_FAIL;
         }
         return res;
+    }
+
+    /**
+     * 根据内容搜索资源
+     * @param resource
+     * @param searchContent
+     * @return 最多返回50个结果
+     */
+    public List getResourceBySearch(Class resource, String searchContent) {
+        List result = new ArrayList();
+        try {
+            char[] s = searchContent.toCharArray();
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < s.length; i++) {
+                sb.append("%");
+                sb.append(s[i]);
+            }
+            sb.append("%");
+            System.out.println("匹配>>>>" + sb.toString());
+            Session session = sessionFactory.getCurrentSession();
+            Criteria c = session.createCriteria(resource).setProjection(Projections.property("id"));
+            if (ifHasCategoryResource(resource)) {
+                c.add(Restrictions.like("title", sb.toString(), MatchMode.ANYWHERE));
+            } else if (resource == Author.class){
+                c.add(Restrictions.like("name", sb.toString(), MatchMode.ANYWHERE));
+            } else {
+                System.out.println("something is bad");
+            }
+            List<Integer> l_id = c.list();
+            if (l_id.size() > 0) {
+                c = session.createCriteria(resource).add(Restrictions.in("id", l_id));
+                c.setMaxResults(50);
+                c.setReadOnly(true);
+                result = c.list();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

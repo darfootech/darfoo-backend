@@ -8,6 +8,7 @@ import java.util.Set;
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.service.responsemodel.VideoCates;
 
+import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

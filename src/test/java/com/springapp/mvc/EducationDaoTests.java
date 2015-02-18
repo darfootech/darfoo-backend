@@ -1,6 +1,5 @@
 package com.springapp.mvc;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -8,6 +7,7 @@ import java.util.Set;
 import com.darfoo.backend.dao.*;
 
 import com.darfoo.backend.model.*;
+import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
