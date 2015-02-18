@@ -73,7 +73,7 @@ public class RecommendController {
 
     @RequestMapping(value = "/admin/recommend/tutorial", method = RequestMethod.GET)
     public String recommendTutorial(ModelMap modelMap, HttpSession session) {
-        List<Tutorial> allTutorials = educationDao.getAllEducation();
+        List<Tutorial> allTutorials = commonDao.getAllResource(Tutorial.class);
         List<Tutorial> recommendTutorials = educationDao.getRecommendTutorials();
         modelMap.addAttribute("alltutorials", allTutorials);
         modelMap.addAttribute("recommendtutorials", recommendTutorials);

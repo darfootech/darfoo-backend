@@ -155,8 +155,7 @@ public class VideoDao {
      * 根据类别获取视频列表(我要上网—视频页面)
      * $categories  (较快-简单—欢快-A) 如果用户没有选择某个类别，那么就去掉该字符串
      *
-     * @param 例如 categories = {"较快","简单","欢快","A"}  例如 categories = {"较快","欢快","A"} 表示有一个类别用户没有选择
-     *           *
+     * params example -> categories = {"较快","简单","欢快","A"}  例如 categories = {"较快","欢快","A"} 表示有一个类别用户没有选择
      */
     public List<Video> getVideosByCategories(String[] categories) {
         List<Video> l_video = new ArrayList<Video>();
@@ -494,7 +493,7 @@ public class VideoDao {
     /**
      * 按热度排序，从热度最大到最小排序返回
      *
-     * @param 获得热度排名前number个 *
+     * param 获得热度排名前number个
      */
     public List<Video> getVideosByHottest(int number) {
         List<Video> l_video = new ArrayList<Video>();
@@ -517,7 +516,7 @@ public class VideoDao {
     /**
      * 获得最新的number个video
      *
-     * @param 获得排名前number个 *
+     * param 获得排名前number个
      */
     public List<Video> getVideosByNewest(int number) {
         List<Video> videos = new ArrayList<Video>();

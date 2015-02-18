@@ -142,7 +142,7 @@ public class DownloadController {
     }
 
     public void writeTutorialsToCSV(){
-        List<Tutorial> educations = educationDao.getAllEducation();
+        List<Tutorial> educations = commonDao.getAllResource(Tutorial.class);
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
         CSVPrinter printer = null;
         try {

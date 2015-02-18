@@ -80,8 +80,7 @@ public class GalleryController {
 
     @RequestMapping(value = "/admin/tutorial/all", method = RequestMethod.GET)
     public String showAllTutorial(ModelMap modelMap, HttpSession session) {
-        List<Tutorial> s_tutorial = new ArrayList<Tutorial>();
-        s_tutorial = educationDao.getAllEducation();
+        List<Tutorial> s_tutorial = commonDao.getAllResource(Tutorial.class);
         modelMap.addAttribute("alltutorials", s_tutorial);
         return "alltutorial";
     }

@@ -1,6 +1,7 @@
 package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.*;
+import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,7 +46,7 @@ public class DeleteController {
     public @ResponseBody
     String deleteTutorial(HttpServletRequest request, HttpSession session){
         Integer vid = Integer.parseInt(request.getParameter("id"));
-        String status = CRUDEvent.getResponse(educationDao.deleteEducationById(vid));
+        String status = CRUDEvent.getResponse(commonDao.deleteResourceById(Tutorial.class, vid));
         System.out.println(status);
         if (status.equals("DELETE_SUCCESS")){
             return 200+"";

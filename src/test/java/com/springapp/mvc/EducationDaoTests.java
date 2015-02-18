@@ -124,7 +124,7 @@ public class EducationDaoTests {
 
     @Test
     public void deleteEducationById() {
-        System.out.println(CRUDEvent.getResponse(educationDao.deleteEducationById(24)));
+        System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Tutorial.class, 24)));
     }
 
 
@@ -161,8 +161,7 @@ public class EducationDaoTests {
      */
     @Test
     public void getAllEducations() {
-        List<Tutorial> s_educations = new ArrayList<Tutorial>();
-        s_educations = educationDao.getAllEducation();
+        List<Tutorial> s_educations = commonDao.getAllResource(Tutorial.class);
         System.out.println("总共查到" + s_educations.size());
         for (Tutorial video : s_educations) {
             System.out.println("----------------");
@@ -178,7 +177,7 @@ public class EducationDaoTests {
      */
     @Test
     public void deleteEducation() {
-        int res = educationDao.deleteEducationById(5);
+        int res = commonDao.deleteResourceById(Tutorial.class, 5);
         System.out.println(CRUDEvent.getResponse(res));
     }
 
@@ -313,7 +312,7 @@ public class EducationDaoTests {
                 System.out.println("——————————————————————————————————————");
             }
         }
-        System.out.println("education count -> " + educationDao.getAllEducation().size());
+        System.out.println("education count -> " + commonDao.getAllResource(Tutorial.class).size());
         System.out.println("education count -> " + idSet.size());
     }
 

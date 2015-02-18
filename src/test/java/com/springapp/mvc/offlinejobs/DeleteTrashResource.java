@@ -86,11 +86,12 @@ public class DeleteTrashResource {
         List<String> keyList = new ArrayList<String>();
 
         List<Video> videoList = commonDao.getAllResource(Video.class);
+        List<Tutorial> tutorialList = commonDao.getAllResource(Tutorial.class);
         for (Video video : videoList) {
             keyList.add(video.getVideo_key());
         }
 
-        for (Tutorial education : educationDao.getAllEducation()) {
+        for (Tutorial education : tutorialList) {
             keyList.add(education.getVideo_key());
         }
 

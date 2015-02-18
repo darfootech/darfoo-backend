@@ -42,8 +42,7 @@ public class UpdateResourceKey {
 
     @Test
     public void updateTutorialKey() {
-        List<Tutorial> s_educations;
-        s_educations = educationDao.getAllEducation();
+        List<Tutorial> s_educations = commonDao.getAllResource(Tutorial.class);
         for (Tutorial tutorial : s_educations) {
             int tutorialid = tutorial.getId();
             String tutorialkey = tutorial.getVideo_key() + ".mp4";

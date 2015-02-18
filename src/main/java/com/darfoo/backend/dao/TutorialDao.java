@@ -107,8 +107,7 @@ public class TutorialDao {
      * 根据类别获取视频列表(我要上网—视频页面) 暂时去掉名师那个种类
      * $categories  (快-简单—队形表演) 如果用户没有选择某个类别，那么就去掉该字符串
      *
-     * @param 例如 categories = {"快","简单","队形表演"}  例如 categories = {"快","简单"}
-     *           *
+     * param example -> categories = {"快","简单","队形表演"}  例如 categories = {"快","简单"}
      */
     public List<Tutorial> getEducationVideosByCategories(String[] categories) {
         List<Tutorial> l_video = new ArrayList<Tutorial>();
@@ -161,48 +160,6 @@ public class TutorialDao {
             e.printStackTrace();
         }
         return l_video;
-    }
-
-    /**
-     * 根据id删除单个教学视频
-     * educationcategory表不受影响
-     * **/
-//	public int deleteEducationById(Integer id){
-//		int result = 0;
-//		try{
-//			Session session = sf.getCurrentSession();
-//			String sql1 = "delete from education_category where video_id=:video_id";
-//			String sql2 = "delete from education where id=:id";
-//			int res = session.createSQLQuery(sql1).setInteger("video_id", id).executeUpdate();  
-//			if(res > 0){
-//				result = session.createSQLQuery(sql2).setInteger("id", id).executeUpdate();
-//			}
-//		}catch(Exception e){
-//			e.printStackTrace();
-//		}
-//		return result;
-//	}
-
-    /**
-     * 删除(education和关系表中的值)
-     * *
-     */
-    public int deleteEducationById(Integer id) {
-        int res = 0;
-        try {
-            Session session = sf.getCurrentSession();
-            Tutorial video = (Tutorial) session.get(Tutorial.class, id);
-            if (video == null) {
-                res = CRUDEvent.DELETE_NOTFOUND;
-            } else {
-                session.delete(video);
-                res = CRUDEvent.DELETE_SUCCESS;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            res = CRUDEvent.DELETE_FAIL;
-        }
-        return res;
     }
 
     /**
@@ -336,42 +293,6 @@ public class TutorialDao {
             e.printStackTrace();
         }
         return res;
-    }
-
-    /**
-     * 获得所有Education对象
-     * *
-     */
-    public List<Tutorial> getAllEducation() {
-        List<Tutorial> s_educations = new ArrayList<Tutorial>();
-        Map<Integer, Tutorial> sortMap = new HashMap<Integer, Tutorial>();
-
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Tutorial.class);
-            c.addOrder(Order.desc("id"));
-            c.setReadOnly(true);
-            c.setFetchMode("categories", FetchMode.JOIN);
-            List<Tutorial> l_educations = c.list();
-            if (l_educations.size() > 0) {
-                for (Tutorial education : l_educations) {
-                    sortMap.put(education.getId(), education);
-                }
-            }
-
-            List<Integer> sortedKeys = new ArrayList(sortMap.keySet());
-            Collections.sort(sortedKeys);
-
-            for (Integer index : sortedKeys) {
-                s_educations.add(sortMap.get(index));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Collections.reverse(s_educations);
-        return s_educations;
     }
 
     public List<Tutorial> getAllTutorialsWithoutId(Integer tutorialid) {
@@ -517,7 +438,7 @@ public class TutorialDao {
     /**
      * 按热度排序，从热度最大到最小排序返回
      *
-     * @param 获得热度排名前number个 *
+     * param 获得热度排名前number个
      */
     public List<Tutorial> getEducationsByHottest(int number) {
         List<Tutorial> educations = new ArrayList<Tutorial>();
@@ -540,7 +461,7 @@ public class TutorialDao {
     /**
      * 获得最新的number个教学视频
      *
-     * @param 获得排名前number个 *
+     * param 获得排名前number个
      */
     public List<Tutorial> getEducationsByNewest(int number) {
         List<Tutorial> educations = new ArrayList<Tutorial>();
