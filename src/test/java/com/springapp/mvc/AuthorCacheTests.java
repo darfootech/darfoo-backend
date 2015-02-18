@@ -66,7 +66,7 @@ public class AuthorCacheTests {
 
     @Test
     public void cacheIndexAuthors() {
-        List<Author> authors = authorDao.getAllAuthor();
+        List<Author> authors = commonDao.getAllResource(Author.class);
         for (Author author : authors) {
             int id = author.getId();
             long result = redisClient.sadd("authorindex", "author-" + id);

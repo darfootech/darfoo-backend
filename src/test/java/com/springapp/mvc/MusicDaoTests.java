@@ -58,12 +58,13 @@ public class MusicDaoTests {
         }
 
         Music music = new Music();
-        if (authorDao.getAllAuthor().size() == 0) {
+        List<Author> authorList = commonDao.getAllResource(Author.class);
+        if (authorList.size() == 0) {
             System.out.println("无法找到默认作者，不可以创建伴奏");
             return;
         } else {
             System.out.println("可以找到默认作者，可以创建伴奏");
-            music.setAuthor(authorDao.getAllAuthor().get(0));
+            music.setAuthor(authorList.get(0));
         }
 
         if (imageDao.getAllImage().size() == 0) {

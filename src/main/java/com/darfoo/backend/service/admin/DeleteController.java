@@ -1,6 +1,7 @@
 package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.*;
+import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Video;
@@ -73,7 +74,7 @@ public class DeleteController {
     public @ResponseBody
     String deleteAuthor(HttpServletRequest request, HttpSession session){
         Integer id = Integer.parseInt(request.getParameter("id"));
-        String status = CRUDEvent.getResponse(authorDao.deleteAuthorById(id));
+        String status = CRUDEvent.getResponse(commonDao.deleteResourceById(Author.class, id));
         System.out.println(status);
         if (status.equals("DELETE_SUCCESS")){
             return 200+"";

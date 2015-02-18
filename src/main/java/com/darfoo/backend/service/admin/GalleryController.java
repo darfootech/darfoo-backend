@@ -67,7 +67,7 @@ public class GalleryController {
         String videoType = videoKey.split("\\.")[1];
         modelMap.addAttribute("videotype", videoType);
         modelMap.addAttribute("video", video);
-        modelMap.addAttribute("authors", authorDao.getAllAuthor());
+        modelMap.addAttribute("authors", commonDao.getAllResource(Author.class));
         modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw(video.getImage().getImage_key()));
         if (video.getMusic() != null) {
             String connectmusic = video.getMusic().getTitle() + "-" + video.getMusic().getAuthorName();
@@ -108,7 +108,7 @@ public class GalleryController {
         String videoType = videoKey.split("\\.")[1];
         modelMap.addAttribute("videotype", videoType);
         modelMap.addAttribute("tutorial", tutorial);
-        modelMap.addAttribute("authors", authorDao.getAllAuthor());
+        modelMap.addAttribute("authors", commonDao.getAllResource(Author.class));
         modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw(tutorial.getImage().getImage_key()));
         if (tutorial.getMusic() != null) {
             String connectmusic = tutorial.getMusic().getTitle() + "-" + tutorial.getMusic().getAuthorName();
@@ -152,8 +152,7 @@ public class GalleryController {
 
     @RequestMapping(value = "/admin/author/all", method = RequestMethod.GET)
     public String showAllAuthor(ModelMap modelMap, HttpSession session) {
-        List<Author> s_author = new ArrayList<Author>();
-        s_author = authorDao.getAllAuthor();
+        List<Author> s_author = commonDao.getAllResource(Author.class);
         modelMap.addAttribute("allauthors", s_author);
         return "allauthor";
     }

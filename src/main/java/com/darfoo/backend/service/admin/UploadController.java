@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -256,13 +257,14 @@ public class UploadController {
         }*/
 
         Music music = new Music();
-        if (authorDao.getAllAuthor().size() == 0) {
+        List<Author> authorList = commonDao.getAllResource(Author.class);
+        if (authorList.size() == 0) {
             System.out.println("无法找到默认作者，不可以创建伴奏");
             resultMap.put("statuscode", 501);
             resultMap.put("insertid", -1);
         } else {
             System.out.println("可以找到默认作者，可以创建伴奏");
-            music.setAuthor(authorDao.getAllAuthor().get(0));
+            music.setAuthor(authorList.get(0));
         }
 
         if (imageDao.getAllImage().size() == 0) {
@@ -340,7 +342,7 @@ public class UploadController {
     public String uploadVideo(ModelMap modelMap, HttpSession session) {
         session.setAttribute("resource", "video");
         modelMap.addAttribute("resource", "video");
-        modelMap.addAttribute("authors", authorDao.getAllAuthor());
+        modelMap.addAttribute("authors", commonDao.getAllResource(Author.class));
         return "uploadvideo";
     }
 
@@ -515,7 +517,7 @@ public class UploadController {
     public String uploadTutorial(ModelMap modelMap, HttpSession session) {
         session.setAttribute("resource", "tutorial");
         modelMap.addAttribute("resource", "tutorial");
-        modelMap.addAttribute("authors", authorDao.getAllAuthor());
+        modelMap.addAttribute("authors", commonDao.getAllResource(Author.class));
         return "uploadtutorial";
     }
 

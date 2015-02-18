@@ -154,7 +154,7 @@ public class AuthorDaoTests {
 
     @Test
     public void getAllAuthor() {
-        List<Author> l_author = authorDao.getAllAuthor();
+        List<Author> l_author = commonDao.getAllResource(Author.class);
         for (Author a : l_author) {
             System.out.println(a.toString());
         }
@@ -163,7 +163,7 @@ public class AuthorDaoTests {
     @Test
     public void deleteAuthor() {
         Integer id = 6;
-        System.out.println(CRUDEvent.getResponse(authorDao.deleteAuthorById(id)));
+        System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Author.class, id)));
     }
 
     @Test

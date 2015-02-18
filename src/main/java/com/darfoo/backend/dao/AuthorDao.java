@@ -69,24 +69,6 @@ public class AuthorDao {
         return res;
     }
 
-    /**
-     * 获取所有author对象
-     *
-     * @return List<Author>
-     * *
-     */
-    public List<Author> getAllAuthor() {
-        List<Author> l_author = new ArrayList<Author>();
-        try {
-            Session session = sf.getCurrentSession();
-            String sql = "select * from author order by id desc";
-            l_author = session.createSQLQuery(sql).addEntity(Author.class).list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return l_author;
-    }
-
     public List<Object[]> getAuthorOrderByVideoCountDesc() {
         List<Object[]> result = new ArrayList<Object[]>();
         try {
@@ -174,36 +156,6 @@ public class AuthorDao {
             }
         } catch (Exception e) {
             res = CRUDEvent.CRUD_EXCETION;
-        }
-        return res;
-    }
-
-    /**
-     * 删除作者
-     * (先解除与video music education对应author_id的约束，现将author_id设为null)
-     * *
-     */
-    public int deleteAuthorById(Integer id) {
-        int res = 0;
-        try {
-            Session session = sf.getCurrentSession();
-            Author author = (Author) session.get(Author.class, id);
-            if (author == null) {
-                System.out.println("没有找到对应id为" + id + "的Author");
-                res = CRUDEvent.DELETE_NOTFOUND;
-            } else {
-                String sql1 = "update video set AUTHOR_ID=null where AUTHOR_ID=:author_id";
-                String sql2 = "update education set AUTHOR_ID=null where AUTHOR_ID=:author_id";
-                String sql3 = "update music set AUTHOR_ID=null where AUTHOR_ID=:author_id";
-                System.out.println("video受影响的行数:" + session.createSQLQuery(sql1).setInteger("author_id", id).executeUpdate());
-                System.out.println("education受影响的行数:" + session.createSQLQuery(sql2).setInteger("author_id", id).executeUpdate());
-                System.out.println("music受影响的行数:" + session.createSQLQuery(sql3).setInteger("author_id", id).executeUpdate());
-                session.delete(author);
-                res = CRUDEvent.DELETE_SUCCESS;
-            }
-        } catch (Exception e) {
-            res = CRUDEvent.DELETE_FAIL;
-            e.printStackTrace();
         }
         return res;
     }
