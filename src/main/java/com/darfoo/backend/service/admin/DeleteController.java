@@ -1,6 +1,7 @@
 package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.*;
+import com.darfoo.backend.model.Music;
 import com.darfoo.backend.model.Tutorial;
 import com.darfoo.backend.model.Video;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,7 @@ public class DeleteController {
     public @ResponseBody
     String deleteMusic(HttpServletRequest request, HttpSession session){
         Integer id = Integer.parseInt(request.getParameter("id"));
-        String status = CRUDEvent.getResponse(musicDao.deleteMusicById(id));
+        String status = CRUDEvent.getResponse(commonDao.deleteResourceById(Music.class, id));
         System.out.println(status);
         if (status.equals("DELETE_SUCCESS")){
             return 200+"";

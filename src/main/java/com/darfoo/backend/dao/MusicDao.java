@@ -86,29 +86,6 @@ public class MusicDao {
 
     /**
      * 获取单个music的信息
-     * 根据music的title来获得music对象
-     *
-     * @return music 返回一个Music的实例对象(包含关联表中的数据)，详细请看Music.java类
-     * *
-     */
-    public Music getMusicByMusicTitle(String title) {
-        Music music = null;
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Music.class);
-            c.setReadOnly(true);
-            c.add(Restrictions.eq("title", title));
-            //设置JOIN mode，这样categories会直接加载到music类中
-            c.setFetchMode("categories", FetchMode.JOIN);
-            music = (Music) c.uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return music;
-    }
-
-    /**
-     * 获取单个music的信息
      * 根据music的title和作者id来获得music对象
      *
      * @return music 返回一个Music的实例对象(包含关联表中的数据)，详细请看Music.java类
@@ -166,8 +143,7 @@ public class MusicDao {
      * 根据类别获取歌曲列表(我要上网—音乐页面中)
      * $categories  (四拍-情歌风-A) 如果用户没有选择某个类别，那么就去掉该字符串
      *
-     * @param 例如 categories = {"四拍","情歌风","A"}  例如 categories = {"四拍","A"} 表示有一个类别用户没有选择
-     *           *
+     * param example -> categories = {"四拍","情歌风","A"}  例如 categories = {"四拍","A"} 表示有一个类别用户没有选择
      */
     public List<Music> getMusicsByCategories(String[] categories) {
         List<Music> l_music = new ArrayList<Music>();
@@ -220,28 +196,6 @@ public class MusicDao {
             e.printStackTrace();
         }
         return l_music;
-    }
-
-    /**
-     * 删除(music和关系表中的值)
-     * *
-     */
-    public int deleteMusicById(Integer id) {
-        int res = 0;
-        try {
-            Session session = sf.getCurrentSession();
-            Music music = (Music) session.get(Music.class, id);
-            if (music == null) {
-                res = CRUDEvent.DELETE_NOTFOUND;
-            } else {
-                session.delete(music);
-                res = CRUDEvent.DELETE_SUCCESS;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            res = CRUDEvent.DELETE_FAIL;
-        }
-        return res;
     }
 
     /**
@@ -377,41 +331,6 @@ public class MusicDao {
         return res;
     }
 
-    /**
-     * 获得所有Music对象
-     * *
-     */
-    public List<Music> getAllMusic() {
-        List<Music> s_musics = new ArrayList<Music>();
-        Map<Integer, Music> sortMap = new HashMap<Integer, Music>();
-
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Music.class);
-            c.setReadOnly(true);
-            c.setFetchMode("categories", FetchMode.JOIN);
-            List<Music> l_musics = c.list();
-            if (l_musics.size() > 0) {
-                for (Music music : l_musics) {
-                    sortMap.put(music.getId(), music);
-                }
-            }
-
-            List<Integer> sortedKeys = new ArrayList(sortMap.keySet());
-            Collections.sort(sortedKeys);
-
-            for (Integer index : sortedKeys) {
-                s_musics.add(sortMap.get(index));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Collections.reverse(s_musics);
-        return s_musics;
-    }
-
     public List<Music> getAllMusicsWithoutId(Integer musicid) {
         List<Music> s_musics = new ArrayList<Music>();
         try {
@@ -473,7 +392,7 @@ public class MusicDao {
     /**
      * 按热度排序，从热度最大到最小排序返回
      *
-     * @param 获得热度排名前number个 *
+     * param 获得热度排名前number个
      */
     public List<Music> getMusicsByHottest(int number) {
         List<Music> l_music = new ArrayList<Music>();
@@ -496,7 +415,7 @@ public class MusicDao {
     /**
      * 获得最新的number个音频
      *
-     * @param 获得排名前number个 *
+     * param 获得排名前number个
      */
     public List<Music> getMusicsByNewest(int number) {
         List<Music> musics = new ArrayList<Music>();

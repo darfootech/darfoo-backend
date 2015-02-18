@@ -121,8 +121,7 @@ public class GalleryController {
 
     @RequestMapping(value = "/admin/music/all", method = RequestMethod.GET)
     public String showAllMusic(ModelMap modelMap, HttpSession session) {
-        List<Music> s_music = new ArrayList<Music>();
-        s_music = musicDao.getAllMusic();
+        List<Music> s_music = commonDao.getAllResource(Music.class);
         modelMap.addAttribute("allmusics", s_music);
         return "allmusic";
     }

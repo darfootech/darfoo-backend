@@ -35,12 +35,6 @@ import java.util.Set;
 @Controller
 public class DownloadController {
     @Autowired
-    VideoDao videoDao;
-    @Autowired
-    TutorialDao educationDao;
-    @Autowired
-    MusicDao musicDao;
-    @Autowired
     CommonDao commonDao;
 
     public String timestampTodatetime(long timestampfromdb){
@@ -220,7 +214,7 @@ public class DownloadController {
     }
 
     public void writeMusicsToCSV(){
-        List<Music> musics = musicDao.getAllMusic();
+        List<Music> musics = commonDao.getAllResource(Music.class);
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
         CSVPrinter printer = null;
         try {

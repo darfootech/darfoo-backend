@@ -29,12 +29,6 @@ import java.util.Set;
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class DownloadTests {
     @Autowired
-    VideoDao videoDao;
-    @Autowired
-    TutorialDao educationDao;
-    @Autowired
-    MusicDao musicDao;
-    @Autowired
     CommonDao commonDao;
 
     @Test
@@ -171,7 +165,7 @@ public class DownloadTests {
 
     @Test
     public void writeMusicsToCSV() {
-        List<Music> musics = musicDao.getAllMusic();
+        List<Music> musics = commonDao.getAllResource(Music.class);
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
         CSVPrinter printer = null;
         try {

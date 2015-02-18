@@ -28,7 +28,7 @@ public class ConnectController {
 
     @RequestMapping(value = "/admin/connectmusic/all", method = RequestMethod.GET)
     public String connectMusicAll(ModelMap modelMap) {
-        modelMap.addAttribute("musics", musicDao.getAllMusic());
+        modelMap.addAttribute("musics", commonDao.getAllResource(Music.class));
         return "connectionallmusic";
     }
 

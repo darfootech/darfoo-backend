@@ -141,7 +141,7 @@ public class MusicDaoTests {
 
     @Test
     public void deleteMusicById() {
-        System.out.println(CRUDEvent.getResponse(musicDao.deleteMusicById(2)));   //--->DELETE_SUCCESS
+        System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Music.class, 2)));   //--->DELETE_SUCCESS
 //		System.out.println(CRUDEvent.getResponse(musicDao.deleteMusicById(200))); //--->DELETE_NOTFOUND
     }
 
@@ -176,8 +176,7 @@ public class MusicDaoTests {
      */
     @Test
     public void getAllMusics() {
-        List<Music> s_musics = new ArrayList<Music>();
-        s_musics = musicDao.getAllMusic();
+        List<Music> s_musics = commonDao.getAllResource(Music.class);
         System.out.println("总共查到" + s_musics.size());
         for (Music video : s_musics) {
             System.out.println("----------------");
@@ -189,7 +188,7 @@ public class MusicDaoTests {
 
     @Test
     public void deleteVideoCascade() {
-        System.out.println(CRUDEvent.getResponse(musicDao.deleteMusicById(14)));
+        System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Music.class, 14)));
     }
 
     /**
@@ -279,7 +278,7 @@ public class MusicDaoTests {
             System.out.println("最终满足的music数量>>>>>>>>>>>>>>>>>>>>>" + musics.size());
         }
 
-        System.out.println("music count -> " + musicDao.getAllMusic().size());
+        System.out.println("music count -> " + commonDao.getAllResource(Music.class).size());
         System.out.println("music count -> " + idSet.size());
     }
 
