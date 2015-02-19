@@ -26,9 +26,9 @@ public class VideoDao {
     //插入所有video(视频)的类型
     public void insertAllVideoCategories() {
         String[] categories = {
-                "较快", "适中", "较慢",    //按速度
-                "简单", "普通", "稍难",                    //按难度  (将"适中"改为"普通"，否则会出现unique的错误org.hibernate.exception.ConstraintViolationException， com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException)
-                "欢快", "活泼", "优美", "情歌风", "红歌风", "草原风", "戏曲风", "印巴风", "江南风", "民歌风", "儿歌风",  //按风格
+                "较快", "适中", "较慢", //按速度
+                "简单", "普通", "稍难", //按难度
+                "欢快", "活泼", "优美", "情歌风", "红歌风", "草原风", "戏曲风", "印巴风", "江南风", "民歌风", "儿歌风", //按风格
                 "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
         };
 
@@ -102,43 +102,6 @@ public class VideoDao {
             e.printStackTrace();
         }
         return video;
-    }
-
-    /**
-     * 获取首页推荐视频信息
-     *
-     * @param number 推荐视频数量
-     * @return video中的categories可以获取
-     */
-
-    public List<Video> getRecommendVideos(int number) {
-        List<Video> l_video = new ArrayList<Video>();
-        try {
-            Session session = sf.getCurrentSession();
-            //投影查询获得所有video的id
-            Criteria c = session.createCriteria(Video.class).setProjection(Projections.property("id"));
-            c.setReadOnly(true);
-            List<Integer> l_vid = c.list();
-            int count = l_vid.size();
-            if (count <= number) {
-                //请求的视频个数多于数据库数量，则返回全部视频
-                c = session.createCriteria(Video.class);
-                c.setReadOnly(true);
-
-            } else {
-                //请求的视频个数少于数据库数量，则返回最新的number个视频
-                c = session.createCriteria(Video.class).addOrder(Order.desc("update_timestamp"));
-                c.setReadOnly(true);
-                c.setMaxResults(number);
-            }
-            l_video = c.list();
-            for (Video v : l_video) {
-                v.trigLazyLoad();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return l_video;
     }
 
     /**
@@ -336,30 +299,6 @@ public class VideoDao {
             e.printStackTrace();
         }
         return res;
-    }
-
-    public List<Video> getAllVideosWithoutId(Integer videoid) {
-        List<Video> s_videos = new ArrayList<Video>();
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Video.class);
-            c.add(Restrictions.not(Restrictions.eq("id", videoid)));
-            c.addOrder(Order.desc("id"));
-            c.setReadOnly(true);
-            c.setFetchMode("categories", FetchMode.JOIN);
-            List<Video> l_videos = c.list();
-            if (l_videos.size() > 0) {
-                //去除重复的video
-                for (Video video : l_videos) {
-                    if (!s_videos.contains(video)) {
-                        s_videos.add(video);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return s_videos;
     }
 
     /**
@@ -778,7 +717,7 @@ public class VideoDao {
         } else if (sameAuthorLen == 5) {
             result = sameAuthorVideos;
         } else {
-            List<Video> allVideos = getAllVideosWithoutId(videoid);
+            List<Video> allVideos = commonDao.getAllResourceWithoutId(Video.class, videoid);
             Collections.shuffle(allVideos);
             for (int i = 0; i < 5 - sameAuthorLen; i++) {
                 sameAuthorVideos.add(allVideos.get(i));

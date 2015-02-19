@@ -34,7 +34,6 @@ public class CommonDao {
         }
     }
 
-
     /**
      * 获取单个资源的信息
      *
@@ -59,6 +58,11 @@ public class CommonDao {
         }
     }
 
+    /**
+     * 获得某一类的所有记录
+     * @param resource
+     * @return
+     */
     public List getAllResource(Class resource) {
         try {
             Session session = sessionFactory.getCurrentSession();
@@ -69,6 +73,27 @@ public class CommonDao {
             /*if (ifHasCategoryResource(resource)) {
                 criteria.setFetchMode("categories", FetchMode.JOIN);
             }*/
+            return criteria.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 获得除了传入id对应记录的所有类别的记录
+     * @param resource
+     * @param id
+     * @return
+     */
+    public List getAllResourceWithoutId(Class resource, Integer id) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Criteria criteria = session.createCriteria(resource);
+            criteria.add(Restrictions.not(Restrictions.eq("id", id)));
+            criteria.addOrder(Order.desc("id"));
+            criteria.setReadOnly(true);
+            //c.setFetchMode("categories", FetchMode.JOIN);
             return criteria.list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,6 +130,12 @@ public class CommonDao {
         }
     }
 
+    /**
+     * 删除单个资源
+     * @param resource
+     * @param id
+     * @return
+     */
     public int deleteResourceById(Class resource, Integer id) {
         int res;
         try {
@@ -142,20 +173,20 @@ public class CommonDao {
             sb.append("%");
             System.out.println("匹配>>>>" + sb.toString());
             Session session = sessionFactory.getCurrentSession();
-            Criteria c = session.createCriteria(resource).setProjection(Projections.property("id"));
+            Criteria criteria = session.createCriteria(resource).setProjection(Projections.property("id"));
             if (ifHasCategoryResource(resource)) {
-                c.add(Restrictions.like("title", sb.toString(), MatchMode.ANYWHERE));
+                criteria.add(Restrictions.like("title", sb.toString(), MatchMode.ANYWHERE));
             } else if (resource == Author.class) {
-                c.add(Restrictions.like("name", sb.toString(), MatchMode.ANYWHERE));
+                criteria.add(Restrictions.like("name", sb.toString(), MatchMode.ANYWHERE));
             } else {
                 System.out.println("something is bad");
             }
-            List<Integer> l_id = c.list();
+            List<Integer> l_id = criteria.list();
             if (l_id.size() > 0) {
-                c = session.createCriteria(resource).add(Restrictions.in("id", l_id));
-                c.setMaxResults(50);
-                c.setReadOnly(true);
-                result = c.list();
+                criteria = session.createCriteria(resource).add(Restrictions.in("id", l_id));
+                criteria.setMaxResults(50);
+                criteria.setReadOnly(true);
+                result = criteria.list();
             }
         } catch (Exception e) {
             e.printStackTrace();

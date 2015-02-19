@@ -93,17 +93,6 @@ public class VideoCacheTests {
     }
 
     @Test
-    public void cacheRecommendVideos() {
-        List<Video> recommendVideos = videoDao.getRecommendVideos(7);
-        for (Video video : recommendVideos) {
-            int vid = video.getId();
-            long result = redisClient.sadd("videorecommend", "video-" + vid);
-            videoCacheDao.insertSingleVideo(video);
-            System.out.println("insert result -> " + result);
-        }
-    }
-
-    @Test
     public void getRecommendVideos() {
         Set<String> recommendVideos = redisClient.smembers("videorecommend");
         List<SingleVideo> result = new ArrayList<SingleVideo>();

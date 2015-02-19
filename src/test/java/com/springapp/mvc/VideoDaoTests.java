@@ -124,17 +124,6 @@ public class VideoDaoTests {
     }
 
     @Test
-    public void getRecommendVideos() {
-        long start = System.currentTimeMillis();
-        List<Video> videos = videoDao.getRecommendVideos(7);
-        for (Video video : videos) {
-            System.out.println(video.toString(true));
-            System.out.println("——————————————————————————————————————");
-        }
-        System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
-    }
-
-    @Test
     public void getVideosByCategories() {
         long start = System.currentTimeMillis();
         //String[] categories = {};//无条件限制
@@ -421,7 +410,7 @@ public class VideoDaoTests {
     @Test
     public void getAllVideosWithoutId() {
         int vid = 1;
-        List<Video> allvideos = videoDao.getAllVideosWithoutId(vid);
+        List<Video> allvideos = commonDao.getAllResourceWithoutId(Video.class, vid);
         for (Video video : allvideos) {
             System.out.println(video.getId());
         }
