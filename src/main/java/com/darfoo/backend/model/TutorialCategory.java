@@ -20,9 +20,7 @@ public class TutorialCategory implements Serializable {
     String description;
     //建立与video表的多对多关系
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "categories")
-//	@JoinTable(name="education_category",joinColumns={@JoinColumn(name="category_id",referencedColumnName="id",nullable=false,columnDefinition="int(11) not null")},
-//	inverseJoinColumns={@JoinColumn(name="video_id",nullable=false,columnDefinition="int(11) not null")})
-            Set<Tutorial> videos = new HashSet<Tutorial>();
+    Set<Tutorial> videos = new HashSet<Tutorial>();
 
     public TutorialCategory() {
     }

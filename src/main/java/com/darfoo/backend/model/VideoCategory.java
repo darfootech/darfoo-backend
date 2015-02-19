@@ -20,10 +20,7 @@ public class VideoCategory implements Serializable {
     String description;
     //建立与video表的多对多关系
     @ManyToMany(mappedBy = "categories", targetEntity = Video.class)
-//	@Cascade(value={CascadeType.DELETE,CascadeType.REMOVE})
-//	@JoinTable(name="video_category",joinColumns={@JoinColumn(name="category_id",referencedColumnName="id",nullable=false,columnDefinition="int(11) not null")},
-//	inverseJoinColumns={@JoinColumn(name="video_id",nullable=false,columnDefinition="int(11) not null")})
-            Set<Video> videos = new HashSet<Video>();
+    Set<Video> videos = new HashSet<Video>();
 
     public VideoCategory() {
     }
