@@ -21,10 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by zjh on 14-12-18.
@@ -516,7 +513,11 @@ public class CacheController {
     @ResponseBody
     public List<SingleVideo> getVideoListForAuthor(@PathVariable Integer id) {
         List<SingleVideo> result = new ArrayList<SingleVideo>();
-        List<Video> videos = videoDao.getVideosByAuthorId(id);
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("author_id", id);
+
+        List<Video> videos = commonDao.getResourcesByFields(Video.class, conditions);
         List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(id);
 
         for (Video video : videos) {
@@ -556,7 +557,11 @@ public class CacheController {
     @ResponseBody
     public List<SingleVideo> getVideoListForAuthorByPage(@PathVariable Integer id, @PathVariable Integer page) {
         List<SingleVideo> result = new ArrayList<SingleVideo>();
-        List<Video> videos = videoDao.getVideosByAuthorId(id);
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("author_id", id);
+
+        List<Video> videos = commonDao.getResourcesByFields(Video.class, conditions);
         List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(id);
 
         int pageSize = 12;
@@ -648,7 +653,11 @@ public class CacheController {
         List<Author> authors = commonDao.getResourceBySearch(Author.class, searchContent);
         for (Author author : authors) {
             int aid = author.getId();
-            List<Video> authorvideos = videoDao.getVideosByAuthorId(aid);
+
+            HashMap<String, Object> conditions = new HashMap<String, Object>();
+            conditions.put("author_id", aid);
+
+            List<Video> authorvideos = commonDao.getResourcesByFields(Video.class, conditions);
             List<Tutorial> authortutorials = educationDao.getTutorialsByAuthorId(aid);
             for (Video video : authorvideos) {
                 videoids.add(video.getId());
@@ -716,7 +725,11 @@ public class CacheController {
         List<Author> authors = commonDao.getResourceBySearch(Author.class, searchContent);
         for (Author author : authors) {
             int aid = author.getId();
-            List<Video> authorvideos = videoDao.getVideosByAuthorId(aid);
+
+            HashMap<String, Object> conditions = new HashMap<String, Object>();
+            conditions.put("author_id", aid);
+
+            List<Video> authorvideos = commonDao.getResourcesByFields(Video.class, conditions);
             List<Tutorial> authortutorials = educationDao.getTutorialsByAuthorId(aid);
             for (Video video : authorvideos) {
                 videoids.add(video.getId());

@@ -45,7 +45,12 @@ public class UpdateController {
 
         int authorid = a.getId();
         //视频title可以重名,但是不可能出现视频title一样,作者id都一样的情况,也就是一个作者的作品中不会出现重名的情况
-        Video queryVideo = videoDao.getVideoByTitleAuthorId(videoTitle, authorid);
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("title", videoTitle);
+        conditions.put("author_id", authorid);
+
+        Video queryVideo = (Video) commonDao.getResourceByFields(Video.class, conditions);
         if (queryVideo == null) {
             System.out.println("视频名字和作者id组合不存在，可以进行插入");
             return 1;

@@ -59,7 +59,12 @@ public class VideoDaoTests {
 
         int authorid = a.getId();
         //视频title可以重名,但是不可能出现视频title一样,作者id都一样的情况,也就是一个作者的作品中不会出现重名的情况
-        Video queryVideo = videoDao.getVideoByTitleAuthorId(videoTitle, authorid);
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("title", videoTitle);
+        conditions.put("author_id", authorid);
+
+        Video queryVideo = (Video) commonDao.getResourceByFields(Video.class, conditions);
         if (queryVideo == null) {
             System.out.println("视频名字和作者id组合不存在，可以进行插入");
         } else {
@@ -322,7 +327,11 @@ public class VideoDaoTests {
     @Test
     public void getVideosByMusicId() {
         Integer mId = 25;
-        List<Video> videos = videoDao.getVideosByMusicId(mId);
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("music_id", mId);
+
+        List<Video> videos = commonDao.getResourcesByFields(Video.class, conditions);
         System.out.println("---------返回" + videos.size() + "个视频---------");
         for (Video v : videos) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
@@ -337,7 +346,8 @@ public class VideoDaoTests {
     @Test
     public void getVideosWithoutMusicId() {
         Integer mId = 1;
-        List<Video> videos = videoDao.getVideosByAuthorId(mId);
+
+        List<Video> videos = videoDao.getVideosWithoutMusicId(mId);
         System.out.println("---------返回" + videos.size() + "个视频---------");
         for (Video v : videos) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
@@ -352,7 +362,11 @@ public class VideoDaoTests {
     @Test
     public void getVideosByAuthorId() {
         Integer aId = 1;
-        List<Video> videos = videoDao.getVideosWithoutMusicId(aId);
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("author_id", aId);
+
+        List<Video> videos = commonDao.getResourcesByFields(Video.class, conditions);
         System.out.println("---------返回" + videos.size() + "个视频---------");
         for (Video v : videos) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));

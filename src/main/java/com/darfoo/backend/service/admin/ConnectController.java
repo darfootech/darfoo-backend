@@ -4,6 +4,7 @@ import com.darfoo.backend.dao.CommonDao;
 import com.darfoo.backend.dao.MusicDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Music;
+import com.darfoo.backend.model.Video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 
 /**
  * Created by zjh on 14-12-13.
@@ -41,7 +43,11 @@ public class ConnectController {
         Music music = (Music) commonDao.getResourceById(Music.class, musicid);
         session.setAttribute("connectmusicid", musicid);
         modelMap.addAttribute("music", music);
-        modelMap.addAttribute("connectvideos", videoDao.getVideosByMusicId(musicid));
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("music_id", musicid);
+
+        modelMap.addAttribute("connectvideos", commonDao.getResourcesByFields(Video.class, conditions));
         modelMap.addAttribute("notconnectvideos", videoDao.getVideosWithoutMusicId(musicid));
         return "connectionsinglemusic";
     }

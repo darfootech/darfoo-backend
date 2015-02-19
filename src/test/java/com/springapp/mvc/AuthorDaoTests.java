@@ -11,10 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
@@ -177,7 +174,11 @@ public class AuthorDaoTests {
         String authorname = author.getName();
 
         List<SingleVideo> result = new ArrayList<SingleVideo>();
-        List<Video> videos = videoDao.getVideosByAuthorId(aid);
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("author_id", aid);
+
+        List<Video> videos = commonDao.getResourcesByFields(Video.class, conditions);
         List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(aid);
 
         for (Video video : videos) {

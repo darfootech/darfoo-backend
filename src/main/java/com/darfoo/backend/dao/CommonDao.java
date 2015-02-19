@@ -62,6 +62,7 @@ public class CommonDao {
 
     /**
      * 获得某一类的所有记录
+     *
      * @param resource
      * @return
      */
@@ -84,6 +85,7 @@ public class CommonDao {
 
     /**
      * 获得除了传入id对应记录的所有类别的记录
+     *
      * @param resource
      * @param id
      * @return
@@ -103,8 +105,56 @@ public class CommonDao {
         }
     }
 
+    public Object getResourceByFields(Class resource, HashMap<String, Object> conditions) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Criteria criteria = session.createCriteria(resource);
+            criteria.setReadOnly(true);
+
+            for (String key : conditions.keySet()) {
+                if (key.equals("author_id") || key.equals("music_id")) {
+                    criteria.add(Restrictions.eq(key.replace("_", "."), conditions.get(key)));
+                } else {
+                    criteria.add(Restrictions.eq(key, conditions.get(key)));
+                }
+            }
+
+            if (ifHasCategoryResource(resource)) {
+                //设置JOIN mode，这样categories会直接加载到返回的实例中
+                criteria.setFetchMode("categories", FetchMode.JOIN);
+            }
+            return criteria.uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Object();
+        }
+    }
+
+    public List getResourcesByFields(Class resource, HashMap<String, Object> conditions) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Criteria criteria = session.createCriteria(resource);
+            criteria.setReadOnly(true);
+
+            for (String key : conditions.keySet()) {
+                if (key.equals("author_id") || key.equals("music_id")) {
+                    criteria.add(Restrictions.eq(key.replace("_", "."), conditions.get(key)));
+                } else {
+                    criteria.add(Restrictions.eq(key, conditions.get(key)));
+                }
+            }
+
+            return criteria.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList();
+        }
+    }
+
+
     /**
      * 获得热度排名前count个
+     *
      * @param resource
      * @param count
      * @return
@@ -125,6 +175,7 @@ public class CommonDao {
 
     /**
      * 获得倒序更新日期前count个
+     *
      * @param resource
      * @param count
      * @return
@@ -213,7 +264,7 @@ public class CommonDao {
     }
 
     public int updateResourceFieldsById(Class resource, Integer id, HashMap<String, Object> updateFieldValue) {
-        int res = 0;
+        int res;
         try {
             Session session = sessionFactory.getCurrentSession();
             Object object = session.get(resource, id);
@@ -234,6 +285,7 @@ public class CommonDao {
 
     /**
      * 删除单个资源
+     *
      * @param resource
      * @param id
      * @return

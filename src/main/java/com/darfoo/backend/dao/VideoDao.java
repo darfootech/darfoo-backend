@@ -86,25 +86,6 @@ public class VideoDao {
     }
 
     /**
-     * 获取单个video的信息
-     * 根据video的title和作者id来获得video对象
-     *
-     * @return video 返回一个video的实例对象(包含关联表中的数据)，详细请看Video.java类
-     * *
-     */
-    public Video getVideoByTitleAuthorId(String title, int authorid) {
-        Video video = null;
-        try {
-            Session session = sf.getCurrentSession();
-            String sql = "select * from video where title=:title and author_id=:authorid";
-            video = (Video) session.createSQLQuery(sql).addEntity(Video.class).setString("title", title).setInteger("authorid", authorid).uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return video;
-    }
-
-    /**
      * 根据类别获取视频列表(我要上网—视频页面)
      * $categories  (较快-简单—欢快-A) 如果用户没有选择某个类别，那么就去掉该字符串
      * <p/>
@@ -405,42 +386,6 @@ public class VideoDao {
     }
 
     /**
-     * 根据musicid来获得与之关联的所有video
-     *
-     * @param musicid
-     * @return
-     */
-    public List<Video> getVideosByMusicId(int musicid) {
-        List<Video> videos = null;
-        try {
-            Session session = sf.getCurrentSession();
-            String sql = "select * from video where music_id=:musicid order by id desc";
-            videos = (List<Video>) session.createSQLQuery(sql).addEntity(Video.class).setInteger("musicid", musicid).list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return videos;
-    }
-
-    /**
-     * 根据authorid来获得与之关联的所有video
-     *
-     * @param authorid
-     * @return
-     */
-    public List<Video> getVideosByAuthorId(int authorid) {
-        List<Video> videos = null;
-        try {
-            Session session = sf.getCurrentSession();
-            String sql = "select * from video where author_id=:authorid order by id desc";
-            videos = (List<Video>) session.createSQLQuery(sql).addEntity(Video.class).setInteger("authorid", authorid).list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return videos;
-    }
-
-    /**
      * 根据musicid来获得不与之关联的所有video
      *
      * @param musicid
@@ -646,7 +591,11 @@ public class VideoDao {
     public List<Video> getSideBarVideos(Integer videoid) {
         List<Video> result = new ArrayList<Video>();
         int authorid = ((Video) commonDao.getResourceById(Video.class, videoid)).getAuthor().getId();
-        List<Video> sameAuthorVideos = getVideosByAuthorId(authorid);
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("author_id", authorid);
+
+        List<Video> sameAuthorVideos = commonDao.getResourcesByFields(Video.class, conditions);
         int sameAuthorLen = sameAuthorVideos.size();
         if (sameAuthorLen > 5) {
             Collections.shuffle(sameAuthorVideos);

@@ -20,6 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -91,7 +92,11 @@ public class AuthorCacheTests {
     public void cacheAuthorVideos() {
         int id = 11;
         List<SingleVideo> result = new ArrayList<SingleVideo>();
-        List<Video> videos = videoDao.getVideosByAuthorId(id);
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("author_id", id);
+
+        List<Video> videos = commonDao.getResourcesByFields(Video.class, conditions);
         List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(id);
 
         for (Video video : videos) {
