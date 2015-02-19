@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -34,7 +35,9 @@ public class UpdateResourceKey {
         for (Video video : s_videos) {
             int videoid = video.getId();
             String videokey = video.getVideo_key() + ".mp4";
-            videoDao.updateVideoKeyById(videoid, videokey);
+            HashMap<String, Object> updateMap = new HashMap<String, Object>();
+            updateMap.put("video_key", videokey);
+            commonDao.updateResourceFieldsById(Video.class, videoid, updateMap);
         }
         System.out.println("总共查到" + s_videos.size());
     }

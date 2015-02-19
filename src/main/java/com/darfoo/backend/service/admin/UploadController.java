@@ -125,7 +125,9 @@ public class UploadController {
             System.out.println("插入视频成功，视频id是" + insertStatus);
         }
 
-        videoDao.updateVideoKeyById(insertStatus, videotitle + "-" + insertStatus + "." + videotype);
+        HashMap<String, Object> updateMap = new HashMap<String, Object>();
+        updateMap.put("video_key", videotitle + "-" + insertStatus + "." + videotype);
+        commonDao.updateResourceFieldsById(Video.class, insertStatus, updateMap);
 
         resultMap.put("statuscode", 200);
         resultMap.put("insertid", insertStatus);

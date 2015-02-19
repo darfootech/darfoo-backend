@@ -12,6 +12,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -151,7 +152,9 @@ public class UpdateController {
         categoryTitles.add(videoLetter.toUpperCase());
 
         String newVideoKey = ((Video) commonDao.getResourceById(Video.class, vid)).getVideo_key().split("\\.")[0] + "." + videoType;
-        videoDao.updateVideoKeyById(vid, newVideoKey);
+        HashMap<String, Object> updateMap = new HashMap<String, Object>();
+        updateMap.put("video_key", newVideoKey);
+        commonDao.updateResourceFieldsById(Video.class, vid, updateMap);
 
         if (videoTitle.equals("")) {
             videoTitle = originTitle;

@@ -286,21 +286,6 @@ public class VideoDao {
         return res;
     }
 
-    public int updateVideoKeyById(int videoid, String newVideoKey) {
-        int res = 0;
-        try {
-            Session session = sf.getCurrentSession();
-            Video oldVideo = (Video) session.get(Video.class, videoid);
-            oldVideo.setVideo_key(newVideoKey);
-            session.saveOrUpdate(oldVideo);
-            res = CRUDEvent.UPDATE_SUCCESS;
-        } catch (Exception e) {
-            res = CRUDEvent.CRUD_EXCETION;
-            e.printStackTrace();
-        }
-        return res;
-    }
-
     /**
      * 为video添加一个对应的music(插入操作用更新替代)
      *

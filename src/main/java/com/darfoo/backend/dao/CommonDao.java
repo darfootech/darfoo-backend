@@ -219,6 +219,7 @@ public class CommonDao {
             Object object = session.get(resource, id);
             for (Field field : resource.getDeclaredFields()) {
                 if (updateFieldValue.keySet().contains(field.getName().toLowerCase())) {
+                    field.setAccessible(true);
                     field.set(object, updateFieldValue.get(field.getName().toLowerCase()));
                 }
             }

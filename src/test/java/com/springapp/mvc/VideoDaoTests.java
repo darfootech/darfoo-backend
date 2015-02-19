@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -98,8 +95,16 @@ public class VideoDaoTests {
             System.out.println("插入视频成功，视频id是" + insertStatus);
         }
 
-        videoDao.updateVideoKeyById(insertStatus, videoTitle + "-" + insertStatus);
+        HashMap<String, Object> updateMap = new HashMap<String, Object>();
+        updateMap.put("video_key", videoTitle + "-" + insertStatus);
+        commonDao.updateResourceFieldsById(Video.class, insertStatus, updateMap);
+    }
 
+    @Test
+    public void updateVideokeyById() {
+        HashMap<String, Object> updateMap = new HashMap<String, Object>();
+        updateMap.put("video_key", "cleanthacleantha.mp4");
+        commonDao.updateResourceFieldsById(Video.class, 3, updateMap);
     }
 
     @Test
