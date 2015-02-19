@@ -66,6 +66,8 @@ public class Video implements Serializable {
     @Column(name = "RECOMMEND", nullable = true, updatable = true, columnDefinition = "int default 0")
     Integer recommend;
 
+    public Video() {}
+
     public Integer getRecommend() {
         return recommend;
     }
@@ -88,10 +90,6 @@ public class Video implements Serializable {
 
     public void setMusic(Music music) {
         this.music = music;
-    }
-
-    public Video() {
-
     }
 
     public Integer getId() {
@@ -178,10 +176,5 @@ public class Video implements Serializable {
             }
         }
         return sb.toString();
-    }
-
-    public void trigLazyLoad() {
-        for (VideoCategory category : categories)
-            ;
     }
 }

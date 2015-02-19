@@ -302,7 +302,7 @@ public class VideoDaoTests {
     @Test
     public void getVideosByNewest() {
         int number = 20;
-        List<Video> videos = videoDao.getVideosByNewest(number);
+        List<Video> videos = commonDao.getResourcesByNewest(Video.class, number);
         System.out.println("---------返回" + videos.size() + "个视频---------");
         for (Video v : videos) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));

@@ -420,29 +420,6 @@ public class VideoDao {
     }
 
     /**
-     * 获得最新的number个video
-     * <p/>
-     * param 获得排名前number个
-     */
-    public List<Video> getVideosByNewest(int number) {
-        List<Video> videos = new ArrayList<Video>();
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Video.class);
-            c.addOrder(Order.desc("update_timestamp"));//按最新时间排序
-            c.setMaxResults(number);
-            c.setReadOnly(true);
-            videos = c.list();
-            for (Video v : videos) {
-                v.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return videos;
-    }
-
-    /**
      * 根据musicid来获得与之关联的所有video
      *
      * @param musicid

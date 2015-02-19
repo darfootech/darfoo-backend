@@ -14,7 +14,9 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -122,6 +124,26 @@ public class CommonDao {
     }
 
     /**
+     * 获得倒序更新日期前count个
+     * @param resource
+     * @param count
+     * @return
+     */
+    public List getResourcesByNewest(Class resource, Integer count) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Criteria c = session.createCriteria(Video.class);
+            c.addOrder(Order.desc("update_timestamp"));//按最新时间排序
+            c.setMaxResults(count);
+            c.setReadOnly(true);
+            return c.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList();
+        }
+    }
+
+    /**
      * 根据name或者title字段的值获取资源实例
      *
      * @param resource
@@ -148,30 +170,6 @@ public class CommonDao {
             e.printStackTrace();
             return new Object();
         }
-    }
-
-    /**
-     * 删除单个资源
-     * @param resource
-     * @param id
-     * @return
-     */
-    public int deleteResourceById(Class resource, Integer id) {
-        int res;
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            Object target = session.get(resource, id);
-            if (target == null) {
-                res = CRUDEvent.DELETE_NOTFOUND;
-            } else {
-                session.delete(target);
-                res = CRUDEvent.DELETE_SUCCESS;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            res = CRUDEvent.DELETE_FAIL;
-        }
-        return res;
     }
 
     /**
@@ -212,5 +210,48 @@ public class CommonDao {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public int updateResourceFieldsById(Class resource, Integer id, HashMap<String, Object> updateFieldValue) {
+        int res = 0;
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Object object = session.get(resource, id);
+            for (Field field : resource.getDeclaredFields()) {
+                if (updateFieldValue.keySet().contains(field.getName().toLowerCase())) {
+                    field.set(object, updateFieldValue.get(field.getName().toLowerCase()));
+                }
+            }
+            session.saveOrUpdate(object);
+            res = CRUDEvent.UPDATE_SUCCESS;
+        } catch (Exception e) {
+            res = CRUDEvent.CRUD_EXCETION;
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    /**
+     * 删除单个资源
+     * @param resource
+     * @param id
+     * @return
+     */
+    public int deleteResourceById(Class resource, Integer id) {
+        int res;
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Object target = session.get(resource, id);
+            if (target == null) {
+                res = CRUDEvent.DELETE_NOTFOUND;
+            } else {
+                session.delete(target);
+                res = CRUDEvent.DELETE_SUCCESS;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = CRUDEvent.DELETE_FAIL;
+        }
+        return res;
     }
 }

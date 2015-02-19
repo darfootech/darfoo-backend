@@ -119,7 +119,7 @@ public class CacheController {
     public
     @ResponseBody
     List<SingleVideo> cacheIndexVideos() {
-        List<Video> latestVideos = videoDao.getVideosByNewest(12);
+        List<Video> latestVideos = commonDao.getResourcesByNewest(Video.class, 12);
         for (Video video : latestVideos) {
             int vid = video.getId();
             long result = redisClient.sadd("videoindex", "video-" + vid);

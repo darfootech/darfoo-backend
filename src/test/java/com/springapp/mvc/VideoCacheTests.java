@@ -68,7 +68,7 @@ public class VideoCacheTests {
 
     @Test
     public void cacheIndexVideos() {
-        List<Video> latestVideos = videoDao.getVideosByNewest(7);
+        List<Video> latestVideos = commonDao.getResourcesByNewest(Video.class, 7);
         for (Video video : latestVideos) {
             int vid = video.getId();
             long result = redisClient.sadd("videoindex", "video-" + vid);
