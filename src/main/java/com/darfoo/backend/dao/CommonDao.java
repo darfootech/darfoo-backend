@@ -54,7 +54,7 @@ public class CommonDao {
             return criteria.uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new Object();
         }
     }
 
@@ -76,7 +76,7 @@ public class CommonDao {
             return criteria.list();
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new ArrayList();
         }
     }
 
@@ -97,7 +97,27 @@ public class CommonDao {
             return criteria.list();
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new ArrayList();
+        }
+    }
+
+    /**
+     * 获得热度排名前count个
+     * @param resource
+     * @param count
+     * @return
+     */
+    public List getResourcesByHottest(Class resource, Integer count) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Criteria criteria = session.createCriteria(resource);
+            criteria.addOrder(Order.desc("hottest"));//安热度递减排序
+            criteria.setMaxResults(count);
+            criteria.setReadOnly(true);
+            return criteria.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList();
         }
     }
 
@@ -126,7 +146,7 @@ public class CommonDao {
             return criteria.uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new Object();
         }
     }
 

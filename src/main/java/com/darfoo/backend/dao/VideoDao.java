@@ -420,29 +420,6 @@ public class VideoDao {
     }
 
     /**
-     * 按热度排序，从热度最大到最小排序返回
-     * <p/>
-     * param 获得热度排名前number个
-     */
-    public List<Video> getVideosByHottest(int number) {
-        List<Video> l_video = new ArrayList<Video>();
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Video.class);
-            c.addOrder(Order.desc("hottest"));//安热度递减排序
-            c.setMaxResults(number);
-            c.setReadOnly(true);
-            l_video = c.list();
-            for (Video v : l_video) {
-                v.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return l_video;
-    }
-
-    /**
      * 获得最新的number个video
      * <p/>
      * param 获得排名前number个

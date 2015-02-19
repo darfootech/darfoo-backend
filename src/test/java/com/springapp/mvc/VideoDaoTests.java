@@ -286,11 +286,11 @@ public class VideoDaoTests {
     @Test
     public void getVideosByHottest() {
         int number = 20;
-        List<Video> videos = videoDao.getVideosByHottest(number);
+        List<Video> videos = commonDao.getResourcesByHottest(Video.class, number);
         System.out.println("---------返回" + videos.size() + "个视频---------");
         for (Video v : videos) {
             System.out.println("热度值---->" + v.getHottest());
-            System.out.println(v.toString(true));
+            System.out.println(v.toString(false));
             System.out.println("---------------------------");
         }
     }
