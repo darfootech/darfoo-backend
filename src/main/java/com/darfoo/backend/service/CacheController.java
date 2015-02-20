@@ -50,6 +50,8 @@ public class CacheController {
     CommonRedisClient redisClient;
     @Autowired
     CommonDao commonDao;
+    @Autowired
+    RecommendDao recommendDao;
 
     VideoCates videoCates = new VideoCates();
     TutorialCates tutorialCates = new TutorialCates();
@@ -83,7 +85,7 @@ public class CacheController {
     public
     @ResponseBody
     List<SingleVideo> cacheRecmmendVideos() {
-        List<Video> recommendVideos = videoDao.getRecommendVideos();
+        List<Video> recommendVideos = recommendDao.getRecommendResources(Video.class);
         List<Tutorial> recommendTutorials = educationDao.getRecommendTutorials();
 
         for (Video video : recommendVideos) {

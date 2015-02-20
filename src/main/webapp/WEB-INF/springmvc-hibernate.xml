@@ -82,4 +82,5 @@
     <!-- 根据Annotation来生成事务代理  要使用@Transactional必须要下面的声明-->
     <!--  <tx:annotation-driven transaction-manager="transactionManager"/> -->
     <bean id="commonDao" class="com.darfoo.backend.dao.CommonDao"/>
+    <bean id="recommendDao" class="com.darfoo.backend.dao.RecommendDao"/>
 </beans>

@@ -268,12 +268,13 @@ public class CommonDao {
         try {
             Session session = sessionFactory.getCurrentSession();
             Object object = session.get(resource, id);
-            for (Field field : resource.getDeclaredFields()) {
-                if (updateFieldValue.keySet().contains(field.getName().toLowerCase())) {
-                    field.setAccessible(true);
-                    field.set(object, updateFieldValue.get(field.getName().toLowerCase()));
-                }
+
+            for (String key : updateFieldValue.keySet()) {
+                Field field = resource.getDeclaredField(key);
+                field.setAccessible(true);
+                field.set(object, updateFieldValue.get(key));
             }
+
             session.saveOrUpdate(object);
             res = CRUDEvent.UPDATE_SUCCESS;
         } catch (Exception e) {

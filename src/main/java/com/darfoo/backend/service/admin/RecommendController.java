@@ -1,6 +1,7 @@
 package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.CommonDao;
+import com.darfoo.backend.dao.RecommendDao;
 import com.darfoo.backend.dao.TutorialDao;
 import com.darfoo.backend.dao.VideoDao;
 import com.darfoo.backend.model.Tutorial;
@@ -33,13 +34,15 @@ public class RecommendController {
     @Autowired
     CommonDao commonDao;
     @Autowired
+    RecommendDao recommendDao;
+    @Autowired
     QiniuUtils qiniuUtils;
 
 
     @RequestMapping(value = "/admin/recommend/video", method = RequestMethod.GET)
     public String recommendVideo(ModelMap modelMap, HttpSession session) {
         List<Video> allVideos = commonDao.getAllResource(Video.class);
-        List<Video> recommendVideos = videoDao.getRecommendVideos();
+        List<Video> recommendVideos = recommendDao.getRecommendResources(Video.class);
         modelMap.addAttribute("allvideos", allVideos);
         modelMap.addAttribute("recommendvideos", recommendVideos);
         return "recommendvideo";
@@ -53,7 +56,7 @@ public class RecommendController {
         System.out.println(idss);
         String[] videoids = idss.split(",");
         for (int i = 0; i < videoids.length; i++) {
-            videoDao.doRecommendVideo(Integer.parseInt(videoids[i]));
+            recommendDao.doRecommendResource(Video.class, Integer.parseInt(videoids[i]));
         }
         return 200 + "";
     }
@@ -66,7 +69,7 @@ public class RecommendController {
         System.out.println(idss);
         String[] videoids = idss.split(",");
         for (int i = 0; i < videoids.length; i++) {
-            videoDao.unRecommendVideo(Integer.parseInt(videoids[i]));
+            recommendDao.unRecommendResource(Video.class, Integer.parseInt(videoids[i]));
         }
         return 200 + "";
     }
@@ -108,7 +111,7 @@ public class RecommendController {
 
     @RequestMapping(value = "/admin/recommend/updateimage/all", method = RequestMethod.GET)
     public String updateRecommendImage(ModelMap modelMap, HttpSession session) {
-        List<Video> recommendVideos = videoDao.getRecommendVideos();
+        List<Video> recommendVideos = recommendDao.getRecommendResources(Video.class);
         List<Tutorial> recommendTutorials = educationDao.getRecommendTutorials();
         modelMap.addAttribute("videos", recommendVideos);
         modelMap.addAttribute("tutorials", recommendTutorials);

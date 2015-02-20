@@ -24,6 +24,8 @@ public class VideoDaoTests {
     ImageDao imageDao;
     @Autowired
     CommonDao commonDao;
+    @Autowired
+    RecommendDao recommendDao;
 
     VideoCates videoCates = new VideoCates();
 
@@ -448,18 +450,18 @@ public class VideoDaoTests {
     public void doRecommendVideo() {
         int[] vids = {359, 360, 358, 348, 300, 138, 128};
         for (Integer id : vids) {
-            videoDao.doRecommendVideo(id);
+            recommendDao.doRecommendResource(Video.class, id);
         }
     }
 
     @Test
     public void unRecommendVideo() {
-        videoDao.unRecommendVideo(1);
+        recommendDao.unRecommendResource(Video.class, 1);
     }
 
     @Test
     public void yaGetRecommendVideos() {
-        List<Video> videos = videoDao.getRecommendVideos();
+        List<Video> videos = recommendDao.getRecommendResources(Video.class);
         for (Video video : videos) {
             System.out.println(video.getTitle());
         }
