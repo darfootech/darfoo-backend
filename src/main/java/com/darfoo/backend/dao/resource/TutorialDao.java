@@ -351,7 +351,6 @@ public class TutorialDao {
             Tutorial education = (Tutorial) session.get(Tutorial.class, vId);
             if (education != null) {
                 music = education.getMusic();
-                music.trigLazyLoad(); //促发对category的加载
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -400,9 +399,6 @@ public class TutorialDao {
             c.setMaxResults(number);
             c.setReadOnly(true);
             educations = c.list();
-            for (Tutorial e : educations) {
-                e.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -423,9 +419,6 @@ public class TutorialDao {
             c.setMaxResults(number);
             c.setReadOnly(true);
             educations = c.list();
-            for (Tutorial e : educations) {
-                e.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

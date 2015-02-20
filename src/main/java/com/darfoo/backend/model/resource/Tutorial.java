@@ -178,9 +178,4 @@ public class Tutorial implements Serializable {
         }
         return sb.toString();
     }
-
-    public void trigLazyLoad() {
-        for (TutorialCategory category : categories)
-            ;
-    }
 }

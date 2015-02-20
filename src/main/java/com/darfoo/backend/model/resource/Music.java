@@ -165,9 +165,4 @@ public class Music implements Serializable {
         }
         return sb.toString();
     }
-
-    public void trigLazyLoad() {
-        for (MusicCategory category : categories)
-            ;
-    }
 }

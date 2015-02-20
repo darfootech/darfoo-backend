@@ -113,9 +113,6 @@ public class MusicDao {
                 c.setReadOnly(true);
                 //c.setFetchMode("categories", FetchMode.JOIN);//同时加载目录(会导致查询结果不值number个，而是number*4个)
                 l_music = c.list();
-                for (Music m : l_music) {
-                    m.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
-                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -329,9 +326,6 @@ public class MusicDao {
             c.setMaxResults(number);
             c.setReadOnly(true);
             l_music = c.list();
-            for (Music m : l_music) {
-                m.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -352,9 +346,6 @@ public class MusicDao {
             c.setMaxResults(number);
             c.setReadOnly(true);
             musics = c.list();
-            for (Music m : musics) {
-                m.trigLazyLoad();   //强制触发延迟加载,避免Session关闭后再加载出现错误
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
