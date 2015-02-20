@@ -1,10 +1,10 @@
 package com.springapp.mvc;
 
-import com.darfoo.backend.caches.CommonRedisClient;
+import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.caches.dao.MusicCacheDao;
-import com.darfoo.backend.dao.CommonDao;
-import com.darfoo.backend.dao.MusicDao;
-import com.darfoo.backend.model.Music;
+import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.resource.MusicDao;
+import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
 import com.darfoo.backend.utils.ServiceUtils;

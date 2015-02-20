@@ -5,8 +5,8 @@ package com.springapp.mvc;
  */
 
 import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.UploadVideoDao;
-import com.darfoo.backend.model.UploadVideo;
+import com.darfoo.backend.dao.upload.UploadVideoDao;
+import com.darfoo.backend.model.upload.UploadVideo;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

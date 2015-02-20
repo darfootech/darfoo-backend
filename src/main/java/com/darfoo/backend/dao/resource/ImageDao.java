@@ -1,6 +1,7 @@
-package com.darfoo.backend.dao;
+package com.darfoo.backend.dao.resource;
 
-import com.darfoo.backend.model.Image;
+import com.darfoo.backend.dao.CRUDEvent;
+import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.UpdateCheckResponse;
 import org.hibernate.Criteria;
 import org.hibernate.Session;

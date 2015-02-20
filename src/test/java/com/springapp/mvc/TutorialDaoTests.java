@@ -1,7 +1,17 @@
 package com.springapp.mvc;
 
 import com.darfoo.backend.dao.*;
+import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.cota.RecommendDao;
+import com.darfoo.backend.dao.resource.AuthorDao;
+import com.darfoo.backend.dao.resource.ImageDao;
+import com.darfoo.backend.dao.resource.TutorialDao;
 import com.darfoo.backend.model.*;
+import com.darfoo.backend.model.category.TutorialCategory;
+import com.darfoo.backend.model.resource.Author;
+import com.darfoo.backend.model.resource.Image;
+import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;

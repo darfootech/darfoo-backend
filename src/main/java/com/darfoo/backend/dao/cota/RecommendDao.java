@@ -1,6 +1,6 @@
-package com.darfoo.backend.dao;
+package com.darfoo.backend.dao.cota;
 
-import com.darfoo.backend.model.Video;
+import com.darfoo.backend.dao.CRUDEvent;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

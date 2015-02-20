@@ -1,8 +1,8 @@
 package com.darfoo.backend.caches.dao;
 
-import com.darfoo.backend.caches.AbstractBaseRedisDao;
-import com.darfoo.backend.caches.CacheProtocol;
-import com.darfoo.backend.model.Author;
+import com.darfoo.backend.caches.client.AbstractBaseRedisDao;
+import com.darfoo.backend.caches.cota.CacheProtocol;
+import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
 import org.springframework.beans.factory.annotation.Autowired;
 

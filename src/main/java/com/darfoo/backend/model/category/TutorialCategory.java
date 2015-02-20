@@ -1,4 +1,6 @@
-package com.darfoo.backend.model;
+package com.darfoo.backend.model.category;
+
+import com.darfoo.backend.model.resource.Tutorial;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,20 +11,20 @@ import java.util.Set;
  * Created by zjh on 14-11-16.
  */
 @Entity
-@Table(name = "musiccategory")
-public class MusicCategory implements Serializable {
+@Table(name = "educationcategory")
+public class TutorialCategory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    @Column(name = "Title", unique = true, nullable = false, columnDefinition = "varchar(255) not null")
+    @Column(name = "TITLE", unique = true, nullable = false, columnDefinition = "varchar(255) not null")
     String title;
     @Column(name = "DESCRIPTION", nullable = false, columnDefinition = "varchar(255) not null")
     String description;
-    //建立于music表的 双向N-N关系
-    @ManyToMany(mappedBy = "categories", targetEntity = Music.class)
-    Set<Music> musics = new HashSet<Music>();
+    //建立与video表的多对多关系
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "categories")
+    Set<Tutorial> videos = new HashSet<Tutorial>();
 
-    public MusicCategory() {
+    public TutorialCategory() {
     }
 
     public Integer getId() {
@@ -41,14 +43,6 @@ public class MusicCategory implements Serializable {
         this.title = title;
     }
 
-    public Set<Music> getMusics() {
-        return musics;
-    }
-
-    public void setMusics(Set<Music> musics) {
-        this.musics = musics;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -56,4 +50,14 @@ public class MusicCategory implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public Set<Tutorial> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(Set<Tutorial> videos) {
+        this.videos = videos;
+    }
+
+
 }

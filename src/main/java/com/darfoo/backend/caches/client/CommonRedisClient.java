@@ -1,4 +1,4 @@
-package com.darfoo.backend.caches;
+package com.darfoo.backend.caches.client;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;

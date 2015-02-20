@@ -1,7 +1,7 @@
-package com.darfoo.backend.model;
+package com.darfoo.backend.model.resource;
 
-import com.darfoo.backend.caches.CacheInsert;
-import com.darfoo.backend.caches.CacheInsertEnum;
+import com.darfoo.backend.caches.cota.CacheInsert;
+import com.darfoo.backend.caches.cota.CacheInsertEnum;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 

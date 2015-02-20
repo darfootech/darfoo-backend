@@ -1,4 +1,4 @@
-package com.darfoo.backend.caches;
+package com.darfoo.backend.caches.cota;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

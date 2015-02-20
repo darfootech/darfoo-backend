@@ -1,6 +1,7 @@
-package com.darfoo.backend.dao;
+package com.darfoo.backend.dao.upload;
 
-import com.darfoo.backend.model.UploadVideo;
+import com.darfoo.backend.dao.CRUDEvent;
+import com.darfoo.backend.model.upload.UploadVideo;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

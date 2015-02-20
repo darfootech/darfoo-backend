@@ -1,15 +1,20 @@
 package com.darfoo.backend.service;
 
-import com.darfoo.backend.caches.CommonRedisClient;
+import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.caches.dao.AuthorCacheDao;
 import com.darfoo.backend.caches.dao.MusicCacheDao;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
-import com.darfoo.backend.dao.*;
-import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.Music;
-import com.darfoo.backend.model.Tutorial;
-import com.darfoo.backend.model.Video;
+import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.cota.RecommendDao;
+import com.darfoo.backend.dao.resource.AuthorDao;
+import com.darfoo.backend.dao.resource.MusicDao;
+import com.darfoo.backend.dao.resource.TutorialDao;
+import com.darfoo.backend.dao.resource.VideoDao;
+import com.darfoo.backend.model.resource.Author;
+import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.model.resource.Tutorial;
+import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.service.responsemodel.*;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;

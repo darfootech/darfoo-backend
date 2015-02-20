@@ -1,4 +1,4 @@
-package com.darfoo.backend.model;
+package com.darfoo.backend.model.resource;
 
 import javax.persistence.*;
 import java.io.Serializable;

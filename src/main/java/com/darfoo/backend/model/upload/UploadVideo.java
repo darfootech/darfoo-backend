@@ -1,4 +1,4 @@
-package com.darfoo.backend.model;
+package com.darfoo.backend.model.upload;
 
 /**
  * Created by zjh on 15-1-11.

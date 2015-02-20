@@ -1,11 +1,11 @@
 package com.darfoo.backend.service.admin;
 
-import com.darfoo.backend.dao.CommonDao;
-import com.darfoo.backend.dao.RecommendDao;
-import com.darfoo.backend.dao.TutorialDao;
-import com.darfoo.backend.dao.VideoDao;
-import com.darfoo.backend.model.Tutorial;
-import com.darfoo.backend.model.Video;
+import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.cota.RecommendDao;
+import com.darfoo.backend.dao.resource.TutorialDao;
+import com.darfoo.backend.dao.resource.VideoDao;
+import com.darfoo.backend.model.resource.Tutorial;
+import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.utils.QiniuUtils;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.darfoo.backend.caches;
+package com.darfoo.backend.caches.cota;
 
 /**
  * Created by zjh on 15-2-14.

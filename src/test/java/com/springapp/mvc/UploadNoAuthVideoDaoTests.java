@@ -5,7 +5,16 @@ package com.springapp.mvc;
  */
 
 import com.darfoo.backend.dao.*;
-import com.darfoo.backend.model.*;
+import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.resource.AuthorDao;
+import com.darfoo.backend.dao.resource.ImageDao;
+import com.darfoo.backend.dao.resource.VideoDao;
+import com.darfoo.backend.dao.upload.UploadNoAuthVideoDao;
+import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.resource.Author;
+import com.darfoo.backend.model.resource.Image;
+import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.upload.UploadNoAuthVideo;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.junit.Assert;
 import org.junit.Test;

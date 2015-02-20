@@ -1,8 +1,13 @@
-package com.darfoo.backend.dao;
+package com.darfoo.backend.dao.resource;
 
+import com.darfoo.backend.dao.CRUDEvent;
+import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.*;
+import com.darfoo.backend.model.category.MusicCategory;
+import com.darfoo.backend.model.resource.Author;
+import com.darfoo.backend.model.resource.Image;
+import com.darfoo.backend.model.resource.Music;
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;

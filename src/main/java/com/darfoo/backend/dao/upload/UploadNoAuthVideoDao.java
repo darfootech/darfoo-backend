@@ -1,10 +1,11 @@
-package com.darfoo.backend.dao;
+package com.darfoo.backend.dao.upload;
 
 /**
  * Created by zjh on 15-1-17.
  */
 
-import com.darfoo.backend.model.UploadNoAuthVideo;
+import com.darfoo.backend.dao.CRUDEvent;
+import com.darfoo.backend.model.upload.UploadNoAuthVideo;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

@@ -1,9 +1,13 @@
 package com.springapp.mvc;
 
 import com.darfoo.backend.dao.*;
-import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.Music;
-import com.darfoo.backend.model.MusicCategory;
+import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.resource.AuthorDao;
+import com.darfoo.backend.dao.resource.ImageDao;
+import com.darfoo.backend.dao.resource.MusicDao;
+import com.darfoo.backend.model.resource.Author;
+import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.UpdateCheckResponse;
 import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;

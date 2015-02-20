@@ -1,8 +1,8 @@
 package com.springapp.mvc;
 
 import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.ImageDao;
-import com.darfoo.backend.model.Image;
+import com.darfoo.backend.dao.resource.ImageDao;
+import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.UpdateCheckResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;

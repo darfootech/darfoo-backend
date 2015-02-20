@@ -1,13 +1,13 @@
 package com.springapp.mvc;
 
-import com.darfoo.backend.caches.CommonRedisClient;
+import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.caches.dao.MusicCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
-import com.darfoo.backend.dao.CommonDao;
-import com.darfoo.backend.dao.MusicDao;
-import com.darfoo.backend.dao.VideoDao;
-import com.darfoo.backend.model.Music;
-import com.darfoo.backend.model.Video;
+import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.resource.MusicDao;
+import com.darfoo.backend.dao.resource.VideoDao;
+import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.service.responsemodel.VideoCates;
 import com.darfoo.backend.utils.ServiceUtils;

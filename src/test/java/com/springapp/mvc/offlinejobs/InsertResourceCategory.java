@@ -1,6 +1,6 @@
 package com.springapp.mvc.offlinejobs;
 
-import com.darfoo.backend.dao.CategoryDao;
+import com.darfoo.backend.dao.cota.CategoryDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,17 @@
 package com.darfoo.backend.service.admin;
 
-import com.darfoo.backend.dao.*;
-import com.darfoo.backend.model.*;
+import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.resource.AuthorDao;
+import com.darfoo.backend.dao.resource.MusicDao;
+import com.darfoo.backend.dao.resource.TutorialDao;
+import com.darfoo.backend.dao.resource.VideoDao;
+import com.darfoo.backend.model.category.MusicCategory;
+import com.darfoo.backend.model.category.TutorialCategory;
+import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.resource.Author;
+import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.model.resource.Tutorial;
+import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

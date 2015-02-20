@@ -1,8 +1,8 @@
 package com.darfoo.backend.caches.dao;
 
-import com.darfoo.backend.caches.AbstractBaseRedisDao;
-import com.darfoo.backend.caches.CacheProtocol;
-import com.darfoo.backend.model.Tutorial;
+import com.darfoo.backend.caches.client.AbstractBaseRedisDao;
+import com.darfoo.backend.caches.cota.CacheProtocol;
+import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import org.springframework.beans.factory.annotation.Autowired;
 

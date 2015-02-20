@@ -1,7 +1,8 @@
-package com.darfoo.backend.model;
+package com.darfoo.backend.model.resource;
 
-import com.darfoo.backend.caches.CacheInsert;
-import com.darfoo.backend.caches.CacheInsertEnum;
+import com.darfoo.backend.caches.cota.CacheInsert;
+import com.darfoo.backend.caches.cota.CacheInsertEnum;
+import com.darfoo.backend.model.category.VideoCategory;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -171,7 +172,7 @@ public class Video implements Serializable {
                 sb.append("种类为空");
             } else {
                 for (VideoCategory category : categories) {
-                    sb.append("\n").append("种类:" + category.title + " 描述:" + category.description);
+                    sb.append("\n").append("种类:" + category.getTitle() + " 描述:" + category.getDescription());
                 }
             }
         }

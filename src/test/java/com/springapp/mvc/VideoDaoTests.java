@@ -1,7 +1,18 @@
 package com.springapp.mvc;
 
 import com.darfoo.backend.dao.*;
+import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.PaginationDao;
+import com.darfoo.backend.dao.cota.RecommendDao;
+import com.darfoo.backend.dao.resource.AuthorDao;
+import com.darfoo.backend.dao.resource.ImageDao;
+import com.darfoo.backend.dao.resource.VideoDao;
 import com.darfoo.backend.model.*;
+import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.resource.Author;
+import com.darfoo.backend.model.resource.Image;
+import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.service.responsemodel.VideoCates;
 import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
@@ -26,6 +37,8 @@ public class VideoDaoTests {
     CommonDao commonDao;
     @Autowired
     RecommendDao recommendDao;
+    @Autowired
+    PaginationDao paginationDao;
 
     VideoCates videoCates = new VideoCates();
 
@@ -374,12 +387,12 @@ public class VideoDaoTests {
 
     @Test
     public void getPageCount() {
-        System.out.println("pagecount -> " + videoDao.getPageCount(12));
+        System.out.println("pagecount -> " + paginationDao.getResourcePageCount(Video.class));
     }
 
     @Test
     public void getVideosByPage() {
-        List<Video> result = videoDao.getVideosByPage(5, 12);
+        List<Video> result = paginationDao.getResourcesByPage(Video.class, 1);
         System.out.println(result.size());
     }
 

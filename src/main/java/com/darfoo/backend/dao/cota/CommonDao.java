@@ -1,9 +1,10 @@
-package com.darfoo.backend.dao;
+package com.darfoo.backend.dao.cota;
 
-import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.Music;
-import com.darfoo.backend.model.Tutorial;
-import com.darfoo.backend.model.Video;
+import com.darfoo.backend.dao.CRUDEvent;
+import com.darfoo.backend.model.resource.Author;
+import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.model.resource.Tutorial;
+import com.darfoo.backend.model.resource.Video;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;

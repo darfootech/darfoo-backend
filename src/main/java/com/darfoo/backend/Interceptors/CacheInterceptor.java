@@ -1,16 +1,16 @@
 package com.darfoo.backend.Interceptors;
 
-import com.darfoo.backend.caches.CommonRedisClient;
+import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.caches.dao.MusicCacheDao;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
-import com.darfoo.backend.dao.CommonDao;
-import com.darfoo.backend.dao.MusicDao;
-import com.darfoo.backend.dao.TutorialDao;
-import com.darfoo.backend.dao.VideoDao;
-import com.darfoo.backend.model.Music;
-import com.darfoo.backend.model.Tutorial;
-import com.darfoo.backend.model.Video;
+import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.resource.MusicDao;
+import com.darfoo.backend.dao.resource.TutorialDao;
+import com.darfoo.backend.dao.resource.VideoDao;
+import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.model.resource.Tutorial;
+import com.darfoo.backend.model.resource.Video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 

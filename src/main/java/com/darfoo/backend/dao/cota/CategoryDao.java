@@ -1,8 +1,8 @@
-package com.darfoo.backend.dao;
+package com.darfoo.backend.dao.cota;
 
-import com.darfoo.backend.model.MusicCategory;
-import com.darfoo.backend.model.TutorialCategory;
-import com.darfoo.backend.model.VideoCategory;
+import com.darfoo.backend.model.category.MusicCategory;
+import com.darfoo.backend.model.category.TutorialCategory;
+import com.darfoo.backend.model.category.VideoCategory;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

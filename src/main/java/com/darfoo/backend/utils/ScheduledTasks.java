@@ -1,6 +1,6 @@
 package com.darfoo.backend.utils;
 
-import com.darfoo.backend.caches.CommonRedisClient;
+import com.darfoo.backend.caches.client.CommonRedisClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;

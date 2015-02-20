@@ -1,10 +1,10 @@
 package com.springapp.mvc;
 
-import com.darfoo.backend.caches.CommonRedisClient;
+import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
-import com.darfoo.backend.dao.CommonDao;
-import com.darfoo.backend.dao.TutorialDao;
-import com.darfoo.backend.model.Tutorial;
+import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.resource.TutorialDao;
+import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.service.responsemodel.TutorialCates;
 import com.darfoo.backend.utils.ServiceUtils;

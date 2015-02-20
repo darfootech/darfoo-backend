@@ -1,10 +1,10 @@
 package com.darfoo.backend.service;
 
 import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.UploadNoAuthVideoDao;
-import com.darfoo.backend.dao.UploadVideoDao;
-import com.darfoo.backend.model.UploadNoAuthVideo;
-import com.darfoo.backend.model.UploadVideo;
+import com.darfoo.backend.dao.upload.UploadNoAuthVideoDao;
+import com.darfoo.backend.dao.upload.UploadVideoDao;
+import com.darfoo.backend.model.upload.UploadNoAuthVideo;
+import com.darfoo.backend.model.upload.UploadVideo;
 import com.darfoo.backend.service.responsemodel.UploadStatus;
 import com.darfoo.backend.service.responsemodel.UploadToken;
 import com.darfoo.backend.utils.CryptUtils;

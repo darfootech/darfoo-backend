@@ -4,8 +4,13 @@ package com.springapp.mvc;
  * Created by zjh on 14-12-11.
  */
 
-import com.darfoo.backend.dao.CommonDao;
-import com.darfoo.backend.model.*;
+import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.category.MusicCategory;
+import com.darfoo.backend.model.category.TutorialCategory;
+import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.model.resource.Tutorial;
+import com.darfoo.backend.model.resource.Video;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.junit.Test;

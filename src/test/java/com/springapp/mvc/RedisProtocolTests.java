@@ -1,11 +1,11 @@
 package com.springapp.mvc;
 
-import com.darfoo.backend.caches.CacheProtocol;
-import com.darfoo.backend.dao.CommonDao;
-import com.darfoo.backend.model.Author;
-import com.darfoo.backend.model.Music;
-import com.darfoo.backend.model.Tutorial;
-import com.darfoo.backend.model.Video;
+import com.darfoo.backend.caches.cota.CacheProtocol;
+import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.resource.Author;
+import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.model.resource.Tutorial;
+import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
 import com.darfoo.backend.service.responsemodel.SingleVideo;

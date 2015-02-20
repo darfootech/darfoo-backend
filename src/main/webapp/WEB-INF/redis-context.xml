@@ -41,7 +41,7 @@
         <property name="connectionFactory" ref="connectionFactory"/>
     </bean>
 
-    <bean id="commonRedisClient" class="com.darfoo.backend.caches.CommonRedisClient"/>
+    <bean id="commonRedisClient" class="com.darfoo.backend.caches.client.CommonRedisClient"/>
     <bean id="qiniuUtils" class="com.darfoo.backend.utils.QiniuUtils"/>
 
     <bean id="videoCacheDao" class="com.darfoo.backend.caches.dao.VideoCacheDao"/>
@@ -49,5 +49,5 @@
     <bean id="musicCacheDao" class="com.darfoo.backend.caches.dao.MusicCacheDao"/>
     <bean id="authorCacheDao" class="com.darfoo.backend.caches.dao.AuthorCacheDao"/>
 
-    <bean id="cacheInsertProtocol" class="com.darfoo.backend.caches.CacheProtocol"/>
+    <bean id="cacheInsertProtocol" class="com.darfoo.backend.caches.cota.CacheProtocol"/>
 </beans>
