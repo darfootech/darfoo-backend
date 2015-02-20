@@ -30,11 +30,6 @@ public class VideoDaoTests {
     VideoCates videoCates = new VideoCates();
 
     @Test
-    public void insertAllVideoCategories() {
-        videoDao.insertAllVideoCategories();
-    }
-
-    @Test
     public void insertSingleVideo() {
         String videoTitle = "clea333";
         String authorName = "周杰伦";

@@ -83,4 +83,5 @@
     <!--  <tx:annotation-driven transaction-manager="transactionManager"/> -->
     <bean id="commonDao" class="com.darfoo.backend.dao.CommonDao"/>
     <bean id="recommendDao" class="com.darfoo.backend.dao.RecommendDao"/>
+    <bean id="categoryDao" class="com.darfoo.backend.dao.CategoryDao"/>
 </beans>

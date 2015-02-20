@@ -29,11 +29,6 @@ public class MusicDaoTests {
     CommonDao commonDao;
 
     @Test
-    public void insertAllMusicCategories() {
-        musicDao.insertAllMusicCategories();
-    }
-
-    @Test
     public void insertSingleMusic() {
         String musicTitle = "ccccc";
         //String imagekey = System.currentTimeMillis() + ".jpg";

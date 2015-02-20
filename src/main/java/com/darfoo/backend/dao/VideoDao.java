@@ -23,28 +23,6 @@ public class VideoDao {
 
     private int pageSize = 12;
 
-    //插入所有video(视频)的类型
-    public void insertAllVideoCategories() {
-        String[] categories = {
-                "较快", "适中", "较慢", //按速度
-                "简单", "普通", "稍难", //按难度
-                "欢快", "活泼", "优美", "情歌风", "红歌风", "草原风", "戏曲风", "印巴风", "江南风", "民歌风", "儿歌风", //按风格
-                "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-        };
-
-        try {
-            Session session = sf.getCurrentSession();
-            for (String category : categories) {
-                VideoCategory vCategory = new VideoCategory();
-                vCategory.setTitle(category);
-                vCategory.setDescription("待定");
-                session.save(vCategory);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     //插入单个视频
     @SuppressWarnings("unchecked")
     public int insertSingleVideo(Video video) {

@@ -23,24 +23,6 @@ public class MusicDao {
 
     private int pageSize = 22;
 
-    //插入所有music(categories)的类型
-    public void insertAllMusicCategories() {
-        String[] categories = {"四拍", "八拍", "十六拍", "三十二拍",    //按节拍
-                "情歌风", "红歌风", "草原风", "戏曲风", "印巴风", "江南风", "民歌风", "儿歌风",  //按风格
-                "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};//按字母
-        try {
-            Session session = sf.getCurrentSession();
-            for (String category : categories) {
-                MusicCategory mCategory = new MusicCategory();
-                mCategory.setTitle(category);
-                mCategory.setDescription("待定");
-                session.save(mCategory);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     //插入单个音频
     @SuppressWarnings("unchecked")
     public int insertSingleMusic(Music music) {

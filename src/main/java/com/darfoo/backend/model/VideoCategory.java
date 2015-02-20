@@ -56,6 +56,4 @@ public class VideoCategory implements Serializable {
     public void setVideos(Set<Video> videos) {
         this.videos = videos;
     }
-
-
 }

@@ -22,25 +22,6 @@ public class TutorialDao {
 
     private int pageSize = 12;
 
-    //插入所有education(视频)的类型  (暂时将名师教学这个选项去掉)
-    public void insertAllEducationCategories() {
-        String[] categories = {"快", "中", "慢",    //按速度
-                "简单", "适中", "稍难",                    //按难度
-                "队形表演", "背面教学", "分解教学"};  //按教学类型
-
-        try {
-            Session session = sf.getCurrentSession();
-            for (String category : categories) {
-                TutorialCategory eCategory = new TutorialCategory();
-                eCategory.setTitle(category);
-                eCategory.setDescription("待定");
-                session.save(eCategory);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     //插入单个education视频
     @SuppressWarnings("unchecked")
     public int insertSingleEducationVideo(Tutorial video) {

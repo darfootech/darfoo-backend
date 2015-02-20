@@ -16,7 +16,7 @@ import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
-public class EducationDaoTests {
+public class TutorialDaoTests {
     @Autowired
     TutorialDao educationDao;
     @Autowired
@@ -27,11 +27,6 @@ public class EducationDaoTests {
     CommonDao commonDao;
     @Autowired
     RecommendDao recommendDao;
-
-    @Test
-    public void insertAllEducationCategories() {
-        educationDao.insertAllEducationCategories();
-    }
 
     @Test
     public void insertSingleEducationVideo() {
