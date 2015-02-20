@@ -6,6 +6,7 @@ import com.darfoo.backend.caches.dao.MusicCacheDao;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.PaginationDao;
+import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
@@ -60,6 +61,8 @@ public class CacheController {
     RecommendDao recommendDao;
     @Autowired
     PaginationDao paginationDao;
+    @Autowired
+    CategoryDao categoryDao;
 
     VideoCates videoCates = new VideoCates();
     TutorialCates tutorialCates = new TutorialCates();
@@ -171,7 +174,7 @@ public class CacheController {
 
         //System.out.println(targetCategories.toString());
 
-        List<Video> targetVideos = videoDao.getVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
+        List<Video> targetVideos = categoryDao.getResourcesByCategories(Video.class, ServiceUtils.convertList2Array(targetCategories));
         for (Video video : targetVideos) {
             int vid = video.getId();
             long result = redisClient.sadd("videocategory" + categories, "video-" + vid);

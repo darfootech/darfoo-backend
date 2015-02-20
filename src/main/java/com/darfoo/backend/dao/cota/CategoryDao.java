@@ -3,11 +3,17 @@ package com.darfoo.backend.dao.cota;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.resource.Video;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zjh on 15-2-20.
@@ -42,7 +48,7 @@ public class CategoryDao {
         }
     }
 
-    //插入所有video(视频)的类型
+    //插入所有欣赏视频的类型
     public void insertAllVideoCategories() {
         String[] categories = {
                 "较快", "适中", "较慢", //按速度
@@ -54,7 +60,7 @@ public class CategoryDao {
         insertResourceCategories(VideoCategory.class, categories);
     }
 
-    //插入所有education(视频)的类型  (暂时将名师教学这个选项去掉)
+    //插入所有教学视频的类型
     public void insertAllTutorialCategories() {
         String[] categories = {"快", "中", "慢",    //按速度
                 "简单", "适中", "稍难",                    //按难度
@@ -63,12 +69,75 @@ public class CategoryDao {
         insertResourceCategories(TutorialCategory.class, categories);
     }
 
-    //插入所有music(categories)的类型
+    //插入所有伴奏的类型
     public void insertAllMusicCategories() {
         String[] categories = {"四拍", "八拍", "十六拍", "三十二拍",    //按节拍
                 "情歌风", "红歌风", "草原风", "戏曲风", "印巴风", "江南风", "民歌风", "儿歌风",  //按风格
                 "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};//按字母
 
         insertResourceCategories(MusicCategory.class, categories);
+    }
+
+    /**
+     * 根据类别返回满足类别筛选条件的所有资源记录
+     * (较快-简单—欢快-A) -> {"较快","简单","欢快","A"}
+     * 一个类别属性没有选择就表示只要考虑剩下的类别属性来筛选资源记录
+     * @param resource
+     * @param categories
+     * @return
+     */
+    public List getResourcesByCategories(Class resource, String[] categories) {
+        List result = new ArrayList();
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            List<Integer> l_interact_id = new ArrayList<Integer>(); //存符合部分条件的video id
+            Criteria c;
+            for (int i = 0; i < categories.length; i++) {
+                c = session.createCriteria(resource).setProjection(Projections.property("id"));
+                c.createCriteria("categories").add(Restrictions.eq("title", categories[i]));
+                //这个降序的机制在这里木有用
+                //c.addOrder(Order.desc("id"));
+                c.setReadOnly(true);
+                List<Integer> l_id = c.list();
+                System.out.println("满足条件 " + categories[i] + " 的video数量 -> " + l_id.size());
+
+                if (l_id.size() == 0) {
+                    //只要有一项查询结果长度为0，说明视频表无法满足该种类组合，返回一个空的List<Video>对象,长度为0
+                    result = new ArrayList();
+                    l_interact_id.clear();//清空，表示无交集
+                    break;
+                } else {
+                    if (l_interact_id.size() == 0) {
+                        l_interact_id = l_id;
+                        continue;
+                    } else {
+                        l_interact_id.retainAll(l_id);
+                        boolean hasItersection = l_interact_id.size() > 0 ? true : false;
+                        if (!hasItersection) {
+                            //之前查询的结果与当前的无交集，说明视频表无法满足该种类组合，返回一个空的List<Video>对象,长度为0
+                            result = new ArrayList();
+                            break;
+                        }
+                    }
+                }
+            }
+            if (categories.length == 0) {
+                //categories长度为0，即没有筛选条件,返回所有视频
+                c = session.createCriteria(resource);
+                //c.addOrder(Order.desc("id"));
+                c.setReadOnly(true);
+                result = c.list();
+            } else if (l_interact_id.size() > 0) {
+                //交集内的id数量大于0个
+                c = session.createCriteria(resource).add(Restrictions.in("id", l_interact_id));
+                //c.addOrder(Order.desc("id"));
+                c.setReadOnly(true);
+                result = c.list();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //Collections.reverse(l_video);
+        return result;
     }
 }

@@ -27,8 +27,6 @@ public class VideoDao {
     @Autowired
     CommonDao commonDao;
 
-    private int pageSize = 12;
-
     //插入单个视频
     @SuppressWarnings("unchecked")
     public int insertSingleVideo(Video video) {
@@ -67,70 +65,6 @@ public class VideoDao {
             e.printStackTrace();
             return -1;
         }
-    }
-
-    /**
-     * 根据类别获取视频列表(我要上网—视频页面)
-     * $categories  (较快-简单—欢快-A) 如果用户没有选择某个类别，那么就去掉该字符串
-     * <p/>
-     * params example -> categories = {"较快","简单","欢快","A"}  例如 categories = {"较快","欢快","A"} 表示有一个类别用户没有选择
-     */
-    public List<Video> getVideosByCategories(String[] categories) {
-        List<Video> l_video = new ArrayList<Video>();
-        try {
-            Session session = sf.getCurrentSession();
-            List<Integer> l_interact_id = new ArrayList<Integer>();  //存符合部分条件的video id
-            Criteria c;
-            for (int i = 0; i < categories.length; i++) {
-                c = session.createCriteria(Video.class).setProjection(Projections.property("id"));
-                c.createCriteria("categories").add(Restrictions.eq("title", categories[i]));
-                //这个降序的机制在这里木有用
-                //c.addOrder(Order.desc("id"));
-                c.setReadOnly(true);
-                List<Integer> l_id = c.list();
-                System.out.println("满足条件 " + categories[i] + " 的video数量》》》" + l_id.size());
-                for (Integer j : l_id) {
-                    System.out.print(j + "#");
-                }
-                System.out.println();
-                if (l_id.size() == 0) {
-                    //只要有一项查询结果长度为0，说明视频表无法满足该种类组合，返回一个空的List<Video>对象,长度为0
-                    l_video = new ArrayList<Video>();
-                    l_interact_id.clear();//清空，表示无交集
-                    break;
-                } else {
-                    if (l_interact_id.size() == 0) {
-                        l_interact_id = l_id;
-                        continue;
-                    } else {
-                        l_interact_id.retainAll(l_id);
-                        boolean hasItersection = l_interact_id.size() > 0 ? true : false;
-                        if (!hasItersection) {
-                            //之前查询的结果与当前的无交集，说明视频表无法满足该种类组合，返回一个空的List<Video>对象,长度为0
-                            l_video = new ArrayList<Video>();
-                            break;
-                        }
-                    }
-                }
-            }
-            if (categories.length == 0) {
-                //categories长度为0，即没有筛选条件,返回所有视频
-                c = session.createCriteria(Video.class);
-                //c.addOrder(Order.desc("id"));
-                c.setReadOnly(true);
-                l_video = c.list();
-            } else if (l_interact_id.size() > 0) {
-                //交集内的id数量大于0个
-                c = session.createCriteria(Video.class).add(Restrictions.in("id", l_interact_id));
-                //c.addOrder(Order.desc("id"));
-                c.setReadOnly(true);
-                l_video = c.list();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //Collections.reverse(l_video);
-        return l_video;
     }
 
     /**

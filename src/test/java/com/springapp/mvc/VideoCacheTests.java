@@ -3,6 +3,7 @@ package com.springapp.mvc;
 import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.caches.dao.MusicCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
+import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.MusicDao;
 import com.darfoo.backend.dao.resource.VideoDao;
@@ -44,6 +45,8 @@ public class VideoCacheTests {
     CommonRedisClient redisClient;
     @Autowired
     CommonDao commonDao;
+    @Autowired
+    CategoryDao categoryDao;
 
     VideoCates videoCates = new VideoCates();
 
@@ -131,7 +134,7 @@ public class VideoCacheTests {
 
         //System.out.println(targetCategories.toString());
 
-        List<Video> targetVideos = videoDao.getVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
+        List<Video> targetVideos = categoryDao.getResourcesByCategories(Video.class, ServiceUtils.convertList2Array(targetCategories));
         for (Video video : targetVideos) {
             int vid = video.getId();
             long result = redisClient.sadd("videocategory" + categories, "video-" + vid);

@@ -1,6 +1,7 @@
 package com.springapp.mvc;
 
 import com.darfoo.backend.dao.*;
+import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.PaginationDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
@@ -39,6 +40,8 @@ public class VideoDaoTests {
     RecommendDao recommendDao;
     @Autowired
     PaginationDao paginationDao;
+    @Autowired
+    CategoryDao categoryDao;
 
     VideoCates videoCates = new VideoCates();
 
@@ -150,8 +153,8 @@ public class VideoDaoTests {
         //String[] categories = {"较快","稍难","情歌风","S"}; //满足所有条件
         //String[] categories = {"较快","普通","优美","0"}; //有一个条件不满足
         String[] categories = {"较快"};//满足单个条件
-        List<Video> videos = videoDao.getVideosByCategories(categories);
-        System.out.println("最终满足的video数量>>>>>>>>>>>>>>>>>>>>>" + videos.size());
+        List<Video> videos = categoryDao.getResourcesByCategories(Video.class, categories);
+        System.out.println("最终满足的video数量 -> " + videos.size());
         for (Video video : videos) {
             System.out.println(video.getId());
             System.out.println("——————————————————————————————————————");
