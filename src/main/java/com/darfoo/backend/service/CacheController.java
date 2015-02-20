@@ -86,7 +86,7 @@ public class CacheController {
     @ResponseBody
     List<SingleVideo> cacheRecmmendVideos() {
         List<Video> recommendVideos = recommendDao.getRecommendResources(Video.class);
-        List<Tutorial> recommendTutorials = educationDao.getRecommendTutorials();
+        List<Tutorial> recommendTutorials = recommendDao.getRecommendResources(Tutorial.class);
 
         for (Video video : recommendVideos) {
             int vid = video.getId();

@@ -77,7 +77,7 @@ public class RecommendController {
     @RequestMapping(value = "/admin/recommend/tutorial", method = RequestMethod.GET)
     public String recommendTutorial(ModelMap modelMap, HttpSession session) {
         List<Tutorial> allTutorials = commonDao.getAllResource(Tutorial.class);
-        List<Tutorial> recommendTutorials = educationDao.getRecommendTutorials();
+        List<Tutorial> recommendTutorials = recommendDao.getRecommendResources(Tutorial.class);
         modelMap.addAttribute("alltutorials", allTutorials);
         modelMap.addAttribute("recommendtutorials", recommendTutorials);
         return "recommendtutorial";
@@ -91,7 +91,7 @@ public class RecommendController {
         System.out.println(idss);
         String[] videoids = idss.split(",");
         for (int i = 0; i < videoids.length; i++) {
-            educationDao.doRecommendTutorial(Integer.parseInt(videoids[i]));
+            recommendDao.doRecommendResource(Tutorial.class, Integer.parseInt(videoids[i]));
         }
         return 200 + "";
     }
@@ -104,7 +104,7 @@ public class RecommendController {
         System.out.println(idss);
         String[] videoids = idss.split(",");
         for (int i = 0; i < videoids.length; i++) {
-            educationDao.unRecommendTutorial(Integer.parseInt(videoids[i]));
+            recommendDao.unRecommendResource(Tutorial.class, Integer.parseInt(videoids[i]));
         }
         return 200 + "";
     }
@@ -112,7 +112,7 @@ public class RecommendController {
     @RequestMapping(value = "/admin/recommend/updateimage/all", method = RequestMethod.GET)
     public String updateRecommendImage(ModelMap modelMap, HttpSession session) {
         List<Video> recommendVideos = recommendDao.getRecommendResources(Video.class);
-        List<Tutorial> recommendTutorials = educationDao.getRecommendTutorials();
+        List<Tutorial> recommendTutorials = recommendDao.getRecommendResources(Tutorial.class);
         modelMap.addAttribute("videos", recommendVideos);
         modelMap.addAttribute("tutorials", recommendTutorials);
         return "updaterecommendimageall";

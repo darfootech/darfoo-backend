@@ -25,6 +25,8 @@ public class EducationDaoTests {
     ImageDao imageDao;
     @Autowired
     CommonDao commonDao;
+    @Autowired
+    RecommendDao recommendDao;
 
     @Test
     public void insertAllEducationCategories() {
@@ -332,17 +334,17 @@ public class EducationDaoTests {
 
     @Test
     public void doRecommendTutorial() {
-        educationDao.doRecommendTutorial(1);
+        recommendDao.doRecommendResource(Tutorial.class, 1);
     }
 
     @Test
     public void unRecommendTutorial() {
-        educationDao.unRecommendTutorial(1);
+        recommendDao.unRecommendResource(Tutorial.class, 1);
     }
 
     @Test
     public void yaGetRecommendTutorials() {
-        List<Tutorial> tutorials = educationDao.getRecommendTutorials();
+        List<Tutorial> tutorials = recommendDao.getRecommendResources(Tutorial.class);
         for (Tutorial tutorial : tutorials) {
             System.out.println(tutorial.getTitle());
         }
