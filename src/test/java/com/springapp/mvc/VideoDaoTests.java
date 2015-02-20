@@ -261,9 +261,9 @@ public class VideoDaoTests {
         //Integer mId = 6;
         //先插入或更新一个music到video中
         //System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId))+" 往Id为"+vId+"的video记录中插入music_id为"+mId);
-        Music music = videoDao.getMusic(vId);
+        Music music = ((Video) commonDao.getResourceById(Video.class, vId)).getMusic();
         if (music != null) {
-            System.out.println(music.toString(true));
+            System.out.println(music.toString(false));
         } else {
             System.out.println("id为" + vId + "对应的video还未包含相应的music");
         }

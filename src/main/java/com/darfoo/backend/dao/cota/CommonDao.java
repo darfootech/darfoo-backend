@@ -45,12 +45,12 @@ public class CommonDao {
      * @param vid
      * @return 抽象资源对象
      */
-    public Object getResourceById(Class resource, Integer vid) {
+    public Object getResourceById(Class resource, Integer id) {
         try {
             Session session = sessionFactory.getCurrentSession();
             Criteria criteria = session.createCriteria(resource);
             criteria.setReadOnly(true);
-            criteria.add(Restrictions.eq("id", vid));
+            criteria.add(Restrictions.eq("id", id));
             if (ifHasCategoryResource(resource)) {
                 //设置JOIN mode，这样categories会直接加载到返回的实例中
                 criteria.setFetchMode("categories", FetchMode.JOIN);

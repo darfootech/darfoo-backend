@@ -67,7 +67,8 @@ public class Video implements Serializable {
     @Column(name = "RECOMMEND", nullable = true, updatable = true, columnDefinition = "int default 0")
     Integer recommend;
 
-    public Video() {}
+    public Video() {
+    }
 
     public Integer getRecommend() {
         return recommend;
@@ -77,9 +78,6 @@ public class Video implements Serializable {
         this.recommend = recommend;
     }
 
-    public Music getMusic() {
-        return music;
-    }
 
     public Long getHottest() {
         return hottest;
@@ -87,6 +85,10 @@ public class Video implements Serializable {
 
     public void setHottest(Long hottest) {
         this.hottest = hottest;
+    }
+
+    public Music getMusic() {
+        return music;
     }
 
     public void setMusic(Music music) {

@@ -432,7 +432,7 @@ public class CacheController {
     public
     @ResponseBody
     SingleMusic getMusicByVideoId(@PathVariable Integer id) {
-        Music targetMusic = videoDao.getMusic(id);
+        Music targetMusic = ((Video) commonDao.getResourceById(Video.class, id)).getMusic();
         if (targetMusic != null) {
             int music_id = targetMusic.getId();
             videoCacheDao.insertMusic(id, music_id);

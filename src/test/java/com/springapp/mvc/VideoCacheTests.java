@@ -162,7 +162,7 @@ public class VideoCacheTests {
     @Test
     public void cacheAndGetMusic() {
         int id = 1;
-        Music targetMusic = videoDao.getMusic(id);
+        Music targetMusic = ((Video) commonDao.getResourceById(Video.class, id)).getMusic();
         if (targetMusic != null) {
             int music_id = targetMusic.getId();
             videoCacheDao.insertMusic(id, music_id);

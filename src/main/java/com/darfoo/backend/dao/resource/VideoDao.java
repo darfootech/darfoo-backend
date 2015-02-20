@@ -218,30 +218,6 @@ public class VideoDao {
     }
 
     /**
-     * 获取video对应的music
-     *
-     * @param vId 对应的视频资源id
-     * @return music对应的Music;没有就为null
-     * *
-     */
-    public Music getMusic(Integer vId) {
-        Music music = null;
-        try {
-            Session session = sf.getCurrentSession();
-            Video video = (Video) session.get(Video.class, vId);
-            if (video != null) {
-                music = video.getMusic();
-                if (music != null) {
-                    music.trigLazyLoad(); //促发对category的加载
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return music;
-    }
-
-    /**
      * 删除video中的music(就是将MUSIC_ID字段设为null)
      *
      * @param vId video的Id
