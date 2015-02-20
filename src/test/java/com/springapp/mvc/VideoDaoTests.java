@@ -400,7 +400,7 @@ public class VideoDaoTests {
     public void getPageCountByCategories() {
         String[] categories = {};//无条件限制
         //String[] categories = {"较快"};//满足单个条件
-        System.out.println("pagecount -> " + videoDao.getPageCountByCategories(categories));
+        System.out.println("pagecount -> " + paginationDao.getResourcePageCountByCategories(Video.class, categories));
     }
 
     @Test
@@ -410,22 +410,22 @@ public class VideoDaoTests {
         //String[] categories = {"较快","稍难","情歌风","S"}; //满足所有条件
         //String[] categories = {"较快","普通","优美","0"}; //有一个条件不满足
         String[] categories = {"较快"};//满足单个条件
-        List<Video> videos = videoDao.getVideosByCategoriesByPage(categories, 1);
+        List<Video> videos = paginationDao.getResourcesByCategoriesByPage(Video.class, categories, 1);
         for (Video video : videos) {
             System.out.println(video.getId());
             System.out.println("——————————————————————————————————————");
         }
-        System.out.println("最终满足的video数量>>>>>>>>>>>>>>>>>>>>>" + videos.size());
+        System.out.println("最终满足的video数量 -> " + videos.size());
         System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }
 
     @Test
     public void isDuplicateWithPageQuery() {
         String[] categories = {};//满足单个条件
-        int pagecount = (int) videoDao.getPageCountByCategories(categories);
+        int pagecount = (int) paginationDao.getResourcePageCountByCategories(Video.class, categories);
         Set<Integer> idSet = new HashSet<Integer>();
         for (int i = 0; i < pagecount; i++) {
-            List<Video> videos = videoDao.getVideosByCategoriesByPage(categories, i + 1);
+            List<Video> videos = paginationDao.getResourcesByCategoriesByPage(Video.class, categories, i + 1);
             for (Video video : videos) {
                 System.out.println(video.getId());
                 idSet.add(video.getId());

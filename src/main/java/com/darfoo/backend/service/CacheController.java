@@ -5,6 +5,7 @@ import com.darfoo.backend.caches.dao.AuthorCacheDao;
 import com.darfoo.backend.caches.dao.MusicCacheDao;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
+import com.darfoo.backend.dao.PaginationDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
@@ -57,6 +58,8 @@ public class CacheController {
     CommonDao commonDao;
     @Autowired
     RecommendDao recommendDao;
+    @Autowired
+    PaginationDao paginationDao;
 
     VideoCates videoCates = new VideoCates();
     TutorialCates tutorialCates = new TutorialCates();
@@ -212,7 +215,7 @@ public class CacheController {
             targetCategories.add(letterCate);
         }
 
-        List<Video> targetVideos = videoDao.getVideosByCategoriesByPage(ServiceUtils.convertList2Array(targetCategories), page);
+        List<Video> targetVideos = paginationDao.getResourcesByCategoriesByPage(Video.class, ServiceUtils.convertList2Array(targetCategories), page);
         System.out.println("target video size -> " + targetVideos.size());
 
         for (Video video : targetVideos) {
