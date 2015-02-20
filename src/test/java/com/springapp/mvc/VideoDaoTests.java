@@ -280,10 +280,10 @@ public class VideoDaoTests {
      */
     @Test
     public void updateVideoHottest() {
-        Integer id = 40;
+        Integer id = 41;
         int n = 1;
         //int n = -5;
-        System.out.println(CRUDEvent.getResponse(videoDao.updateVideoHottest(id, n)));
+        System.out.println(CRUDEvent.getResponse(commonDao.updateResourceHottest(Video.class, id, n)));
     }
 
     /**

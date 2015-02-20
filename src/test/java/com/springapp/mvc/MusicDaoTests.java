@@ -188,7 +188,7 @@ public class MusicDaoTests {
         Integer id = 1;
         int n = 1;
         //int n = -5;
-        System.out.println(CRUDEvent.getResponse(musicDao.updateMusicHottest(id, n)));
+        System.out.println(CRUDEvent.getResponse(commonDao.updateResourceHottest(Music.class, id, n)));
     }
 
     /**

@@ -335,40 +335,6 @@ public class MusicDao {
     }
 
     /**
-     * music 的点击量更新
-     * 点击量自增N(自增1就设为1)
-     *
-     * @param id music的id
-     * @param n  增加的值(通常设为1)
-     *           *
-     */
-    public int updateMusicHottest(Integer id, int n) {
-        int res = 0;
-        try {
-            Session session = sf.getCurrentSession();
-            Music music = (Music) session.get(Music.class, id);
-            if (music == null) {
-                res = CRUDEvent.UPDATE_MUSIC_NOTFOUND;
-            } else {
-                Long Hottest = music.getHottest();
-                if (Hottest == null) {
-                    Hottest = 1L;  //若没有点击量记录，则设为1
-                } else {
-                    Hottest += n;
-                    if (Hottest <= 0)
-                        Hottest = 0L;  //若你把n设为了负数，那么最小点击量不会低于0
-                }
-                music.setHottest(Hottest);
-                res = CRUDEvent.UPDATE_SUCCESS;
-            }
-        } catch (Exception e) {
-            res = CRUDEvent.UPDATE_FAIL;
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-    /**
      * 按热度排序，从热度最大到最小排序返回
      * <p/>
      * param 获得热度排名前number个

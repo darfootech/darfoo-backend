@@ -202,32 +202,6 @@ public class AuthorDao {
         return result;
     }
 
-    public int updateAuthorHottest(Integer id, int n) {
-        int res = 0;
-        try {
-            Session session = sf.getCurrentSession();
-            Author author = (Author) session.get(Author.class, id);
-            if (author == null) {
-                res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
-            } else {
-                Long Hottest = author.getHottest();
-                if (Hottest == null) {
-                    Hottest = 1L;  //若没有点击量记录，则设为1
-                } else {
-                    Hottest += n;
-                    if (Hottest <= 0)
-                        Hottest = 0L;  //若你把n设为了负数，那么最小点击量不会低于0
-                }
-                author.setHottest(Hottest);
-                res = CRUDEvent.UPDATE_SUCCESS;
-            }
-        } catch (Exception e) {
-            res = CRUDEvent.UPDATE_FAIL;
-            e.printStackTrace();
-        }
-        return res;
-    }
-
     public List<Author> getAuthorsByHottest(int number) {
         List<Author> l_author = new ArrayList<Author>();
         try {

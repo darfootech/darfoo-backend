@@ -1,7 +1,10 @@
 package com.darfoo.backend.Interceptors;
 
 import com.darfoo.backend.dao.*;
+import com.darfoo.backend.model.Author;
 import com.darfoo.backend.model.Music;
+import com.darfoo.backend.model.Tutorial;
+import com.darfoo.backend.model.Video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -24,6 +27,8 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
     MusicDao musicDao;
     @Autowired
     AuthorDao authorDao;
+    @Autowired
+    CommonDao commonDao;
 
     //截取数字
     public String getNumbers(String content) {
@@ -45,7 +50,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             System.out.println("video clicked id is: " + videoid + "\n");
             int vid = Integer.parseInt(videoid);
             int acc = 1;
-            System.out.println(CRUDEvent.getResponse(videoDao.updateVideoHottest(vid, acc)));
+            System.out.println(CRUDEvent.getResponse(commonDao.updateResourceHottest(Video.class, vid, acc)));
             return true;
         }
 
@@ -54,7 +59,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             System.out.println("tutorial clicked id is: " + tutorialid + "\n");
             int tid = Integer.parseInt(tutorialid);
             int acc = 1;
-            System.out.println(CRUDEvent.getResponse(educationDao.updateEducationHottest(tid, acc)));
+            System.out.println(CRUDEvent.getResponse(commonDao.updateResourceHottest(Tutorial.class, tid, acc)));
             return true;
         }
 
@@ -63,7 +68,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             System.out.println("music clicked id is: " + musicid + "\n");
             int mid = Integer.parseInt(musicid);
             int acc = 1;
-            System.out.println(CRUDEvent.getResponse(musicDao.updateMusicHottest(mid, acc)));
+            System.out.println(CRUDEvent.getResponse(commonDao.updateResourceHottest(Music.class, mid, acc)));
             return true;
         }
 
@@ -72,7 +77,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             System.out.println("author clicked id is: " + authorid + "\n");
             int aid = Integer.parseInt(authorid);
             int acc = 1;
-            System.out.println(CRUDEvent.getResponse(authorDao.updateAuthorHottest(aid, acc)));
+            System.out.println(CRUDEvent.getResponse(commonDao.updateResourceHottest(Author.class, aid, acc)));
             return true;
         }
 
@@ -83,7 +88,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
                 int musicid = music.getId();
                 System.out.println("music clicked id is: " + musicid + "\n");
                 int acc = 1;
-                System.out.println(CRUDEvent.getResponse(musicDao.updateMusicHottest(musicid, acc)));
+                System.out.println(CRUDEvent.getResponse(commonDao.updateResourceHottest(Music.class, musicid, acc)));
                 return true;
             } else {
                 System.out.println("no music connect to this video: " + videoid);

@@ -105,6 +105,13 @@ public class CommonDao {
         }
     }
 
+    /**
+     * 根据字段值来获取单个资源
+     *
+     * @param resource
+     * @param conditions
+     * @return
+     */
     public Object getResourceByFields(Class resource, HashMap<String, Object> conditions) {
         try {
             Session session = sessionFactory.getCurrentSession();
@@ -130,6 +137,13 @@ public class CommonDao {
         }
     }
 
+    /**
+     * 根据字段值获取资源
+     *
+     * @param resource
+     * @param conditions
+     * @return
+     */
     public List getResourcesByFields(Class resource, HashMap<String, Object> conditions) {
         try {
             Session session = sessionFactory.getCurrentSession();
@@ -150,7 +164,6 @@ public class CommonDao {
             return new ArrayList();
         }
     }
-
 
     /**
      * 获得热度排名前count个
@@ -263,6 +276,14 @@ public class CommonDao {
         return result;
     }
 
+    /**
+     * 根据资源id来更新对应资源的字段值
+     *
+     * @param resource
+     * @param id
+     * @param updateFieldValue
+     * @return
+     */
     public int updateResourceFieldsById(Class resource, Integer id, HashMap<String, Object> updateFieldValue) {
         int res;
         try {
@@ -279,6 +300,36 @@ public class CommonDao {
             res = CRUDEvent.UPDATE_SUCCESS;
         } catch (Exception e) {
             res = CRUDEvent.CRUD_EXCETION;
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    /**
+     * 更新资源热度
+     *
+     * @param resource
+     * @param id 资源id
+     * @param n 热度增加的值
+     * @return
+     */
+    public int updateResourceHottest(Class resource, Integer id, Integer n) {
+        int res;
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Object object = session.get(resource, id);
+            if (object == null) {
+                res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
+            } else {
+                Field field = resource.getDeclaredField("hottest");
+                field.setAccessible(true);
+                Long Hottest = (Long) field.get(object);
+                Hottest += n;
+                field.set(object, Hottest);
+                res = CRUDEvent.UPDATE_SUCCESS;
+            }
+        } catch (Exception e) {
+            res = CRUDEvent.UPDATE_FAIL;
             e.printStackTrace();
         }
         return res;

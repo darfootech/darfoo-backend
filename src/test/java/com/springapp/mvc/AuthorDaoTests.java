@@ -268,7 +268,7 @@ public class AuthorDaoTests {
     public void updateVideoHottest() {
         Integer id = 1;
         int n = 1;
-        System.out.println(CRUDEvent.getResponse(authorDao.updateAuthorHottest(id, n)));
+        System.out.println(CRUDEvent.getResponse(commonDao.updateResourceHottest(Author.class, id, n)));
     }
 
     @Test

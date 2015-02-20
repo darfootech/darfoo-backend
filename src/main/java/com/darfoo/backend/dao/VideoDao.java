@@ -277,7 +277,6 @@ public class VideoDao {
         return res;
     }
 
-
     /**
      * 获取video对应的music
      *
@@ -325,40 +324,6 @@ public class VideoDao {
             }
         } catch (Exception e) {
             res = CRUDEvent.DELETE_FAIL;
-        }
-        return res;
-    }
-
-    /**
-     * video 的点击量更新
-     * 点击量自增N(自增1就设为1)
-     *
-     * @param id video的id
-     * @param n  增加的值(通常设为1)
-     *           *
-     */
-    public int updateVideoHottest(Integer id, int n) {
-        int res = 0;
-        try {
-            Session session = sf.getCurrentSession();
-            Video video = (Video) session.get(Video.class, id);
-            if (video == null) {
-                res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
-            } else {
-                Long Hottest = video.getHottest();
-                if (Hottest == null) {
-                    Hottest = 1L;  //若没有点击量记录，则设为1
-                } else {
-                    Hottest += n;
-                    if (Hottest <= 0)
-                        Hottest = 0L;  //若你把n设为了负数，那么最小点击量不会低于0
-                }
-                video.setHottest(Hottest);
-                res = CRUDEvent.UPDATE_SUCCESS;
-            }
-        } catch (Exception e) {
-            res = CRUDEvent.UPDATE_FAIL;
-            e.printStackTrace();
         }
         return res;
     }
