@@ -521,40 +521,4 @@ public class VideoDao {
         Collections.reverse(l_video);
         return l_video;
     }
-
-    /**
-     * 获得播放页面右侧的相关视频
-     * 获取原则 ->
-     * 从相同明星舞队中随机选取5个
-     * 如果相同明星舞队中视频个数不足则从所有视频中随机选出对应个数来填充
-     *
-     * @param videoid
-     * @return
-     */
-    public List<Video> getSideBarVideos(Integer videoid) {
-        List<Video> result = new ArrayList<Video>();
-        int authorid = ((Video) commonDao.getResourceById(Video.class, videoid)).getAuthor().getId();
-
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("author_id", authorid);
-
-        List<Video> sameAuthorVideos = commonDao.getResourcesByFields(Video.class, conditions);
-        int sameAuthorLen = sameAuthorVideos.size();
-        if (sameAuthorLen > 5) {
-            Collections.shuffle(sameAuthorVideos);
-            for (int i = 0; i < 5; i++) {
-                result.add(sameAuthorVideos.get(i));
-            }
-        } else if (sameAuthorLen == 5) {
-            result = sameAuthorVideos;
-        } else {
-            List<Video> allVideos = commonDao.getAllResourceWithoutId(Video.class, videoid);
-            Collections.shuffle(allVideos);
-            for (int i = 0; i < 5 - sameAuthorLen; i++) {
-                sameAuthorVideos.add(allVideos.get(i));
-            }
-            result = sameAuthorVideos;
-        }
-        return result;
-    }
 }

@@ -179,7 +179,7 @@ public class AuthorDaoTests {
         conditions.put("author_id", aid);
 
         List<Video> videos = commonDao.getResourcesByFields(Video.class, conditions);
-        List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(aid);
+        List<Tutorial> tutorials = commonDao.getResourcesByFields(Tutorial.class, conditions);
 
         for (Video video : videos) {
             int vid = video.getId();

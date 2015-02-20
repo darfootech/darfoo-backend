@@ -310,30 +310,6 @@ public class MusicDao {
         return res;
     }
 
-    public List<Music> getAllMusicsWithoutId(Integer musicid) {
-        List<Music> s_musics = new ArrayList<Music>();
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Music.class);
-            c.add(Restrictions.not(Restrictions.eq("id", musicid)));
-            c.addOrder(Order.desc("id"));
-            c.setReadOnly(true);
-            c.setFetchMode("categories", FetchMode.JOIN);
-            List<Music> l_musics = c.list();
-            if (l_musics.size() > 0) {
-                //去除重复的video
-                for (Music music : l_musics) {
-                    if (!s_musics.contains(music)) {
-                        s_musics.add(music);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return s_musics;
-    }
-
     /**
      * 按热度排序，从热度最大到最小排序返回
      * <p/>
@@ -550,49 +526,5 @@ public class MusicDao {
 
         Collections.reverse(l_music);
         return l_music;
-    }
-
-    public List<Music> getMusicsByAuthorName(String authorname) {
-        List<Music> tutorials = null;
-        try {
-            Session session = sf.getCurrentSession();
-            String sql = "select * from music where author_name=:authorname order by id desc";
-            tutorials = (List<Music>) session.createSQLQuery(sql).addEntity(Music.class).setString("authorname", authorname).list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return tutorials;
-    }
-
-    /**
-     * 获得播放页面上下的相关伴奏
-     * 获取原则 ->
-     * 从相同名字的明星舞队中随机选取5个
-     * 如果相同名字明星舞队中伴奏个数不足则从所有伴奏中随机选出对应个数来填充
-     *
-     * @param musicid
-     * @return
-     */
-    public List<Music> getSideBarMusics(Integer musicid) {
-        List<Music> result = new ArrayList<Music>();
-        String authorname = ((Music) commonDao.getResourceById(Music.class, musicid)).getAuthorName();
-        List<Music> sameAuthorMusics = getMusicsByAuthorName(authorname);
-        int sameAuthorLen = sameAuthorMusics.size();
-        if (sameAuthorLen > 5) {
-            Collections.shuffle(sameAuthorMusics);
-            for (int i = 0; i < 5; i++) {
-                result.add(sameAuthorMusics.get(i));
-            }
-        } else if (sameAuthorLen == 5) {
-            result = sameAuthorMusics;
-        } else {
-            List<Music> allMusics = getAllMusicsWithoutId(musicid);
-            Collections.shuffle(allMusics);
-            for (int i = 0; i < 5 - sameAuthorLen; i++) {
-                sameAuthorMusics.add(allMusics.get(i));
-            }
-            result = sameAuthorMusics;
-        }
-        return result;
     }
 }

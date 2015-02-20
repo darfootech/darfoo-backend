@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -268,7 +269,11 @@ public class TutorialDaoTests {
     @Test
     public void getTutorialsByAuthorId() {
         Integer aId = 2;
-        List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(aId);
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("author_id", aId);
+
+        List<Tutorial> tutorials = commonDao.getResourcesByFields(Tutorial.class, conditions);
         System.out.println("---------返回" + tutorials.size() + "个视频---------");
         for (Tutorial v : tutorials) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
@@ -320,7 +325,7 @@ public class TutorialDaoTests {
 
     @Test
     public void getSideBarTutorials() {
-        List<Tutorial> result = educationDao.getSideBarTutorials(1);
+        List<Tutorial> result = commonDao.getSideBarResources(Tutorial.class, 1);
         System.out.println(result.size());
         for (Tutorial video : result) {
             System.out.println(video.getTitle() + "-" + video.getId());

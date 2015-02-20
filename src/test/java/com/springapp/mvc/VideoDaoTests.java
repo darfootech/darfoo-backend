@@ -434,7 +434,7 @@ public class VideoDaoTests {
 
     @Test
     public void getSideBarVideos() {
-        List<Video> result = videoDao.getSideBarVideos(1);
+        List<Video> result = commonDao.getSideBarResources(Video.class, 1);
         System.out.println(result.size());
         for (Video video : result) {
             System.out.println(video.getTitle() + "-" + video.getId());

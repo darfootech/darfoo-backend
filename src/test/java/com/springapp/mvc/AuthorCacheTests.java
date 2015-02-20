@@ -97,7 +97,7 @@ public class AuthorCacheTests {
         conditions.put("author_id", id);
 
         List<Video> videos = commonDao.getResourcesByFields(Video.class, conditions);
-        List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(id);
+        List<Tutorial> tutorials = commonDao.getResourcesByFields(Tutorial.class, conditions);
 
         for (Video video : videos) {
             int vid = video.getId();

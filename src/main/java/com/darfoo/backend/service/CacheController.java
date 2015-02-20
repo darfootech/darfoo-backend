@@ -520,7 +520,7 @@ public class CacheController {
         conditions.put("author_id", id);
 
         List<Video> videos = commonDao.getResourcesByFields(Video.class, conditions);
-        List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(id);
+        List<Tutorial> tutorials = commonDao.getResourcesByFields(Tutorial.class, conditions);
 
         for (Video video : videos) {
             int vid = video.getId();
@@ -564,7 +564,7 @@ public class CacheController {
         conditions.put("author_id", id);
 
         List<Video> videos = commonDao.getResourcesByFields(Video.class, conditions);
-        List<Tutorial> tutorials = educationDao.getTutorialsByAuthorId(id);
+        List<Tutorial> tutorials = commonDao.getResourcesByFields(Tutorial.class, conditions);
 
         int pageSize = 12;
         String rediskey = "authorvideos" + id + "page";
@@ -660,7 +660,7 @@ public class CacheController {
             conditions.put("author_id", aid);
 
             List<Video> authorvideos = commonDao.getResourcesByFields(Video.class, conditions);
-            List<Tutorial> authortutorials = educationDao.getTutorialsByAuthorId(aid);
+            List<Tutorial> authortutorials = commonDao.getResourcesByFields(Tutorial.class, conditions);
             for (Video video : authorvideos) {
                 videoids.add(video.getId());
             }
@@ -732,7 +732,7 @@ public class CacheController {
             conditions.put("author_id", aid);
 
             List<Video> authorvideos = commonDao.getResourcesByFields(Video.class, conditions);
-            List<Tutorial> authortutorials = educationDao.getTutorialsByAuthorId(aid);
+            List<Tutorial> authortutorials = commonDao.getResourcesByFields(Tutorial.class, conditions);
             for (Video video : authorvideos) {
                 videoids.add(video.getId());
             }
@@ -906,7 +906,7 @@ public class CacheController {
     public
     @ResponseBody
     List<SingleVideo> getSidebarVideos(@PathVariable Integer id) {
-        List<Video> sidebarVideos = videoDao.getSideBarVideos(id);
+        List<Video> sidebarVideos = commonDao.getSideBarResources(Video.class, id);
         String rediskey = "videosidebar" + id;
         for (Video video : sidebarVideos) {
             int vid = video.getId();
@@ -931,7 +931,7 @@ public class CacheController {
     public
     @ResponseBody
     List<SingleVideo> getSidebarTutorials(@PathVariable Integer id) {
-        List<Tutorial> sidebarTutorials = educationDao.getSideBarTutorials(id);
+        List<Tutorial> sidebarTutorials = commonDao.getSideBarResources(Tutorial.class, id);
         String rediskey = "tutorialsidebar" + id;
         for (Tutorial video : sidebarTutorials) {
             int vid = video.getId();
@@ -957,7 +957,7 @@ public class CacheController {
     public
     @ResponseBody
     List<SingleMusic> getSidebarMusics(@PathVariable Integer id) {
-        List<Music> musics = musicDao.getSideBarMusics(id);
+        List<Music> musics = commonDao.getSideBarResources(Music.class, id);
         List<SingleMusic> result = new ArrayList<SingleMusic>();
         String rediskey = "musicsidebar" + id;
         for (Music music : musics) {

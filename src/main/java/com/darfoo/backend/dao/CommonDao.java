@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -277,6 +278,77 @@ public class CommonDao {
     }
 
     /**
+     * 获取资源相邻的资源用于在客户端的播放界面的侧边选择
+     * 获得播放页面右侧的相关视频和伴奏
+     * 获取原则 ->
+     * 视频
+     * 从相同明星舞队中随机选取5个
+     * 如果相同明星舞队中视频个数不足则从所有视频中随机选出对应个数来填充
+     * 伴奏
+     * 从相同名字的明星舞队中随机选取5个
+     * 如果相同名字明星舞队中伴奏个数不足则从所有伴奏中随机选出对应个数来填充
+     *
+     * @param resource
+     * @param id
+     * @return
+     */
+    public List getSideBarResources(Class resource, Integer id) {
+        List result = new ArrayList();
+        List sameAuthorList = new ArrayList();
+        try {
+            if (resource == Video.class || resource == Tutorial.class) {
+                Field field = resource.getDeclaredField("author");
+                field.setAccessible(true);
+                Object object = getResourceById(resource, id);
+
+                Author author = (Author) field.get(object);
+                int authorid = author.getId();
+
+                HashMap<String, Object> conditions = new HashMap<String, Object>();
+                conditions.put("author_id", authorid);
+
+                sameAuthorList = getResourcesByFields(resource, conditions);
+            } else if (resource == Music.class) {
+                Field field = resource.getDeclaredField("authorName");
+                field.setAccessible(true);
+                Object object = getResourceById(resource, id);
+
+                String authorname = field.get(object).toString();
+
+                HashMap<String, Object> conditions = new HashMap<String, Object>();
+                conditions.put("authorName", authorname);
+
+                sameAuthorList = getResourcesByFields(resource, conditions);
+            } else {
+                System.out.println("something is wired");
+            }
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        int sameAuthorLen = sameAuthorList.size();
+        if (sameAuthorLen > 5) {
+            Collections.shuffle(sameAuthorList);
+            for (int i = 0; i < 5; i++) {
+                result.add(sameAuthorList.get(i));
+            }
+        } else if (sameAuthorLen == 5) {
+            result = sameAuthorList;
+        } else {
+            List allResources = getAllResourceWithoutId(resource, id);
+            Collections.shuffle(allResources);
+            for (int i = 0; i < 5 - sameAuthorLen; i++) {
+                sameAuthorList.add(allResources.get(i));
+            }
+            result = sameAuthorList;
+        }
+
+        return result;
+    }
+
+    /**
      * 根据资源id来更新对应资源的字段值
      *
      * @param resource
@@ -309,8 +381,8 @@ public class CommonDao {
      * 更新资源热度
      *
      * @param resource
-     * @param id 资源id
-     * @param n 热度增加的值
+     * @param id       资源id
+     * @param n        热度增加的值
      * @return
      */
     public int updateResourceHottest(Class resource, Integer id, Integer n) {

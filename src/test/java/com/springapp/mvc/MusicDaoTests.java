@@ -273,7 +273,7 @@ public class MusicDaoTests {
     @Test
     public void getAllMusicsWithoutId() {
         int vid = 1;
-        List<Music> allmusics = musicDao.getAllMusicsWithoutId(vid);
+        List<Music> allmusics = commonDao.getAllResourceWithoutId(Music.class, vid);
         for (Music music : allmusics) {
             System.out.println(music.getId());
         }
@@ -281,7 +281,7 @@ public class MusicDaoTests {
 
     @Test
     public void getSideBarMusics() {
-        List<Music> result = musicDao.getSideBarMusics(27);
+        List<Music> result = commonDao.getSideBarResources(Music.class, 27);
         System.out.println(result.size());
         for (Music music : result) {
             System.out.println(music.getTitle() + "-" + music.getId());

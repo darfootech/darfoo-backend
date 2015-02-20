@@ -425,24 +425,6 @@ public class TutorialDao {
         return educations;
     }
 
-    /**
-     * 根据authorid来获得与之关联的所有tutorial
-     *
-     * @param authorid
-     * @return
-     */
-    public List<Tutorial> getTutorialsByAuthorId(int authorid) {
-        List<Tutorial> tutorials = null;
-        try {
-            Session session = sf.getCurrentSession();
-            String sql = "select * from education where author_id=:authorid order by id desc";
-            tutorials = (List<Tutorial>) session.createSQLQuery(sql).addEntity(Tutorial.class).setInteger("authorid", authorid).list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return tutorials;
-    }
-
     public void disconnectTutorialMusic(int videoid, int musicid) {
         System.out.println(CRUDEvent.getResponse(insertOrUpdateMusic(videoid, musicid)));
         System.out.println(CRUDEvent.getResponse(deleteMusicFromEducation(videoid)));
@@ -574,37 +556,5 @@ public class TutorialDao {
 
         Collections.reverse(l_video);
         return l_video;
-    }
-
-    /**
-     * 获得播放页面右侧的相关教程
-     * 获取原则 ->
-     * 从相同明星舞队中随机选取5个
-     * 如果相同明星舞队中教程个数不足则从所有教程中随机选出对应个数来填充
-     *
-     * @param tutorialid
-     * @return
-     */
-    public List<Tutorial> getSideBarTutorials(Integer tutorialid) {
-        List<Tutorial> result = new ArrayList<Tutorial>();
-        int authorid = ((Tutorial) commonDao.getResourceById(Tutorial.class, tutorialid)).getAuthor().getId();
-        List<Tutorial> sameAuthorTutorials = getTutorialsByAuthorId(authorid);
-        int sameAuthorLen = sameAuthorTutorials.size();
-        if (sameAuthorLen > 5) {
-            Collections.shuffle(sameAuthorTutorials);
-            for (int i = 0; i < 5; i++) {
-                result.add(sameAuthorTutorials.get(i));
-            }
-        } else if (sameAuthorLen == 5) {
-            result = sameAuthorTutorials;
-        } else {
-            List<Tutorial> allTutorials = getAllTutorialsWithoutId(tutorialid);
-            Collections.shuffle(allTutorials);
-            for (int i = 0; i < 5 - sameAuthorLen; i++) {
-                sameAuthorTutorials.add(allTutorials.get(i));
-            }
-            result = sameAuthorTutorials;
-        }
-        return result;
     }
 }
