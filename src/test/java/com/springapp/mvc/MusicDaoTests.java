@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +43,11 @@ public class MusicDaoTests {
         String authorname = "吉卉";
 
         //伴奏title可以重名,但是不可能出现authorname和title都一样的情况,也就是一个作者名字对应的伴奏中不会出现重名的情况
-        Music queryMusic = musicDao.getMusicByTitleAuthorName(musicTitle, authorname);
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("title", musicTitle);
+        conditions.put("author_name", authorname);
+
+        Music queryMusic = (Music) commonDao.getResourceByFields(Music.class, conditions);
         if (queryMusic == null) {
             System.out.println("伴奏名字和作者名字组合不存在，可以进行插入");
         } else {
@@ -110,7 +115,7 @@ public class MusicDaoTests {
     @Test
     public void getHottestMusics() {
         long start = System.currentTimeMillis();
-        List<Music> musics = musicDao.getHottestMusics(5);
+        List<Music> musics = commonDao.getResourcesByHottest(Music.class, 5);
         for (Music music : musics) {
             System.out.println(music.toString(true));
             System.out.println("——————————————————————————————————————");

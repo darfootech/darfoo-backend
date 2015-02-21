@@ -23,10 +23,6 @@ import java.util.*;
 public class MusicDao {
     @Autowired
     private SessionFactory sf;
-    @Autowired
-    CommonDao commonDao;
-
-    private int pageSize = 22;
 
     //插入单个音频
     @SuppressWarnings("unchecked")
@@ -85,39 +81,6 @@ public class MusicDao {
             e.printStackTrace();
         }
         return music;
-    }
-
-    /**
-     * 获取热门歌曲排行榜(暂时不排)
-     *
-     * @param number 推荐歌曲数量<del>(暂时定为3个)</del>
-     * @return List<Music> l_music 返回一个包含多个music对象的List
-     */
-    public List<Music> getHottestMusics(int number) {
-        number = 3;
-        List<Music> l_music = new ArrayList<Music>();
-        try {
-            Session session = sf.getCurrentSession();
-            //投影查询获得所有music的id
-            Criteria c = session.createCriteria(Music.class).setProjection(Projections.property("id"));
-            c.setReadOnly(true);
-            List<Integer> l_mid = c.list();
-            int count = l_mid.size();
-            System.out.println("count>>>>" + count);
-            if (count >= number) {    //要求库里至少有3端歌曲
-                Set<Integer> s_vid = new HashSet<Integer>();
-                s_vid.add(l_mid.get(count / 2));
-                s_vid.add(l_mid.get(count / 2 - 1));
-                s_vid.add(l_mid.get(count / 2 + 1));
-                c = session.createCriteria(Music.class).add(Restrictions.in("id", s_vid));
-                c.setReadOnly(true);
-                //c.setFetchMode("categories", FetchMode.JOIN);//同时加载目录(会导致查询结果不值number个，而是number*4个)
-                l_music = c.list();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return l_music;
     }
 
     /**
@@ -334,24 +297,5 @@ public class MusicDao {
             e.printStackTrace();
         }
         return res;
-    }
-
-    /**
-     * 获取单个music的信息
-     * 根据music的title和authorname来获得music对象
-     *
-     * @return music 返回一个music的实例对象(包含关联表中的数据)，详细请看Music.java类
-     * *
-     */
-    public Music getMusicByTitleAuthorName(String title, String authorname) {
-        Music music = null;
-        try {
-            Session session = sf.getCurrentSession();
-            String sql = "select * from music where title=:title and author_name=:authorname";
-            music = (Music) session.createSQLQuery(sql).addEntity(Music.class).setString("title", title).setString("authorname", authorname).uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return music;
     }
 }

@@ -116,7 +116,11 @@ public class UpdateController {
     }
 
     public int checkMusicTitleAuthorNameDuplicate(String musicTitle, String authorName) {
-        Music queryMusic = musicDao.getMusicByTitleAuthorName(musicTitle, authorName);
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("title", musicTitle);
+        conditions.put("author_name", authorName);
+
+        Music queryMusic = (Music) commonDao.getResourceByFields(Music.class, conditions);
         if (queryMusic == null) {
             System.out.println("伴奏名字和作者名字组合不存在，可以进行插入");
             return 1;

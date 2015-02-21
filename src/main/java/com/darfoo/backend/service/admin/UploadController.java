@@ -248,7 +248,12 @@ public class UploadController {
         }
 
         //伴奏title可以重名,但是不可能出现authorname和title都一样的情况,也就是一个作者名字对应的伴奏中不会出现重名的情况
-        Music queryMusic = musicDao.getMusicByTitleAuthorName(musictitle, authorname);
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("title", musictitle);
+        conditions.put("author_name", authorname);
+
+        Music queryMusic = (Music) commonDao.getResourceByFields(Music.class, conditions);
         if (queryMusic == null) {
             System.out.println("伴奏名字和作者名字组合不存在，可以进行插入");
         } else {
