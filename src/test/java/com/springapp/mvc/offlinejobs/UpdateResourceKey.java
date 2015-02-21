@@ -48,7 +48,9 @@ public class UpdateResourceKey {
         for (Tutorial tutorial : s_educations) {
             int tutorialid = tutorial.getId();
             String tutorialkey = tutorial.getVideo_key() + ".mp4";
-            educationDao.updateVideoKeyById(tutorialid, tutorialkey);
+            HashMap<String, Object> updateMap = new HashMap<String, Object>();
+            updateMap.put("video_key", tutorialkey);
+            commonDao.updateResourceFieldsById(Tutorial.class, tutorialid, updateMap);
         }
         System.out.println("总共查到" + s_educations.size());
     }

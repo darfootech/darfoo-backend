@@ -260,7 +260,7 @@ public class CacheController {
             targetCategories.add(styleCate);
         }
 
-        List<Tutorial> targetVideos = educationDao.getEducationVideosByCategories(ServiceUtils.convertList2Array(targetCategories));
+        List<Tutorial> targetVideos = categoryDao.getResourcesByCategories(Tutorial.class, ServiceUtils.convertList2Array(targetCategories));
         for (Tutorial video : targetVideos) {
             int vid = video.getId();
             long result = redisClient.sadd("tutorialcategory" + categories, "tutorial-" + vid);
@@ -300,7 +300,7 @@ public class CacheController {
             targetCategories.add(styleCate);
         }
 
-        List<Tutorial> targetVideos = educationDao.getTutorialsByCategoriesByPage(ServiceUtils.convertList2Array(targetCategories), page);
+        List<Tutorial> targetVideos = paginationDao.getResourcesByCategoriesByPage(Tutorial.class, ServiceUtils.convertList2Array(targetCategories), page);
         for (Tutorial video : targetVideos) {
             int vid = video.getId();
             long result = redisClient.lpush("tutorialcategory" + categories + "page" + page, "tutorial-" + vid);

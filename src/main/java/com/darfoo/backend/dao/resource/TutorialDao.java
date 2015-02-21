@@ -24,10 +24,6 @@ import java.util.*;
 public class TutorialDao {
     @Autowired
     private SessionFactory sf;
-    @Autowired
-    CommonDao commonDao;
-
-    private int pageSize = 12;
 
     //插入单个education视频
     @SuppressWarnings("unchecked")
@@ -67,84 +63,6 @@ public class TutorialDao {
             e.printStackTrace();
             return -1;
         }
-    }
-
-    /**
-     * 获取单个tutorial的信息
-     * 根据tutorial的title和作者id来获得tutorial对象
-     *
-     * @return education 返回一个Education的实例对象(包含关联表中的数据)，详细请看Education.java类
-     * *
-     */
-    public Tutorial getEducationByTitleAuthorId(String title, int authorid) {
-        Tutorial education = null;
-        try {
-            Session session = sf.getCurrentSession();
-            String sql = "select * from education where title=:title and author_id=:authorid";
-            education = (Tutorial) session.createSQLQuery(sql).addEntity(Tutorial.class).setString("title", title).setInteger("authorid", authorid).uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return education;
-    }
-
-    /**
-     * 根据类别获取视频列表(我要上网—视频页面) 暂时去掉名师那个种类
-     * $categories  (快-简单—队形表演) 如果用户没有选择某个类别，那么就去掉该字符串
-     * <p/>
-     * param example -> categories = {"快","简单","队形表演"}  例如 categories = {"快","简单"}
-     */
-    public List<Tutorial> getEducationVideosByCategories(String[] categories) {
-        List<Tutorial> l_video = new ArrayList<Tutorial>();
-        try {
-            Session session = sf.getCurrentSession();
-            List<Integer> l_interact_id = new ArrayList<Integer>();  //存符合部分条件的video id
-            Criteria c;
-            for (int i = 0; i < categories.length; i++) {
-                c = session.createCriteria(Tutorial.class).setProjection(Projections.property("id"));
-                c.createCriteria("categories").add(Restrictions.eq("title", categories[i]));
-                c.setReadOnly(true);
-                List<Integer> l_id = c.list();
-                System.out.println("满足条件 " + categories[i] + " 的enducation video数量》》》" + l_id.size());
-                for (Integer j : l_id) {
-                    System.out.print(j + "#");
-                }
-                System.out.println();
-                if (l_id.size() == 0) {
-                    //只要有一项查询结果长度为0，说明视频表无法满足该种类组合，返回一个空的List<Education>对象,长度为0
-                    l_video = new ArrayList<Tutorial>();
-                    l_interact_id.clear();//清空
-                    break;
-                } else {
-                    if (l_interact_id.size() == 0) {
-                        l_interact_id = l_id;
-                        continue;
-                    } else {
-                        l_interact_id.retainAll(l_id);
-                        boolean hasItersection = l_interact_id.size() > 0 ? true : false;
-                        if (!hasItersection) {
-                            //之前查询的结果与当前的无交集，说明视频表无法满足该种类组合，返回一个空的List<Education>对象,长度为0
-                            l_video = new ArrayList<Tutorial>();
-                            break;
-                        }
-                    }
-                }
-            }
-            if (categories.length == 0) {
-                //categories长度为0，即没有筛选条件,返回所有视频
-                c = session.createCriteria(Tutorial.class);
-                c.setReadOnly(true);
-                l_video = c.list();
-            } else if (l_interact_id.size() > 0) {
-                //交集内的id数量大于0个
-                c = session.createCriteria(Tutorial.class).add(Restrictions.in("id", l_interact_id));
-                c.setReadOnly(true);
-                l_video = c.list();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return l_video;
     }
 
     /**
@@ -265,45 +183,6 @@ public class TutorialDao {
         return res;
     }
 
-    public int updateVideoKeyById(int tutorialid, String newTutorialKey) {
-        int res = 0;
-        try {
-            Session session = sf.getCurrentSession();
-            Tutorial oldTutorial = (Tutorial) session.get(Tutorial.class, tutorialid);
-            oldTutorial.setVideo_key(newTutorialKey);
-            session.saveOrUpdate(oldTutorial);
-            res = CRUDEvent.UPDATE_SUCCESS;
-        } catch (Exception e) {
-            res = CRUDEvent.CRUD_EXCETION;
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-    public List<Tutorial> getAllTutorialsWithoutId(Integer tutorialid) {
-        List<Tutorial> s_tutorials = new ArrayList<Tutorial>();
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Tutorial.class);
-            c.add(Restrictions.not(Restrictions.eq("id", tutorialid)));
-            c.addOrder(Order.desc("id"));
-            c.setReadOnly(true);
-            c.setFetchMode("categories", FetchMode.JOIN);
-            List<Tutorial> l_tutorials = c.list();
-            if (l_tutorials.size() > 0) {
-                //去除重复的video
-                for (Tutorial tutorial : l_tutorials) {
-                    if (!s_tutorials.contains(tutorial)) {
-                        s_tutorials.add(tutorial);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return s_tutorials;
-    }
-
     /**
      * 为education添加一个对应的music(插入操作用更新替代)
      *
@@ -336,35 +215,13 @@ public class TutorialDao {
         return res;
     }
 
-
-    /**
-     * 获取education对应的music
-     *
-     * @param vId 对应的视频资源id
-     * @return music对应的Music;没有就返回null
-     * *
-     */
-    public Music getMusic(Integer vId) {
-        Music music = null;
-        try {
-            Session session = sf.getCurrentSession();
-            Tutorial education = (Tutorial) session.get(Tutorial.class, vId);
-            if (education != null) {
-                music = education.getMusic();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return music;
-    }
-
     /**
      * 删除education中的music(就是将MUSIC_ID字段设为null)
      *
      * @param vId education的Id
      *            *
      */
-    public int deleteMusicFromEducation(Integer vId) {
+    public int deleteMusicFromTutorial(Integer vId) {
         int res = 0;
         try {
             Session session = sf.getCurrentSession();
@@ -385,176 +242,8 @@ public class TutorialDao {
         return res;
     }
 
-   /**
-     * 按热度排序，从热度最大到最小排序返回
-     * <p/>
-     * param 获得热度排名前number个
-     */
-    public List<Tutorial> getEducationsByHottest(int number) {
-        List<Tutorial> educations = new ArrayList<Tutorial>();
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Tutorial.class);
-            c.addOrder(Order.desc("hottest"));//安热度递减排序
-            c.setMaxResults(number);
-            c.setReadOnly(true);
-            educations = c.list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return educations;
-    }
-
-    /**
-     * 获得最新的number个教学视频
-     * <p/>
-     * param 获得排名前number个
-     */
-    public List<Tutorial> getEducationsByNewest(int number) {
-        List<Tutorial> educations = new ArrayList<Tutorial>();
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Tutorial.class);
-            c.addOrder(Order.desc("update_timestamp"));//按最新时间排序
-            c.setMaxResults(number);
-            c.setReadOnly(true);
-            educations = c.list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return educations;
-    }
-
     public void disconnectTutorialMusic(int videoid, int musicid) {
         System.out.println(CRUDEvent.getResponse(insertOrUpdateMusic(videoid, musicid)));
-        System.out.println(CRUDEvent.getResponse(deleteMusicFromEducation(videoid)));
-    }
-
-    /*分页机制*/
-    public long getPageCountByCategories(String[] categories) {
-        List<Tutorial> l_video = new ArrayList<Tutorial>();
-        try {
-            Session session = sf.getCurrentSession();
-            List<Integer> l_interact_id = new ArrayList<Integer>();  //存符合部分条件的video id
-            Criteria c;
-            for (int i = 0; i < categories.length; i++) {
-                c = session.createCriteria(Tutorial.class).setProjection(Projections.property("id"));
-                c.createCriteria("categories").add(Restrictions.eq("title", categories[i]));
-                c.setReadOnly(true);
-                List<Integer> l_id = c.list();
-                System.out.println("满足条件 " + categories[i] + " 的enducation video数量》》》" + l_id.size());
-                for (Integer j : l_id) {
-                    System.out.print(j + "#");
-                }
-                System.out.println();
-                if (l_id.size() == 0) {
-                    //只要有一项查询结果长度为0，说明视频表无法满足该种类组合，返回一个空的List<Education>对象,长度为0
-                    l_video = new ArrayList<Tutorial>();
-                    l_interact_id.clear();//清空
-                    break;
-                } else {
-                    if (l_interact_id.size() == 0) {
-                        l_interact_id = l_id;
-                        continue;
-                    } else {
-                        l_interact_id.retainAll(l_id);
-                        boolean hasItersection = l_interact_id.size() > 0 ? true : false;
-                        if (!hasItersection) {
-                            //之前查询的结果与当前的无交集，说明视频表无法满足该种类组合，返回一个空的List<Education>对象,长度为0
-                            l_video = new ArrayList<Tutorial>();
-                            break;
-                        }
-                    }
-                }
-            }
-            if (categories.length == 0) {
-                //categories长度为0，即没有筛选条件,返回所有视频
-                c = session.createCriteria(Tutorial.class);
-                c.setReadOnly(true);
-                l_video = c.list();
-            } else if (l_interact_id.size() > 0) {
-                //交集内的id数量大于0个
-                c = session.createCriteria(Tutorial.class).add(Restrictions.in("id", l_interact_id));
-                c.setReadOnly(true);
-                l_video = c.list();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return (l_video.size() / pageSize) + 1;
-    }
-
-    public List<Tutorial> getTutorialsByCategoriesByPage(String[] categories, int pageNo) {
-        List<Tutorial> l_video = new ArrayList<Tutorial>();
-
-        if (pageNo > getPageCountByCategories(categories)) {
-            return l_video;
-        }
-
-        try {
-            Session session = sf.getCurrentSession();
-            List<Integer> l_interact_id = new ArrayList<Integer>();  //存符合部分条件的video id
-            Criteria c;
-            for (int i = 0; i < categories.length; i++) {
-                c = session.createCriteria(Tutorial.class).setProjection(Projections.property("id"));
-                c.createCriteria("categories").add(Restrictions.eq("title", categories[i]));
-
-                /*分页机制*/
-                c.setFirstResult((pageNo - 1) * pageSize);
-                c.setMaxResults(pageSize);
-
-                c.addOrder(Order.desc("id"));
-
-                c.setReadOnly(true);
-                List<Integer> l_id = c.list();
-                System.out.println("满足条件 " + categories[i] + " 的enducation video数量》》》" + l_id.size());
-                for (Integer j : l_id) {
-                    System.out.print(j + "#");
-                }
-                System.out.println();
-                if (l_id.size() == 0) {
-                    //只要有一项查询结果长度为0，说明视频表无法满足该种类组合，返回一个空的List<Education>对象,长度为0
-                    l_video = new ArrayList<Tutorial>();
-                    l_interact_id.clear();//清空
-                    break;
-                } else {
-                    if (l_interact_id.size() == 0) {
-                        l_interact_id = l_id;
-                        continue;
-                    } else {
-                        l_interact_id.retainAll(l_id);
-                        boolean hasItersection = l_interact_id.size() > 0 ? true : false;
-                        if (!hasItersection) {
-                            //之前查询的结果与当前的无交集，说明视频表无法满足该种类组合，返回一个空的List<Education>对象,长度为0
-                            l_video = new ArrayList<Tutorial>();
-                            break;
-                        }
-                    }
-                }
-            }
-            if (categories.length == 0) {
-                //categories长度为0，即没有筛选条件,返回所有视频
-                c = session.createCriteria(Tutorial.class);
-                c.setFirstResult((pageNo - 1) * pageSize);
-                c.setMaxResults(pageSize);
-                c.addOrder(Order.desc("id"));
-                c.setReadOnly(true);
-                l_video = c.list();
-            } else if (l_interact_id.size() > 0) {
-                //交集内的id数量大于0个
-                c = session.createCriteria(Tutorial.class).add(Restrictions.in("id", l_interact_id));
-                c.setFirstResult((pageNo - 1) * pageSize);
-                c.setMaxResults(pageSize);
-                c.addOrder(Order.desc("id"));
-                c.setReadOnly(true);
-                l_video = c.list();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Collections.reverse(l_video);
-        return l_video;
+        System.out.println(CRUDEvent.getResponse(deleteMusicFromTutorial(videoid)));
     }
 }

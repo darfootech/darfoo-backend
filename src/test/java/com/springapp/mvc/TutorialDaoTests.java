@@ -1,6 +1,7 @@
 package com.springapp.mvc;
 
 import com.darfoo.backend.dao.*;
+import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
@@ -8,10 +9,7 @@ import com.darfoo.backend.dao.resource.ImageDao;
 import com.darfoo.backend.dao.resource.TutorialDao;
 import com.darfoo.backend.model.*;
 import com.darfoo.backend.model.category.TutorialCategory;
-import com.darfoo.backend.model.resource.Author;
-import com.darfoo.backend.model.resource.Image;
-import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Tutorial;
+import com.darfoo.backend.model.resource.*;
 import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +36,10 @@ public class TutorialDaoTests {
     CommonDao commonDao;
     @Autowired
     RecommendDao recommendDao;
+    @Autowired
+    CategoryDao categoryDao;
+    @Autowired
+    PaginationDao paginationDao;
 
     @Test
     public void insertSingleEducationVideo() {
@@ -65,7 +67,13 @@ public class TutorialDaoTests {
         }
 
         int authorid = a.getId();
-        Tutorial queryVideo = educationDao.getEducationByTitleAuthorId(title, authorid);
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("title", title);
+        conditions.put("author_id", authorid);
+
+        Tutorial queryVideo = (Tutorial) commonDao.getResourceByFields(Tutorial.class, conditions);
+
         if (queryVideo == null) {
             System.out.println("教程和作者id组合不存在，可以进行插入");
         } else {
@@ -98,7 +106,9 @@ public class TutorialDaoTests {
             System.out.println("插入教程成功，教程id是" + insertStatus);
         }
 
-        educationDao.updateVideoKeyById(insertStatus, title + "-" + insertStatus);
+        HashMap<String, Object> updateMap = new HashMap<String, Object>();
+        updateMap.put("video_key", title + "-" + insertStatus);
+        commonDao.updateResourceFieldsById(Tutorial.class, insertStatus, updateMap);
     }
 
     @Test
@@ -117,8 +127,8 @@ public class TutorialDaoTests {
         String[] categories = {};//无条件限制
         //String[] categories = {"较快","稍难","情歌风","S"}; //满条件限制
         //String[] categories = {"快","分解教学"};
-        List<Tutorial> videos = educationDao.getEducationVideosByCategories(categories);
-        System.out.println("最终满足的video数量>>>>>>>>>>>>>>>>>>>>>" + videos.size());
+        List<Tutorial> videos = categoryDao.getResourcesByCategories(Tutorial.class, categories);
+        System.out.println("最终满足的video数量 -> " + videos.size());
         for (Tutorial video : videos) {
             System.out.println(video.toString());
             System.out.println("——————————————————————————————————————");
@@ -207,7 +217,7 @@ public class TutorialDaoTests {
         //先为education的id为vId的记录添加一个music
         System.out.println(CRUDEvent.getResponse(educationDao.insertOrUpdateMusic(vId, mId)) + " 往id为" + vId + "的education记录中插入id为" + mId + "的music");
         //查询
-        Music music = educationDao.getMusic(vId);
+        Music music = ((Video) commonDao.getResourceById(Video.class, vId)).getMusic();
         if (music != null) {
             System.out.println(music.toString(true));
         } else {
@@ -226,7 +236,7 @@ public class TutorialDaoTests {
         //先插入或更新一个music到education中
         System.out.println(CRUDEvent.getResponse(educationDao.insertOrUpdateMusic(vId, mId)));
         //删除刚插入的那个education中的music
-        System.out.println(CRUDEvent.getResponse(educationDao.deleteMusicFromEducation(vId)));
+        System.out.println(CRUDEvent.getResponse(educationDao.deleteMusicFromTutorial(vId)));
     }
 
     /**
@@ -248,7 +258,7 @@ public class TutorialDaoTests {
     @Test
     public void getEducationsByHottest() {
         int number = 20;
-        List<Tutorial> educations = educationDao.getEducationsByHottest(number);
+        List<Tutorial> educations = commonDao.getResourcesByHottest(Tutorial.class, number);
         System.out.println("---------返回" + educations.size() + "个视频---------");
         for (Tutorial v : educations) {
             System.out.println("热度值---->" + v.getHottest());
@@ -264,7 +274,7 @@ public class TutorialDaoTests {
     @Test
     public void getEducationsByNewest() {
         int number = 20;
-        List<Tutorial> educations = educationDao.getEducationsByNewest(number);
+        List<Tutorial> educations = commonDao.getResourcesByNewest(Tutorial.class, number);
         System.out.println("---------返回" + educations.size() + "个视频---------");
         for (Tutorial v : educations) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
@@ -298,22 +308,22 @@ public class TutorialDaoTests {
         String[] categories = {};//无条件限制
         //String[] categories = {"较快","稍难","情歌风","S"}; //满条件限制
         //String[] categories = {"快", "分解教学"};
-        List<Tutorial> videos = educationDao.getTutorialsByCategoriesByPage(categories, 1);
+        List<Tutorial> videos = paginationDao.getResourcesByCategoriesByPage(Tutorial.class, categories, 1);
         for (Tutorial video : videos) {
             System.out.println(video.getId());
             System.out.println("——————————————————————————————————————");
         }
-        System.out.println("最终满足的video数量>>>>>>>>>>>>>>>>>>>>>" + videos.size());
+        System.out.println("最终满足的video数量 -> " + videos.size());
         System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }
 
     @Test
     public void isDuplicateWithPageQuery() {
         String[] categories = {};//无条件限制
-        int pagecout = (int) educationDao.getPageCountByCategories(categories);
+        int pagecout = (int) paginationDao.getResourcePageCountByCategories(Tutorial.class, categories);
         Set<Integer> idSet = new HashSet<Integer>();
         for (int i = 0; i < pagecout; i++) {
-            List<Tutorial> videos = educationDao.getTutorialsByCategoriesByPage(categories, i + 1);
+            List<Tutorial> videos = paginationDao.getResourcesByCategoriesByPage(Tutorial.class, categories, i + 1);
             for (Tutorial video : videos) {
                 System.out.println(video.getId());
                 idSet.add(video.getId());
@@ -327,7 +337,7 @@ public class TutorialDaoTests {
     @Test
     public void getAllTutorialsWithoutId() {
         int vid = 1;
-        List<Tutorial> allvideos = educationDao.getAllTutorialsWithoutId(vid);
+        List<Tutorial> allvideos = commonDao.getAllResourceWithoutId(Tutorial.class, vid);
         for (Tutorial video : allvideos) {
             System.out.println(video.getId());
         }

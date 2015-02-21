@@ -1,7 +1,6 @@
 package com.darfoo.backend.dao.resource;
 
 import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.*;
 import com.darfoo.backend.model.category.VideoCategory;
 import com.darfoo.backend.model.resource.Author;
@@ -11,8 +10,6 @@ import com.darfoo.backend.model.resource.Video;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,8 +21,6 @@ import java.util.*;
 public class VideoDao {
     @Autowired
     private SessionFactory sf;
-    @Autowired
-    CommonDao commonDao;
 
     //插入单个视频
     @SuppressWarnings("unchecked")

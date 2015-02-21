@@ -74,7 +74,12 @@ public class UpdateController {
         }
 
         int authorid = a.getId();
-        Tutorial queryVideo = educationDao.getEducationByTitleAuthorId(tutorialTitle, authorid);
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("title", tutorialTitle);
+        conditions.put("author_id", authorid);
+
+        Tutorial queryVideo = (Tutorial) commonDao.getResourceByFields(Tutorial.class, conditions);
         if (queryVideo == null) {
             System.out.println("教程和作者id组合不存在，可以进行插入");
             return 1;
@@ -248,7 +253,11 @@ public class UpdateController {
         categoryTitles.add(videoStyle);
 
         String newTutorialKey = ((Tutorial) commonDao.getResourceById(Tutorial.class, vid)).getVideo_key().split("\\.")[0] + "." + videoType;
-        educationDao.updateVideoKeyById(vid, newTutorialKey);
+
+        HashMap<String, Object> updateMap = new HashMap<String, Object>();
+        updateMap.put("video_key", newTutorialKey);
+
+        commonDao.updateResourceFieldsById(Tutorial.class, vid, updateMap);
 
         if (videoTitle.equals("")) {
             videoTitle = originTitle;

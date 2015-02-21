@@ -159,7 +159,13 @@ public class UploadController {
         }
 
         int authorid = targetAuthor.getId();
-        Tutorial queryVideo = educationDao.getEducationByTitleAuthorId(videotitle, authorid);
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("title", videotitle);
+        conditions.put("author_id", authorid);
+
+        Tutorial queryVideo = (Tutorial) commonDao.getResourceByFields(Tutorial.class, conditions);
+
         if (queryVideo == null) {
             System.out.println("教程和作者id组合不存在，可以进行插入");
         } else {
@@ -215,7 +221,9 @@ public class UploadController {
             System.out.println("插入教程成功，教程id是" + insertStatus);
         }
 
-        educationDao.updateVideoKeyById(insertStatus, videotitle + "-" + insertStatus + "." + videotype);
+        HashMap<String, Object> updateMap = new HashMap<String, Object>();
+        updateMap.put("video_key", videotitle + "-" + insertStatus + "." + videotype);
+        commonDao.updateResourceFieldsById(Tutorial.class, insertStatus, updateMap);
 
         resultMap.put("statuscode", 200);
         resultMap.put("insertid", insertStatus);

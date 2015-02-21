@@ -65,16 +65,15 @@ public class Tutorial implements Serializable {
     @Column(name = "RECOMMEND", nullable = true, updatable = true, columnDefinition = "int default 0")
     Integer recommend;
 
+    public Tutorial() {
+    }
+
     public Integer getRecommend() {
         return recommend;
     }
 
     public void setRecommend(Integer recommend) {
         this.recommend = recommend;
-    }
-
-    public Music getMusic() {
-        return music;
     }
 
     public Long getHottest() {
@@ -85,16 +84,20 @@ public class Tutorial implements Serializable {
         this.hottest = hottest;
     }
 
+    public Music getMusic() {
+        return music;
+    }
+
     public void setMusic(Music music) {
         this.music = music;
     }
 
-    public Tutorial() {
-
-    }
-
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Author getAuthor() {
@@ -113,12 +116,12 @@ public class Tutorial implements Serializable {
         this.categories = categories;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getVideo_key() {
         return video_key;
+    }
+
+    public void setVideo_key(String video_key) {
+        this.video_key = video_key;
     }
 
     public Image getImage() {
@@ -127,10 +130,6 @@ public class Tutorial implements Serializable {
 
     public void setImage(Image image) {
         this.image = image;
-    }
-
-    public void setVideo_key(String video_key) {
-        this.video_key = video_key;
     }
 
     public String getTitle() {
