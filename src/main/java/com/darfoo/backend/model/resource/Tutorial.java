@@ -15,21 +15,21 @@ import java.util.Set;
  * Created by zjh on 14-11-16.
  */
 @Entity
-@Table(name = "education")
+@Table(name = "tutorial")
 public class Tutorial implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     Integer id;
 
-    //单向N-1  在educationvideo表中增加一个外键列IMAGE_ID(music的主键)
+    //单向N-1  在tutorialvideo表中增加一个外键列IMAGE_ID(music的主键)
     @ManyToOne(targetEntity = Image.class)
     @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE})
     @JoinColumn(name = "IMAGE_ID", referencedColumnName = "id")
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
     Image image;
 
-    //单向N-1 在educationvideo表中增加一个外键列AUTHOR_ID(author的主键)
+    //单向N-1 在tutorialvideo表中增加一个外键列AUTHOR_ID(author的主键)
     @ManyToOne(targetEntity = Author.class)
     @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE})
     @JoinColumn(name = "AUTHOR_ID", referencedColumnName = "id")
@@ -38,7 +38,7 @@ public class Tutorial implements Serializable {
 
     //category
     @ManyToMany(targetEntity = TutorialCategory.class)
-    @JoinTable(name = "education_category", joinColumns = {@JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false, columnDefinition = "int(11) not null")},
+    @JoinTable(name = "tutorial_category", joinColumns = {@JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false, columnDefinition = "int(11) not null")},
             inverseJoinColumns = {@JoinColumn(name = "category_id", nullable = false, columnDefinition = "int(11) not null")})
     Set<TutorialCategory> categories = new HashSet<TutorialCategory>();
 

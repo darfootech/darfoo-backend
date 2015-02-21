@@ -11,7 +11,7 @@ import java.util.Set;
  * Created by zjh on 14-11-16.
  */
 @Entity
-@Table(name = "educationcategory")
+@Table(name = "tutorialcategory")
 public class TutorialCategory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

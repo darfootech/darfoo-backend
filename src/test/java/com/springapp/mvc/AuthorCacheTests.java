@@ -44,7 +44,7 @@ public class AuthorCacheTests {
     @Autowired
     VideoCacheDao videoCacheDao;
     @Autowired
-    TutorialDao educationDao;
+    TutorialDao tutorialDao;
     @Autowired
     TutorialCacheDao tutorialCacheDao;
     @Autowired

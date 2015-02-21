@@ -29,7 +29,7 @@ public class DeleteController {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    TutorialDao educationDao;
+    TutorialDao tutorialDao;
     @Autowired
     MusicDao musicDao;
     @Autowired

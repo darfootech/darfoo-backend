@@ -44,7 +44,7 @@ public class CacheController {
     @Autowired
     TutorialCacheDao tutorialCacheDao;
     @Autowired
-    TutorialDao educationDao;
+    TutorialDao tutorialDao;
     @Autowired
     MusicCacheDao musicCacheDao;
     @Autowired

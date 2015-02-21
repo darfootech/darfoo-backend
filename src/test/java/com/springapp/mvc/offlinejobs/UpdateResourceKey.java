@@ -25,7 +25,7 @@ public class UpdateResourceKey {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    TutorialDao educationDao;
+    TutorialDao tutorialDao;
     @Autowired
     CommonDao commonDao;
 
@@ -44,15 +44,15 @@ public class UpdateResourceKey {
 
     @Test
     public void updateTutorialKey() {
-        List<Tutorial> s_educations = commonDao.getAllResource(Tutorial.class);
-        for (Tutorial tutorial : s_educations) {
+        List<Tutorial> s_tutorials = commonDao.getAllResource(Tutorial.class);
+        for (Tutorial tutorial : s_tutorials) {
             int tutorialid = tutorial.getId();
             String tutorialkey = tutorial.getVideo_key() + ".mp4";
             HashMap<String, Object> updateMap = new HashMap<String, Object>();
             updateMap.put("video_key", tutorialkey);
             commonDao.updateResourceFieldsById(Tutorial.class, tutorialid, updateMap);
         }
-        System.out.println("总共查到" + s_educations.size());
+        System.out.println("总共查到" + s_tutorials.size());
     }
 
 }

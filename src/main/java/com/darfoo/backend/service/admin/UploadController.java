@@ -36,7 +36,7 @@ public class UploadController {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    TutorialDao educationDao;
+    TutorialDao tutorialDao;
     @Autowired
     ImageDao imageDao;
     @Autowired
@@ -217,7 +217,7 @@ public class UploadController {
         video.setTitle(videotitle);
         video.setVideo_key(videotitle);
         video.setUpdate_timestamp(System.currentTimeMillis());
-        int insertStatus = educationDao.insertSingleTutorial(video);
+        int insertStatus = tutorialDao.insertSingleTutorial(video);
         if (insertStatus == -1) {
             System.out.println("插入教程失败");
         } else {

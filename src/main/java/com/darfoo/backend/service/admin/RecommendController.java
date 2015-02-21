@@ -30,7 +30,7 @@ public class RecommendController {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    TutorialDao educationDao;
+    TutorialDao tutorialDao;
     @Autowired
     CommonDao commonDao;
     @Autowired

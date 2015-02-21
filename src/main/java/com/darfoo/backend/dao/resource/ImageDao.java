@@ -123,7 +123,7 @@ public class ImageDao {
 
     /**
      * 删除Image
-     * (先解除与video music education author对应image_id的约束，将image_id设为null)
+     * (先解除与video music tutorial author对应image_id的约束，将image_id设为null)
      * *
      */
     public int deleteImageById(Integer id) {
@@ -136,11 +136,11 @@ public class ImageDao {
                 res = CRUDEvent.DELETE_NOTFOUND;
             } else {
                 String sql1 = "update video set IMAGE_ID=null where IMAGE_ID=:image_id";
-                String sql2 = "update education set IMAGE_ID=null where IMAGE_ID=:image_id";
+                String sql2 = "update tutorial set IMAGE_ID=null where IMAGE_ID=:image_id";
                 String sql3 = "update music set IMAGE_ID=null where IMAGE_ID=:image_id";
                 String sql4 = "update author set IMAGE_ID=null where IMAGE_ID=:image_id";
                 System.out.println("video受影响的行数:" + session.createSQLQuery(sql1).setInteger("image_id", id).executeUpdate());
-                System.out.println("education受影响的行数:" + session.createSQLQuery(sql2).setInteger("image_id", id).executeUpdate());
+                System.out.println("tutorial受影响的行数:" + session.createSQLQuery(sql2).setInteger("image_id", id).executeUpdate());
                 System.out.println("music受影响的行数:" + session.createSQLQuery(sql3).setInteger("image_id", id).executeUpdate());
                 System.out.println("author受影响的行数:" + session.createSQLQuery(sql4).setInteger("image_id", id).executeUpdate());
                 session.delete(image);

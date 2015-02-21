@@ -39,7 +39,7 @@ public class SearchDaoTests {
     @Autowired
     VideoCacheDao videoCacheDao;
     @Autowired
-    TutorialDao educationDao;
+    TutorialDao tutorialDao;
     @Autowired
     TutorialCacheDao tutorialCacheDao;
     @Autowired

@@ -30,7 +30,7 @@ public class AuthorDaoTests {
     @Autowired
     ImageDao imageDao;
     @Autowired
-    TutorialDao educationDao;
+    TutorialDao tutorialDao;
     @Autowired
     VideoDao videoDao;
     @Autowired

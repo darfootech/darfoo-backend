@@ -25,7 +25,7 @@ import java.util.Set;
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class TutorialDaoTests {
     @Autowired
-    TutorialDao educationDao;
+    TutorialDao tutorialDao;
     @Autowired
     AuthorDao authorDao;
     @Autowired
@@ -99,7 +99,7 @@ public class TutorialDaoTests {
         video.setTitle(title);
         video.setVideo_key(title);
         video.setUpdate_timestamp(System.currentTimeMillis());
-        int insertStatus = educationDao.insertSingleTutorial(video);
+        int insertStatus = tutorialDao.insertSingleTutorial(video);
         if (insertStatus == -1) {
             System.out.println("插入教程失败");
         } else {
@@ -152,7 +152,7 @@ public class TutorialDaoTests {
         String tutorialTitle = "呵呵";
         String authorName = "滨崎步";
         String imageKey = "滨崎步.jpg";
-        UpdateCheckResponse response = educationDao.updateTutorialCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
+        UpdateCheckResponse response = tutorialDao.updateTutorialCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
         System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
         String videoSpeed = "快";  //"快","中","慢"//按速度
         String videoDifficuty = "稍难";  //"简单","适中","稍难"//按难度
@@ -163,21 +163,21 @@ public class TutorialDaoTests {
         categoryTitles.add(videoStyle);
         if (response.updateIsReady()) {
             //updateIsReady为true表示可以进行更新操作
-            System.out.println(CRUDEvent.getResponse(educationDao.updateTutorial(vid, tutorialTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis())));
+            System.out.println(CRUDEvent.getResponse(tutorialDao.updateTutorial(vid, tutorialTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis())));
         } else {
             System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
         }
     }
 
     /**
-     * 获取所有的education对象
+     * 获取所有的tutorial对象
      * *
      */
     @Test
     public void getAllTutorials() {
-        List<Tutorial> s_educations = commonDao.getAllResource(Tutorial.class);
-        System.out.println("总共查到" + s_educations.size());
-        for (Tutorial video : s_educations) {
+        List<Tutorial> s_tutorials = commonDao.getAllResource(Tutorial.class);
+        System.out.println("总共查到" + s_tutorials.size());
+        for (Tutorial video : s_tutorials) {
             System.out.println("----------------");
             System.out.println("id: " + video.getId());
             System.out.println(video.toString(true));
@@ -196,7 +196,7 @@ public class TutorialDaoTests {
     }
 
     /**
-     * education中 插入/更新 music
+     * tutorial中 插入/更新 music
      * *
      */
     @Test
@@ -207,21 +207,21 @@ public class TutorialDaoTests {
     }
 
     /**
-     * 从education中查询对应的music(只能查到唯一一个)
+     * 从tutorial中查询对应的music(只能查到唯一一个)
      * *
      */
     @Test
     public void getMusicFromTutorial() {
         Integer vId = 1;
         Integer mId = 3;
-        //先为education的id为vId的记录添加一个music
-        System.out.println(CRUDEvent.getResponse(accompanyDao.updateResourceMusic(Tutorial.class, vId, mId)) + " 往id为" + vId + "的education记录中插入id为" + mId + "的music");
+        //先为tutorial的id为vId的记录添加一个music
+        System.out.println(CRUDEvent.getResponse(accompanyDao.updateResourceMusic(Tutorial.class, vId, mId)) + " 往id为" + vId + "的tutorial记录中插入id为" + mId + "的music");
         //查询
         Music music = ((Video) commonDao.getResourceById(Video.class, vId)).getMusic();
         if (music != null) {
             System.out.println(music.toString(true));
         } else {
-            System.out.println("id为" + vId + "对应的education还未包含相应的music");
+            System.out.println("id为" + vId + "对应的tutorial还未包含相应的music");
         }
     }
 
@@ -254,9 +254,9 @@ public class TutorialDaoTests {
     @Test
     public void getTutorialsByHottest() {
         int number = 20;
-        List<Tutorial> educations = commonDao.getResourcesByHottest(Tutorial.class, number);
-        System.out.println("---------返回" + educations.size() + "个视频---------");
-        for (Tutorial v : educations) {
+        List<Tutorial> tutorials = commonDao.getResourcesByHottest(Tutorial.class, number);
+        System.out.println("---------返回" + tutorials.size() + "个视频---------");
+        for (Tutorial v : tutorials) {
             System.out.println("热度值---->" + v.getHottest());
             System.out.println(v.toString(true));
             System.out.println("---------------------------");
@@ -264,15 +264,15 @@ public class TutorialDaoTests {
     }
 
     /**
-     * 获取最新的number个education
+     * 获取最新的number个tutorial
      * *
      */
     @Test
     public void getTutorialsByNewest() {
         int number = 20;
-        List<Tutorial> educations = commonDao.getResourcesByNewest(Tutorial.class, number);
-        System.out.println("---------返回" + educations.size() + "个视频---------");
-        for (Tutorial v : educations) {
+        List<Tutorial> tutorials = commonDao.getResourcesByNewest(Tutorial.class, number);
+        System.out.println("---------返回" + tutorials.size() + "个视频---------");
+        for (Tutorial v : tutorials) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
             System.out.println(v.toString(true));
             System.out.println("---------------------------");
@@ -326,8 +326,8 @@ public class TutorialDaoTests {
                 System.out.println("——————————————————————————————————————");
             }
         }
-        System.out.println("education count -> " + commonDao.getAllResource(Tutorial.class).size());
-        System.out.println("education count -> " + idSet.size());
+        System.out.println("tutorial count -> " + commonDao.getAllResource(Tutorial.class).size());
+        System.out.println("tutorial count -> " + idSet.size());
     }
 
     @Test

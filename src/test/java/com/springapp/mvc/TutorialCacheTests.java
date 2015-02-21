@@ -31,7 +31,7 @@ import java.util.Set;
 })
 public class TutorialCacheTests {
     @Autowired
-    TutorialDao educationDao;
+    TutorialDao tutorialDao;
     @Autowired
     TutorialCacheDao tutorialCacheDao;
     @Autowired

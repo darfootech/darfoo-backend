@@ -34,7 +34,7 @@ public class GalleryController {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    TutorialDao educationDao;
+    TutorialDao tutorialDao;
     @Autowired
     MusicDao musicDao;
     @Autowired

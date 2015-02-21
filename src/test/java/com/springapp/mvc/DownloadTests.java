@@ -104,7 +104,7 @@ public class DownloadTests {
 
     @Test
     public void writeTutorialsToCSV() {
-        List<Tutorial> educations = commonDao.getAllResource(Tutorial.class);
+        List<Tutorial> tutorials = commonDao.getAllResource(Tutorial.class);
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
         CSVPrinter printer = null;
         try {
@@ -112,7 +112,7 @@ public class DownloadTests {
             printer = new CSVPrinter(out, format.withDelimiter(','));
             System.out.println("********");
             printer.printRecord("教程标题", "明星舞队名称", "舞蹈速度", "舞蹈难度", "舞蹈风格");
-            for (Tutorial tutorial : educations) {
+            for (Tutorial tutorial : tutorials) {
                 HashMap<String, String> styleMap = new HashMap<String, String>();
                 Set<TutorialCategory> categories = tutorial.getCategories();
                 for (TutorialCategory category : categories) {

@@ -36,7 +36,7 @@ public class DeleteTrashResource {
     @Autowired
     VideoDao videoDao;
     @Autowired
-    TutorialDao educationDao;
+    TutorialDao tutorialDao;
     @Autowired
     MusicDao musicDao;
     @Autowired
@@ -96,8 +96,8 @@ public class DeleteTrashResource {
             keyList.add(video.getVideo_key());
         }
 
-        for (Tutorial education : tutorialList) {
-            keyList.add(education.getVideo_key());
+        for (Tutorial tutorial : tutorialList) {
+            keyList.add(tutorial.getVideo_key());
         }
 
         for (Music music : musicList) {
