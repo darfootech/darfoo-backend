@@ -1,4 +1,4 @@
-package com.darfoo.backend.dao;
+package com.darfoo.backend.dao.cota;
 
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Music;

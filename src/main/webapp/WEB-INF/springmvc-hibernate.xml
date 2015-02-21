@@ -85,5 +85,6 @@
     <bean id="commonDao" class="com.darfoo.backend.dao.cota.CommonDao"/>
     <bean id="recommendDao" class="com.darfoo.backend.dao.cota.RecommendDao"/>
     <bean id="categoryDao" class="com.darfoo.backend.dao.cota.CategoryDao"/>
-    <bean id="paginationDao" class="com.darfoo.backend.dao.PaginationDao"/>
+    <bean id="paginationDao" class="com.darfoo.backend.dao.cota.PaginationDao"/>
+    <bean id="accompanyDao" class="com.darfoo.backend.dao.cota.AccompanyDao"/>
 </beans>

@@ -5,7 +5,7 @@ import com.darfoo.backend.caches.dao.AuthorCacheDao;
 import com.darfoo.backend.caches.dao.MusicCacheDao;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
-import com.darfoo.backend.dao.PaginationDao;
+import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
