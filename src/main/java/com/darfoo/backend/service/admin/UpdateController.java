@@ -248,7 +248,7 @@ public class UpdateController {
         }
 
         Integer vid = Integer.parseInt(request.getParameter("id"));
-        UpdateCheckResponse response = educationDao.updateEducationCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
+        UpdateCheckResponse response = educationDao.updateTutorialCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
         System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
         Set<String> categoryTitles = new HashSet<String>();
         categoryTitles.add(videoSpeed);
@@ -267,11 +267,11 @@ public class UpdateController {
         }
         if (response.updateIsReady()) {
             //updateIsReady为true表示可以进行更新操作
-            String status = CRUDEvent.getResponse(educationDao.updateEducation(vid, videoTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
+            String status = CRUDEvent.getResponse(educationDao.updateTutorial(vid, videoTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
 
             if (!connectmusic.equals("")) {
                 int mid = Integer.parseInt(connectmusic.split("-")[2]);
-                educationDao.insertOrUpdateMusic(vid, mid);
+                accompanyDao.updateResourceMusic(Tutorial.class, vid, mid);
             }
 
             if (status.equals("UPDATE_SUCCESS")) {

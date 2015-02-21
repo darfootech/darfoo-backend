@@ -217,7 +217,7 @@ public class UploadController {
         video.setTitle(videotitle);
         video.setVideo_key(videotitle);
         video.setUpdate_timestamp(System.currentTimeMillis());
-        int insertStatus = educationDao.insertSingleEducationVideo(video);
+        int insertStatus = educationDao.insertSingleTutorial(video);
         if (insertStatus == -1) {
             System.out.println("插入教程失败");
         } else {
@@ -572,7 +572,7 @@ public class UploadController {
 
             if (!connectmusic.equals("")) {
                 int mid = Integer.parseInt(connectmusic.split("-")[2]);
-                educationDao.insertOrUpdateMusic(insertid, mid);
+                accompanyDao.updateResourceMusic(Tutorial.class, insertid, mid);
             }
 
             return statusCode + "";

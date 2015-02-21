@@ -5,7 +5,6 @@ import com.darfoo.backend.model.*;
 import com.darfoo.backend.model.category.VideoCategory;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Image;
-import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Video;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -122,7 +121,7 @@ public class VideoDao {
      *                       *
      */
     public int updateVideo(Integer id, String title, String authorname, String imagekey, Set<String> categoryTitles, Long updateTimestamp) {
-        int res = 0;
+        int res;
         try {
             Session session = sf.getCurrentSession();
             Video oldVideo = (Video) session.get(Video.class, id);
@@ -133,7 +132,7 @@ public class VideoDao {
                 if (author != null) {
                     oldVideo.setAuthor(author);
                 } else {
-                    return res = CRUDEvent.UPDATE_AUTHOR_NOTFOUND;
+                    return CRUDEvent.UPDATE_AUTHOR_NOTFOUND;
                 }
             } else {
                 System.out.println("作者不需要更新");
@@ -145,7 +144,7 @@ public class VideoDao {
                 if (image != null) {
                     oldVideo.setImage(image);
                 } else {
-                    return res = CRUDEvent.UPDATE_IMAGE_NOTFOUND;
+                    return CRUDEvent.UPDATE_IMAGE_NOTFOUND;
                 }
             } else {
                 System.out.println("图片不需要更新");

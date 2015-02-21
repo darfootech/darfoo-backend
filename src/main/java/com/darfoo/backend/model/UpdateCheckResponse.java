@@ -3,8 +3,8 @@ package com.darfoo.backend.model;
 public class UpdateCheckResponse {
 
     int videoUpdate;//若值被置为1，则表明要更新的video对象不存在于数据库中
+    int tutorialUpdate;//若值被置为1，则表明要更新的tutorial对象不存在于数据库中
     int musicUpdate;//若值被置为1，则表明要更新的music对象不存在于数据库中
-    int educationUpdate;//若值被置为1，则表明要更新的education对象不存在于数据库中
     int dancegroupUpdate;//若值被置为1，则表明要更新的dancegroup对象不存在于数据库中
     int imageUpdate;//若值被置为1,则表明需要先在数据库插入image
     //int imageRepeat;
@@ -15,18 +15,18 @@ public class UpdateCheckResponse {
     public UpdateCheckResponse() {
         this.videoUpdate = 0;
         this.musicUpdate = 0;
-        this.educationUpdate = 0;
+        this.tutorialUpdate = 0;
         this.authorUpdate = 0;
         this.imageUpdate = 0;
         this.groupImageUpdate = 0;
     }
 
-    public int getEducationUpdate() {
-        return educationUpdate;
+    public int getTutorialUpdate() {
+        return tutorialUpdate;
     }
 
-    public void setEducationUpdate(int educationUpdate) {
-        this.educationUpdate = educationUpdate;
+    public void setTutorialUpdate(int tutorialUpdate) {
+        this.tutorialUpdate = tutorialUpdate;
     }
 
     public int getDancegroupUpdate() {
@@ -85,7 +85,7 @@ public class UpdateCheckResponse {
      */
     public boolean updateIsReady() {
         boolean isReady = true;
-        if (videoUpdate == 1 || musicUpdate == 1 || educationUpdate == 1 || dancegroupUpdate == 1 || imageUpdate == 1 || authorUpdate == 1 || groupImageUpdate == 1) {
+        if (videoUpdate == 1 || musicUpdate == 1 || tutorialUpdate == 1 || dancegroupUpdate == 1 || imageUpdate == 1 || authorUpdate == 1 || groupImageUpdate == 1) {
             isReady = false;
         }
         return isReady;

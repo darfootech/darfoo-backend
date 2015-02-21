@@ -1,10 +1,7 @@
 package com.springapp.mvc;
 
 import com.darfoo.backend.dao.*;
-import com.darfoo.backend.dao.cota.CategoryDao;
-import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.cota.PaginationDao;
-import com.darfoo.backend.dao.cota.RecommendDao;
+import com.darfoo.backend.dao.cota.*;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.dao.resource.ImageDao;
 import com.darfoo.backend.dao.resource.TutorialDao;
@@ -41,9 +38,11 @@ public class TutorialDaoTests {
     CategoryDao categoryDao;
     @Autowired
     PaginationDao paginationDao;
+    @Autowired
+    AccompanyDao accompanyDao;
 
     @Test
-    public void insertSingleEducationVideo() {
+    public void insertSingleTutorial() {
         String title = "Strong Heart321";
         String authorName = "周杰伦";
         String imagekey = "仓木麻衣3321.jpg";
@@ -100,7 +99,7 @@ public class TutorialDaoTests {
         video.setTitle(title);
         video.setVideo_key(title);
         video.setUpdate_timestamp(System.currentTimeMillis());
-        int insertStatus = educationDao.insertSingleEducationVideo(video);
+        int insertStatus = educationDao.insertSingleTutorial(video);
         if (insertStatus == -1) {
             System.out.println("插入教程失败");
         } else {
@@ -113,7 +112,7 @@ public class TutorialDaoTests {
     }
 
     @Test
-    public void getEducationVideoById() {
+    public void getTutorialById() {
         Tutorial video = (Tutorial) commonDao.getResourceById(Tutorial.class, 1);
         if (video != null) {
             System.out.println(video.toString(true));
@@ -123,7 +122,7 @@ public class TutorialDaoTests {
     }
 
     @Test
-    public void getEducationVideosByCategories() {
+    public void getTutorialsByCategories() {
         long start = System.currentTimeMillis();
         String[] categories = {};//无条件限制
         //String[] categories = {"较快","稍难","情歌风","S"}; //满条件限制
@@ -138,7 +137,7 @@ public class TutorialDaoTests {
     }
 
     @Test
-    public void deleteEducationById() {
+    public void deleteTutorialById() {
         System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Tutorial.class, 24)));
     }
 
@@ -148,12 +147,12 @@ public class TutorialDaoTests {
      * *
      */
     @Test
-    public void updateEducationById() {
+    public void updateTutorialById() {
         Integer vid = 7;
         String tutorialTitle = "呵呵";
         String authorName = "滨崎步";
         String imageKey = "滨崎步.jpg";
-        UpdateCheckResponse response = educationDao.updateEducationCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
+        UpdateCheckResponse response = educationDao.updateTutorialCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
         System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
         String videoSpeed = "快";  //"快","中","慢"//按速度
         String videoDifficuty = "稍难";  //"简单","适中","稍难"//按难度
@@ -164,7 +163,7 @@ public class TutorialDaoTests {
         categoryTitles.add(videoStyle);
         if (response.updateIsReady()) {
             //updateIsReady为true表示可以进行更新操作
-            System.out.println(CRUDEvent.getResponse(educationDao.updateEducation(vid, tutorialTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis())));
+            System.out.println(CRUDEvent.getResponse(educationDao.updateTutorial(vid, tutorialTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis())));
         } else {
             System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
         }
@@ -175,7 +174,7 @@ public class TutorialDaoTests {
      * *
      */
     @Test
-    public void getAllEducations() {
+    public void getAllTutorials() {
         List<Tutorial> s_educations = commonDao.getAllResource(Tutorial.class);
         System.out.println("总共查到" + s_educations.size());
         for (Tutorial video : s_educations) {
@@ -191,7 +190,7 @@ public class TutorialDaoTests {
      * *
      */
     @Test
-    public void deleteEducation() {
+    public void deleteTutorial() {
         int res = commonDao.deleteResourceById(Tutorial.class, 5);
         System.out.println(CRUDEvent.getResponse(res));
     }
@@ -204,7 +203,7 @@ public class TutorialDaoTests {
     public void insertorUpdateMusic() {
         Integer vId = 1;
         Integer mId = 1;
-        System.out.println(CRUDEvent.getResponse(educationDao.insertOrUpdateMusic(vId, mId)));
+        System.out.println(CRUDEvent.getResponse(accompanyDao.updateResourceMusic(Tutorial.class, vId, mId)));
     }
 
     /**
@@ -212,11 +211,11 @@ public class TutorialDaoTests {
      * *
      */
     @Test
-    public void getMusicFromEducation() {
+    public void getMusicFromTutorial() {
         Integer vId = 1;
         Integer mId = 3;
         //先为education的id为vId的记录添加一个music
-        System.out.println(CRUDEvent.getResponse(educationDao.insertOrUpdateMusic(vId, mId)) + " 往id为" + vId + "的education记录中插入id为" + mId + "的music");
+        System.out.println(CRUDEvent.getResponse(accompanyDao.updateResourceMusic(Tutorial.class, vId, mId)) + " 往id为" + vId + "的education记录中插入id为" + mId + "的music");
         //查询
         Music music = ((Video) commonDao.getResourceById(Video.class, vId)).getMusic();
         if (music != null) {
@@ -227,17 +226,13 @@ public class TutorialDaoTests {
     }
 
     /**
-     * 删除video中的music(将MUSIC_ID设为空)
+     * 删除Tutorial中的music(将MUSIC_ID设为空)
      * *
      */
     @Test
-    public void deleteMusicFromVideo() {
+    public void disconnectMusicFromTutorial() {
         Integer vId = 1;
-        Integer mId = 3;
-        //先插入或更新一个music到education中
-        System.out.println(CRUDEvent.getResponse(educationDao.insertOrUpdateMusic(vId, mId)));
-        //删除刚插入的那个education中的music
-        System.out.println(CRUDEvent.getResponse(educationDao.deleteMusicFromTutorial(vId)));
+        accompanyDao.disconnectResourceMusic(Tutorial.class, vId);
     }
 
     /**
@@ -245,7 +240,7 @@ public class TutorialDaoTests {
      * *
      */
     @Test
-    public void updateEducationHottest() {
+    public void updateTutorialHottest() {
         Integer id = 1;
         int n = 1;
         //int n = -5;
@@ -257,7 +252,7 @@ public class TutorialDaoTests {
      * *
      */
     @Test
-    public void getEducationsByHottest() {
+    public void getTutorialsByHottest() {
         int number = 20;
         List<Tutorial> educations = commonDao.getResourcesByHottest(Tutorial.class, number);
         System.out.println("---------返回" + educations.size() + "个视频---------");
@@ -273,7 +268,7 @@ public class TutorialDaoTests {
      * *
      */
     @Test
-    public void getEducationsByNewest() {
+    public void getTutorialsByNewest() {
         int number = 20;
         List<Tutorial> educations = commonDao.getResourcesByNewest(Tutorial.class, number);
         System.out.println("---------返回" + educations.size() + "个视频---------");
