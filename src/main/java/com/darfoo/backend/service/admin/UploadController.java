@@ -146,7 +146,7 @@ public class UploadController {
         return resultMap;
     }
 
-    public HashMap<String, Integer> insertSingleEducationVideo(String videotitle, String videotype, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle) {
+    public HashMap<String, Integer> insertSingleTutorialVideo(String videotitle, String videotype, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle) {
         System.out.println(authorname);
 
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
@@ -560,7 +560,7 @@ public class UploadController {
 
         System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + update_timestamp);
 
-        HashMap<String, Integer> resultMap = this.insertSingleEducationVideo(videoTitle, videoType, authorName, imagekey, videoSpeed, videoDifficult, videoStyle);
+        HashMap<String, Integer> resultMap = this.insertSingleTutorialVideo(videoTitle, videoType, authorName, imagekey, videoSpeed, videoDifficult, videoStyle);
         int statusCode = resultMap.get("statuscode");
         System.out.println("status code is: " + statusCode);
         if (statusCode != 200) {

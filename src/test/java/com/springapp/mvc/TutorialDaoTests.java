@@ -186,7 +186,7 @@ public class TutorialDaoTests {
     }
 
     /**
-     * delete Education
+     * delete Tutorial
      * *
      */
     @Test

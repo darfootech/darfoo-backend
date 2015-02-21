@@ -24,7 +24,7 @@ public class InsertResourceCategory {
     }
 
     @Test
-    public void insertAllEducationCategories() {
+    public void insertAllTutorialCategories() {
         categoryDao.insertAllTutorialCategories();
     }
 
