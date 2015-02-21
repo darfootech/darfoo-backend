@@ -407,7 +407,7 @@ public class CacheController {
     public
     @ResponseBody
     List<SingleMusic> getHottestMusics() {
-        List<Music> musics = musicDao.getMusicsByHottest(5);
+        List<Music> musics = commonDao.getResourcesByHottest(Music.class, 5);
         List<SingleMusic> result = new ArrayList<SingleMusic>();
         for (Music music : musics) {
             int mid = music.getId();

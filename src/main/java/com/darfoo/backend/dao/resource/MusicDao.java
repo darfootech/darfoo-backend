@@ -313,46 +313,6 @@ public class MusicDao {
     }
 
     /**
-     * 按热度排序，从热度最大到最小排序返回
-     * <p/>
-     * param 获得热度排名前number个
-     */
-    public List<Music> getMusicsByHottest(int number) {
-        List<Music> l_music = new ArrayList<Music>();
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Music.class);
-            c.addOrder(Order.desc("Hottest"));//安热度递减排序
-            c.setMaxResults(number);
-            c.setReadOnly(true);
-            l_music = c.list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return l_music;
-    }
-
-    /**
-     * 获得最新的number个音频
-     * <p/>
-     * param 获得排名前number个
-     */
-    public List<Music> getMusicsByNewest(int number) {
-        List<Music> musics = new ArrayList<Music>();
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Music.class);
-            c.addOrder(Order.desc("update_timestamp"));//按最新时间排序
-            c.setMaxResults(number);
-            c.setReadOnly(true);
-            musics = c.list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return musics;
-    }
-
-    /**
      * 更新Music的AUTHOR_NAME
      *
      * @param id            muisc_id

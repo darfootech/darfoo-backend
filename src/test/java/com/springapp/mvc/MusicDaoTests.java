@@ -202,7 +202,7 @@ public class MusicDaoTests {
     @Test
     public void getMusicsByHottest() {
         int number = 20;
-        List<Music> musics = musicDao.getMusicsByHottest(number);
+        List<Music> musics = commonDao.getResourcesByHottest(Music.class, number);
         System.out.println("---------返回" + musics.size() + "个视频---------");
         for (Music v : musics) {
             System.out.println("热度值---->" + v.getHottest());
@@ -218,7 +218,7 @@ public class MusicDaoTests {
     @Test
     public void getMusicsByNewest() {
         int number = 20;
-        List<Music> musics = musicDao.getMusicsByNewest(number);
+        List<Music> musics = commonDao.getResourcesByNewest(Music.class, number);
         System.out.println("---------返回" + musics.size() + "个视频---------");
         for (Music v : musics) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));

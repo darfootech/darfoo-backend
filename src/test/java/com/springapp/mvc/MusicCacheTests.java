@@ -100,7 +100,7 @@ public class MusicCacheTests {
 
     @Test
     public void cacheHottestMusics() {
-        List<Music> musics = musicDao.getMusicsByHottest(5);
+        List<Music> musics = commonDao.getResourcesByHottest(Music.class, 5);
         List<SingleMusic> result = new ArrayList<SingleMusic>();
         for (Music music : musics) {
             int mid = music.getId();
