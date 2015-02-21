@@ -1,10 +1,7 @@
 package com.springapp.mvc;
 
 import com.darfoo.backend.dao.*;
-import com.darfoo.backend.dao.cota.CategoryDao;
-import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.cota.PaginationDao;
-import com.darfoo.backend.dao.cota.RecommendDao;
+import com.darfoo.backend.dao.cota.*;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.dao.resource.ImageDao;
 import com.darfoo.backend.dao.resource.VideoDao;
@@ -42,6 +39,8 @@ public class VideoDaoTests {
     PaginationDao paginationDao;
     @Autowired
     CategoryDao categoryDao;
+    @Autowired
+    AccompanyDao accompanyDao;
 
     VideoCates videoCates = new VideoCates();
 
@@ -248,7 +247,7 @@ public class VideoDaoTests {
     public void insertOrUpdateMusic() {
         Integer vId = 1;
         Integer mId = 6;
-        System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId)));
+        System.out.println(CRUDEvent.getResponse(accompanyDao.updateResourceMusic(Video.class, vId, mId)));
     }
 
     /**
@@ -274,20 +273,9 @@ public class VideoDaoTests {
      * *
      */
     @Test
-    public void deleteMusicFromVideo() {
-        Integer vId = 1;
-        Integer mId = 6;
-        //先插入或更新一个music到video中
-        System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId)));
-        //删除刚插入的那个video中的music
-        System.out.println(CRUDEvent.getResponse(videoDao.deleteMusicFromVideo(vId)));
-    }
-
-    @Test
     public void disconnectVideoMusic() {
         Integer vId = 1;
-        Integer mId = 6;
-        videoDao.disconnectVideoMusic(vId, mId);
+        accompanyDao.disconnectResourceMusic(Video.class, vId);
     }
 
     /**
@@ -360,7 +348,7 @@ public class VideoDaoTests {
     public void getVideosWithoutMusicId() {
         Integer mId = 1;
 
-        List<Video> videos = videoDao.getVideosWithoutMusicId(mId);
+        List<Video> videos = accompanyDao.getResourcesWithoutMusicId(Video.class, mId);
         System.out.println("---------返回" + videos.size() + "个视频---------");
         for (Video v : videos) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));

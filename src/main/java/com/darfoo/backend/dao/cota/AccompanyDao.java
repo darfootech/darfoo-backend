@@ -64,7 +64,7 @@ public class AccompanyDao {
      * @param id
      * @return
      */
-    public int deleteMusicFromResource(Class resource, Integer id) {
+    private int deleteMusicFromResource(Class resource, Integer id) {
         int res;
         try {
             Session session = sessionFactory.getCurrentSession();

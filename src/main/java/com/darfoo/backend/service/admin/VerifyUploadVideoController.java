@@ -1,6 +1,7 @@
 package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.*;
+import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.dao.resource.ImageDao;
@@ -46,6 +47,8 @@ public class VerifyUploadVideoController {
     CommonDao commonDao;
     @Autowired
     QiniuUtils qiniuUtils;
+    @Autowired
+    AccompanyDao accompanyDao;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public String allUnVerifyVideos(ModelMap modelMap) {
@@ -180,7 +183,7 @@ public class VerifyUploadVideoController {
 
             if (!connectmusic.equals("")) {
                 int mid = Integer.parseInt(connectmusic.split("-")[2]);
-                videoDao.insertOrUpdateMusic(insertid, mid);
+                accompanyDao.updateResourceMusic(Video.class, insertid, mid);
             }
 
             return statusCode + "";

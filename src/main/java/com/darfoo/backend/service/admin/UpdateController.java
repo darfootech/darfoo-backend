@@ -1,6 +1,7 @@
 package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.*;
+import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.*;
 import com.darfoo.backend.model.*;
@@ -37,6 +38,8 @@ public class UpdateController {
     ImageDao imageDao;
     @Autowired
     CommonDao commonDao;
+    @Autowired
+    AccompanyDao accompanyDao;
 
     public int checkVideoTitleAuthorIdDuplicate(String videoTitle, String authorName) {
         Author a = (Author) commonDao.getResourceByTitleOrName(Author.class, authorName, "name");
@@ -178,7 +181,7 @@ public class UpdateController {
 
             if (!connectmusic.equals("")) {
                 int mid = Integer.parseInt(connectmusic.split("-")[2]);
-                videoDao.insertOrUpdateMusic(vid, mid);
+                accompanyDao.updateResourceMusic(Video.class, vid, mid);
             }
 
             if (status.equals("UPDATE_SUCCESS")) {

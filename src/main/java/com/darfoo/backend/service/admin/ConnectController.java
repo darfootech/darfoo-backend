@@ -1,5 +1,6 @@
 package com.darfoo.backend.service.admin;
 
+import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.MusicDao;
 import com.darfoo.backend.dao.resource.VideoDao;
@@ -29,6 +30,8 @@ public class ConnectController {
     VideoDao videoDao;
     @Autowired
     CommonDao commonDao;
+    @Autowired
+    AccompanyDao accompanyDao;
 
     @RequestMapping(value = "/admin/connectmusic/all", method = RequestMethod.GET)
     public String connectMusicAll(ModelMap modelMap) {
@@ -48,7 +51,7 @@ public class ConnectController {
         conditions.put("music_id", musicid);
 
         modelMap.addAttribute("connectvideos", commonDao.getResourcesByFields(Video.class, conditions));
-        modelMap.addAttribute("notconnectvideos", videoDao.getVideosWithoutMusicId(musicid));
+        modelMap.addAttribute("notconnectvideos", accompanyDao.getResourcesWithoutMusicId(Video.class, musicid));
         return "connectionsinglemusic";
     }
 
@@ -62,7 +65,7 @@ public class ConnectController {
         System.out.println("current music id: " + currentmusicid);
         String[] videoids = idss.split(",");
         for (int i = 0; i < videoids.length; i++) {
-            videoDao.insertOrUpdateMusic(Integer.parseInt(videoids[i]), currentmusicid);
+            accompanyDao.updateResourceMusic(Video.class, Integer.parseInt(videoids[i]), currentmusicid);
         }
         return 200 + "";
     }
@@ -77,7 +80,7 @@ public class ConnectController {
         System.out.println("current music id: " + currentmusicid);
         String[] videoids = idss.split(",");
         for (int i = 0; i < videoids.length; i++) {
-            videoDao.disconnectVideoMusic(Integer.parseInt(videoids[i]), currentmusicid);
+            accompanyDao.disconnectResourceMusic(Video.class, Integer.parseInt(videoids[i]));
         }
         return 200 + "";
     }

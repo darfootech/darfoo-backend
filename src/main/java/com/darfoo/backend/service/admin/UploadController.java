@@ -1,5 +1,6 @@
 package com.darfoo.backend.service.admin;
 
+import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.*;
 import com.darfoo.backend.model.category.MusicCategory;
@@ -42,6 +43,8 @@ public class UploadController {
     MusicDao musicDao;
     @Autowired
     CommonDao commonDao;
+    @Autowired
+    AccompanyDao accompanyDao;
 
     public HashMap<String, Integer> insertSingleVideo(String videotitle, String videotype, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter) {
         System.out.println(authorname);
@@ -395,7 +398,7 @@ public class UploadController {
 
             if (!connectmusic.equals("")) {
                 int mid = Integer.parseInt(connectmusic.split("-")[2]);
-                videoDao.insertOrUpdateMusic(insertid, mid);
+                accompanyDao.updateResourceMusic(Video.class, insertid, mid);
             }
 
             return statusCode + "";
