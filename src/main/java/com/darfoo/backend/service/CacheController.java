@@ -382,7 +382,7 @@ public class CacheController {
             targetCategories.add(letterCate);
         }
 
-        List<Music> musics = musicDao.getMusicsByCategoriesByPage(ServiceUtils.convertList2Array(targetCategories), page);
+        List<Music> musics = paginationDao.getResourcesByCategoriesByPage(Music.class, ServiceUtils.convertList2Array(targetCategories), page);
         List<SingleMusic> result = new ArrayList<SingleMusic>();
         for (Music music : musics) {
             int mid = music.getId();

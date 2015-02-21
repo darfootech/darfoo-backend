@@ -2,6 +2,7 @@ package com.springapp.mvc;
 
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.dao.resource.ImageDao;
 import com.darfoo.backend.dao.resource.MusicDao;
@@ -31,6 +32,8 @@ public class MusicDaoTests {
     ImageDao imageDao;
     @Autowired
     CommonDao commonDao;
+    @Autowired
+    PaginationDao paginationDao;
 
     @Test
     public void insertSingleMusic() {
@@ -246,7 +249,7 @@ public class MusicDaoTests {
         //String[] categories = {"四拍","情歌风","D"}; //满足所有条件
         //String[] categories = {"四拍"}; //满足个别条件
         //String[] categories = {"四拍","情歌风","0"};//最后一个条件不满足
-        List<Music> musics = musicDao.getMusicsByCategoriesByPage(categories, 1);
+        List<Music> musics = paginationDao.getResourcesByCategoriesByPage(Music.class, categories, 1);
         for (Music music : musics) {
             System.out.println(music.getId());
             System.out.println("——————————————————————————————————————");
@@ -258,10 +261,10 @@ public class MusicDaoTests {
     @Test
     public void isDuplicateWithPageQuery() {
         String[] categories = {};//无条件限制
-        int pagecount = (int) musicDao.getPageCountByCategories(categories);
+        int pagecount = (int) paginationDao.getResourcePageCountByCategories(Music.class, categories);
         Set<Integer> idSet = new HashSet<Integer>();
         for (int i = 0; i < pagecount; i++) {
-            List<Music> musics = musicDao.getMusicsByCategoriesByPage(categories, i + 1);
+            List<Music> musics = paginationDao.getResourcesByCategoriesByPage(Music.class, categories, i + 1);
             for (Music music : musics) {
                 System.out.println(music.getId());
                 idSet.add(music.getId());
