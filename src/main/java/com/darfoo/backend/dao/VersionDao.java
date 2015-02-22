@@ -71,7 +71,7 @@ public class VersionDao {
     }
 
     public int insertVersion(Version version) {
-        int res = 0;
+        int res;
         try {
             boolean isExist = isExistVersion(version.getVersion(), version.getType());
             if (isExist) {
