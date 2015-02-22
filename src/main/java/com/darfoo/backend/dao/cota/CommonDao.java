@@ -42,7 +42,7 @@ public class CommonDao {
      * 获取单个资源的信息
      *
      * @param resource
-     * @param vid
+     * @param id
      * @return 抽象资源对象
      */
     public Object getResourceById(Class resource, Integer id) {

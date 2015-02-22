@@ -57,25 +57,6 @@ public class ImageDao {
     }
 
     /**
-     * 获取所有的image
-     *
-     * @return List<Image>
-     * *
-     */
-    public List<Image> getAllImage() {
-        List<Image> l_image = new ArrayList<Image>();
-        try {
-            Session session = sf.getCurrentSession();
-            String sql = "select * from image";
-            l_image = session.createSQLQuery(sql).addEntity(Image.class).list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return l_image;
-
-    }
-
-    /**
      * 更新之前需要先执行下面的方法，根据response来确定下一步操作
      * *
      */
@@ -105,7 +86,7 @@ public class ImageDao {
      * *
      */
     public int updateImage(Integer id, String newImageKey) {
-        int res = 0;
+        int res;
         try {
             Session session = sf.getCurrentSession();
             String sql = "update image set IMAGE_KEY=:key where id=:id";
@@ -127,7 +108,7 @@ public class ImageDao {
      * *
      */
     public int deleteImageById(Integer id) {
-        int res = 0;
+        int res;
         try {
             Session session = sf.getCurrentSession();
             Image image = (Image) session.get(Image.class, id);

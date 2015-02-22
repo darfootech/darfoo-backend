@@ -4,10 +4,7 @@ import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.UpdateCheckResponse;
-import org.hibernate.Criteria;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -37,8 +34,10 @@ public class AuthorDao {
         boolean isExist = true;
         try {
             Session session = sf.getCurrentSession();
-            String sql = "select * from author where name=:name";
-            Author author = (Author) session.createSQLQuery(sql).addEntity(Author.class).setString("name", name).uniqueResult();
+            Criteria criteria = session.createCriteria(Author.class);
+            criteria.setReadOnly(true);
+            criteria.add(Restrictions.eq("name", name));
+            Author author = (Author) criteria.uniqueResult();
             isExist = (author == null) ? false : true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,7 +52,7 @@ public class AuthorDao {
      *               *
      */
     public int insertAuthor(Author author) {
-        int res = 0;
+        int res;
         try {
             boolean isExist = isExistAuthor(author.getName());
             if (isExist) {
@@ -92,7 +91,7 @@ public class AuthorDao {
      */
     public UpdateCheckResponse updateAuthorCheck(Integer id, String imagekey) {
         UpdateCheckResponse response = new UpdateCheckResponse();
-        Author author = null;
+        Author author;
         try {
             Session session = sf.getCurrentSession();
             author = (Author) session.get(Author.class, id);
@@ -128,7 +127,7 @@ public class AuthorDao {
      *                          *
      */
     public int updateAuthor(Integer id, String authorName, String authorDescription, String imageKey) {
-        int res = 0;
+        int res;
         try {
             Session session = sf.getCurrentSession();
             Author author = (Author) session.get(Author.class, id);
@@ -140,7 +139,7 @@ public class AuthorDao {
                     if (image != null) {
                         author.setImage(image);
                     } else {
-                        return res = CRUDEvent.UPDATE_IMAGE_NOTFOUND;
+                        return CRUDEvent.UPDATE_IMAGE_NOTFOUND;
                     }
                 } else {
                     System.out.println("图片不需要更新");
@@ -201,20 +200,5 @@ public class AuthorDao {
         }
         Collections.reverse(result);
         return result;
-    }
-
-    public List<Author> getAuthorsByHottest(int number) {
-        List<Author> l_author = new ArrayList<Author>();
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Author.class);
-            c.addOrder(Order.desc("HOTTEST"));//安热度递减排序
-            c.setMaxResults(number);
-            c.setReadOnly(true);
-            l_author = c.list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return l_author;
     }
 }

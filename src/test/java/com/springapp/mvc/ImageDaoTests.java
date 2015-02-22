@@ -1,6 +1,7 @@
 package com.springapp.mvc;
 
 import com.darfoo.backend.dao.CRUDEvent;
+import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.ImageDao;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.UpdateCheckResponse;
@@ -15,9 +16,10 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class ImageDaoTests {
-
     @Autowired
     ImageDao imageDao;
+    @Autowired
+    CommonDao commonDao;
 
     @Test
     public void insertImage() {
@@ -28,7 +30,7 @@ public class ImageDaoTests {
 
     @Test
     public void getAllImage() {
-        List<Image> l_image = imageDao.getAllImage();
+        List<Image> l_image = commonDao.getAllResource(Image.class);
         for (Image image : l_image) {
             System.out.println(image.getId() + " " + image.getImage_key());
         }

@@ -8,6 +8,7 @@ import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.dao.resource.ImageDao;
 import com.darfoo.backend.dao.resource.MusicDao;
 import com.darfoo.backend.model.resource.Author;
+import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.UpdateCheckResponse;
@@ -69,12 +70,12 @@ public class MusicDaoTests {
             music.setAuthor(authorList.get(0));
         }
 
-        if (imageDao.getAllImage().size() == 0) {
+        if (commonDao.getAllResource(Image.class).size() == 0) {
             System.out.println("无法找到默认图片，不可以创建伴奏");
             return;
         } else {
             System.out.println("可以找到默认图片，可以创建伴奏");
-            music.setImage(imageDao.getAllImage().get(0));
+            music.setImage((Image) commonDao.getAllResource(Image.class).get(0));
         }
         //music.setImage(image);
         MusicCategory c1 = new MusicCategory();

@@ -294,13 +294,13 @@ public class UploadController {
             music.setAuthor(authorList.get(0));
         }
 
-        if (imageDao.getAllImage().size() == 0) {
+        if (commonDao.getAllResource(Image.class).size() == 0) {
             System.out.println("无法找到默认图片，不可以创建伴奏");
             resultMap.put("statuscode", 501);
             resultMap.put("insertid", -1);
         } else {
             System.out.println("可以找到默认图片，可以创建伴奏");
-            music.setImage(imageDao.getAllImage().get(0));
+            music.setImage((Image) commonDao.getAllResource(Image.class).get(0));
         }
 
         //music.setImage(image);

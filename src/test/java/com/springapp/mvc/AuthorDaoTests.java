@@ -283,7 +283,7 @@ public class AuthorDaoTests {
     @Test
     public void getVideosByHottest() {
         int number = 20;
-        List<Author> authors = authorDao.getAuthorsByHottest(number);
+        List<Author> authors = commonDao.getResourcesByHottest(Author.class, number);
         System.out.println("---------返回" + authors.size() + "个视频---------");
         for (Author a : authors) {
             System.out.println(a.getName());

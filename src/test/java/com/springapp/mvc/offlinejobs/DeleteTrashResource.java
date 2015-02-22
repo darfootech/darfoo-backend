@@ -92,6 +92,8 @@ public class DeleteTrashResource {
         List<Video> videoList = commonDao.getAllResource(Video.class);
         List<Tutorial> tutorialList = commonDao.getAllResource(Tutorial.class);
         List<Music> musicList = commonDao.getAllResource(Music.class);
+        List<Image> imageList = commonDao.getAllResource(Image.class);
+
         for (Video video : videoList) {
             keyList.add(video.getVideo_key());
         }
@@ -104,7 +106,7 @@ public class DeleteTrashResource {
             keyList.add(music.getMusic_key() + ".mp3");
         }
 
-        for (Image image : imageDao.getAllImage()) {
+        for (Image image : imageList) {
             keyList.add(image.getImage_key());
         }
 
