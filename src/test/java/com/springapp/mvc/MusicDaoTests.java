@@ -1,6 +1,7 @@
 package com.springapp.mvc;
 
 import com.darfoo.backend.dao.*;
+import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
@@ -35,6 +36,8 @@ public class MusicDaoTests {
     CommonDao commonDao;
     @Autowired
     PaginationDao paginationDao;
+    @Autowired
+    CategoryDao categoryDao;
 
     @Test
     public void insertSingleMusic() {
@@ -132,8 +135,8 @@ public class MusicDaoTests {
         String[] categories = {"四拍", "情歌风", "D"}; //满足所有条件
         //String[] categories = {"四拍"}; //满足个别条件
         //String[] categories = {"四拍","情歌风","0"};//最后一个条件不满足
-        List<Music> musics = musicDao.getMusicsByCategories(categories);
-        System.out.println("最终满足的music数量>>>>>>>>>>>>>>>>>>>>>" + musics.size());
+        List<Music> musics = categoryDao.getResourcesByCategories(Music.class, categories);
+        System.out.println("最终满足的music数量 -> " + musics.size());
         for (Music music : musics) {
             System.out.println(music.toString());
             System.out.println("——————————————————————————————————————");

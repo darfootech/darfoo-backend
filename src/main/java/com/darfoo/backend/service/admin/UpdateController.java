@@ -103,7 +103,12 @@ public class UpdateController {
         }
 
         int authorid = a.getId();
-        Music queryMusic = musicDao.getMusicByTitleAuthorId(musicTitle, authorid);
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("title", musicTitle);
+        conditions.put("author_id", authorid);
+
+        Music queryMusic = (Music) commonDao.getResourceByFields(Music.class, conditions);
         if (queryMusic == null) {
             System.out.println("伴奏与作者id组合不存在，可以进行插入");
             return 1;

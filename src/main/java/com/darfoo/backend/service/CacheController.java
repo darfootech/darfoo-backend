@@ -341,7 +341,7 @@ public class CacheController {
             targetCategories.add(letterCate);
         }
 
-        List<Music> musics = musicDao.getMusicsByCategories(ServiceUtils.convertList2Array(targetCategories));
+        List<Music> musics = categoryDao.getResourcesByCategories(Music.class, ServiceUtils.convertList2Array(targetCategories));
         List<SingleMusic> result = new ArrayList<SingleMusic>();
         for (Music music : musics) {
             int mid = music.getId();
