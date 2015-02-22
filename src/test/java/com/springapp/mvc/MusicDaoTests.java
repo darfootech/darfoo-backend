@@ -61,23 +61,7 @@ public class MusicDaoTests {
         }
 
         Music music = new Music();
-        List<Author> authorList = commonDao.getAllResource(Author.class);
-        if (authorList.size() == 0) {
-            System.out.println("无法找到默认作者，不可以创建伴奏");
-            return;
-        } else {
-            System.out.println("可以找到默认作者，可以创建伴奏");
-            music.setAuthor(authorList.get(0));
-        }
 
-        if (commonDao.getAllResource(Image.class).size() == 0) {
-            System.out.println("无法找到默认图片，不可以创建伴奏");
-            return;
-        } else {
-            System.out.println("可以找到默认图片，可以创建伴奏");
-            music.setImage((Image) commonDao.getAllResource(Image.class).get(0));
-        }
-        //music.setImage(image);
         MusicCategory c1 = new MusicCategory();
         MusicCategory c2 = new MusicCategory();
         MusicCategory c3 = new MusicCategory();
@@ -161,8 +145,6 @@ public class MusicDaoTests {
         String musicTitle = "呵呵呵";
         String authorName = "仓木麻衣";
         String imageKey = "仓木麻衣.jpg";
-        UpdateCheckResponse response = musicDao.updateMusicCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
-        System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
         String musicBeat = "八拍";
         String musicStyle = "戏曲风";
         String musicLetter = "q";
@@ -170,10 +152,8 @@ public class MusicDaoTests {
         categoryTitles.add(musicBeat);
         categoryTitles.add(musicStyle);
         categoryTitles.add(musicLetter.toUpperCase());
-        if (response.updateIsReady()) {
-            //updateIsReady为true表示可以进行更新操作
-            System.out.println(CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis())));
-        }
+        //updateIsReady为true表示可以进行更新操作
+        System.out.println(CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, categoryTitles, System.currentTimeMillis())));
     }
 
     /**

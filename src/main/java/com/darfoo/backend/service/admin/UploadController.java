@@ -272,46 +272,8 @@ public class UploadController {
             return resultMap;
         }
 
-        /*if (imagekey.equals("")){
-            resultMap.put("statuscode", 508);
-            resultMap.put("insertid", -1);
-            return resultMap;
-        }*/
-
-        /*Image image = imageDao.getImageByName(imagekey);
-        if (image == null){
-            System.out.println("图片不存在，可以进行插入");
-            image = new Image();
-            image.setImage_key(imagekey);
-            imageDao.insertSingleImage(image);
-        }else{
-            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
-            resultMap.put("statuscode", 502);
-            resultMap.put("insertid", -1);
-            return resultMap;
-        }*/
-
         Music music = new Music();
-        List<Author> authorList = commonDao.getAllResource(Author.class);
-        if (authorList.size() == 0) {
-            System.out.println("无法找到默认作者，不可以创建伴奏");
-            resultMap.put("statuscode", 501);
-            resultMap.put("insertid", -1);
-        } else {
-            System.out.println("可以找到默认作者，可以创建伴奏");
-            music.setAuthor(authorList.get(0));
-        }
 
-        if (commonDao.getAllResource(Image.class).size() == 0) {
-            System.out.println("无法找到默认图片，不可以创建伴奏");
-            resultMap.put("statuscode", 501);
-            resultMap.put("insertid", -1);
-        } else {
-            System.out.println("可以找到默认图片，可以创建伴奏");
-            music.setImage((Image) commonDao.getAllResource(Image.class).get(0));
-        }
-
-        //music.setImage(image);
         MusicCategory beat = new MusicCategory();
         MusicCategory style = new MusicCategory();
         MusicCategory letter = new MusicCategory();

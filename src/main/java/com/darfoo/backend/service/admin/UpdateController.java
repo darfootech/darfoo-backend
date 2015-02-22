@@ -94,32 +94,6 @@ public class UpdateController {
         }
     }
 
-    public int checkMusicTitleAuthorIdDuplicate(String musicTitle, String authorName) {
-        Author a = (Author) commonDao.getResourceByTitleOrName(Author.class, authorName, "name");
-        if (a != null) {
-            System.out.println(a.getName());
-        } else {
-            System.out.println("无该author记录");
-        }
-
-        int authorid = a.getId();
-
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("title", musicTitle);
-        conditions.put("author_id", authorid);
-
-        Music queryMusic = (Music) commonDao.getResourceByFields(Music.class, conditions);
-        if (queryMusic == null) {
-            System.out.println("伴奏与作者id组合不存在，可以进行插入");
-            return 1;
-        } else {
-            System.out.println(queryMusic.getId());
-            System.out.println(queryMusic.getAuthor().getName());
-            System.out.println("伴奏与作者id组合已存在，不可以进行插入了，是否需要修改");
-            return 0;
-        }
-    }
-
     public int checkMusicTitleAuthorNameDuplicate(String musicTitle, String authorName) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("title", musicTitle);
@@ -346,14 +320,12 @@ public class UpdateController {
             return 505 + "";
         }
 
-        int duplicateCode = checkMusicTitleAuthorIdDuplicate(musicTitle, authorName);
+        int duplicateCode = checkMusicTitleAuthorNameDuplicate(musicTitle, authorName);
         if (duplicateCode == 0) {
             return 501 + "";
         }
 
         Integer vid = Integer.parseInt(request.getParameter("id"));
-        UpdateCheckResponse response = musicDao.updateMusicCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
-        System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
         Set<String> categoryTitles = new HashSet<String>();
         categoryTitles.add(musicBeat);
         categoryTitles.add(musicStyle);
@@ -361,17 +333,13 @@ public class UpdateController {
         if (musicTitle.equals("")) {
             musicTitle = originTitle;
         }
-        if (response.updateIsReady()) {
-            //updateIsReady为true表示可以进行更新操作
-            String status = CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
-            if (status.equals("UPDATE_SUCCESS")) {
-                return 200 + "";
-            } else {
-                return 503 + "";
-            }
+
+        //updateIsReady为true表示可以进行更新操作
+        String status = CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, categoryTitles, System.currentTimeMillis()));
+        if (status.equals("UPDATE_SUCCESS")) {
+            return 200 + "";
         } else {
-            System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
-            return 501 + "";
+            return 503 + "";
         }
     }
 
@@ -405,8 +373,6 @@ public class UpdateController {
         }
 
         Integer vid = Integer.parseInt(request.getParameter("id"));
-        UpdateCheckResponse response = musicDao.updateMusicCheck(vid, authorObjectName, imageKey); //先检查图片和作者姓名是否已经存在
-        System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
         Set<String> categoryTitles = new HashSet<String>();
         categoryTitles.add(musicBeat);
         categoryTitles.add(musicStyle);
@@ -419,53 +385,18 @@ public class UpdateController {
             authorName = originAuthorName;
         }
 
-        if (response.updateIsReady()) {
-            //updateIsReady为true表示可以进行更新操作
-            String status = CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, authorObjectName, imageKey, categoryTitles, System.currentTimeMillis()));
+        //updateIsReady为true表示可以进行更新操作
+        String status = CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, categoryTitles, System.currentTimeMillis()));
 
-            HashMap<String, Object> updateMap = new HashMap<String, Object>();
-            updateMap.put("authorName", authorName);
+        HashMap<String, Object> updateMap = new HashMap<String, Object>();
+        updateMap.put("authorName", authorName);
 
-            String updateAuthorNameStatus = CRUDEvent.getResponse(commonDao.updateResourceFieldsById(Music.class, vid, updateMap));
+        String updateAuthorNameStatus = CRUDEvent.getResponse(commonDao.updateResourceFieldsById(Music.class, vid, updateMap));
 
-            if (status.equals("UPDATE_SUCCESS") && updateAuthorNameStatus.equals("UPDATE_SUCCESS")) {
-                return 200 + "";
-            } else {
-                return 503 + "";
-            }
+        if (status.equals("UPDATE_SUCCESS") && updateAuthorNameStatus.equals("UPDATE_SUCCESS")) {
+            return 200 + "";
         } else {
-            System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
-            return 501 + "";
-        }
-    }
-
-    @RequestMapping(value = "/admin/music/updateimage/{id}", method = RequestMethod.GET)
-    public String updateMusicImage(@PathVariable String id, ModelMap modelMap) {
-        modelMap.addAttribute("musicid", Integer.parseInt(id));
-        return "updatemusicimage";
-    }
-
-    @RequestMapping(value = "/admin/music/updateimageresource", method = RequestMethod.POST)
-    public String updateMusicImageResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request) {
-        int id = Integer.parseInt(request.getParameter("id"));
-        String imagekey = ((Music) commonDao.getResourceById(Music.class, id)).getImage().getImage_key();
-
-        System.out.println(id + " " + imagekey);
-
-        ServiceUtils.deleteResource(imagekey);
-
-        String imageStatusCode = "";
-
-        try {
-            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (imageStatusCode.equals("200")) {
-            return "success";
-        } else {
-            return "fail";
+            return 503 + "";
         }
     }
 

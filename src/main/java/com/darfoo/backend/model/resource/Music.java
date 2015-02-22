@@ -28,18 +28,6 @@ public class Music implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "category_id", nullable = false, columnDefinition = "int(11) not null")})
     Set<MusicCategory> categories = new HashSet<MusicCategory>();
 
-    //music & author 单向N-1 在music表中增加一个外键列AUTHOR_ID(author的主键)
-    @ManyToOne(targetEntity = Author.class)
-    @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE}) //去掉级联删除
-    @JoinColumn(name = "AUTHOR_ID", referencedColumnName = "id")
-    Author author;
-
-    //music & image 单向N-1 在music表中增加一个外键列IMAGE_ID(image的主键)
-    @ManyToOne(targetEntity = Image.class)
-    @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE})  //去掉级联删除
-    @JoinColumn(name = "IMAGE_ID", referencedColumnName = "id")
-    Image image;
-
     @Column(name = "TITLE", nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     String title;
@@ -80,28 +68,12 @@ public class Music implements Serializable {
     public Music() {
     }
 
-    public Author getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Author author) {
-        this.author = author;
-    }
-
     public Set<MusicCategory> getCategories() {
         return categories;
     }
 
     public void setCategories(Set<MusicCategory> categories) {
         this.categories = categories;
-    }
-
-    public Image getImage() {
-        return image;
-    }
-
-    public void setImage(Image image) {
-        this.image = image;
     }
 
     public Integer getId() {
@@ -139,30 +111,6 @@ public class Music implements Serializable {
     public String toString(boolean isShowCategory) {
         StringBuilder sb = new StringBuilder();
         sb.append("title:" + title + "\nmusic_key:" + music_key + "\nupdate_timestamp:" + update_timestamp);
-        if (author == null) {
-            sb.append("\nauthor:null");
-        } else {
-            sb.append("\nauthor:" + author.getName() + "  演唱家信息:" + author.getDescription());
-            if (author.getImage() == null) {
-                sb.append(" 作者图片:" + null);
-            } else {
-                sb.append(" 作者图片:" + author.getImage().getImage_key());
-            }
-        }
-        if (image == null) {
-            sb.append("\n视频图片:null");
-        } else {
-            sb.append("\n视频图片:" + image.getImage_key());
-        }
-        if (isShowCategory) {
-            if (categories == null) {
-                sb.append("种类为空");
-            } else {
-                for (MusicCategory category : categories) {
-                    sb.append("\n").append("种类:" + category.getTitle() + " 描述:" + category.getDescription());
-                }
-            }
-        }
         return sb.toString();
     }
 }
