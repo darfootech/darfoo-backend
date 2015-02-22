@@ -34,29 +34,6 @@ public class ImageDao {
     }
 
     /**
-     * 获取单个image的信息
-     * 根据image的name来获得image对象
-     *
-     * @return image 返回一个image的实例对象(包含关联表中的数据)，详细请看Image.java类
-     * *
-     */
-    public Image getImageByName(String name) {
-        Image image = null;
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria c = session.createCriteria(Image.class);
-            c.setReadOnly(true);
-            c.add(Restrictions.eq("image_key", name));
-            //设置JOIN mode，这样categories会直接加载到video类中
-//            c.setFetchMode("categories", FetchMode.JOIN);
-            image = (Image) c.uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return image;
-    }
-
-    /**
      * 更新之前需要先执行下面的方法，根据response来确定下一步操作
      * *
      */
@@ -80,58 +57,4 @@ public class ImageDao {
         }
         return response;
     }
-
-    /**
-     * 更新Image（需要先完成check）
-     * *
-     */
-    public int updateImage(Integer id, String newImageKey) {
-        int res;
-        try {
-            Session session = sf.getCurrentSession();
-            String sql = "update image set IMAGE_KEY=:key where id=:id";
-            if (session.createSQLQuery(sql).setString("key", newImageKey).setInteger("id", id).executeUpdate() > 0) {
-                res = CRUDEvent.UPDATE_SUCCESS;
-            } else {
-                res = CRUDEvent.UPDATE_IMAGE_NOTFOUND;
-            }
-        } catch (Exception e) {
-            res = CRUDEvent.UPDATE_FAIL;
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-    /**
-     * 删除Image
-     * (先解除与video music tutorial author对应image_id的约束，将image_id设为null)
-     * *
-     */
-    public int deleteImageById(Integer id) {
-        int res;
-        try {
-            Session session = sf.getCurrentSession();
-            Image image = (Image) session.get(Image.class, id);
-            if (image == null) {
-                System.out.println("没有找到对应id为" + id + "的Author");
-                res = CRUDEvent.DELETE_NOTFOUND;
-            } else {
-                String sql1 = "update video set IMAGE_ID=null where IMAGE_ID=:image_id";
-                String sql2 = "update tutorial set IMAGE_ID=null where IMAGE_ID=:image_id";
-                String sql3 = "update music set IMAGE_ID=null where IMAGE_ID=:image_id";
-                String sql4 = "update author set IMAGE_ID=null where IMAGE_ID=:image_id";
-                System.out.println("video受影响的行数:" + session.createSQLQuery(sql1).setInteger("image_id", id).executeUpdate());
-                System.out.println("tutorial受影响的行数:" + session.createSQLQuery(sql2).setInteger("image_id", id).executeUpdate());
-                System.out.println("music受影响的行数:" + session.createSQLQuery(sql3).setInteger("image_id", id).executeUpdate());
-                System.out.println("author受影响的行数:" + session.createSQLQuery(sql4).setInteger("image_id", id).executeUpdate());
-                session.delete(image);
-                res = CRUDEvent.DELETE_SUCCESS;
-            }
-        } catch (Exception e) {
-            res = CRUDEvent.DELETE_FAIL;
-            e.printStackTrace();
-        }
-        return res;
-    }
-
 }

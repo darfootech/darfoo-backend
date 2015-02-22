@@ -5,12 +5,14 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.ImageDao;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.UpdateCheckResponse;
+import com.darfoo.backend.model.resource.Video;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -48,7 +50,10 @@ public class ImageDaoTests {
         String newImageKey = "aasa1";
         UpdateCheckResponse response = imageDao.updateImageCheck(id, newImageKey);
         if (response.updateIsReady()) {
-            System.out.println(CRUDEvent.getResponse(imageDao.updateImage(id, newImageKey)));
+            HashMap<String, Object> updateMap = new HashMap<String, Object>();
+            updateMap.put("image_key", newImageKey);
+
+            System.out.println(CRUDEvent.getResponse(commonDao.updateResourceFieldsById(Image.class, id, updateMap)));
         } else {
             System.out.println("没有对应id的image或者插入imagekey重复");
         }
@@ -62,7 +67,7 @@ public class ImageDaoTests {
     @Test
     public void deleteImage() {
         Integer id = 115;
-        int res = imageDao.deleteImageById(id);
+        int res = commonDao.deleteResourceById(Image.class, id);
         System.out.println(CRUDEvent.getResponse(res));
     }
 }

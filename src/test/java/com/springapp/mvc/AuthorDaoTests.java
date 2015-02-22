@@ -70,7 +70,10 @@ public class AuthorDaoTests {
             System.out.println("无该author记录，可以创建新作者");
         }
 
-        Image image = imageDao.getImageByName(imagekey);
+        HashMap<String, Object> imageConditions = new HashMap<String, Object>();
+        imageConditions.put("image_key", imagekey);
+
+        Image image = (Image) commonDao.getResourceByFields(Image.class, imageConditions);
         if (image == null) {
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
@@ -102,7 +105,11 @@ public class AuthorDaoTests {
                 System.out.println("无该author记录，可以创建新作者");
             }
 
-            Image image = imageDao.getImageByName(imagekey);
+            HashMap<String, Object> imageConditions = new HashMap<String, Object>();
+            imageConditions.put("image_key", imagekey);
+
+            Image image = (Image) commonDao.getResourceByFields(Image.class, imageConditions);
+
             if (image == null) {
                 System.out.println("图片不存在，可以进行插入");
                 image = new Image();
@@ -140,7 +147,11 @@ public class AuthorDaoTests {
             System.out.println("作者名字不存在，可以进行修改");
         }
 
-        Image image = imageDao.getImageByName(newimageKey);
+        HashMap<String, Object> imageConditions = new HashMap<String, Object>();
+        imageConditions.put("image_key", newimageKey);
+
+        Image image = (Image) commonDao.getResourceByFields(Image.class, imageConditions);
+
         if (image == null) {
             System.out.println("图片不存在，可以进行插入");
             image = new Image();

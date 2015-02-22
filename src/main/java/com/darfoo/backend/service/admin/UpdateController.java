@@ -177,6 +177,7 @@ public class UpdateController {
         categoryTitles.add(videoLetter.toUpperCase());
 
         String newVideoKey = ((Video) commonDao.getResourceById(Video.class, vid)).getVideo_key().split("\\.")[0] + "." + videoType;
+
         HashMap<String, Object> updateMap = new HashMap<String, Object>();
         updateMap.put("video_key", newVideoKey);
         commonDao.updateResourceFieldsById(Video.class, vid, updateMap);
@@ -485,7 +486,10 @@ public class UpdateController {
         }
 
         if (newimagekey != null) {
-            Image image = imageDao.getImageByName(newimagekey);
+            HashMap<String, Object> imageConditions = new HashMap<String, Object>();
+            imageConditions.put("image_key", imagekey);
+
+            Image image = (Image) commonDao.getResourceByFields(Image.class, imageConditions);
             if (image == null) {
                 System.out.println("图片不存在，可以进行插入");
                 image = new Image();

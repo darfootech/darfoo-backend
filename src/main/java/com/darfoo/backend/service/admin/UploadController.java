@@ -79,6 +79,7 @@ public class UploadController {
         conditions.put("author_id", authorid);
 
         Video queryVideo = (Video) commonDao.getResourceByFields(Video.class, conditions);
+
         if (queryVideo == null) {
             System.out.println("视频名字和作者id组合不存在，可以进行插入");
         } else {
@@ -96,7 +97,11 @@ public class UploadController {
             return resultMap;
         }
 
-        Image image = imageDao.getImageByName(imagekey);
+        HashMap<String, Object> imageConditions = new HashMap<String, Object>();
+        imageConditions.put("image_key", imagekey);
+
+        Image image = (Image) commonDao.getResourceByFields(Image.class, imageConditions);
+
         if (image == null) {
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
@@ -186,7 +191,10 @@ public class UploadController {
             return resultMap;
         }
 
-        Image image = imageDao.getImageByName(imagekey);
+        HashMap<String, Object> imageConditions = new HashMap<String, Object>();
+        imageConditions.put("image_key", imagekey);
+
+        Image image = (Image) commonDao.getResourceByFields(Image.class, imageConditions);
         if (image == null) {
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
@@ -346,7 +354,10 @@ public class UploadController {
             return 508;
         }
 
-        Image image = imageDao.getImageByName(imagekey);
+        HashMap<String, Object> imageConditions = new HashMap<String, Object>();
+        imageConditions.put("image_key", imagekey);
+
+        Image image = (Image) commonDao.getResourceByFields(Image.class, imageConditions);
         if (image == null) {
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
