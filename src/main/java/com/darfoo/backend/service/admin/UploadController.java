@@ -325,7 +325,9 @@ public class UploadController {
             System.out.println("插入伴奏成功，伴奏id是" + insertStatus);
         }
 
-        musicDao.updateMusicKeyById(insertStatus, musictitle + "-" + insertStatus);
+        HashMap<String, Object> updateMap = new HashMap<String, Object>();
+        updateMap.put("music_key", musictitle + "-" + insertStatus);
+        commonDao.updateResourceFieldsById(Music.class, insertStatus, updateMap);
 
         resultMap.put("statuscode", 200);
         resultMap.put("insertid", insertStatus);

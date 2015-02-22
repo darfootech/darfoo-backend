@@ -72,7 +72,7 @@ public class VideoDao {
      */
     public UpdateCheckResponse updateVideoCheck(Integer id, String authorname, String imagekey) {
         UpdateCheckResponse response = new UpdateCheckResponse();
-        Video oldVideo = null;
+        Video oldVideo;
         try {
             Session session = sf.getCurrentSession();
             oldVideo = (Video) session.get(Video.class, id);

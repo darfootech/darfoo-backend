@@ -153,7 +153,7 @@ public class MusicDao {
      */
     public UpdateCheckResponse updateMusicCheck(Integer id, String authorname, String imagekey) {
         UpdateCheckResponse response = new UpdateCheckResponse();
-        Music oldMusic = null;
+        Music oldMusic;
         try {
             Session session = sf.getCurrentSession();
             oldMusic = (Music) session.get(Music.class, id);
@@ -202,7 +202,7 @@ public class MusicDao {
      *                       *
      */
     public int updateMusic(Integer id, String title, String authorname, String imagekey, Set<String> categoryTitles, Long updateTimestamp) {
-        int res = 0;
+        int res;
         try {
             Session session = sf.getCurrentSession();
             Music oldMusic = (Music) session.get(Music.class, id);
@@ -213,7 +213,7 @@ public class MusicDao {
                 if (author != null) {
                     oldMusic.setAuthor(author);
                 } else {
-                    return res = CRUDEvent.UPDATE_AUTHOR_NOTFOUND;
+                    return CRUDEvent.UPDATE_AUTHOR_NOTFOUND;
                 }
             } else {
                 System.out.println("作者不需要更新");
@@ -225,7 +225,7 @@ public class MusicDao {
                 if (image != null) {
                     oldMusic.setImage(image);
                 } else {
-                    return res = CRUDEvent.UPDATE_IMAGE_NOTFOUND;
+                    return CRUDEvent.UPDATE_IMAGE_NOTFOUND;
                 }
             } else {
                 System.out.println("图片不需要更新");
@@ -255,45 +255,6 @@ public class MusicDao {
             res = CRUDEvent.UPDATE_SUCCESS;
         } catch (Exception e) {
             res = CRUDEvent.CRUD_EXCETION;
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-    public int updateMusicKeyById(int musicid, String newMusicKey) {
-        int res = 0;
-        try {
-            Session session = sf.getCurrentSession();
-            Music oldMusic = (Music) session.get(Music.class, musicid);
-            oldMusic.setMusic_key(newMusicKey);
-            session.saveOrUpdate(oldMusic);
-            res = CRUDEvent.UPDATE_SUCCESS;
-        } catch (Exception e) {
-            res = CRUDEvent.CRUD_EXCETION;
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-    /**
-     * 更新Music的AUTHOR_NAME
-     *
-     * @param id            muisc_id
-     * @param newAuthorName 新的作者名
-     */
-    public int updateAuthorName(Integer id, String newAuthorName) {
-        int res = 0;
-        try {
-            Session session = sf.getCurrentSession();
-            Music music = (Music) session.get(Music.class, id);
-            if (music == null) {
-                res = CRUDEvent.UPDATE_MUSIC_NOTFOUND;
-            } else {
-                music.setAuthorName(newAuthorName);//更新作者名字
-                res = CRUDEvent.UPDATE_SUCCESS;
-            }
-        } catch (Exception e) {
-            res = CRUDEvent.UPDATE_FAIL;
             e.printStackTrace();
         }
         return res;

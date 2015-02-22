@@ -95,7 +95,9 @@ public class MusicDaoTests {
             System.out.println("插入伴奏成功，视频id是" + insertStatus);
         }
 
-        musicDao.updateMusicKeyById(insertStatus, musicTitle + "-" + insertStatus);
+        HashMap<String, Object> updateMap = new HashMap<String, Object>();
+        updateMap.put("music_key", musicTitle + "-" + insertStatus);
+        commonDao.updateResourceFieldsById(Music.class, insertStatus, updateMap);
     }
 
     @Test
@@ -243,8 +245,12 @@ public class MusicDaoTests {
     public void updateAuthorName() {
         //Integer id = 10;  //UPDATE_MUSIC_NOTFOUND
         Integer id = 30;
-        String newAuthorName = "吉卉";
-        System.out.println(CRUDEvent.getResponse(musicDao.updateAuthorName(id, newAuthorName)));
+        String newAuthorName = "jihui";
+
+        HashMap<String, Object> updateMap = new HashMap<String, Object>();
+        updateMap.put("authorName", newAuthorName);
+
+        System.out.println(CRUDEvent.getResponse(commonDao.updateResourceFieldsById(Music.class, id, updateMap)));
     }
 
     @Test

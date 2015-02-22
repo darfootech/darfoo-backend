@@ -416,7 +416,12 @@ public class UpdateController {
         if (response.updateIsReady()) {
             //updateIsReady为true表示可以进行更新操作
             String status = CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, authorObjectName, imageKey, categoryTitles, System.currentTimeMillis()));
-            String updateAuthorNameStatus = CRUDEvent.getResponse(musicDao.updateAuthorName(vid, authorName));
+
+            HashMap<String, Object> updateMap = new HashMap<String, Object>();
+            updateMap.put("authorName", authorName);
+
+            String updateAuthorNameStatus = CRUDEvent.getResponse(commonDao.updateResourceFieldsById(Music.class, vid, updateMap));
+
             if (status.equals("UPDATE_SUCCESS") && updateAuthorNameStatus.equals("UPDATE_SUCCESS")) {
                 return 200 + "";
             } else {
