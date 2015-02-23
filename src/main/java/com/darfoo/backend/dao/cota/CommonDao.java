@@ -70,12 +70,12 @@ public class CommonDao {
 
                     int authorid = author.getId();
 
-                    if (resource == Video.class) {
+                    if (resource == Video.class || resource == Tutorial.class) {
                         HashMap<String, Object> conditions = new HashMap<String, Object>();
                         conditions.put("title", title);
                         conditions.put("author_id", authorid);
 
-                        Video queryVideo = (Video) getResourceByFields(Video.class, conditions);
+                        Object queryVideo = getResourceByFields(resource, conditions);
 
                         if (queryVideo == null) {
                             System.out.println("视频名字和作者id组合不存在，可以进行插入");
@@ -144,10 +144,12 @@ public class CommonDao {
             }
 
             if (ifHasCategoryResource(resource)) {
-                if (!isCategoryHasSingleChar) {
-                    resultMap.put("statuscode", 503);
-                    resultMap.put("insertid", -1);
-                    return resultMap;
+                if (resource == Video.class) {
+                    if (!isCategoryHasSingleChar) {
+                        resultMap.put("statuscode", 503);
+                        resultMap.put("insertid", -1);
+                        return resultMap;
+                    }
                 }
 
                 Set categories = new HashSet();
@@ -155,6 +157,12 @@ public class CommonDao {
                     criteria = session.createCriteria(VideoCategory.class).add(Restrictions.in("title", categoryTitles));
                     List<VideoCategory> categoryList = criteria.list();
                     categories = new HashSet<VideoCategory>(categoryList);
+                }
+
+                if (resource == Tutorial.class) {
+                    criteria = session.createCriteria(TutorialCategory.class).add(Restrictions.in("title", categoryTitles));
+                    List<TutorialCategory> categoryList = criteria.list();
+                    categories = new HashSet<TutorialCategory>(categoryList);
                 }
 
                 Field field = resource.getDeclaredField("categories");
@@ -172,22 +180,21 @@ public class CommonDao {
             field.setAccessible(true);
             int insertid = (Integer) field.get(object);
 
-            if (resource == Video.class) {
+            if (resource == Video.class || resource == Tutorial.class) {
                 HashMap<String, Object> updateMap = new HashMap<String, Object>();
                 updateMap.put("video_key", insertcontents.get("title") + "-" + insertid + "." + insertcontents.get("videotype"));
-                updateResourceFieldsById(Video.class, insertid, updateMap);
+                updateResourceFieldsById(resource, insertid, updateMap);
 
                 String connectmusic = insertcontents.get("connectmusic");
                 if (!connectmusic.equals("")) {
                     int mid = Integer.parseInt(connectmusic.split("-")[2]);
-                    accompanyDao.updateResourceMusic(Video.class, insertid, mid);
+                    accompanyDao.updateResourceMusic(resource, insertid, mid);
                 }
             }
 
             resultMap.put("statuscode", 200);
             resultMap.put("insertid", insertid);
             return resultMap;
-
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

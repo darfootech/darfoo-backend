@@ -260,8 +260,8 @@ public class UploadController {
         System.out.println("status code is -> " + statuscode);
 
         if (resource == Video.class) {
-            session.setAttribute("videoKey", insertcontents.get("title") + "-" + insertid + "." + insertcontents.get("videotype"));
-            session.setAttribute("videoImage", insertcontents.get("imagekey"));
+            session.setAttribute("videokey", insertcontents.get("title") + "-" + insertid + "." + insertcontents.get("videotype"));
+            session.setAttribute("imagekey", insertcontents.get("imagekey"));
 
         }
 
@@ -291,22 +291,17 @@ public class UploadController {
 
     @RequestMapping("/resources/videoresource/create")
     public String createVideoResource(@RequestParam("videoresource") CommonsMultipartFile videoresource, @RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session) {
-        //upload
-        String videoTitle = (String) session.getAttribute("videoKey");
-        String imageKey = (String) session.getAttribute("videoImage");
+        String videokey = (String) session.getAttribute("videokey");
+        String imagekey = (String) session.getAttribute("imagekey");
 
-        //String videoResourceName = videoresource.getOriginalFilename();
-        //String imageResourceName = imageresource.getOriginalFilename();
-        //System.out.println(videoResourceName + " " + imageResourceName);
-
-        System.out.println(videoTitle + " " + imageKey);
+        System.out.println(videokey + " " + imagekey);
 
         String videoStatusCode = "";
         String imageStatusCode = "";
 
         try {
-            videoStatusCode = ServiceUtils.uploadLargeResource(videoresource, videoTitle);
-            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imageKey);
+            videoStatusCode = ServiceUtils.uploadLargeResource(videoresource, videokey);
+            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
         } catch (IOException e) {
             e.printStackTrace();
         }

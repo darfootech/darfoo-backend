@@ -42,76 +42,25 @@ public class TutorialDaoTests {
     AccompanyDao accompanyDao;
 
     @Test
-    public void insertSingleTutorial() {
-        String title = "Strong Heart321";
+    public void insertTutorialResource() {
+        HashMap<String, String> insertcontents = new HashMap<String, String>();
+        String tutorialTitle = "tutorialtitle-" + System.currentTimeMillis();
         String authorName = "周杰伦";
-        String imagekey = "仓木麻衣3321.jpg";
+        String imagekey = "imagekey-" + System.currentTimeMillis() + ".jpg";
 
-        Author a = (Author) commonDao.getResourceByTitleOrName(Author.class, authorName, "name");
-        if (a != null) {
-            System.out.println(a.getName());
-        } else {
-            System.out.println("无该author记录");
-            return;
-        }
+        insertcontents.put("title", tutorialTitle);
+        insertcontents.put("authorname", authorName);
+        insertcontents.put("imagekey", imagekey);
+        insertcontents.put("category1", "快");
+        insertcontents.put("category2", "适中");
+        insertcontents.put("category3", "分解教学");
+        insertcontents.put("videotype", "mp3");
+        insertcontents.put("connectmusic", "ccccc-memeda-33");
 
-        HashMap<String, Object> imageConditions = new HashMap<String, Object>();
-        imageConditions.put("image_key", imagekey);
+        HashMap<String, Integer> insertresult = commonDao.insertResource(Tutorial.class, insertcontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
+        System.out.println("insertid -> " + insertresult.get("insertid"));
 
-        Image image = (Image) commonDao.getResourceByFields(Image.class, imageConditions);
-        if (image == null) {
-            System.out.println("图片不存在，可以进行插入");
-            image = new Image();
-            image.setImage_key(imagekey);
-            imageDao.insertSingleImage(image);
-        } else {
-            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
-            return;
-        }
-
-        int authorid = a.getId();
-
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("title", title);
-        conditions.put("author_id", authorid);
-
-        Tutorial queryVideo = (Tutorial) commonDao.getResourceByFields(Tutorial.class, conditions);
-
-        if (queryVideo == null) {
-            System.out.println("教程和作者id组合不存在，可以进行插入");
-        } else {
-            System.out.println(queryVideo.getId());
-            System.out.println(queryVideo.getAuthor().getName());
-            System.out.println("教程和作者id组合已存在，不可以进行插入了，是否需要修改");
-            return;
-        }
-
-        Tutorial video = new Tutorial();
-        video.setAuthor(a);
-        video.setImage(image);
-        TutorialCategory c1 = new TutorialCategory();
-        TutorialCategory c2 = new TutorialCategory();
-        TutorialCategory c3 = new TutorialCategory();
-        c1.setTitle("快");
-        c2.setTitle("适中");
-        c3.setTitle("分解教学");
-        Set<TutorialCategory> s_eCategory = video.getCategories();
-        s_eCategory.add(c1);
-        s_eCategory.add(c2);
-        s_eCategory.add(c3);
-        video.setTitle(title);
-        video.setVideo_key(title);
-        video.setUpdate_timestamp(System.currentTimeMillis());
-        int insertStatus = tutorialDao.insertSingleTutorial(video);
-        if (insertStatus == -1) {
-            System.out.println("插入教程失败");
-        } else {
-            System.out.println("插入教程成功，教程id是" + insertStatus);
-        }
-
-        HashMap<String, Object> updateMap = new HashMap<String, Object>();
-        updateMap.put("video_key", title + "-" + insertStatus);
-        commonDao.updateResourceFieldsById(Tutorial.class, insertStatus, updateMap);
     }
 
     @Test
