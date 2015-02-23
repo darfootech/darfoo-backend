@@ -23,23 +23,19 @@ public class Video implements Serializable {
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     Integer id;
 
-    //video & image  单向N-1  在video表中增加一个外键列IMAGE_ID(music的主键)
-    @ManyToOne(targetEntity = Image.class)
-    @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE})
+    @OneToOne(targetEntity = Image.class, fetch = FetchType.EAGER)
+    @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE, CascadeType.DELETE})
     @JoinColumn(name = "IMAGE_ID", referencedColumnName = "id", updatable = true)
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
     Image image;
 
-    //video & author 单向N-1 在video表中增加一个外键列AUTHOR_ID(author的主键)
     @ManyToOne(targetEntity = Author.class)
     @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE})
     @JoinColumn(name = "AUTHOR_ID", referencedColumnName = "id", updatable = true)
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     Author author;
 
-    //video & category
-    @ManyToMany(targetEntity = VideoCategory.class)
-    //@Cascade(value={CascadeType.DELETE,CascadeType.REMOVE})
+    @ManyToMany(targetEntity = VideoCategory.class, cascade = {javax.persistence.CascadeType.ALL})
     @JoinTable(name = "video_category", joinColumns = {@JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false, columnDefinition = "int(11) not null")},
             inverseJoinColumns = {@JoinColumn(name = "category_id", nullable = false, columnDefinition = "int(11) not null")})
     Set<VideoCategory> categories = new HashSet<VideoCategory>();

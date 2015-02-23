@@ -27,6 +27,10 @@ public class TutorialCategory implements Serializable {
     public TutorialCategory() {
     }
 
+    public TutorialCategory(String title) {
+        this.title = title;
+    }
+
     public Integer getId() {
         return id;
     }

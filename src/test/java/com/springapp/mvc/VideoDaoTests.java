@@ -46,9 +46,9 @@ public class VideoDaoTests {
 
     @Test
     public void insertSingleVideo() {
-        String videoTitle = "clea333";
+        String videoTitle = "videotitle-" + System.currentTimeMillis();
         String authorName = "周杰伦";
-        String imagekey = "滨崎步311.jpg";
+        String imagekey = "imagekey-" + System.currentTimeMillis() + ".jpg";
 
         Author a = (Author) commonDao.getResourceByTitleOrName(Author.class, authorName, "name");
         if (a != null) {
@@ -100,7 +100,9 @@ public class VideoDaoTests {
         c2.setTitle("中等");
         c3.setTitle("情歌风");
         c4.setTitle("D");
-        Set<VideoCategory> s_vCategory = video.getCategories();
+        //Set<VideoCategory> s_vCategory = video.getCategories();
+        Set s_vCategory = video.getCategories();
+        //Set s_vCategory = new HashSet<VideoCategory>();
         s_vCategory.add(c1);
         s_vCategory.add(c2);
         s_vCategory.add(c3);
@@ -121,6 +123,26 @@ public class VideoDaoTests {
     }
 
     @Test
+    public void insertVideoResource() {
+        HashMap<String, String> insertcontents = new HashMap<String, String>();
+        String videoTitle = "videotitle-" + System.currentTimeMillis();
+        String authorName = "周杰伦";
+        String imagekey = "imagekey-" + System.currentTimeMillis() + ".jpg";
+
+        insertcontents.put("title", videoTitle);
+        insertcontents.put("authorname", authorName);
+        insertcontents.put("imagekey", imagekey);
+        insertcontents.put("videokey", videoTitle + System.currentTimeMillis());
+        insertcontents.put("timestamp", System.currentTimeMillis() + "");
+        insertcontents.put("category1", "适中");
+        insertcontents.put("category2", "中等");
+        insertcontents.put("category3", "情歌风");
+        insertcontents.put("category4", "D");
+
+        commonDao.insertResource(Video.class, insertcontents);
+    }
+
+    @Test
     public void updateVideokeyById() {
         HashMap<String, Object> updateMap = new HashMap<String, Object>();
         updateMap.put("video_key", "cleanthacleantha.mp4");
@@ -130,7 +152,7 @@ public class VideoDaoTests {
     @Test
     public void getVideoByVideoId() {
         long start = System.currentTimeMillis();
-        Video video = (Video) commonDao.getResourceById(Video.class, 2);
+        Video video = (Video) commonDao.getResourceById(Video.class, 59);
         System.out.println(video.toString(true));
         System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }

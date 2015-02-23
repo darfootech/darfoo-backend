@@ -27,6 +27,10 @@ public class VideoCategory implements Serializable {
     public VideoCategory() {
     }
 
+    public VideoCategory(String title) {
+        this.title = title;
+    }
+
     public Integer getId() {
         return id;
     }

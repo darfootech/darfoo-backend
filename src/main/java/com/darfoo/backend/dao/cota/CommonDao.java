@@ -1,10 +1,10 @@
 package com.darfoo.backend.dao.cota;
 
 import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.model.resource.Author;
-import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Tutorial;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.category.MusicCategory;
+import com.darfoo.backend.model.category.TutorialCategory;
+import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.resource.*;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
@@ -16,10 +16,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by zjh on 15-2-17.
@@ -36,6 +33,143 @@ public class CommonDao {
         } else {
             return false;
         }
+    }
+
+    public HashMap<String, Integer> insertResource(Class resource, HashMap<String, String> insertcontents) {
+        Set<String> categoryTitles = new HashSet<String>();
+
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Criteria criteria;
+
+            Object object = resource.newInstance();
+
+            for (String key : insertcontents.keySet()) {
+                System.out.println(key);
+                if (key.equals("title")) {
+                    Field field = resource.getDeclaredField("title");
+                    field.setAccessible(true);
+
+                    String title = insertcontents.get(key);
+                    String authorname = insertcontents.get("authorname");
+                    Author author = (Author) getResourceByTitleOrName(Author.class, authorname, "name");
+
+                    if (author == null) {
+                        System.out.println("作者还不存在");
+                        resultMap.put("statuscode", 502);
+                        resultMap.put("insertid", -1);
+                        return resultMap;
+                    }
+
+                    int authorid = author.getId();
+
+                    if (resource == Video.class) {
+                        HashMap<String, Object> conditions = new HashMap<String, Object>();
+                        conditions.put("title", title);
+                        conditions.put("author_id", authorid);
+
+                        Video queryVideo = (Video) getResourceByFields(Video.class, conditions);
+
+                        if (queryVideo == null) {
+                            System.out.println("视频名字和作者id组合不存在，可以进行插入");
+                            field.set(object, title);
+                        } else {
+                            System.out.println("视频名字和作者id组合已存在，不可以进行插入了，是否需要修改");
+                            resultMap.put("statuscode", 500);
+                            resultMap.put("insertid", -1);
+                            return resultMap;
+                        }
+                    }
+                } else if (key.equals("videokey")) {
+                    Field field = resource.getDeclaredField("video_key");
+                    field.setAccessible(true);
+                    field.set(object, insertcontents.get(key));
+                } else if (key.equals("imagekey")) {
+                    String imagekey = insertcontents.get(key);
+                    criteria = session.createCriteria(Image.class).add(Restrictions.eq("image_key", imagekey));
+                    if (criteria.list().size() == 1) {
+                        System.out.println("相同imagekey的图片已经存在了");
+                        resultMap.put("statuscode", 501);
+                        resultMap.put("insertid", -1);
+                        return resultMap;
+                    } else {
+                        Field field = resource.getDeclaredField("image");
+                        field.setAccessible(true);
+                        field.set(object, new Image(imagekey));
+                    }
+                } else if (key.equals("authorname")) {
+                    String authorname = insertcontents.get(key);
+                    if (resource == Video.class || resource == Tutorial.class) {
+                        criteria = session.createCriteria(Author.class).add(Restrictions.eq("name", authorname));
+                        if (criteria.list().size() == 1) {
+                            Field field = resource.getDeclaredField("author");
+                            field.setAccessible(true);
+                            field.set(object, criteria.uniqueResult());
+                        } else {
+                            System.out.println("作者还不存在");
+                            resultMap.put("statuscode", 502);
+                            resultMap.put("insertid", -1);
+                            return resultMap;
+                        }
+                    } else if (resource == Music.class) {
+                        Field field = resource.getDeclaredField("authorName");
+                        field.setAccessible(true);
+                        field.set(object, authorname);
+                    } else {
+                        System.out.println("something is wired");
+                    }
+                } else if (key.contains("category")) {
+                    categoryTitles.add(insertcontents.get(key));
+                } else if (key.contains("timestamp")) {
+                    Field field = resource.getDeclaredField("update_timestamp");
+                    field.setAccessible(true);
+                    field.set(object, Long.parseLong(insertcontents.get(key)));
+                } else {
+                    System.out.println("something is wired");
+                }
+            }
+
+            if (ifHasCategoryResource(resource)) {
+                Set categories = new HashSet();
+                if (resource == Video.class) {
+                    criteria = session.createCriteria(VideoCategory.class).add(Restrictions.in("title", categoryTitles));
+                    List<VideoCategory> categoryList = criteria.list();
+                    categories = new HashSet<VideoCategory>(categoryList);
+                }
+
+                Field field = resource.getDeclaredField("categories");
+                field.setAccessible(true);
+                field.set(object, categories);
+            }
+
+            session.save(object);
+
+            Field field = resource.getDeclaredField("id");
+            field.setAccessible(true);
+            int insertid = (Integer) field.get(object);
+
+            if (resource == Video.class) {
+                HashMap<String, Object> updateMap = new HashMap<String, Object>();
+                updateMap.put("video_key", insertcontents.get("title") + "-" + insertid);
+                updateResourceFieldsById(Video.class, insertid, updateMap);
+            }
+
+            resultMap.put("statuscode", 200);
+            resultMap.put("insertid", insertid);
+            return resultMap;
+
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        resultMap.put("statuscode", 404);
+        resultMap.put("insertid", -1);
+        return resultMap;
     }
 
     /**

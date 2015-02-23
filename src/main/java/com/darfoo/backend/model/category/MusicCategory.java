@@ -27,6 +27,10 @@ public class MusicCategory implements Serializable {
     public MusicCategory() {
     }
 
+    public MusicCategory(String title) {
+        this.title = title;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -19,6 +19,10 @@ public class Image implements Serializable {
 
     }
 
+    public Image(String image_key) {
+        this.image_key = image_key;
+    }
+
     public String getImage_key() {
         return image_key;
     }
