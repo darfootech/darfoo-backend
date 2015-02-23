@@ -1,4 +1,4 @@
-package com.springapp.mvc;
+package com.springapp.mvc.resource;
 
 import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.caches.dao.AuthorCacheDao;

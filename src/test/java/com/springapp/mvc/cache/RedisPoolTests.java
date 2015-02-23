@@ -1,4 +1,4 @@
-package com.springapp.mvc;
+package com.springapp.mvc.cache;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

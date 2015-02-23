@@ -1,4 +1,4 @@
-package com.springapp.mvc;
+package com.springapp.mvc.cache;
 
 import com.darfoo.backend.caches.cota.CacheProtocol;
 import com.darfoo.backend.dao.cota.CommonDao;

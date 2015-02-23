@@ -1,4 +1,4 @@
-package com.springapp.mvc;
+package com.springapp.mvc.admin;
 
 /**
  * Created by zjh on 15-1-11.
