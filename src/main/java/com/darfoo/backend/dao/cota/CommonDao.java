@@ -26,6 +26,8 @@ import java.util.*;
 public class CommonDao {
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    AccompanyDao accompanyDao;
 
     private boolean ifHasCategoryResource(Class resource) {
         if (resource == Video.class || resource == Tutorial.class || resource == Music.class) {
@@ -152,8 +154,14 @@ public class CommonDao {
 
             if (resource == Video.class) {
                 HashMap<String, Object> updateMap = new HashMap<String, Object>();
-                updateMap.put("video_key", insertcontents.get("title") + "-" + insertid);
+                updateMap.put("video_key", insertcontents.get("title") + "-" + insertid + "." + insertcontents.get("videotype"));
                 updateResourceFieldsById(Video.class, insertid, updateMap);
+
+                String connectmusic = insertcontents.get("connectmusic");
+                if (!connectmusic.equals("")) {
+                    int mid = Integer.parseInt(connectmusic.split("-")[2]);
+                    accompanyDao.updateResourceMusic(Video.class, insertid, mid);
+                }
             }
 
             resultMap.put("statuscode", 200);

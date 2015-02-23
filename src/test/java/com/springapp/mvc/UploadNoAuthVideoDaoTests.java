@@ -110,7 +110,7 @@ public class UploadNoAuthVideoDaoTests {
         Assert.assertEquals(CRUDEvent.DELETE_SUCCESS, result);
     }
 
-    @Test
+    /*@Test
     public void insertSingleVideo() {
         String videotitle = "cleantha33";
         String imagekey = "cleantha0-1421489883812-30:ad:05:01:a6:83.mp3";
@@ -199,5 +199,5 @@ public class UploadNoAuthVideoDaoTests {
         resultMap.put("statuscode", 200);
         resultMap.put("insertid", insertStatus);
         System.out.println(resultMap.get("statuscode"));
-    }
+    }*/
 }

@@ -57,7 +57,7 @@ public class VerifyUploadVideoController {
         return "verifyallvideo";
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String singleUnVerifyVideos(@PathVariable Integer id, ModelMap modelMap, HttpSession session) {
         UploadNoAuthVideo video = uploadNoAuthVideoDao.getUploadVideoById(id);
         session.setAttribute("uploadvideoid", id);
@@ -152,9 +152,9 @@ public class VerifyUploadVideoController {
         resultMap.put("statuscode", 200);
         resultMap.put("insertid", insertStatus);
         return resultMap;
-    }
+    }*/
 
-    @RequestMapping(value = "/verify", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/verify", method = RequestMethod.POST)
     public
     @ResponseBody
     String verifyUploadVideo(HttpServletRequest request, HttpSession session) {
@@ -191,7 +191,7 @@ public class VerifyUploadVideoController {
 
             return statusCode + "";
         }
-    }
+    }*/
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public

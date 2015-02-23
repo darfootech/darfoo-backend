@@ -45,84 +45,6 @@ public class VideoDaoTests {
     VideoCates videoCates = new VideoCates();
 
     @Test
-    public void insertSingleVideo() {
-        String videoTitle = "videotitle-" + System.currentTimeMillis();
-        String authorName = "周杰伦";
-        String imagekey = "imagekey-" + System.currentTimeMillis() + ".jpg";
-
-        Author a = (Author) commonDao.getResourceByTitleOrName(Author.class, authorName, "name");
-        if (a != null) {
-            System.out.println(a.getName());
-        } else {
-            System.out.println("无该author记录");
-            return;
-        }
-
-        HashMap<String, Object> imageConditions = new HashMap<String, Object>();
-        imageConditions.put("image_key", imagekey);
-
-        Image image = (Image) commonDao.getResourceByFields(Image.class, imageConditions);
-        if (image == null) {
-            System.out.println("图片不存在，可以进行插入");
-            image = new Image();
-            image.setImage_key(imagekey);
-            imageDao.insertSingleImage(image);
-        } else {
-            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
-            return;
-        }
-
-        int authorid = a.getId();
-        //视频title可以重名,但是不可能出现视频title一样,作者id都一样的情况,也就是一个作者的作品中不会出现重名的情况
-
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("title", videoTitle);
-        conditions.put("author_id", authorid);
-
-        Video queryVideo = (Video) commonDao.getResourceByFields(Video.class, conditions);
-        if (queryVideo == null) {
-            System.out.println("视频名字和作者id组合不存在，可以进行插入");
-        } else {
-            System.out.println(queryVideo.getId());
-            System.out.println(queryVideo.getAuthor().getName());
-            System.out.println("视频名字和作者id组合已存在，不可以进行插入了，是否需要修改");
-            return;
-        }
-
-        Video video = new Video();
-        video.setAuthor(a);
-        video.setImage(image);
-        VideoCategory c1 = new VideoCategory();
-        VideoCategory c2 = new VideoCategory();
-        VideoCategory c3 = new VideoCategory();
-        VideoCategory c4 = new VideoCategory();
-        c1.setTitle("适中");
-        c2.setTitle("中等");
-        c3.setTitle("情歌风");
-        c4.setTitle("D");
-        //Set<VideoCategory> s_vCategory = video.getCategories();
-        Set s_vCategory = video.getCategories();
-        //Set s_vCategory = new HashSet<VideoCategory>();
-        s_vCategory.add(c1);
-        s_vCategory.add(c2);
-        s_vCategory.add(c3);
-        s_vCategory.add(c4);
-        video.setTitle(videoTitle);
-        video.setVideo_key(videoTitle + System.currentTimeMillis());
-        video.setUpdate_timestamp(System.currentTimeMillis());
-        int insertStatus = videoDao.insertSingleVideo(video);
-        if (insertStatus == -1) {
-            System.out.println("插入视频失败");
-        } else {
-            System.out.println("插入视频成功，视频id是" + insertStatus);
-        }
-
-        HashMap<String, Object> updateMap = new HashMap<String, Object>();
-        updateMap.put("video_key", videoTitle + "-" + insertStatus);
-        commonDao.updateResourceFieldsById(Video.class, insertStatus, updateMap);
-    }
-
-    @Test
     public void insertVideoResource() {
         HashMap<String, String> insertcontents = new HashMap<String, String>();
         String videoTitle = "videotitle-" + System.currentTimeMillis();
@@ -138,8 +60,12 @@ public class VideoDaoTests {
         insertcontents.put("category2", "中等");
         insertcontents.put("category3", "情歌风");
         insertcontents.put("category4", "D");
+        insertcontents.put("videotype", "mp3");
+        insertcontents.put("connectmusic", "ccccc-memeda-33");
 
-        commonDao.insertResource(Video.class, insertcontents);
+        HashMap<String, Integer> insertresult = commonDao.insertResource(Video.class, insertcontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
+        System.out.println("insertid -> " + insertresult.get("insertid"));
     }
 
     @Test

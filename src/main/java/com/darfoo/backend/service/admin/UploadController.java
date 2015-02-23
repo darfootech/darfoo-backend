@@ -46,111 +46,6 @@ public class UploadController {
     @Autowired
     AccompanyDao accompanyDao;
 
-    public HashMap<String, Integer> insertSingleVideo(String videotitle, String videotype, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle, String videoletter) {
-        System.out.println(authorname);
-
-        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
-
-        Author targetAuthor = (Author) commonDao.getResourceByTitleOrName(Author.class, authorname, "name");
-        if (targetAuthor != null) {
-            System.out.println(targetAuthor.getName());
-        } else {
-            System.out.println("无该author记录");
-            resultMap.put("statuscode", 501);
-            resultMap.put("insertid", -1);
-            return resultMap;
-        }
-
-        boolean isSingleLetter = ServiceUtils.isSingleCharacter(videoletter);
-        if (isSingleLetter) {
-            System.out.println("是单个大写字母");
-        } else {
-            System.out.println("不是单个大写字母");
-            resultMap.put("statuscode", 505);
-            resultMap.put("insertid", -1);
-            return resultMap;
-        }
-
-        int authorid = targetAuthor.getId();
-        //视频title可以重名,但是不可能出现视频title一样,作者id都一样的情况,也就是一个作者的作品中不会出现重名的情况
-
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("title", videotitle);
-        conditions.put("author_id", authorid);
-
-        Video queryVideo = (Video) commonDao.getResourceByFields(Video.class, conditions);
-
-        if (queryVideo == null) {
-            System.out.println("视频名字和作者id组合不存在，可以进行插入");
-        } else {
-            System.out.println(queryVideo.getId());
-            System.out.println(queryVideo.getAuthor().getName());
-            System.out.println("视频名字和作者id组合已存在，不可以进行插入了，是否需要修改");
-            resultMap.put("statuscode", 503);
-            resultMap.put("insertid", -1);
-            return resultMap;
-        }
-
-        if (imagekey.equals("")) {
-            resultMap.put("statuscode", 508);
-            resultMap.put("insertid", -1);
-            return resultMap;
-        }
-
-        HashMap<String, Object> imageConditions = new HashMap<String, Object>();
-        imageConditions.put("image_key", imagekey);
-
-        Image image = (Image) commonDao.getResourceByFields(Image.class, imageConditions);
-
-        if (image == null) {
-            System.out.println("图片不存在，可以进行插入");
-            image = new Image();
-            image.setImage_key(imagekey);
-            imageDao.insertSingleImage(image);
-        } else {
-            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
-            resultMap.put("statuscode", 502);
-            resultMap.put("insertid", -1);
-            return resultMap;
-        }
-
-        Video video = new Video();
-        video.setAuthor(targetAuthor);
-        Image img = new Image();
-        img.setImage_key(imagekey);
-        video.setImage(img);
-        VideoCategory speed = new VideoCategory();
-        VideoCategory difficult = new VideoCategory();
-        VideoCategory style = new VideoCategory();
-        VideoCategory letter = new VideoCategory();
-        speed.setTitle(videospeed);
-        difficult.setTitle(videodifficult);
-        style.setTitle(videostyle);
-        letter.setTitle(videoletter);
-        Set<VideoCategory> s_vCategory = video.getCategories();
-        s_vCategory.add(speed);
-        s_vCategory.add(difficult);
-        s_vCategory.add(style);
-        s_vCategory.add(letter);
-        video.setTitle(videotitle);
-        video.setVideo_key(videotitle);
-        video.setUpdate_timestamp(System.currentTimeMillis());
-        int insertStatus = videoDao.insertSingleVideo(video);
-        if (insertStatus == -1) {
-            System.out.println("插入视频失败");
-        } else {
-            System.out.println("插入视频成功，视频id是" + insertStatus);
-        }
-
-        HashMap<String, Object> updateMap = new HashMap<String, Object>();
-        updateMap.put("video_key", videotitle + "-" + insertStatus + "." + videotype);
-        commonDao.updateResourceFieldsById(Video.class, insertStatus, updateMap);
-
-        resultMap.put("statuscode", 200);
-        resultMap.put("insertid", insertStatus);
-        return resultMap;
-    }
-
     public HashMap<String, Integer> insertSingleTutorialVideo(String videotitle, String videotype, String authorname, String imagekey, String videospeed, String videodifficult, String videostyle) {
         System.out.println(authorname);
 
@@ -339,6 +234,8 @@ public class UploadController {
         return 200;
     }
 
+
+
     /*video part*/
     @RequestMapping(value = "/resources/video/new", method = RequestMethod.GET)
     public String uploadVideo(ModelMap modelMap, HttpSession session) {
@@ -348,7 +245,7 @@ public class UploadController {
         return "uploadvideo";
     }
 
-    @RequestMapping(value = "/resources/video/create", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/resources/video/create", method = RequestMethod.POST)
     public
     @ResponseBody
     String createVideo(HttpServletRequest request, HttpSession session) {
@@ -383,7 +280,7 @@ public class UploadController {
 
             return statusCode + "";
         }
-    }
+    }*/
 
     @RequestMapping(value = "/resources/videoresource/new", method = RequestMethod.GET)
     public String uploadVideoResource() {
