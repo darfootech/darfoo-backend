@@ -23,10 +23,9 @@ public class Tutorial implements Serializable {
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     Integer id;
 
-    //单向N-1  在tutorialvideo表中增加一个外键列IMAGE_ID(music的主键)
-    @ManyToOne(targetEntity = Image.class)
-    @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE})
-    @JoinColumn(name = "IMAGE_ID", referencedColumnName = "id")
+    @OneToOne(targetEntity = Image.class, fetch = FetchType.EAGER)
+    @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+    @JoinColumn(name = "IMAGE_ID", referencedColumnName = "id", updatable = true)
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
     Image image;
 
@@ -38,7 +37,7 @@ public class Tutorial implements Serializable {
     Author author;
 
     //category
-    @ManyToMany(targetEntity = TutorialCategory.class)
+    @ManyToMany(targetEntity = TutorialCategory.class, cascade = {javax.persistence.CascadeType.ALL})
     @JoinTable(name = "tutorial_category", joinColumns = {@JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false, columnDefinition = "int(11) not null")},
             inverseJoinColumns = {@JoinColumn(name = "category_id", nullable = false, columnDefinition = "int(11) not null")})
     Set<TutorialCategory> categories = new HashSet<TutorialCategory>();
