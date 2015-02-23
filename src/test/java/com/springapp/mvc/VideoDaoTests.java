@@ -54,8 +54,6 @@ public class VideoDaoTests {
         insertcontents.put("title", videoTitle);
         insertcontents.put("authorname", authorName);
         insertcontents.put("imagekey", imagekey);
-        insertcontents.put("videokey", videoTitle + System.currentTimeMillis());
-        insertcontents.put("timestamp", System.currentTimeMillis() + "");
         insertcontents.put("category1", "适中");
         insertcontents.put("category2", "中等");
         insertcontents.put("category3", "情歌风");

@@ -78,6 +78,11 @@ public class ServiceUtils {
         return pattern.matcher(letter).matches();
     }
 
+    public static boolean isValidImageKey(String imagekey) {
+        Pattern pattern = Pattern.compile("([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)");
+        return pattern.matcher(imagekey).matches();
+    }
+
     public static void deleteResource(String key) {
         qiniuUtils.deleteResource(key);
     }

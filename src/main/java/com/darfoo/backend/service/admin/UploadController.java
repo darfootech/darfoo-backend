@@ -6,6 +6,7 @@ import com.darfoo.backend.dao.resource.*;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.cota.ModelInsert;
 import com.darfoo.backend.model.resource.*;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -234,7 +236,37 @@ public class UploadController {
         return 200;
     }
 
+    public int commonInsertResource(Class resource, HttpServletRequest request, HttpSession session) {
+        HashMap<String, String> insertcontents = new HashMap<String, String>();
 
+        for (Field field : resource.getDeclaredFields()) {
+            if (field.isAnnotationPresent(ModelInsert.class)) {
+                String insertkey = field.getName().toLowerCase();
+                insertcontents.put(insertkey, request.getParameter(insertkey));
+            }
+        }
+
+        if (resource == Video.class) {
+            insertcontents.put("category1", request.getParameter("videospeed"));
+            insertcontents.put("category2", request.getParameter("videodifficult"));
+            insertcontents.put("category3", request.getParameter("videostyle"));
+            insertcontents.put("category4", request.getParameter("videoletter").toUpperCase());
+        }
+
+        HashMap<String, Integer> result = commonDao.insertResource(resource, insertcontents);
+        int statuscode = result.get("statuscode");
+        int insertid = result.get("insertid");
+
+        System.out.println("status code is -> " + statuscode);
+
+        if (resource == Video.class) {
+            session.setAttribute("videoKey", insertcontents.get("title") + "-" + insertid + "." + insertcontents.get("videotype"));
+            session.setAttribute("videoImage", insertcontents.get("imagekey"));
+
+        }
+
+        return statuscode;
+    }
 
     /*video part*/
     @RequestMapping(value = "/resources/video/new", method = RequestMethod.GET)
@@ -245,42 +277,12 @@ public class UploadController {
         return "uploadvideo";
     }
 
-    /*@RequestMapping(value = "/resources/video/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/resources/video/create", method = RequestMethod.POST)
     public
     @ResponseBody
-    String createVideo(HttpServletRequest request, HttpSession session) {
-        String videoTitle = request.getParameter("title");
-        String videoType = request.getParameter("videotype");
-        String authorName = request.getParameter("authorname");
-        String imagekey = request.getParameter("imagekey");
-        String videoSpeed = request.getParameter("videospeed");
-        String videoDifficult = request.getParameter("videodifficult");
-        String videoStyle = request.getParameter("videostyle");
-        String videoLetter = request.getParameter("videoletter").toUpperCase();
-        String connectmusic = request.getParameter("connectmusic");
-        System.out.println("connectmusic -> " + connectmusic);
-
-        Long update_timestamp = System.currentTimeMillis() / 1000;
-        System.out.println("requests: " + videoTitle + " " + authorName + " " + imagekey + " " + videoSpeed + " " + videoDifficult + " " + videoStyle + " " + videoLetter + " " + update_timestamp);
-
-        HashMap<String, Integer> resultMap = this.insertSingleVideo(videoTitle, videoType, authorName, imagekey, videoSpeed, videoDifficult, videoStyle, videoLetter);
-        int statusCode = resultMap.get("statuscode");
-        System.out.println("status code is: " + statusCode);
-        if (statusCode != 200) {
-            return statusCode + "";
-        } else {
-            int insertid = resultMap.get("insertid");
-            session.setAttribute("videoKey", videoTitle + "-" + insertid + "." + videoType);
-            session.setAttribute("videoImage", imagekey);
-
-            if (!connectmusic.equals("")) {
-                int mid = Integer.parseInt(connectmusic.split("-")[2]);
-                accompanyDao.updateResourceMusic(Video.class, insertid, mid);
-            }
-
-            return statusCode + "";
-        }
-    }*/
+    Integer createVideo(HttpServletRequest request, HttpSession session) {
+        return commonInsertResource(Video.class, request, session);
+    }
 
     @RequestMapping(value = "/resources/videoresource/new", method = RequestMethod.GET)
     public String uploadVideoResource() {

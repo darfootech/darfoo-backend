@@ -3,6 +3,7 @@ package com.darfoo.backend.model.resource;
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
 import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.cota.ModelInsert;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -46,6 +47,7 @@ public class Video implements Serializable {
 
     @Column(name = "TITLE", nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
+    @ModelInsert
     String title;
 
     @Column(name = "UPDATE_TIMESTAMP", nullable = false, columnDefinition = "bigint(64) not null")
@@ -62,6 +64,22 @@ public class Video implements Serializable {
 
     @Column(name = "RECOMMEND", nullable = true, updatable = true, columnDefinition = "int default 0")
     Integer recommend;
+
+    @Transient
+    @ModelInsert
+    String videotype;
+
+    @Transient
+    @ModelInsert
+    String authorname;
+
+    @Transient
+    @ModelInsert
+    String imagekey;
+
+    @Transient
+    @ModelInsert
+    String connectmusic;
 
     public Video() {
     }
