@@ -6,11 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by zjh on 15-2-23.
+ * Created by zjh on 15-2-24.
  */
 
-//标识出资源中需要从界面view层获得并插入到数据库的字段名称
+//标识出资源中需要上传到七牛上的字段名称
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface ModelInsert {
+public @interface ModelUpload {
+    ModelUploadEnum type() default ModelUploadEnum.SMALL;
 }

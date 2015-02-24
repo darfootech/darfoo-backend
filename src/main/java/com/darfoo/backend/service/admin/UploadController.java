@@ -7,7 +7,10 @@ import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.category.VideoCategory;
 import com.darfoo.backend.model.cota.ModelInsert;
+import com.darfoo.backend.model.cota.ModelUpload;
+import com.darfoo.backend.model.cota.ModelUploadEnum;
 import com.darfoo.backend.model.resource.*;
+import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
@@ -127,6 +131,40 @@ public class UploadController {
         return statuscode;
     }
 
+    public String commonUploadResource(Class resource, HashMap<String, CommonsMultipartFile> uploadresources, HttpSession session) {
+        for (Field field : resource.getDeclaredFields()) {
+            if (field.isAnnotationPresent(ModelUpload.class)) {
+                field.setAccessible(true);
+                Annotation annotation = field.getAnnotation(ModelUpload.class);
+                ModelUpload modelUpload = (ModelUpload) annotation;
+
+                CommonsMultipartFile file = uploadresources.get(field.getName());
+                String key = session.getAttribute(field.getName()).toString();
+
+                try {
+                    if (modelUpload.type() == ModelUploadEnum.SMALL) {
+                        String status = ServiceUtils.uploadSmallResource(file, key);
+                        if (!status.equals("200")) {
+                            return "fail";
+                        }
+                    } else if (modelUpload.type() == ModelUploadEnum.LARGE) {
+                        String status = ServiceUtils.uploadLargeResource(file, key);
+                        if (!status.equals("200")) {
+                            return "fail";
+                        }
+                    } else {
+                        System.out.println("wired");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "fail";
+                }
+            }
+        }
+
+        return "success";
+    }
+
     @RequestMapping(value = "/resources/{type}/new", method = RequestMethod.GET)
     public String uploadResource(@PathVariable String type, ModelMap modelMap, HttpSession session) {
         session.setAttribute("resource", type);
@@ -136,16 +174,10 @@ public class UploadController {
     }
 
     @RequestMapping(value = "/resources/{type}/create", method = RequestMethod.POST)
-    public @ResponseBody Integer reateResource(@PathVariable String type, HttpServletRequest request, HttpSession session) {
-        if (type.equals("video")) {
-            return commonInsertResource(Video.class, request, session);
-        } else if (type.equals("tutorial")) {
-            return commonInsertResource(Tutorial.class, request, session);
-        } else if (type.equals("music")) {
-            return commonInsertResource(Music.class, request, session);
-        } else {
-            return 404;
-        }
+    public
+    @ResponseBody
+    Integer createResource(@PathVariable String type, HttpServletRequest request, HttpSession session) {
+        return commonInsertResource(TypeClassMapping.typeClassMap.get(type), request, session);
     }
 
     @RequestMapping(value = "/resources/{type}resource/new", method = RequestMethod.GET)
@@ -155,49 +187,17 @@ public class UploadController {
 
     @RequestMapping(value = "/resources/{type}resource/create")
     public String createMediaResource(@RequestParam("videoresource") CommonsMultipartFile videoresource, @RequestParam("imageresource") CommonsMultipartFile imageresource, @PathVariable String type, HttpSession session) {
-        String videokey = (String) session.getAttribute("videokey");
-        String imagekey = (String) session.getAttribute("imagekey");
-
-        System.out.println(videokey + " " + imagekey);
-
-        String videoStatusCode = "";
-        String imageStatusCode = "";
-
-        try {
-            videoStatusCode = ServiceUtils.uploadLargeResource(videoresource, videokey);
-            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (videoStatusCode.equals("200") && imageStatusCode.equals("200")) {
-            return "success";
-        } else {
-            return "fail";
-        }
+        HashMap<String, CommonsMultipartFile> uploadresources = new HashMap<String, CommonsMultipartFile>();
+        uploadresources.put("videokey", videoresource);
+        uploadresources.put("imagekey", imageresource);
+        return commonUploadResource(TypeClassMapping.typeClassMap.get(type), uploadresources, session);
     }
 
-    @RequestMapping("/resources/musicresourcenopic/create")
+    @RequestMapping("/resources/musicresource/create")
     public String createMusicResourceNoPic(@RequestParam("musicresource") CommonsMultipartFile musicresource, HttpSession session) {
-        String musicTitle = (String) session.getAttribute("musickey");
-
-        String videoResourceName = musicresource.getOriginalFilename();
-
-        System.out.println("musicresourcename -> " + videoResourceName);
-
-        String musicStatusCode = "";
-
-        try {
-            musicStatusCode = ServiceUtils.uploadLargeResource(musicresource, musicTitle);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (musicStatusCode.equals("200")) {
-            return "success";
-        } else {
-            return "fail";
-        }
+        HashMap<String, CommonsMultipartFile> uploadresources = new HashMap<String, CommonsMultipartFile>();
+        uploadresources.put("musickey", musicresource);
+        return commonUploadResource(Music.class, uploadresources, session);
     }
 
     @RequestMapping(value = "/resources/author/create", method = RequestMethod.POST)

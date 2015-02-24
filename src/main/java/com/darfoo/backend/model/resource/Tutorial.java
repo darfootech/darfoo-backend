@@ -4,6 +4,8 @@ import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.cota.ModelInsert;
+import com.darfoo.backend.model.cota.ModelUpload;
+import com.darfoo.backend.model.cota.ModelUploadEnum;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -76,11 +78,16 @@ public class Tutorial implements Serializable {
 
     @Transient
     @ModelInsert
+    @ModelUpload(type = ModelUploadEnum.SMALL)
     String imagekey;
 
     @Transient
     @ModelInsert
     String connectmusic;
+
+    @Transient
+    @ModelUpload(type = ModelUploadEnum.LARGE)
+    String videokey;
 
     public Tutorial() {
     }
