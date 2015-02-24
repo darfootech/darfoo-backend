@@ -79,7 +79,7 @@ public class GalleryController {
         modelMap.addAttribute("authors", commonDao.getAllResource(Author.class));
         modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw(video.getImage().getImage_key()));
         if (video.getMusic() != null) {
-            String connectmusic = video.getMusic().getTitle() + "-" + video.getMusic().getAuthorName();
+            String connectmusic = video.getMusic().getTitle() + "-" + video.getMusic().getAuthorname();
             modelMap.addAttribute("connectmusic", connectmusic);
         } else {
             modelMap.addAttribute("connectmusic", "请输入要关联的伴奏并选择");
@@ -120,7 +120,7 @@ public class GalleryController {
         modelMap.addAttribute("authors", commonDao.getAllResource(Author.class));
         modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw(tutorial.getImage().getImage_key()));
         if (tutorial.getMusic() != null) {
-            String connectmusic = tutorial.getMusic().getTitle() + "-" + tutorial.getMusic().getAuthorName();
+            String connectmusic = tutorial.getMusic().getTitle() + "-" + tutorial.getMusic().getAuthorname();
             modelMap.addAttribute("connectmusic", connectmusic);
         } else {
             modelMap.addAttribute("connectmusic", "请输入要关联的伴奏并选择");

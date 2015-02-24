@@ -3,6 +3,7 @@ package com.darfoo.backend.model.resource;
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
 import com.darfoo.backend.model.category.MusicCategory;
+import com.darfoo.backend.model.cota.ModelInsert;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -30,6 +31,7 @@ public class Music implements Serializable {
 
     @Column(name = "TITLE", nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
+    @ModelInsert
     String title;
 
     @Column(name = "MUSIC_KEY", nullable = false, unique = true, columnDefinition = "varchar(255) not null")
@@ -47,14 +49,18 @@ public class Music implements Serializable {
     //因为伴奏的作者不需要其他的信息 所以伴奏只需要一个作者名字就可以了
     @Column(name = "AUTHOR_NAME", nullable = true, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
-    String authorName;
+    @ModelInsert
+    String authorname;
 
-    public String getAuthorName() {
-        return authorName;
+    public Music() {
     }
 
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
+    public String getAuthorname() {
+        return authorname;
+    }
+
+    public void setAuthorname(String authorname) {
+        this.authorname = authorname;
     }
 
     public Long getHottest() {
@@ -63,9 +69,6 @@ public class Music implements Serializable {
 
     public void setHottest(Long hottest) {
         this.hottest = hottest;
-    }
-
-    public Music() {
     }
 
     public Set<MusicCategory> getCategories() {

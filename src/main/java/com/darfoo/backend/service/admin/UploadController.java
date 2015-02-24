@@ -62,7 +62,7 @@ public class UploadController {
 
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("title", musictitle);
-        conditions.put("author_name", authorname);
+        conditions.put("authorname", authorname);
 
         Music queryMusic = (Music) commonDao.getResourceByFields(Music.class, conditions);
         if (queryMusic == null) {
@@ -89,7 +89,7 @@ public class UploadController {
         s_mCategory.add(letter);
         music.setTitle(musictitle);
         music.setMusic_key(musictitle);
-        music.setAuthorName(authorname);
+        music.setAuthorname(authorname);
         music.setUpdate_timestamp(System.currentTimeMillis());
         int insertStatus = musicDao.insertSingleMusic(music);
         if (insertStatus == -1) {

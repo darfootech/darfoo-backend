@@ -97,7 +97,7 @@ public class UpdateController {
     public int checkMusicTitleAuthorNameDuplicate(String musicTitle, String authorName) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("title", musicTitle);
-        conditions.put("author_name", authorName);
+        conditions.put("authorname", authorName);
 
         Music queryMusic = (Music) commonDao.getResourceByFields(Music.class, conditions);
         if (queryMusic == null) {

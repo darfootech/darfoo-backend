@@ -43,7 +43,7 @@ public class CacheProtocol {
                                 Author author = (Author) field.get(object);
                                 cacheInsertMap.put("authorname", author.getName());
                                 System.out.println(field.getName() + " -> " + author.getName());
-                            } else if (field.getName().toLowerCase().equals("authorname")) {
+                            } else if (field.getName().equals("authorname")) {
                                 cacheInsertMap.put("authorname", field.get(object).toString());
                                 System.out.println(field.getName() + " -> " + field.get(object));
                             } else if (field.getName().equals("update_timestamp")) {

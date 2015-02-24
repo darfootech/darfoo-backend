@@ -7,6 +7,7 @@ import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.dao.resource.ImageDao;
 import com.darfoo.backend.dao.resource.MusicDao;
+import com.darfoo.backend.model.cota.ModelInsert;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.Music;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -41,51 +43,20 @@ public class MusicDaoTests {
     CategoryDao categoryDao;
 
     @Test
-    public void insertSingleMusic() {
-        String musicTitle = "ccccc";
-        //String imagekey = System.currentTimeMillis() + ".jpg";
-        String authorname = "吉卉";
+    public void insertMusicResource() {
+        HashMap<String, String> insertcontents = new HashMap<String, String>();
+        String musicTitle = "musictitle-" + System.currentTimeMillis();
+        String authorName = "吉卉";
 
-        //伴奏title可以重名,但是不可能出现authorname和title都一样的情况,也就是一个作者名字对应的伴奏中不会出现重名的情况
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("title", musicTitle);
-        conditions.put("author_name", authorname);
+        insertcontents.put("title", musicTitle);
+        insertcontents.put("authorname", authorName);
+        insertcontents.put("category1", "八拍");
+        insertcontents.put("category2", "情歌风");
+        insertcontents.put("category4", "D");
 
-        Music queryMusic = (Music) commonDao.getResourceByFields(Music.class, conditions);
-        if (queryMusic == null) {
-            System.out.println("伴奏名字和作者名字组合不存在，可以进行插入");
-        } else {
-            System.out.println(queryMusic.toString());
-            System.out.println("伴奏名字和作者名字组合已存在，不可以进行插入了，是否需要修改");
-            return;
-        }
-
-        Music music = new Music();
-
-        MusicCategory c1 = new MusicCategory();
-        MusicCategory c2 = new MusicCategory();
-        MusicCategory c3 = new MusicCategory();
-        c1.setTitle("八拍");
-        c2.setTitle("情歌风");
-        c3.setTitle("S");
-        Set<MusicCategory> s_mCategory = music.getCategories();
-        s_mCategory.add(c1);
-        s_mCategory.add(c2);
-        s_mCategory.add(c3);
-        music.setTitle(musicTitle);
-        music.setMusic_key(musicTitle);
-        music.setUpdate_timestamp(System.currentTimeMillis());
-        music.setAuthorName(authorname);
-        int insertStatus = musicDao.insertSingleMusic(music);
-        if (insertStatus == -1) {
-            System.out.println("插入伴奏失败");
-        } else {
-            System.out.println("插入伴奏成功，视频id是" + insertStatus);
-        }
-
-        HashMap<String, Object> updateMap = new HashMap<String, Object>();
-        updateMap.put("music_key", musicTitle + "-" + insertStatus);
-        commonDao.updateResourceFieldsById(Music.class, insertStatus, updateMap);
+        HashMap<String, Integer> insertresult = commonDao.insertResource(Music.class, insertcontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
+        System.out.println("insertid -> " + insertresult.get("insertid"));
     }
 
     @Test
@@ -93,11 +64,11 @@ public class MusicDaoTests {
         long start = System.currentTimeMillis();
         Music music = (Music) commonDao.getResourceById(Music.class, 30);
         System.out.println(music.toString(true));
-        String authorname = music.getAuthorName();
+        String authorname = music.getAuthorname();
         if (authorname.equals("")) {
             System.out.println("authorname is empty please fill it");
         } else {
-            System.out.println("authorname -> " + music.getAuthorName());
+            System.out.println("authorname -> " + music.getAuthorname());
         }
         System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }

@@ -59,18 +59,19 @@ public class CommonDao {
 
                     String title = insertcontents.get(key);
                     String authorname = insertcontents.get("authorname");
-                    Author author = (Author) getResourceByTitleOrName(Author.class, authorname, "name");
-
-                    if (author == null) {
-                        System.out.println("作者还不存在");
-                        resultMap.put("statuscode", 502);
-                        resultMap.put("insertid", -1);
-                        return resultMap;
-                    }
-
-                    int authorid = author.getId();
 
                     if (resource == Video.class || resource == Tutorial.class) {
+                        Author author = (Author) getResourceByTitleOrName(Author.class, authorname, "name");
+
+                        if (author == null) {
+                            System.out.println("作者还不存在");
+                            resultMap.put("statuscode", 502);
+                            resultMap.put("insertid", -1);
+                            return resultMap;
+                        }
+
+                        int authorid = author.getId();
+
                         HashMap<String, Object> conditions = new HashMap<String, Object>();
                         conditions.put("title", title);
                         conditions.put("author_id", authorid);
@@ -90,11 +91,32 @@ public class CommonDao {
                             resultMap.put("insertid", -1);
                             return resultMap;
                         }
+                    } else if (resource == Music.class) {
+                        HashMap<String, Object> conditions = new HashMap<String, Object>();
+                        conditions.put("title", title);
+                        conditions.put("authorname", authorname);
+                        Object queryMusic = getResourceByFields(resource, conditions);
+
+                        if (queryMusic == null) {
+                            System.out.println("伴奏名字和作者名字组合不存在，可以进行插入");
+                            field.set(object, title);
+
+                            Field keyField = resource.getDeclaredField("music_key");
+                            keyField.setAccessible(true);
+                            keyField.set(object, title + System.currentTimeMillis());
+                        } else {
+                            System.out.println("伴奏名字和作者名字组合已存在，不可以进行插入了，是否需要修改");
+                            resultMap.put("statuscode", 505);
+                            resultMap.put("insertid", -1);
+                            return resultMap;
+                        }
+                    } else {
+                        System.out.println("wired");
                     }
                 } else if (key.equals("imagekey")) {
                     String imagekey = insertcontents.get(key);
 
-                    if (!ServiceUtils.isValidImageKey(imagekey)){
+                    if (!ServiceUtils.isValidImageKey(imagekey)) {
                         resultMap.put("statuscode", 504);
                         resultMap.put("insertid", -1);
                         return resultMap;
@@ -126,7 +148,7 @@ public class CommonDao {
                             return resultMap;
                         }
                     } else if (resource == Music.class) {
-                        Field field = resource.getDeclaredField("authorName");
+                        Field field = resource.getDeclaredField("authorname");
                         field.setAccessible(true);
                         field.set(object, authorname);
                     } else {
@@ -144,7 +166,7 @@ public class CommonDao {
             }
 
             if (ifHasCategoryResource(resource)) {
-                if (resource == Video.class) {
+                if (resource == Video.class || resource == Music.class) {
                     if (!isCategoryHasSingleChar) {
                         resultMap.put("statuscode", 503);
                         resultMap.put("insertid", -1);
@@ -152,18 +174,23 @@ public class CommonDao {
                     }
                 }
 
-                Set categories = new HashSet();
+                Class categoryClass = null;
+                Set categories;
                 if (resource == Video.class) {
-                    criteria = session.createCriteria(VideoCategory.class).add(Restrictions.in("title", categoryTitles));
-                    List<VideoCategory> categoryList = criteria.list();
-                    categories = new HashSet<VideoCategory>(categoryList);
+                    categoryClass = VideoCategory.class;
                 }
 
                 if (resource == Tutorial.class) {
-                    criteria = session.createCriteria(TutorialCategory.class).add(Restrictions.in("title", categoryTitles));
-                    List<TutorialCategory> categoryList = criteria.list();
-                    categories = new HashSet<TutorialCategory>(categoryList);
+                    categoryClass = TutorialCategory.class;
                 }
+
+                if (resource == Music.class) {
+                    categoryClass = MusicCategory.class;
+                }
+
+                criteria = session.createCriteria(categoryClass).add(Restrictions.in("title", categoryTitles));
+                List categoryList = criteria.list();
+                categories = new HashSet(categoryList);
 
                 Field field = resource.getDeclaredField("categories");
                 field.setAccessible(true);
@@ -190,6 +217,12 @@ public class CommonDao {
                     int mid = Integer.parseInt(connectmusic.split("-")[2]);
                     accompanyDao.updateResourceMusic(resource, insertid, mid);
                 }
+            }
+
+            if (resource == Music.class) {
+                HashMap<String, Object> updateMap = new HashMap<String, Object>();
+                updateMap.put("music_key", insertcontents.get("title") + "-" + insertid);
+                updateResourceFieldsById(resource, insertid, updateMap);
             }
 
             resultMap.put("statuscode", 200);
@@ -479,14 +512,14 @@ public class CommonDao {
 
                 sameAuthorList = getResourcesByFields(resource, conditions);
             } else if (resource == Music.class) {
-                Field field = resource.getDeclaredField("authorName");
+                Field field = resource.getDeclaredField("authorname");
                 field.setAccessible(true);
                 Object object = getResourceById(resource, id);
 
                 String authorname = field.get(object).toString();
 
                 HashMap<String, Object> conditions = new HashMap<String, Object>();
-                conditions.put("authorName", authorname);
+                conditions.put("authorname", authorname);
 
                 sameAuthorList = getResourcesByFields(resource, conditions);
             } else {

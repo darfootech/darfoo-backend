@@ -30,7 +30,7 @@ public class MusicController {
         List<HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
         for (Music music : musics){
             HashMap<String, Object> item = new HashMap<String, Object>();
-            item.put("word", music.getTitle() + "-" + music.getAuthorName() + "-" + music.getId());
+            item.put("word", music.getTitle() + "-" + music.getAuthorname() + "-" + music.getId());
             result.add(item);
         }
         return result;
