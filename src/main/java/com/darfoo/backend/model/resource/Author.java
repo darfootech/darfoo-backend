@@ -38,15 +38,12 @@ public class Author implements Serializable {
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
     Image image;
 
-    @Column(name = "UPDATE_TIMESTAMP", nullable = false, columnDefinition = "bigint(64) not null")
-    @CacheInsert(type = CacheInsertEnum.NORMAL)
-    Long update_timestamp;
-
     //点击量
     @Column(name = "HOTTEST", nullable = false, updatable = true, columnDefinition = "bigint(64) default 0")
     Long hottest;
 
     @Transient
+    @ModelInsert
     @ModelUpload(type = ModelUploadEnum.SMALL)
     String imagekey;
 

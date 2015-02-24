@@ -200,6 +200,8 @@ public class CommonDao {
             }
 
             if (ifHasCategoryResource(resource)) {
+                setResourceAttr(resource, object, "update_timestamp", System.currentTimeMillis());
+
                 if (resource == Video.class || resource == Music.class) {
                     if (!isCategoryHasSingleChar) {
                         resultMap.put("statuscode", 503);
@@ -236,8 +238,6 @@ public class CommonDao {
             if (resource == Video.class || resource == Tutorial.class) {
                 setResourceAttr(resource, object, "recommend", 0);
             }
-
-            setResourceAttr(resource, object, "update_timestamp", System.currentTimeMillis());
 
             session.save(object);
 
