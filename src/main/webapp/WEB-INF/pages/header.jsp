@@ -55,16 +55,18 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="<%if(resource.equals("video")){out.write("active");}else{out.write("");}%>"><a
-                        href="/darfoobackend/rest/resources/video/new/">舞蹈欣赏</a></li>
-                <li class="<%if(resource.equals("tutorial")){out.write("active");}else{out.write("");}%>"><a
-                        href="/darfoobackend/rest/resources/tutorial/new/">舞蹈教程</a></li>
-                <li class="<%if(resource.equals("music")){out.write("active");}else{out.write("");}%>"><a
-                        href="/darfoobackend/rest/resources/music/new/">舞蹈伴奏</a></li>
-                <li class="<%if(resource.equals("author")){out.write("active");}else{out.write("");}%>"><a
-                        href="/darfoobackend/rest/resources/author/new/">明星舞队</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">下载资源表格 <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">新建资源 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/darfoobackend/rest/resources/video/new">舞蹈欣赏</a></li>
+                        <li><a href="/darfoobackend/rest/resources/tutorial/new">舞蹈教程</a></li>
+                        <li><a href="/darfoobackend/rest/resources/music/new">舞蹈伴奏</a></li>
+                        <li><a href="/darfoobackend/rest/resources/author/new">明星舞队</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">下载表格 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="/darfoobackend/rest/downloadvideos">下载视频资源表格</a></li>
                         <li><a href="/darfoobackend/rest/downloadtutorials">下载教程资源表格</a></li>
@@ -73,21 +75,45 @@
                 </li>
 
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">查看和修改 <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">查看和修改资源 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="/darfoobackend/rest/admin/video/all">查看修改舞蹈欣赏</a></li>
                         <li><a href="/darfoobackend/rest/admin/tutorial/all">查看修改舞蹈教程</a></li>
                         <li><a href="/darfoobackend/rest/admin/music/all">查看修改舞蹈伴奏</a></li>
                         <li><a href="/darfoobackend/rest/admin/author/all">查看修改明星舞队</a></li>
                         <li><a href="/darfoobackend/rest/admin/connectmusic/all">关联舞蹈伴奏和舞蹈视频</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">资源推荐 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
                         <li><a href="/darfoobackend/rest/admin/recommend/video">首页推荐舞蹈欣赏</a></li>
                         <li><a href="/darfoobackend/rest/admin/recommend/tutorial">首页推荐舞蹈教程</a></li>
                         <li><a href="/darfoobackend/rest/admin/recommend/updateimage/all">查看修改推荐舞蹈视频图片</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">资源审核 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/darfoobackend/rest/admin/verifyvideo/all">审核上传视频资源</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">资源同步 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/darfoobackend/rest/admin/runscript/upload">同步视频音频资源</a></li>
+                        <li><a href="/darfoobackend/rest/admin/runscript/resourcevolumn">查看未同步视频音频容量</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">版本发布 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
                         <li><a href="/darfoobackend/rest/admin/version/release/new">上传新发布版本launcher</a></li>
                         <li><a href="/darfoobackend/rest/admin/version/debug/new">上传新调试版本launcher</a></li>
-                        <li><a href="/darfoobackend/rest/admin/runscript/upload">同步视频</a></li>
-                        <li><a href="/darfoobackend/rest/admin/runscript/resourcevolumn">查看已有视频容量</a></li>
-                        <li><a href="/darfoobackend/rest/admin/verifyvideo/all">审核上传视频</a></li>
                     </ul>
                 </li>
             </ul>
