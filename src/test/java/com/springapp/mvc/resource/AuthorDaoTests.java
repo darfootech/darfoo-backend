@@ -59,37 +59,18 @@ public class AuthorDaoTests {
     }
 
     @Test
-    public void insertAuthor() {
-        String authorName = System.currentTimeMillis() + "";
-        String imagekey = System.currentTimeMillis() + "dg111";
+    public void insertAuthorResource() {
+        HashMap<String, String> insertcontents = new HashMap<String, String>();
+        String authorName = "周杰伦" + System.currentTimeMillis() ;
+        String imagekey = "imagekey-" + System.currentTimeMillis() + ".jpg";
 
-        if (authorDao.isExistAuthor(authorName)) {
-            System.out.println("已存在，不能创建新作者");
-            return;
-        } else {
-            System.out.println("无该author记录，可以创建新作者");
-        }
+        insertcontents.put("name", authorName);
+        insertcontents.put("imagekey", imagekey);
+        insertcontents.put("description", "台湾人气偶像组合");
 
-        HashMap<String, Object> imageConditions = new HashMap<String, Object>();
-        imageConditions.put("image_key", imagekey);
-
-        Image image = (Image) commonDao.getResourceByFields(Image.class, imageConditions);
-        if (image == null) {
-            System.out.println("图片不存在，可以进行插入");
-            image = new Image();
-            image.setImage_key(imagekey);
-            imageDao.insertSingleImage(image);
-        } else {
-            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
-            return;
-        }
-
-        Author author = new Author();
-        author.setName(authorName);
-        author.setDescription("台湾人气偶像组合");
-        author.setImage(image);
-        int res = authorDao.insertAuthor(author);
-        System.out.println(CRUDEvent.getResponse(res));
+        HashMap<String, Integer> insertresult = commonDao.insertResource(Author.class, insertcontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
+        System.out.println("insertid -> " + insertresult.get("insertid"));
     }
 
     @Test

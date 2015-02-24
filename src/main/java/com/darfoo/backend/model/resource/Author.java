@@ -2,6 +2,9 @@ package com.darfoo.backend.model.resource;
 
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
+import com.darfoo.backend.model.cota.ModelInsert;
+import com.darfoo.backend.model.cota.ModelUpload;
+import com.darfoo.backend.model.cota.ModelUploadEnum;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -20,9 +23,12 @@ public class Author implements Serializable {
     Integer id;
     @Column(name = "NAME", nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
+    @ModelInsert
     String name;
+
     @Column(name = "DESCRIPTION", nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
+    @ModelInsert
     String description;
 
     //暂时弄成单向对应关系
@@ -32,9 +38,17 @@ public class Author implements Serializable {
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
     Image image;
 
+    @Column(name = "UPDATE_TIMESTAMP", nullable = false, columnDefinition = "bigint(64) not null")
+    @CacheInsert(type = CacheInsertEnum.NORMAL)
+    Long update_timestamp;
+
     //点击量
-    @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
+    @Column(name = "HOTTEST", nullable = false, updatable = true, columnDefinition = "bigint(64) default 0")
     Long hottest;
+
+    @Transient
+    @ModelUpload(type = ModelUploadEnum.SMALL)
+    String imagekey;
 
     public Author() {
 

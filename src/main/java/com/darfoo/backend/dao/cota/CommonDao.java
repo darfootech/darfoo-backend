@@ -1,6 +1,7 @@
 package com.darfoo.backend.dao.cota;
 
 import com.darfoo.backend.dao.CRUDEvent;
+import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.category.VideoCategory;
@@ -29,6 +30,8 @@ public class CommonDao {
     private SessionFactory sessionFactory;
     @Autowired
     AccompanyDao accompanyDao;
+    @Autowired
+    AuthorDao authorDao;
 
     private boolean ifHasCategoryResource(Class resource) {
         if (resource == Video.class || resource == Tutorial.class || resource == Music.class) {
@@ -36,6 +39,39 @@ public class CommonDao {
         } else {
             return false;
         }
+    }
+
+    private boolean ifHasHottestResource(Class resource) {
+        if (ifHasCategoryResource(resource) || resource == Author.class) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void setResourceAttr(Class resource, Object object, String fieldname, Object value) {
+        try {
+            Field field = resource.getDeclaredField(fieldname);
+            field.setAccessible(true);
+            field.set(object, value);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Object getResourceAttr(Class resource, Object object, String fieldname) {
+        try {
+            Field field = resource.getDeclaredField(fieldname);
+            field.setAccessible(true);
+            return field.get(object);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public HashMap<String, Integer> insertResource(Class resource, HashMap<String, String> insertcontents) {
@@ -54,9 +90,6 @@ public class CommonDao {
             for (String key : insertcontents.keySet()) {
                 System.out.println(key);
                 if (key.equals("title")) {
-                    Field field = resource.getDeclaredField("title");
-                    field.setAccessible(true);
-
                     String title = insertcontents.get(key);
                     String authorname = insertcontents.get("authorname");
 
@@ -80,11 +113,8 @@ public class CommonDao {
 
                         if (queryVideo == null) {
                             System.out.println("视频名字和作者id组合不存在，可以进行插入");
-                            field.set(object, title);
-
-                            Field keyField = resource.getDeclaredField("video_key");
-                            keyField.setAccessible(true);
-                            keyField.set(object, title + System.currentTimeMillis());
+                            setResourceAttr(resource, object, key, title);
+                            setResourceAttr(resource, object, "video_key", title + System.currentTimeMillis());
                         } else {
                             System.out.println("视频名字和作者id组合已存在，不可以进行插入了，是否需要修改");
                             resultMap.put("statuscode", 500);
@@ -99,11 +129,8 @@ public class CommonDao {
 
                         if (queryMusic == null) {
                             System.out.println("伴奏名字和作者名字组合不存在，可以进行插入");
-                            field.set(object, title);
-
-                            Field keyField = resource.getDeclaredField("music_key");
-                            keyField.setAccessible(true);
-                            keyField.set(object, title + System.currentTimeMillis());
+                            setResourceAttr(resource, object, key, title);
+                            setResourceAttr(resource, object, "music_key", title + System.currentTimeMillis());
                         } else {
                             System.out.println("伴奏名字和作者名字组合已存在，不可以进行插入了，是否需要修改");
                             resultMap.put("statuscode", 505);
@@ -129,18 +156,14 @@ public class CommonDao {
                         resultMap.put("insertid", -1);
                         return resultMap;
                     } else {
-                        Field field = resource.getDeclaredField("image");
-                        field.setAccessible(true);
-                        field.set(object, new Image(imagekey));
+                        setResourceAttr(resource, object, "image", new Image(imagekey));
                     }
                 } else if (key.equals("authorname")) {
                     String authorname = insertcontents.get(key);
                     if (resource == Video.class || resource == Tutorial.class) {
                         criteria = session.createCriteria(Author.class).add(Restrictions.eq("name", authorname));
                         if (criteria.list().size() == 1) {
-                            Field field = resource.getDeclaredField("author");
-                            field.setAccessible(true);
-                            field.set(object, criteria.uniqueResult());
+                            setResourceAttr(resource, object, "author", criteria.uniqueResult());
                         } else {
                             System.out.println("作者还不存在");
                             resultMap.put("statuscode", 502);
@@ -148,9 +171,7 @@ public class CommonDao {
                             return resultMap;
                         }
                     } else if (resource == Music.class) {
-                        Field field = resource.getDeclaredField("authorname");
-                        field.setAccessible(true);
-                        field.set(object, authorname);
+                        setResourceAttr(resource, object, key, insertcontents.get(key));
                     } else {
                         System.out.println("authorname something is wired class -> " + resource.getName());
                     }
@@ -160,6 +181,19 @@ public class CommonDao {
                         isCategoryHasSingleChar = true;
                     }
                     categoryTitles.add(category);
+                } else if (key.equals("name")) {
+                    String name = insertcontents.get(key);
+                    if (authorDao.isExistAuthor(name)) {
+                        System.out.println("相同名字明星舞队已存在，不能创建新明星舞队");
+                        resultMap.put("statuscode", 506);
+                        resultMap.put("insertid", -1);
+                        return resultMap;
+                    } else {
+                        System.out.println("可以创建新明星舞队");
+                        setResourceAttr(resource, object, key, insertcontents.get(key));
+                    }
+                } else if (key.equals("description")) {
+                    setResourceAttr(resource, object, key, insertcontents.get(key));
                 } else {
                     System.out.println("key something is wired key -> " + key);
                 }
@@ -192,20 +226,22 @@ public class CommonDao {
                 List categoryList = criteria.list();
                 categories = new HashSet(categoryList);
 
-                Field field = resource.getDeclaredField("categories");
-                field.setAccessible(true);
-                field.set(object, categories);
+                setResourceAttr(resource, object, "categories", categories);
             }
 
-            Field timeField = resource.getDeclaredField("update_timestamp");
-            timeField.setAccessible(true);
-            timeField.set(object, System.currentTimeMillis());
+            if (ifHasHottestResource(resource)) {
+                setResourceAttr(resource, object, "hottest", 0L);
+            }
+
+            if (resource == Video.class || resource == Tutorial.class) {
+                setResourceAttr(resource, object, "recommend", 0);
+            }
+
+            setResourceAttr(resource, object, "update_timestamp", System.currentTimeMillis());
 
             session.save(object);
 
-            Field field = resource.getDeclaredField("id");
-            field.setAccessible(true);
-            int insertid = (Integer) field.get(object);
+            int insertid = (Integer) getResourceAttr(resource, object, "id");
 
             if (resource == Video.class || resource == Tutorial.class) {
                 HashMap<String, Object> updateMap = new HashMap<String, Object>();
@@ -231,8 +267,6 @@ public class CommonDao {
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
         resultMap.put("statuscode", 404);
