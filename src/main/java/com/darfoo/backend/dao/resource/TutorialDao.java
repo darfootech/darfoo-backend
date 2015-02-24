@@ -20,46 +20,6 @@ public class TutorialDao {
     @Autowired
     private SessionFactory sf;
 
-    //插入单个Tutorial视频
-    @SuppressWarnings("unchecked")
-    public int insertSingleTutorial(Tutorial video) {
-        Set<TutorialCategory> eCategories = video.getCategories();
-        Author author = video.getAuthor();
-        Image image = video.getImage();
-        try {
-            Session session = sf.getCurrentSession();
-            //先查询image表中是否包含此video的图片信息
-            Criteria c = session.createCriteria(Image.class).add(Restrictions.eq("image_key", image.getImage_key()));//image的image_key字段需为unique
-            List<Image> l_img = c.list();
-            if (l_img.size() > 0) {
-                //image表包含该video的图片信息,用持久化的实体代替原来的值
-                video.setImage(l_img.get(0));
-            }
-            //查询author表中是否包含此video的作者信息
-            c = session.createCriteria(Author.class).add(Restrictions.eq("name", author.getName())); //author的name字段需为unique
-            List<Author> l_author = c.list();
-            if (l_author.size() > 0) {
-                //author表包含该video的作者信息,用持久化的实体代替原来的值
-                video.setAuthor(l_author.get(0));
-            }
-            //对于VideoCategory，插入时默认认为全都属于VideoCategory表，所以只需找到对应种类的实体即可
-            Set<String> s_title = new HashSet<String>();  //videoCategory的title字段为unique
-            for (TutorialCategory eCategory : eCategories) {
-                s_title.add(eCategory.getTitle());
-            }
-            c = session.createCriteria(TutorialCategory.class).add(Restrictions.in("title", s_title));
-            List<TutorialCategory> l_vCategory = c.list();
-            eCategories = new HashSet<TutorialCategory>(l_vCategory);
-            video.setCategories(eCategories);
-            session.saveOrUpdate(video);
-            int insertId = video.getId();
-            return insertId;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
     /**
      * 更新Tutorial之前先做check(主要是对author和image的check)
      * ***不对title(key)进行update，这样的更新没有必要，不如直接插入一个Video(吉卉这个请注意)

@@ -24,30 +24,6 @@ public class MusicDao {
     @Autowired
     private SessionFactory sf;
 
-    //插入单个音频
-    @SuppressWarnings("unchecked")
-    public int insertSingleMusic(Music music) {
-        Set<MusicCategory> mCategories = music.getCategories();
-        try {
-            Session session = sf.getCurrentSession();
-            //对于MusicCategory，插入时默认认为全都属于MusicCategory表，所以只需找到对应种类的实体即可
-            Set<String> s_title = new HashSet<String>();  //videoCategory的title字段为unique
-            for (MusicCategory mCategory : mCategories) {
-                s_title.add(mCategory.getTitle());
-            }
-            Criteria c = session.createCriteria(MusicCategory.class).add(Restrictions.in("title", s_title));
-            List<MusicCategory> l_mCategory = c.list();
-            mCategories = new HashSet<MusicCategory>(l_mCategory);
-            music.setCategories(mCategories);
-            session.save(music);
-            int insertId = music.getId();
-            return insertId;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
     /**
      * update Music
      * 在update之前，请务必做updateMusicCheck操作，保证UpdateCheckResponse.updateIsReady()==true;若为false,请根据response的成员值来设计逻辑
