@@ -310,6 +310,7 @@ public class CommonDao {
             Criteria criteria = session.createCriteria(resource);
             criteria.addOrder(Order.desc("id"));
             criteria.setReadOnly(true);
+            criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
             //如果fetch了就会出现duplicate的情况 反正需要得到类别的时候直接从单个资源那里fetch就行了
             /*if (ifHasCategoryResource(resource)) {
                 criteria.setFetchMode("categories", FetchMode.JOIN);

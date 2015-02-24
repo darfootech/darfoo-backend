@@ -7,7 +7,6 @@
     <div class="row">
         <div class="col-md-12">
             <c:if test="${not empty allvideos}">
-
                 <ul>
                     <c:forEach var="video" items="${allvideos}">
                         <a style="color: #FFF" href="/darfoobackend/rest/admin/video/${video.id}">
@@ -18,7 +17,6 @@
                         <br/>
                     </c:forEach>
                 </ul>
-
             </c:if>
         </div>
     </div>

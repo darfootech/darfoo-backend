@@ -38,7 +38,7 @@ public class Video implements Serializable {
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     Author author;
 
-    @ManyToMany(targetEntity = VideoCategory.class, cascade = {javax.persistence.CascadeType.ALL})
+    @ManyToMany(targetEntity = VideoCategory.class, cascade = {javax.persistence.CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(name = "video_category", joinColumns = {@JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false, columnDefinition = "int(11) not null")},
             inverseJoinColumns = {@JoinColumn(name = "category_id", nullable = false, columnDefinition = "int(11) not null")})
     Set<VideoCategory> categories = new HashSet<VideoCategory>();

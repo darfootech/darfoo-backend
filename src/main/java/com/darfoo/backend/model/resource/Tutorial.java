@@ -39,7 +39,7 @@ public class Tutorial implements Serializable {
     Author author;
 
     //category
-    @ManyToMany(targetEntity = TutorialCategory.class, cascade = {javax.persistence.CascadeType.ALL})
+    @ManyToMany(targetEntity = TutorialCategory.class, cascade = {javax.persistence.CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(name = "tutorial_category", joinColumns = {@JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false, columnDefinition = "int(11) not null")},
             inverseJoinColumns = {@JoinColumn(name = "category_id", nullable = false, columnDefinition = "int(11) not null")})
     Set<TutorialCategory> categories = new HashSet<TutorialCategory>();

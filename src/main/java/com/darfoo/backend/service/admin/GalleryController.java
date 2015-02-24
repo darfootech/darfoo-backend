@@ -1,10 +1,6 @@
 package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.dao.resource.MusicDao;
-import com.darfoo.backend.dao.resource.TutorialDao;
-import com.darfoo.backend.dao.resource.VideoDao;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.category.VideoCategory;
@@ -12,6 +8,7 @@ import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,23 +29,16 @@ import java.util.Set;
 @Controller
 public class GalleryController {
     @Autowired
-    VideoDao videoDao;
-    @Autowired
-    TutorialDao tutorialDao;
-    @Autowired
-    MusicDao musicDao;
-    @Autowired
-    AuthorDao authorDao;
-    @Autowired
     CommonDao commonDao;
     @Autowired
     QiniuUtils qiniuUtils;
 
-    @RequestMapping(value = "/admin/video/all", method = RequestMethod.GET)
-    public String showAllVideo(ModelMap modelMap, HttpSession session) {
-        List<Video> s_videos = commonDao.getAllResource(Video.class);
-        modelMap.addAttribute("allvideos", s_videos);
-        return "allvideo";
+    @RequestMapping(value = "/admin/gallery/{type}/all", method = RequestMethod.GET)
+    public String showAllResource(@PathVariable String type, ModelMap modelMap) {
+        System.out.println("gallery -> " + type);
+        List resources = commonDao.getAllResource(TypeClassMapping.typeClassMap.get(type));
+        modelMap.addAttribute(String.format("all%ss", type), resources);
+        return String.format("all%s", type);
     }
 
     @RequestMapping(value = "/admin/video/{id}", method = RequestMethod.GET)
@@ -87,13 +77,6 @@ public class GalleryController {
         return "singlevideo";
     }
 
-    @RequestMapping(value = "/admin/tutorial/all", method = RequestMethod.GET)
-    public String showAllTutorial(ModelMap modelMap, HttpSession session) {
-        List<Tutorial> s_tutorial = commonDao.getAllResource(Tutorial.class);
-        modelMap.addAttribute("alltutorials", s_tutorial);
-        return "alltutorial";
-    }
-
     @RequestMapping(value = "/admin/tutorial/{id}", method = RequestMethod.GET)
     public String showSingleTutorial(@PathVariable Integer id, ModelMap modelMap) {
         Tutorial tutorial = (Tutorial) commonDao.getResourceById(Tutorial.class, id);
@@ -128,13 +111,6 @@ public class GalleryController {
         return "singletutorial";
     }
 
-    @RequestMapping(value = "/admin/music/all", method = RequestMethod.GET)
-    public String showAllMusic(ModelMap modelMap, HttpSession session) {
-        List<Music> s_music = commonDao.getAllResource(Music.class);
-        modelMap.addAttribute("allmusics", s_music);
-        return "allmusic";
-    }
-
     @RequestMapping(value = "/admin/music/{id}", method = RequestMethod.GET)
     public String showSingleMusic(@PathVariable Integer id, ModelMap modelMap) {
         Music music = (Music) commonDao.getResourceById(Music.class, id);
@@ -156,13 +132,6 @@ public class GalleryController {
         }
         modelMap.addAttribute("music", music);
         return "singlemusic";
-    }
-
-    @RequestMapping(value = "/admin/author/all", method = RequestMethod.GET)
-    public String showAllAuthor(ModelMap modelMap, HttpSession session) {
-        List<Author> s_author = commonDao.getAllResource(Author.class);
-        modelMap.addAttribute("allauthors", s_author);
-        return "allauthor";
     }
 
     @RequestMapping(value = "/admin/author/{id}", method = RequestMethod.GET)
