@@ -99,9 +99,8 @@ public class AccompanyDao {
         try {
             Session session = sessionFactory.getCurrentSession();
             Criteria criteria = session.createCriteria(resource);
-            criteria.add(Restrictions.not(Restrictions.eq("music_id", musicid)));
-            criteria.add(Restrictions.isNotNull("music_id"));
             criteria.addOrder(Order.desc("id"));
+            criteria.add(Restrictions.or(Restrictions.not(Restrictions.eq("music.id", musicid)), Restrictions.isNull("music.id")));
             criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
             criteria.setReadOnly(true);
             return criteria.list();

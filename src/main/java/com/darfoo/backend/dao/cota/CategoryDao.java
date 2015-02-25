@@ -7,6 +7,7 @@ import com.darfoo.backend.model.resource.Video;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ import java.util.List;
 public class CategoryDao {
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    CommonDao commonDao;
 
     public void insertResourceCategories(Class resource, String[] categories) {
         try {
@@ -93,13 +96,12 @@ public class CategoryDao {
             List<Integer> l_interact_id = new ArrayList<Integer>(); //存符合部分条件的video id
             Criteria c;
             for (int i = 0; i < categories.length; i++) {
-                c = session.createCriteria(resource).setProjection(Projections.property("id"));
-                c.createCriteria("categories").add(Restrictions.eq("title", categories[i]));
-                //这个降序的机制在这里木有用
-                //c.addOrder(Order.desc("id"));
-                c.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-                c.setReadOnly(true);
-                List<Integer> l_id = c.list();
+                List<Integer> l_id = commonDao.getCommonQueryCriteria(resource)
+                        .addOrder(Order.desc("id"))
+                        .setProjection(Projections.property("id"))
+                        .createCriteria("categories").add(Restrictions.eq("title", categories[i]))
+                        .list();
+
                 System.out.println("满足条件 " + categories[i] + " 的video数量 -> " + l_id.size());
 
                 if (l_id.size() == 0) {
@@ -124,18 +126,20 @@ public class CategoryDao {
             }
             if (categories.length == 0) {
                 //categories长度为0，即没有筛选条件,返回所有视频
-                c = session.createCriteria(resource);
-                c.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-                //c.addOrder(Order.desc("id"));
-                c.setReadOnly(true);
-                result = c.list();
-            } else if (l_interact_id.size() > 0) {
+                l_interact_id = commonDao.getCommonQueryCriteria(resource)
+                        .addOrder(Order.desc("id"))
+                        .setProjection(Projections.property("id"))
+                        .list();
+            }
+
+            if (l_interact_id.size() > 0) {
                 //交集内的id数量大于0个
-                c = session.createCriteria(resource).add(Restrictions.in("id", l_interact_id));
-                c.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-                //c.addOrder(Order.desc("id"));
-                c.setReadOnly(true);
-                result = c.list();
+                return commonDao.getCommonQueryCriteria(resource)
+                        .addOrder(Order.desc("id"))
+                        .add(Restrictions.in("id", l_interact_id))
+                        .list();
+            } else {
+                return result;
             }
         } catch (Exception e) {
             e.printStackTrace();

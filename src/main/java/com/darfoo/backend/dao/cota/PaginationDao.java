@@ -197,7 +197,6 @@ public class PaginationDao {
             } else {
                 return result;
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             return result;
