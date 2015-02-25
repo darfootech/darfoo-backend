@@ -45,7 +45,7 @@ public class Music implements Serializable {
     Long update_timestamp;
 
     //点击量
-    @Column(name = "HOTTEST", nullable = false, updatable = true, columnDefinition = "bigint(64) default 0")
+    @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
     Long hottest;
 
     //因为伴奏的作者不需要其他的信息 所以伴奏只需要一个作者名字就可以了

@@ -1,11 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%@include file="header.jsp" %>
+<%@include file="../header.jsp" %>
 
 <script>
     var add_recommendevents = [];
     var delete_recommendevents = [];
 
     $(function () {
+        var type = $("#type").text();
+
         $(".addrecommendevent").click(function () {
             if (parseInt($(this).attr("picked")) == 0) {
                 var eid = $(this).attr("eid");
@@ -52,10 +54,10 @@
 
         $("#addrecommendevent").click(function () {
             if (add_recommendevents.length == 0) {
-                alert("还没有选择要推荐的舞蹈教程");
+                alert("还没有选择要推荐的舞蹈视频");
             } else {
-                $.post("/darfoobackend/rest/admin/recommend/addtutorials", {
-                    'vids': add_recommendevents.join(',')
+                $.post("/darfoobackend/rest/admin/recommend/add/" + type, {
+                    'ids': add_recommendevents.join(',')
                 }, function (data) {
                     if (data == 200) {
                         window.location.reload();
@@ -68,10 +70,10 @@
 
         $("#deleterecommendevent").click(function () {
             if (delete_recommendevents.length == 0) {
-                alert("还没有选择要取消推荐的舞蹈教程");
+                alert("还没有选择要取消推荐的舞蹈视频");
             } else {
-                $.post("/darfoobackend/rest/admin/recommend/deltutorials", {
-                    'vids': delete_recommendevents.join(',')
+                $.post("/darfoobackend/rest/admin/recommend/del/" + type, {
+                    'ids': delete_recommendevents.join(',')
                 }, function (data) {
                     if (data == 200) {
                         window.location.reload();
@@ -84,17 +86,19 @@
     });
 </script>
 
+<div id="type" style="display: none">${type}</div>
+
 <div class="container">
     <div style="margin-top:33px;"></div>
     <div class="row marketing">
         <div class="col-lg-6">
-            <p><a id="addrecommendevent" class="btn btn-lg btn-success" href="#" role="button">选中要推荐的舞蹈教程然后点这里</a></p>
-            <c:if test="${not empty alltutorials}">
+            <p><a id="addrecommendevent" class="btn btn-lg btn-success" href="#" role="button">选中要推荐的舞蹈视频然后点这里</a></p>
+            <c:if test="${not empty unrecommendresources}">
                 <ul class="list-group">
-                    <c:forEach var="video" items="${alltutorials}">
+                    <c:forEach var="resource" items="${unrecommendresources}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
-                            <div class="content addrecommendevent" picked="0" eid="${video.id}">${video.title}
-                                (${video.author.name})
+                            <div class="content addrecommendevent" picked="0" eid="${resource.id}">${resource.title}
+                                (${resource.author.name})
                             </div>
                         </li>
                     </c:forEach>
@@ -103,14 +107,14 @@
         </div>
 
         <div class="col-lg-6">
-            <p><a id="deleterecommendevent" class="btn btn-lg btn-success" href="#" role="button">选中要取消推荐的舞蹈教程然后点这里</a>
+            <p><a id="deleterecommendevent" class="btn btn-lg btn-success" href="#" role="button">选中要取消推荐的舞蹈视频然后点这里</a>
             </p>
-            <c:if test="${not empty recommendtutorials}">
+            <c:if test="${not empty recommendresources}">
                 <ul class="list-group">
-                    <c:forEach var="video" items="${recommendtutorials}">
+                    <c:forEach var="resource" items="${recommendresources}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
-                            <div class="content deleterecommendevent" picked="0" eid="${video.id}">${video.title}
-                                (${video.author.name})
+                            <div class="content deleterecommendevent" picked="0" eid="${resource.id}">${resource.title}
+                                (${resource.author.name})
                             </div>
                         </li>
                     </c:forEach>
@@ -120,4 +124,4 @@
     </div>
 </div>
 
-<%@include file="footer.jsp" %>
+<%@include file="../footer.jsp" %>

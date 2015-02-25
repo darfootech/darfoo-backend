@@ -4,6 +4,7 @@ import com.darfoo.backend.dao.CRUDEvent;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,6 +20,8 @@ import java.util.List;
 public class RecommendDao {
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    CommonDao commonDao;
 
     public int doRecommendResource(Class resource, Integer id) {
         int res;
@@ -28,9 +31,7 @@ public class RecommendDao {
             if (object == null) {
                 res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
             } else {
-                Field field = resource.getDeclaredField("recommend");
-                field.setAccessible(true);
-                field.set(object, 1);
+                commonDao.setResourceAttr(resource, object, "recommend", 1);
                 res = CRUDEvent.UPDATE_SUCCESS;
             }
         } catch (Exception e) {
@@ -48,9 +49,7 @@ public class RecommendDao {
             if (object == null) {
                 res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
             } else {
-                Field field = resource.getDeclaredField("recommend");
-                field.setAccessible(true);
-                field.set(object, 0);
+                commonDao.setResourceAttr(resource, object, "recommend", 0);
                 res = CRUDEvent.UPDATE_SUCCESS;
             }
         } catch (Exception e) {
@@ -60,13 +59,26 @@ public class RecommendDao {
         return res;
     }
 
+    public List getUnRecommendResources(Class resource) {
+        try {
+            return commonDao.getCommonQueryCriteria(resource)
+                    .add(Restrictions.or(
+                            Restrictions.eq("recommend", 0),
+                            Restrictions.isNull("recommend")))
+                    .addOrder(Order.desc("id"))
+                    .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList();
+        }
+    }
+
     public List getRecommendResources(Class resource) {
         try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria criteria = session.createCriteria(resource);
-            criteria.setReadOnly(true);
-            criteria.add(Restrictions.eq("recommend", 1));
-            return criteria.list();
+            return commonDao.getCommonQueryCriteria(resource)
+                    .add(Restrictions.eq("recommend", 1))
+                    .addOrder(Order.desc("id"))
+                    .list();
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList();

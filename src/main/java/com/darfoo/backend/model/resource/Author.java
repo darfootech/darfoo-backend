@@ -39,7 +39,7 @@ public class Author implements Serializable {
     Image image;
 
     //点击量
-    @Column(name = "HOTTEST", nullable = false, updatable = true, columnDefinition = "bigint(64) default 0")
+    @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
     Long hottest;
 
     @Transient

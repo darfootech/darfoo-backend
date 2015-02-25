@@ -8,7 +8,6 @@ import com.darfoo.backend.model.category.VideoCategory;
 import com.darfoo.backend.model.resource.*;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;

@@ -396,7 +396,7 @@ public class VideoDaoTests {
 
     @Test
     public void doRecommendVideo() {
-        int[] vids = {359, 360, 358, 348, 300, 138, 128};
+        int[] vids = {87, 84, 83};
         for (Integer id : vids) {
             recommendDao.doRecommendResource(Video.class, id);
         }
@@ -408,7 +408,15 @@ public class VideoDaoTests {
     }
 
     @Test
-    public void yaGetRecommendVideos() {
+    public void getUnRecommendVideos() {
+        List<Video> videos = recommendDao.getUnRecommendResources(Video.class);
+        for (Video video : videos) {
+            System.out.println(video.getTitle());
+        }
+    }
+
+    @Test
+    public void getRecommendVideos() {
         List<Video> videos = recommendDao.getRecommendResources(Video.class);
         for (Video video : videos) {
             System.out.println(video.getTitle());
