@@ -396,7 +396,7 @@ public class VideoDaoTests {
 
     @Test
     public void doRecommendVideo() {
-        int[] vids = {87, 84, 83};
+        int[] vids = {89, 84, 83};
         for (Integer id : vids) {
             recommendDao.doRecommendResource(Video.class, id);
         }

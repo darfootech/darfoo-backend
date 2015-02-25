@@ -61,10 +61,10 @@ public class Video implements Serializable {
     Music music;
 
     //点击量
-    @Column(name = "HOTTEST", nullable = true, columnDefinition = "bigint(64) default 0")
+    @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
     Long hottest;
 
-    @Column(name = "RECOMMEND", nullable = true, columnDefinition = "int default 0")
+    @Column(name = "RECOMMEND", nullable = true, updatable = true, columnDefinition = "int default 0")
     Integer recommend;
 
     @Transient
