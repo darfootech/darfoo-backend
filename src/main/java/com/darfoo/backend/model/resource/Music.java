@@ -26,7 +26,7 @@ public class Music implements Serializable {
     Integer id;
 
     //music & musiccategory 双向N-N
-    @ManyToMany(targetEntity = MusicCategory.class, cascade = {javax.persistence.CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = MusicCategory.class, fetch = FetchType.EAGER)
     @JoinTable(name = "music_category", joinColumns = {@JoinColumn(name = "music_id", referencedColumnName = "id", nullable = false, columnDefinition = "int(11) not null")},
             inverseJoinColumns = {@JoinColumn(name = "category_id", nullable = false, columnDefinition = "int(11) not null")})
     Set<MusicCategory> categories = new HashSet<MusicCategory>();

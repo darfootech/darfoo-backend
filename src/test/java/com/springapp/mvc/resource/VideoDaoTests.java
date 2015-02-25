@@ -141,7 +141,7 @@ public class VideoDaoTests {
 
     @Test
     public void deleteVideoCascade() {
-        System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Video.class, 40)));
+        System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Video.class, 85)));
     }
 
     /**
@@ -348,8 +348,8 @@ public class VideoDaoTests {
         long start = System.currentTimeMillis();
         //String[] categories = {};//无条件限制
         //String[] categories = {"较快","简单", "欢快"}; //满足所有条件
-        String[] categories = {"较快","简单", "欢快", "A"}; //满足所有条件
-        //String[] categories = {"较快"};//满足单个条件
+        //String[] categories = {"较快","简单", "欢快", "A"}; //满足所有条件
+        String[] categories = {"适中"};//满足单个条件
         List<Video> videos = paginationDao.getResourcesByCategoriesByPage(Video.class, categories, 1);
         for (Video video : videos) {
             System.out.println(video.getId());
