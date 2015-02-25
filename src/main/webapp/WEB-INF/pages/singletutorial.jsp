@@ -101,12 +101,12 @@
     });
 </script>
 
-<div id="tutorialid" style="display: none">${tutorial.id}</div>
+<div id="tutorialid" style="display: none">${video.id}</div>
 <div id="speed" style="display: none">${speed}</div>
 <div id="difficult" style="display: none">${difficult}</div>
 <div id="style" style="display: none">${style}</div>
 <div id="type" style="display: none">${videotype}</div>
-<div id="starteamname" style="display: none">${tutorial.author.name}</div>
+<div id="starteamname" style="display: none">${video.author.name}</div>
 
 <div class="container">
     <h1>查看与修改舞蹈教程信息</h1>
@@ -115,30 +115,21 @@
         <div class="col-md-12">
             <form role="form" id="createtutorialform" name="createtutorialform">
                 <div style="display: none">
-                    <input type="text" name="id" value="${tutorial.id}">
+                    <input type="text" name="id" value="${video.id}">
                 </div>
 
                 <div style="display: none">
-                    <input type="text" name="origintitle" value="${tutorial.title}">
+                    <input type="text" name="origintitle" value="${video.title}">
                 </div>
 
                 <div class="form-group">
                     <label for="title">舞蹈教程标题(也就是上传教程文件的文件名,不需要后缀)</label>
-                    <input type="text" class="form-control" name="title" id="title" placeholder="${tutorial.title}">
+                    <input type="text" class="form-control" name="title" id="title" placeholder="${video.title}">
                 </div>
-
-                <!--<div style="display: none">
-                    <input type="text" name="authorname" value="${tutorial.author.name}">
-                </div>
-
-                <div class="form-group">
-                    <label for="authorname">舞蹈教程作者名字</label>
-                    <input type="text" class="form-control" id="authorname" placeholder="${tutorial.author.name}" disabled="disabled">
-                </div>-->
 
                 <div class="form-group">
                     <label for="authorname">关联的明星舞队---
-                        <div style="color: green; display: inline; font-size: 18pt">原本为${tutorial.author.name}</div>
+                        <div style="color: green; display: inline; font-size: 18pt">原本为${video.author.name}</div>
                     </label>
                     <select data-toggle="select" name="authorname" id="authorname"
                             class="form-control select select-success mrs mbm">
@@ -149,12 +140,12 @@
                 </div>
 
                 <div style="display: none">
-                    <input type="text" name="imagekey" value="${tutorial.image.image_key}">
+                    <input type="text" name="imagekey" value="${video.image.image_key}">
                 </div>
 
                 <div class="form-group">
                     <label for="imagekey">舞蹈教程封面图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
-                    <input type="text" class="form-control" id="imagekey" placeholder="${tutorial.image.image_key}"
+                    <input type="text" class="form-control" id="imagekey" placeholder="${video.image.image_key}"
                            disabled="disabled">
                 </div>
 

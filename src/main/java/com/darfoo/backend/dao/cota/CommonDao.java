@@ -45,7 +45,7 @@ public class CommonDao {
         return criteria;
     }
 
-    private boolean ifHasCategoryResource(Class resource) {
+    public boolean ifHasCategoryResource(Class resource) {
         if (resource == Video.class || resource == Tutorial.class || resource == Music.class) {
             return true;
         } else {
@@ -53,7 +53,7 @@ public class CommonDao {
         }
     }
 
-    private boolean ifHasHottestResource(Class resource) {
+    public boolean ifHasHottestResource(Class resource) {
         if (ifHasCategoryResource(resource) || resource == Author.class) {
             return true;
         } else {
@@ -61,7 +61,7 @@ public class CommonDao {
         }
     }
 
-    private void setResourceAttr(Class resource, Object object, String fieldname, Object value) {
+    public void setResourceAttr(Class resource, Object object, String fieldname, Object value) {
         try {
             Field field = resource.getDeclaredField(fieldname);
             field.setAccessible(true);
@@ -73,7 +73,7 @@ public class CommonDao {
         }
     }
 
-    private Object getResourceAttr(Class resource, Object object, String fieldname) {
+    public Object getResourceAttr(Class resource, Object object, String fieldname) {
         try {
             Field field = resource.getDeclaredField(fieldname);
             field.setAccessible(true);
