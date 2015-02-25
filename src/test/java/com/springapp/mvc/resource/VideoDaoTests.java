@@ -347,9 +347,9 @@ public class VideoDaoTests {
     public void getVideosByCategoriesByPage() {
         long start = System.currentTimeMillis();
         //String[] categories = {};//无条件限制
-        //String[] categories = {"较快","稍难","情歌风","S"}; //满足所有条件
-        //String[] categories = {"较快","普通","优美","0"}; //有一个条件不满足
-        String[] categories = {"较快"};//满足单个条件
+        //String[] categories = {"较快","简单", "欢快"}; //满足所有条件
+        String[] categories = {"较快","简单", "欢快", "A"}; //满足所有条件
+        //String[] categories = {"较快"};//满足单个条件
         List<Video> videos = paginationDao.getResourcesByCategoriesByPage(Video.class, categories, 1);
         for (Video video : videos) {
             System.out.println(video.getId());

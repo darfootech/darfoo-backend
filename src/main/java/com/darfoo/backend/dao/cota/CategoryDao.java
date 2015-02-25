@@ -97,6 +97,7 @@ public class CategoryDao {
                 c.createCriteria("categories").add(Restrictions.eq("title", categories[i]));
                 //这个降序的机制在这里木有用
                 //c.addOrder(Order.desc("id"));
+                c.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
                 c.setReadOnly(true);
                 List<Integer> l_id = c.list();
                 System.out.println("满足条件 " + categories[i] + " 的video数量 -> " + l_id.size());
@@ -124,12 +125,14 @@ public class CategoryDao {
             if (categories.length == 0) {
                 //categories长度为0，即没有筛选条件,返回所有视频
                 c = session.createCriteria(resource);
+                c.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
                 //c.addOrder(Order.desc("id"));
                 c.setReadOnly(true);
                 result = c.list();
             } else if (l_interact_id.size() > 0) {
                 //交集内的id数量大于0个
                 c = session.createCriteria(resource).add(Restrictions.in("id", l_interact_id));
+                c.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
                 //c.addOrder(Order.desc("id"));
                 c.setReadOnly(true);
                 result = c.list();

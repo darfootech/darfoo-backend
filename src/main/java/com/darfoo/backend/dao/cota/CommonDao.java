@@ -33,6 +33,18 @@ public class CommonDao {
     @Autowired
     AuthorDao authorDao;
 
+    public Criteria getCommonQueryCriteria(Class resource) {
+        Criteria criteria = sessionFactory
+                .getCurrentSession()
+                .createCriteria(resource)
+                .setReadOnly(true);
+
+        if (ifHasCategoryResource(resource)) {
+            criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        }
+        return criteria;
+    }
+
     private boolean ifHasCategoryResource(Class resource) {
         if (resource == Video.class || resource == Tutorial.class || resource == Music.class) {
             return true;
@@ -283,15 +295,9 @@ public class CommonDao {
      */
     public Object getResourceById(Class resource, Integer id) {
         try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria criteria = session.createCriteria(resource);
-            criteria.setReadOnly(true);
-            criteria.add(Restrictions.eq("id", id));
-            if (ifHasCategoryResource(resource)) {
-                //设置JOIN mode，这样categories会直接加载到返回的实例中
-                criteria.setFetchMode("categories", FetchMode.JOIN);
-            }
-            return criteria.uniqueResult();
+            return getCommonQueryCriteria(resource)
+                    .add(Restrictions.eq("id", id))
+                    .uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
             return new Object();
@@ -306,16 +312,9 @@ public class CommonDao {
      */
     public List getAllResource(Class resource) {
         try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria criteria = session.createCriteria(resource);
-            criteria.addOrder(Order.desc("id"));
-            criteria.setReadOnly(true);
-            criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-            //如果fetch了就会出现duplicate的情况 反正需要得到类别的时候直接从单个资源那里fetch就行了
-            /*if (ifHasCategoryResource(resource)) {
-                criteria.setFetchMode("categories", FetchMode.JOIN);
-            }*/
-            return criteria.list();
+            return getCommonQueryCriteria(resource)
+                    .addOrder(Order.desc("id"))
+                    .list();
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList();
@@ -331,13 +330,10 @@ public class CommonDao {
      */
     public List getAllResourceWithoutId(Class resource, Integer id) {
         try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria criteria = session.createCriteria(resource);
-            criteria.add(Restrictions.not(Restrictions.eq("id", id)));
-            criteria.addOrder(Order.desc("id"));
-            criteria.setReadOnly(true);
-            //c.setFetchMode("categories", FetchMode.JOIN);
-            return criteria.list();
+            return getCommonQueryCriteria(resource)
+                    .add(Restrictions.not(Restrictions.eq("id", id)))
+                    .addOrder(Order.desc("id"))
+                    .list();
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList();
@@ -353,21 +349,13 @@ public class CommonDao {
      */
     public Object getResourceByFields(Class resource, HashMap<String, Object> conditions) {
         try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria criteria = session.createCriteria(resource);
-            criteria.setReadOnly(true);
-
+            Criteria criteria = getCommonQueryCriteria(resource);
             for (String key : conditions.keySet()) {
                 if (key.equals("author_id") || key.equals("music_id")) {
                     criteria.add(Restrictions.eq(key.replace("_", "."), conditions.get(key)));
                 } else {
                     criteria.add(Restrictions.eq(key, conditions.get(key)));
                 }
-            }
-
-            if (ifHasCategoryResource(resource)) {
-                //设置JOIN mode，这样categories会直接加载到返回的实例中
-                criteria.setFetchMode("categories", FetchMode.JOIN);
             }
             return criteria.uniqueResult();
         } catch (Exception e) {
@@ -385,10 +373,7 @@ public class CommonDao {
      */
     public List getResourcesByFields(Class resource, HashMap<String, Object> conditions) {
         try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria criteria = session.createCriteria(resource);
-            criteria.setReadOnly(true);
-
+            Criteria criteria = getCommonQueryCriteria(resource);
             for (String key : conditions.keySet()) {
                 if (key.equals("author_id") || key.equals("music_id")) {
                     criteria.add(Restrictions.eq(key.replace("_", "."), conditions.get(key)));
@@ -396,7 +381,6 @@ public class CommonDao {
                     criteria.add(Restrictions.eq(key, conditions.get(key)));
                 }
             }
-
             return criteria.list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -413,12 +397,10 @@ public class CommonDao {
      */
     public List getResourcesByHottest(Class resource, Integer count) {
         try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria criteria = session.createCriteria(resource);
-            criteria.addOrder(Order.desc("hottest"));//安热度递减排序
-            criteria.setMaxResults(count);
-            criteria.setReadOnly(true);
-            return criteria.list();
+            return getCommonQueryCriteria(resource)
+                    .addOrder(Order.desc("hottest"))
+                    .setMaxResults(count)
+                    .list();
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList();
@@ -434,12 +416,10 @@ public class CommonDao {
      */
     public List getResourcesByNewest(Class resource, Integer count) {
         try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria c = session.createCriteria(Video.class);
-            c.addOrder(Order.desc("update_timestamp"));//按最新时间排序
-            c.setMaxResults(count);
-            c.setReadOnly(true);
-            return c.list();
+            return getCommonQueryCriteria(resource)
+                .addOrder(Order.desc("update_timestamp"))
+                .setMaxResults(count)
+                .list();
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList();
@@ -456,17 +436,11 @@ public class CommonDao {
      */
     public Object getResourceByTitleOrName(Class resource, String titlename, String type) {
         try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria criteria = session.createCriteria(resource);
-            criteria.setReadOnly(true);
+            Criteria criteria = getCommonQueryCriteria(resource);
             if (type.equals("title")) {
                 criteria.add(Restrictions.eq("title", titlename));
             } else if (type.equals("name")) {
                 criteria.add(Restrictions.eq("name", titlename));
-            }
-            if (ifHasCategoryResource(resource)) {
-                //设置JOIN mode，这样categories会直接加载到返回的实例中
-                criteria.setFetchMode("categories", FetchMode.JOIN);
             }
             return criteria.uniqueResult();
         } catch (Exception e) {
@@ -493,8 +467,8 @@ public class CommonDao {
             }
             sb.append("%");
             System.out.println("匹配>>>>" + sb.toString());
-            Session session = sessionFactory.getCurrentSession();
-            Criteria criteria = session.createCriteria(resource).setProjection(Projections.property("id"));
+            Criteria criteria = getCommonQueryCriteria(resource)
+                    .setProjection(Projections.property("id"));
             if (ifHasCategoryResource(resource)) {
                 criteria.add(Restrictions.like("title", sb.toString(), MatchMode.ANYWHERE));
             } else if (resource == Author.class) {
@@ -504,7 +478,8 @@ public class CommonDao {
             }
             List<Integer> l_id = criteria.list();
             if (l_id.size() > 0) {
-                criteria = session.createCriteria(resource).add(Restrictions.in("id", l_id));
+                criteria = getCommonQueryCriteria(resource)
+                        .add(Restrictions.in("id", l_id));
                 criteria.setMaxResults(50);
                 criteria.setReadOnly(true);
                 result = criteria.list();

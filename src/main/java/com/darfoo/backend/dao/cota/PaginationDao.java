@@ -5,15 +5,12 @@ import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
 import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,10 +20,11 @@ import java.util.List;
 //for the pagination stuff 分页加载机制
 public class PaginationDao {
     @Autowired
-    private SessionFactory sessionFactory;
+    CommonDao commonDao;
 
     /**
      * 获得某一类别资源的每一页要显示的记录个数
+     *
      * @param resource
      * @return
      */
@@ -45,6 +43,7 @@ public class PaginationDao {
 
     /**
      * 获得某一类资源的总页数
+     *
      * @param resource
      * @return
      */
@@ -52,23 +51,19 @@ public class PaginationDao {
         long result = 0;
         int pageSize = getResourcePageSize(resource);
         try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria criteria = session.createCriteria(resource);
-
-            // 获取根据条件分页查询的总行数
+            Criteria criteria = commonDao.getCommonQueryCriteria(resource);
             result = (Long) criteria.setProjection(
                     Projections.rowCount()).uniqueResult();
-            criteria.setProjection(null);
-
             return (result / pageSize) + 1;
-        } catch (RuntimeException re) {
-            re.printStackTrace();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
             return result;
         }
     }
 
     /**
      * 根据页码号来获取资源
+     *
      * @param pageNo
      * @return
      */
@@ -81,16 +76,11 @@ public class PaginationDao {
         }
 
         try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria criteria = session.createCriteria(resource);
-
-            criteria.setFirstResult((pageNo - 1) * pageSize);
-            criteria.setMaxResults(pageSize);
-
-            result = criteria.list();
-            return result;
-        } catch (RuntimeException re) {
-            //re.printStackTrace();
+            return commonDao.getCommonQueryCriteria(resource)
+                    .setFirstResult((pageNo - 1) * pageSize)
+                    .setMaxResults(pageSize).list();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
             return result;
         }
     }
@@ -100,15 +90,13 @@ public class PaginationDao {
         int pageSize = getResourcePageSize(resource);
 
         try {
-            Session session = sessionFactory.getCurrentSession();
             List<Integer> l_interact_id = new ArrayList<Integer>();  //存符合部分条件的video id
-            Criteria c;
             for (int i = 0; i < categories.length; i++) {
                 //利用projection投影只获得某一个字段的collection结果
-                c = session.createCriteria(resource).setProjection(Projections.property("id"));
-                c.createCriteria("categories").add(Restrictions.eq("title", categories[i]));
-                c.setReadOnly(true);
-                List<Integer> l_id = c.list();
+                List<Integer> l_id = commonDao.getCommonQueryCriteria(resource)
+                        .setProjection(Projections.property("id"))
+                        .createCriteria("categories").add(Restrictions.eq("title", categories[i]))
+                        .list();
                 System.out.println("满足条件 " + categories[i] + " 的video数量 -> " + l_id.size());
 
                 if (l_id.size() == 0) {
@@ -133,17 +121,16 @@ public class PaginationDao {
             }
             if (categories.length == 0) {
                 //categories长度为0，即没有筛选条件,返回所有视频
-                c = session.createCriteria(resource);
-                c.setReadOnly(true);
-                result = c.list();
+                result = commonDao.getCommonQueryCriteria(resource).list();
             } else if (l_interact_id.size() > 0) {
                 //交集内的id数量大于0个
-                c = session.createCriteria(resource).add(Restrictions.in("id", l_interact_id));
-                c.setReadOnly(true);
-                result = c.list();
+                result = commonDao.getCommonQueryCriteria(resource)
+                        .add(Restrictions.in("id", l_interact_id))
+                        .list();
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return 0;
         }
 
         return (result.size() / pageSize) + 1;
@@ -158,21 +145,16 @@ public class PaginationDao {
         }
 
         try {
-            Session session = sessionFactory.getCurrentSession();
             List<Integer> l_interact_id = new ArrayList<Integer>();  //存符合部分条件的video id
-            Criteria c;
             for (int i = 0; i < categories.length; i++) {
-                c = session.createCriteria(resource).setProjection(Projections.property("id"));
-                c.createCriteria("categories").add(Restrictions.eq("title", categories[i]));
+                List<Integer> l_id = commonDao.getCommonQueryCriteria(resource)
+                        .addOrder(Order.desc("id"))
+                        .setProjection(Projections.property("id"))
+                        .createCriteria("categories").add(Restrictions.eq("title", categories[i]))
+                        .setFirstResult((pageNo - 1) * pageSize)
+                        .setMaxResults(pageSize)
+                        .list();
 
-                /*分页机制*/
-                c.setFirstResult((pageNo - 1) * pageSize);
-                c.setMaxResults(pageSize);
-
-                c.addOrder(Order.desc("id"));
-
-                c.setReadOnly(true);
-                List<Integer> l_id = c.list();
                 System.out.println("满足条件 " + categories[i] + " 的video数量 -> " + l_id.size());
 
                 if (l_id.size() == 0) {
@@ -198,26 +180,27 @@ public class PaginationDao {
             }
             if (categories.length == 0) {
                 //categories长度为0，即没有筛选条件,返回所有视频
-                c = session.createCriteria(resource);
-                c.setFirstResult((pageNo - 1) * pageSize);
-                c.setMaxResults(pageSize);
-                c.addOrder(Order.desc("id"));
-                c.setReadOnly(true);
-                result = c.list();
-            } else if (l_interact_id.size() > 0) {
-                //交集内的id数量大于0个
-                c = session.createCriteria(resource).add(Restrictions.in("id", l_interact_id));
-                c.setFirstResult((pageNo - 1) * pageSize);
-                c.setMaxResults(pageSize);
-                c.addOrder(Order.desc("id"));
-                c.setReadOnly(true);
-                result = c.list();
+                l_interact_id = commonDao.getCommonQueryCriteria(resource)
+                        .addOrder(Order.desc("id"))
+                        .setProjection(Projections.property("id"))
+                        .setFirstResult((pageNo - 1) * pageSize)
+                        .setMaxResults(pageSize)
+                        .list();
             }
+
+            if (l_interact_id.size() > 0) {
+                //交集内的id数量大于0个
+                return commonDao.getCommonQueryCriteria(resource)
+                        .addOrder(Order.desc("id"))
+                        .add(Restrictions.in("id", l_interact_id))
+                        .list();
+            } else {
+                return result;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
+            return result;
         }
-
-        Collections.reverse(result);
-        return result;
     }
 }
