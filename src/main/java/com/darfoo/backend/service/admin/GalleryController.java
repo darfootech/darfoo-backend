@@ -9,6 +9,9 @@ import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.service.cota.TypeClassMapping;
+import com.darfoo.backend.service.responsemodel.MusicCates;
+import com.darfoo.backend.service.responsemodel.TutorialCates;
+import com.darfoo.backend.service.responsemodel.VideoCates;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +35,12 @@ public class GalleryController {
     CommonDao commonDao;
     @Autowired
     QiniuUtils qiniuUtils;
+    @Autowired
+    VideoCates videoCates;
+    @Autowired
+    TutorialCates tutorialCates;
+    @Autowired
+    MusicCates musicCates;
 
     @RequestMapping(value = "/admin/gallery/{type}/all", method = RequestMethod.GET)
     public String showAllResource(@PathVariable String type, ModelMap modelMap) {
@@ -46,20 +55,16 @@ public class GalleryController {
         Video video = (Video) commonDao.getResourceById(Video.class, id);
         Set<VideoCategory> categories = video.getCategories();
         for (VideoCategory category : categories) {
-            int categoryid = category.getId();
             String categorytitle = category.getTitle();
-            System.out.println(categoryid);
             System.out.println(categorytitle);
-            if (categoryid >= 1 && categoryid <= 3) {
-                modelMap.addAttribute("speed", category.getTitle());
-            } else if (categoryid >= 4 && categoryid <= 6) {
-                modelMap.addAttribute("difficult", category.getTitle());
-            } else if (categoryid >= 7 && categoryid <= 17) {
-                modelMap.addAttribute("style", category.getTitle());
-            } else if (categoryid >= 18 && categoryid <= 43) {
-                modelMap.addAttribute("letter", category.getTitle());
+            if (videoCates.getSpeedCategory().containsValue(categorytitle)) {
+                modelMap.addAttribute("speed", categorytitle);
+            } else if (videoCates.getDifficultyCategory().containsValue(categorytitle)) {
+                modelMap.addAttribute("difficult", categorytitle);
+            } else if (videoCates.getStyleCategory().containsValue(categorytitle)) {
+                modelMap.addAttribute("style", categorytitle);
             } else {
-                System.out.println("something is wrong with the category");
+                modelMap.addAttribute("letter", categorytitle);
             }
         }
         String videoKey = video.getVideo_key();
@@ -82,16 +87,14 @@ public class GalleryController {
         Tutorial tutorial = (Tutorial) commonDao.getResourceById(Tutorial.class, id);
         Set<TutorialCategory> categories = tutorial.getCategories();
         for (TutorialCategory category : categories) {
-            int categoryid = category.getId();
             String categorytitle = category.getTitle();
-            System.out.println(categoryid);
             System.out.println(categorytitle);
-            if (categorytitle.equals("快") || categorytitle.equals("中") || categorytitle.equals("慢")) {
+            if (tutorialCates.getSpeedCategory().containsValue(categorytitle)) {
                 modelMap.addAttribute("speed", categorytitle);
-            } else if (categorytitle.equals("简单") || categorytitle.equals("适中") || categorytitle.equals("稍难")) {
+            } else if (tutorialCates.getDifficultyCategory().containsValue(categorytitle)) {
                 modelMap.addAttribute("difficult", categorytitle);
-            } else if (categorytitle.equals("背面教学") || categorytitle.equals("分解教学") || categorytitle.equals("队形表演")) {
-                modelMap.addAttribute("style", category.getTitle());
+            } else if (tutorialCates.getStyleCategory().containsValue(categorytitle)) {
+                modelMap.addAttribute("style", categorytitle);
             } else {
                 System.out.println("something is wrong with the category");
             }
@@ -116,18 +119,14 @@ public class GalleryController {
         Music music = (Music) commonDao.getResourceById(Music.class, id);
         Set<MusicCategory> categories = music.getCategories();
         for (MusicCategory category : categories) {
-            int categoryid = category.getId();
             String categorytitle = category.getTitle();
-            System.out.println(categoryid);
             System.out.println(categorytitle);
-            if (categoryid >= 1 && categoryid <= 4) {
-                modelMap.addAttribute("beat", category.getTitle());
-            } else if (categoryid >= 5 && categoryid <= 12) {
-                modelMap.addAttribute("style", category.getTitle());
-            } else if (categoryid >= 13 && categoryid <= 38) {
-                modelMap.addAttribute("letter", category.getTitle());
+            if (musicCates.getBeatCategory().containsValue(categorytitle)) {
+                modelMap.addAttribute("beat", categorytitle);
+            } else if (musicCates.getStyleCategory().containsValue(categorytitle)) {
+                modelMap.addAttribute("style", categorytitle);
             } else {
-                System.out.println("something is wrong with the category");
+                modelMap.addAttribute("letter", categorytitle);
             }
         }
         modelMap.addAttribute("music", music);

@@ -63,10 +63,12 @@ public class CacheController {
     PaginationDao paginationDao;
     @Autowired
     CategoryDao categoryDao;
-
-    VideoCates videoCates = new VideoCates();
-    TutorialCates tutorialCates = new TutorialCates();
-    MusicCates musicCates = new MusicCates();
+    @Autowired
+    VideoCates videoCates;
+    @Autowired
+    TutorialCates tutorialCates;
+    @Autowired
+    MusicCates musicCates;
 
     @RequestMapping(value = "/video/{id}", method = RequestMethod.GET)
     public
