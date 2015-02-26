@@ -59,8 +59,6 @@ public class AuthorDao {
         try {
             Session session = sf.getCurrentSession();
             Criteria criteria = session.createCriteria(Author.class);
-
-            // 获取根据条件分页查询的总行数
             result = (Long) criteria.setProjection(
                     Projections.rowCount()).uniqueResult();
             criteria.setProjection(null);
