@@ -91,23 +91,18 @@ public class UploadController {
                 CommonsMultipartFile file = uploadresources.get(field.getName());
                 String key = session.getAttribute(field.getName()).toString();
 
-                try {
-                    if (modelUpload.type() == ModelUploadEnum.SMALL) {
-                        String status = ServiceUtils.uploadSmallResource(file, key);
-                        if (!status.equals("200")) {
-                            return "fail";
-                        }
-                    } else if (modelUpload.type() == ModelUploadEnum.LARGE) {
-                        String status = ServiceUtils.uploadLargeResource(file, key);
-                        if (!status.equals("200")) {
-                            return "fail";
-                        }
-                    } else {
-                        System.out.println("wired");
+                if (modelUpload.type() == ModelUploadEnum.SMALL) {
+                    String status = ServiceUtils.uploadSmallResource(file, key);
+                    if (!status.equals("200")) {
+                        return "fail";
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return "fail";
+                } else if (modelUpload.type() == ModelUploadEnum.LARGE) {
+                    String status = ServiceUtils.uploadLargeResource(file, key);
+                    if (!status.equals("200")) {
+                        return "fail";
+                    }
+                } else {
+                    System.out.println("wired");
                 }
             }
         }

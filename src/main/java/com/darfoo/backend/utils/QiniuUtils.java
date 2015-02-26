@@ -115,23 +115,6 @@ public class QiniuUtils {
         }
     }
 
-    public String uploadResource(String fileLocation, String fileName) {
-        System.out.println("start to upload resource to qiniu server");
-        Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
-        // 请确保该bucket已经存在
-        PutPolicy putPolicy = new PutPolicy(this.bucketName);
-        try {
-            String uptoken = putPolicy.token(mac);
-            PutExtra extra = new PutExtra();
-            String key = fileName;
-            String localFile = fileLocation;
-            PutRet ret = IoApi.putFile(uptoken, key, localFile, extra);
-            return ret.getStatusCode() + "";
-        } catch (Exception e) {
-            return e.getMessage();
-        }
-    }
-
     //尝试使用断点续传和并行分块上传
     public String uploadResourceStream(String fileLocation, String fileName) {
         System.out.println("start to upload resource to qiniu server");
@@ -150,9 +133,6 @@ public class QiniuUtils {
     }
 
     public void deleteResource(String key) {
-        Config.ACCESS_KEY = "bnMvAStYBsL5AjYM3UXbpGalrectRZZF88Y6fZ-X";
-        Config.SECRET_KEY = "eMZK5q9HI1EXe7KzNtsyKJZJPHEfh96XcHvDigyG";
-        String bucketName = "zjdxlab410yy";
         Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
         RSClient client = new RSClient(mac);
         client.delete(bucketName, key);

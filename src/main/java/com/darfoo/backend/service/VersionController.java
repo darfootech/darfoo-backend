@@ -90,13 +90,7 @@ public class VersionController {
 
         String versionkey = "launcher-" + newversion + "-release.apk";
 
-        String status = "";
-
-        try {
-            status = ServiceUtils.uploadSmallResource(versionresource, versionkey);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String status = ServiceUtils.uploadSmallResource(versionresource, versionkey);
 
         if (status.equals("200")) {
             return "success";
@@ -130,13 +124,7 @@ public class VersionController {
 
         String versionkey = "launcher-" + newversion + "-debug.apk";
 
-        String status = "";
-
-        try {
-            status = ServiceUtils.uploadSmallResource(versionresource, versionkey);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String status = ServiceUtils.uploadSmallResource(versionresource, versionkey);
 
         if (status.equals("200")) {
             return "success";

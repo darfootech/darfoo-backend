@@ -194,13 +194,7 @@ public class UpdateController {
 
         ServiceUtils.deleteResource(imagekey);
 
-        String imageStatusCode = "";
-
-        try {
-            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
 
         if (imageStatusCode.equals("200")) {
             return "success";
@@ -284,13 +278,7 @@ public class UpdateController {
 
         ServiceUtils.deleteResource(imagekey);
 
-        String imageStatusCode = "";
-
-        try {
-            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
 
         if (imageStatusCode.equals("200")) {
             return "success";
@@ -472,13 +460,7 @@ public class UpdateController {
 
         ServiceUtils.deleteResource(imagekey);
 
-        String imageStatusCode = "";
-
-        try {
-            imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String imageStatusCode = ServiceUtils.uploadSmallResource(imageresource, imagekey);
 
         if (imageStatusCode.equals("200")) {
             return "success";

@@ -21,7 +21,8 @@ public class ServiceUtils {
     }
 
     //=> 大文件传得比较慢，所以就先放服务器上用七牛的命令行工具统一传
-    public static String uploadLargeResource(CommonsMultipartFile file, String fileName) throws IOException {
+    public static String uploadLargeResource(CommonsMultipartFile file, String fileName) {
+        String statusCode = "200";
         String dirName = "uploadresources/";
 
         long startTime = System.currentTimeMillis();
@@ -33,19 +34,21 @@ public class ServiceUtils {
 
         File newFile = new File(path);
         //通过CommonsMultipartFile的方法直接写文件（注意这个时候）
-        file.transferTo(newFile);
+        try {
+            file.transferTo(newFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            statusCode = "500";
+        }
 
         long endTime = System.currentTimeMillis();
         System.out.println("方法二的运行时间：" + String.valueOf(endTime - startTime) + "ms");
 
-        String statusCode = "200";
-
         return statusCode;
-        //return "/success";
     }
 
     //=> 小文件直接上传七牛服务器
-    public static String uploadSmallResource(CommonsMultipartFile file, String fileName) throws IOException {
+    public static String uploadSmallResource(CommonsMultipartFile file, String fileName) {
         String dirName = "uploadresources/" + new Date().getTime() + file.getOriginalFilename() + "/";
 
         long startTime = System.currentTimeMillis();
@@ -57,7 +60,12 @@ public class ServiceUtils {
 
         File newFile = new File(path);
         //通过CommonsMultipartFile的方法直接写文件（注意这个时候）
-        file.transferTo(newFile);
+        try {
+            file.transferTo(newFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "500";
+        }
 
         //String statusCode = qiniuUtils.uploadResource(path, file.getOriginalFilename());
         String statusCode = qiniuUtils.uploadResourceStream(path, fileName);
@@ -70,7 +78,15 @@ public class ServiceUtils {
         System.out.println("方法二的运行时间：" + String.valueOf(endTime - startTime) + "ms");
 
         return statusCode;
-        //return "/success";
+    }
+
+    public static String reUploadSmallResource(CommonsMultipartFile file, String fileName) {
+        deleteResource(fileName);
+        return uploadSmallResource(file, fileName);
+    }
+
+    public static void deleteResource(String key) {
+        qiniuUtils.deleteResource(key);
     }
 
     public static boolean isSingleCharacter(String letter) {
@@ -81,9 +97,5 @@ public class ServiceUtils {
     public static boolean isValidImageKey(String imagekey) {
         Pattern pattern = Pattern.compile("([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)");
         return pattern.matcher(imagekey).matches();
-    }
-
-    public static void deleteResource(String key) {
-        qiniuUtils.deleteResource(key);
     }
 }

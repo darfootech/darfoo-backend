@@ -110,10 +110,6 @@ public class DeleteTrashResource {
             keyList.add(image.getImage_key());
         }
 
-        /*for (String key : keyList){
-            System.out.println(key);
-        }*/
-
         List<String> remoteList = getFileList();
         for (String key : remoteList) {
             if (!keyList.contains(key)) {
