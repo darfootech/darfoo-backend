@@ -5,14 +5,8 @@ import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.dao.resource.ImageDao;
 import com.darfoo.backend.dao.resource.MusicDao;
-import com.darfoo.backend.model.cota.ModelInsert;
-import com.darfoo.backend.model.resource.Author;
-import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.category.MusicCategory;
-import com.darfoo.backend.model.UpdateCheckResponse;
 import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -33,8 +26,6 @@ public class MusicDaoTests {
     private MusicDao musicDao;
     @Autowired
     AuthorDao authorDao;
-    @Autowired
-    ImageDao imageDao;
     @Autowired
     CommonDao commonDao;
     @Autowired

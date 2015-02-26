@@ -4,7 +4,6 @@ import com.darfoo.backend.dao.*;
 import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.dao.resource.ImageDao;
 import com.darfoo.backend.dao.upload.UploadNoAuthVideoDao;
 import com.darfoo.backend.model.upload.UploadNoAuthVideo;
 import com.darfoo.backend.utils.QiniuUtils;
@@ -27,8 +26,6 @@ import java.util.List;
 public class VerifyUploadVideoController {
     @Autowired
     AuthorDao authorDao;
-    @Autowired
-    ImageDao imageDao;
     @Autowired
     UploadNoAuthVideoDao uploadNoAuthVideoDao;
     @Autowired

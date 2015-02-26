@@ -1,7 +1,6 @@
 package com.springapp.mvc.offlinejobs;
 
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.resource.ImageDao;
 import com.darfoo.backend.dao.resource.MusicDao;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.Music;
@@ -33,8 +32,6 @@ import java.util.List;
 public class DeleteTrashResource {
     @Autowired
     MusicDao musicDao;
-    @Autowired
-    ImageDao imageDao;
     @Autowired
     CommonDao commonDao;
 

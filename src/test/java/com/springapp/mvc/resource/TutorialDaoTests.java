@@ -3,7 +3,6 @@ package com.springapp.mvc.resource;
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.dao.cota.*;
 import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.dao.resource.ImageDao;
 import com.darfoo.backend.model.resource.*;
 import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
@@ -23,8 +22,6 @@ import java.util.Set;
 public class TutorialDaoTests {
     @Autowired
     AuthorDao authorDao;
-    @Autowired
-    ImageDao imageDao;
     @Autowired
     CommonDao commonDao;
     @Autowired

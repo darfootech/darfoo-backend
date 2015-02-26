@@ -30,8 +30,6 @@ public class UpdateController {
     @Autowired
     AuthorDao authorDao;
     @Autowired
-    ImageDao imageDao;
-    @Autowired
     CommonDao commonDao;
     @Autowired
     AccompanyDao accompanyDao;
@@ -410,7 +408,7 @@ public class UpdateController {
                 System.out.println("图片不存在，可以进行插入");
                 image = new Image();
                 image.setImage_key(newimagekey);
-                imageDao.insertSingleImage(image);
+                //imageDao.insertSingleImage(image);
                 session.setAttribute("authorImage", newimagekey);
             } else {
                 System.out.println("图片已存在，不可以进行插入了，是否需要修改");

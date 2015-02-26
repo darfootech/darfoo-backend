@@ -7,7 +7,6 @@ package com.springapp.mvc.upload;
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.dao.resource.ImageDao;
 import com.darfoo.backend.dao.upload.UploadNoAuthVideoDao;
 import com.darfoo.backend.model.upload.UploadNoAuthVideo;
 import org.junit.Assert;
@@ -27,8 +26,6 @@ public class UploadNoAuthVideoDaoTests {
     UploadNoAuthVideoDao uploadVideoDao;
     @Autowired
     AuthorDao authorDao;
-    @Autowired
-    ImageDao imageDao;
     @Autowired
     CommonDao commonDao;
 

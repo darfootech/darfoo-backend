@@ -3,7 +3,6 @@ package com.springapp.mvc.resource;
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.dao.cota.*;
 import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.dao.resource.ImageDao;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.service.responsemodel.VideoCates;
@@ -22,8 +21,6 @@ import java.util.*;
 public class VideoDaoTests {
     @Autowired
     AuthorDao authorDao;
-    @Autowired
-    ImageDao imageDao;
     @Autowired
     CommonDao commonDao;
     @Autowired

@@ -3,7 +3,6 @@ package com.springapp.mvc.resource;
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.dao.resource.ImageDao;
 import com.darfoo.backend.model.*;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Image;
@@ -25,8 +24,6 @@ import java.util.*;
 public class AuthorDaoTests {
     @Autowired
     AuthorDao authorDao;
-    @Autowired
-    ImageDao imageDao;
     @Autowired
     CommonDao commonDao;
 
@@ -89,7 +86,7 @@ public class AuthorDaoTests {
                 System.out.println("图片不存在，可以进行插入");
                 image = new Image();
                 image.setImage_key(imagekey);
-                imageDao.insertSingleImage(image);
+                //imageDao.insertSingleImage(image);
             } else {
                 System.out.println("图片已存在，不可以进行插入了，是否需要修改");
                 return;
@@ -131,7 +128,7 @@ public class AuthorDaoTests {
             System.out.println("图片不存在，可以进行插入");
             image = new Image();
             image.setImage_key(newimageKey);
-            imageDao.insertSingleImage(image);
+            //imageDao.insertSingleImage(image);
         } else {
             System.out.println("图片已存在，不可以进行插入了，是否需要修改");
             return;
