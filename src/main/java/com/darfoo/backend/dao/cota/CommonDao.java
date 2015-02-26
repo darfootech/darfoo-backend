@@ -372,7 +372,8 @@ public class CommonDao {
      */
     public List getResourcesByFields(Class resource, HashMap<String, Object> conditions) {
         try {
-            Criteria criteria = getCommonQueryCriteria(resource);
+            Criteria criteria = getCommonQueryCriteria(resource)
+                    .addOrder(Order.desc("id"));
             for (String key : conditions.keySet()) {
                 if (key.equals("author_id") || key.equals("music_id")) {
                     criteria.add(Restrictions.eq(key.replace("_", "."), conditions.get(key)));

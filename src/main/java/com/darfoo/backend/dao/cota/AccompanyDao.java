@@ -22,6 +22,8 @@ import java.util.List;
 public class AccompanyDao {
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    CommonDao commonDao;
 
     /**
      * 为资源添加一个对应的伴奏music(插入操作用更新替代)
@@ -41,9 +43,7 @@ public class AccompanyDao {
                     System.out.println("被更新的music的id在music表中未发现对应记录，请先完成music的插入");
                     res = CRUDEvent.UPDATE_MUSIC_NOTFOUND;
                 } else {
-                    Field field = resource.getDeclaredField("music");
-                    field.setAccessible(true);
-                    field.set(object, music);
+                    commonDao.setResourceAttr(resource, object, "music", music);
                     res = CRUDEvent.UPDATE_SUCCESS;
                 }
             } else {
@@ -57,24 +57,21 @@ public class AccompanyDao {
         return res;
     }
 
-
     /**
      * 删除资源中的music(就是将MUSIC_ID字段设为null)
      * @param resource
      * @param id
      * @return
      */
-    private int deleteMusicFromResource(Class resource, Integer id) {
+    public int deleteMusicFromResource(Class resource, Integer id) {
         int res;
         try {
             Session session = sessionFactory.getCurrentSession();
             Object object = session.get(resource, id);
             if (object != null) {
-                Field field = resource.getField("music");
-                field.setAccessible(true);
-                Music music = (Music) field.get(object);
+                Object music = commonDao.getResourceAttr(resource, object, "music");
                 if (music != null) {
-                    field.set(object, null);
+                    commonDao.setResourceAttr(resource, object, "music", null);
                 } else {
                     System.out.println("music_id 已经为null");
                 }
@@ -83,6 +80,7 @@ public class AccompanyDao {
                 res = CRUDEvent.DELETE_NOTFOUND;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             res = CRUDEvent.DELETE_FAIL;
         }
         return res;
@@ -97,25 +95,13 @@ public class AccompanyDao {
     public List getResourcesWithoutMusicId(Class resource, int musicid) {
         List result = new ArrayList();
         try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria criteria = session.createCriteria(resource);
-            criteria.addOrder(Order.desc("id"));
-            criteria.add(Restrictions.or(Restrictions.not(Restrictions.eq("music.id", musicid)), Restrictions.isNull("music.id")));
-            criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-            criteria.setReadOnly(true);
-            return criteria.list();
+            return commonDao.getCommonQueryCriteria(resource)
+                .addOrder(Order.desc("id"))
+                .add(Restrictions.or(Restrictions.not(Restrictions.eq("music.id", musicid)), Restrictions.isNull("music.id")))
+                .list();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
-    }
-
-    /**
-     * 取消资源和伴奏的关系 其实就是deletemusic包装了一下
-     * @param resource
-     * @param id
-     */
-    public void disconnectResourceMusic(Class resource, int id) {
-        System.out.println(CRUDEvent.getResponse(deleteMusicFromResource(resource, id)));
     }
 }

@@ -184,7 +184,7 @@ public class TutorialDaoTests {
     @Test
     public void disconnectMusicFromTutorial() {
         Integer vId = 1;
-        accompanyDao.disconnectResourceMusic(Tutorial.class, vId);
+        accompanyDao.deleteMusicFromResource(Tutorial.class, vId);
     }
 
     /**

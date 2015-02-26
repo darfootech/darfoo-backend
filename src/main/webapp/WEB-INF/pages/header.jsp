@@ -47,12 +47,6 @@
 <!-- Static navbar -->
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-            </button>
-            <a class="navbar-brand" href="/darfoobackend/rest/resources/video/new/">33</a>
-        </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
@@ -81,7 +75,8 @@
                         <li><a href="/darfoobackend/rest/admin/gallery/tutorial/all">查看修改舞蹈教程</a></li>
                         <li><a href="/darfoobackend/rest/admin/gallery/music/all">查看修改舞蹈伴奏</a></li>
                         <li><a href="/darfoobackend/rest/admin/gallery/author/all">查看修改明星舞队</a></li>
-                        <li><a href="/darfoobackend/rest/admin/connectmusic/all">关联舞蹈伴奏和舞蹈视频</a></li>
+                        <li><a href="/darfoobackend/rest/admin/connectmusic/video/all">关联舞蹈伴奏和舞蹈视频</a></li>
+                        <li><a href="/darfoobackend/rest/admin/connectmusic/tutorial/all">关联舞蹈伴奏和舞蹈教程</a></li>
                     </ul>
                 </li>
 

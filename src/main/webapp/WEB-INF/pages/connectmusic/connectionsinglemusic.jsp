@@ -1,61 +1,63 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%@include file="header.jsp" %>
+<%@include file="../header.jsp" %>
 
 <script>
-    var add_recommendevents = [];
-    var delete_recommendevents = [];
+    var add_connectmusic = [];
+    var del_connectmusic = [];
 
     $(function () {
-        $(".addrecommendevent").click(function () {
+        var type = $("#type").text();
+
+        $(".addconnectmusic").click(function () {
             if (parseInt($(this).attr("picked")) == 0) {
                 var eid = $(this).attr("eid");
                 $(this).attr("picked", 1);
                 $(this).parents("li").css("background-color", "green");
-                if ($.inArray(parseInt(eid), add_recommendevents) == -1) {
-                    add_recommendevents.push(parseInt(eid));
+                if ($.inArray(parseInt(eid), add_connectmusic) == -1) {
+                    add_connectmusic.push(parseInt(eid));
                 }
-                console.log(add_recommendevents);
+                console.log(add_connectmusic);
             } else {
                 var eid = $(this).attr("eid");
                 $(this).attr("picked", 0);
                 $(this).parents("li").css("background-color", "white");
-                if ($.inArray(parseInt(eid), add_recommendevents) != -1) {
-                    add_recommendevents = $.grep(add_recommendevents, function (value) {
+                if ($.inArray(parseInt(eid), add_connectmusic) != -1) {
+                    add_connectmusic = $.grep(add_connectmusic, function (value) {
                         return value != parseInt(eid);
                     });
                 }
-                console.log(add_recommendevents);
+                console.log(add_connectmusic);
             }
         });
 
-        $(".deleterecommendevent").click(function () {
+        $(".delconnectmusic").click(function () {
             if (parseInt($(this).attr("picked")) == 0) {
                 var eid = $(this).attr("eid");
                 $(this).attr("picked", 1);
                 $(this).parents("li").css("background-color", "red");
-                if ($.inArray(parseInt(eid), delete_recommendevents) == -1) {
-                    delete_recommendevents.push(parseInt(eid));
+                if ($.inArray(parseInt(eid), del_connectmusic) == -1) {
+                    del_connectmusic.push(parseInt(eid));
                 }
-                console.log(delete_recommendevents);
+                console.log(del_connectmusic);
             } else {
                 var eid = $(this).attr("eid");
                 $(this).attr("picked", 0);
                 $(this).parents("li").css("background-color", "white");
-                if ($.inArray(parseInt(eid), delete_recommendevents) != -1) {
-                    delete_recommendevents = $.grep(delete_recommendevents, function (value) {
+                if ($.inArray(parseInt(eid), del_connectmusic) != -1) {
+                    del_connectmusic = $.grep(del_connectmusic, function (value) {
                         return value != parseInt(eid);
                     });
                 }
-                console.log(delete_recommendevents);
+                console.log(del_connectmusic);
             }
         });
 
-        $("#addrecommendevent").click(function () {
-            if (add_recommendevents.length == 0) {
-                alert("还没有选择要推荐的活动");
+        $("#addconnectmusic").click(function () {
+            if (add_connectmusic.length == 0) {
+                alert("还没有选择要关联伴奏的舞蹈视频");
             } else {
-                $.post("/darfoobackend/rest/admin/connectmusic/addconnects", {
-                    'vids': add_recommendevents.join(',')
+                $.post("/darfoobackend/rest/admin/connectmusic/addconnects/" + type, {
+                    'ids': add_connectmusic.join(',')
                 }, function (data) {
                     if (data == 200) {
                         window.location.reload();
@@ -66,12 +68,12 @@
             }
         });
 
-        $("#deleterecommendevent").click(function () {
-            if (delete_recommendevents.length == 0) {
-                alert("还没有选择要取消推荐的活动");
+        $("#delconnectmusic").click(function () {
+            if (del_connectmusic.length == 0) {
+                alert("还没有选择要取消关联伴奏的舞蹈视频");
             } else {
-                $.post("/darfoobackend/rest/admin/connectmusic/delconnects", {
-                    'vids': delete_recommendevents.join(',')
+                $.post("/darfoobackend/rest/admin/connectmusic/delconnects/" + type, {
+                    'ids': del_connectmusic.join(',')
                 }, function (data) {
                     if (data == 200) {
                         window.location.reload();
@@ -84,16 +86,18 @@
     });
 </script>
 
+<div id="type" style="display: none">${type}</div>
+
 <div class="container">
     <div style="margin-top:33px;"></div>
     <div class="row marketing">
         <div class="col-lg-6">
-            <p><a id="addrecommendevent" class="btn btn-lg btn-success" href="#" role="button">选中要关联的舞蹈视频然后点这里</a></p>
+            <p><a id="addconnectmusic" class="btn btn-lg btn-success" href="#" role="button">选中要关联的舞蹈视频然后点这里</a></p>
             <c:if test="${not empty notconnectvideos}">
                 <ul class="list-group">
                     <c:forEach var="video" items="${notconnectvideos}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
-                            <div class="content addrecommendevent" picked="0" eid="${video.id}">${video.title}
+                            <div class="content addconnectmusic" picked="0" eid="${video.id}">${video.title}
                                 (${video.author.name})
                             </div>
                         </li>
@@ -103,13 +107,13 @@
         </div>
 
         <div class="col-lg-6">
-            <p><a id="deleterecommendevent" class="btn btn-lg btn-success" href="#" role="button">选中要取消关联的舞蹈视频然后点这里</a>
+            <p><a id="delconnectmusic" class="btn btn-lg btn-success" href="#" role="button">选中要取消关联的舞蹈视频然后点这里</a>
             </p>
             <c:if test="${not empty connectvideos}">
                 <ul class="list-group">
                     <c:forEach var="video" items="${connectvideos}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
-                            <div class="content deleterecommendevent" picked="0" eid="${video.id}">${video.title}
+                            <div class="content delconnectmusic" picked="0" eid="${video.id}">${video.title}
                                 (${video.author.name})
                             </div>
                         </li>
@@ -120,4 +124,4 @@
     </div>
 </div>
 
-<%@include file="footer.jsp" %>
+<%@include file="../footer.jsp" %>

@@ -45,31 +45,25 @@ public class RecommendController {
         return "recommend/recommendresource";
     }
 
-    @RequestMapping(value = "/admin/recommend/add/{type}", method = RequestMethod.POST, consumes = "application/json", headers = "content-type=application/x-www-form-urlencoded")
+    @RequestMapping(value = "/admin/recommend/{operation}/{type}", method = RequestMethod.POST, consumes = "application/json", headers = "content-type=application/x-www-form-urlencoded")
     public
     @ResponseBody
-    Integer doRecommendResources(@PathVariable String type, HttpServletRequest request) {
+    Integer doRecommendResources(@PathVariable String operation, @PathVariable String type, HttpServletRequest request) {
         String ids = request.getParameter("ids");
         System.out.println(ids);
         String[] idArray = ids.split(",");
-        for (int i = 0; i < idArray.length; i++) {
-            int status = recommendDao.doRecommendResource(TypeClassMapping.typeClassMap.get(type), Integer.parseInt(idArray[i]));
-            if (status != CRUDEvent.UPDATE_SUCCESS) {
-                return 500;
-            }
-        }
-        return 200;
-    }
 
-    @RequestMapping(value = "/admin/recommend/del/{type}", method = RequestMethod.POST, consumes = "application/json", headers = "content-type=application/x-www-form-urlencoded")
-    public
-    @ResponseBody
-    Integer unRecommendResources(@PathVariable String type, HttpServletRequest request) {
-        String ids = request.getParameter("ids");
-        System.out.println(ids);
-        String[] idArray = ids.split(",");
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+
         for (int i = 0; i < idArray.length; i++) {
-            int status = recommendDao.unRecommendResource(TypeClassMapping.typeClassMap.get(type), Integer.parseInt(idArray[i]));
+            int status;
+            if (operation.equals("add")) {
+               status = recommendDao.doRecommendResource(resource, Integer.parseInt(idArray[i]));
+            } else if (operation.equals("del")){
+                status = recommendDao.unRecommendResource(resource, Integer.parseInt(idArray[i]));
+            } else {
+                status = CRUDEvent.UPDATE_FAIL;
+            }
             if (status != CRUDEvent.UPDATE_SUCCESS) {
                 return 500;
             }

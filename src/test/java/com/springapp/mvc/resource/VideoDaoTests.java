@@ -223,8 +223,8 @@ public class VideoDaoTests {
      */
     @Test
     public void disconnectVideoMusic() {
-        Integer vId = 1;
-        accompanyDao.disconnectResourceMusic(Video.class, vId);
+        Integer vId = 81;
+        System.out.println(CRUDEvent.getResponse(accompanyDao.deleteMusicFromResource(Video.class, vId)));
     }
 
     /**
@@ -276,7 +276,7 @@ public class VideoDaoTests {
      */
     @Test
     public void getVideosByMusicId() {
-        Integer mId = 25;
+        Integer mId = 33;
 
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("music_id", mId);
@@ -295,7 +295,7 @@ public class VideoDaoTests {
      */
     @Test
     public void getVideosWithoutMusicId() {
-        Integer mId = 1;
+        Integer mId = 33;
 
         List<Video> videos = accompanyDao.getResourcesWithoutMusicId(Video.class, mId);
         System.out.println("---------返回" + videos.size() + "个视频---------");

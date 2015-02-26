@@ -1,11 +1,13 @@
 package com.darfoo.backend.service.admin;
 
+import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.MusicDao;
 import com.darfoo.backend.dao.resource.VideoDao;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.service.cota.TypeClassMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,64 +27,60 @@ import java.util.HashMap;
 @Controller
 public class ConnectController {
     @Autowired
-    MusicDao musicDao;
-    @Autowired
-    VideoDao videoDao;
-    @Autowired
     CommonDao commonDao;
     @Autowired
     AccompanyDao accompanyDao;
 
-    @RequestMapping(value = "/admin/connectmusic/all", method = RequestMethod.GET)
-    public String connectMusicAll(ModelMap modelMap) {
+    @RequestMapping(value = "/admin/connectmusic/{type}/all", method = RequestMethod.GET)
+    public String connectMusicAll(@PathVariable String type, ModelMap modelMap) {
         modelMap.addAttribute("musics", commonDao.getAllResource(Music.class));
-        return "connectionallmusic";
+        modelMap.addAttribute("type", type);
+        return "connectmusic/connectionallmusic";
     }
 
-    @RequestMapping(value = "/admin/connectmusic/single/{id}", method = RequestMethod.GET)
-    public String connectMusicSingle(@PathVariable String id, ModelMap modelMap, HttpSession session) {
-        int musicid = Integer.parseInt(id);
-        System.out.println("current music id: " + musicid);
-        Music music = (Music) commonDao.getResourceById(Music.class, musicid);
-        session.setAttribute("connectmusicid", musicid);
+    @RequestMapping(value = "/admin/connectmusic/single/{type}/{id}", method = RequestMethod.GET)
+    public String connectMusicSingle(@PathVariable String type, @PathVariable Integer id, ModelMap modelMap, HttpSession session) {
+        System.out.println("current music id: " + id);
+        Music music = (Music) commonDao.getResourceById(Music.class, id);
+        session.setAttribute("connectmusicid", id);
         modelMap.addAttribute("music", music);
 
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("music_id", musicid);
+        conditions.put("music_id", id);
 
-        modelMap.addAttribute("connectvideos", commonDao.getResourcesByFields(Video.class, conditions));
-        modelMap.addAttribute("notconnectvideos", accompanyDao.getResourcesWithoutMusicId(Video.class, musicid));
-        return "connectionsinglemusic";
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+
+        modelMap.addAttribute("connectvideos", commonDao.getResourcesByFields(resource, conditions));
+        modelMap.addAttribute("notconnectvideos", accompanyDao.getResourcesWithoutMusicId(resource, id));
+        modelMap.addAttribute("type", type);
+        return "connectmusic/connectionsinglemusic";
     }
 
-    @RequestMapping(value = "/admin/connectmusic/addconnects", method = RequestMethod.POST, consumes = "application/json", headers = "content-type=application/x-www-form-urlencoded")
+    @RequestMapping(value = "/admin/connectmusic/{operation}connects/{type}", method = RequestMethod.POST, consumes = "application/json", headers = "content-type=application/x-www-form-urlencoded")
     public
     @ResponseBody
-    String addConnections(HttpServletRequest request, HttpSession session) {
-        String idss = request.getParameter("vids");
-        System.out.println(idss);
+    Integer addConnections(@PathVariable String type, @PathVariable String operation, HttpServletRequest request, HttpSession session) {
+        String ids = request.getParameter("ids");
+        System.out.println(ids);
         int currentmusicid = (Integer) session.getAttribute("connectmusicid");
         System.out.println("current music id: " + currentmusicid);
-        String[] videoids = idss.split(",");
-        for (int i = 0; i < videoids.length; i++) {
-            accompanyDao.updateResourceMusic(Video.class, Integer.parseInt(videoids[i]), currentmusicid);
-        }
-        return 200 + "";
-    }
+        String[] idArray = ids.split(",");
 
-    @RequestMapping(value = "/admin/connectmusic/delconnects", method = RequestMethod.POST, consumes = "application/json", headers = "content-type=application/x-www-form-urlencoded")
-    public
-    @ResponseBody
-    String delConnections(HttpServletRequest request, HttpSession session) {
-        String idss = request.getParameter("vids");
-        System.out.println(idss);
-        int currentmusicid = (Integer) session.getAttribute("connectmusicid");
-        System.out.println("current music id: " + currentmusicid);
-        String[] videoids = idss.split(",");
-        for (int i = 0; i < videoids.length; i++) {
-            accompanyDao.disconnectResourceMusic(Video.class, Integer.parseInt(videoids[i]));
-        }
-        return 200 + "";
-    }
+        Class resource = TypeClassMapping.typeClassMap.get(type);
 
+        for (int i = 0; i < idArray.length; i++) {
+            int status;
+            if (operation.equals("add")) {
+                status = accompanyDao.updateResourceMusic(resource, Integer.parseInt(idArray[i]), currentmusicid);
+            } else if (operation.equals("del")){
+                status = accompanyDao.deleteMusicFromResource(resource, Integer.parseInt(idArray[i]));
+            } else {
+                status = CRUDEvent.UPDATE_FAIL;
+            }
+            if (status != CRUDEvent.UPDATE_SUCCESS && status != CRUDEvent.DELETE_SUCCESS) {
+                return 500;
+            }
+        }
+        return 200;
+    }
 }
