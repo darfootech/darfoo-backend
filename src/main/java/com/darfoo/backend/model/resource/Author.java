@@ -3,6 +3,7 @@ package com.darfoo.backend.model.resource;
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
 import com.darfoo.backend.model.cota.ModelInsert;
+import com.darfoo.backend.model.cota.ModelUpdate;
 import com.darfoo.backend.model.cota.ModelUpload;
 import com.darfoo.backend.model.cota.ModelUploadEnum;
 import org.hibernate.annotations.Cascade;
@@ -21,14 +22,17 @@ public class Author implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //引用下面名为mysql的主键生成方式
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     Integer id;
+
     @Column(name = "NAME", nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     @ModelInsert
+    @ModelUpdate
     String name;
 
     @Column(name = "DESCRIPTION", nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     @ModelInsert
+    @ModelUpdate
     String description;
 
     //暂时弄成单向对应关系

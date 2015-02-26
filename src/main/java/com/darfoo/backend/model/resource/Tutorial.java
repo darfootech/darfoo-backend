@@ -4,6 +4,7 @@ import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.cota.ModelInsert;
+import com.darfoo.backend.model.cota.ModelUpdate;
 import com.darfoo.backend.model.cota.ModelUpload;
 import com.darfoo.backend.model.cota.ModelUploadEnum;
 import org.hibernate.annotations.Cascade;
@@ -51,6 +52,7 @@ public class Tutorial implements Serializable {
     @Column(name = "TITLE", nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     @ModelInsert
+    @ModelUpdate
     String title;
 
     @Column(name = "UPDATE_TIMESTAMP", nullable = false, columnDefinition = "bigint(64) not null")
@@ -74,6 +76,7 @@ public class Tutorial implements Serializable {
 
     @Transient
     @ModelInsert
+    @ModelUpdate
     String authorname;
 
     @Transient
@@ -83,6 +86,7 @@ public class Tutorial implements Serializable {
 
     @Transient
     @ModelInsert
+    @ModelUpdate
     String connectmusic;
 
     @Transient

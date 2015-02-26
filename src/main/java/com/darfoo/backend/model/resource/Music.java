@@ -4,6 +4,7 @@ import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.cota.ModelInsert;
+import com.darfoo.backend.model.cota.ModelUpdate;
 import com.darfoo.backend.model.cota.ModelUpload;
 import com.darfoo.backend.model.cota.ModelUploadEnum;
 import org.hibernate.annotations.Cascade;
@@ -34,6 +35,7 @@ public class Music implements Serializable {
     @Column(name = "TITLE", nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     @ModelInsert
+    @ModelUpdate
     String title;
 
     @Column(name = "MUSIC_KEY", nullable = false, unique = true, columnDefinition = "varchar(255) not null")
@@ -52,6 +54,7 @@ public class Music implements Serializable {
     @Column(name = "AUTHOR_NAME", nullable = true, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     @ModelInsert
+    @ModelUpdate
     String authorname;
 
     @Transient
