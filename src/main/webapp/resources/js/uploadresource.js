@@ -1,7 +1,7 @@
 $(function () {
     var type = $("#type").text();
 
-    $("#start").click(function() {
+    $("#start").click(function () {
         $.ajax({
             type: "POST",
             url: "/darfoobackend/rest/resources/" + type + "/create",
@@ -31,7 +31,7 @@ $(function () {
             error: function () {
                 alert("提交资源信息失败");
             }
-        })
+        });
     });
 
     $.ajax({

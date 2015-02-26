@@ -10,7 +10,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <form role="form" id="createauthorform" name="createauthorform">
+            <form role="form" id="createresourceform">
                 <div class="form-group">
                     <label for="name">作者名字</label>
                     <input type="text" class="form-control" name="name" id="name" placeholder="请输入作者名字">

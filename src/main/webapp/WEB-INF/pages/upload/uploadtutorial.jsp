@@ -10,7 +10,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <form role="form" id="createtutorialform" name="createtutorialform">
+            <form role="form" id="createresourceform">
                 <div class="form-group">
                     <label for="title">教学视频标题(也就是上传视频文件的文件名,不需要后缀)</label>
                     <input type="text" class="form-control" name="title" id="title" placeholder="请输入教学视频标题">

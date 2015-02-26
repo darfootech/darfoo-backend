@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-12">
             <form role="form" action="/darfoobackend/rest/resources/tutorialresource/create" method="post"
-                  id="createvideoform" name="createvideoform" enctype="multipart/form-data">
+                  enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="videoresource">选择要上传的教程资源(请确保是MP4格式的视频文件)</label>
                     <input type="file" id="videoresource" name="videoresource">
