@@ -4,9 +4,6 @@ import com.darfoo.backend.dao.*;
 import com.darfoo.backend.dao.cota.*;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.dao.resource.ImageDao;
-import com.darfoo.backend.dao.resource.TutorialDao;
-import com.darfoo.backend.model.*;
-import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.resource.*;
 import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
@@ -24,8 +21,6 @@ import java.util.Set;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class TutorialDaoTests {
-    @Autowired
-    TutorialDao tutorialDao;
     @Autowired
     AuthorDao authorDao;
     @Autowired
@@ -100,25 +95,20 @@ public class TutorialDaoTests {
      */
     @Test
     public void updateTutorialById() {
-        Integer vid = 7;
-        String tutorialTitle = "呵呵";
+        HashMap<String, String> updatecontents = new HashMap<String, String>();
+        String tutorialTitle = "呵呵-" + System.currentTimeMillis();
         String authorName = "滨崎步";
-        String imageKey = "滨崎步.jpg";
-        UpdateCheckResponse response = tutorialDao.updateTutorialCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
-        System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
-        String videoSpeed = "快";  //"快","中","慢"//按速度
-        String videoDifficuty = "稍难";  //"简单","适中","稍难"//按难度
-        String videoStyle = "队形表演";    //"队形表演","背面教学","分解教学"//按教学类型
-        Set<String> categoryTitles = new HashSet<String>();
-        categoryTitles.add(videoSpeed);
-        categoryTitles.add(videoDifficuty);
-        categoryTitles.add(videoStyle);
-        if (response.updateIsReady()) {
-            //updateIsReady为true表示可以进行更新操作
-            System.out.println(CRUDEvent.getResponse(tutorialDao.updateTutorial(vid, tutorialTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis())));
-        } else {
-            System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
-        }
+
+        Integer id = 37;
+
+        updatecontents.put("title", tutorialTitle);
+        updatecontents.put("authorname", authorName);
+        updatecontents.put("category1", "快");
+        updatecontents.put("category2", "稍难");
+        updatecontents.put("category3", "队形表演");
+
+        HashMap<String, Integer> insertresult = commonDao.updateResource(Tutorial.class, id, updatecontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
     }
 
     /**

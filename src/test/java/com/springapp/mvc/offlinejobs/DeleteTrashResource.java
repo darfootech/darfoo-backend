@@ -3,7 +3,6 @@ package com.springapp.mvc.offlinejobs;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.ImageDao;
 import com.darfoo.backend.dao.resource.MusicDao;
-import com.darfoo.backend.dao.resource.TutorialDao;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
@@ -32,8 +31,6 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class DeleteTrashResource {
-    @Autowired
-    TutorialDao tutorialDao;
     @Autowired
     MusicDao musicDao;
     @Autowired

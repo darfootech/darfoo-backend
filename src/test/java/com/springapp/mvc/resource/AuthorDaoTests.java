@@ -4,7 +4,6 @@ import com.darfoo.backend.dao.*;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.dao.resource.ImageDao;
-import com.darfoo.backend.dao.resource.TutorialDao;
 import com.darfoo.backend.model.*;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Image;
@@ -28,8 +27,6 @@ public class AuthorDaoTests {
     AuthorDao authorDao;
     @Autowired
     ImageDao imageDao;
-    @Autowired
-    TutorialDao tutorialDao;
     @Autowired
     CommonDao commonDao;
 

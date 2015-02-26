@@ -26,8 +26,6 @@ import java.util.Set;
 @Controller
 public class UpdateController {
     @Autowired
-    TutorialDao tutorialDao;
-    @Autowired
     MusicDao musicDao;
     @Autowired
     AuthorDao authorDao;
@@ -202,7 +200,7 @@ public class UpdateController {
         }
     }
 
-    @RequestMapping(value = "/admin/tutorial/update", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/admin/tutorial/update", method = RequestMethod.POST)
     public
     @ResponseBody
     String updateTutorial(HttpServletRequest request, HttpSession session) {
@@ -260,7 +258,7 @@ public class UpdateController {
             System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
             return 505 + "";
         }
-    }
+    }*/
 
     @RequestMapping(value = "/admin/tutorial/updateimage/{id}", method = RequestMethod.GET)
     public String updateTutorialImage(@PathVariable String id, ModelMap modelMap) {

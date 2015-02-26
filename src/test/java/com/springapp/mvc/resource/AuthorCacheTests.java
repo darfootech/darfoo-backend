@@ -6,7 +6,6 @@ import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.resource.TutorialDao;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
@@ -40,8 +39,6 @@ public class AuthorCacheTests {
     AuthorCacheDao authorCacheDao;
     @Autowired
     VideoCacheDao videoCacheDao;
-    @Autowired
-    TutorialDao tutorialDao;
     @Autowired
     TutorialCacheDao tutorialCacheDao;
     @Autowired

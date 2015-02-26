@@ -4,7 +4,6 @@ import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.resource.TutorialDao;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.service.responsemodel.TutorialCates;
@@ -30,8 +29,6 @@ import java.util.Set;
         "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml"
 })
 public class TutorialCacheTests {
-    @Autowired
-    TutorialDao tutorialDao;
     @Autowired
     TutorialCacheDao tutorialCacheDao;
     @Autowired
