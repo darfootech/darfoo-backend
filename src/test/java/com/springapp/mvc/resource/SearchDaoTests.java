@@ -9,7 +9,6 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.dao.resource.MusicDao;
 import com.darfoo.backend.dao.resource.TutorialDao;
-import com.darfoo.backend.dao.resource.VideoDao;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
@@ -34,8 +33,6 @@ import java.util.Set;
         "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml"
 })
 public class SearchDaoTests {
-    @Autowired
-    VideoDao videoDao;
     @Autowired
     VideoCacheDao videoCacheDao;
     @Autowired

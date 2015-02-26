@@ -6,7 +6,6 @@ import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.MusicDao;
-import com.darfoo.backend.dao.resource.VideoDao;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
@@ -33,8 +32,6 @@ import java.util.Set;
         "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml"
 })
 public class VideoCacheTests {
-    @Autowired
-    VideoDao videoDao;
     @Autowired
     VideoCacheDao videoCacheDao;
     @Autowired

@@ -2,7 +2,6 @@ package com.springapp.mvc.offlinejobs;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.TutorialDao;
-import com.darfoo.backend.dao.resource.VideoDao;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
 import org.junit.Test;
@@ -22,8 +21,6 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class UpdateResourceKey {
-    @Autowired
-    VideoDao videoDao;
     @Autowired
     TutorialDao tutorialDao;
     @Autowired

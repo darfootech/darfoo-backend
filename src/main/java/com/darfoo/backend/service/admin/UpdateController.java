@@ -26,8 +26,6 @@ import java.util.Set;
 @Controller
 public class UpdateController {
     @Autowired
-    VideoDao videoDao;
-    @Autowired
     TutorialDao tutorialDao;
     @Autowired
     MusicDao musicDao;
@@ -141,7 +139,8 @@ public class UpdateController {
         }
 
         Integer vid = Integer.parseInt(request.getParameter("id"));
-        UpdateCheckResponse response = videoDao.updateVideoCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
+        //UpdateCheckResponse response = videoDao.updateVideoCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
+        UpdateCheckResponse response = new UpdateCheckResponse();
         System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
         Set<String> categoryTitles = new HashSet<String>();
         categoryTitles.add(videoSpeed);
@@ -160,7 +159,8 @@ public class UpdateController {
         }
         if (response.updateIsReady()) {
             //updateIsReady为true表示可以进行更新操作
-            String status = CRUDEvent.getResponse(videoDao.updateVideo(vid, videoTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
+            //String status = CRUDEvent.getResponse(videoDao.updateVideo(vid, videoTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis()));
+            String status = "";
 
             if (!connectmusic.equals("")) {
                 int mid = Integer.parseInt(connectmusic.split("-")[2]);

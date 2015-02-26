@@ -8,14 +8,8 @@ import com.darfoo.backend.dao.*;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.dao.resource.ImageDao;
-import com.darfoo.backend.dao.resource.VideoDao;
 import com.darfoo.backend.dao.upload.UploadNoAuthVideoDao;
-import com.darfoo.backend.model.category.VideoCategory;
-import com.darfoo.backend.model.resource.Author;
-import com.darfoo.backend.model.resource.Image;
-import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.model.upload.UploadNoAuthVideo;
-import com.darfoo.backend.utils.ServiceUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,9 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
@@ -37,8 +29,6 @@ public class UploadNoAuthVideoDaoTests {
     AuthorDao authorDao;
     @Autowired
     ImageDao imageDao;
-    @Autowired
-    VideoDao videoDao;
     @Autowired
     CommonDao commonDao;
 

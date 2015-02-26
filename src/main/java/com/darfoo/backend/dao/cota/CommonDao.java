@@ -85,6 +85,13 @@ public class CommonDao {
         return null;
     }
 
+    /**
+     * 插入新的资源
+     *
+     * @param resource
+     * @param insertcontents
+     * @return
+     */
     public HashMap<String, Integer> insertResource(Class resource, HashMap<String, String> insertcontents) {
         Set<String> categoryTitles = new HashSet<String>();
 
@@ -286,6 +293,100 @@ public class CommonDao {
     }
 
     /**
+     * 更新已有资源
+     *
+     * @param resource
+     * @param updatecontents
+     * @return image_key这个字段创建了就不需要更新的 更新这个字段没有意义
+     */
+    public HashMap<String, Integer> updateResource(Class resource, Integer id, HashMap<String, String> updatecontents) {
+        Set<String> categoryTitles = new HashSet<String>();
+
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+
+        boolean isCategoryHasSingleChar = false;
+
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria;
+
+        Object object = session.get(resource, id);
+
+        if (object == null) {
+            System.out.println("需要更新的资源不存在");
+            resultMap.put("statuscode", 500);
+            return resultMap;
+        } else {
+            for (String key : updatecontents.keySet()) {
+                if (key.equals("authorname")) {
+                    String authorname = updatecontents.get(key);
+                    if (resource == Video.class || resource == Tutorial.class) {
+                        String oldAuthorname = ((Author) getResourceAttr(resource, object, "author")).getName();
+                        if (!authorname.equals(oldAuthorname)) {
+                            criteria = session.createCriteria(Author.class).add(Restrictions.eq("name", authorname));
+                            criteria.setReadOnly(true);
+                            Author author = (Author) criteria.uniqueResult();
+                            if (author == null) {
+                                System.out.println("要更新的资源的的明星舞队不存在，请先完成明星舞队信息的创建");
+                                resultMap.put("statuscode", 501);
+                                return resultMap;
+                            } else {
+                                setResourceAttr(resource, object, "author", author);
+                            }
+                        }
+                    }
+                } else if (key.contains("category")) {
+                    String category = updatecontents.get(key);
+                    if (ServiceUtils.isSingleCharacter(category)) {
+                        isCategoryHasSingleChar = true;
+                    }
+                    categoryTitles.add(category);
+                } else if (key.equals("title")) {
+                    String title = updatecontents.get(key);
+                    String oldTitle = getResourceAttr(resource, object, "title").toString();
+                    if (title != null && !title.equals(oldTitle)) {
+                        setResourceAttr(resource, object, "title", title);
+                    }
+                }
+            }
+
+            if (ifHasCategoryResource(resource)) {
+                setResourceAttr(resource, object, "update_timestamp", System.currentTimeMillis());
+
+                if (resource == Video.class || resource == Music.class) {
+                    if (!isCategoryHasSingleChar) {
+                        resultMap.put("statuscode", 503);
+                        return resultMap;
+                    }
+                }
+
+                Class categoryClass = null;
+                Set categories;
+                if (resource == Video.class) {
+                    categoryClass = VideoCategory.class;
+                }
+
+                if (resource == Tutorial.class) {
+                    categoryClass = TutorialCategory.class;
+                }
+
+                if (resource == Music.class) {
+                    categoryClass = MusicCategory.class;
+                }
+
+                criteria = session.createCriteria(categoryClass).add(Restrictions.in("title", categoryTitles));
+                List categoryList = criteria.list();
+                categories = new HashSet(categoryList);
+
+                setResourceAttr(resource, object, "categories", categories);
+            }
+
+            session.saveOrUpdate(object);
+            resultMap.put("statuscode", 200);
+            return resultMap;
+        }
+    }
+
+    /**
      * 获取单个资源的信息
      *
      * @param resource
@@ -417,9 +518,9 @@ public class CommonDao {
     public List getResourcesByNewest(Class resource, Integer count) {
         try {
             return getCommonQueryCriteria(resource)
-                .addOrder(Order.desc("update_timestamp"))
-                .setMaxResults(count)
-                .list();
+                    .addOrder(Order.desc("update_timestamp"))
+                    .setMaxResults(count)
+                    .list();
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList();

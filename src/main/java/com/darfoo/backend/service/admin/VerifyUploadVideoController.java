@@ -5,28 +5,18 @@ import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.dao.resource.ImageDao;
-import com.darfoo.backend.dao.resource.VideoDao;
 import com.darfoo.backend.dao.upload.UploadNoAuthVideoDao;
-import com.darfoo.backend.model.category.VideoCategory;
-import com.darfoo.backend.model.resource.Author;
-import com.darfoo.backend.model.resource.Image;
-import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.model.upload.UploadNoAuthVideo;
 import com.darfoo.backend.utils.QiniuUtils;
-import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by zjh on 15-1-17.
@@ -39,8 +29,6 @@ public class VerifyUploadVideoController {
     AuthorDao authorDao;
     @Autowired
     ImageDao imageDao;
-    @Autowired
-    VideoDao videoDao;
     @Autowired
     UploadNoAuthVideoDao uploadNoAuthVideoDao;
     @Autowired

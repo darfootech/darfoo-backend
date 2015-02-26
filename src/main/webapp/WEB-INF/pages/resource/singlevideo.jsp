@@ -127,15 +127,6 @@
                     <input type="text" class="form-control" name="title" id="title" placeholder="${video.title}">
                 </div>
 
-                <!--<div style="display: none">
-                    <input type="text" name="authorname" value="${video.author.name}">
-                </div>
-
-                <div class="form-group">
-                    <label for="authorname">舞蹈视频作者名字</label>
-                    <input type="text" class="form-control" id="authorname" placeholder="${video.author.name}" disabled="disabled">
-                </div>-->
-
                 <div class="form-group">
                     <label for="authorname">关联的明星舞队---
                         <div style="color: green; display: inline; font-size: 18pt">原本为${video.author.name}</div>
@@ -235,6 +226,5 @@
         </div>
     </div>
 </div>
-
 
 <%@include file="../footer.jsp" %>

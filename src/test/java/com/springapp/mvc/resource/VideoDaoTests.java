@@ -4,11 +4,6 @@ import com.darfoo.backend.dao.*;
 import com.darfoo.backend.dao.cota.*;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.dao.resource.ImageDao;
-import com.darfoo.backend.dao.resource.VideoDao;
-import com.darfoo.backend.model.*;
-import com.darfoo.backend.model.category.VideoCategory;
-import com.darfoo.backend.model.resource.Author;
-import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.service.responsemodel.VideoCates;
@@ -25,8 +20,6 @@ import java.util.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class VideoDaoTests {
-    @Autowired
-    VideoDao videoDao;
     @Autowired
     AuthorDao authorDao;
     @Autowired
@@ -150,27 +143,21 @@ public class VideoDaoTests {
      */
     @Test
     public void updateVideoById() {
-        Integer vid = 4;
-        String videoTitle = "呵呵";
+        HashMap<String, String> updatecontents = new HashMap<String, String>();
+        String videoTitle = "呵呵-" + System.currentTimeMillis();
         String authorName = "仓木麻衣";
-        String imageKey = "仓木麻衣.jpg";
-        UpdateCheckResponse response = videoDao.updateVideoCheck(vid, authorName, imageKey); //先检查图片和作者姓名是否已经存在
-        System.out.println(response.updateIsReady()); //若response.updateIsReady()为false,可以根据response成员变量具体的值来获悉是哪个值需要先插入数据库
-        String videoSpeed = "适中";
-        String videoDifficuty = "稍难";
-        String videoStyle = "戏曲风";
-        String videoLetter = "q";
-        Set<String> categoryTitles = new HashSet<String>();
-        categoryTitles.add(videoSpeed);
-        categoryTitles.add(videoDifficuty);
-        categoryTitles.add(videoStyle);
-        categoryTitles.add(videoLetter.toUpperCase());
-        if (response.updateIsReady()) {
-            //updateIsReady为true表示可以进行更新操作
-            System.out.println(CRUDEvent.getResponse(videoDao.updateVideo(vid, videoTitle, authorName, imageKey, categoryTitles, System.currentTimeMillis())));
-        } else {
-            System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
-        }
+
+        Integer id = 81;
+
+        updatecontents.put("title", videoTitle);
+        updatecontents.put("authorname", authorName);
+        updatecontents.put("category1", "适中");
+        updatecontents.put("category2", "稍难");
+        updatecontents.put("category3", "戏曲风");
+        updatecontents.put("category4", "q".toUpperCase());
+
+        HashMap<String, Integer> insertresult = commonDao.updateResource(Video.class, id, updatecontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
     }
 
     /**
