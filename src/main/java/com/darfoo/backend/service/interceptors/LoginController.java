@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
     @RequestMapping(value = {"/", ""})
     public String index() {
-        return "login";
+        return "auth/login";
     }
 
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
@@ -43,7 +43,7 @@ public class LoginController {
 
     @RequestMapping(value = "/permissiondeny", method = RequestMethod.GET)
     public String permissiondeny() {
-        return "permissiondeny";
+        return "auth/permissiondeny";
     }
 
     @RequestMapping("/out")

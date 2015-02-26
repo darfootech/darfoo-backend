@@ -15,7 +15,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -110,11 +109,10 @@ public class UploadController {
     }
 
     @RequestMapping(value = "/resources/{type}/new", method = RequestMethod.GET)
-    public String uploadResource(@PathVariable String type, ModelMap modelMap, HttpSession session) {
-        session.setAttribute("resource", type);
-        modelMap.addAttribute("resource", type);
+    public String uploadResource(@PathVariable String type, ModelMap modelMap) {
+        modelMap.addAttribute("type", type);
         modelMap.addAttribute("authors", commonDao.getAllResource(Author.class));
-        return "upload" + type;
+        return String.format("upload/upload%s", type);
     }
 
     @RequestMapping(value = "/resources/{type}/create", method = RequestMethod.POST)
@@ -126,7 +124,7 @@ public class UploadController {
 
     @RequestMapping(value = "/resources/{type}resource/new", method = RequestMethod.GET)
     public String uploadMediaResource(@PathVariable String type) {
-        return String.format("upload%sresource", type);
+        return String.format("upload/upload%sresource", type);
     }
 
     @RequestMapping(value = "/resources/{type}resource/create")

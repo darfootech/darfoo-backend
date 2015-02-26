@@ -29,6 +29,6 @@ public class RunScriptController {
         String scriptpath = "./resourcevolumn.sh";
         String volumn = RunShellUtils.runshellscriptwithresult(scriptpath);
         modelMap.put("volumn", volumn);
-        return "showvolumn";
+        return "shell/showvolumn";
     }
 }

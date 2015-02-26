@@ -1,30 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%@include file="header.jsp" %>
+<%@include file="../header.jsp" %>
 
-<script>
-    function start() {
-        $.ajax({
-            type: "POST",
-            url: "/darfoobackend/rest/resources/author/create",
-            data: $("#createauthorform").serialize(),
-            success: function (data) {
-                if (data == "200") {
-                    alert("创建作者成功");
-                    window.location.href = "/darfoobackend/rest/resources/authorresource/new"
-                } else if (data == "501") {
-                    alert("相同名字的作者已经存在");
-                } else if (data == "508") {
-                    alert("请填写并上传作者相关的图片");
-                } else {
-                    alert("创建作者失败")
-                }
-            },
-            error: function () {
-                alert("创建作者失败");
-            }
-        })
-    }
-</script>
+<script src="/darfoobackend/resources/js/uploadresource.js"></script>
+
+<div id="type" style="display: none">${type}</div>
 
 <div class="container">
     <h1>创建作者-明星舞队(视频,教程,伴奏)</h1>
@@ -44,10 +23,10 @@
                     <label for="imagekey">作者图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
                     <input type="text" class="form-control" name="imagekey" id="imagekey" placeholder="请输入作者图片名称">
                 </div>
-                <button type="button" class="btn btn-default" onclick="start()">创建作者</button>
+                <button type="button" class="btn btn-default" id="start">创建作者</button>
             </form>
         </div>
     </div>
 </div>
 
-<%@include file="footer.jsp" %>
+<%@include file="../footer.jsp" %>
