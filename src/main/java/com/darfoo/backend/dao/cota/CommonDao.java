@@ -347,12 +347,14 @@ public class CommonDao {
                         isCategoryHasSingleChar = true;
                     }
                     categoryTitles.add(category);
-                } else if (key.equals("title")) {
-                    String title = updatecontents.get(key);
-                    String oldTitle = getResourceAttr(resource, object, "title").toString();
-                    if (title != null && !title.equals(oldTitle)) {
-                        setResourceAttr(resource, object, "title", title);
+                } else if (key.equals("title") || key.equals("name") || key.equals("description")) {
+                    String value = updatecontents.get(key);
+                    String oldValue = getResourceAttr(resource, object, key).toString();
+                    if (value != null && !value.equals(oldValue)) {
+                        setResourceAttr(resource, object, key, value);
                     }
+                } else {
+                    System.out.println("wired");
                 }
             }
 

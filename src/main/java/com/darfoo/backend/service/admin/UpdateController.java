@@ -381,7 +381,7 @@ public class UpdateController {
         }
     }*/
 
-    @RequestMapping(value = "/admin/author/update", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/admin/author/update", method = RequestMethod.POST)
     public
     @ResponseBody
     String updateAuthor(HttpServletRequest request, HttpSession session) {
@@ -436,7 +436,7 @@ public class UpdateController {
         } else {
             return 503 + "";
         }
-    }
+    }*/
 
     @RequestMapping(value = "/admin/author/updateimage/{id}", method = RequestMethod.GET)
     public String updateAuthorImage(@PathVariable String id, ModelMap modelMap) {

@@ -69,42 +69,19 @@ public class AuthorDaoTests {
      * *
      */
     @Test
-    public void updateAuthor() {
-        Integer id = 4;
-        String newName = "滨崎步";
-        String newDesciption = "日本女歌手";
-        String newimageKey = "滨崎步3113.jpg";
+    public void updateAuthorById() {
+        HashMap<String, String> updatecontents = new HashMap<String, String>();
+        String authorName = "滨崎步" + System.currentTimeMillis() ;
+        String imagekey = "imagekey-" + System.currentTimeMillis() + ".jpg";
 
-        if (authorDao.isExistAuthor(newName)) {
-            System.out.println("已存在，不能修改作者名字");
-            return;
-        } else {
-            System.out.println("作者名字不存在，可以进行修改");
-        }
+        Integer id = 39;
 
-        HashMap<String, Object> imageConditions = new HashMap<String, Object>();
-        imageConditions.put("image_key", newimageKey);
+        updatecontents.put("name", authorName);
+        updatecontents.put("imagekey", imagekey);
+        updatecontents.put("description", "日本女歌手");
 
-        Image image = (Image) commonDao.getResourceByFields(Image.class, imageConditions);
-
-        if (image == null) {
-            System.out.println("图片不存在，可以进行插入");
-            image = new Image();
-            image.setImage_key(newimageKey);
-            //imageDao.insertSingleImage(image);
-        } else {
-            System.out.println("图片已存在，不可以进行插入了，是否需要修改");
-            return;
-        }
-
-        UpdateCheckResponse response = authorDao.updateAuthorCheck(id, newimageKey);
-        if (response.updateIsReady()) {
-            int res = authorDao.updateAuthor(id, newName, newDesciption, newimageKey);//更新id为2的Author对象的名字
-            System.out.println(CRUDEvent.getResponse(res));
-        } else {
-            System.out.println("请根据reponse中的成员变量值来设计具体逻辑");
-        }
-
+        HashMap<String, Integer> insertresult = commonDao.updateResource(Author.class, id, updatecontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
     }
 
     @Test
