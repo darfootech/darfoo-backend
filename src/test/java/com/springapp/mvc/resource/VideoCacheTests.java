@@ -5,7 +5,6 @@ import com.darfoo.backend.caches.dao.MusicCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.resource.MusicDao;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
@@ -34,8 +33,6 @@ import java.util.Set;
 public class VideoCacheTests {
     @Autowired
     VideoCacheDao videoCacheDao;
-    @Autowired
-    MusicDao musicDao;
     @Autowired
     MusicCacheDao musicCacheDao;
     @Autowired

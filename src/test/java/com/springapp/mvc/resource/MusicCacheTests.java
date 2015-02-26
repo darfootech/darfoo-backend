@@ -4,7 +4,6 @@ import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.caches.dao.MusicCacheDao;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.resource.MusicDao;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
@@ -30,8 +29,6 @@ import java.util.Set;
         "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml"
 })
 public class MusicCacheTests {
-    @Autowired
-    MusicDao musicDao;
     @Autowired
     MusicCacheDao musicCacheDao;
     @Autowired

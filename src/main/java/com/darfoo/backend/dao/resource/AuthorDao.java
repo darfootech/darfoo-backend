@@ -45,30 +45,6 @@ public class AuthorDao {
         return isExist;
     }
 
-    /**
-     * 插入单个Author
-     *
-     * @param author 在插入时请保证image有值，否则将以null
-     *               *
-     */
-    public int insertAuthor(Author author) {
-        int res;
-        try {
-            boolean isExist = isExistAuthor(author.getName());
-            if (isExist) {
-                res = CRUDEvent.INSERT_REPEAT;
-            } else {
-                Session session = sf.getCurrentSession();
-                Integer id = (Integer) (session.save(author));
-                res = (id > 0) ? CRUDEvent.INSERT_SUCCESS : CRUDEvent.INSERT_FAIL;
-            }
-        } catch (Exception e) {
-            res = CRUDEvent.CRUD_EXCETION;
-            //throw new RuntimeException("rollback");
-        }
-        return res;
-    }
-
     public List<Object[]> getAuthorOrderByVideoCountDesc() {
         List<Object[]> result = new ArrayList<Object[]>();
         try {

@@ -333,6 +333,13 @@ public class CommonDao {
                                 setResourceAttr(resource, object, "author", author);
                             }
                         }
+                    } else if (resource == Music.class) {
+                        String oldAuthorname = getResourceAttr(resource, object, "authorname").toString();
+                        if (!authorname.equals(oldAuthorname)) {
+                            setResourceAttr(resource, object, "authorname", authorname);
+                        }
+                    } else {
+                        System.out.println("wired");
                     }
                 } else if (key.contains("category")) {
                     String category = updatecontents.get(key);

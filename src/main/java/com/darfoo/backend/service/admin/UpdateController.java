@@ -26,8 +26,6 @@ import java.util.Set;
 @Controller
 public class UpdateController {
     @Autowired
-    MusicDao musicDao;
-    @Autowired
     AuthorDao authorDao;
     @Autowired
     CommonDao commonDao;
@@ -282,7 +280,7 @@ public class UpdateController {
         }
     }
 
-    @RequestMapping(value = "/admin/music/update", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/admin/music/update", method = RequestMethod.POST)
     public
     @ResponseBody
     String updateMusic(HttpServletRequest request, HttpSession session) {
@@ -324,9 +322,9 @@ public class UpdateController {
         } else {
             return 503 + "";
         }
-    }
+    }*/
 
-    @RequestMapping(value = "/admin/music/updatenopic", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/admin/music/updatenopic", method = RequestMethod.POST)
     public
     @ResponseBody
     String updateMusicNoPic(HttpServletRequest request, HttpSession session) {
@@ -381,7 +379,7 @@ public class UpdateController {
         } else {
             return 503 + "";
         }
-    }
+    }*/
 
     @RequestMapping(value = "/admin/author/update", method = RequestMethod.POST)
     public

@@ -10,7 +10,6 @@ import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.dao.resource.MusicDao;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
@@ -41,8 +40,6 @@ public class CacheController {
     TutorialCacheDao tutorialCacheDao;
     @Autowired
     MusicCacheDao musicCacheDao;
-    @Autowired
-    MusicDao musicDao;
     @Autowired
     AuthorCacheDao authorCacheDao;
     @Autowired

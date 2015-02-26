@@ -3,7 +3,6 @@ package com.darfoo.backend.Interceptors;
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.dao.resource.MusicDao;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
@@ -22,8 +21,6 @@ import java.util.regex.Pattern;
 
 /*用来拦截请求单个视频，伴奏，教程资源的点击，用来累计每一个资源记录的点击量，从而综合更新日期和点击量做热门推荐*/
 public class HotClickInterceptor extends HandlerInterceptorAdapter {
-    @Autowired
-    MusicDao musicDao;
     @Autowired
     AuthorDao authorDao;
     @Autowired

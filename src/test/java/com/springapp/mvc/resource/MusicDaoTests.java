@@ -5,7 +5,6 @@ import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.dao.resource.MusicDao;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
@@ -22,8 +21,6 @@ import java.util.Set;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class MusicDaoTests {
-    @Autowired
-    private MusicDao musicDao;
     @Autowired
     AuthorDao authorDao;
     @Autowired
@@ -94,7 +91,6 @@ public class MusicDaoTests {
     @Test
     public void deleteMusicById() {
         System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Music.class, 2)));   //--->DELETE_SUCCESS
-//		System.out.println(CRUDEvent.getResponse(musicDao.deleteMusicById(200))); //--->DELETE_NOTFOUND
     }
 
     /**
@@ -103,19 +99,20 @@ public class MusicDaoTests {
      */
     @Test
     public void updateMusicById() {
-        Integer vid = 10;
-        String musicTitle = "呵呵呵";
+        HashMap<String, String> updatecontents = new HashMap<String, String>();
+        String musicTitle = "呵呵-" + System.currentTimeMillis();
         String authorName = "仓木麻衣";
-        String imageKey = "仓木麻衣.jpg";
-        String musicBeat = "八拍";
-        String musicStyle = "戏曲风";
-        String musicLetter = "q";
-        Set<String> categoryTitles = new HashSet<String>();
-        categoryTitles.add(musicBeat);
-        categoryTitles.add(musicStyle);
-        categoryTitles.add(musicLetter.toUpperCase());
-        //updateIsReady为true表示可以进行更新操作
-        System.out.println(CRUDEvent.getResponse(musicDao.updateMusic(vid, musicTitle, categoryTitles, System.currentTimeMillis())));
+
+        Integer id = 39;
+
+        updatecontents.put("title", musicTitle);
+        updatecontents.put("authorname", authorName);
+        updatecontents.put("category1", "八拍");
+        updatecontents.put("category2", "戏曲风");
+        updatecontents.put("category3", "q".toUpperCase());
+
+        HashMap<String, Integer> insertresult = commonDao.updateResource(Music.class, id, updatecontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
     }
 
     /**

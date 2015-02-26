@@ -7,7 +7,6 @@ import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.dao.resource.MusicDao;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
@@ -36,8 +35,6 @@ public class SearchDaoTests {
     VideoCacheDao videoCacheDao;
     @Autowired
     TutorialCacheDao tutorialCacheDao;
-    @Autowired
-    MusicDao musicDao;
     @Autowired
     MusicCacheDao musicCacheDao;
     @Autowired

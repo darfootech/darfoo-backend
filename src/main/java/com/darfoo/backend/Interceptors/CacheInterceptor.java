@@ -5,7 +5,6 @@ import com.darfoo.backend.caches.dao.MusicCacheDao;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.resource.MusicDao;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
@@ -21,8 +20,6 @@ import java.util.regex.Pattern;
  * Created by zjh on 14-12-18.
  */
 public class CacheInterceptor extends HandlerInterceptorAdapter {
-    @Autowired
-    MusicDao musicDao;
     @Autowired
     VideoCacheDao videoCacheDao;
     @Autowired
