@@ -299,6 +299,8 @@ public class CommonDao {
      * @param updatecontents
      * @return image_key这个字段创建了就不需要更新的 更新这个字段没有意义
      */
+    //视频title可以重名,但是不可能出现视频title一样,作者id都一样的情况,也就是一个作者的作品中不会出现重名的情况
+    //伴奏title可以重名,但是不可能出现伴奏title一样authorname也一样的情况
     public HashMap<String, Integer> updateResource(Class resource, Integer id, HashMap<String, String> updatecontents) {
         Set<String> categoryTitles = new HashSet<String>();
 
@@ -319,27 +321,65 @@ public class CommonDao {
             for (String key : updatecontents.keySet()) {
                 if (key.equals("authorname")) {
                     String authorname = updatecontents.get(key);
-                    if (resource == Video.class || resource == Tutorial.class) {
-                        String oldAuthorname = ((Author) getResourceAttr(resource, object, "author")).getName();
-                        if (!authorname.equals(oldAuthorname)) {
-                            criteria = session.createCriteria(Author.class).add(Restrictions.eq("name", authorname));
-                            criteria.setReadOnly(true);
-                            Author author = (Author) criteria.uniqueResult();
-                            if (author == null) {
-                                System.out.println("要更新的资源的的明星舞队不存在，请先完成明星舞队信息的创建");
-                                resultMap.put("statuscode", 501);
-                                return resultMap;
-                            } else {
-                                setResourceAttr(resource, object, "author", author);
+                    if (!authorname.equals("") && authorname != null) {
+                        if (resource == Video.class || resource == Tutorial.class) {
+                            String oldAuthorname = ((Author) getResourceAttr(resource, object, "author")).getName();
+                            if (!authorname.equals(oldAuthorname)) {
+                                criteria = session.createCriteria(Author.class).add(Restrictions.eq("name", authorname));
+                                criteria.setReadOnly(true);
+                                Author author = (Author) criteria.uniqueResult();
+                                if (author == null) {
+                                    System.out.println("要更新的资源的的明星舞队不存在，请先完成明星舞队信息的创建");
+                                    resultMap.put("statuscode", 501);
+                                    return resultMap;
+                                } else {
+                                    int authorid = author.getId();
+
+                                    HashMap<String, Object> conditions = new HashMap<String, Object>();
+                                    conditions.put("title", getResourceAttr(resource, object, "title"));
+                                    conditions.put("author_id", authorid);
+
+                                    Object queryOldResource = getResourceByFields(resource, conditions);
+
+                                    conditions.put("title", updatecontents.get("title"));
+
+                                    Object queryResource = getResourceByFields(resource, conditions);
+
+                                    if (queryOldResource == null && queryResource == null) {
+                                        System.out.println("资源名字和作者id组合不存在，可以进行插入");
+                                        setResourceAttr(resource, object, "author", author);
+                                    } else {
+                                        System.out.println("资源名字和作者id组合已存在，不可以进行插入了，是否需要修改");
+                                        resultMap.put("statuscode", 502);
+                                        return resultMap;
+                                    }
+                                }
                             }
+                        } else if (resource == Music.class) {
+                            String oldAuthorname = getResourceAttr(resource, object, "authorname").toString();
+                            if (!authorname.equals(oldAuthorname)) {
+                                HashMap<String, Object> conditions = new HashMap<String, Object>();
+                                conditions.put("title", getResourceAttr(resource, object, "title"));
+                                conditions.put("authorname", authorname);
+
+                                Object queryOldResource = getResourceByFields(resource, conditions);
+
+                                conditions.put("title", updatecontents.get("title"));
+
+                                Object queryResource = getResourceByFields(resource, conditions);
+
+                                if (queryOldResource == null && queryResource == null) {
+                                    System.out.println("伴奏名字和作者名字组合不存在，可以进行插入");
+                                    setResourceAttr(resource, object, key, authorname);
+                                } else {
+                                    System.out.println("伴奏名字和作者名字组合已存在，不可以进行插入了，是否需要修改");
+                                    resultMap.put("statuscode", 502);
+                                    return resultMap;
+                                }
+                            }
+                        } else {
+                            System.out.println("wired");
                         }
-                    } else if (resource == Music.class) {
-                        String oldAuthorname = getResourceAttr(resource, object, "authorname").toString();
-                        if (!authorname.equals(oldAuthorname)) {
-                            setResourceAttr(resource, object, "authorname", authorname);
-                        }
-                    } else {
-                        System.out.println("wired");
                     }
                 } else if (key.contains("category")) {
                     String category = updatecontents.get(key);
@@ -347,14 +387,74 @@ public class CommonDao {
                         isCategoryHasSingleChar = true;
                     }
                     categoryTitles.add(category);
-                } else if (key.equals("title") || key.equals("name") || key.equals("description")) {
+                } else if (key.equals("title")) {
+                    String title = updatecontents.get(key);
+                    String oldTitle = getResourceAttr(resource, object, key).toString();
+
+                    if (!title.equals("") && title != null && !title.equals(oldTitle)) {
+                        if (resource == Video.class || resource == Tutorial.class) {
+                            int oldAuthorid = ((Author) getResourceAttr(resource, object, "author")).getId();
+                            HashMap<String, Object> conditions = new HashMap<String, Object>();
+                            conditions.put("title", title);
+                            conditions.put("author_id", oldAuthorid);
+
+                            Object queryResource = getResourceByFields(resource, conditions);
+
+                            if (queryResource == null) {
+                                System.out.println("资源名字和作者id组合不存在，可以进行插入");
+                                setResourceAttr(resource, object, key, title);
+                            } else {
+                                System.out.println("资源名字和作者id组合已存在，不可以进行插入了，是否需要修改");
+                                resultMap.put("statuscode", 502);
+                                return resultMap;
+                            }
+                        } else if (resource == Music.class) {
+                            HashMap<String, Object> conditions = new HashMap<String, Object>();
+                            conditions.put("title", title);
+                            conditions.put("authorname", updatecontents.get("authorname"));
+
+                            Object queryResource = getResourceByFields(resource, conditions);
+                            if (queryResource == null) {
+                                System.out.println("伴奏名字和作者名字组合不存在，可以进行插入");
+                                setResourceAttr(resource, object, key, title);
+                            } else {
+                                System.out.println("伴奏名字和作者名字组合已存在，不可以进行插入了，是否需要修改");
+                                resultMap.put("statuscode", 502);
+                                return resultMap;
+                            }
+                        } else {
+                            System.out.println("wired");
+                        }
+                    }
+                } else if (key.equals("name")) {
+                    String name = updatecontents.get(key);
+                    String oldName = getResourceAttr(resource, object, key).toString();
+
+                    if (!name.equals("") && name != null && !name.equals(oldName)) {
+                        Object queryResource = getResourceByTitleOrName(resource, name, key);
+                        if (queryResource == null) {
+                            setResourceAttr(resource, object, key, name);
+                        } else {
+                            resultMap.put("statuscode", 504);
+                            return resultMap;
+                        }
+                    }
+                } else if (key.equals("description")) {
                     String value = updatecontents.get(key);
                     String oldValue = getResourceAttr(resource, object, key).toString();
-                    if (value != null && !value.equals(oldValue)) {
+                    if (!value.equals("") && value != null && !value.equals(oldValue)) {
                         setResourceAttr(resource, object, key, value);
                     }
                 } else {
                     System.out.println("wired");
+                }
+            }
+
+            if (resource == Video.class || resource == Tutorial.class) {
+                String connectmusic = updatecontents.get("connectmusic");
+                if (!connectmusic.equals("")) {
+                    int mid = Integer.parseInt(connectmusic.split("-")[2]);
+                    accompanyDao.updateResourceMusic(resource, id, mid);
                 }
             }
 

@@ -152,6 +152,7 @@ public class VideoDaoTests {
         updatecontents.put("category2", "稍难");
         updatecontents.put("category3", "戏曲风");
         updatecontents.put("category4", "q".toUpperCase());
+        updatecontents.put("connectmusic", "ccccc-memeda-33");
 
         HashMap<String, Integer> insertresult = commonDao.updateResource(Video.class, id, updatecontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
