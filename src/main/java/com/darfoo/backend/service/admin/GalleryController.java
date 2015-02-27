@@ -10,6 +10,7 @@ import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.TutorialCates;
 import com.darfoo.backend.service.responsemodel.VideoCates;
+import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -98,7 +99,7 @@ public class GalleryController {
         } else if (resource == UploadNoAuthVideo.class) {
             String videokey = commonDao.getResourceAttr(resource, object, "video_key").toString();
             modelMap.addAttribute("video", object);
-            modelMap.addAttribute("videourl", qiniuUtils.getQiniuResourceUrlRaw(videokey));
+            modelMap.addAttribute("videourl", qiniuUtils.getQiniuResourceUrl(videokey, QiniuResourceEnum.RAW));
         } else {
             System.out.println("wired");
         }
@@ -110,7 +111,7 @@ public class GalleryController {
             modelMap.addAttribute("videotype", videotype);
             modelMap.addAttribute("video", object);
             modelMap.addAttribute("authors", commonDao.getAllResource(Author.class));
-            modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw(imagekey));
+            modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(imagekey, QiniuResourceEnum.RAW));
             if (music != null) {
                 String connectmusic = music.getTitle() + "-" + music.getAuthorname();
                 modelMap.addAttribute("connectmusic", connectmusic);
@@ -127,7 +128,7 @@ public class GalleryController {
             modelMap.addAttribute("author", object);
             Image image = (Image) commonDao.getResourceAttr(resource, object, "image");
             if (image != null) {
-                modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw(image.getImage_key()));
+                modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(image.getImage_key(), QiniuResourceEnum.RAW));
                 if (image.getImage_key().equals("")) {
                     modelMap.addAttribute("updateauthorimage", 1);
                 }

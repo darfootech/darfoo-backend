@@ -17,11 +17,6 @@ public class ScheduledTasks {
     @Autowired
     CommonRedisClient redisClient;
 
-    /*@Scheduled(fixedRate = 5000)
-    public void reportCurrentTime() {
-        System.out.println("Method executed at every 5 seconds. Current time is :: "+ new Date());
-    }*/
-
     //=>暂时一天清空一次redis缓存
     @Scheduled(fixedRate = 600000)
     public void flushRedisCache() {

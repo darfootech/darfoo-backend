@@ -6,6 +6,7 @@ import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.service.cota.TypeClassMapping;
+import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +87,7 @@ public class RecommendController {
         Object object = commonDao.getResourceById(resource, id);
         String imagekey = String.format("%s@@recommend%s.png", commonDao.getResourceAttr(resource, object, "video_key"), resource.getSimpleName().toLowerCase());
         session.setAttribute("imagekey", imagekey);
-        String imageurl = qiniuUtils.getQiniuResourceUrl(imagekey);
+        String imageurl = qiniuUtils.getQiniuResourceUrl(imagekey, QiniuResourceEnum.RAW);
         modelMap.addAttribute("resource", object);
         modelMap.addAttribute("imageurl", imageurl);
         return "recommend/updaterecommendresourceimage";

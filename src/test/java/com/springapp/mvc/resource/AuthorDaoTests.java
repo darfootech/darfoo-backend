@@ -9,6 +9,7 @@ import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
+import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -115,8 +116,8 @@ public class AuthorDaoTests {
 
         for (Video video : videos) {
             int vid = video.getId();
-            String video_download_url = qiniuUtils.getQiniuResourceUrl(video.getVideo_key());
-            String image_download_url = qiniuUtils.getQiniuResourceUrl(video.getImage().getImage_key());
+            String video_download_url = qiniuUtils.getQiniuResourceUrl(video.getVideo_key(), QiniuResourceEnum.RAW);
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(video.getImage().getImage_key(), QiniuResourceEnum.RAW);
             String title = video.getTitle();
             long timestamp = video.getUpdate_timestamp();
             result.add(new SingleVideo(vid, title, authorname, video_download_url, image_download_url, 1, timestamp));
@@ -124,8 +125,8 @@ public class AuthorDaoTests {
 
         for (Tutorial tutorial : tutorials) {
             int tid = tutorial.getId();
-            String tutorial_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getVideo_key());
-            String image_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getImage().getImage_key());
+            String tutorial_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getVideo_key(), QiniuResourceEnum.RAW);
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getImage().getImage_key(), QiniuResourceEnum.RAW);
             String title = tutorial.getTitle();
             long timestamp = tutorial.getUpdate_timestamp();
             result.add(new SingleVideo(tid, title, authorname, tutorial_download_url, image_download_url, 0, timestamp));

@@ -5,6 +5,7 @@ import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -58,18 +59,18 @@ public class CacheProtocol {
                                 String image_download_url = "";
                                 if (image != null) {
                                     if (prefix.contains("recommend")) {
-                                        image_download_url = qiniuUtils.getQiniuResourceUrlByType(image.getImage_key() + "@@recommend" + model.getName().toLowerCase() + ".png", "image");
+                                        image_download_url = qiniuUtils.getQiniuResourceUrl(image.getImage_key() + "@@recommend" + model.getName().toLowerCase() + ".png", QiniuResourceEnum.RAW);
                                     } else {
-                                        image_download_url = qiniuUtils.getQiniuResourceUrlByType(image.getImage_key(), "image");
+                                        image_download_url = qiniuUtils.getQiniuResourceUrl(image.getImage_key(), QiniuResourceEnum.RAW);
                                     }
                                 }
                                 cacheInsertMap.put("image_url", image_download_url);
                                 System.out.println("image_url -> " + image_download_url);
                             } else if (field.getName().equals("video_key")) {
-                                cacheInsertMap.put("video_url", qiniuUtils.getQiniuResourceUrlByType(field.get(object).toString(), "video"));
+                                cacheInsertMap.put("video_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
                                 System.out.println("video_url -> " + field.get(object).toString());
                             } else {
-                                cacheInsertMap.put("music_url", qiniuUtils.getQiniuResourceUrlByType(field.get(object).toString() + ".mp3", "music"));
+                                cacheInsertMap.put("music_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString() + ".mp3", QiniuResourceEnum.ENCRYPT));
                                 System.out.println("music_url -> " + field.get(object).toString());
                             }
                         } else {

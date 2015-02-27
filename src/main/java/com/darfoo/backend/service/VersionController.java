@@ -2,6 +2,7 @@ package com.darfoo.backend.service;
 
 import com.darfoo.backend.dao.VersionDao;
 import com.darfoo.backend.model.Version;
+import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class VersionController {
         Map<String, Object> result = new HashMap<String, Object>();
         try {
             Version version = versionDao.getLatestReleaseVersion();
-            String version_download_url = qiniuUtils.getQiniuResourceUrl("launcher-" + version.getVersion() + "-release.apk");
+            String version_download_url = qiniuUtils.getQiniuResourceUrl("launcher-" + version.getVersion() + "-release.apk", QiniuResourceEnum.RAW);
             result.put("version", version.getVersion());
             result.put("version_url", version_download_url);
             return result;
@@ -54,7 +55,7 @@ public class VersionController {
         Map<String, Object> result = new HashMap<String, Object>();
         try {
             Version version = versionDao.getLatestDebugVersion();
-            String version_download_url = qiniuUtils.getQiniuResourceUrl("launcher-" + version.getVersion() + "-debug.apk");
+            String version_download_url = qiniuUtils.getQiniuResourceUrl("launcher-" + version.getVersion() + "-debug.apk", QiniuResourceEnum.RAW);
             result.put("version", version.getVersion());
             result.put("version_url", version_download_url);
             return result;
