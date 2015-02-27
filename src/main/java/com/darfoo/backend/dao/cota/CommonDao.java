@@ -373,7 +373,7 @@ public class CommonDao {
                                     setResourceAttr(resource, object, key, authorname);
                                 } else {
                                     System.out.println("伴奏名字和作者名字组合已存在，不可以进行插入了，是否需要修改");
-                                    resultMap.put("statuscode", 502);
+                                    resultMap.put("statuscode", 505);
                                     return resultMap;
                                 }
                             }
@@ -383,10 +383,12 @@ public class CommonDao {
                     }
                 } else if (key.contains("category")) {
                     String category = updatecontents.get(key);
-                    if (ServiceUtils.isSingleCharacter(category)) {
-                        isCategoryHasSingleChar = true;
+                    if (category != null && !category.equals("")) {
+                        if (ServiceUtils.isSingleCharacter(category)) {
+                            isCategoryHasSingleChar = true;
+                        }
+                        categoryTitles.add(category);
                     }
-                    categoryTitles.add(category);
                 } else if (key.equals("title")) {
                     String title = updatecontents.get(key);
                     String oldTitle = getResourceAttr(resource, object, key).toString();
@@ -419,7 +421,7 @@ public class CommonDao {
                                 setResourceAttr(resource, object, key, title);
                             } else {
                                 System.out.println("伴奏名字和作者名字组合已存在，不可以进行插入了，是否需要修改");
-                                resultMap.put("statuscode", 502);
+                                resultMap.put("statuscode", 505);
                                 return resultMap;
                             }
                         } else {
@@ -452,7 +454,7 @@ public class CommonDao {
 
             if (resource == Video.class || resource == Tutorial.class) {
                 String connectmusic = updatecontents.get("connectmusic");
-                if (!connectmusic.equals("")) {
+                if (connectmusic != null && !connectmusic.equals("")) {
                     int mid = Integer.parseInt(connectmusic.split("-")[2]);
                     accompanyDao.updateResourceMusic(resource, id, mid);
                 }

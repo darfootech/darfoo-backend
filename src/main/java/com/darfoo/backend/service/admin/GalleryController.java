@@ -135,6 +135,8 @@ public class GalleryController {
     @RequestMapping(value = "/admin/{type}/{id}", method = RequestMethod.GET)
     public String showSingleResource(@PathVariable String type, @PathVariable Integer id, ModelMap modelMap) {
         getResourceModelMap(TypeClassMapping.typeClassMap.get(type), id, modelMap);
+        modelMap.addAttribute("id", id);
+        modelMap.addAttribute("type", type);
         return String.format("resource/single%s", type);
     }
 }

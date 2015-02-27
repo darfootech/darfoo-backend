@@ -146,13 +146,13 @@ public class VideoDaoTests {
 
         Integer id = 81;
 
-        updatecontents.put("title", videoTitle);
+        updatecontents.put("title", "");
         updatecontents.put("authorname", authorName);
         updatecontents.put("category1", "适中");
         updatecontents.put("category2", "稍难");
         updatecontents.put("category3", "戏曲风");
         updatecontents.put("category4", "q".toUpperCase());
-        updatecontents.put("connectmusic", "ccccc-memeda-33");
+        updatecontents.put("connectmusic", "");
 
         HashMap<String, Integer> insertresult = commonDao.updateResource(Video.class, id, updatecontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));

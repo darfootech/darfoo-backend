@@ -3,28 +3,30 @@
  */
 
 $(function () {
-    var type = $("type").text();
+    var type = $("#type").text();
+    var id = $("#id").text();
 
     $("#update").click(function() {
-        var createauthorUrl = "/darfoobackend/rest/admin/author/update";
-
         $.ajax({
             type: "POST",
-            url: createauthorUrl,
-            data: $("#createauthorform").serialize(),
+            url: "/darfoobackend/rest/admin/" + type + "/update",
+            data: $("#updateresourceform").serialize(),
             success: function (data) {
                 if (data == "200") {
                     alert("更新作者信息成功");
-                    window.location.href = "/darfoobackend/rest/admin/author/all"
-                } else if (data == "201") {
-                    alert("更新作者信息成功");
-                    window.location.href = "/darfoobackend/rest/resources/authorresource/new"
+                    window.location.href = "/darfoobackend/rest/admin/gallery/" + type + "/all"
+                } else if (data == "500") {
+                    alert("需要被更新的资源不存在");
                 } else if (data == "501") {
-                    alert("相同名字的作者已经存在了，请修改作者名字")
+                    alert("要更新的资源的关联的明星舞队不存在")
+                } else if (data == "502") {
+                    alert("资源名字和明星舞队组合已存在");
+                } else if (data == "503") {
+                    alert("请保证资源首字母是单个英文字符");
+                } else if (data == "504") {
+                    alert("相同名称的明星舞队已经存在");
                 } else if (data == "505") {
-                    alert("相同名字的图片已经存在了，请修改图片名字");
-                } else if (data == "508") {
-                    alert("请填写并上传作者相关的图片");
+                    alert("伴奏名字和作者名字组合已存在");
                 } else {
                     alert("更新作者信息失败");
                 }
@@ -36,19 +38,15 @@ $(function () {
     });
 
     $("#kickout").click(function(){
-        var authorid = $("#authorid").text();
-
-        var targeturl = "/darfoobackend/rest/admin/author/delete";
-
         $.ajax({
             type: "POST",
-            url: targeturl,
-            data: {"id": authorid},
+            url: "/darfoobackend/rest/admin/" + type + "/delete",
+            data: {"id": id},
             success: function (data) {
                 if (data == "200") {
                     alert("删除作者信息成功");
-                    window.location.href = "/darfoobackend/rest/admin/author/all"
-                } else if (data == "505") {
+                    window.location.href = "/darfoobackend/rest/admin/gallery/" + type + "/all"
+                } else if (data == "500") {
                     alert("删除作者信息失败");
                 } else {
                     alert("删除作者信息失败");
@@ -61,6 +59,6 @@ $(function () {
     });
 
     $("#updateimage").click(function(){
-        window.location.href = "/darfoobackend/rest/admin/author/updateimage/" + $("#authorid").text();
+        window.location.href = "/darfoobackend/rest/admin/" + type + "/updateimage/" + id;
     });
 });

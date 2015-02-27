@@ -1,125 +1,39 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@include file="../header.jsp" %>
+<%@include file="../update/updatecota.jsp"%>
+
+<script src="/darfoobackend/resources/js/modifyresource.js"></script>
 
 <script>
     $(function () {
         var speed = $("#speed").text();
         var difficult = $("#difficult").text();
         var style = $("#style").text();
-        var type = $("#type").text();
-        var starteamname = $("#starteamname").text();
+        var videotype = $("#oldvideotype").text();
+        var authorname = $("#oldauthorname").text();
 
         $('#videospeed option[value="' + speed + '"]').attr("selected", true);
         $('#videodifficult option[value="' + difficult + '"]').attr("selected", true);
         $('#videostyle option[value="' + style + '"]').attr("selected", true);
-        $('#videotype option[value="' + type + '"]').attr("selected", true);
-        $('#authorname option[value="' + starteamname + '"]').attr("selected", true);
-    });
-
-    function update() {
-        var createVideoUrl = "/darfoobackend/rest/admin/video/update";
-        $.ajax({
-            type: "POST",
-            url: createVideoUrl,
-            data: $("#createvideoform").serialize(),
-            success: function (data) {
-                if (data == "200") {
-                    alert("更新视频信息成功");
-                    window.location.href = "/darfoobackend/rest/admin/video/all"
-                } else if (data == "505") {
-                    alert("请确保舞蹈视频首字母填写的是一个不区分大小写的英文字母");
-                } else if (data == "501") {
-                    alert("该作者已经有相同名字的舞蹈视频了");
-                } else if (data == "508") {
-                    alert("请填写并上传舞蹈视频相关的图片");
-                } else {
-                    alert("更新视频信息失败");
-                }
-            },
-            error: function () {
-                alert("更新视频信息失败");
-            }
-        })
-    }
-
-    function kickout() {
-        var videoid = $("#videoid").text();
-
-        var targeturl = "/darfoobackend/rest/admin/video/delete";
-
-        $.ajax({
-            type: "POST",
-            url: targeturl,
-            data: {"id": videoid},
-            success: function (data) {
-                if (data == "200") {
-                    alert("删除视频信息成功");
-                    window.location.href = "/darfoobackend/rest/admin/video/all"
-                } else if (data == "505") {
-                    alert("删除视频信息失败");
-                } else {
-                    alert("删除视频信息失败");
-                }
-            },
-            error: function () {
-                alert("删除视频信息失败");
-            }
-        })
-    }
-
-    function updateimage() {
-        window.location.href = "/darfoobackend/rest/admin/video/updateimage/" + $("#videoid").text();
-    }
-
-    $(function () {
-        $.ajax({
-            url: '/darfoobackend/rest/resources/music/all/service',
-            type: 'GET',
-            //beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-            data: {},
-            success: function (response) {
-                console.log(response);
-
-                var states = new Bloodhound({
-                    datumTokenizer: function (d) {
-                        return Bloodhound.tokenizers.whitespace(d.word);
-                    },
-                    queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    limit: 4,
-                    local: response
-                });
-
-                states.initialize();
-
-                $('input.typeahead-only').typeahead(null, {
-                    name: 'states',
-                    displayKey: 'word',
-                    source: states.ttAdapter()
-                });
-            }
-        });
+        $('#videotype option[value="' + videotype + '"]').attr("selected", true);
+        $('#authorname option[value="' + authorname + '"]').attr("selected", true);
     });
 </script>
 
-<div id="videoid" style="display: none">${video.id}</div>
 <div id="speed" style="display: none">${speed}</div>
 <div id="difficult" style="display: none">${difficult}</div>
 <div id="style" style="display: none">${style}</div>
-<div id="type" style="display: none">${videotype}</div>
-<div id="starteamname" style="display: none">${video.author.name}</div>
+<div id="oldvideotype" style="display: none">${videotype}</div>
+<div id="oldauthorname" style="display: none">${video.author.name}</div>
 
 <div class="container">
     <h1>查看与修改舞蹈视频信息</h1>
 
     <div class="row">
         <div class="col-md-12">
-            <form role="form" id="createvideoform" name="createvideoform">
+            <form role="form" id="updateresourceform">
                 <div style="display: none">
                     <input type="text" name="id" value="${video.id}">
-                </div>
-
-                <div style="display: none">
-                    <input type="text" name="origintitle" value="${video.title}">
                 </div>
 
                 <div class="form-group">
@@ -219,9 +133,9 @@
                            id="connectmusic" placeholder="${connectmusic}"/>
                 </div>
 
-                <button type="button" class="btn btn-default" onclick="update()">更新舞蹈视频信息</button>
-                <button type="button" class="btn btn-default" onclick="kickout()">删除舞蹈视频</button>
-                <button type="button" class="btn btn-default" onclick="updateimage()">更新舞蹈视频封面图片</button>
+                <button type="button" class="btn btn-default" id="update">更新舞蹈视频信息</button>
+                <button type="button" class="btn btn-default" id="kickout">删除舞蹈视频</button>
+                <button type="button" class="btn btn-default" id="updateimage">更新舞蹈视频封面图片</button>
             </form>
         </div>
     </div>

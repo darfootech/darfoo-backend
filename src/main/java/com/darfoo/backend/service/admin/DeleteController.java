@@ -21,13 +21,13 @@ public class DeleteController {
     CommonDao commonDao;
 
     @RequestMapping(value = "admin/{type}/delete", method = RequestMethod.POST)
-    public @ResponseBody String deleteResource(@PathVariable String type, HttpServletRequest request) {
+    public @ResponseBody Integer deleteResource(@PathVariable String type, HttpServletRequest request) {
         Integer id = Integer.parseInt(request.getParameter("id"));
         String status = CRUDEvent.getResponse(commonDao.deleteResourceById(TypeClassMapping.typeClassMap.get(type), id));
         if (status.equals("DELETE_SUCCESS")) {
-            return 200 + "";
+            return 200;
         } else {
-            return 505 + "";
+            return 505;
         }
     }
 }

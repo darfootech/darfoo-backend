@@ -77,7 +77,7 @@ public class UpdateController {
     public String updateVideoImage(@PathVariable String type, @PathVariable Integer id, ModelMap modelMap) {
         modelMap.addAttribute("resourceid", id);
         modelMap.addAttribute("type", type);
-        return "upload/updateresourceimage";
+        return "update/updateresourceimage";
     }
 
     @RequestMapping(value = "/admin/{type}/updateimageresource", method = RequestMethod.POST)
