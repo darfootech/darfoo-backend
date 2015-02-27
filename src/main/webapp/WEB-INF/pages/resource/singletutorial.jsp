@@ -1,112 +1,30 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@include file="../header.jsp" %>
+<%@include file="../update/updatecota.jsp"%>
+
+<script src="/darfoobackend/resources/js/modifyresource.js"></script>
 
 <script>
     $(function () {
         var speed = $("#speed").text();
         var difficult = $("#difficult").text();
         var style = $("#style").text();
-        var type = $("#type").text();
-        var starteamname = $("#starteamname").text();
+        var videotype = $("#oldvideotype").text();
+        var authorname = $("#oldauthorname").text();
 
         $('#tutorialspeed option[value="' + speed + '"]').attr("selected", true);
         $('#tutorialdifficult option[value="' + difficult + '"]').attr("selected", true);
         $('#tutorialstyle option[value="' + style + '"]').attr("selected", true);
-        $('#videotype option[value="' + type + '"]').attr("selected", true);
-        $('#authorname option[value="' + starteamname + '"]').attr("selected", true);
-    });
-
-    function update() {
-        var createtutorialUrl = "/darfoobackend/rest/admin/tutorial/update";
-        $.ajax({
-            type: "POST",
-            url: createtutorialUrl,
-            data: $("#createtutorialform").serialize(),
-            success: function (data) {
-                if (data == "200") {
-                    alert("更新教程信息成功");
-                    window.location.href = "/darfoobackend/rest/admin/tutorial/all"
-                } else if (data == "505") {
-                    alert("请确保舞蹈教程首字母填写的是一个不区分大小写的英文字母");
-                } else if (data == "501") {
-                    alert("该作者已经有相同名字的舞蹈教程了");
-                } else if (data == "508") {
-                    alert("请填写并上传舞蹈教程相关的图片");
-                } else {
-                    alert("更新教程信息失败");
-                }
-            },
-            error: function () {
-                alert("更新教程信息失败");
-            }
-        })
-    }
-
-    function kickout() {
-        var tutorialid = $("#tutorialid").text();
-
-        var targeturl = "/darfoobackend/rest/admin/tutorial/delete";
-
-        $.ajax({
-            type: "POST",
-            url: targeturl,
-            data: {"id": tutorialid},
-            success: function (data) {
-                if (data == "200") {
-                    alert("删除教程信息成功");
-                    window.location.href = "/darfoobackend/rest/admin/tutorial/all"
-                } else if (data == "505") {
-                    alert("删除教程信息失败");
-                } else {
-                    alert("删除教程信息失败");
-                }
-            },
-            error: function () {
-                alert("删除教程信息失败");
-            }
-        })
-    }
-
-    function updateimage() {
-        window.location.href = "/darfoobackend/rest/admin/tutorial/updateimage/" + $("#tutorialid").text();
-    }
-
-    $(function () {
-        $.ajax({
-            url: '/darfoobackend/rest/resources/music/all/service',
-            type: 'GET',
-            //beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-            data: {},
-            success: function (response) {
-                console.log(response);
-
-                var states = new Bloodhound({
-                    datumTokenizer: function (d) {
-                        return Bloodhound.tokenizers.whitespace(d.word);
-                    },
-                    queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    limit: 4,
-                    local: response
-                });
-
-                states.initialize();
-
-                $('input.typeahead-only').typeahead(null, {
-                    name: 'states',
-                    displayKey: 'word',
-                    source: states.ttAdapter()
-                });
-            }
-        });
+        $('#videotype option[value="' + videotype + '"]').attr("selected", true);
+        $('#authorname option[value="' + authorname + '"]').attr("selected", true);
     });
 </script>
 
-<div id="tutorialid" style="display: none">${video.id}</div>
 <div id="speed" style="display: none">${speed}</div>
 <div id="difficult" style="display: none">${difficult}</div>
 <div id="style" style="display: none">${style}</div>
-<div id="type" style="display: none">${videotype}</div>
-<div id="starteamname" style="display: none">${video.author.name}</div>
+<div id="oldvideotype" style="display: none">${videotype}</div>
+<div id="oldauthorname" style="display: none">${video.author.name}</div>
 
 <div class="container">
     <h1>查看与修改舞蹈教程信息</h1>
@@ -206,9 +124,9 @@
                            id="connectmusic" placeholder="${connectmusic}"/>
                 </div>
 
-                <button type="button" class="btn btn-default" onclick="update()">更新舞蹈教程信息</button>
-                <button type="button" class="btn btn-default" onclick="kickout()">删除舞蹈教程</button>
-                <button type="button" class="btn btn-default" onclick="updateimage()">更新舞蹈教程封面图片</button>
+                <button type="button" class="btn btn-default" id="update">更新舞蹈教程信息</button>
+                <button type="button" class="btn btn-default" id="kickout">删除舞蹈教程</button>
+                <button type="button" class="btn btn-default" id="updateimage">更新舞蹈教程封面图片</button>
             </form>
         </div>
     </div>

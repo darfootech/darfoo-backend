@@ -1,5 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@include file="../header.jsp" %>
+<%@include file="../update/updatecota.jsp"%>
+
+<script src="/darfoobackend/resources/js/modifyresource.js"></script>
 
 <script>
     $(function () {
@@ -9,60 +12,8 @@
         $('#musicbeat option[value="' + beat + '"]').attr("selected", true);
         $('#musicstyle option[value="' + style + '"]').attr("selected", true);
     });
-
-    function update() {
-        var createmusicUrl = "/darfoobackend/rest/admin/music/updatenopic";
-        $.ajax({
-            type: "POST",
-            url: createmusicUrl,
-            data: $("#createmusicform").serialize(),
-            success: function (data) {
-                if (data == "200") {
-                    alert("更新伴奏信息成功");
-                    window.location.href = "/darfoobackend/rest/admin/music/all"
-                } else if (data == "505") {
-                    alert("请确保舞蹈伴奏首字母填写的是一个不区分大小写的英文字母");
-                } else if (data == "501") {
-                    alert("该作者已经有相同名字的舞蹈伴奏了");
-                } else if (data == "508") {
-                    alert("请填写并上传舞蹈伴奏相关的图片");
-                } else {
-                    alert("更新伴奏信息失败");
-                }
-            },
-            error: function () {
-                alert("更新伴奏信息失败");
-            }
-        })
-    }
-
-    function kickout() {
-        var musicid = $("#musicid").text();
-
-        var targeturl = "/darfoobackend/rest/admin/music/delete";
-
-        $.ajax({
-            type: "POST",
-            url: targeturl,
-            data: {"id": musicid},
-            success: function (data) {
-                if (data == "200") {
-                    alert("删除伴奏信息成功");
-                    window.location.href = "/darfoobackend/rest/admin/music/all"
-                } else if (data == "505") {
-                    alert("删除伴奏信息失败");
-                } else {
-                    alert("删除伴奏信息失败");
-                }
-            },
-            error: function () {
-                alert("删除伴奏信息失败");
-            }
-        })
-    }
 </script>
 
-<div id="musicid" style="display: none">${music.id}</div>
 <div id="beat" style="display: none">${beat}</div>
 <div id="style" style="display: none">${style}</div>
 
@@ -130,8 +81,8 @@
                     <input type="text" class="form-control" name="musicletter" id="musicletter" value="${letter}">
                 </div>
 
-                <button type="button" class="btn btn-default" onclick="update()">更新舞蹈伴奏信息</button>
-                <button type="button" class="btn btn-default" onclick="kickout()">删除舞蹈伴奏</button>
+                <button type="button" class="btn btn-default" id="update">更新舞蹈伴奏信息</button>
+                <button type="button" class="btn btn-default" id="kickout">删除舞蹈伴奏</button>
             </form>
         </div>
     </div>
