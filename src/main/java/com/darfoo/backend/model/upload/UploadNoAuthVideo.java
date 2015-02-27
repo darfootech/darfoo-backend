@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class UploadNoAuthVideo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //引用下面名为mysql的主键生成方式
-            Integer id;
+    Integer id;
 
     //视频资源在七牛上的标识
     @Column(name = "VIDEO_KEY", unique = true, nullable = false, columnDefinition = "varchar(255) not null")
