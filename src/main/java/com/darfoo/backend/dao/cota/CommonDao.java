@@ -156,7 +156,7 @@ public class CommonDao {
                             return resultMap;
                         }
                     } else {
-                        System.out.println("wired");
+                        setResourceAttr(resource, object, key, insertcontents.get(key));
                     }
                 } else if (key.equals("imagekey")) {
                     String imagekey = insertcontents.get(key);
@@ -210,7 +210,7 @@ public class CommonDao {
                         System.out.println("可以创建新明星舞队");
                         setResourceAttr(resource, object, key, insertcontents.get(key));
                     }
-                } else if (key.equals("description")) {
+                } else if (key.equals("description") || key.equals("macaddr") || key.equals("video_key")) {
                     setResourceAttr(resource, object, key, insertcontents.get(key));
                 } else {
                     System.out.println("key something is wired key -> " + key);

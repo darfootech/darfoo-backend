@@ -51,12 +51,7 @@ public class VerifyUploadVideoController {
         modelMap.addAttribute("videoid", id);
         modelMap.addAttribute("title", video.getTitle());
         modelMap.addAttribute("videokey", video.getVideo_key());
-        modelMap.addAttribute("imagekey", video.getImage_key());
-        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw(video.getImage_key()));
-        //modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw("心里藏着你-348.mp4@@recommendvideo.png"));
         modelMap.addAttribute("videourl", qiniuUtils.getQiniuResourceUrlRaw(video.getVideo_key()));
-        //modelMap.addAttribute("videourl", qiniuUtils.getQiniuResourceUrlRaw("心里藏着你-348.mp4"));
-        modelMap.addAttribute("videotype", video.getVideotype());
         return "verifysinglevideo";
     }
 }
