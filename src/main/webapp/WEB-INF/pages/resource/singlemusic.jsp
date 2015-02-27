@@ -22,7 +22,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <form role="form" id="createmusicform" name="createmusicform">
+            <form role="form" id="updateresourceform">
                 <div style="display: none">
                     <input type="text" name="id" value="${music.id}">
                 </div>

@@ -31,7 +31,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <form role="form" id="createtutorialform" name="createtutorialform">
+            <form role="form" id="updateresourceform">
                 <div style="display: none">
                     <input type="text" name="id" value="${video.id}">
                 </div>

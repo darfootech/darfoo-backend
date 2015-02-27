@@ -9,7 +9,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <form role="form" id="createauthorform" name="createauthorform">
+            <form role="form" id="updateresourceform">
                 <div style="display: none">
                     <input type="text" name="id" value="${author.id}">
                 </div>
