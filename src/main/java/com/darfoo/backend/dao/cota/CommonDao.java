@@ -517,6 +517,26 @@ public class CommonDao {
     }
 
     /**
+     * 根据字段的值来判断是否已经有资源占用了这个字段的值
+     * @param resource
+     * @param conditions
+     * @return
+     */
+    public boolean isResourceExistsByFields(Class resource, HashMap<String, String> conditions) {
+        try {
+            Criteria criteria = getCommonQueryCriteria(resource);
+            for (String key : conditions.keySet()) {
+                criteria.add(Restrictions.eq(key, conditions.get(key)));
+            }
+            Object object = criteria.uniqueResult();
+            return (object == null) ? false : true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
      * 获取单个资源的信息
      *
      * @param resource

@@ -1,6 +1,7 @@
 package com.darfoo.backend.service;
 
 import com.darfoo.backend.dao.VersionDao;
+import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.Version;
 import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
@@ -27,8 +28,10 @@ import java.util.Map;
 public class VersionController {
     @Autowired
     VersionDao versionDao;
-
-    QiniuUtils qiniuUtils = new QiniuUtils();
+    @Autowired
+    CommonDao commonDao;
+    @Autowired
+    QiniuUtils qiniuUtils;
 
     @RequestMapping(value = "/resources/version/latest", method = RequestMethod.GET)
     public

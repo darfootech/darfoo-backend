@@ -1,5 +1,6 @@
 package com.darfoo.backend.dao;
 
+import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.Version;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -9,6 +10,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,21 +22,8 @@ import java.util.List;
 public class VersionDao {
     @Autowired
     SessionFactory sessionFactory;
-
-    public boolean isExistVersion(String version, String type) {
-        boolean isExist = true;
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria criteria = session.createCriteria(Version.class);
-            criteria.add(Restrictions.eq("version", version));
-            criteria.add(Restrictions.eq("type", type));
-            Version v = (Version) criteria.uniqueResult();
-            isExist = (v == null) ? false : true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return isExist;
-    }
+    @Autowired
+    CommonDao commonDao;
 
     public Version getLatestReleaseVersion() {
         Version version = null;
@@ -73,7 +62,10 @@ public class VersionDao {
     public int insertVersion(Version version) {
         int res;
         try {
-            boolean isExist = isExistVersion(version.getVersion(), version.getType());
+            HashMap<String, String> conditions = new HashMap<String, String>();
+            conditions.put("version", version.getVersion());
+            conditions.put("type", version.getType());
+            boolean isExist = commonDao.isResourceExistsByFields(Version.class, conditions);
             if (isExist) {
                 res = CRUDEvent.INSERT_REPEAT;
             } else {
@@ -83,7 +75,6 @@ public class VersionDao {
             }
         } catch (Exception e) {
             res = CRUDEvent.CRUD_EXCETION;
-            //throw new RuntimeException("rollback");
         }
         return res;
     }
