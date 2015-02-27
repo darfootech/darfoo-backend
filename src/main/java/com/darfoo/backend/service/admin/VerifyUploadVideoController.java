@@ -39,19 +39,17 @@ public class VerifyUploadVideoController {
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public String allUnVerifyVideos(ModelMap modelMap) {
-        List<UploadNoAuthVideo> videos = uploadNoAuthVideoDao.getAllUnVerifyVideos();
+        List<UploadNoAuthVideo> videos = commonDao.getAllResource(UploadNoAuthVideo.class);
         modelMap.addAttribute("allvideos", videos);
         return "verifyallvideo";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String singleUnVerifyVideos(@PathVariable Integer id, ModelMap modelMap, HttpSession session) {
-        UploadNoAuthVideo video = uploadNoAuthVideoDao.getUploadVideoById(id);
-        session.setAttribute("uploadvideoid", id);
-        session.setAttribute("uploadmacaddr", video.getMac_addr());
+        UploadNoAuthVideo video = (UploadNoAuthVideo) commonDao.getResourceById(UploadNoAuthVideo.class, id);
 
         modelMap.addAttribute("videoid", id);
-        modelMap.addAttribute("title", video.getVideotitle());
+        modelMap.addAttribute("title", video.getTitle());
         modelMap.addAttribute("videokey", video.getVideo_key());
         modelMap.addAttribute("imagekey", video.getImage_key());
         modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrlRaw(video.getImage_key()));
@@ -60,18 +58,5 @@ public class VerifyUploadVideoController {
         //modelMap.addAttribute("videourl", qiniuUtils.getQiniuResourceUrlRaw("心里藏着你-348.mp4"));
         modelMap.addAttribute("videotype", video.getVideotype());
         return "verifysinglevideo";
-    }
-
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    String deleteVideo(HttpServletRequest request) {
-        Integer vid = Integer.parseInt(request.getParameter("id"));
-        String status = CRUDEvent.getResponse(uploadNoAuthVideoDao.deleteVideoById(vid));
-        if (status.equals("DELETE_SUCCESS")) {
-            return 200 + "";
-        } else {
-            return 505 + "";
-        }
     }
 }

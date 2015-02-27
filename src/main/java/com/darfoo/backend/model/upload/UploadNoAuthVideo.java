@@ -28,26 +28,21 @@ public class UploadNoAuthVideo implements Serializable {
 
     //上传视频的标题
     @Column(name = "VIDEO_TITLE", nullable = false, updatable = true, columnDefinition = "varchar(255) not null")
-    String videotitle;
+    String title;
 
     //上传视频的类型
     @Column(name = "VIDEO_TYPE", nullable = false, updatable = true, columnDefinition = "varchar(255) not null")
     String videotype;
 
-    //对应最后真正到视频库里的视频id
-    @Column(name = "VIDEO_ID", nullable = false, updatable = true, columnDefinition = "int(11) default 0")
-    Integer videoid;
-
     public UploadNoAuthVideo() {
     }
 
-    public UploadNoAuthVideo(String video_key, String image_key, String mac_addr, String videotitle, String videotype, Integer videoid) {
+    public UploadNoAuthVideo(String video_key, String image_key, String mac_addr, String title, String videotype) {
         this.video_key = video_key;
         this.image_key = image_key;
         this.mac_addr = mac_addr;
-        this.videotitle = videotitle;
+        this.title = title;
         this.videotype = videotype;
-        this.videoid = videoid;
     }
 
     public Integer getId() {
@@ -66,14 +61,6 @@ public class UploadNoAuthVideo implements Serializable {
         this.video_key = video_key;
     }
 
-    public Integer getVideoid() {
-        return videoid;
-    }
-
-    public void setVideoid(Integer videoid) {
-        this.videoid = videoid;
-    }
-
     public String getMac_addr() {
         return mac_addr;
     }
@@ -82,12 +69,12 @@ public class UploadNoAuthVideo implements Serializable {
         this.mac_addr = mac_addr;
     }
 
-    public String getVideotitle() {
-        return videotitle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setVideotitle(String videotitle) {
-        this.videotitle = videotitle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getImage_key() {

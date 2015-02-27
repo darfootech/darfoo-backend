@@ -92,7 +92,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">资源审核 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/darfoobackend/rest/admin/verifyvideo/all">审核上传视频资源</a></li>
+                        <li><a href="/darfoobackend/rest/admin/gallery/uploadnoauthvideo/all">审核非注册用户上传视频资源</a></li>
                     </ul>
                 </li>
 
