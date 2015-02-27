@@ -41,8 +41,8 @@ public class AuthorDaoTests {
 
     @Test
     public void isExistAuthor() {
-        String name = "T-ara";
-        if (authorDao.isExistAuthor(name)) {
+        String name = "cleantha";
+        if (commonDao.isResourceExistsByField(Author.class, "name", name)) {
             System.out.println("已存在");
         } else {
             System.out.println("无该author记录");

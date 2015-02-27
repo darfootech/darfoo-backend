@@ -201,7 +201,7 @@ public class CommonDao {
                     categoryTitles.add(category);
                 } else if (key.equals("name")) {
                     String name = insertcontents.get(key);
-                    if (authorDao.isExistAuthor(name)) {
+                    if (isResourceExistsByField(Author.class, "name", name)) {
                         System.out.println("相同名字明星舞队已存在，不能创建新明星舞队");
                         resultMap.put("statuscode", 506);
                         resultMap.put("insertid", -1);

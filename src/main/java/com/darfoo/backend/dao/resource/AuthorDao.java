@@ -19,28 +19,6 @@ public class AuthorDao {
 
     private int pageSize = 15;
 
-    /**
-     * 根据name判断该author是否已经存在表里
-     *
-     * @param name 待判断的author的name
-     * @return 表中已经存在该name对应的作者信息, 返回true;反之，返回一个false
-     * *
-     */
-    public boolean isExistAuthor(String name) {
-        boolean isExist = true;
-        try {
-            Session session = sf.getCurrentSession();
-            Criteria criteria = session.createCriteria(Author.class);
-            criteria.setReadOnly(true);
-            criteria.add(Restrictions.eq("name", name));
-            Author author = (Author) criteria.uniqueResult();
-            isExist = (author == null) ? false : true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return isExist;
-    }
-
     public List<Object[]> getAuthorOrderByVideoCountDesc() {
         List<Object[]> result = new ArrayList<Object[]>();
         try {
