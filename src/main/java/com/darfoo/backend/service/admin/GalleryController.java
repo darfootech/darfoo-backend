@@ -5,6 +5,7 @@ import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.category.VideoCategory;
 import com.darfoo.backend.model.resource.*;
+import com.darfoo.backend.model.upload.UploadNoAuthVideo;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.TutorialCates;
@@ -94,6 +95,12 @@ public class GalleryController {
                     modelMap.addAttribute("letter", categorytitle);
                 }
             }
+        } else if (resource == UploadNoAuthVideo.class) {
+            String videokey = commonDao.getResourceAttr(resource, object, "video_key").toString();
+            modelMap.addAttribute("video", object);
+            modelMap.addAttribute("videourl", qiniuUtils.getQiniuResourceUrlRaw(videokey));
+        } else {
+            System.out.println("wired");
         }
 
         if (resource == Video.class || resource == Tutorial.class) {

@@ -38,17 +38,11 @@
             <form role="form">
                 <div class="form-group">
                     <label for="title">舞蹈视频标题</label>
-                    <input type="text" class="form-control" name="title" id="title" value="${title}">
+                    <input type="text" class="form-control" name="title" id="title" value="${video.title}" disabled="disabled">
                 </div>
 
                 <div class="form-group">
                     <a href="${videourl}" target="_blank">点击此处预览舞蹈视频</a>
-                </div>
-
-                <div class="form-group">
-                    <label for="videotype">舞蹈视频文件格式</label>
-                    <input type="text" class="form-control" name="videotype" id="videotype" value="${videotype}"
-                           disabled="disabled">
                 </div>
 
                 <button type="button" class="btn btn-default" id="kickout">删除舞蹈视频</button>
