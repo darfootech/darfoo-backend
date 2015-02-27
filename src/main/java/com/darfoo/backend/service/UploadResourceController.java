@@ -1,7 +1,6 @@
 package com.darfoo.backend.service;
 
 import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.upload.UploadNoAuthVideoDao;
 import com.darfoo.backend.model.upload.UploadNoAuthVideo;
 import com.darfoo.backend.service.responsemodel.UploadStatus;
 import com.darfoo.backend.service.responsemodel.UploadToken;
@@ -9,15 +8,12 @@ import com.darfoo.backend.utils.CryptUtils;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by zjh on 14-12-22.
@@ -27,8 +23,6 @@ import java.util.Map;
 @Controller
 @RequestMapping("/uploadresource")
 public class UploadResourceController {
-    @Autowired
-    UploadNoAuthVideoDao uploadNoAuthVideoDao;
     @Autowired
     QiniuUtils qiniuUtils;
 
@@ -53,7 +47,7 @@ public class UploadResourceController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "finishcallbackna", method = RequestMethod.POST)
+    /*@RequestMapping(value = "finishcallbackna", method = RequestMethod.POST)
     public
     @ResponseBody
     UploadStatus uploadFinishCallbackWithoutAuth(HttpServletRequest request) {
@@ -67,7 +61,7 @@ public class UploadResourceController {
             System.out.println("macaddr -> " + macaddr);
             System.out.println("videotitle -> " + videotitle);
 
-            int status = uploadNoAuthVideoDao.insertUploadVideo(new UploadNoAuthVideo(videotitle, macaddr, videokey));
+            //int status = uploadNoAuthVideoDao.insertUploadVideo(new UploadNoAuthVideo(videotitle, macaddr, videokey));
 
             if (status == CRUDEvent.INSERT_SUCCESS) {
                 return new UploadStatus("ok");
@@ -78,5 +72,5 @@ public class UploadResourceController {
             e.printStackTrace();
             return new UploadStatus("error");
         }
-    }
+    }*/
 }

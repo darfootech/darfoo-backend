@@ -6,8 +6,6 @@ package com.springapp.mvc.upload;
 
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.dao.upload.UploadNoAuthVideoDao;
 import com.darfoo.backend.model.upload.UploadNoAuthVideo;
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,18 +20,13 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class UploadNoAuthVideoDaoTests {
-
-    @Autowired
-    UploadNoAuthVideoDao uploadVideoDao;
-    @Autowired
-    AuthorDao authorDao;
     @Autowired
     CommonDao commonDao;
 
     @Test
     public void isExistVideo() {
-        String videokey = "cleantha33-1421475655469-30:ad:05:01:a6:83.mp4";
-        System.out.println("is exists -> " + uploadVideoDao.isExistVideo(videokey));
+        String videokey = "cleantha33-1425022872317-30:ad:05:01:a6:83.mp4";
+        System.out.println("is exists -> " + commonDao.isResourceExistsByField(UploadNoAuthVideo.class, "video_key", videokey));
     }
 
     @Test
