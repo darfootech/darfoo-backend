@@ -1,9 +1,7 @@
 package com.darfoo.backend.service;
 
-import com.darfoo.backend.dao.CRUDEvent;
+import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.upload.UploadNoAuthVideo;
-import com.darfoo.backend.service.responsemodel.UploadStatus;
-import com.darfoo.backend.service.responsemodel.UploadToken;
 import com.darfoo.backend.utils.CryptUtils;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 
 /**
  * Created by zjh on 14-12-22.
@@ -25,6 +24,8 @@ import java.io.UnsupportedEncodingException;
 public class UploadResourceController {
     @Autowired
     QiniuUtils qiniuUtils;
+    @Autowired
+    CommonDao commonDao;
 
     /**
      * 获取上传qiniu云的token凭证
@@ -34,11 +35,13 @@ public class UploadResourceController {
     @RequestMapping(value = "gettk", method = RequestMethod.GET)
     public
     @ResponseBody
-    UploadToken getUploadToken() {
+    HashMap<String, String> getUploadToken() {
+        HashMap<String, String> result = new HashMap<String, String>();
         String token = qiniuUtils.getToken();
         System.out.println("origin token -> " + token);
         String encryptToken = CryptUtils.base64EncodeStr(token);
-        return new UploadToken(encryptToken);
+        result.put("tk", encryptToken);
+        return result;
     }
 
     /**
@@ -47,10 +50,12 @@ public class UploadResourceController {
      * @param request
      * @return
      */
-    /*@RequestMapping(value = "finishcallbackna", method = RequestMethod.POST)
+    @RequestMapping(value = "finishcallbackna", method = RequestMethod.POST)
     public
     @ResponseBody
-    UploadStatus uploadFinishCallbackWithoutAuth(HttpServletRequest request) {
+    HashMap<String, String> uploadFinishCallbackWithoutAuth(HttpServletRequest request) {
+        HashMap<String, String> result = new HashMap<String, String>();
+
         try {
             request.setCharacterEncoding("UTF-8");
             String videokey = request.getParameter("videokey");
@@ -61,16 +66,27 @@ public class UploadResourceController {
             System.out.println("macaddr -> " + macaddr);
             System.out.println("videotitle -> " + videotitle);
 
-            //int status = uploadNoAuthVideoDao.insertUploadVideo(new UploadNoAuthVideo(videotitle, macaddr, videokey));
+            HashMap<String, String> insertcontents = new HashMap<String, String>();
 
-            if (status == CRUDEvent.INSERT_SUCCESS) {
-                return new UploadStatus("ok");
+            insertcontents.put("title", videotitle);
+            insertcontents.put("video_key", videokey);
+            insertcontents.put("macaddr", macaddr);
+
+            HashMap<String, Integer> insertresult = commonDao.insertResource(UploadNoAuthVideo.class, insertcontents);
+
+            int status = insertresult.get("statuscode");
+
+            System.out.println("statuscode -> " + status);
+
+            if (status == 200) {
+                result.put("status", "ok");
             } else {
-                return new UploadStatus("error");
+                result.put("status", "error");
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-            return new UploadStatus("error");
+            result.put("status", "error");
         }
-    }*/
+        return result;
+    }
 }
