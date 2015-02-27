@@ -25,33 +25,15 @@ public class VersionDao {
     @Autowired
     CommonDao commonDao;
 
-    public Version getLatestReleaseVersion() {
+    public Version getLatestVersion(Class resource, String type) {
         Version version = null;
         try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria criteria = session.createCriteria(Version.class);
-            criteria.add(Restrictions.eq("type", "release"));
-            criteria.addOrder(Order.desc("id"));
-            List result = criteria.list();
+            List result = commonDao.getCommonQueryCriteria(resource)
+                    .add(Restrictions.eq("type", type))
+                    .addOrder(Order.desc("id"))
+                    .list();
             if (result.size() > 0) {
-                version = (Version) criteria.list().get(0);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return version;
-    }
-
-    public Version getLatestDebugVersion() {
-        Version version = null;
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria criteria = session.createCriteria(Version.class);
-            criteria.add(Restrictions.eq("type", "debug"));
-            criteria.addOrder(Order.desc("id"));
-            List result = criteria.list();
-            if (result.size() > 0) {
-                version = (Version) criteria.list().get(0);
+                version = (Version) result.get(0);
             }
         } catch (Exception e) {
             e.printStackTrace();

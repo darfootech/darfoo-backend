@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@include file="header.jsp" %>
+<%@include file="../header.jsp" %>
 
 <script>
     function upload() {
@@ -32,7 +32,7 @@
     <div class="row">
         <div class="col-md-12">
             <form role="form" action="/darfoobackend/rest/admin/version/${type}/create" method="post"
-                  id="uploadlauncher" name="uploadlauncher" enctype="multipart/form-data">
+                  id="uploadlauncher" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="version">之前的版本为${latestversion}</label>
                     <input type="text" class="form-control" name="newversion" id="version"
@@ -50,4 +50,4 @@
     </div>
 </div>
 
-<%@include file="footer.jsp" %>
+<%@include file="../footer.jsp" %>

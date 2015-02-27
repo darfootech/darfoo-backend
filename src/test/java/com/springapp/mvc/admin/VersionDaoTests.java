@@ -31,7 +31,7 @@ public class VersionDaoTests {
     @Test
     public void getLatestReleaseVersion() {
         try {
-            Version latestVersion = versionDao.getLatestReleaseVersion();
+            Version latestVersion = versionDao.getLatestVersion(Version.class, "release");
             System.out.println("latest version -> " + latestVersion.getVersion());
         } catch (NullPointerException e) {
             System.out.println("no latest version already exists");
@@ -41,7 +41,7 @@ public class VersionDaoTests {
     @Test
     public void getLatestDebugVersion() {
         try {
-            Version latestVersion = versionDao.getLatestDebugVersion();
+            Version latestVersion = versionDao.getLatestVersion(Version.class, "debug");
             System.out.println("latest version -> " + latestVersion.getVersion());
         } catch (NullPointerException e) {
             System.out.println("no latest version already exists");
