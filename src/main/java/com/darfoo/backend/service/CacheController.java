@@ -62,7 +62,7 @@ public class CacheController {
         return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), id, type);
     }
 
-    private void insertCacheResourcesSet(Class insertclass, List resources, String setkey, String prefix) {
+    private void insertResourcesIntoCacheSet(Class insertclass, List resources, String setkey, String prefix) {
         for (Object object : resources) {
             int id = (Integer) commonDao.getResourceAttr(insertclass, object, "id");
             long status = redisClient.sadd(setkey, String.format("%s-%d", prefix, id));
@@ -95,8 +95,8 @@ public class CacheController {
         List recommendVideos = recommendDao.getRecommendResources(Video.class);
         List recommendTutorials = recommendDao.getRecommendResources(Tutorial.class);
 
-        insertCacheResourcesSet(Video.class, recommendVideos, setkey, videoPrefix);
-        insertCacheResourcesSet(Tutorial.class, recommendTutorials, setkey, tutorialPrefix);
+        insertResourcesIntoCacheSet(Video.class, recommendVideos, setkey, videoPrefix);
+        insertResourcesIntoCacheSet(Tutorial.class, recommendTutorials, setkey, tutorialPrefix);
 
         List videos = extractResourcesFromCacheSet(SingleVideo.class, setkey, videoPrefix);
         List tutorials = extractResourcesFromCacheSet(SingleVideo.class, setkey, tutorialPrefix);
@@ -112,7 +112,7 @@ public class CacheController {
         String setkey = "videoindex";
         String prefix = "video";
 
-        insertCacheResourcesSet(Video.class, latestVideos, setkey, prefix);
+        insertResourcesIntoCacheSet(Video.class, latestVideos, setkey, prefix);
 
         return extractResourcesFromCacheSet(Video.class, setkey, prefix);
     }
