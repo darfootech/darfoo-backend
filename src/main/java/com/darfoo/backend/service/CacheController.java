@@ -158,6 +158,22 @@ public class CacheController {
         return targetCategories;
     }
 
+    private List getSearchResourcesWithAuthor(Class resource, String searchContent) {
+        List objects = commonDao.getResourceBySearch(resource, searchContent);
+
+        List<Author> authors = commonDao.getResourceBySearch(Author.class, searchContent);
+        for (Author author : authors) {
+            int aid = author.getId();
+            HashMap<String, Object> conditions = new HashMap<String, Object>();
+            conditions.put("author_id", aid);
+
+            List authorObjects = commonDao.getResourcesByFields(resource, conditions);
+            objects.addAll(authorObjects);
+        }
+
+        return objects;
+    }
+
     @RequestMapping(value = "/video/recommend", method = RequestMethod.GET)
     public
     @ResponseBody
@@ -196,6 +212,21 @@ public class CacheController {
 
         return extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
     }
+
+    @RequestMapping(value = "/{type}/index/page/{page}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List cacheIndexResourcesByPage(@PathVariable String type, @PathVariable Integer page) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        String cachekey = String.format("%sindexpage%d", type, page);
+
+        List resources = authorDao.getAuthorsOrderByVideoCountDesc();
+
+        insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
+
+        return extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
+    }
+
 
     @RequestMapping(value = "/{type}/category/{categories}", method = RequestMethod.GET)
     public
@@ -254,142 +285,47 @@ public class CacheController {
         }
     }
 
-    /*@RequestMapping(value = "/author/index/page/{page}", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    List<SingleAuthor> cacheIndexAuthorsByPage(@PathVariable Integer page) {
-        List<Object[]> authorIdAndCnt = authorDao.getAuthorOrderByVideoCountDescByPage(page);
-        for (Object[] rows : authorIdAndCnt) {
-            int authorid = (Integer) rows[1];
-            System.out.println(authorid + " -> " + ((BigInteger) rows[0]).intValue());
-            Author author = (Author) commonDao.getResourceById(Author.class, authorid);
-            long result = redisClient.lpush("authorindexpage" + page, "author-" + authorid);
-            authorCacheDao.insertSingleAuthor(author);
-            System.out.println("insert result -> " + result);
-        }
-
-        List<String> indexAuthorKeys = redisClient.lrange("authorindexpage" + page, 0L, -1L);
-        List<SingleAuthor> result = new ArrayList<SingleAuthor>();
-        for (String key : indexAuthorKeys) {
-            System.out.println("key -> " + key);
-            int id = Integer.parseInt(key.split("-")[1]);
-            SingleAuthor author = authorCacheDao.getSingleAuthor(id);
-            System.out.println("name -> " + author.getName());
-            result.add(author);
-        }
-        return result;
-    }
-
     @RequestMapping(value = "/author/videos/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public List<SingleVideo> getVideoListForAuthor(@PathVariable Integer id) {
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
-
+    public List getVideoListForAuthor(@PathVariable Integer id) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", id);
+        String cachekey = String.format("authorvideos%d", id);
 
-        List<Video> videos = commonDao.getResourcesByFields(Video.class, conditions);
-        List<Tutorial> tutorials = commonDao.getResourcesByFields(Tutorial.class, conditions);
+        String[] types = {"video", "tutorial"};
 
-        for (Video video : videos) {
-            int vid = video.getId();
-            long status = redisClient.sadd("authorvideos" + id, "video-" + vid);
-            videoCacheDao.insertSingleVideo(video);
-            System.out.println("insert result -> " + status);
+        for (String type : types) {
+            Class resource = TypeClassMapping.typeClassMap.get(type);
+            List resources = commonDao.getResourcesByFields(resource, conditions);
+
+            insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SET);
         }
 
-        for (Tutorial tutorial : tutorials) {
-            int tid = tutorial.getId();
-            long status = redisClient.sadd("authorvideos" + id, "tutorial-" + tid);
-            tutorialCacheDao.insertSingleTutorial(tutorial);
-            System.out.println("insert result -> " + status);
-        }
-
-        Set<String> authorVideoKeys = redisClient.smembers("authorvideos" + id);
-        for (String key : authorVideoKeys) {
-            System.out.println("key -> " + key);
-            int vtid = Integer.parseInt(key.split("-")[1]);
-            String vtflag = key.split("-")[0];
-            if (vtflag.equals("video")) {
-                SingleVideo video = videoCacheDao.getSingleVideo(vtid);
-                result.add(video);
-            } else if (vtflag.equals("tutorial")) {
-                SingleVideo tutorial = tutorialCacheDao.getSingleTutorial(vtid);
-                result.add(tutorial);
-            } else {
-                System.out.println("something is wrong");
-            }
-        }
-
-        return result;
+        return extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.SET);
     }
 
     @RequestMapping(value = "/author/videos/{id}/page/{page}", method = RequestMethod.GET)
     @ResponseBody
-    public List<SingleVideo> getVideoListForAuthorByPage(@PathVariable Integer id, @PathVariable Integer page) {
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
-
+    public List getVideoListForAuthorByPage(@PathVariable Integer id, @PathVariable Integer page) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", id);
 
-        List<Video> videos = commonDao.getResourcesByFields(Video.class, conditions);
-        List<Tutorial> tutorials = commonDao.getResourcesByFields(Tutorial.class, conditions);
+        int pageSize = paginationDao.getResourcePageSize(Video.class);
+        String cachekey = String.format("authorvideos%dpage%d", id, page);
 
-        int pageSize = 12;
-        String rediskey = "authorvideos" + id + "page";
+        String[] types = {"video", "tutorial"};
 
-        for (Video video : videos) {
-            int vid = video.getId();
-            long status = redisClient.lpush(rediskey, "video-" + vid);
-            videoCacheDao.insertSingleVideo(video);
-            System.out.println("insert result -> " + status);
-        }
+        for (String type : types) {
+            Class resource = TypeClassMapping.typeClassMap.get(type);
+            List resources = commonDao.getResourcesByFields(resource, conditions);
 
-        for (Tutorial tutorial : tutorials) {
-            int tid = tutorial.getId();
-            long status = redisClient.lpush(rediskey, "tutorial-" + tid);
-            tutorialCacheDao.insertSingleTutorial(tutorial);
-            System.out.println("insert result -> " + status);
+            insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
         }
 
         long start = (page - 1) * pageSize;
         long end = page * pageSize - 1;
 
-        List<String> authorVideoKeys = redisClient.lrange(rediskey, start, end);
-        for (String key : authorVideoKeys) {
-            System.out.println("key -> " + key);
-            int vtid = Integer.parseInt(key.split("-")[1]);
-            String vtflag = key.split("-")[0];
-            if (vtflag.equals("video")) {
-                SingleVideo video = videoCacheDao.getSingleVideo(vtid);
-                result.add(video);
-            } else if (vtflag.equals("tutorial")) {
-                SingleVideo tutorial = tutorialCacheDao.getSingleTutorial(vtid);
-                result.add(tutorial);
-            } else {
-                System.out.println("something is wrong");
-            }
-        }
-
-        System.out.println("videolist size -> " + result.size());
-
-        return result;
-    }*/
-
-    private List getSearchResourcesWithAuthor(Class resource, String searchContent) {
-        List objects = commonDao.getResourceBySearch(resource, searchContent);
-
-        List<Author> authors = commonDao.getResourceBySearch(Author.class, searchContent);
-        for (Author author : authors) {
-            int aid = author.getId();
-            HashMap<String, Object> conditions = new HashMap<String, Object>();
-            conditions.put("author_id", aid);
-
-            List authorObjects = commonDao.getResourcesByFields(Video.class, conditions);
-            objects.addAll(authorObjects);
-        }
-
-        return objects;
+        return extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.LIST, start, end);
     }
 
     //http://localhost:8080/darfoobackend/rest/cache/{type}/search?search=s
