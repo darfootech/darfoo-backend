@@ -213,32 +213,20 @@ public class CacheController {
         return extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
     }
 
-    /*@RequestMapping("/music/hottest")
+    @RequestMapping("/{type}/hottest")
     public
     @ResponseBody
-    List<SingleMusic> getHottestMusics() {
-        List<Music> musics = commonDao.getResourcesByHottest(Music.class, 5);
-        List<SingleMusic> result = new ArrayList<SingleMusic>();
-        for (Music music : musics) {
-            int mid = music.getId();
-            long status = redisClient.sadd("musichottest", "music-" + mid);
-            musicCacheDao.insertSingleMusic(music);
-            System.out.println("insert result -> " + status);
-        }
+    List getHottestMusics(@PathVariable String type) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        List resources = commonDao.getResourcesByHottest(resource, 5);
+        String cachekey = String.format("%shottest", type);
 
-        Set<String> hottestMusicKeys = redisClient.smembers("musichottest");
-        for (String vkey : hottestMusicKeys) {
-            System.out.println("vkey -> " + vkey);
-            int mid = Integer.parseInt(vkey.split("-")[1]);
-            SingleMusic music = musicCacheDao.getSingleMusic(mid);
-            System.out.println("title -> " + music.getTitle());
-            result.add(music);
-        }
+        insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
 
-        return result;
+        return extractResourcesFromCache(resource, cachekey, CacheCollType.LIST);
     }
 
-    @RequestMapping(value = "/video/getmusic/{id}", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/video/getmusic/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
     SingleMusic getMusicByVideoId(@PathVariable Integer id) {
@@ -486,80 +474,16 @@ public class CacheController {
         return extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST, start, end);
     }
 
-    /*@RequestMapping(value = "/video/sidebar/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/sidebar/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<SingleVideo> getSidebarVideos(@PathVariable Integer id) {
-        List<Video> sidebarVideos = commonDao.getSideBarResources(Video.class, id);
-        String rediskey = "videosidebar" + id;
-        for (Video video : sidebarVideos) {
-            int vid = video.getId();
-            long result = redisClient.lpush(rediskey, "video-" + vid);
-            videoCacheDao.insertSingleVideo(video);
-            System.out.println("insert result -> " + result);
-        }
-        List<String> sideBarVideoKeys = redisClient.lrange(rediskey, 0L, -1L);
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
-        for (String vkey : sideBarVideoKeys) {
-            System.out.println("vkey -> " + vkey);
-            int vid = Integer.parseInt(vkey.split("-")[1]);
-            SingleVideo video = videoCacheDao.getSingleVideo(vid);
-            System.out.println("title -> " + video.getTitle());
-            result.add(video);
-        }
+    List getSidebarVideos(@PathVariable String type, @PathVariable Integer id) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        List resources = commonDao.getSideBarResources(resource, id);
+        String cachekey = String.format("%ssidebar%d", type, id);
 
-        return result;
+        insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
+
+        return extractResourcesFromCache(resource, cachekey, CacheCollType.LIST);
     }
-
-    @RequestMapping(value = "/tutorial/sidebar/{id}", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    List<SingleVideo> getSidebarTutorials(@PathVariable Integer id) {
-        List<Tutorial> sidebarTutorials = commonDao.getSideBarResources(Tutorial.class, id);
-        String rediskey = "tutorialsidebar" + id;
-        for (Tutorial video : sidebarTutorials) {
-            int vid = video.getId();
-            long result = redisClient.lpush(rediskey, "tutorial-" + vid);
-            tutorialCacheDao.insertSingleTutorial(video);
-            System.out.println("insert result -> " + result);
-        }
-
-        List<String> sidebarTutorialKeys = redisClient.lrange(rediskey, 0L, -1L);
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
-        for (String vkey : sidebarTutorialKeys) {
-            System.out.println("vkey -> " + vkey);
-            int vid = Integer.parseInt(vkey.split("-")[1]);
-            SingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
-            System.out.println("title -> " + video.getTitle());
-            result.add(video);
-        }
-
-        return result;
-    }
-
-    @RequestMapping(value = "/music/sidebar/{id}", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    List<SingleMusic> getSidebarMusics(@PathVariable Integer id) {
-        List<Music> musics = commonDao.getSideBarResources(Music.class, id);
-        List<SingleMusic> result = new ArrayList<SingleMusic>();
-        String rediskey = "musicsidebar" + id;
-        for (Music music : musics) {
-            int mid = music.getId();
-            long status = redisClient.lpush(rediskey, "music-" + mid);
-            musicCacheDao.insertSingleMusic(music);
-            System.out.println("insert result -> " + status);
-        }
-
-        List<String> sidebarMusicKeys = redisClient.lrange(rediskey, 0L, -1L);
-        for (String vkey : sidebarMusicKeys) {
-            System.out.println("vkey -> " + vkey);
-            int mid = Integer.parseInt(vkey.split("-")[1]);
-            SingleMusic music = musicCacheDao.getSingleMusic(mid);
-            System.out.println("title -> " + music.getTitle());
-            result.add(music);
-        }
-
-        return result;
-    }*/
 }
