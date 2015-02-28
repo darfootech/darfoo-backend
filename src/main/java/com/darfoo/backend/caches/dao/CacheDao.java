@@ -14,7 +14,7 @@ public class CacheDao {
         return cacheProtocol.insertResourceIntoCache(resource, object, prefix);
     }
 
-    public Object getSingleResource(Class resource, Integer id, String prefix) {
-        return cacheProtocol.extractResourceFromCache(resource, id, prefix);
+    public Object getSingleResource(Class resource, String cachekey) {
+        return cacheProtocol.extractResourceFromCache(resource, cachekey);
     }
 }

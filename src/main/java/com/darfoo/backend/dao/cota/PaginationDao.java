@@ -28,7 +28,7 @@ public class PaginationDao {
      * @param resource
      * @return
      */
-    private int getResourcePageSize(Class resource) {
+    public int getResourcePageSize(Class resource) {
         if (resource == Video.class || resource == Tutorial.class) {
             return 12;
         } else if (resource == Music.class) {

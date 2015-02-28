@@ -96,11 +96,8 @@ public class CacheProtocol {
         }
     }
 
-    public Object extractResourceFromCache(Class response, Integer id, String prefix) {
+    public Object extractResourceFromCache(Class response, String cachekey) {
         try {
-
-            String cachekey = prefix + "-" + id;
-
             if (commonRedisClient.exists(cachekey)) {
                 HashMap<String, String> result = (HashMap<String, String>) commonRedisClient.hgetAll(cachekey);
                 Object obj = response.newInstance();
