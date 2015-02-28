@@ -1,6 +1,7 @@
 package com.springapp.mvc.cache;
 
 import com.darfoo.backend.caches.cota.CacheProtocol;
+import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Music;
@@ -32,6 +33,27 @@ public class RedisProtocolTests {
     CommonDao commonDao;
     @Autowired
     CacheProtocol cacheProtocol;
+    @Autowired
+    CacheDao cacheDao;
+
+    @Test
+    public void insertResourceIntoCache() {
+        Video video = (Video) commonDao.getResourceById(Video.class, 35);
+        cacheDao.insertSingleResource(Video.class, video, "video");
+    }
+
+    @Test
+    public void extractResourceFromCache() {
+        SingleVideo result = (SingleVideo) cacheDao.getSingleResource(SingleVideo.class, 35, "video");
+        try {
+            for (Field field : SingleVideo.class.getDeclaredFields()) {
+                field.setAccessible(true);
+                System.out.println(field.getName() + " -> " + field.get(result));
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void insertVideoResourceIntoCache() {
