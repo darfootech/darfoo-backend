@@ -1,9 +1,6 @@
 package com.darfoo.backend.service;
 
 import com.darfoo.backend.caches.client.CommonRedisClient;
-import com.darfoo.backend.caches.dao.AuthorCacheDao;
-import com.darfoo.backend.caches.dao.MusicCacheDao;
-import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.cota.CategoryDao;
@@ -36,12 +33,6 @@ import java.util.*;
 public class CacheController {
     @Autowired
     VideoCacheDao videoCacheDao;
-    @Autowired
-    TutorialCacheDao tutorialCacheDao;
-    @Autowired
-    MusicCacheDao musicCacheDao;
-    @Autowired
-    AuthorCacheDao authorCacheDao;
     @Autowired
     AuthorDao authorDao;
     @Autowired
