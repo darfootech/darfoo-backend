@@ -1,6 +1,7 @@
 package com.darfoo.backend.service;
 
 import com.darfoo.backend.caches.client.CommonRedisClient;
+import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.cota.CategoryDao;
@@ -11,6 +12,7 @@ import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.*;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,8 @@ public class CacheController {
     @Autowired
     VideoCacheDao videoCacheDao;
     @Autowired
+    CacheDao cacheDao;
+    @Autowired
     AuthorDao authorDao;
     @Autowired
     CommonRedisClient redisClient;
@@ -52,7 +56,19 @@ public class CacheController {
     @Autowired
     MusicCates musicCates;
 
-    @RequestMapping(value = "/video/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/{id}", method = RequestMethod.GET)
+    public @ResponseBody Object getSingleResourceFromCache(@PathVariable String type, @PathVariable Integer id) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        if (resource == Video.class || resource == Tutorial.class) {
+            return cacheDao.getSingleResource(SingleVideo.class, id, type);
+        } else if (resource == Music.class) {
+            return cacheDao.getSingleResource(SingleMusic.class, id, type);
+        } else {
+            return null;
+        }
+    }
+
+    /*@RequestMapping(value = "/video/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
     SingleVideo getSingleVideoFromCache(@PathVariable String id) {
@@ -155,8 +171,6 @@ public class CacheController {
             String letterCate = requestCategories[3];
             targetCategories.add(letterCate);
         }
-
-        //System.out.println(targetCategories.toString());
 
         List<Video> targetVideos = categoryDao.getResourcesByCategories(Video.class, ServiceUtils.convertList2Array(targetCategories));
         for (Video video : targetVideos) {
@@ -442,14 +456,6 @@ public class CacheController {
     public
     @ResponseBody
     List<SingleAuthor> cacheIndexAuthors() {
-        /*List<Author> authors = authorDao.getAllAuthor();
-        for (Author author : authors){
-            int id = author.getId();
-            long result = redisClient.sadd("authorindex", "author-" + id);
-            authorCacheDao.insertSingleAuthor(author);
-            System.out.println("insert result -> " + result);
-        }*/
-
         List<Object[]> authorIdAndCnt = authorDao.getAuthorOrderByVideoCountDesc();
         for (Object[] rows : authorIdAndCnt) {
             int authorid = (Integer) rows[1];
@@ -476,14 +482,6 @@ public class CacheController {
     public
     @ResponseBody
     List<SingleAuthor> cacheIndexAuthorsByPage(@PathVariable Integer page) {
-        /*List<Author> authors = authorDao.getAllAuthor();
-        for (Author author : authors){
-            int id = author.getId();
-            long result = redisClient.sadd("authorindex", "author-" + id);
-            authorCacheDao.insertSingleAuthor(author);
-            System.out.println("insert result -> " + result);
-        }*/
-
         List<Object[]> authorIdAndCnt = authorDao.getAuthorOrderByVideoCountDescByPage(page);
         for (Object[] rows : authorIdAndCnt) {
             int authorid = (Integer) rows[1];
@@ -601,33 +599,6 @@ public class CacheController {
 
         return result;
     }
-
-    /*search cache*/
-    //http://localhost:8080/darfoobackend/rest/resources/video/search?search=s
-    /*@RequestMapping(value = "/video/search", method = RequestMethod.GET)
-    public @ResponseBody
-    List<SingleVideo> searchVideo(HttpServletRequest request){
-        String searchContent = request.getParameter("search");
-        System.out.println(searchContent);
-        List<Video> videos = searchDao.getVideoBySearch(searchContent);
-        for (Video video : videos){
-            int vid = video.getId();
-            long status = redisClient.sadd("videosearch" + searchContent, "video-" + vid);
-            videoCacheDao.insertSingleVideo(video);
-            System.out.println("insert result -> " + status);
-        }
-
-        Set<String> searchVideoKeys = redisClient.smembers("videosearch" + searchContent);
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
-        for (String key : searchVideoKeys){
-            System.out.println("key -> " + key);
-            int vid = Integer.parseInt(key.split("-")[1]);
-            SingleVideo video = videoCacheDao.getSingleVideo(vid);
-            System.out.println("title -> " + video.getTitle());
-            result.add(video);
-        }
-        return result;
-    }*/
 
     @RequestMapping(value = "/video/search", method = RequestMethod.GET)
     public
@@ -972,5 +943,5 @@ public class CacheController {
         }
 
         return result;
-    }
+    }*/
 }

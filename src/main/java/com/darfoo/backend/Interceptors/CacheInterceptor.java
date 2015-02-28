@@ -1,8 +1,6 @@
 package com.darfoo.backend.Interceptors;
 
 import com.darfoo.backend.caches.client.CommonRedisClient;
-import com.darfoo.backend.caches.dao.MusicCacheDao;
-import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.resource.Music;
@@ -22,10 +20,6 @@ import java.util.regex.Pattern;
 public class CacheInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     VideoCacheDao videoCacheDao;
-    @Autowired
-    TutorialCacheDao tutorialCacheDao;
-    @Autowired
-    MusicCacheDao musicCacheDao;
     @Autowired
     CommonRedisClient commonRedisClient;
     @Autowired
@@ -47,7 +41,7 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
         System.out.println("current cache uri is: " + uri + "\n");
 
         /*将单一资源的请求结果放入缓存*/
-        if (uri.matches("(.*)/resources/video/\\d+$")) {
+        /*if (uri.matches("(.*)/resources/video/\\d+$")) {
             String videoid = getNumbers(uri);
             System.out.println("video cache id is: " + videoid + "\n");
             int vid = Integer.parseInt(videoid);
@@ -96,7 +90,7 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
                 musicCacheDao.insertSingleMusic(music);
             }
             return true;
-        }
+        }*/
         /*end of single resource cache*/
 
         System.out.print("no cache resource clicked" + "\n");
