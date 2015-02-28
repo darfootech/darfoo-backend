@@ -58,6 +58,9 @@ public class CacheController {
 
     @RequestMapping(value = "/{type}/{id}", method = RequestMethod.GET)
     public @ResponseBody Object getSingleResourceFromCache(@PathVariable String type, @PathVariable Integer id) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        Object object = commonDao.getResourceById(resource, id);
+        cacheDao.insertSingleResource(resource, object, type);
         return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), String.format("%s-%d", type, id));
     }
 
@@ -172,51 +175,58 @@ public class CacheController {
         return extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.SET);
     }
 
-    @RequestMapping(value = "/video/index", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/index", method = RequestMethod.GET)
     public
     @ResponseBody
-    List cacheIndexVideos() {
-        List latestVideos = commonDao.getResourcesByNewest(Video.class, 12);
-        String cachekey = "videoindex";
-        String prefix = "video";
+    List cacheIndexResources(@PathVariable String type) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        String cachekey = String.format("%sindex", type);
 
-        insertResourcesIntoCache(Video.class, latestVideos, cachekey, prefix, CacheCollType.SET);
+        List resources;
+        if (type.equals("video")) {
+            resources = commonDao.getResourcesByNewest(resource, 12);
+        } else if (type.equals("author")) {
+            resources = authorDao.getAuthorsOrderByVideoCountDesc();
+        } else {
+            System.out.println("wired");
+            resources = new ArrayList();
+        }
 
-        return extractResourcesFromCache(Video.class, cachekey, CacheCollType.SET);
+        insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
+
+        return extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
     }
 
     @RequestMapping(value = "/{type}/category/{categories}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List getVideosByCategories(@PathVariable String type, @PathVariable String categories) {
+    List getResourcesByCategories(@PathVariable String type, @PathVariable String categories) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
 
         String cachekey = String.format("%scategory%s", type, categories);
-        String prefix = type;
 
         List resources = categoryDao.getResourcesByCategories(resource, ServiceUtils.convertList2Array(parseResourceCategories(resource, categories)));
-        insertResourcesIntoCache(resource, resources, cachekey, prefix, CacheCollType.SET);
+        insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SET);
         return extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SET);
     }
 
     @RequestMapping(value = "/{type}/category/{categories}/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List getVideosByCategoriesByPage(@PathVariable String type, @PathVariable String categories, @PathVariable Integer page) {
+    List getResourcesByCategoriesByPage(@PathVariable String type, @PathVariable String categories, @PathVariable Integer page) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
 
         String cachekey = String.format("%scategory%spage%d", type, categories, page);
-        String prefix = type;
 
         List resources = paginationDao.getResourcesByCategoriesByPage(resource, ServiceUtils.convertList2Array(parseResourceCategories(resource, categories)), page);
-        insertResourcesIntoCache(resource, resources, cachekey, prefix, CacheCollType.LIST);
+        insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
         return extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
     }
 
     @RequestMapping("/{type}/hottest")
     public
     @ResponseBody
-    List getHottestMusics(@PathVariable String type) {
+    List getHottestResources(@PathVariable String type) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         List resources = commonDao.getResourcesByHottest(resource, 5);
         String cachekey = String.format("%shottest", type);
@@ -226,59 +236,25 @@ public class CacheController {
         return extractResourcesFromCache(resource, cachekey, CacheCollType.LIST);
     }
 
-    /*@RequestMapping(value = "/video/getmusic/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/video/getmusic/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
-    SingleMusic getMusicByVideoId(@PathVariable Integer id) {
+    Object getMusicByVideoId(@PathVariable Integer id) {
+        String type = "music";
+        Class resource = TypeClassMapping.typeClassMap.get(type);
         Music targetMusic = ((Video) commonDao.getResourceById(Video.class, id)).getMusic();
         if (targetMusic != null) {
             int music_id = targetMusic.getId();
             videoCacheDao.insertMusic(id, music_id);
-            Music music = (Music) commonDao.getResourceById(Music.class, music_id);
-            System.out.println(musicCacheDao.insertSingleMusic(music));
-            return musicCacheDao.getSingleMusic(music_id);
+            Object object = commonDao.getResourceById(resource, music_id);
+            cacheDao.insertSingleResource(resource, object, type);
+            return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), type);
         } else {
             return new SingleMusic(-1, "", "", "", 0L);
         }
     }
 
-    @RequestMapping(value = "/author/{id}", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    SingleAuthor cacheSingleAuthor(@PathVariable Integer id) {
-        Author author = (Author) commonDao.getResourceById(Author.class, id);
-        System.out.println(authorCacheDao.insertSingleAuthor(author));
-        SingleAuthor result = authorCacheDao.getSingleAuthor(id);
-        return result;
-    }
-
-    @RequestMapping(value = "/author/index", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    List<SingleAuthor> cacheIndexAuthors() {
-        List<Object[]> authorIdAndCnt = authorDao.getAuthorOrderByVideoCountDesc();
-        for (Object[] rows : authorIdAndCnt) {
-            int authorid = (Integer) rows[1];
-            System.out.println(authorid + " -> " + ((BigInteger) rows[0]).intValue());
-            Author author = (Author) commonDao.getResourceById(Author.class, authorid);
-            long result = redisClient.lpush("authorindex", "author-" + authorid);
-            authorCacheDao.insertSingleAuthor(author);
-            System.out.println("insert result -> " + result);
-        }
-
-        List<String> indexAuthorKeys = redisClient.lrange("authorindex", 0L, -1L);
-        List<SingleAuthor> result = new ArrayList<SingleAuthor>();
-        for (String key : indexAuthorKeys) {
-            System.out.println("key -> " + key);
-            int id = Integer.parseInt(key.split("-")[1]);
-            SingleAuthor author = authorCacheDao.getSingleAuthor(id);
-            System.out.println("name -> " + author.getName());
-            result.add(author);
-        }
-        return result;
-    }
-
-    @RequestMapping(value = "/author/index/page/{page}", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/author/index/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
     List<SingleAuthor> cacheIndexAuthorsByPage(@PathVariable Integer page) {
@@ -420,7 +396,7 @@ public class CacheController {
     @RequestMapping(value = "/{type}/search", method = RequestMethod.GET)
     public
     @ResponseBody
-    List searchVideo(@PathVariable String type, HttpServletRequest request) {
+    List searchResource(@PathVariable String type, HttpServletRequest request) {
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
 
@@ -447,7 +423,7 @@ public class CacheController {
     @RequestMapping(value = "/{type}/search/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List searchVideoByPage(@PathVariable String type, @PathVariable Integer page, HttpServletRequest request) {
+    List searchResourceByPage(@PathVariable String type, @PathVariable Integer page, HttpServletRequest request) {
         String searchContent = request.getParameter("search");
         System.out.println(searchContent);
         Class resource = TypeClassMapping.typeClassMap.get(type);
@@ -477,7 +453,7 @@ public class CacheController {
     @RequestMapping(value = "/{type}/sidebar/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List getSidebarVideos(@PathVariable String type, @PathVariable Integer id) {
+    List getSidebarResources(@PathVariable String type, @PathVariable Integer id) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         List resources = commonDao.getSideBarResources(resource, id);
         String cachekey = String.format("%ssidebar%d", type, id);
