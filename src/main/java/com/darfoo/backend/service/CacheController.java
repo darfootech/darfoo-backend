@@ -121,6 +121,34 @@ public class CacheController {
                 String letterCate = requestCategories[3];
                 targetCategories.add(letterCate);
             }
+        } else if (resource == Tutorial.class) {
+            if (!requestCategories[0].equals("0")) {
+                String speedCate = tutorialCates.getSpeedCategory().get(requestCategories[0]);
+                targetCategories.add(speedCate);
+            }
+            if (!requestCategories[1].equals("0")) {
+                String difficultyCate = tutorialCates.getDifficultyCategory().get(requestCategories[1]);
+                targetCategories.add(difficultyCate);
+            }
+            if (!requestCategories[2].equals("0")) {
+                String styleCate = tutorialCates.getStyleCategory().get(requestCategories[2]);
+                targetCategories.add(styleCate);
+            }
+        } else if (resource == Music.class) {
+            if (!requestCategories[0].equals("0")) {
+                String beatCate = musicCates.getBeatCategory().get(requestCategories[0]);
+                targetCategories.add(beatCate);
+            }
+            if (!requestCategories[1].equals("0")) {
+                String styleCate = musicCates.getStyleCategory().get(requestCategories[1]);
+                targetCategories.add(styleCate);
+            }
+            if (!requestCategories[2].equals("0")) {
+                String letterCate = requestCategories[2];
+                targetCategories.add(letterCate);
+            }
+        } else {
+            System.out.println("wired");
         }
 
         return targetCategories;
@@ -179,7 +207,7 @@ public class CacheController {
     List<SingleVideo> getVideosByCategoriesByPage(@PathVariable String type, @PathVariable String categories, @PathVariable Integer page) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
 
-        String cachekey = String.format("videocategory%spage%d", categories, page);
+        String cachekey = String.format("%scategory%spage%d", type, categories, page);
         String prefix = type;
 
         List resources = paginationDao.getResourcesByCategoriesByPage(resource, ServiceUtils.convertList2Array(parseResourceCategories(resource, categories)), page);
@@ -187,169 +215,7 @@ public class CacheController {
         return extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, prefix, CacheCollType.LIST);
     }
 
-    /*@RequestMapping(value = "/tutorial/category/{categories}", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    List<SingleVideo> getTutorialsByCategories(@PathVariable String categories) {
-        String[] requestCategories = categories.split("-");
-        List<String> targetCategories = new ArrayList<String>();
-        if (!requestCategories[0].equals("0")) {
-            String speedCate = tutorialCates.getSpeedCategory().get(requestCategories[0]);
-            targetCategories.add(speedCate);
-        }
-        if (!requestCategories[1].equals("0")) {
-            String difficultyCate = tutorialCates.getDifficultyCategory().get(requestCategories[1]);
-            targetCategories.add(difficultyCate);
-        }
-        if (!requestCategories[2].equals("0")) {
-            String styleCate = tutorialCates.getStyleCategory().get(requestCategories[2]);
-            targetCategories.add(styleCate);
-        }
-
-        List<Tutorial> targetVideos = categoryDao.getResourcesByCategories(Tutorial.class, ServiceUtils.convertList2Array(targetCategories));
-        for (Tutorial video : targetVideos) {
-            int vid = video.getId();
-            long result = redisClient.sadd("tutorialcategory" + categories, "tutorial-" + vid);
-            tutorialCacheDao.insertSingleTutorial(video);
-            System.out.println("insert result -> " + result);
-        }
-
-        Set<String> categoryVideoKeys = redisClient.smembers("tutorialcategory" + categories);
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
-        for (String vkey : categoryVideoKeys) {
-            System.out.println("vkey -> " + vkey);
-            int vid = Integer.parseInt(vkey.split("-")[1]);
-            SingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
-            System.out.println("title -> " + video.getTitle());
-            result.add(video);
-        }
-
-        return result;
-    }
-
-    @RequestMapping(value = "/tutorial/category/{categories}/page/{page}", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    List<SingleVideo> getTutorialsByCategoriesByPage(@PathVariable String categories, @PathVariable Integer page) {
-        String[] requestCategories = categories.split("-");
-        List<String> targetCategories = new ArrayList<String>();
-        if (!requestCategories[0].equals("0")) {
-            String speedCate = tutorialCates.getSpeedCategory().get(requestCategories[0]);
-            targetCategories.add(speedCate);
-        }
-        if (!requestCategories[1].equals("0")) {
-            String difficultyCate = tutorialCates.getDifficultyCategory().get(requestCategories[1]);
-            targetCategories.add(difficultyCate);
-        }
-        if (!requestCategories[2].equals("0")) {
-            String styleCate = tutorialCates.getStyleCategory().get(requestCategories[2]);
-            targetCategories.add(styleCate);
-        }
-
-        List<Tutorial> targetVideos = paginationDao.getResourcesByCategoriesByPage(Tutorial.class, ServiceUtils.convertList2Array(targetCategories), page);
-        for (Tutorial video : targetVideos) {
-            int vid = video.getId();
-            long result = redisClient.lpush("tutorialcategory" + categories + "page" + page, "tutorial-" + vid);
-            tutorialCacheDao.insertSingleTutorial(video);
-            System.out.println("insert result -> " + result);
-        }
-
-        List<String> categoryVideoKeys = redisClient.lrange("tutorialcategory" + categories + "page" + page, 0L, -1L);
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
-        for (String vkey : categoryVideoKeys) {
-            System.out.println("vkey -> " + vkey);
-            int vid = Integer.parseInt(vkey.split("-")[1]);
-            SingleVideo video = tutorialCacheDao.getSingleTutorial(vid);
-            System.out.println("title -> " + video.getTitle());
-            result.add(video);
-        }
-
-        return result;
-    }
-
-    @RequestMapping(value = "/music/category/{categories}", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    List<SingleMusic> getMusicByCategories(@PathVariable String categories) {
-        //System.out.println("category request is " + categories + " !!!!!!!!!");
-        String[] requestCategories = categories.split("-");
-        List<String> targetCategories = new ArrayList<String>();
-        if (!requestCategories[0].equals("0")) {
-            String beatCate = musicCates.getBeatCategory().get(requestCategories[0]);
-            targetCategories.add(beatCate);
-        }
-        if (!requestCategories[1].equals("0")) {
-            String styleCate = musicCates.getStyleCategory().get(requestCategories[1]);
-            targetCategories.add(styleCate);
-        }
-        if (!requestCategories[2].equals("0")) {
-            String letterCate = requestCategories[2];
-            targetCategories.add(letterCate);
-        }
-
-        List<Music> musics = categoryDao.getResourcesByCategories(Music.class, ServiceUtils.convertList2Array(targetCategories));
-        List<SingleMusic> result = new ArrayList<SingleMusic>();
-        for (Music music : musics) {
-            int mid = music.getId();
-            long status = redisClient.sadd("musiccategory" + categories, "music-" + mid);
-            musicCacheDao.insertSingleMusic(music);
-            System.out.println("insert result -> " + status);
-        }
-
-        Set<String> categoryMusicKeys = redisClient.smembers("musiccategory" + categories);
-        for (String vkey : categoryMusicKeys) {
-            System.out.println("vkey -> " + vkey);
-            int mid = Integer.parseInt(vkey.split("-")[1]);
-            SingleMusic music = musicCacheDao.getSingleMusic(mid);
-            System.out.println("title -> " + music.getTitle());
-            result.add(music);
-        }
-
-        return result;
-    }
-
-    @RequestMapping(value = "/music/category/{categories}/page/{page}", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    List<SingleMusic> getMusicByCategoriesByPage(@PathVariable String categories, @PathVariable Integer page) {
-        //System.out.println("category request is " + categories + " !!!!!!!!!");
-        String[] requestCategories = categories.split("-");
-        List<String> targetCategories = new ArrayList<String>();
-        if (!requestCategories[0].equals("0")) {
-            String beatCate = musicCates.getBeatCategory().get(requestCategories[0]);
-            targetCategories.add(beatCate);
-        }
-        if (!requestCategories[1].equals("0")) {
-            String styleCate = musicCates.getStyleCategory().get(requestCategories[1]);
-            targetCategories.add(styleCate);
-        }
-        if (!requestCategories[2].equals("0")) {
-            String letterCate = requestCategories[2];
-            targetCategories.add(letterCate);
-        }
-
-        List<Music> musics = paginationDao.getResourcesByCategoriesByPage(Music.class, ServiceUtils.convertList2Array(targetCategories), page);
-        List<SingleMusic> result = new ArrayList<SingleMusic>();
-        for (Music music : musics) {
-            int mid = music.getId();
-            long status = redisClient.lpush("musiccategory" + categories + "page" + page, "music-" + mid);
-            musicCacheDao.insertSingleMusic(music);
-            System.out.println("insert result -> " + status);
-        }
-
-        List<String> categoryMusicKeys = redisClient.lrange("musiccategory" + categories + "page" + page, 0L, -1L);
-        for (String vkey : categoryMusicKeys) {
-            System.out.println("vkey -> " + vkey);
-            int mid = Integer.parseInt(vkey.split("-")[1]);
-            SingleMusic music = musicCacheDao.getSingleMusic(mid);
-            System.out.println("title -> " + music.getTitle());
-            result.add(music);
-        }
-
-        return result;
-    }
-
-    @RequestMapping("/music/hottest")
+    /*@RequestMapping("/music/hottest")
     public
     @ResponseBody
     List<SingleMusic> getHottestMusics() {
