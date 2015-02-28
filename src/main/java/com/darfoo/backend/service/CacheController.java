@@ -12,6 +12,7 @@ import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.*;
 import com.darfoo.backend.utils.ServiceUtils;
@@ -62,19 +63,34 @@ public class CacheController {
         return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), id, type);
     }
 
-    private void insertResourcesIntoCacheSet(Class insertclass, List resources, String setkey, String prefix) {
+    private void insertResourcesIntoCache(Class insertclass, List resources, String cachekey, String prefix, CacheCollType type) {
         for (Object object : resources) {
             int id = (Integer) commonDao.getResourceAttr(insertclass, object, "id");
-            long status = redisClient.sadd(setkey, String.format("%s-%d", prefix, id));
+            long status = 0L;
+            if (type == CacheCollType.SET) {
+                status = redisClient.sadd(cachekey, String.format("%s-%d", prefix, id));
+            } else if (type == CacheCollType.LIST) {
+                status = redisClient.lpush(cachekey, String.format("%s-%d", prefix, id));
+            } else {
+                System.out.println("wired");
+            }
+            System.out.println("insert result -> " + status);
 
             boolean result = cacheDao.insertSingleResource(insertclass, object, prefix);
-            System.out.println("insert result -> " + status);
             System.out.println("insert result -> " + result);
         }
     }
 
-    private List extractResourcesFromCacheSet(Class responseclass, String setkey, String prefix) {
-        Set<String> keys = redisClient.smembers(setkey);
+    private List extractResourcesFromCache(Class responseclass, String cachekey, String prefix, CacheCollType type) {
+        Collection<String> keys;
+        if (type == CacheCollType.SET) {
+            keys = redisClient.smembers(cachekey);
+        } else if (type == CacheCollType.LIST) {
+            keys = redisClient.lrange(cachekey, 0L, -1L);
+        } else {
+            System.out.println("wired");
+            keys = new ArrayList<String>();
+        }
         List result = new ArrayList();
         for (String key : keys) {
             System.out.println("key -> " + key);
@@ -84,22 +100,48 @@ public class CacheController {
         return result;
     }
 
+    private List<String> parseResourceCategories(Class resource, String categories) {
+        String[] requestCategories = categories.split("-");
+        List<String> targetCategories = new ArrayList<String>();
+
+        if (resource == Video.class) {
+            if (!requestCategories[0].equals("0")) {
+                String speedCate = videoCates.getSpeedCategory().get(requestCategories[0]);
+                targetCategories.add(speedCate);
+            }
+            if (!requestCategories[1].equals("0")) {
+                String difficultyCate = videoCates.getDifficultyCategory().get(requestCategories[1]);
+                targetCategories.add(difficultyCate);
+            }
+            if (!requestCategories[2].equals("0")) {
+                String styleCate = videoCates.getStyleCategory().get(requestCategories[2]);
+                targetCategories.add(styleCate);
+            }
+            if (!requestCategories[3].equals("0")) {
+                String letterCate = requestCategories[3];
+                targetCategories.add(letterCate);
+            }
+        }
+
+        return targetCategories;
+    }
+
     @RequestMapping(value = "/video/recommend", method = RequestMethod.GET)
     public
     @ResponseBody
     List cacheRecmmendVideos() {
-        String setkey = "recommend";
-        String videoPrefix = String.format("%svideo", setkey);
-        String tutorialPrefix = String.format("%stutorial", setkey);
+        String cachekey = "recommend";
+        String videoPrefix = String.format("%svideo", cachekey);
+        String tutorialPrefix = String.format("%stutorial", cachekey);
 
         List recommendVideos = recommendDao.getRecommendResources(Video.class);
         List recommendTutorials = recommendDao.getRecommendResources(Tutorial.class);
 
-        insertResourcesIntoCacheSet(Video.class, recommendVideos, setkey, videoPrefix);
-        insertResourcesIntoCacheSet(Tutorial.class, recommendTutorials, setkey, tutorialPrefix);
+        insertResourcesIntoCache(Video.class, recommendVideos, cachekey, videoPrefix, CacheCollType.SET);
+        insertResourcesIntoCache(Tutorial.class, recommendTutorials, cachekey, tutorialPrefix, CacheCollType.SET);
 
-        List videos = extractResourcesFromCacheSet(SingleVideo.class, setkey, videoPrefix);
-        List tutorials = extractResourcesFromCacheSet(SingleVideo.class, setkey, tutorialPrefix);
+        List videos = extractResourcesFromCache(SingleVideo.class, cachekey, videoPrefix, CacheCollType.SET);
+        List tutorials = extractResourcesFromCache(SingleVideo.class, cachekey, tutorialPrefix, CacheCollType.SET);
         videos.addAll(tutorials);
         return videos;
     }
@@ -107,107 +149,45 @@ public class CacheController {
     @RequestMapping(value = "/video/index", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<SingleVideo> cacheIndexVideos() {
+    List cacheIndexVideos() {
         List latestVideos = commonDao.getResourcesByNewest(Video.class, 12);
-        String setkey = "videoindex";
+        String cachekey = "videoindex";
         String prefix = "video";
 
-        insertResourcesIntoCacheSet(Video.class, latestVideos, setkey, prefix);
+        insertResourcesIntoCache(Video.class, latestVideos, cachekey, prefix, CacheCollType.SET);
 
-        return extractResourcesFromCacheSet(Video.class, setkey, prefix);
+        return extractResourcesFromCache(Video.class, cachekey, prefix, CacheCollType.SET);
     }
 
-    /*@RequestMapping(value = "/video/category/{categories}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/category/{categories}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<SingleVideo> getVideosByCategories(@PathVariable String categories) {
-        String[] requestCategories = categories.split("-");
-        List<String> targetCategories = new ArrayList<String>();
-        if (!requestCategories[0].equals("0")) {
-            String speedCate = videoCates.getSpeedCategory().get(requestCategories[0]);
-            targetCategories.add(speedCate);
-        }
-        if (!requestCategories[1].equals("0")) {
-            String difficultyCate = videoCates.getDifficultyCategory().get(requestCategories[1]);
-            targetCategories.add(difficultyCate);
-        }
-        if (!requestCategories[2].equals("0")) {
-            String styleCate = videoCates.getStyleCategory().get(requestCategories[2]);
-            targetCategories.add(styleCate);
-        }
-        if (!requestCategories[3].equals("0")) {
-            String letterCate = requestCategories[3];
-            targetCategories.add(letterCate);
-        }
+    List getVideosByCategories(@PathVariable String type, @PathVariable String categories) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
 
-        List<Video> targetVideos = categoryDao.getResourcesByCategories(Video.class, ServiceUtils.convertList2Array(targetCategories));
-        for (Video video : targetVideos) {
-            int vid = video.getId();
-            long result = redisClient.sadd("videocategory" + categories, "video-" + vid);
-            videoCacheDao.insertSingleVideo(video);
-            System.out.println("insert result -> " + result);
-        }
+        String cachekey = String.format("%scategory%s", type, categories);
+        String prefix = type;
 
-        Set<String> categoryVideoKeys = redisClient.smembers("videocategory" + categories);
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
-        for (String vkey : categoryVideoKeys) {
-            System.out.println("vkey -> " + vkey);
-            int vid = Integer.parseInt(vkey.split("-")[1]);
-            SingleVideo video = videoCacheDao.getSingleVideo(vid);
-            System.out.println("title -> " + video.getTitle());
-            result.add(video);
-        }
-
-        return result;
+        List resources = categoryDao.getResourcesByCategories(resource, ServiceUtils.convertList2Array(parseResourceCategories(resource, categories)));
+        insertResourcesIntoCache(resource, resources, cachekey, prefix, CacheCollType.SET);
+        return extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, prefix, CacheCollType.SET);
     }
 
-    @RequestMapping(value = "/video/category/{categories}/page/{page}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/category/{categories}/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<SingleVideo> getVideosByCategoriesByPage(@PathVariable String categories, @PathVariable Integer page) {
-        String[] requestCategories = categories.split("-");
-        List<String> targetCategories = new ArrayList<String>();
-        if (!requestCategories[0].equals("0")) {
-            String speedCate = videoCates.getSpeedCategory().get(requestCategories[0]);
-            targetCategories.add(speedCate);
-        }
-        if (!requestCategories[1].equals("0")) {
-            String difficultyCate = videoCates.getDifficultyCategory().get(requestCategories[1]);
-            targetCategories.add(difficultyCate);
-        }
-        if (!requestCategories[2].equals("0")) {
-            String styleCate = videoCates.getStyleCategory().get(requestCategories[2]);
-            targetCategories.add(styleCate);
-        }
-        if (!requestCategories[3].equals("0")) {
-            String letterCate = requestCategories[3];
-            targetCategories.add(letterCate);
-        }
+    List<SingleVideo> getVideosByCategoriesByPage(@PathVariable String type, @PathVariable String categories, @PathVariable Integer page) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
 
-        List<Video> targetVideos = paginationDao.getResourcesByCategoriesByPage(Video.class, ServiceUtils.convertList2Array(targetCategories), page);
-        System.out.println("target video size -> " + targetVideos.size());
+        String cachekey = String.format("videocategory%spage%d", categories, page);
+        String prefix = type;
 
-        for (Video video : targetVideos) {
-            int vid = video.getId();
-            long result = redisClient.lpush("videocategory" + categories + "page" + page, "video-" + vid);
-            videoCacheDao.insertSingleVideo(video);
-            System.out.println("insert result -> " + result);
-        }
-
-        List<String> categoryVideoKeys = redisClient.lrange("videocategory" + categories + "page" + page, 0L, -1L);
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
-        for (String vkey : categoryVideoKeys) {
-            System.out.println("vkey -> " + vkey);
-            int vid = Integer.parseInt(vkey.split("-")[1]);
-            SingleVideo video = videoCacheDao.getSingleVideo(vid);
-            System.out.println("title -> " + video.getTitle());
-            result.add(video);
-        }
-
-        return result;
+        List resources = paginationDao.getResourcesByCategoriesByPage(resource, ServiceUtils.convertList2Array(parseResourceCategories(resource, categories)), page);
+        insertResourcesIntoCache(resource, resources, cachekey, prefix, CacheCollType.LIST);
+        return extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, prefix, CacheCollType.LIST);
     }
 
-    @RequestMapping(value = "/tutorial/category/{categories}", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/tutorial/category/{categories}", method = RequestMethod.GET)
     public
     @ResponseBody
     List<SingleVideo> getTutorialsByCategories(@PathVariable String categories) {
