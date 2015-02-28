@@ -59,7 +59,7 @@ public class CacheProtocol {
                                 String image_download_url = "";
                                 if (image != null) {
                                     if (prefix.contains("recommend")) {
-                                        image_download_url = qiniuUtils.getQiniuResourceUrl(image.getImage_key() + "@@recommend" + model.getName().toLowerCase() + ".png", QiniuResourceEnum.RAW);
+                                        image_download_url = qiniuUtils.getQiniuResourceUrl(image.getImage_key() + "@@recommend" + model.getSimpleName().toLowerCase() + ".png", QiniuResourceEnum.RAW);
                                     } else {
                                         image_download_url = qiniuUtils.getQiniuResourceUrl(image.getImage_key(), QiniuResourceEnum.RAW);
                                     }

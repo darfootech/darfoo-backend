@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
 import java.util.*;
@@ -58,98 +59,65 @@ public class CacheController {
 
     @RequestMapping(value = "/{type}/{id}", method = RequestMethod.GET)
     public @ResponseBody Object getSingleResourceFromCache(@PathVariable String type, @PathVariable Integer id) {
-        Class resource = TypeClassMapping.typeClassMap.get(type);
-        if (resource == Video.class || resource == Tutorial.class) {
-            return cacheDao.getSingleResource(SingleVideo.class, id, type);
-        } else if (resource == Music.class) {
-            return cacheDao.getSingleResource(SingleMusic.class, id, type);
-        } else {
-            return null;
+        return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), id, type);
+    }
+
+    private void insertCacheResourcesSet(Class insertclass, List resources, String setkey, String prefix) {
+        for (Object object : resources) {
+            int id = (Integer) commonDao.getResourceAttr(insertclass, object, "id");
+            long status = redisClient.sadd(setkey, String.format("%s-%d", prefix, id));
+
+            boolean result = cacheDao.insertSingleResource(insertclass, object, prefix);
+            System.out.println("insert result -> " + status);
+            System.out.println("insert result -> " + result);
         }
     }
 
-    /*@RequestMapping(value = "/video/{id}", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    SingleVideo getSingleVideoFromCache(@PathVariable String id) {
-        Integer vid = Integer.parseInt(id);
-        return videoCacheDao.getSingleVideo(vid);
-    }
-
-    @RequestMapping(value = "/tutorial/{id}", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    SingleVideo getSingleTutorialFromCache(@PathVariable String id) {
-        Integer tid = Integer.parseInt(id);
-        return tutorialCacheDao.getSingleTutorial(tid);
-    }
-
-    @RequestMapping(value = "/music/{id}", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    SingleMusic getSingleMusicFromCache(@PathVariable String id) {
-        Integer mid = Integer.parseInt(id);
-        return musicCacheDao.getSingleMusic(mid);
+    private List extractResourcesFromCacheSet(Class responseclass, String setkey, String prefix) {
+        Set<String> keys = redisClient.smembers(setkey);
+        List result = new ArrayList();
+        for (String key : keys) {
+            System.out.println("key -> " + key);
+            int id = Integer.parseInt(key.split("-")[1]);
+            result.add(cacheDao.getSingleResource(responseclass, id, prefix));
+        }
+        return result;
     }
 
     @RequestMapping(value = "/video/recommend", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<SingleVideo> cacheRecmmendVideos() {
-        List<Video> recommendVideos = recommendDao.getRecommendResources(Video.class);
-        List<Tutorial> recommendTutorials = recommendDao.getRecommendResources(Tutorial.class);
+    List cacheRecmmendVideos() {
+        String setkey = "recommend";
+        String videoPrefix = String.format("%svideo", setkey);
+        String tutorialPrefix = String.format("%stutorial", setkey);
 
-        for (Video video : recommendVideos) {
-            int vid = video.getId();
-            long status = redisClient.sadd("recommend", "recommendvideo-" + vid);
-            videoCacheDao.insertRecommendVideo(video);
-            System.out.println("insert result -> " + status);
-        }
+        List recommendVideos = recommendDao.getRecommendResources(Video.class);
+        List recommendTutorials = recommendDao.getRecommendResources(Tutorial.class);
 
-        for (Tutorial video : recommendTutorials) {
-            int vid = video.getId();
-            long status = redisClient.sadd("recommend", "recommendvideo-" + vid);
-            tutorialCacheDao.insertRecommendTutorial(video);
-            System.out.println("insert result -> " + status);
-        }
+        insertCacheResourcesSet(Video.class, recommendVideos, setkey, videoPrefix);
+        insertCacheResourcesSet(Tutorial.class, recommendTutorials, setkey, tutorialPrefix);
 
-        Set<String> recommendVideoKeys = redisClient.smembers("recommend");
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
-        for (String vkey : recommendVideoKeys) {
-            System.out.println("vkey -> " + vkey);
-            int vid = Integer.parseInt(vkey.split("-")[1]);
-            SingleVideo video = videoCacheDao.getRecommendVideo(vid);
-            System.out.println("title -> " + video.getTitle());
-            result.add(video);
-        }
-        return result;
+        List videos = extractResourcesFromCacheSet(SingleVideo.class, setkey, videoPrefix);
+        List tutorials = extractResourcesFromCacheSet(SingleVideo.class, setkey, tutorialPrefix);
+        videos.addAll(tutorials);
+        return videos;
     }
 
     @RequestMapping(value = "/video/index", method = RequestMethod.GET)
     public
     @ResponseBody
     List<SingleVideo> cacheIndexVideos() {
-        List<Video> latestVideos = commonDao.getResourcesByNewest(Video.class, 12);
-        for (Video video : latestVideos) {
-            int vid = video.getId();
-            long result = redisClient.sadd("videoindex", "video-" + vid);
-            videoCacheDao.insertSingleVideo(video);
-            System.out.println("insert result -> " + result);
-        }
-        Set<String> latestVideoKeys = redisClient.smembers("videoindex");
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
-        for (String vkey : latestVideoKeys) {
-            System.out.println("vkey -> " + vkey);
-            int vid = Integer.parseInt(vkey.split("-")[1]);
-            SingleVideo video = videoCacheDao.getSingleVideo(vid);
-            System.out.println("title -> " + video.getTitle());
-            result.add(video);
-        }
+        List latestVideos = commonDao.getResourcesByNewest(Video.class, 12);
+        String setkey = "videoindex";
+        String prefix = "video";
 
-        return result;
+        insertCacheResourcesSet(Video.class, latestVideos, setkey, prefix);
+
+        return extractResourcesFromCacheSet(Video.class, setkey, prefix);
     }
 
-    @RequestMapping(value = "/video/category/{categories}", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/video/category/{categories}", method = RequestMethod.GET)
     public
     @ResponseBody
     List<SingleVideo> getVideosByCategories(@PathVariable String categories) {
