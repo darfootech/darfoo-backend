@@ -61,14 +61,15 @@ public class CacheUtils {
         return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SET);
     }
 
-    public List cacheHottestResources(String type, Integer limit) {
+    public List cacheHottestResources(String type) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
+        int limit = commonDao.getResourceHottestLimit(resource);
         List resources = commonDao.getResourcesByHottest(resource, limit);
         String cachekey = String.format("%shottest", type);
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
 
-        return cacheDao.extractResourcesFromCache(resource, cachekey, CacheCollType.LIST);
+        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
     }
 
     public List cacheResourcesBySearch(String type, String searchContent) {

@@ -41,7 +41,7 @@ public class MusicCacheTests {
 
     @Test
     public void cacheHottestMusics() {
-        List<SingleMusic> musics = cacheUtils.cacheHottestResources("music", 5);
+        List<SingleMusic> musics = cacheUtils.cacheHottestResources("music");
         for (SingleMusic music : musics) {
             System.out.println(music);
         }

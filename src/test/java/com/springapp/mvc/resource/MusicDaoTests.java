@@ -154,7 +154,7 @@ public class MusicDaoTests {
      */
     @Test
     public void getMusicsByHottest() {
-        int number = 20;
+        int number = 5;
         List<Music> musics = commonDao.getResourcesByHottest(Music.class, number);
         System.out.println("---------返回" + musics.size() + "个视频---------");
         for (Music v : musics) {

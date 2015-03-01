@@ -8,6 +8,7 @@ import com.darfoo.backend.model.category.VideoCategory;
 import com.darfoo.backend.model.resource.*;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
@@ -32,6 +33,14 @@ public class CommonDao {
     @Autowired
     AuthorDao authorDao;
 
+    public int getResourceHottestLimit(Class resource) {
+        if (resource == Music.class) {
+            return 5;
+        } else {
+            return 0;
+        }
+    }
+
     public Criteria getCommonQueryCriteria(Class resource) {
         Criteria criteria = sessionFactory
                 .getCurrentSession()
@@ -39,7 +48,9 @@ public class CommonDao {
                 .setReadOnly(true);
 
         if (ifHasCategoryResource(resource)) {
-            criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+            //不设置fetchmode则截取部分结果的行为会发生在去重之前
+            criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+                    .setFetchMode("categories", FetchMode.SELECT);
         }
         return criteria;
     }
