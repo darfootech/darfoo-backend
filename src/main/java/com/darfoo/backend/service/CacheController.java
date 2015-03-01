@@ -112,7 +112,6 @@ public class CacheController {
         return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
     }
 
-
     @RequestMapping(value = "/{type}/category/{categories}", method = RequestMethod.GET)
     public
     @ResponseBody

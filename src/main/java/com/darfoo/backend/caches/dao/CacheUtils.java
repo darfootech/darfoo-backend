@@ -70,4 +70,28 @@ public class CacheUtils {
 
         return cacheDao.extractResourcesFromCache(resource, cachekey, CacheCollType.LIST);
     }
+
+    public List cacheResourcesBySearch(String type, String searchContent) {
+        String cachekey = String.format("%ssearch%s", type, searchContent);
+
+        if (type.equals("video")) {
+            String[] types = {"video", "tutorial"};
+
+            for (String innertype : types) {
+                Class resource = TypeClassMapping.typeClassMap.get(innertype);
+                List resources = cacheDao.getSearchResourcesWithAuthor(resource, searchContent);
+
+                cacheDao.insertResourcesIntoCache(resource, resources, cachekey, innertype, CacheCollType.LIST);
+            }
+        } else if (type.equals("music")) {
+            Class resource = TypeClassMapping.typeClassMap.get(type);
+            List resources = commonDao.getResourceBySearch(resource, searchContent);
+
+            cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
+        } else {
+            System.out.println("wired");
+        }
+
+        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
+    }
 }
