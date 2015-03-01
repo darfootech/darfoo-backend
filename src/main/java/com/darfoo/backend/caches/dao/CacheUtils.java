@@ -2,6 +2,7 @@ package com.darfoo.backend.caches.dao;
 
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
@@ -23,12 +24,13 @@ public class CacheUtils {
     AuthorDao authorDao;
     @Autowired
     CategoryDao categoryDao;
+    @Autowired
+    PaginationDao paginationDao;
 
     public Object cacheSingleResource(String type, Integer id) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         Object object = commonDao.getResourceById(resource, id);
         cacheDao.insertSingleResource(resource, object, type);
-
         return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), String.format("%s-%d", type, id));
     }
 
@@ -47,18 +49,25 @@ public class CacheUtils {
         }
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
-
         return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
     }
 
     public List cacheResourcesByCategories(String type, String categories) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
-
         String cachekey = String.format("%scategory%s", type, categories);
 
         List resources = categoryDao.getResourcesByCategories(resource, ServiceUtils.convertList2Array(cacheDao.parseResourceCategories(resource, categories)));
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SET);
         return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SET);
+    }
+
+    public List cacheResourcesByCategoriesByPage(String type, String categories, Integer page) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        String cachekey = String.format("%scategory%spage%d", type, categories, page);
+
+        List resources = paginationDao.getResourcesByCategoriesByPage(resource, ServiceUtils.convertList2Array(cacheDao.parseResourceCategories(resource, categories)), page);
+        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
+        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
     }
 
     public List cacheHottestResources(String type) {
@@ -68,31 +77,45 @@ public class CacheUtils {
         String cachekey = String.format("%shottest", type);
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
-
         return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
     }
 
-    public List cacheResourcesBySearch(String type, String searchContent) {
+    public List cacheResourcesBySearch(String type, String searchContent, Integer... pageArray) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
         String cachekey = String.format("%ssearch%s", type, searchContent);
 
         if (type.equals("video")) {
             String[] types = {"video", "tutorial"};
 
             for (String innertype : types) {
-                Class resource = TypeClassMapping.typeClassMap.get(innertype);
-                List resources = cacheDao.getSearchResourcesWithAuthor(resource, searchContent);
-
-                cacheDao.insertResourcesIntoCache(resource, resources, cachekey, innertype, CacheCollType.LIST);
+                Class innerresource = TypeClassMapping.typeClassMap.get(innertype);
+                List resources = cacheDao.getSearchResourcesWithAuthor(innerresource, searchContent);
+                cacheDao.insertResourcesIntoCache(innerresource, resources, cachekey, innertype, CacheCollType.LIST);
             }
         } else if (type.equals("music")) {
-            Class resource = TypeClassMapping.typeClassMap.get(type);
             List resources = commonDao.getResourceBySearch(resource, searchContent);
-
             cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
         } else {
             System.out.println("wired");
         }
 
-        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
+        if (pageArray.length == 0) {
+            return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
+        } else {
+            int page = pageArray[0];
+            int pageSize = paginationDao.getResourcePageSize(resource);
+            long start = (page - 1) * pageSize;
+            long end = page * pageSize - 1;
+            return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST, start, end);
+        }
+    }
+
+    public List cacheSidebarResources(String type, Integer id) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        List resources = commonDao.getSideBarResources(resource, id);
+        String cachekey = String.format("%ssidebar%d", type, id);
+
+        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
+        return cacheDao.extractResourcesFromCache(resource, cachekey, CacheCollType.LIST);
     }
 }
