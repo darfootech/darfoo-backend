@@ -54,10 +54,6 @@
             <mvc:mapping path="/**"/>
             <bean class="com.darfoo.backend.Interceptors.HotClickInterceptor"/>
         </mvc:interceptor>
-        <mvc:interceptor>
-            <mvc:mapping path="/**"/>
-            <bean class="com.darfoo.backend.Interceptors.CacheInterceptor"/>
-        </mvc:interceptor>
     </mvc:interceptors>
 
     <task:annotation-driven/>
