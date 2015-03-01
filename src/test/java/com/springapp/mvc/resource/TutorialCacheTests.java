@@ -1,6 +1,7 @@
 package com.springapp.mvc.resource;
 
 import com.darfoo.backend.caches.dao.CacheDao;
+import com.darfoo.backend.caches.dao.CacheUtils;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,11 +23,11 @@ import java.util.List;
 })
 public class TutorialCacheTests {
     @Autowired
-    CacheDao cacheDao;
+    CacheUtils cacheUtils;
 
     @Test
     public void cacheSingleTutorial() {
-        SingleVideo tutorial = (SingleVideo) new CacheDaoTests().cacheSingleResource("tutorial", 36);
+        SingleVideo tutorial = (SingleVideo) cacheUtils.cacheSingleResource("tutorial", 36);
         System.out.println(tutorial);
     }
 
@@ -34,7 +35,7 @@ public class TutorialCacheTests {
     public void cacheTutorialsByCategories() {
         String categories = "0-0-0-0";
 
-        List<SingleVideo> videos = new CacheDaoTests().cacheResourcesByCategories("tutorial", categories);
+        List<SingleVideo> videos = cacheUtils.cacheResourcesByCategories("tutorial", categories);
         for (SingleVideo video : videos) {
             System.out.println(video);
         }

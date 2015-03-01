@@ -2,6 +2,7 @@ package com.springapp.mvc.resource;
 
 import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.caches.dao.CacheDao;
+import com.darfoo.backend.caches.dao.CacheUtils;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.resource.Music;
@@ -32,18 +33,18 @@ import java.util.Set;
 })
 public class MusicCacheTests {
     @Autowired
-    CacheDao cacheDao;
+    CacheUtils cacheUtils;
 
     @Test
     public void cacheSingleMusic() {
-        SingleMusic music = (SingleMusic) new CacheDaoTests().cacheSingleResource("music", 39);
+        SingleMusic music = (SingleMusic) cacheUtils.cacheSingleResource("music", 39);
         System.out.println(music);
     }
 
     @Test
     public void cacheMusicsByCategories() {
         String categories = "1-0-0";
-        List<SingleMusic> musics = new CacheDaoTests().cacheResourcesByCategories("music", categories);
+        List<SingleMusic> musics = cacheUtils.cacheResourcesByCategories("music", categories);
         for (SingleMusic music : musics) {
             System.out.println(music);
         }
@@ -51,7 +52,7 @@ public class MusicCacheTests {
 
     @Test
     public void cacheHottestMusics() {
-        List<SingleMusic> musics = new CacheDaoTests().cacheHottestResources("music", 5);
+        List<SingleMusic> musics = cacheUtils.cacheHottestResources("music", 5);
         for (SingleMusic music : musics) {
             System.out.println(music);
         }

@@ -1,6 +1,7 @@
 package com.springapp.mvc.resource;
 
 import com.darfoo.backend.caches.dao.CacheDao;
+import com.darfoo.backend.caches.dao.CacheUtils;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
@@ -30,16 +31,18 @@ public class AuthorCacheTests {
     CommonDao commonDao;
     @Autowired
     CacheDao cacheDao;
+    @Autowired
+    CacheUtils cacheUtils;
 
     @Test
     public void cacheSingleAuthor() {
-        SingleAuthor author = (SingleAuthor) new CacheDaoTests().cacheSingleResource("author", 39);
+        SingleAuthor author = (SingleAuthor) cacheUtils.cacheSingleResource("author", 39);
         System.out.println(author);
     }
 
     @Test
     public void cacheIndexAuthors() {
-        List<SingleAuthor> authors = new CacheDaoTests().cacheIndexResources("author");
+        List<SingleAuthor> authors = cacheUtils.cacheIndexResources("author");
         for (SingleAuthor author : authors) {
             System.out.println(author);
         }

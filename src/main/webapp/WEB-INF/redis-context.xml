@@ -46,6 +46,7 @@
 
     <bean id="videoCacheDao" class="com.darfoo.backend.caches.dao.VideoCacheDao"/>
     <bean id="cacheDao" class="com.darfoo.backend.caches.dao.CacheDao"/>
+    <bean id="cacheUtils" class="com.darfoo.backend.caches.dao.CacheUtils"/>
 
     <bean id="cacheInsertProtocol" class="com.darfoo.backend.caches.cota.CacheProtocol"/>
 </beans>

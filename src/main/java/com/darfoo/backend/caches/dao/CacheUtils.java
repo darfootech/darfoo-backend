@@ -1,18 +1,12 @@
-package com.springapp.mvc.resource;
+package com.darfoo.backend.caches.dao;
 
-import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +14,7 @@ import java.util.List;
 /**
  * Created by zjh on 15-3-1.
  */
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({
-        "file:src/main/webapp/WEB-INF/pre-deal.xml",
-        "file:src/main/webapp/WEB-INF/redis-context.xml",
-        "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml"
-})
-public class CacheDaoTests {
+public class CacheUtils {
     @Autowired
     CommonDao commonDao;
     @Autowired
