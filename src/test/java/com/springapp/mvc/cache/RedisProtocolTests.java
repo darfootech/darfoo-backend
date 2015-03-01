@@ -44,7 +44,7 @@ public class RedisProtocolTests {
 
     @Test
     public void extractResourceFromCache() {
-        SingleVideo result = (SingleVideo) cacheDao.getSingleResource(SingleVideo.class, 35, "video");
+        SingleVideo result = (SingleVideo) cacheDao.getSingleResource(SingleVideo.class, "video-" + 81);
         try {
             for (Field field : SingleVideo.class.getDeclaredFields()) {
                 field.setAccessible(true);
@@ -63,7 +63,7 @@ public class RedisProtocolTests {
 
     @Test
     public void extractVideoResourceFromCache() {
-        SingleVideo result = (SingleVideo) cacheProtocol.extractResourceFromCache(SingleVideo.class, 35, "video");
+        SingleVideo result = (SingleVideo) cacheProtocol.extractResourceFromCache(SingleVideo.class, "video-" + 81);
         try {
             for (Field field : SingleVideo.class.getDeclaredFields()) {
                 field.setAccessible(true);
@@ -82,7 +82,7 @@ public class RedisProtocolTests {
 
     @Test
     public void extractTutorialResourceFromCache() {
-        SingleVideo result = (SingleVideo) cacheProtocol.extractResourceFromCache(SingleVideo.class, 30, "tutorial");
+        SingleVideo result = (SingleVideo) cacheProtocol.extractResourceFromCache(SingleVideo.class, "tutorial-" + 30);
         try {
             for (Field field : SingleVideo.class.getDeclaredFields()) {
                 field.setAccessible(true);
@@ -101,7 +101,7 @@ public class RedisProtocolTests {
 
     @Test
     public void extractAuthorResourceFromCache() {
-        SingleAuthor result = (SingleAuthor) cacheProtocol.extractResourceFromCache(SingleAuthor.class, 15, "author");
+        SingleAuthor result = (SingleAuthor) cacheProtocol.extractResourceFromCache(SingleAuthor.class, "author-" + 13);
         try {
             for (Field field : SingleAuthor.class.getDeclaredFields()) {
                 field.setAccessible(true);
@@ -120,7 +120,7 @@ public class RedisProtocolTests {
 
     @Test
     public void extractMusicResourceFromCache() {
-        SingleMusic result = (SingleMusic) cacheProtocol.extractResourceFromCache(SingleMusic.class, 30, "music");
+        SingleMusic result = (SingleMusic) cacheProtocol.extractResourceFromCache(SingleMusic.class, "music-" + 30);
         try {
             for (Field field : SingleMusic.class.getDeclaredFields()) {
                 field.setAccessible(true);

@@ -1,10 +1,12 @@
 package com.springapp.mvc.resource;
 
 import com.darfoo.backend.caches.client.CommonRedisClient;
-import com.darfoo.backend.caches.dao.MusicCacheDao;
+import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.service.cota.CacheCollType;
+import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
 import com.darfoo.backend.utils.ServiceUtils;
@@ -30,93 +32,28 @@ import java.util.Set;
 })
 public class MusicCacheTests {
     @Autowired
-    MusicCacheDao musicCacheDao;
-    @Autowired
-    CommonRedisClient redisClient;
-    @Autowired
-    CommonDao commonDao;
-    @Autowired
-    CategoryDao categoryDao;
-
-    MusicCates musicCates = new MusicCates();
+    CacheDao cacheDao;
 
     @Test
-    public void testDeleteMusic() {
-        String key = "music-1";
-        redisClient.delete(key);
+    public void cacheSingleMusic() {
+        SingleMusic music = (SingleMusic) new CacheDaoTests().cacheSingleResource("music", 39);
+        System.out.println(music);
     }
 
     @Test
-    public void insertMusic() {
-        Music music = (Music) commonDao.getResourceById(Music.class, 1);
-        System.out.println(musicCacheDao.insertSingleMusic(music));
-    }
-
-    @Test
-    public void getSingleMusic() {
-        Integer id = 1;
-        SingleMusic music = musicCacheDao.getSingleMusic(id);
-        System.out.println(music.getTitle());
-    }
-
-    @Test
-    public void cacheCategory() {
+    public void cacheMusicsByCategories() {
         String categories = "1-0-0";
-        String[] requestCategories = categories.split("-");
-        List<String> targetCategories = new ArrayList<String>();
-        if (!requestCategories[0].equals("0")) {
-            String beatCate = musicCates.getBeatCategory().get(requestCategories[0]);
-            targetCategories.add(beatCate);
+        List<SingleMusic> musics = new CacheDaoTests().cacheResourcesByCategories("music", categories);
+        for (SingleMusic music : musics) {
+            System.out.println(music);
         }
-        if (!requestCategories[1].equals("0")) {
-            String styleCate = musicCates.getStyleCategory().get(requestCategories[1]);
-            targetCategories.add(styleCate);
-        }
-        if (!requestCategories[2].equals("0")) {
-            String letterCate = requestCategories[2];
-            targetCategories.add(letterCate);
-        }
-
-        List<Music> musics = categoryDao.getResourcesByCategories(Music.class, ServiceUtils.convertList2Array(targetCategories));
-        List<SingleMusic> result = new ArrayList<SingleMusic>();
-        for (Music music : musics) {
-            int mid = music.getId();
-            long status = redisClient.sadd("musiccategory" + categories, "music-" + mid);
-            musicCacheDao.insertSingleMusic(music);
-            System.out.println("insert result -> " + status);
-        }
-
-        Set<String> categoryMusicKeys = redisClient.smembers("musiccategory" + categories);
-        for (String vkey : categoryMusicKeys) {
-            System.out.println("vkey -> " + vkey);
-            int mid = Integer.parseInt(vkey.split("-")[1]);
-            SingleMusic music = musicCacheDao.getSingleMusic(mid);
-            System.out.println("title -> " + music.getTitle());
-            result.add(music);
-        }
-
-        System.out.println(result.size());
     }
 
     @Test
     public void cacheHottestMusics() {
-        List<Music> musics = commonDao.getResourcesByHottest(Music.class, 5);
-        List<SingleMusic> result = new ArrayList<SingleMusic>();
-        for (Music music : musics) {
-            int mid = music.getId();
-            long status = redisClient.sadd("musichottest", "music-" + mid);
-            musicCacheDao.insertSingleMusic(music);
-            System.out.println("insert result -> " + status);
+        List<SingleMusic> musics = new CacheDaoTests().cacheHottestResources("music", 5);
+        for (SingleMusic music : musics) {
+            System.out.println(music);
         }
-
-        Set<String> hottestMusicKeys = redisClient.smembers("musichottest");
-        for (String vkey : hottestMusicKeys) {
-            System.out.println("vkey -> " + vkey);
-            int mid = Integer.parseInt(vkey.split("-")[1]);
-            SingleMusic music = musicCacheDao.getSingleMusic(mid);
-            System.out.println("title -> " + music.getTitle());
-            result.add(music);
-        }
-        System.out.println(result.size());
     }
 }
