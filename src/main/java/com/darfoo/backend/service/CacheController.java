@@ -54,21 +54,20 @@ public class CacheController {
         return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), String.format("%s-%d", type, id));
     }
 
-
-
     @RequestMapping(value = "/video/recommend", method = RequestMethod.GET)
     public
     @ResponseBody
     List cacheRecmmendVideos() {
         String cachekey = "recommend";
-        String videoPrefix = String.format("%svideo", cachekey);
-        String tutorialPrefix = String.format("%stutorial", cachekey);
 
-        List recommendVideos = recommendDao.getRecommendResources(Video.class);
-        List recommendTutorials = recommendDao.getRecommendResources(Tutorial.class);
+        String[] types = {"video", "tutorial"};
 
-        cacheDao.insertResourcesIntoCache(Video.class, recommendVideos, videoPrefix, videoPrefix, CacheCollType.SET);
-        cacheDao.insertResourcesIntoCache(Tutorial.class, recommendTutorials, tutorialPrefix, tutorialPrefix, CacheCollType.SET);
+        for (String type : types) {
+            Class resource = TypeClassMapping.typeClassMap.get(type);
+
+            List recommendResources = recommendDao.getRecommendResources(resource);
+            cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, type, CacheCollType.SET);
+        }
 
         return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.SET);
     }
@@ -221,11 +220,14 @@ public class CacheController {
         String cachekey = String.format("%ssearch%s", type, searchContent);
 
         if (type.equals("video")) {
-            List videos = cacheDao.getSearchResourcesWithAuthor(Video.class, searchContent);
-            List tutorials = cacheDao.getSearchResourcesWithAuthor(Tutorial.class, searchContent);
+            String[] types = {"video", "tutorial"};
 
-            cacheDao.insertResourcesIntoCache(Video.class, videos, cachekey, "video", CacheCollType.LIST);
-            cacheDao.insertResourcesIntoCache(Tutorial.class, tutorials, cachekey, "tutorial", CacheCollType.LIST);
+            for (String innertype : types) {
+                Class resource = TypeClassMapping.typeClassMap.get(innertype);
+                List resources = cacheDao.getSearchResourcesWithAuthor(resource, searchContent);
+
+                cacheDao.insertResourcesIntoCache(resource, resources, cachekey, innertype, CacheCollType.LIST);
+            }
         } else if (type.equals("music")) {
             Class resource = TypeClassMapping.typeClassMap.get(type);
             List resources = commonDao.getResourceBySearch(resource, searchContent);
@@ -253,11 +255,14 @@ public class CacheController {
         long end = page * pageSize - 1;
 
         if (type.equals("video")) {
-            List videos = cacheDao.getSearchResourcesWithAuthor(Video.class, searchContent);
-            List tutorials = cacheDao.getSearchResourcesWithAuthor(Tutorial.class, searchContent);
+            String[] types = {"video", "tutorial"};
 
-            cacheDao.insertResourcesIntoCache(Video.class, videos, cachekey, "video", CacheCollType.LIST);
-            cacheDao.insertResourcesIntoCache(Tutorial.class, tutorials, cachekey, "tutorial", CacheCollType.LIST);
+            for (String innertype : types) {
+                Class innerresource = TypeClassMapping.typeClassMap.get(innertype);
+                List resources = cacheDao.getSearchResourcesWithAuthor(innerresource, searchContent);
+
+                cacheDao.insertResourcesIntoCache(innerresource, resources, cachekey, innertype, CacheCollType.LIST);
+            }
         } else if (type.equals("music")) {
             List resources = commonDao.getResourceBySearch(resource, searchContent);
             cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
