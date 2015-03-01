@@ -90,7 +90,8 @@ public class CacheUtils {
             cachekey = String.format("%ssearch%s", type, searchContent);
         } else {
             int page = pageArray[0];
-            cachekey = String.format("%ssearch%spage%d", type, searchContent, page);        }
+            cachekey = String.format("%ssearch%spage%d", type, searchContent, page);
+        }
 
         if (type.equals("video")) {
             String[] types = {"video", "tutorial"};
