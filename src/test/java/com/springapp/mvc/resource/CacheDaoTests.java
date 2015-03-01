@@ -1,11 +1,13 @@
 package com.springapp.mvc.resource;
 
 import com.darfoo.backend.caches.dao.CacheDao;
+import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
+import com.darfoo.backend.utils.ServiceUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,8 @@ public class CacheDaoTests {
     CacheDao cacheDao;
     @Autowired
     AuthorDao authorDao;
+    @Autowired
+    CategoryDao categoryDao;
 
     public Object cacheSingleResource(String type, Integer id) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
@@ -58,5 +62,15 @@ public class CacheDaoTests {
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
 
         return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
+    }
+
+    public List cacheResourcesByCategories(String type, String categories) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+
+        String cachekey = String.format("%scategory%s", type, categories);
+
+        List resources = categoryDao.getResourcesByCategories(resource, ServiceUtils.convertList2Array(cacheDao.parseResourceCategories(resource, categories)));
+        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SET);
+        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SET);
     }
 }

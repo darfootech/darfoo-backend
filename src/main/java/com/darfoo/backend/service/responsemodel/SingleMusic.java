@@ -60,4 +60,15 @@ public class SingleMusic {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    @Override
+    public String toString() {
+        return "SingleMusic{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", authorname='" + authorname + '\'' +
+                ", music_url='" + music_url + '\'' +
+                ", update_timestamp=" + update_timestamp +
+                '}';
+    }
 }

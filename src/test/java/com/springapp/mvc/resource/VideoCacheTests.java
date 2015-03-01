@@ -1,24 +1,22 @@
 package com.springapp.mvc.resource;
 
-import com.darfoo.backend.caches.client.CommonRedisClient;
-import com.darfoo.backend.caches.dao.MusicCacheDao;
+import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
-import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.service.cota.CacheCollType;
+import com.darfoo.backend.service.cota.TypeClassMapping;
+import com.darfoo.backend.service.responsemodel.SingleMusic;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
-import com.darfoo.backend.service.responsemodel.VideoCates;
-import com.darfoo.backend.utils.ServiceUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by zjh on 14-12-17.
@@ -34,116 +32,71 @@ public class VideoCacheTests {
     @Autowired
     VideoCacheDao videoCacheDao;
     @Autowired
-    CommonRedisClient redisClient;
-    @Autowired
     CommonDao commonDao;
     @Autowired
-    CategoryDao categoryDao;
+    CacheDao cacheDao;
     @Autowired
-    VideoCates videoCates;
+    RecommendDao recommendDao;
 
+    @Test
+    public void cacheSingleVideo() {
+        SingleVideo video = (SingleVideo) new CacheDaoTests().cacheSingleResource("video", 81);
+        System.out.println(video);
+    }
 
     @Test
     public void cacheIndexVideos() {
-        List<Video> latestVideos = commonDao.getResourcesByNewest(Video.class, 7);
-        for (Video video : latestVideos) {
-            int vid = video.getId();
-            long result = redisClient.sadd("videoindex", "video-" + vid);
-            videoCacheDao.insertSingleVideo(video);
-            System.out.println("insert result -> " + result);
+        List<SingleVideo> videos = new CacheDaoTests().cacheIndexResources("video");
+        for (SingleVideo video : videos) {
+            System.out.println(video.toString());
         }
     }
 
     @Test
-    public void getIndexVideos() {
-        Set<String> latestVideos = redisClient.smembers("videoindex");
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
-        for (String vkey : latestVideos) {
-            System.out.println("vkey -> " + vkey);
-            int vid = Integer.parseInt(vkey.split("-")[1]);
-            SingleVideo video = videoCacheDao.getSingleVideo(vid);
-            System.out.println("title -> " + video.getTitle());
-            result.add(video);
+    public void cacheRecommendVideos() {
+        String cachekey = "recommend";
+
+        String[] types = {"video", "tutorial"};
+
+        for (String type : types) {
+            Class resource = TypeClassMapping.typeClassMap.get(type);
+
+            List recommendResources = recommendDao.getRecommendResources(resource);
+            cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, type, CacheCollType.SET);
         }
 
-        System.out.println(result.size());
+        List<SingleVideo> videos = cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.SET);
+
+        for (SingleVideo video : videos) {
+            System.out.println(video.toString());
+        }
     }
 
     @Test
-    public void getRecommendVideos() {
-        Set<String> recommendVideos = redisClient.smembers("videorecommend");
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
-        for (String vkey : recommendVideos) {
-            System.out.println("vkey -> " + vkey);
-            int vid = Integer.parseInt(vkey.split("-")[1]);
-            SingleVideo video = videoCacheDao.getSingleVideo(vid);
-            System.out.println("title -> " + video.getTitle());
-            result.add(video);
-        }
-
-        System.out.println(result.size());
-    }
-
-    @Test
-    public void cacheCategory() {
+    public void cacheVideoByCategories() {
         String categories = "0-0-0-0";
-        String[] requestCategories = categories.split("-");
-        List<String> targetCategories = new ArrayList<String>();
-        if (!requestCategories[0].equals("0")) {
-            String speedCate = videoCates.getSpeedCategory().get(requestCategories[0]);
-            targetCategories.add(speedCate);
-        }
-        if (!requestCategories[1].equals("0")) {
-            String difficultyCate = videoCates.getDifficultyCategory().get(requestCategories[1]);
-            targetCategories.add(difficultyCate);
-        }
-        if (!requestCategories[2].equals("0")) {
-            String styleCate = videoCates.getStyleCategory().get(requestCategories[2]);
-            targetCategories.add(styleCate);
-        }
-        if (!requestCategories[3].equals("0")) {
-            String letterCate = requestCategories[3];
-            targetCategories.add(letterCate);
-        }
 
-        //System.out.println(targetCategories.toString());
-
-        List<Video> targetVideos = categoryDao.getResourcesByCategories(Video.class, ServiceUtils.convertList2Array(targetCategories));
-        for (Video video : targetVideos) {
-            int vid = video.getId();
-            long result = redisClient.sadd("videocategory" + categories, "video-" + vid);
-            videoCacheDao.insertSingleVideo(video);
-            System.out.println("insert result -> " + result);
+        List<SingleVideo> videos = new CacheDaoTests().cacheResourcesByCategories("video", categories);
+        for (SingleVideo video : videos) {
+            System.out.println(video);
         }
     }
 
     @Test
-    public void getCategory() {
-        String categories = "0-0-0-0";
-        Set<String> categoryVideoKeys = redisClient.smembers("videocategory" + categories);
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
-        for (String vkey : categoryVideoKeys) {
-            System.out.println("vkey -> " + vkey);
-            int vid = Integer.parseInt(vkey.split("-")[1]);
-            SingleVideo video = videoCacheDao.getSingleVideo(vid);
-            System.out.println("title -> " + video.getTitle());
-            result.add(video);
-        }
-
-        System.out.println(result.size());
-    }
-
-    @Test
-    public void cacheAndGetMusic() {
-        int id = 1;
+    public void cacheVideoMusic() {
+        int id = 81;
+        String type = "music";
+        Class resource = TypeClassMapping.typeClassMap.get(type);
         Music targetMusic = ((Video) commonDao.getResourceById(Video.class, id)).getMusic();
         if (targetMusic != null) {
             int music_id = targetMusic.getId();
             videoCacheDao.insertMusic(id, music_id);
-            Music music = (Music) commonDao.getResourceById(Music.class, music_id);
-            System.out.println(musicCacheDao.insertSingleMusic(music));
+            Object object = commonDao.getResourceById(resource, music_id);
+            cacheDao.insertSingleResource(resource, object, type);
+            SingleMusic music = (SingleMusic) cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), type);
+            System.out.println(music);
         } else {
-            System.out.println("没有关联伴奏");
+            System.out.println("there is no music attach to the target video");
         }
     }
 }

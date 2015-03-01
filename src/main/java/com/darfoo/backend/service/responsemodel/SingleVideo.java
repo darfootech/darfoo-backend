@@ -83,4 +83,17 @@ public class SingleVideo {
     public void setType(Integer type) {
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return "SingleVideo{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", authorname='" + authorname + '\'' +
+                ", video_url='" + video_url + '\'' +
+                ", image_url='" + image_url + '\'' +
+                ", type=" + type +
+                ", update_timestamp=" + update_timestamp +
+                '}';
+    }
 }

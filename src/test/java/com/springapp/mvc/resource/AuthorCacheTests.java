@@ -34,14 +34,14 @@ public class AuthorCacheTests {
     @Test
     public void cacheSingleAuthor() {
         SingleAuthor author = (SingleAuthor) new CacheDaoTests().cacheSingleResource("author", 39);
-        System.out.println(author.toString());
+        System.out.println(author);
     }
 
     @Test
     public void cacheIndexAuthors() {
         List<SingleAuthor> authors = new CacheDaoTests().cacheIndexResources("author");
         for (SingleAuthor author : authors) {
-            System.out.println(author.toString());
+            System.out.println(author);
         }
     }
 
@@ -64,7 +64,7 @@ public class AuthorCacheTests {
 
         List<SingleVideo> videos = cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.SET);
         for (SingleVideo video : videos) {
-            System.out.println(video.toString());
+            System.out.println(video);
         }
     }
 }

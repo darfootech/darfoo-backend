@@ -57,7 +57,7 @@ public class CacheController {
     @RequestMapping(value = "/video/recommend", method = RequestMethod.GET)
     public
     @ResponseBody
-    List cacheRecmmendVideos() {
+    List cacheRecommendVideos() {
         String cachekey = "recommend";
 
         String[] types = {"video", "tutorial"};
