@@ -108,7 +108,7 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String> {
     }
 
     /**
-     * 像某一个key指向的list中插入数据
+     * 向某一个key指向的list尾部中插入数据
      *
      * @param key
      * @param value
@@ -116,6 +116,17 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String> {
      */
     public Long lpush(String key, String value) {
         return redisTemplate.opsForList().leftPush(key, value);
+    }
+
+    /**
+     * 向某一个key指向的list头部中插入数据
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    public Long rpush(String key, String value) {
+        return redisTemplate.opsForList().rightPush(key, value);
     }
 
     /**

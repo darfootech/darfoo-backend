@@ -50,7 +50,7 @@ public class CacheDao {
             if (type == CacheCollType.SET) {
                 status = redisClient.sadd(cachekey, String.format("%s-%d", prefix, id));
             } else if (type == CacheCollType.LIST) {
-                status = redisClient.lpush(cachekey, String.format("%s-%d", prefix, id));
+                status = redisClient.rpush(cachekey, String.format("%s-%d", prefix, id));
             } else {
                 System.out.println("wired");
             }
