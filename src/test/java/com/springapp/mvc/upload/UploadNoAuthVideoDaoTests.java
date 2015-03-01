@@ -4,7 +4,7 @@ package com.springapp.mvc.upload;
  * Created by zjh on 15-1-17.
  */
 
-import com.darfoo.backend.dao.*;
+import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.upload.UploadNoAuthVideo;
 import org.junit.Assert;

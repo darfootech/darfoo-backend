@@ -1,25 +1,14 @@
 package com.springapp.mvc.resource;
 
-import com.darfoo.backend.caches.client.CommonRedisClient;
-import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.caches.dao.CacheUtils;
-import com.darfoo.backend.dao.cota.CategoryDao;
-import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.service.cota.CacheCollType;
-import com.darfoo.backend.service.cota.TypeClassMapping;
-import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
-import com.darfoo.backend.utils.ServiceUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by zjh on 14-12-18.

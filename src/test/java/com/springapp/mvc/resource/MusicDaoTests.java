@@ -1,6 +1,6 @@
 package com.springapp.mvc.resource;
 
-import com.darfoo.backend.dao.*;
+import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;

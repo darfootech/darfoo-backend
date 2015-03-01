@@ -1,6 +1,6 @@
 package com.springapp.mvc.resource;
 
-import com.darfoo.backend.dao.*;
+import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.*;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.model.resource.Music;

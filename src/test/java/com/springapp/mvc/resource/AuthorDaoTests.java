@@ -1,12 +1,10 @@
 package com.springapp.mvc.resource;
 
-import com.darfoo.backend.dao.*;
+import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.model.*;
 import com.darfoo.backend.model.resource.Author;
-import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
@@ -56,7 +54,7 @@ public class AuthorDaoTests {
     @Test
     public void insertAuthorResource() {
         HashMap<String, String> insertcontents = new HashMap<String, String>();
-        String authorName = "周杰伦" + System.currentTimeMillis() ;
+        String authorName = "周杰伦" + System.currentTimeMillis();
         String imagekey = "imagekey-" + System.currentTimeMillis() + ".jpg";
 
         insertcontents.put("name", authorName);
@@ -75,7 +73,7 @@ public class AuthorDaoTests {
     @Test
     public void updateAuthorById() {
         HashMap<String, String> updatecontents = new HashMap<String, String>();
-        String authorName = "滨崎步" + System.currentTimeMillis() ;
+        String authorName = "滨崎步" + System.currentTimeMillis();
         String imagekey = "imagekey-" + System.currentTimeMillis() + ".jpg";
 
         Integer id = 39;

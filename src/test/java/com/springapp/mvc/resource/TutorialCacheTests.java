@@ -1,6 +1,5 @@
 package com.springapp.mvc.resource;
 
-import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.caches.dao.CacheUtils;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import org.junit.Test;
