@@ -1,6 +1,6 @@
 package com.darfoo.backend.Interceptors;
 
-import com.darfoo.backend.dao.*;
+import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.model.resource.Author;

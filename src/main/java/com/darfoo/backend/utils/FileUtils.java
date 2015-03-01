@@ -1,7 +1,6 @@
 package com.darfoo.backend.utils;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by zjh on 14-11-29.

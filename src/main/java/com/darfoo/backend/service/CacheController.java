@@ -2,17 +2,17 @@ package com.darfoo.backend.service;
 
 import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
-import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
-import com.darfoo.backend.service.responsemodel.*;
+import com.darfoo.backend.service.responsemodel.SingleMusic;
+import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by zjh on 14-12-18.
@@ -47,7 +49,9 @@ public class CacheController {
     CategoryDao categoryDao;
 
     @RequestMapping(value = "/{type}/{id}", method = RequestMethod.GET)
-    public @ResponseBody Object getSingleResourceFromCache(@PathVariable String type, @PathVariable Integer id) {
+    public
+    @ResponseBody
+    Object getSingleResourceFromCache(@PathVariable String type, @PathVariable Integer id) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         Object object = commonDao.getResourceById(resource, id);
         cacheDao.insertSingleResource(resource, object, type);

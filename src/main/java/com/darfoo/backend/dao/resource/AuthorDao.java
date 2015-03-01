@@ -3,9 +3,9 @@ package com.darfoo.backend.dao.resource;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.model.resource.Author;
-import org.hibernate.*;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,9 +26,9 @@ public class AuthorDao {
 
     private List extractAndReturnAuthorList(List<Object[]> idCntList) {
         List result = new ArrayList();
-        for (Object[] rows : idCntList){
-            int authorid = (Integer)rows[1];
-            System.out.println(authorid + " -> " + ((BigInteger)rows[0]).intValue());
+        for (Object[] rows : idCntList) {
+            int authorid = (Integer) rows[1];
+            System.out.println(authorid + " -> " + ((BigInteger) rows[0]).intValue());
             Object object = commonDao.getResourceById(Author.class, authorid);
             result.add(object);
         }

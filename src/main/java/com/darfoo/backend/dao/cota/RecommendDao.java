@@ -1,14 +1,12 @@
 package com.darfoo.backend.dao.cota;
 
 import com.darfoo.backend.dao.CRUDEvent;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -2,15 +2,12 @@ package com.darfoo.backend.dao.cota;
 
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Video;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +24,7 @@ public class AccompanyDao {
 
     /**
      * 为资源添加一个对应的伴奏music(插入操作用更新替代)
+     *
      * @param resource
      * @param id
      * @param musicid
@@ -59,6 +57,7 @@ public class AccompanyDao {
 
     /**
      * 删除资源中的music(就是将MUSIC_ID字段设为null)
+     *
      * @param resource
      * @param id
      * @return
@@ -88,6 +87,7 @@ public class AccompanyDao {
 
     /**
      * 根据musicid来获得不与之关联的所有资源记录
+     *
      * @param resource
      * @param musicid
      * @return
@@ -96,9 +96,9 @@ public class AccompanyDao {
         List result = new ArrayList();
         try {
             return commonDao.getCommonQueryCriteria(resource)
-                .addOrder(Order.desc("id"))
-                .add(Restrictions.or(Restrictions.not(Restrictions.eq("music.id", musicid)), Restrictions.isNull("music.id")))
-                .list();
+                    .addOrder(Order.desc("id"))
+                    .add(Restrictions.or(Restrictions.not(Restrictions.eq("music.id", musicid)), Restrictions.isNull("music.id")))
+                    .list();
         } catch (Exception e) {
             e.printStackTrace();
         }

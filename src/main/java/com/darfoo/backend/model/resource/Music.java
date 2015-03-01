@@ -7,8 +7,6 @@ import com.darfoo.backend.model.cota.ModelInsert;
 import com.darfoo.backend.model.cota.ModelUpdate;
 import com.darfoo.backend.model.cota.ModelUpload;
 import com.darfoo.backend.model.cota.ModelUploadEnum;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
 import java.io.Serializable;

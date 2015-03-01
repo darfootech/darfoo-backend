@@ -17,7 +17,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -59,8 +58,8 @@ public class RecommendController {
         for (int i = 0; i < idArray.length; i++) {
             int status;
             if (operation.equals("add")) {
-               status = recommendDao.doRecommendResource(resource, Integer.parseInt(idArray[i]));
-            } else if (operation.equals("del")){
+                status = recommendDao.doRecommendResource(resource, Integer.parseInt(idArray[i]));
+            } else if (operation.equals("del")) {
                 status = recommendDao.unRecommendResource(resource, Integer.parseInt(idArray[i]));
             } else {
                 status = CRUDEvent.UPDATE_FAIL;

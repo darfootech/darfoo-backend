@@ -12,6 +12,7 @@ public class Image implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
+
     @Column(name = "IMAGE_KEY", unique = true, nullable = false, columnDefinition = "varchar(255) not null")
     String image_key;
 

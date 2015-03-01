@@ -3,7 +3,6 @@ package com.darfoo.backend.dao.cota;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.category.VideoCategory;
-import com.darfoo.backend.model.resource.Video;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -85,6 +84,7 @@ public class CategoryDao {
      * 根据类别返回满足类别筛选条件的所有资源记录
      * (较快-简单—欢快-A) -> {"较快","简单","欢快","A"}
      * 一个类别属性没有选择就表示只要考虑剩下的类别属性来筛选资源记录
+     *
      * @param resource
      * @param categories
      * @return

@@ -1,6 +1,6 @@
 package com.darfoo.backend.service.admin;
 
-import com.darfoo.backend.dao.*;
+import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -21,7 +22,9 @@ public class DeleteController {
     CommonDao commonDao;
 
     @RequestMapping(value = "admin/{type}/delete", method = RequestMethod.POST)
-    public @ResponseBody Integer deleteResource(@PathVariable String type, HttpServletRequest request) {
+    public
+    @ResponseBody
+    Integer deleteResource(@PathVariable String type, HttpServletRequest request) {
         Integer id = Integer.parseInt(request.getParameter("id"));
         String status = CRUDEvent.getResponse(commonDao.deleteResourceById(TypeClassMapping.typeClassMap.get(type), id));
         if (status.equals("DELETE_SUCCESS")) {

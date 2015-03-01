@@ -2,7 +2,6 @@ package com.darfoo.backend.dao;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.Version;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;

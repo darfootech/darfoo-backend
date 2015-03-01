@@ -69,7 +69,7 @@ public class ConnectController {
             int status;
             if (operation.equals("add")) {
                 status = accompanyDao.updateResourceMusic(resource, Integer.parseInt(idArray[i]), currentmusicid);
-            } else if (operation.equals("del")){
+            } else if (operation.equals("del")) {
                 status = accompanyDao.deleteMusicFromResource(resource, Integer.parseInt(idArray[i]));
             } else {
                 status = CRUDEvent.UPDATE_FAIL;

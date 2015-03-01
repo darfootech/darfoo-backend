@@ -24,11 +24,12 @@ public class MusicController {
 
     //视频资源需要关联伴奏 通过ajax获取所有伴奏数据 在后台界面上选择
     @RequestMapping(value = "/all/service", method = RequestMethod.GET)
-    public @ResponseBody
-    List<HashMap<String, Object>> getAllMusicService(){
+    public
+    @ResponseBody
+    List<HashMap<String, Object>> getAllMusicService() {
         List<Music> musics = commonDao.getAllResource(Music.class);
         List<HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
-        for (Music music : musics){
+        for (Music music : musics) {
             HashMap<String, Object> item = new HashMap<String, Object>();
             item.put("word", music.getTitle() + "-" + music.getAuthorname() + "-" + music.getId());
             result.add(item);

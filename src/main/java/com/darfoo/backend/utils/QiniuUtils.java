@@ -3,8 +3,6 @@ package com.darfoo.backend.utils;
 import com.qiniu.api.auth.AuthException;
 import com.qiniu.api.auth.digest.Mac;
 import com.qiniu.api.config.Config;
-import com.qiniu.api.io.IoApi;
-import com.qiniu.api.io.PutExtra;
 import com.qiniu.api.io.PutRet;
 import com.qiniu.api.resumableio.ResumeableIoApi;
 import com.qiniu.api.rs.GetPolicy;

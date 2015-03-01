@@ -499,6 +499,7 @@ public class CommonDao {
 
     /**
      * 根据某一个字段的值来判断是否已经有资源占用了这个字段的值
+     *
      * @param resource
      * @param field
      * @param value
@@ -518,6 +519,7 @@ public class CommonDao {
 
     /**
      * 根据字段的值来判断是否已经有资源占用了这个字段的值
+     *
      * @param resource
      * @param conditions
      * @return

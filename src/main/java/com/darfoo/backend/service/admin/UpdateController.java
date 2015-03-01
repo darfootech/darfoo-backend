@@ -2,9 +2,12 @@ package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.resource.*;
+import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.model.cota.ModelUpdate;
-import com.darfoo.backend.model.resource.*;
+import com.darfoo.backend.model.resource.Image;
+import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.model.resource.Tutorial;
+import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +72,9 @@ public class UpdateController {
     }
 
     @RequestMapping(value = "/admin/{type}/update", method = RequestMethod.POST)
-    public @ResponseBody Integer updateResource(@PathVariable String type, HttpServletRequest request) {
+    public
+    @ResponseBody
+    Integer updateResource(@PathVariable String type, HttpServletRequest request) {
         return commonUpdateResource(TypeClassMapping.typeClassMap.get(type), request);
     }
 
