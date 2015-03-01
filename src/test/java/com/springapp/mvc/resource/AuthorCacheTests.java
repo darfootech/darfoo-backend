@@ -2,6 +2,7 @@ package com.springapp.mvc.resource;
 
 import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.caches.dao.AuthorCacheDao;
+import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.caches.dao.TutorialCacheDao;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
@@ -9,6 +10,7 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import org.junit.Test;
@@ -34,52 +36,21 @@ import java.util.Set;
 })
 public class AuthorCacheTests {
     @Autowired
-    AuthorDao authorDao;
-    @Autowired
-    AuthorCacheDao authorCacheDao;
-    @Autowired
     VideoCacheDao videoCacheDao;
     @Autowired
-    TutorialCacheDao tutorialCacheDao;
-    @Autowired
     CommonRedisClient redisClient;
-    @Autowired
-    CommonDao commonDao;
 
     @Test
     public void cacheSingleAuthor() {
-        Author author = (Author) commonDao.getResourceById(Author.class, 1);
-        System.out.println(authorCacheDao.insertSingleAuthor(author));
-    }
-
-    @Test
-    public void getSingleAuthor() {
-        Integer id = 1;
-        SingleAuthor author = authorCacheDao.getSingleAuthor(id);
-        System.out.println(author.getName());
+        SingleAuthor author = (SingleAuthor) new CacheDaoTests().cacheSingleResource("author", 39);
     }
 
     @Test
     public void cacheIndexAuthors() {
-        List<Author> authors = commonDao.getAllResource(Author.class);
-        for (Author author : authors) {
-            int id = author.getId();
-            long result = redisClient.sadd("authorindex", "author-" + id);
-            authorCacheDao.insertSingleAuthor(author);
-            System.out.println("insert result -> " + result);
+        List<SingleAuthor> authors = new CacheDaoTests().cacheIndexResources("author");
+        for (SingleAuthor author : authors) {
+            System.out.println(author.toString());
         }
-
-        Set<String> indexAuthorKeys = redisClient.smembers("authorindex");
-        List<SingleAuthor> result = new ArrayList<SingleAuthor>();
-        for (String key : indexAuthorKeys) {
-            System.out.println("key -> " + key);
-            int id = Integer.parseInt(key.split("-")[1]);
-            SingleAuthor author = authorCacheDao.getSingleAuthor(id);
-            System.out.println("name -> " + author.getName());
-            result.add(author);
-        }
-
-        System.out.println(result.size());
     }
 
     @Test

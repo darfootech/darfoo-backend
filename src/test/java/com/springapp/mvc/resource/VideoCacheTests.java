@@ -34,34 +34,14 @@ public class VideoCacheTests {
     @Autowired
     VideoCacheDao videoCacheDao;
     @Autowired
-    MusicCacheDao musicCacheDao;
-    @Autowired
     CommonRedisClient redisClient;
     @Autowired
     CommonDao commonDao;
     @Autowired
     CategoryDao categoryDao;
+    @Autowired
+    VideoCates videoCates;
 
-    VideoCates videoCates = new VideoCates();
-
-    @Test
-    public void testDeleteVideo() {
-        String key = "video-1";
-        redisClient.delete(key);
-    }
-
-    @Test
-    public void insertVideo() {
-        Video video = (Video) commonDao.getResourceById(Video.class, 1);
-        System.out.println(videoCacheDao.insertSingleVideo(video));
-    }
-
-    @Test
-    public void getSingleVideo() {
-        Integer id = 1;
-        SingleVideo video = videoCacheDao.getSingleVideo(id);
-        System.out.println(video.getTitle());
-    }
 
     @Test
     public void cacheIndexVideos() {
