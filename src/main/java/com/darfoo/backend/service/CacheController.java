@@ -45,10 +45,6 @@ public class CacheController {
     @Autowired
     RecommendDao recommendDao;
     @Autowired
-    PaginationDao paginationDao;
-    @Autowired
-    CategoryDao categoryDao;
-    @Autowired
     CacheUtils cacheUtils;
 
     @RequestMapping(value = "/{type}/{id}", method = RequestMethod.GET)
@@ -138,42 +134,13 @@ public class CacheController {
     @RequestMapping(value = "/author/videos/{id}", method = RequestMethod.GET)
     @ResponseBody
     public List getVideoListForAuthor(@PathVariable Integer id) {
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("author_id", id);
-        String cachekey = String.format("authorvideos%d", id);
-
-        String[] types = {"video", "tutorial"};
-
-        for (String type : types) {
-            Class resource = TypeClassMapping.typeClassMap.get(type);
-            List resources = commonDao.getResourcesByFields(resource, conditions);
-            cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SET);
-        }
-
-        return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.SET);
+        return cacheUtils.cacheAuthorVideos(id);
     }
 
     @RequestMapping(value = "/author/videos/{id}/page/{page}", method = RequestMethod.GET)
     @ResponseBody
     public List getVideoListForAuthorByPage(@PathVariable Integer id, @PathVariable Integer page) {
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("author_id", id);
-
-        int pageSize = paginationDao.getResourcePageSize(Video.class);
-        String cachekey = String.format("authorvideos%dpage%d", id, page);
-
-        String[] types = {"video", "tutorial"};
-
-        for (String type : types) {
-            Class resource = TypeClassMapping.typeClassMap.get(type);
-            List resources = commonDao.getResourcesByFields(resource, conditions);
-            cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
-        }
-
-        long start = (page - 1) * pageSize;
-        long end = page * pageSize - 1;
-
-        return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.LIST, start, end);
+        return cacheUtils.cacheAuthorVideos(id, page);
     }
 
     //http://localhost:8080/darfoobackend/rest/cache/{type}/search?search=s

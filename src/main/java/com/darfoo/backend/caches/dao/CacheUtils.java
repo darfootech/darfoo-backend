@@ -4,12 +4,15 @@ import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
+import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
+import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -82,7 +85,12 @@ public class CacheUtils {
 
     public List cacheResourcesBySearch(String type, String searchContent, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
-        String cachekey = String.format("%ssearch%s", type, searchContent);
+        String cachekey;
+        if (pageArray.length == 0) {
+            cachekey = String.format("%ssearch%s", type, searchContent);
+        } else {
+            int page = pageArray[0];
+            cachekey = String.format("%ssearch%spage%d", type, searchContent, page);        }
 
         if (type.equals("video")) {
             String[] types = {"video", "tutorial"};
@@ -117,5 +125,36 @@ public class CacheUtils {
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
         return cacheDao.extractResourcesFromCache(resource, cachekey, CacheCollType.LIST);
+    }
+
+    public List cacheAuthorVideos(Integer id, Integer... pageArray) {
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("author_id", id);
+        String cachekey;
+        if (pageArray.length == 0) {
+            cachekey = String.format("authorvideos%d", id);
+        } else {
+            int page = pageArray[0];
+            cachekey = String.format("authorvideos%dpage%d", id, page);
+        }
+
+        String[] types = {"video", "tutorial"};
+
+        for (String type : types) {
+            Class resource = TypeClassMapping.typeClassMap.get(type);
+            List resources = commonDao.getResourcesByFields(resource, conditions);
+            cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SET);
+        }
+
+        if (pageArray.length == 0) {
+            return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.SET);
+        } else {
+            int page = pageArray[0];
+            int pageSize = paginationDao.getResourcePageSize(Video.class);
+            long start = (page - 1) * pageSize;
+            long end = page * pageSize - 1;
+
+            return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.LIST, start, end);
+        }
     }
 }
