@@ -73,7 +73,7 @@ public class VideoCacheTests {
     }
 
     @Test
-    public void cacheVideoByCategories() {
+    public void cacheVideosByCategories() {
         String categories = "0-0-0-0";
 
         List<SingleVideo> videos = new CacheDaoTests().cacheResourcesByCategories("video", categories);

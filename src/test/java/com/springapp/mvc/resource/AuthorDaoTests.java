@@ -2,6 +2,7 @@ package com.springapp.mvc.resource;
 
 import com.darfoo.backend.dao.*;
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.model.*;
 import com.darfoo.backend.model.resource.Author;
@@ -27,6 +28,8 @@ public class AuthorDaoTests {
     AuthorDao authorDao;
     @Autowired
     CommonDao commonDao;
+    @Autowired
+    PaginationDao paginationDao;
 
     QiniuUtils qiniuUtils = new QiniuUtils();
 
@@ -141,7 +144,7 @@ public class AuthorDaoTests {
 
     @Test
     public void getAuthorOrderByVideoCountDesc() {
-        List<Object[]> result = authorDao.getAuthorOrderByVideoCountDesc();
+        List<Object[]> result = authorDao.getAuthorsOrderByVideoCountDesc();
         for (Object[] rows : result) {
             System.out.println((Integer) rows[1] + " -> " + ((BigInteger) rows[0]).intValue());
             Author author = (Author) commonDao.getResourceById(Author.class, (Integer) rows[1]);
@@ -151,7 +154,7 @@ public class AuthorDaoTests {
 
     @Test
     public void getAuthorOrderByVideoCountDescByPage() {
-        List<Object[]> result = authorDao.getAuthorOrderByVideoCountDescByPage(2);
+        List<Object[]> result = authorDao.getAuthorsOrderByVideoCountDescByPage(2);
         for (Object[] rows : result) {
             System.out.println((Integer) rows[1] + " -> " + ((BigInteger) rows[0]).intValue());
             Author author = (Author) commonDao.getResourceById(Author.class, (Integer) rows[1]);
@@ -162,7 +165,7 @@ public class AuthorDaoTests {
 
     @Test
     public void getAllPages() {
-        System.out.println("pagecount -> " + authorDao.getPageCount());
+        System.out.println("pagecount -> " + paginationDao.getResourcePageCount(Author.class));
     }
 
     @Test
@@ -180,10 +183,10 @@ public class AuthorDaoTests {
 
     @Test
     public void isDuplicateWithPageQuery() {
-        int pagesize = (int) authorDao.getPageCount();
+        int pagesize = (int) paginationDao.getResourcePageCount(Author.class);
         Set<Integer> idSet = new HashSet<Integer>();
         for (int i = 0; i < pagesize; i++) {
-            List<Object[]> result = authorDao.getAuthorOrderByVideoCountDescByPage(i + 1);
+            List<Object[]> result = authorDao.getAuthorsOrderByVideoCountDescByPage(i + 1);
             for (Object[] rows : result) {
                 System.out.println((Integer) rows[1] + " -> " + ((BigInteger) rows[0]).intValue());
                 Author author = (Author) commonDao.getResourceById(Author.class, (Integer) rows[1]);
@@ -193,7 +196,7 @@ public class AuthorDaoTests {
             System.out.println("result size -> " + result.size());
         }
 
-        System.out.println("author count -> " + authorDao.getAuthorOrderByVideoCountDesc().size());
+        System.out.println("author count -> " + authorDao.getAuthorsOrderByVideoCountDesc().size());
         System.out.println("author count -> " + idSet.size());
     }
 
