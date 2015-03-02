@@ -535,7 +535,7 @@ public class CommonDao {
      * @param conditions
      * @return
      */
-    public boolean isResourceExistsByFields(Class resource, HashMap<String, String> conditions) {
+    public boolean isResourceExistsByFields(Class resource, HashMap<String, Object> conditions) {
         try {
             Criteria criteria = getCommonQueryCriteria(resource);
             for (String key : conditions.keySet()) {
