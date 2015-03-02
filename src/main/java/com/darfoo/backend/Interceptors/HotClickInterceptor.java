@@ -50,7 +50,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        if (uri.matches("(.*)/resources/video/tutorial/\\d+$")) {
+        if (uri.matches("(.*)/resources/tutorial/\\d+$")) {
             String tutorialid = getNumbers(uri);
             System.out.println("tutorial clicked id is: " + tutorialid + "\n");
             int tid = Integer.parseInt(tutorialid);
