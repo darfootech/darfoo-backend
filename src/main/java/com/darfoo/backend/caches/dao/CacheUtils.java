@@ -60,8 +60,8 @@ public class CacheUtils {
         String cachekey = String.format("%scategory%s", type, categories);
 
         List resources = categoryDao.getResourcesByCategories(resource, ServiceUtils.convertList2Array(cacheDao.parseResourceCategories(resource, categories)));
-        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SET);
-        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SET);
+        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
+        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
     }
 
     public List cacheResourcesByCategoriesByPage(String type, String categories, Integer page) {
@@ -144,11 +144,11 @@ public class CacheUtils {
         for (String type : types) {
             Class resource = TypeClassMapping.typeClassMap.get(type);
             List resources = commonDao.getResourcesByFields(resource, conditions);
-            cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SET);
+            cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
         }
 
         if (pageArray.length == 0) {
-            return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.SET);
+            return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.LIST);
         } else {
             int page = pageArray[0];
             int pageSize = paginationDao.getResourcePageSize(Video.class);
