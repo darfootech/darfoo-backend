@@ -2,8 +2,10 @@ package com.springapp.mvc.statistic;
 
 import com.darfoo.backend.dao.statistic.StatisticsDao;
 import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
+import com.darfoo.backend.model.statistics.clickcount.TabClickCount;
 import com.darfoo.backend.model.statistics.clicktime.MenuClickTime;
 import com.darfoo.backend.model.statistics.clicktime.ResourceClickTime;
+import com.darfoo.backend.model.statistics.clicktime.TabClickTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,7 @@ public class StatisticsClickTimeTests {
     }
 
     @Test
-    public void insertMenuClickCount() {
+    public void insertMenuClickTime() {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("mac", "00:ad:05:01:a6:85");
         conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
@@ -43,5 +45,16 @@ public class StatisticsClickTimeTests {
         conditions.put("menuid", 1);
 
         statisticsDao.insertClickBehavior(MenuClickTime.class, conditions);
+    }
+
+    @Test
+    public void insertTabClickTime() {
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("mac", "00:ad:05:01:a6:85");
+        conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
+        conditions.put("uuid", "123");
+        conditions.put("tabid", 3);
+
+        statisticsDao.insertClickBehavior(TabClickTime.class, conditions);
     }
 }
