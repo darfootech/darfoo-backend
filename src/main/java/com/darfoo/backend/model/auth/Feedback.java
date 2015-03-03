@@ -6,13 +6,13 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Created by zjh on 15-3-3.
+ * Created by zjh on 15-3-4.
  */
 
-//userid和mac地址的绑定关系 一个mac地址只能绑定一个用户
+//用户反馈
 @Entity
-@Table(name = "bind")
-public class Bind extends CommonAuth {
+@Table(name = "feedback")
+public class Feedback extends CommonAuth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ModelAttrSuper
@@ -21,6 +21,9 @@ public class Bind extends CommonAuth {
     @Column(name = "userid", unique = false, nullable = false)
     public Integer userid;
 
-    @Column(name = "mac", unique = false, nullable = false)
-    public String mac;
+    @Column(name = "username", unique = false, nullable = false)
+    public String username;
+
+    @Column(name = "feedback", unique = false, nullable = false)
+    public String feedback;
 }

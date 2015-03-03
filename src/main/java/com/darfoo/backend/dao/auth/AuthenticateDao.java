@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 
 /**
@@ -18,12 +19,27 @@ public class AuthenticateDao {
     @Autowired
     CommonDao commonDao;
 
-    public boolean createBind(Integer userid, String macaddr) {
-        Bind bind = new Bind(userid, macaddr);
-        sessionFactory.getCurrentSession().save(bind);
-        if (bind.id > 0) {
-            return true;
-        } else {
+    public boolean createResource(Class resource, HashMap<String, Object> conditions) {
+        try {
+            Object object = resource.newInstance();
+            for (Field field : resource.getFields()) {
+                String fieldname = field.getName();
+                if (conditions.keySet().contains(fieldname)) {
+                    commonDao.setResourceAttr(resource, object, fieldname, conditions.get(fieldname));
+                }
+            }
+            sessionFactory.getCurrentSession().save(object);
+            int status = (Integer) commonDao.getResourceAttr(resource, object, "id");
+            if (status > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
             return false;
         }
     }

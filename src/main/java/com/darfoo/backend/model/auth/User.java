@@ -12,7 +12,7 @@ import java.util.Date;
 //普通用户
 @Entity
 @Table(name = "user")
-public class User {
+public class User extends CommonAuth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ModelAttrSuper
@@ -23,12 +23,6 @@ public class User {
 
     @Column(name = "password", unique = false, nullable = false)
     public String password;
-
-    @Column(name = "timestamp")
-    public Long timestamp = System.currentTimeMillis() / 1000;
-
-    @Column(name = "date")
-    public Date date = new Date();
 
     public User() {
     }
