@@ -15,7 +15,4 @@ import java.io.Serializable;
 public class MenuClickCount extends CommonClickCount implements Serializable {
     @Column(name = "menuid", nullable = false)
     public Integer menuid;
-
-    @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 1")
-    public Long hottest;
 }

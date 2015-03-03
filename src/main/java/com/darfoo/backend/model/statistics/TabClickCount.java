@@ -15,7 +15,4 @@ import java.io.Serializable;
 public class TabClickCount extends CommonClickCount implements Serializable {
     @Column(name = "tabid", nullable = false)
     public Integer tabid;
-
-    @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 1")
-    public Long hottest;
 }

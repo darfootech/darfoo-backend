@@ -33,7 +33,7 @@ public class StatisticsDao {
                     }
                 }
             }
-            commonDao.setResourceAttr(resource, object, "hottest", 1L);
+            commonDao.setResourceAttr(resource.getSuperclass(), object, "hottest", 1L);
             sessionFactory.getCurrentSession().save(object);
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -44,7 +44,7 @@ public class StatisticsDao {
 
     private void updateClickBehavior(Class resource, HashMap<String, Object> conditions) {
         Object object = commonDao.getResourceByFields(resource, conditions);
-        System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(resource, object, "hottest")));
+        System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(resource.getSuperclass(), object, "hottest")));
     }
 
     public void insertOrUpdateClickBehavior(Class resource, HashMap<String, Object> conditions) {

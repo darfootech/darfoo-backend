@@ -26,4 +26,8 @@ public class CommonClickCount {
     @Column(name = "uuid", unique = false, nullable = false)
     @ModelAttrSuper
     public String uuid;
+
+    @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 1")
+    @ModelAttrSuper
+    public Long hottest;
 }

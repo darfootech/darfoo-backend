@@ -18,7 +18,4 @@ public class ResourceClickCount extends CommonClickCount implements Serializable
 
     @Column(name = "resourceid", nullable = false)
     public Integer resourceid;
-
-    @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 1")
-    public Long hottest;
 }
