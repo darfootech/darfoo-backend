@@ -9,20 +9,17 @@ import java.util.Date;
  * Created by zjh on 15-3-3.
  */
 
-//记录搜索行为
+//记录launcher崩溃日志
 @Entity
-@Table(name = "searchhistory")
-public class SearchHistory {
+@Table(name = "crashlog")
+public class CrashLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ModelAttrSuper
     public Integer id;
 
-    @Column(name = "searchcontent", unique = false, nullable = false)
-    public String searchcontent;
-
-    @Column(name = "searchtype", unique = false, nullable = false)
-    public String searchtype;
+    @Column(name = "log", unique = false, nullable = false)
+    public String log;
 
     @Column(name = "timestamp")
     public Long timestamp = System.currentTimeMillis() / 1000;

@@ -33,5 +33,5 @@ public class CommonClickTime {
     public Long timestamp = System.currentTimeMillis() / 1000;
 
     @Column(name = "date")
-    public Date dueDate = new Date();
+    public Date date = new Date();
 }
