@@ -4,6 +4,10 @@ import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.statistics.clickcount.MenuClickCount;
+import com.darfoo.backend.model.statistics.clickcount.TabClickCount;
+import com.darfoo.backend.model.statistics.clicktime.MenuClickTime;
+import com.darfoo.backend.model.statistics.clicktime.TabClickTime;
 import com.darfoo.backend.model.upload.UploadNoAuthVideo;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
@@ -17,6 +21,8 @@ import java.util.HashMap;
 public class TypeClassMapping {
     public static HashMap<String, Class> typeClassMap = new HashMap<String, Class>();
     public static HashMap<String, Class> cacheResponseMap = new HashMap<String, Class>();
+    public static HashMap<String, Class> clickCountStatMap = new HashMap<String, Class>();
+    public static HashMap<String, Class> clickTimeStatMap = new HashMap<String, Class>();
 
     static {
         typeClassMap.put("video", Video.class);
@@ -29,5 +35,11 @@ public class TypeClassMapping {
         cacheResponseMap.put("tutorial", SingleVideo.class);
         cacheResponseMap.put("music", SingleMusic.class);
         cacheResponseMap.put("author", SingleAuthor.class);
+
+        clickCountStatMap.put("menu", MenuClickCount.class);
+        clickCountStatMap.put("tab", TabClickCount.class);
+
+        clickTimeStatMap.put("menu", MenuClickTime.class);
+        clickTimeStatMap.put("tab", TabClickTime.class);
     }
 }
