@@ -2,7 +2,6 @@ package com.darfoo.backend.dao.statistic;
 
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.cota.ModelAttrDefault;
 import com.darfoo.backend.model.cota.ModelAttrSuper;
 import com.darfoo.backend.model.statistics.ResourceClickCount;
 import org.hibernate.SessionFactory;

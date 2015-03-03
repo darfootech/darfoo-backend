@@ -6,6 +6,7 @@ package com.springapp.mvc.statistic;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.statistic.StatisticsDao;
+import com.darfoo.backend.model.statistics.MenuClickCount;
 import com.darfoo.backend.model.statistics.ResourceClickCount;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +25,7 @@ public class StatisticsClickCountTests {
     CommonDao commonDao;
 
     @Test
-    public void insertOrUpdateClickCount() {
+    public void insertOrUpdateResourceClickCount() {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("mac", "00:ad:05:01:a6:85");
         conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
@@ -33,6 +34,17 @@ public class StatisticsClickCountTests {
         conditions.put("resourceid", 81);
 
         statisticsDao.insertOrUpdateClickBehavior(ResourceClickCount.class, conditions);
+    }
+
+    @Test
+    public void insertOrUpdateMenuClickCount() {
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("mac", "00:ad:05:01:a6:85");
+        conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
+        conditions.put("uuid", "123");
+        conditions.put("menuid", 1);
+
+        statisticsDao.insertOrUpdateClickBehavior(MenuClickCount.class, conditions);
     }
 
     @Test
