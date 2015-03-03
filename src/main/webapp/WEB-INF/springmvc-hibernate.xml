@@ -88,6 +88,7 @@
     <bean id="paginationDao" class="com.darfoo.backend.dao.cota.PaginationDao"/>
     <bean id="accompanyDao" class="com.darfoo.backend.dao.cota.AccompanyDao"/>
     <bean id="statisticsDao" class="com.darfoo.backend.dao.statistic.StatisticsDao"/>
+    <bean id="authenticateDao" class="com.darfoo.backend.dao.auth.AuthenticateDao"/>
 
     <bean id="videoCates" class="com.darfoo.backend.service.responsemodel.VideoCates"/>
     <bean id="tutorialCates" class="com.darfoo.backend.service.responsemodel.TutorialCates"/>

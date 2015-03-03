@@ -219,6 +219,13 @@
             <artifactId>config</artifactId>
             <version>1.2.1</version>
         </dependency>
+
+        <!-- for crypt password -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.3m</version>
+        </dependency>
     </dependencies>
 
     <build>
