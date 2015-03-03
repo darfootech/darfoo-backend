@@ -6,9 +6,9 @@ package com.springapp.mvc.statistic;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.statistic.StatisticsDao;
-import com.darfoo.backend.model.statistics.MenuClickCount;
-import com.darfoo.backend.model.statistics.ResourceClickCount;
-import com.darfoo.backend.model.statistics.TabClickCount;
+import com.darfoo.backend.model.statistics.clickcount.MenuClickCount;
+import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
+import com.darfoo.backend.model.statistics.clickcount.TabClickCount;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

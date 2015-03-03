@@ -1,15 +1,17 @@
-package com.darfoo.backend.model.statistics;
+package com.darfoo.backend.model.statistics.clicktime;
 
 import com.darfoo.backend.model.cota.ModelAttrSuper;
 
 import javax.persistence.*;
+import javax.swing.*;
+import java.util.Date;
 
 /**
- * Created by zjh on 15-3-2.
+ * Created by zjh on 15-3-3.
  */
 
 @MappedSuperclass
-public class CommonClickCount {
+public class CommonClickTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ModelAttrSuper
@@ -27,7 +29,9 @@ public class CommonClickCount {
     @ModelAttrSuper
     public String uuid;
 
-    @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 1")
-    @ModelAttrSuper
-    public Long hottest;
+    @Column(name = "timestamp")
+    public Long timestamp = System.currentTimeMillis() / 1000;
+
+    @Column(name = "date")
+    public Date dueDate = new Date();
 }

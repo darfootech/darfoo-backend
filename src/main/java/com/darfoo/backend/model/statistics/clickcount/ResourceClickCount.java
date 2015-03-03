@@ -1,4 +1,4 @@
-package com.darfoo.backend.model.statistics;
+package com.darfoo.backend.model.statistics.clickcount;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
