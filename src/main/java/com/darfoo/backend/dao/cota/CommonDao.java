@@ -866,6 +866,8 @@ public class CommonDao {
     @Transactional
     public int incResourceField(Class resource, Integer id, String fieldname) {
         int res;
+        //getCurrentSession是在上下文中 openSession是在另一个线程中开启一个数据库会话
+        //在统计中用getCurrentSession不起作用的原因可能是先用了getCurrentSession得到的会话来进行了查询持有了锁没有释放 所以更新失败 所以要用newSession新开启一个会话
         Session session = sessionFactory.openSession();
         try {
             Object object = session.get(resource, id);
