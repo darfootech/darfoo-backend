@@ -8,6 +8,7 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.statistic.StatisticsDao;
 import com.darfoo.backend.model.statistics.MenuClickCount;
 import com.darfoo.backend.model.statistics.ResourceClickCount;
+import com.darfoo.backend.model.statistics.TabClickCount;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,17 @@ public class StatisticsClickCountTests {
         conditions.put("menuid", 1);
 
         statisticsDao.insertOrUpdateClickBehavior(MenuClickCount.class, conditions);
+    }
+
+    @Test
+    public void insertOrUpdateTabClickCount() {
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("mac", "00:ad:05:01:a6:85");
+        conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
+        conditions.put("uuid", "123");
+        conditions.put("tabid", 3);
+
+        statisticsDao.insertOrUpdateClickBehavior(TabClickCount.class, conditions);
     }
 
     @Test
