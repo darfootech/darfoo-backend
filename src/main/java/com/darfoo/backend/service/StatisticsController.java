@@ -1,6 +1,8 @@
 package com.darfoo.backend.service;
 
 import com.darfoo.backend.dao.statistic.StatisticsDao;
+import com.darfoo.backend.model.statistics.CrashLog;
+import com.darfoo.backend.model.statistics.SearchHistory;
 import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
 import com.darfoo.backend.model.statistics.clicktime.ResourceClickTime;
 import com.darfoo.backend.service.cota.TypeClassMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 /**
@@ -42,6 +45,27 @@ public class StatisticsController {
             statisticsDao.insertBehavior(ResourceClickTime.class, conditions);
             statisticsDao.insertOrUpdateClickBehavior(ResourceClickCount.class, conditions);
         }
+        return "ok";
+    }
+
+    @RequestMapping(value = "search/t/{type}")
+    public @ResponseBody String statisticsSearchHistory(@PathVariable String type, HttpServletRequest request) {
+        String content = request.getParameter("search");
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("searchtype", type);
+        conditions.put("searchcontent", content);
+
+        statisticsDao.insertBehavior(SearchHistory.class, conditions);
+        return "ok";
+    }
+
+    @RequestMapping(value = "crashlog")
+    public @ResponseBody String statisticsCrashLog(HttpServletRequest request) {
+        String loginfo = request.getParameter("loginfo");
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("log", loginfo);
+
+        statisticsDao.insertBehavior(CrashLog.class, conditions);
         return "ok";
     }
 }
