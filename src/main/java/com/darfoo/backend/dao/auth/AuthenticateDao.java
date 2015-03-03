@@ -1,7 +1,6 @@
 package com.darfoo.backend.dao.auth;
 
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.auth.Bind;
 import com.darfoo.backend.model.auth.User;
 import org.hibernate.SessionFactory;
 import org.mindrot.jbcrypt.BCrypt;

@@ -3,7 +3,6 @@ package com.darfoo.backend.model.auth;
 import com.darfoo.backend.model.cota.ModelAttrSuper;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * Created by zjh on 15-3-4.
