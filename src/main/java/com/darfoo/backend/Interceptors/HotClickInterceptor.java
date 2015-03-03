@@ -36,6 +36,8 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
         return "";
     }
 
+    String hottestField = "hottest";
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
@@ -45,8 +47,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             String videoid = getNumbers(uri);
             System.out.println("video clicked id is: " + videoid + "\n");
             int vid = Integer.parseInt(videoid);
-            int acc = 1;
-            System.out.println(CRUDEvent.getResponse(commonDao.updateResourceHottest(Video.class, vid, acc)));
+            System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Video.class, vid, hottestField)));
             return true;
         }
 
@@ -54,8 +55,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             String tutorialid = getNumbers(uri);
             System.out.println("tutorial clicked id is: " + tutorialid + "\n");
             int tid = Integer.parseInt(tutorialid);
-            int acc = 1;
-            System.out.println(CRUDEvent.getResponse(commonDao.updateResourceHottest(Tutorial.class, tid, acc)));
+            System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Tutorial.class, tid, hottestField)));
             return true;
         }
 
@@ -63,8 +63,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             String musicid = getNumbers(uri);
             System.out.println("music clicked id is: " + musicid + "\n");
             int mid = Integer.parseInt(musicid);
-            int acc = 1;
-            System.out.println(CRUDEvent.getResponse(commonDao.updateResourceHottest(Music.class, mid, acc)));
+            System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Music.class, mid, hottestField)));
             return true;
         }
 
@@ -72,8 +71,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             String authorid = getNumbers(uri);
             System.out.println("author clicked id is: " + authorid + "\n");
             int aid = Integer.parseInt(authorid);
-            int acc = 1;
-            System.out.println(CRUDEvent.getResponse(commonDao.updateResourceHottest(Author.class, aid, acc)));
+            System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Author.class, aid, hottestField)));
             return true;
         }
 
@@ -83,8 +81,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             if (music != null) {
                 int musicid = music.getId();
                 System.out.println("music clicked id is: " + musicid + "\n");
-                int acc = 1;
-                System.out.println(CRUDEvent.getResponse(commonDao.updateResourceHottest(Music.class, musicid, acc)));
+                System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Music.class, musicid, hottestField)));
                 return true;
             } else {
                 System.out.println("no music connect to this video: " + videoid);

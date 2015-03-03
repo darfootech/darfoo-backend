@@ -16,6 +16,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -858,28 +859,54 @@ public class CommonDao {
      * 更新资源热度
      *
      * @param resource
-     * @param id       资源id
-     * @param n        热度增加的值
+     * @param id
+     * @param fieldname
      * @return
      */
-    public int updateResourceHottest(Class resource, Integer id, Integer n) {
+    @Transactional
+    public int incResourceField(Class resource, Integer id, String fieldname) {
         int res;
+        Session session = sessionFactory.openSession();
         try {
-            Session session = sessionFactory.getCurrentSession();
             Object object = session.get(resource, id);
             if (object == null) {
                 res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
             } else {
-                Field field = resource.getDeclaredField("hottest");
-                field.setAccessible(true);
-                Long Hottest = (Long) field.get(object);
-                Hottest += n;
-                field.set(object, Hottest);
+                Long oldvalue = (Long) getResourceAttr(resource, object, fieldname);
+                setResourceAttr(resource, object, fieldname, oldvalue + 1);
+                session.update(object);
                 res = CRUDEvent.UPDATE_SUCCESS;
             }
         } catch (Exception e) {
             res = CRUDEvent.UPDATE_FAIL;
             e.printStackTrace();
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return res;
+    }
+
+    //a overload function
+    @Transactional
+    public int incResourceField(Class resource, Object object, String fieldname) {
+        int res;
+        Session session = sessionFactory.openSession();
+        try {
+            if (object == null) {
+                res = CRUDEvent.UPDATE_VIDEO_NOTFOUND;
+            } else {
+                Long oldvalue = (Long) getResourceAttr(resource, object, fieldname);
+                setResourceAttr(resource, object, fieldname, oldvalue + 1);
+                session.update(object);
+                res = CRUDEvent.UPDATE_SUCCESS;
+            }
+        } catch (Exception e) {
+            res = CRUDEvent.UPDATE_FAIL;
+            e.printStackTrace();
+        } finally {
+            session.flush();
+            session.close();
         }
         return res;
     }

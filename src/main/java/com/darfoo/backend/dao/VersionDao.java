@@ -43,7 +43,7 @@ public class VersionDao {
     public int insertVersion(Version version) {
         int res;
         try {
-            HashMap<String, String> conditions = new HashMap<String, String>();
+            HashMap<String, Object> conditions = new HashMap<String, Object>();
             conditions.put("version", version.getVersion());
             conditions.put("type", version.getType());
             boolean isExist = commonDao.isResourceExistsByFields(Version.class, conditions);

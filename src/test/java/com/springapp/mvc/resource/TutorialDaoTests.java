@@ -183,9 +183,7 @@ public class TutorialDaoTests {
     @Test
     public void updateTutorialHottest() {
         Integer id = 1;
-        int n = 1;
-        //int n = -5;
-        System.out.println(CRUDEvent.getResponse(commonDao.updateResourceHottest(Tutorial.class, id, n)));
+        System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Tutorial.class, id, "hottest")));
     }
 
     /**

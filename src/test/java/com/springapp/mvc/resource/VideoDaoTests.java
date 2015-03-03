@@ -218,10 +218,8 @@ public class VideoDaoTests {
      */
     @Test
     public void updateVideoHottest() {
-        Integer id = 41;
-        int n = 1;
-        //int n = -5;
-        System.out.println(CRUDEvent.getResponse(commonDao.updateResourceHottest(Video.class, id, n)));
+        Integer id = 88;
+        System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Video.class, id, "hottest")));
     }
 
     /**

@@ -1,9 +1,15 @@
 package com.darfoo.backend.dao.statistic;
 
+import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.cota.ModelAttrDefault;
+import com.darfoo.backend.model.cota.ModelAttrSuper;
+import com.darfoo.backend.model.statistics.ResourceClickCount;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -18,12 +24,21 @@ public class StatisticsDao {
     CommonDao commonDao;
 
     private void insertClickBehavior(Class resource, HashMap<String, Object> conditions) {
+        System.out.println("insert resource");
         try {
             Object object = resource.newInstance();
-            for (String key : conditions.keySet()) {
-                commonDao.setResourceAttr(resource, object, key, conditions.get(key));
-            }
 
+            for (Field field : resource.getFields()) {
+                String fieldname = field.getName();
+                if (conditions.keySet().contains(fieldname)) {
+                    if (field.isAnnotationPresent(ModelAttrSuper.class)) {
+                        commonDao.setResourceAttr(resource.getSuperclass(), object, fieldname, conditions.get(fieldname));
+                    } else {
+                        commonDao.setResourceAttr(resource, object, fieldname, conditions.get(fieldname));
+                    }
+                }
+            }
+            commonDao.setResourceAttr(resource, object, "hottest", 1L);
             sessionFactory.getCurrentSession().save(object);
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -34,17 +49,7 @@ public class StatisticsDao {
 
     private void updateClickBehavior(Class resource, HashMap<String, Object> conditions) {
         Object object = commonDao.getResourceByFields(resource, conditions);
-        try {
-            Method method = resource.getDeclaredMethod("updateClickcount");
-            method.invoke(object);
-            sessionFactory.getCurrentSession().saveOrUpdate(object);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(resource, object, "hottest")));
     }
 
     public void insertOrUpdateClickBehavior(Class resource, HashMap<String, Object> conditions) {
