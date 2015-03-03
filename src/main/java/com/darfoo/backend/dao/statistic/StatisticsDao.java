@@ -3,14 +3,10 @@ package com.darfoo.backend.dao.statistic;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.cota.ModelAttrSuper;
-import com.darfoo.backend.model.statistics.ResourceClickCount;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 
 /**

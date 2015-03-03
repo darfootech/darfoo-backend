@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Table(name = "uploadnoauthvideo")
 public class UploadNoAuthVideo implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //引用下面名为mysql的主键生成方式
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
     //上传视频的标题

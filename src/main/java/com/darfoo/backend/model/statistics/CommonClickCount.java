@@ -1,6 +1,5 @@
 package com.darfoo.backend.model.statistics;
 
-import com.darfoo.backend.model.cota.ModelAttrDefault;
 import com.darfoo.backend.model.cota.ModelAttrSuper;
 
 import javax.persistence.*;
