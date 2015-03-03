@@ -33,13 +33,13 @@ public class StatisticsController {
         if (type.equals("menu") || type.equals("tab")) {
             conditions.put(String.format("%sid", type), id);
 
-            statisticsDao.insertClickBehavior(TypeClassMapping.clickTimeStatMap.get(type), conditions);
+            statisticsDao.insertBehavior(TypeClassMapping.clickTimeStatMap.get(type), conditions);
             statisticsDao.insertOrUpdateClickBehavior(TypeClassMapping.clickCountStatMap.get(type), conditions);
         } else {
             conditions.put("type", type);
             conditions.put("resourceid", id);
 
-            statisticsDao.insertClickBehavior(ResourceClickTime.class, conditions);
+            statisticsDao.insertBehavior(ResourceClickTime.class, conditions);
             statisticsDao.insertOrUpdateClickBehavior(ResourceClickCount.class, conditions);
         }
         return "ok";

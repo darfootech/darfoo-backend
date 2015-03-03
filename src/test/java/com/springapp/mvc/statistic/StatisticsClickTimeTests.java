@@ -33,7 +33,7 @@ public class StatisticsClickTimeTests {
         conditions.put("type", "video");
         conditions.put("resourceid", 81);
 
-        statisticsDao.insertClickBehavior(ResourceClickTime.class, conditions);
+        statisticsDao.insertBehavior(ResourceClickTime.class, conditions);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class StatisticsClickTimeTests {
         conditions.put("uuid", "123");
         conditions.put("menuid", 1);
 
-        statisticsDao.insertClickBehavior(MenuClickTime.class, conditions);
+        statisticsDao.insertBehavior(MenuClickTime.class, conditions);
     }
 
     @Test
@@ -55,6 +55,6 @@ public class StatisticsClickTimeTests {
         conditions.put("uuid", "123");
         conditions.put("tabid", 3);
 
-        statisticsDao.insertClickBehavior(TabClickTime.class, conditions);
+        statisticsDao.insertBehavior(TabClickTime.class, conditions);
     }
 }

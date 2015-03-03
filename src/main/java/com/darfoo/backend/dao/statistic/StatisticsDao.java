@@ -18,7 +18,7 @@ public class StatisticsDao {
     @Autowired
     CommonDao commonDao;
 
-    public void insertClickBehavior(Class resource, HashMap<String, Object> conditions) {
+    public void insertBehavior(Class resource, HashMap<String, Object> conditions) {
         System.out.println("insert resource");
         try {
             Object object = resource.newInstance();
@@ -53,7 +53,7 @@ public class StatisticsDao {
         if (commonDao.isResourceExistsByFields(resource, conditions)) {
             updateClickBehavior(resource, conditions);
         } else {
-            insertClickBehavior(resource, conditions);
+            insertBehavior(resource, conditions);
         }
     }
 }
