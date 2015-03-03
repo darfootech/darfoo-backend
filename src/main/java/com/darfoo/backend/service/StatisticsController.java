@@ -26,7 +26,9 @@ public class StatisticsController {
     StatisticsDao statisticsDao;
 
     @RequestMapping(value = "{type}/{id}/m/{mac}/h/{host}/u/{uuid}")
-    public @ResponseBody String statisticsClickBehavior(@PathVariable String type, @PathVariable Integer id, @PathVariable String mac, @PathVariable String host, @PathVariable String uuid) {
+    public
+    @ResponseBody
+    String statisticsClickBehavior(@PathVariable String type, @PathVariable Integer id, @PathVariable String mac, @PathVariable String host, @PathVariable String uuid) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
 
         conditions.put("mac", mac);
@@ -49,7 +51,9 @@ public class StatisticsController {
     }
 
     @RequestMapping(value = "search/t/{type}")
-    public @ResponseBody String statisticsSearchHistory(@PathVariable String type, HttpServletRequest request) {
+    public
+    @ResponseBody
+    String statisticsSearchHistory(@PathVariable String type, HttpServletRequest request) {
         String content = request.getParameter("search");
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("searchtype", type);
@@ -60,7 +64,9 @@ public class StatisticsController {
     }
 
     @RequestMapping(value = "crashlog")
-    public @ResponseBody String statisticsCrashLog(HttpServletRequest request) {
+    public
+    @ResponseBody
+    String statisticsCrashLog(HttpServletRequest request) {
         String loginfo = request.getParameter("loginfo");
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("log", loginfo);

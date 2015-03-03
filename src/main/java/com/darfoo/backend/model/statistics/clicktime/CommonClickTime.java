@@ -3,7 +3,6 @@ package com.darfoo.backend.model.statistics.clicktime;
 import com.darfoo.backend.model.cota.ModelAttrSuper;
 
 import javax.persistence.*;
-import javax.swing.*;
 import java.util.Date;
 
 /**
