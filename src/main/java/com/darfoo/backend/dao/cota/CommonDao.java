@@ -654,6 +654,34 @@ public class CommonDao {
     }
 
     /**
+     * 根据字段值获取资源 并且record的id值不能和制定id相同
+     *
+     * @param resource
+     * @param conditions
+     * @param id
+     * @return
+     */
+    public List getResourcesByFieldsWithoutId(Class resource, HashMap<String, Object> conditions, Integer id) {
+        try {
+            Criteria criteria = getCommonQueryCriteria(resource)
+                    .addOrder(Order.desc("id"))
+                    .add(Restrictions.not(Restrictions.eq("id", id)));
+            for (String key : conditions.keySet()) {
+                if (key.equals("author_id") || key.equals("music_id")) {
+                    criteria.add(Restrictions.eq(key.replace("_", "."), conditions.get(key)));
+                } else {
+                    criteria.add(Restrictions.eq(key, conditions.get(key)));
+                }
+            }
+            return criteria.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList();
+        }
+    }
+
+
+    /**
      * 获得热度排名前count个
      *
      * @param resource
@@ -679,11 +707,11 @@ public class CommonDao {
      * @param count
      * @return
      */
+    //.setMaxResults(count)在这里是个坑
     public List getResourcesByNewest(Class resource, Integer count) {
         try {
             return getCommonQueryCriteria(resource)
                     .addOrder(Order.desc("update_timestamp"))
-                    //.setMaxResults(count)
                     .list().subList(0, count);
         } catch (Exception e) {
             e.printStackTrace();
@@ -785,18 +813,18 @@ public class CommonDao {
                 HashMap<String, Object> conditions = new HashMap<String, Object>();
                 conditions.put("author_id", authorid);
 
-                sameAuthorList = getResourcesByFields(resource, conditions);
+                sameAuthorList = getResourcesByFieldsWithoutId(resource, conditions, id);
             } else if (resource == Music.class) {
-                Field field = resource.getDeclaredField("authorname");
+                Field field = resource.getDeclaredField("author_name");
                 field.setAccessible(true);
                 Object object = getResourceById(resource, id);
 
                 String authorname = field.get(object).toString();
 
                 HashMap<String, Object> conditions = new HashMap<String, Object>();
-                conditions.put("authorname", authorname);
+                conditions.put("author_name", authorname);
 
-                sameAuthorList = getResourcesByFields(resource, conditions);
+                sameAuthorList = getResourcesByFieldsWithoutId(resource, conditions, id);
             } else {
                 System.out.println("something is wired");
             }
