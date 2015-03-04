@@ -4,13 +4,17 @@ package com.springapp.mvc;
  * Created by zjh on 14-12-11.
  */
 
+import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.cota.CSVTitle;
+import com.darfoo.backend.model.cota.ModelAttrSuper;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
 import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.TutorialCates;
 import com.darfoo.backend.service.responsemodel.VideoCates;
@@ -25,6 +29,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -195,12 +201,38 @@ public class DownloadTests {
                     printer.printRecord(itemData);
                 }
             } else {
+                List<String> headers = new ArrayList<String>();
+                List<String> attrs = new ArrayList<String>();
+
+                for (Field field : resource.getFields()) {
+                    if (field.isAnnotationPresent(CSVTitle.class)) {
+                        String title = field.getAnnotation(CSVTitle.class).title();
+                        headers.add(title);
+                        attrs.add(field.getName());
+                    }
+                }
+                printer.printRecord(headers);
+
+                for (Object object : resources) {
+                    List itemData = new ArrayList();
+                    for (String attr : attrs) {
+                        Field field = resource.getField(attr);
+                        if (field.isAnnotationPresent(ModelAttrSuper.class)) {
+                            itemData.add(commonDao.getResourceAttr(resource.getSuperclass(), object, attr));
+                        } else {
+                            itemData.add(commonDao.getResourceAttr(resource, object, attr));
+                        }
+                    }
+                    printer.printRecord(itemData);
+                }
+
                 System.out.println("wired");
             }
-
             printer.flush();
             printer.close();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
     }
@@ -218,5 +250,10 @@ public class DownloadTests {
     @Test
     public void writeMusicsToCSV() {
         writeResourcesToCSV(Music.class);
+    }
+
+    @Test
+    public void writeStatisticsRecordsToCSV() {
+        writeResourcesToCSV(ResourceClickCount.class);
     }
 }

@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class RunShellTests {
     @Test
     public void runshellscript() {
-        //String scriptpath = "/Users/zjh/Documents/darfoo/darfoo_backend/upload.sh";
         String scriptpath = "./upload.sh";
         System.out.println(RunShellUtils.runshellscript(scriptpath));
     }
