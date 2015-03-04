@@ -65,6 +65,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             // 其他情况判断session中是否有key，有的话继续用户的操作
             System.out.println("在管理资源");
             return true;
+        } else if (uri.contains("auth")) {
+            System.out.println("用户操作");
         } else {
             // 最后的情况就是进入登录页面
             System.out.println("需要登陆");
