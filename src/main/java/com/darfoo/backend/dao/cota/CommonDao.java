@@ -683,8 +683,8 @@ public class CommonDao {
         try {
             return getCommonQueryCriteria(resource)
                     .addOrder(Order.desc("update_timestamp"))
-                    .setMaxResults(count)
-                    .list();
+                    //.setMaxResults(count)
+                    .list().subList(0, count);
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList();

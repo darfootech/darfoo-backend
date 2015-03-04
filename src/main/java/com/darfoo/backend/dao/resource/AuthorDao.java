@@ -35,7 +35,7 @@ public class AuthorDao {
         return result;
     }
 
-    public List<Object[]> getAuthorsOrderByVideoCountDesc() {
+    public List getAuthorsOrderByVideoCountDesc() {
         List<Object[]> result = new ArrayList<Object[]>();
         try {
             Session session = sessionFactory.getCurrentSession();
@@ -44,10 +44,11 @@ public class AuthorDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Collections.reverse(result);
         return extractAndReturnAuthorList(result);
     }
 
-    public List<Object[]> getAuthorsOrderByVideoCountDescByPage(int pageNo) {
+    public List getAuthorsOrderByVideoCountDescByPage(int pageNo) {
         List<Object[]> result = new ArrayList<Object[]>();
         int pageSize = paginationDao.getResourcePageSize(Author.class);
         long pageCount = paginationDao.getResourcePageCount(Author.class);
@@ -68,7 +69,6 @@ public class AuthorDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Collections.reverse(result);
         return extractAndReturnAuthorList(result);
     }
 }

@@ -117,14 +117,14 @@ public class MusicDaoTests {
 
     @Test
     public void getMusicsByHottest() {
-        int number = 5;
+        int number = 10;
         List<Music> musics = commonDao.getResourcesByHottest(Music.class, number);
-        System.out.println("---------返回" + musics.size() + "个视频---------");
         for (Music v : musics) {
             System.out.println("热度值---->" + v.getHottest());
             System.out.println(v.toString(true));
             System.out.println("---------------------------");
         }
+        System.out.println("---------返回" + musics.size() + "个视频---------");
     }
 
     @Test
@@ -185,7 +185,7 @@ public class MusicDaoTests {
 
     @Test
     public void getSideBarMusics() {
-        List<Music> result = commonDao.getSideBarResources(Music.class, 27);
+        List<Music> result = commonDao.getSideBarResources(Music.class, 2);
         System.out.println(result.size());
         for (Music music : result) {
             System.out.println(music.getTitle() + "-" + music.getId());

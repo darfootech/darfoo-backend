@@ -60,10 +60,10 @@ public class CacheController {
         for (String type : types) {
             Class resource = TypeClassMapping.typeClassMap.get(type);
             List recommendResources = recommendDao.getRecommendResources(resource);
-            cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, type, CacheCollType.SET);
+            cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, type, CacheCollType.LIST);
         }
 
-        return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.SET);
+        return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.LIST);
     }
 
     @RequestMapping(value = "/{type}/index", method = RequestMethod.GET)

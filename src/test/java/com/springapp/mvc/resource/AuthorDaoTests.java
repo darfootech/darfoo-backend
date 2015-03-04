@@ -138,21 +138,18 @@ public class AuthorDaoTests {
 
     @Test
     public void getAuthorOrderByVideoCountDesc() {
-        List<Object[]> result = authorDao.getAuthorsOrderByVideoCountDesc();
-        for (Object[] rows : result) {
-            System.out.println((Integer) rows[1] + " -> " + ((BigInteger) rows[0]).intValue());
-            Author author = (Author) commonDao.getResourceById(Author.class, (Integer) rows[1]);
-            System.out.println(author.getName());
+        List<Author> result = authorDao.getAuthorsOrderByVideoCountDesc();
+        for (Author author : result) {
+            System.out.println(String.format("%d -> %s", author.getId(), author.getName()));
         }
+        System.out.println("result size -> " + result.size());
     }
 
     @Test
     public void getAuthorOrderByVideoCountDescByPage() {
-        List<Object[]> result = authorDao.getAuthorsOrderByVideoCountDescByPage(2);
-        for (Object[] rows : result) {
-            System.out.println((Integer) rows[1] + " -> " + ((BigInteger) rows[0]).intValue());
-            Author author = (Author) commonDao.getResourceById(Author.class, (Integer) rows[1]);
-            System.out.println(author.getName());
+        List<Author> result = authorDao.getAuthorsOrderByVideoCountDescByPage(1);
+        for (Author author : result) {
+            System.out.println(String.format("%d -> %s", author.getId(), author.getName()));
         }
         System.out.println("result size -> " + result.size());
     }
@@ -167,12 +164,10 @@ public class AuthorDaoTests {
         int pagesize = (int) paginationDao.getResourcePageCount(Author.class);
         Set<Integer> idSet = new HashSet<Integer>();
         for (int i = 0; i < pagesize; i++) {
-            List<Object[]> result = authorDao.getAuthorsOrderByVideoCountDescByPage(i + 1);
-            for (Object[] rows : result) {
-                System.out.println((Integer) rows[1] + " -> " + ((BigInteger) rows[0]).intValue());
-                Author author = (Author) commonDao.getResourceById(Author.class, (Integer) rows[1]);
-                System.out.println(author.getName());
-                idSet.add((Integer) rows[1]);
+            List<Author> result = authorDao.getAuthorsOrderByVideoCountDescByPage(i + 1);
+            for (Author author : result) {
+                System.out.println(String.format("%d -> %s", author.getId(), author.getName()));
+                idSet.add(author.getId());
             }
             System.out.println("result size -> " + result.size());
         }

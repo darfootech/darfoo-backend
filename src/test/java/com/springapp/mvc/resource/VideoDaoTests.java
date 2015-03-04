@@ -187,15 +187,12 @@ public class VideoDaoTests {
      */
     @Test
     public void getMusicFromVideo() {
-        Integer vId = 1;
-        //Integer mId = 6;
-        //先插入或更新一个music到video中
-        //System.out.println(CRUDEvent.getResponse(videoDao.insertOrUpdateMusic(vId, mId))+" 往Id为"+vId+"的video记录中插入music_id为"+mId);
-        Music music = ((Video) commonDao.getResourceById(Video.class, vId)).getMusic();
+        Integer id = 79;
+        Music music = ((Video) commonDao.getResourceById(Video.class, id)).getMusic();
         if (music != null) {
             System.out.println(music.toString(false));
         } else {
-            System.out.println("id为" + vId + "对应的video还未包含相应的music");
+            System.out.println("id为" + id + "对应的video还未包含相应的music");
         }
     }
 
@@ -215,7 +212,7 @@ public class VideoDaoTests {
      */
     @Test
     public void updateVideoHottest() {
-        Integer id = 88;
+        Integer id = 81;
         System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Video.class, id, "hottest")));
     }
 
@@ -241,14 +238,14 @@ public class VideoDaoTests {
      */
     @Test
     public void getVideosByNewest() {
-        int number = 20;
+        int number = 12;
         List<Video> videos = commonDao.getResourcesByNewest(Video.class, number);
-        System.out.println("---------返回" + videos.size() + "个视频---------");
         for (Video v : videos) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
             System.out.println(v.toString(true));
             System.out.println("---------------------------");
         }
+        System.out.println("---------返回" + videos.size() + "个视频---------");
     }
 
     /**
