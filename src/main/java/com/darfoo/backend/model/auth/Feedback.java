@@ -4,7 +4,6 @@ import com.darfoo.backend.model.cota.CSVTitle;
 import com.darfoo.backend.model.cota.ModelAttrSuper;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * Created by zjh on 15-3-4.
