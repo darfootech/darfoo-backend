@@ -1,10 +1,6 @@
 package com.springapp.mvc.resource;
 
-import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.caches.dao.CacheUtils;
-import com.darfoo.backend.caches.dao.VideoCacheDao;
-import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import org.junit.Test;
@@ -22,14 +18,6 @@ import java.util.List;
         "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml"
 })
 public class SearchCacheTests {
-    @Autowired
-    VideoCacheDao videoCacheDao;
-    @Autowired
-    AuthorDao authorDao;
-    @Autowired
-    CacheDao cacheDao;
-    @Autowired
-    CommonDao commonDao;
     @Autowired
     CacheUtils cacheUtils;
 

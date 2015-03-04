@@ -4,7 +4,6 @@ import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
-import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
@@ -21,8 +20,6 @@ import java.util.Set;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class MusicDaoTests {
-    @Autowired
-    AuthorDao authorDao;
     @Autowired
     CommonDao commonDao;
     @Autowired
@@ -48,7 +45,7 @@ public class MusicDaoTests {
     }
 
     @Test
-    public void getMusicByMusicId() {
+    public void getMusicById() {
         long start = System.currentTimeMillis();
         Music music = (Music) commonDao.getResourceById(Music.class, 30);
         System.out.println(music.toString(true));
@@ -57,17 +54,6 @@ public class MusicDaoTests {
             System.out.println("authorname is empty please fill it");
         } else {
             System.out.println("authorname -> " + music.getAuthorname());
-        }
-        System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
-    }
-
-    @Test
-    public void getHottestMusics() {
-        long start = System.currentTimeMillis();
-        List<Music> musics = commonDao.getResourcesByHottest(Music.class, 5);
-        for (Music music : musics) {
-            System.out.println(music.toString(true));
-            System.out.println("——————————————————————————————————————");
         }
         System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }
@@ -93,10 +79,6 @@ public class MusicDaoTests {
         System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Music.class, 2)));   //--->DELETE_SUCCESS
     }
 
-    /**
-     * 更新操作可以参考这个测试
-     * *
-     */
     @Test
     public void updateMusicById() {
         HashMap<String, String> updatecontents = new HashMap<String, String>();
@@ -115,10 +97,6 @@ public class MusicDaoTests {
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
     }
 
-    /**
-     * 获取所有的music对象
-     * *
-     */
     @Test
     public void getAllMusics() {
         List<Music> s_musics = commonDao.getAllResource(Music.class);
@@ -132,24 +110,11 @@ public class MusicDaoTests {
     }
 
     @Test
-    public void deleteVideoCascade() {
-        System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Music.class, 14)));
-    }
-
-    /**
-     * 更新点击量
-     * *
-     */
-    @Test
     public void updateMusicHottest() {
         Integer id = 1;
         System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Music.class, id, "hottest")));
     }
 
-    /**
-     * 按照热度排序从大到小，获取前number个video
-     * *
-     */
     @Test
     public void getMusicsByHottest() {
         int number = 5;
@@ -162,10 +127,6 @@ public class MusicDaoTests {
         }
     }
 
-    /**
-     * 获取最新的number个音频
-     * *
-     */
     @Test
     public void getMusicsByNewest() {
         int number = 20;
@@ -176,22 +137,6 @@ public class MusicDaoTests {
             System.out.println(v.toString(true));
             System.out.println("---------------------------");
         }
-    }
-
-    /**
-     * 更新authorName(Music)
-     * *
-     */
-    @Test
-    public void updateAuthorName() {
-        //Integer id = 10;  //UPDATE_MUSIC_NOTFOUND
-        Integer id = 30;
-        String newAuthorName = "jihui";
-
-        HashMap<String, Object> updateMap = new HashMap<String, Object>();
-        updateMap.put("authorName", newAuthorName);
-
-        System.out.println(CRUDEvent.getResponse(commonDao.updateResourceFieldsById(Music.class, id, updateMap)));
     }
 
     @Test

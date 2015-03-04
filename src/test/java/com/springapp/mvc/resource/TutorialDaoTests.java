@@ -2,7 +2,6 @@ package com.springapp.mvc.resource;
 
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.*;
-import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
@@ -22,8 +21,6 @@ import java.util.Set;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class TutorialDaoTests {
-    @Autowired
-    AuthorDao authorDao;
     @Autowired
     CommonDao commonDao;
     @Autowired
@@ -87,11 +84,6 @@ public class TutorialDaoTests {
         System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Tutorial.class, 24)));
     }
 
-
-    /**
-     * 更新操作可以参考这个测试
-     * *
-     */
     @Test
     public void updateTutorialById() {
         HashMap<String, String> updatecontents = new HashMap<String, String>();
@@ -110,10 +102,6 @@ public class TutorialDaoTests {
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
     }
 
-    /**
-     * 获取所有的tutorial对象
-     * *
-     */
     @Test
     public void getAllTutorials() {
         List<Tutorial> s_tutorials = commonDao.getAllResource(Tutorial.class);
@@ -126,31 +114,13 @@ public class TutorialDaoTests {
         }
     }
 
-    /**
-     * delete Tutorial
-     * *
-     */
     @Test
-    public void deleteTutorial() {
-        int res = commonDao.deleteResourceById(Tutorial.class, 5);
-        System.out.println(CRUDEvent.getResponse(res));
-    }
-
-    /**
-     * tutorial中 插入/更新 music
-     * *
-     */
-    @Test
-    public void insertorUpdateMusic() {
+    public void insertorUpdateTutorialMusic() {
         Integer vId = 1;
         Integer mId = 1;
         System.out.println(CRUDEvent.getResponse(accompanyDao.updateResourceMusic(Tutorial.class, vId, mId)));
     }
 
-    /**
-     * 从tutorial中查询对应的music(只能查到唯一一个)
-     * *
-     */
     @Test
     public void getMusicFromTutorial() {
         Integer vId = 1;
@@ -166,30 +136,18 @@ public class TutorialDaoTests {
         }
     }
 
-    /**
-     * 删除Tutorial中的music(将MUSIC_ID设为空)
-     * *
-     */
     @Test
     public void disconnectMusicFromTutorial() {
         Integer vId = 1;
         accompanyDao.deleteMusicFromResource(Tutorial.class, vId);
     }
 
-    /**
-     * 更新点击量
-     * *
-     */
     @Test
     public void updateTutorialHottest() {
         Integer id = 1;
         System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Tutorial.class, id, "hottest")));
     }
 
-    /**
-     * 按照热度排序从大到小，获取前number个video
-     * *
-     */
     @Test
     public void getTutorialsByHottest() {
         int number = 20;
@@ -202,10 +160,6 @@ public class TutorialDaoTests {
         }
     }
 
-    /**
-     * 获取最新的number个tutorial
-     * *
-     */
     @Test
     public void getTutorialsByNewest() {
         int number = 20;
@@ -218,9 +172,6 @@ public class TutorialDaoTests {
         }
     }
 
-    /**
-     * 根据authorid获得所有与之关联的video
-     */
     @Test
     public void getTutorialsByAuthorId() {
         Integer aId = 2;

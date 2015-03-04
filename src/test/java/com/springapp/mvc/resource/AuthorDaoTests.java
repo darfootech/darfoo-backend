@@ -66,10 +66,6 @@ public class AuthorDaoTests {
         System.out.println("insertid -> " + insertresult.get("insertid"));
     }
 
-    /**
-     * 更新作者，先对image进行是否存在的检测，再更新
-     * *
-     */
     @Test
     public void updateAuthorById() {
         HashMap<String, String> updatecontents = new HashMap<String, String>();
@@ -167,19 +163,6 @@ public class AuthorDaoTests {
     }
 
     @Test
-    public void sublistTest() {
-        List<Integer> test = new ArrayList<Integer>();
-        test.add(1);
-        test.add(2);
-        test.add(3);
-
-        List<Integer> subtest = test.subList(0, 1);
-        for (Integer id : subtest) {
-            System.out.println(id);
-        }
-    }
-
-    @Test
     public void isDuplicateWithPageQuery() {
         int pagesize = (int) paginationDao.getResourcePageCount(Author.class);
         Set<Integer> idSet = new HashSet<Integer>();
@@ -199,13 +182,13 @@ public class AuthorDaoTests {
     }
 
     @Test
-    public void updateVideoHottest() {
+    public void updateAuthorHottest() {
         Integer id = 1;
         System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Author.class, id, "hottest")));
     }
 
     @Test
-    public void getVideosByHottest() {
+    public void getAuthorsByHottest() {
         int number = 20;
         List<Author> authors = commonDao.getResourcesByHottest(Author.class, number);
         System.out.println("---------返回" + authors.size() + "个视频---------");

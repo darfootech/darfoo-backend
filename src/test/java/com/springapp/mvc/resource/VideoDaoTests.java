@@ -2,7 +2,6 @@ package com.springapp.mvc.resource;
 
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.*;
-import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.service.responsemodel.VideoCates;
@@ -19,8 +18,6 @@ import java.util.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class VideoDaoTests {
-    @Autowired
-    AuthorDao authorDao;
     @Autowired
     CommonDao commonDao;
     @Autowired
