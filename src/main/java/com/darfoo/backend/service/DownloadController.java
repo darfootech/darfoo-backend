@@ -4,6 +4,8 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.cota.CSVTitle;
+import com.darfoo.backend.model.cota.ModelAttrSuper;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
@@ -28,6 +30,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -202,17 +205,42 @@ public class DownloadController {
                     printer.printRecord(itemData);
                 }
             } else {
-                System.out.println("wired");
+                List<String> headers = new ArrayList<String>();
+                List<String> attrs = new ArrayList<String>();
+
+                for (Field field : resource.getFields()) {
+                    if (field.isAnnotationPresent(CSVTitle.class)) {
+                        String title = field.getAnnotation(CSVTitle.class).title();
+                        headers.add(title);
+                        attrs.add(field.getName());
+                    }
+                }
+                printer.printRecord(headers);
+
+                for (Object object : resources) {
+                    List itemData = new ArrayList();
+                    for (String attr : attrs) {
+                        Field field = resource.getField(attr);
+                        if (field.isAnnotationPresent(ModelAttrSuper.class)) {
+                            itemData.add(commonDao.getResourceAttr(resource.getSuperclass(), object, attr));
+                        } else {
+                            itemData.add(commonDao.getResourceAttr(resource, object, attr));
+                        }
+                    }
+                    printer.printRecord(itemData);
+                }
             }
 
             printer.flush();
             printer.close();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
         }
     }
 
-    @RequestMapping(value = "download{type}s", method = RequestMethod.GET)
+    @RequestMapping(value = "download/{type}", method = RequestMethod.GET)
     public ResponseEntity<byte[]> downloadvideos(@PathVariable String type) throws IOException {
         writeResourcesToCSV(TypeClassMapping.typeClassMap.get(type));
 

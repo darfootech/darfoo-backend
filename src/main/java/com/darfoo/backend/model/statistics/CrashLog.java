@@ -1,5 +1,6 @@
 package com.darfoo.backend.model.statistics;
 
+import com.darfoo.backend.model.cota.CSVTitle;
 import com.darfoo.backend.model.cota.ModelAttrSuper;
 
 import javax.persistence.*;
@@ -19,11 +20,14 @@ public class CrashLog {
     public Integer id;
 
     @Column(name = "log", unique = false, nullable = false)
+    @CSVTitle(title = "崩溃原因")
     public String log;
 
     @Column(name = "timestamp")
+    @CSVTitle(title = "崩溃时间戳")
     public Long timestamp = System.currentTimeMillis() / 1000;
 
     @Column(name = "date")
+    @CSVTitle(title = "崩溃日期")
     public Date date = new Date();
 }

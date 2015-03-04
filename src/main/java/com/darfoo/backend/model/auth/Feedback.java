@@ -1,5 +1,6 @@
 package com.darfoo.backend.model.auth;
 
+import com.darfoo.backend.model.cota.CSVTitle;
 import com.darfoo.backend.model.cota.ModelAttrSuper;
 
 import javax.persistence.*;

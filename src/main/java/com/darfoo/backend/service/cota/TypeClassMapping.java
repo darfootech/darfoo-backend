@@ -1,12 +1,17 @@
 package com.darfoo.backend.service.cota;
 
+import com.darfoo.backend.model.auth.Feedback;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.statistics.CrashLog;
+import com.darfoo.backend.model.statistics.SearchHistory;
 import com.darfoo.backend.model.statistics.clickcount.MenuClickCount;
+import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
 import com.darfoo.backend.model.statistics.clickcount.TabClickCount;
 import com.darfoo.backend.model.statistics.clicktime.MenuClickTime;
+import com.darfoo.backend.model.statistics.clicktime.ResourceClickTime;
 import com.darfoo.backend.model.statistics.clicktime.TabClickTime;
 import com.darfoo.backend.model.upload.UploadNoAuthVideo;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
@@ -30,6 +35,15 @@ public class TypeClassMapping {
         typeClassMap.put("music", Music.class);
         typeClassMap.put("author", Author.class);
         typeClassMap.put("uploadnoauthvideo", UploadNoAuthVideo.class);
+        typeClassMap.put("resourceclickcount", ResourceClickCount.class);
+        typeClassMap.put("menuclickcount", MenuClickCount.class);
+        typeClassMap.put("tabclickcount", TabClickCount.class);
+        typeClassMap.put("resourceclicktime", ResourceClickTime.class);
+        typeClassMap.put("menuclicktime", MenuClickTime.class);
+        typeClassMap.put("tabclicktime", TabClickTime.class);
+        typeClassMap.put("searchhistory", SearchHistory.class);
+        typeClassMap.put("feedback", Feedback.class);
+        typeClassMap.put("crashlog", CrashLog.class);
 
         cacheResponseMap.put("video", SingleVideo.class);
         cacheResponseMap.put("tutorial", SingleVideo.class);

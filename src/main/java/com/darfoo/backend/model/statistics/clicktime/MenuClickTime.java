@@ -1,5 +1,7 @@
 package com.darfoo.backend.model.statistics.clicktime;
 
+import com.darfoo.backend.model.cota.CSVTitle;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -14,5 +16,6 @@ import java.io.Serializable;
 @Table(name = "menuclicktime")
 public class MenuClickTime extends CommonClickTime implements Serializable {
     @Column(name = "menuid", nullable = false)
+    @CSVTitle(title = "菜单编号")
     public Integer menuid;
 }

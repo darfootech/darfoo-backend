@@ -225,8 +225,6 @@ public class DownloadTests {
                     }
                     printer.printRecord(itemData);
                 }
-
-                System.out.println("wired");
             }
             printer.flush();
             printer.close();
