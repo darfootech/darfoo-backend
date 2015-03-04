@@ -29,28 +29,24 @@ public class AuthenticateController {
     @RequestMapping(value = "prepare/{mac}")
     public
     @ResponseBody
-    HashMap<String, String> prepareBindMac(@PathVariable String mac) {
-        HashMap<String, String> result = new HashMap<String, String>();
-
+    String prepareBindMac(@PathVariable String mac) {
         if (commonDao.isResourceExistsByField(Bind.class, "mac", mac)) {
-            result.put("status", "error");
+            return "error";
         } else {
-            result.put("status", "ok");
+            return "ok";
         }
-
-        return result;
     }
 
-    @RequestMapping(value = "bind/m/{mac}/u/{username}/p/{password}}")
+    @RequestMapping(value = "bind/m/{mac}/u/{username}/p/{password}")
     public
     @ResponseBody
-    HashMap<String, Integer> bindMac(@PathVariable String mac, @PathVariable String username, @PathVariable String password) {
-        HashMap<String, Integer> result = new HashMap<String, Integer>();
+    Integer bindMac(@PathVariable String mac, @PathVariable String username, @PathVariable String password) {
+        int result;
 
         boolean flag = authenticateDao.authenticate(username, password);
         if (flag) {
             System.out.println("用户已经存在");
-            result.put("status", 500);
+            result = 500;
         } else {
             System.out.println("用户不存在");
             int userid = authenticateDao.createUser(username, password);
@@ -60,26 +56,11 @@ public class AuthenticateController {
 
             if (authenticateDao.createResource(Bind.class, conditions)) {
                 System.out.println("绑定成功");
-                result.put("status", 200);
+                result = 200;
             } else {
                 System.out.println("绑定失败");
-                result.put("status", 501);
+                result = 501;
             }
-        }
-
-        return result;
-    }
-
-    @RequestMapping(value = "login/u/{username}/p/{password}")
-    public
-    @ResponseBody
-    HashMap<String, Integer> login(@PathVariable String username, @PathVariable String password) {
-        HashMap<String, Integer> result = new HashMap<String, Integer>();
-
-        if (authenticateDao.authenticate(username, password)) {
-            result.put("status", 200);
-        } else {
-            result.put("status", 500);
         }
 
         return result;
@@ -88,9 +69,7 @@ public class AuthenticateController {
     @RequestMapping(value = "feedback/u/{username}/p/{password}")
     public
     @ResponseBody
-    HashMap<String, String> feedback(@PathVariable String username, @PathVariable String password, HttpServletRequest request) {
-        HashMap<String, String> result = new HashMap<String, String>();
-
+    String feedback(@PathVariable String username, @PathVariable String password, HttpServletRequest request) {
         String content = request.getParameter("content");
 
         boolean flag = authenticateDao.authenticate(username, password);
@@ -106,16 +85,14 @@ public class AuthenticateController {
 
             if (authenticateDao.createResource(Feedback.class, conditions)) {
                 System.out.println("提交反馈成功");
-                result.put("status", "ok");
+                return "ok";
             } else {
                 System.out.println("提交反馈失败");
-                result.put("status", "error");
+                return "error";
             }
         } else {
             System.out.println("用户不存在无法提交反馈");
-            result.put("status", "error");
+            return "error";
         }
-
-        return result;
     }
 }

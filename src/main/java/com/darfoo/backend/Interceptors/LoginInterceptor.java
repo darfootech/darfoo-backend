@@ -67,6 +67,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             return true;
         } else if (uri.contains("auth")) {
             System.out.println("用户操作");
+            return true;
         } else {
             // 最后的情况就是进入登录页面
             System.out.println("需要登陆");
