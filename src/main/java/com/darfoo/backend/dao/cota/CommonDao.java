@@ -749,7 +749,7 @@ public class CommonDao {
      * @param searchContent
      * @return 最多返回50个结果
      */
-    public List getResourceBySearch(Class resource, String searchContent) {
+    public List getResourcesBySearch(Class resource, String searchContent) {
         List result = new ArrayList();
         try {
             char[] s = searchContent.toCharArray();

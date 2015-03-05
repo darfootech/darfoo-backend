@@ -138,9 +138,9 @@ public class CacheDao {
     }
 
     public List getSearchResourcesWithAuthor(Class resource, String searchContent) {
-        List objects = commonDao.getResourceBySearch(resource, searchContent);
+        List objects = commonDao.getResourcesBySearch(resource, searchContent);
 
-        List<Author> authors = commonDao.getResourceBySearch(Author.class, searchContent);
+        List<Author> authors = commonDao.getResourcesBySearch(Author.class, searchContent);
         for (Author author : authors) {
             int aid = author.getId();
             HashMap<String, Object> conditions = new HashMap<String, Object>();

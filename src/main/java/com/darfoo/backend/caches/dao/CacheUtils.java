@@ -97,7 +97,7 @@ public class CacheUtils {
                 cacheDao.insertResourcesIntoCache(innerresource, resources, cachekey, innertype, CacheCollType.LIST);
             }
         } else if (type.equals("music")) {
-            List resources = commonDao.getResourceBySearch(resource, searchContent);
+            List resources = commonDao.getResourcesBySearch(resource, searchContent);
             cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
         } else {
             System.out.println("wired");
