@@ -41,29 +41,37 @@ public class AuthenticateController {
     public
     @ResponseBody
     Integer bindMac(@PathVariable String mac, @PathVariable String username, @PathVariable String password) {
-        int result;
-
-        boolean flag = authenticateDao.authenticate(username, password);
-        if (flag) {
-            System.out.println("用户已经存在");
-            result = 500;
+        boolean macflag = commonDao.isResourceExistsByField(Bind.class, "mac", mac);
+        if (macflag) {
+            System.out.println("mac地址已经绑定过用户");
+            return 500;
         } else {
-            System.out.println("用户不存在");
-            int userid = authenticateDao.createUser(username, password);
+            int userid = 0;
+            boolean usernameflag = commonDao.isResourceExistsByField(User.class, "username", username);
+            if (usernameflag) {
+                if (authenticateDao.authenticate(username, password)) {
+                    User user = authenticateDao.getUserByName(username);
+                    userid = user.id;
+                } else {
+                    System.out.println("用户身份验证失败无法将已有用户绑定到新的平板上");
+                    return 501;
+                }
+            } else {
+                System.out.println("用户不存在");
+                userid = authenticateDao.createUser(username, password);
+            }
             HashMap<String, Object> conditions = new HashMap<String, Object>();
             conditions.put("userid", userid);
             conditions.put("mac", mac);
 
             if (authenticateDao.createResource(Bind.class, conditions)) {
                 System.out.println("绑定成功");
-                result = 200;
+                return 200;
             } else {
                 System.out.println("绑定失败");
-                result = 501;
+                return 502;
             }
         }
-
-        return result;
     }
 
     @RequestMapping(value = "feedback/u/{username}/p/{password}")

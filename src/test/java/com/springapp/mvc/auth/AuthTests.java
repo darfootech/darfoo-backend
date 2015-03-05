@@ -42,12 +42,24 @@ public class AuthTests {
         String username = "username333";
         String password = "password";
 
-        boolean flag = authenticateDao.authenticate(username, password);
-        if (flag) {
-            System.out.println("用户已经存在");
+        boolean macflag = commonDao.isResourceExistsByField(Bind.class, "mac", mac);
+        if (macflag) {
+            System.out.println("mac地址已经绑定过用户");
         } else {
-            System.out.println("用户不存在");
-            int userid = authenticateDao.createUser(username, password);
+            int userid = 0;
+            boolean usernameflag = commonDao.isResourceExistsByField(User.class, "username", username);
+            if (usernameflag) {
+                if (authenticateDao.authenticate(username, password)) {
+                    User user = authenticateDao.getUserByName(username);
+                    userid = user.id;
+                } else {
+                    System.out.println("用户身份验证失败无法将已有用户绑定到新的平板上");
+                    return;
+                }
+            } else {
+                System.out.println("用户不存在");
+                userid = authenticateDao.createUser(username, password);
+            }
             HashMap<String, Object> conditions = new HashMap<String, Object>();
             conditions.put("userid", userid);
             conditions.put("mac", mac);
@@ -62,8 +74,8 @@ public class AuthTests {
 
     @Test
     public void getFeedback() {
-        String content = "feedback";
-        String username = "username333";
+        String content = "反馈";
+        String username = "username33";
         String password = "password";
 
         boolean flag = authenticateDao.authenticate(username, password);

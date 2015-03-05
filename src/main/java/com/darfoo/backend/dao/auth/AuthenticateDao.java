@@ -50,6 +50,13 @@ public class AuthenticateDao {
         return user.id;
     }
 
+    public User getUserByName(String username) {
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("username", username);
+        User user = (User) commonDao.getResourceByFields(User.class, conditions);
+        return user;
+    }
+
     public boolean authenticate(String username, String password) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("username", username);
