@@ -68,10 +68,17 @@ public class VideoDaoTests {
         System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }
 
+    /**
+     * video的标题可以重复但是同一个明星舞队下面的video标题不可以重复
+     */
     @Test
-    public void getVideoByVideoTitle() {
+    public void getVideoByTitleAndAuthorId() {
         long start = System.currentTimeMillis();
-        Video video = (Video) commonDao.getResourceByTitleOrName(Video.class, "ccc", "title");
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("title", "ccc");
+        conditions.put("author_id", 3);
+
+        Video video = (Video) commonDao.getResourceByFields(Video.class, conditions);
         if (video == null) {
             System.out.println("对象不存在，可以进行插入");
         } else {
