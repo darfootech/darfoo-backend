@@ -37,7 +37,7 @@ public class Author implements Serializable {
 
     //暂时弄成单向对应关系
     @OneToOne(targetEntity = Image.class, fetch = FetchType.EAGER)
-    @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE})
+    @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE, CascadeType.DELETE})
     @JoinColumn(name = "IMAGE_ID", referencedColumnName = "id", updatable = true)
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
     Image image;
