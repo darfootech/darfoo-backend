@@ -85,13 +85,8 @@ public class CacheUtils {
 
     public List cacheResourcesBySearch(String type, String searchContent, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
-        String cachekey;
-        if (pageArray.length == 0) {
-            cachekey = String.format("%ssearch%s", type, searchContent);
-        } else {
-            int page = pageArray[0];
-            cachekey = String.format("%ssearch%spage%d", type, searchContent, page);
-        }
+        //因为这里的分页是一次性把所有查询结果都放入缓存中然后在前端用redis游标来得到分页结果所以缓存的key中不需要包含页码号不然没请求一个页码都会在redis中生成一个完全一样的缓存结果
+        String cachekey = String.format("%ssearch%s", type, searchContent);
 
         if (type.equals("video")) {
             String[] types = {"video", "tutorial"};
@@ -131,13 +126,8 @@ public class CacheUtils {
     public List cacheAuthorVideos(Integer id, Integer... pageArray) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", id);
-        String cachekey;
-        if (pageArray.length == 0) {
-            cachekey = String.format("authorvideos%d", id);
-        } else {
-            int page = pageArray[0];
-            cachekey = String.format("authorvideos%dpage%d", id, page);
-        }
+        //因为这里的分页是一次性把所有查询结果都放入缓存中然后在前端用redis游标来得到分页结果所以缓存的key中不需要包含页码号不然没请求一个页码都会在redis中生成一个完全一样的缓存结果
+        String cachekey = String.format("authorvideos%d", id);
 
         String[] types = {"video", "tutorial"};
 

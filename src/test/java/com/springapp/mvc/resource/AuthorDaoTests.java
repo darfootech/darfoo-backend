@@ -146,7 +146,7 @@ public class AuthorDaoTests {
 
     @Test
     public void getAuthorOrderByVideoCountDescByPage() {
-        List<Author> result = authorDao.getAuthorsOrderByVideoCountDescByPage(1);
+        List<Author> result = authorDao.getAuthorsOrderByVideoCountDescByPage(2);
         for (Author author : result) {
             System.out.println(String.format("%d -> %s", author.getId(), author.getName()));
         }
