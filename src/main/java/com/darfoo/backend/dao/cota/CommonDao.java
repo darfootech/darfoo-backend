@@ -463,7 +463,9 @@ public class CommonDao {
                     //为之前没有关联图片的明星舞队更新图片
                     if (resource == Author.class) {
                         String imagekey = updatecontents.get(key);
-                        if (!imagekey.equals("")) {
+                        String oldImagekey = ((Author) object).getImage().getImage_key();
+
+                        if (!imagekey.equals("") && !imagekey.equals(oldImagekey)) {
                             if (!ServiceUtils.isValidImageKey(imagekey)) {
                                 resultMap.put("statuscode", 506);
                                 resultMap.put("insertid", -1);
