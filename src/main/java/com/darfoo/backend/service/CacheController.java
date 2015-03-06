@@ -60,7 +60,7 @@ public class CacheController {
         for (String type : types) {
             Class resource = TypeClassMapping.typeClassMap.get(type);
             List recommendResources = recommendDao.getRecommendResources(resource);
-            cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, type, CacheCollType.LIST);
+            cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, cachekey + type, CacheCollType.LIST);
         }
 
         return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.LIST);

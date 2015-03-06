@@ -1,6 +1,7 @@
 package com.darfoo.backend.caches.cota;
 
 import com.darfoo.backend.caches.client.CommonRedisClient;
+import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.Tutorial;
@@ -22,6 +23,8 @@ public class CacheProtocol {
     CommonRedisClient commonRedisClient;
     @Autowired
     QiniuUtils qiniuUtils;
+    @Autowired
+    CommonDao commonDao;
 
     public boolean insertResourceIntoCache(Class model, Object object, String prefix) {
         try {
@@ -59,7 +62,7 @@ public class CacheProtocol {
                                 String image_download_url = "";
                                 if (image != null) {
                                     if (prefix.contains("recommend")) {
-                                        image_download_url = qiniuUtils.getQiniuResourceUrl(image.getImage_key() + "@@recommend" + model.getSimpleName().toLowerCase() + ".png", QiniuResourceEnum.RAW);
+                                        image_download_url = qiniuUtils.getQiniuResourceUrl(commonDao.getResourceAttr(model, object, "video_key") + "@@recommend" + model.getSimpleName().toLowerCase() + ".png", QiniuResourceEnum.RAW);
                                     } else {
                                         image_download_url = qiniuUtils.getQiniuResourceUrl(image.getImage_key(), QiniuResourceEnum.RAW);
                                     }
