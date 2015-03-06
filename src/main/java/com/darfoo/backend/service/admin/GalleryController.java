@@ -123,6 +123,8 @@ public class GalleryController {
         }
 
         if (resource == Music.class) {
+            String musickey = commonDao.getResourceAttr(resource, object, "music_key").toString() + ".mp3";
+            modelMap.addAttribute("musicurl", qiniuUtils.getQiniuResourceUrl(musickey, QiniuResourceEnum.RAW));
             modelMap.addAttribute("music", object);
         }
 

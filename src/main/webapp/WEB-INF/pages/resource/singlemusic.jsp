@@ -28,22 +28,22 @@
                 </div>
 
                 <div style="display: none">
-                    <input type="text" name="origintitle" value="${music.title}">
+                    <input type="text" name="title" value="${music.title}">
                 </div>
 
                 <div class="form-group">
                     <label for="title">舞蹈伴奏标题(也就是上传伴奏文件的文件名,不需要后缀)</label>
-                    <input type="text" class="form-control" name="title" id="title" placeholder="${music.title}">
+                    <input type="text" class="form-control" id="title" placeholder="${music.title}" disabled="disabled">
                 </div>
 
                 <div style="display: none">
-                    <input type="text" name="originauthorname" value="${music.authorname}">
+                    <input type="text" name="authorname" value="${music.authorname}">
                 </div>
 
                 <div class="form-group">
                     <label for="authorname">舞蹈伴奏作者名字</label>
-                    <input type="text" class="form-control" name="authorname" id="authorname"
-                           placeholder="${music.authorname}">
+                    <input type="text" class="form-control" id="authorname"
+                           placeholder="${music.authorname}" disabled="disabled">
                 </div>
 
                 <div class="form-group">
@@ -79,6 +79,10 @@
                 <div class="form-group">
                     <label for="musicletter">伴奏首字母(大小写均可)</label>
                     <input type="text" class="form-control" name="musicletter" id="musicletter" value="${letter}">
+                </div>
+
+                <div class="form-group">
+                    <a href="${musicurl}" target="_blank">点击此处预览对应的音频资源</a>
                 </div>
 
                 <button type="button" class="btn btn-default" style="margin-right: 100px" id="update">更新舞蹈伴奏信息</button>
