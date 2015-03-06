@@ -81,7 +81,7 @@
                     <input type="text" class="form-control" name="musicletter" id="musicletter" value="${letter}">
                 </div>
 
-                <button type="button" class="btn btn-default" id="update">更新舞蹈伴奏信息</button>
+                <button type="button" class="btn btn-default" style="margin-right: 100px" id="update">更新舞蹈伴奏信息</button>
                 <button type="button" class="btn btn-default" id="kickout">删除舞蹈伴奏</button>
             </form>
         </div>
