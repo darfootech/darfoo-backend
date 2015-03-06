@@ -27,6 +27,10 @@ $(function () {
                     alert("相同名称的明星舞队已经存在");
                 } else if (data == "505") {
                     alert("伴奏名字和作者名字组合已存在");
+                } else if (data == "506") {
+                    alert("请保证图片名字带有后缀");
+                } else if (data == "507") {
+                    alert("相同名字的图片已经存在了,请修改图片名字");
                 } else {
                     alert("更新资源信息失败");
                 }

@@ -459,6 +459,27 @@ public class CommonDao {
                     if (!value.equals("") && value != null && !value.equals(oldValue)) {
                         setResourceAttr(resource, object, key, value);
                     }
+                } else if (key.equals("imagekey")) {
+                    //为之前没有关联图片的明星舞队更新图片
+                    if (resource == Author.class) {
+                        String imagekey = updatecontents.get(key);
+                        if (!imagekey.equals("")) {
+                            if (!ServiceUtils.isValidImageKey(imagekey)) {
+                                resultMap.put("statuscode", 506);
+                                resultMap.put("insertid", -1);
+                                return resultMap;
+                            }
+                            criteria = session.createCriteria(Image.class).add(Restrictions.eq("image_key", imagekey));
+                            if (criteria.list().size() == 1) {
+                                System.out.println("相同imagekey的图片已经存在了");
+                                resultMap.put("statuscode", 507);
+                                resultMap.put("insertid", -1);
+                                return resultMap;
+                            } else {
+                                setResourceAttr(resource, object, "image", new Image(imagekey));
+                            }
+                        }
+                    }
                 } else {
                     System.out.println("wired");
                 }

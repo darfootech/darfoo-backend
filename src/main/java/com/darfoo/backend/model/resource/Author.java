@@ -49,6 +49,7 @@ public class Author implements Serializable {
     @Transient
     @ModelInsert
     @ModelUpload(type = ModelUploadEnum.SMALL)
+    @ModelUpdate
     String imagekey;
 
     public Author() {
