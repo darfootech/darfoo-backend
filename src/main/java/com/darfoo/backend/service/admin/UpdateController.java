@@ -52,9 +52,9 @@ public class UpdateController {
         }
 
         if (resource == Tutorial.class) {
-            updatecontents.put("category1", request.getParameter("videospeed"));
-            updatecontents.put("category2", request.getParameter("videodifficult"));
-            updatecontents.put("category3", request.getParameter("videostyle"));
+            updatecontents.put("category1", request.getParameter("tutorialspeed"));
+            updatecontents.put("category2", request.getParameter("tutorialdifficult"));
+            updatecontents.put("category3", request.getParameter("tutorialstyle"));
         }
 
         if (resource == Music.class) {
