@@ -106,11 +106,13 @@ public class GalleryController {
 
         if (resource == Video.class || resource == Tutorial.class) {
             String videotype = commonDao.getResourceAttr(resource, object, "video_key").toString().split("\\.")[1];
+            String videokey = commonDao.getResourceAttr(resource, object, "video_key").toString();
             String imagekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
             Music music = (Music) commonDao.getResourceAttr(resource, object, "music");
             modelMap.addAttribute("videotype", videotype);
             modelMap.addAttribute("video", object);
             modelMap.addAttribute("authors", commonDao.getAllResource(Author.class));
+            modelMap.addAttribute("videourl", qiniuUtils.getQiniuResourceUrl(videokey, QiniuResourceEnum.RAW));
             modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(imagekey, QiniuResourceEnum.RAW));
             if (music != null) {
                 String connectmusic = music.getTitle() + "-" + music.getAuthorname();

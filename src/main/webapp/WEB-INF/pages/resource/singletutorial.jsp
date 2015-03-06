@@ -37,12 +37,12 @@
                 </div>
 
                 <div style="display: none">
-                    <input type="text" name="origintitle" value="${video.title}">
+                    <input type="text" name="title" value="${video.title}">
                 </div>
 
                 <div class="form-group">
                     <label for="title">舞蹈教程标题(也就是上传教程文件的文件名,不需要后缀)</label>
-                    <input type="text" class="form-control" name="title" id="title" placeholder="${video.title}">
+                    <input type="text" class="form-control" id="title" placeholder="${video.title}" disabled="disabled">
                 </div>
 
                 <div class="form-group">
@@ -68,14 +68,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="videotype">舞蹈教程格式---
+                    <label>舞蹈教程格式---
                         <div style="color: green; display: inline; font-size: 18pt">原本为${videotype}</div>
                     </label>
-                    <select data-toggle="select" name="videotype" id="videotype"
-                            class="form-control select select-success mrs mbm">
-                        <option value="mp4">mp4</option>
-                        <option value="flv">flv</option>
-                    </select>
                 </div>
 
                 <div class="form-group">
@@ -116,6 +111,10 @@
 
                 <div class="form-group">
                     <img src="${imageurl}" width="600" height="600">
+                </div>
+
+                <div class="form-group">
+                    <a href="${videourl}" target="_blank">点击此处预览对应的视频资源</a>
                 </div>
 
                 <div class="form-group">
