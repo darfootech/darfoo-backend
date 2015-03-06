@@ -25,25 +25,29 @@
                            placeholder="${author.description}"/>
                 </div>
 
-                <div style="display: none">
-                    <input type="text" name="imagekey" value="${author.image.image_key}">
-                </div>
+                <c:choose>
+                    <c:when test="${empty author.image || updateauthorimage == 1}">
+                        <h3>该作者还没有上传图片,请上传</h3>
 
-                <div class="form-group">
-                    <label for="imagekey">作者图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
-                    <input type="text" class="form-control" id="imagekey" placeholder="${author.image.image_key}"
-                           disabled="disabled">
-                </div>
+                        <div class="form-group">
+                            <label for="newimagekey">作者图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
+                            <input type="text" class="form-control" name="imagekey" id="newimagekey"
+                                   placeholder="请输入作者图片名称">
+                        </div>
+                    </c:when>
 
-                <c:if test="${empty author.image || updateauthorimage == 1}">
-                    <h3>该作者还没有上传图片,请上传</h3>
+                    <c:otherwise>
+                        <div style="display: none">
+                            <input type="text" name="imagekey" value="${author.image.image_key}">
+                        </div>
 
-                    <div class="form-group">
-                        <label for="newimagekey">作者图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
-                        <input type="text" class="form-control" name="newimagekey" id="newimagekey"
-                               placeholder="请输入作者图片名称">
-                    </div>
-                </c:if>
+                        <div class="form-group">
+                            <label for="imagekey">作者图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
+                            <input type="text" class="form-control" id="imagekey" placeholder="${author.image.image_key}"
+                                   disabled="disabled">
+                        </div>
+                    </c:otherwise>
+                </c:choose>
 
                 <div class="form-group">
                     <img src="${imageurl}" width="600" height="600">

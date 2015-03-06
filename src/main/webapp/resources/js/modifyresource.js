@@ -13,7 +13,7 @@ $(function () {
             data: $("#updateresourceform").serialize(),
             success: function (data) {
                 if (data == "200") {
-                    alert("更新作者信息成功");
+                    alert("更新资源信息成功");
                     window.location.href = "/darfoobackend/rest/admin/gallery/" + type + "/all"
                 } else if (data == "500") {
                     alert("需要被更新的资源不存在");
@@ -28,7 +28,7 @@ $(function () {
                 } else if (data == "505") {
                     alert("伴奏名字和作者名字组合已存在");
                 } else {
-                    alert("更新作者信息失败");
+                    alert("更新资源信息失败");
                 }
             },
             error: function () {
@@ -44,16 +44,16 @@ $(function () {
             data: {"id": id},
             success: function (data) {
                 if (data == "200") {
-                    alert("删除作者信息成功");
+                    alert("删除资源信息成功");
                     window.location.href = "/darfoobackend/rest/admin/gallery/" + type + "/all"
                 } else if (data == "500") {
-                    alert("删除作者信息失败");
+                    alert("删除资源信息失败");
                 } else {
-                    alert("删除作者信息失败");
+                    alert("删除资源信息失败");
                 }
             },
             error: function () {
-                alert("删除作者信息失败");
+                alert("删除资源信息失败");
             }
         });
     });

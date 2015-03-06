@@ -68,7 +68,7 @@ public class UploadController {
         System.out.println("status code is -> " + statuscode);
 
         if (resource == Video.class || resource == Tutorial.class) {
-            session.setAttribute("videokey", insertcontents.get("title") + "-" + insertid + "." + insertcontents.get("videotype"));
+            session.setAttribute("videokey", insertcontents.get("title") + "-" + resource.getSimpleName().toLowerCase() + "-" + insertid + "." + insertcontents.get("videotype"));
             session.setAttribute("imagekey", insertcontents.get("imagekey"));
         }
 

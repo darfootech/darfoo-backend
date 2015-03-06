@@ -25,7 +25,7 @@ $(function () {
                 } else if (data == "506") {
                     alert("相同名字的明星舞队已经存在");
                 } else {
-                    alert("提交视频信息失败");
+                    alert("提交资源信息失败");
                 }
             },
             error: function () {

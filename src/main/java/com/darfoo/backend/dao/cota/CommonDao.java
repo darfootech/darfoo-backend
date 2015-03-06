@@ -275,7 +275,7 @@ public class CommonDao {
 
             if (resource == Video.class || resource == Tutorial.class) {
                 HashMap<String, Object> updateMap = new HashMap<String, Object>();
-                updateMap.put("video_key", insertcontents.get("title") + "-" + insertid + "." + insertcontents.get("videotype"));
+                updateMap.put("video_key", insertcontents.get("title") + "-" + resource.getSimpleName().toLowerCase() + "-" + insertid + "." + insertcontents.get("videotype"));
                 updateResourceFieldsById(resource, insertid, updateMap);
 
                 String connectmusic = insertcontents.get("connectmusic");
