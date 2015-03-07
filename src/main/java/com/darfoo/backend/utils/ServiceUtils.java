@@ -23,7 +23,7 @@ public class ServiceUtils {
     //=> 大文件传得比较慢，所以就先放服务器上用七牛的命令行工具统一传
     public static String uploadLargeResource(CommonsMultipartFile file, String fileName) {
         String statusCode = "200";
-        String dirName = "uploadresources/";
+        String dirName = UploadDirConfig.uploaddir + "uploadresources/";
 
         long startTime = System.currentTimeMillis();
         //System.out.println("fileName："+file.getOriginalFilename());
@@ -49,7 +49,7 @@ public class ServiceUtils {
 
     //=> 小文件直接上传七牛服务器
     public static String uploadSmallResource(CommonsMultipartFile file, String fileName) {
-        String dirName = "uploadresources/" + new Date().getTime() + file.getOriginalFilename() + "/";
+        String dirName = UploadDirConfig.uploaddir + "uploadresources/" + new Date().getTime() + file.getOriginalFilename() + "/";
 
         long startTime = System.currentTimeMillis();
         //System.out.println("fileName："+file.getOriginalFilename());

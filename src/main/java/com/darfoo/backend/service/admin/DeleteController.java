@@ -4,8 +4,6 @@ import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.resource.*;
 import com.darfoo.backend.service.cota.TypeClassMapping;
-import com.darfoo.backend.utils.QiniuResourceEnum;
-import com.darfoo.backend.utils.QiniuUtils;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

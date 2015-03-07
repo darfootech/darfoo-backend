@@ -20,3 +20,4 @@ src/main/resources/redis.properties
 *.pyc
 *.pyo
 admin.properties
+*.conf
