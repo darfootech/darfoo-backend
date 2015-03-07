@@ -61,10 +61,15 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         } else if (uri.contains("statistics")) {
             System.out.println("行为统计");
             return true;
-        } else if (request.getSession() != null && request.getSession().getAttribute("loginUser") != null && request.getSession().getAttribute("loginUser").equals("cleantha")) {
+        } else if (uri.contains("admin")) {
             // 其他情况判断session中是否有key，有的话继续用户的操作
-            System.out.println("在管理资源");
-            return true;
+            if (request.getSession() != null && request.getSession().getAttribute("loginUser") != null && request.getSession().getAttribute("loginUser").equals("cleantha")) {
+                System.out.println("在管理资源");
+                return true;
+            } else {
+                response.sendRedirect(request.getContextPath() + "/rest/login");
+                return false;
+            }
         } else if (uri.contains("auth")) {
             System.out.println("用户操作");
             return true;
