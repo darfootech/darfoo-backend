@@ -62,18 +62,18 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">下载表格 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/darfoobackend/rest/download/video">下载视频资源表格</a></li>
-                        <li><a href="/darfoobackend/rest/download/tutorial">下载教程资源表格</a></li>
-                        <li><a href="/darfoobackend/rest/download/music">下载伴奏资源表格</a></li>
-                        <li><a href="/darfoobackend/rest/download/resourceclickcount">下载资源点击热度表格</a></li>
-                        <li><a href="/darfoobackend/rest/download/menuclickcount">下载菜单点击热度表格</a></li>
-                        <li><a href="/darfoobackend/rest/download/tabclickcount">下载底部菜单点击热度表格</a></li>
-                        <li><a href="/darfoobackend/rest/download/resourceclicktime">下载资源点击时间表格</a></li>
-                        <li><a href="/darfoobackend/rest/download/menuclicktime">下载菜单点击时间表格</a></li>
-                        <li><a href="/darfoobackend/rest/download/tabclicktime">下载底部菜单点击时间表格</a></li>
-                        <li><a href="/darfoobackend/rest/download/searchhistory">下载用户搜索记录表格</a></li>
-                        <li><a href="/darfoobackend/rest/download/feedback">下载用户反馈表格</a></li>
-                        <li><a href="/darfoobackend/rest/download/crashlog">下载崩溃日志表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/video">下载视频资源表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/tutorial">下载教程资源表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/music">下载伴奏资源表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/resourceclickcount">下载资源点击热度表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/menuclickcount">下载菜单点击热度表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/tabclickcount">下载底部菜单点击热度表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/resourceclicktime">下载资源点击时间表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/menuclicktime">下载菜单点击时间表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/tabclicktime">下载底部菜单点击时间表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/searchhistory">下载用户搜索记录表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/feedback">下载用户反馈表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/crashlog">下载崩溃日志表格</a></li>
                     </ul>
                 </li>
 

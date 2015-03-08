@@ -240,7 +240,7 @@ public class DownloadController {
         }
     }
 
-    @RequestMapping(value = "download/{type}", method = RequestMethod.GET)
+    @RequestMapping(value = "admin/download/{type}", method = RequestMethod.GET)
     public ResponseEntity<byte[]> downloadvideos(@PathVariable String type) throws IOException {
         writeResourcesToCSV(TypeClassMapping.typeClassMap.get(type));
 
