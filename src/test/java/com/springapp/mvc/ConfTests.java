@@ -1,6 +1,6 @@
 package com.springapp.mvc;
 
-import com.darfoo.backend.utils.UploadDirConfig;
+import com.darfoo.backend.utils.DiskFileDirConfig;
 import org.junit.Test;
 
 /**
@@ -9,6 +9,6 @@ import org.junit.Test;
 public class ConfTests {
     @Test
     public void getUploadDir() {
-        System.out.println(UploadDirConfig.uploaddir);
+        System.out.println(DiskFileDirConfig.uploaddir);
     }
 }

@@ -13,6 +13,7 @@ import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.TutorialCates;
 import com.darfoo.backend.service.responsemodel.VideoCates;
+import com.darfoo.backend.utils.DiskFileDirConfig;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.FileUtils;
@@ -72,7 +73,7 @@ public class DownloadController {
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
         CSVPrinter printer = null;
         try {
-            Writer out = new FileWriter(String.format("%s.csv", resource.getSimpleName().toLowerCase()));
+            Writer out = new FileWriter(String.format("%s%s.csv", DiskFileDirConfig.csvdir, resource.getSimpleName().toLowerCase()));
             printer = new CSVPrinter(out, format.withDelimiter(','));
             HashMap<String, String> styleMap = new HashMap<String, String>();
 
@@ -244,10 +245,10 @@ public class DownloadController {
     public ResponseEntity<byte[]> downloadvideos(@PathVariable String type) throws IOException {
         writeResourcesToCSV(TypeClassMapping.typeClassMap.get(type));
 
-        String path = String.format("%s.csv", type);
+        String path = String.format("%s%s.csv", DiskFileDirConfig.csvdir, type);
         File file = new File(path);
         HttpHeaders headers = new HttpHeaders();
-        String fileName = new String(path.getBytes("UTF-8"), "iso-8859-1");//为了解决中文名称乱码问题
+        String fileName = new String(String.format("%s.csv", type).getBytes("UTF-8"), "iso-8859-1");//为了解决中文名称乱码问题
         headers.setContentDispositionFormData("attachment", fileName);
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         byte[] fileBytes = FileUtils.readFileToByteArray(file);

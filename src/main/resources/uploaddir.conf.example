@@ -1,3 +1,7 @@
 upload {
     dir="/Users/zjh/Documents/"
 }
+
+csvfile {
+    dir="/Users/zjh/Documents/csvfiles/"
+}

@@ -17,6 +17,7 @@ import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
 import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.TutorialCates;
 import com.darfoo.backend.service.responsemodel.VideoCates;
+import com.darfoo.backend.utils.DiskFileDirConfig;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.junit.Test;
@@ -66,7 +67,7 @@ public class DownloadTests {
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
         CSVPrinter printer = null;
         try {
-            Writer out = new FileWriter(String.format("%s.csv", resource.getSimpleName().toLowerCase()));
+            Writer out = new FileWriter(String.format("%s%s.csv", DiskFileDirConfig.csvdir, resource.getSimpleName().toLowerCase()));
             printer = new CSVPrinter(out, format.withDelimiter(','));
             HashMap<String, String> styleMap = new HashMap<String, String>();
 
