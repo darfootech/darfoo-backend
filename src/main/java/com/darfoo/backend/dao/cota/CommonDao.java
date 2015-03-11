@@ -97,6 +97,32 @@ public class CommonDao {
         return null;
     }
 
+    public void saveResourceWithCategory(Class resource, Object object, Set<String> categoryTitles) {
+        Class categoryClass = null;
+        Set categories;
+        if (resource == Video.class) {
+            categoryClass = VideoCategory.class;
+        }
+
+        if (resource == Tutorial.class) {
+            categoryClass = TutorialCategory.class;
+        }
+
+        if (resource == Music.class) {
+            categoryClass = MusicCategory.class;
+        }
+
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(categoryClass).add(Restrictions.in("title", categoryTitles));
+        List categoryList = criteria.list();
+        categories = new HashSet(categoryList);
+
+        setResourceAttr(resource, object, "categories", categories);
+
+        session.clear();
+        session.save(object);
+    }
+
     /**
      * 插入新的资源
      *

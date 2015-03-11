@@ -18,6 +18,8 @@ public class VideoCates {
     private int styleCount = 12;
     private String[] styleArray = {"全部", "欢快", "活泼", "优美", "情歌风", "红歌风", "草原风", "戏曲风", "印巴风", "江南风", "民歌风", "儿歌风"};
 
+    public HashMap<String, String> categoryMap = new HashMap<String, String>();
+
     public VideoCates() {
         for (int i = 0; i < speedCount; i++) {
             speedCategory.put(i + "", speedArray[i]);
@@ -30,6 +32,13 @@ public class VideoCates {
         for (int i = 0; i < styleCount; i++) {
             styleCategory.put(i + "", styleArray[i]);
         }
+
+        categoryMap.put("较快", "快");
+        categoryMap.put("适中", "中");
+        categoryMap.put("较慢", "慢");
+        categoryMap.put("简单", "简单");
+        categoryMap.put("中等", "适中");
+        categoryMap.put("稍难", "稍难");
     }
 
     public Map<String, String> getSpeedCategory() {

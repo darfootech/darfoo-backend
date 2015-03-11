@@ -1,8 +1,10 @@
 package com.springapp.mvc.offlinejobs;
 
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.category.VideoCategory;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.service.responsemodel.VideoCates;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by zjh on 15-3-11.
@@ -25,6 +29,8 @@ import java.util.List;
 public class MergeVideoToTutorial {
     @Autowired
     CommonDao commonDao;
+    @Autowired
+    VideoCates videoCates;
 
     //因为之前只是在video和tutorial中各自保重了同一个authorid下面不存在duplicate的title 但是合并在一起就不一定了所以要先把这些无法插入的video找出来
     //此外由于相同imagekey的图片资源不能重复插入所以还不能单纯地使用CommonDao#insertResource函数来讲video资源插入到tutorial资源表中
@@ -66,6 +72,36 @@ public class MergeVideoToTutorial {
             System.out.println("done");
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void insertVideoToTutorial() {
+        List<Video> videos = commonDao.getAllResource(Video.class);
+
+        for (Video video : videos) {
+            System.out.println("current process video -> " + video.getId());
+
+            Tutorial tutorial = new Tutorial();
+            tutorial.setAuthor(video.getAuthor());
+            tutorial.setImage(video.getImage());
+            tutorial.setMusic(video.getMusic());
+            tutorial.setTitle(video.getTitle() + "-欣赏");
+            tutorial.setVideo_key(video.getVideo_key());
+            tutorial.setUpdate_timestamp(video.getUpdate_timestamp());
+            tutorial.setHottest(video.getHottest());
+            tutorial.setRecommend(video.getRecommend());
+
+            Set<String> categoryTitles = new HashSet<String>();
+            for (VideoCategory category : video.getCategories()) {
+                String categorytitle = category.getTitle();
+                if (videoCates.getSpeedCategory().containsValue(categorytitle) || videoCates.getDifficultyCategory().containsValue(categorytitle)) {
+                    categoryTitles.add(videoCates.categoryMap.get(categorytitle));
+                }
+            }
+            categoryTitles.add("队形表演");
+
+            commonDao.saveResourceWithCategory(Tutorial.class, tutorial, categoryTitles);
         }
     }
 }
