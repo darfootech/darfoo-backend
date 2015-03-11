@@ -40,7 +40,7 @@ public class MergeVideoToTutorial {
             Integer authorid = video.getAuthor().getId();
 
             HashMap<String, Object> conditions = new HashMap<String, Object>();
-            conditions.put("title", title);
+            conditions.put("title", title + "-欣赏");
             conditions.put("author_id", authorid);
 
             Object query = commonDao.getResourceByFields(Tutorial.class, conditions);
