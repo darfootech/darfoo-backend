@@ -11,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -71,7 +75,48 @@ public class MergeVideoToTutorial {
         }
     }*/
 
+    //由于之前的疏忽 video和tutorial中的video_key这个字段还会出现重复
+    /*@Test
+    public void getUnValidVideosAgain() {
+        List<Video> videos = commonDao.getAllResource(Video.class);
+        String content = "";
+
+        for (Video video : videos) {
+            //System.out.println(video.toString(true));
+            System.out.println("current process video -> " + video.getId());
+            String videokey = video.getVideo_key();
+
+            HashMap<String, Object> conditions = new HashMap<String, Object>();
+            conditions.put("video_key", videokey);
+
+            Object query = commonDao.getResourceByFields(Tutorial.class, conditions);
+
+            if (query != null) {
+                System.out.println(String.format("相同videokey的资源已经存在了 视频标题为 -> %d", video.getId()));
+                content += String.format("id -> %d\n", video.getId());
+            }
+        }
+
+        try {
+            File file = new File("duplicatevideos.txt");
+
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(content);
+            bw.close();
+
+            System.out.println("done");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }*/
+
     //mvn -Dtest=MergeVideoToTutorial test
+    //should be 924 video resource there
     @Test
     public void insertVideoToTutorial() {
         List<Video> videos = commonDao.getAllResource(Video.class);

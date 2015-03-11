@@ -135,7 +135,7 @@ public class VideoDaoTests {
 
     @Test
     public void deleteVideoCascade() {
-        System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Video.class, 85)));
+        System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Video.class, 91)));
     }
 
     /**
