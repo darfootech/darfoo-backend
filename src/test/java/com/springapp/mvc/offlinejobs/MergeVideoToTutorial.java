@@ -11,10 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,7 +30,7 @@ public class MergeVideoToTutorial {
 
     //因为之前只是在video和tutorial中各自保重了同一个authorid下面不存在duplicate的title 但是合并在一起就不一定了所以要先把这些无法插入的video找出来
     //此外由于相同imagekey的图片资源不能重复插入所以还不能单纯地使用CommonDao#insertResource函数来讲video资源插入到tutorial资源表中
-    @Test
+    /*@Test
     public void getUnValidVideos() {
         List<Video> videos = commonDao.getAllResource(Video.class);
         String content = "";
@@ -73,8 +69,9 @@ public class MergeVideoToTutorial {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
+    //mvn -Dtest=MergeVideoToTutorial test
     @Test
     public void insertVideoToTutorial() {
         List<Video> videos = commonDao.getAllResource(Video.class);
