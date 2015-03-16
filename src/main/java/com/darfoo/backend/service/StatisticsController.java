@@ -1,5 +1,7 @@
 package com.darfoo.backend.service;
 
+import com.darfoo.backend.dao.CRUDEvent;
+import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.statistic.StatisticsDao;
 import com.darfoo.backend.model.statistics.CrashLog;
 import com.darfoo.backend.model.statistics.SearchHistory;
@@ -24,6 +26,10 @@ import java.util.HashMap;
 public class StatisticsController {
     @Autowired
     StatisticsDao statisticsDao;
+    @Autowired
+    CommonDao commonDao;
+
+    String hottestField = "hottest";
 
     @RequestMapping(value = "{type}/{id}/m/{mac}/h/{host}/u/{uuid}")
     public
@@ -46,6 +52,10 @@ public class StatisticsController {
 
             statisticsDao.insertBehavior(ResourceClickTime.class, conditions);
             statisticsDao.insertOrUpdateClickBehavior(ResourceClickCount.class, conditions);
+
+            System.out.println(String.format("%s clicked id is: %d\n", type, id));
+            System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(TypeClassMapping.typeClassMap.get(type), id, hottestField)));
+
         }
         return "ok";
     }

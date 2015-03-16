@@ -27,16 +27,8 @@ public class InterceptorTests {
 
     @Test
     public void getNumberFromUri() {
-        String uri = "/darfoobackend/rest/resources/video/33";
-        System.out.println(uri.matches("(.*)/resources/video/\\d+$"));
+        String uri = String.format("/darfoobackend/rest/resources/%s/33", "video");
+        System.out.println(uri.matches(String.format("(.*)/resources/%s/\\d+$", "video")));
         System.out.println(getNumbers(uri));
-
-        String uri1 = "/darfoobackend/rest/resources/video/tutorial/333";
-        System.out.println(uri1.matches("(.*)/resources/video/tutorial/\\d+$"));
-        System.out.println(getNumbers(uri1));
-
-        String uri2 = "/darfoobackend/rest/resources/music/33";
-        System.out.println(uri2.matches("(.*)/resources/music/\\d+$"));
-        System.out.println(getNumbers(uri2));
     }
 }

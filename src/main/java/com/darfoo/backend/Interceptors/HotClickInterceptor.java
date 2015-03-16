@@ -3,10 +3,9 @@ package com.darfoo.backend.Interceptors;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.service.cota.TypeClassMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -43,36 +42,15 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
         String uri = request.getRequestURI();
         System.out.println("current uri is: " + uri + "\n");
 
-        if (uri.matches("(.*)/resources/video/\\d+$")) {
-            String videoid = getNumbers(uri);
-            System.out.println("video clicked id is: " + videoid + "\n");
-            int vid = Integer.parseInt(videoid);
-            System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Video.class, vid, hottestField)));
-            return true;
-        }
+        String[] types = {"video", "tutorial", "music", "author"};
 
-        if (uri.matches("(.*)/resources/tutorial/\\d+$")) {
-            String tutorialid = getNumbers(uri);
-            System.out.println("tutorial clicked id is: " + tutorialid + "\n");
-            int tid = Integer.parseInt(tutorialid);
-            System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Tutorial.class, tid, hottestField)));
-            return true;
-        }
-
-        if (uri.matches("(.*)/resources/music/\\d+$")) {
-            String musicid = getNumbers(uri);
-            System.out.println("music clicked id is: " + musicid + "\n");
-            int mid = Integer.parseInt(musicid);
-            System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Music.class, mid, hottestField)));
-            return true;
-        }
-
-        if (uri.matches("(.*)/resources/author/\\d+$")) {
-            String authorid = getNumbers(uri);
-            System.out.println("author clicked id is: " + authorid + "\n");
-            int aid = Integer.parseInt(authorid);
-            System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Author.class, aid, hottestField)));
-            return true;
+        for (String type : types) {
+            if (uri.matches(String.format("(.*)/resources/%s/\\d+$", type))) {
+                Integer id = Integer.parseInt(getNumbers(uri));
+                System.out.println(String.format("%s clicked id is: %d\n", type, id));
+                System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(TypeClassMapping.typeClassMap.get(type), id, hottestField)));
+                return true;
+            }
         }
 
         if (uri.matches("(.*)/resources/video/getmusic/\\d+$")) {
