@@ -142,6 +142,16 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String> {
     }
 
     /**
+     * 判断某一个key对应的redis集合中是否存在某一个field
+     * @param key
+     * @param field
+     * @return
+     */
+    public Boolean hexists(String key, String field) {
+        return redisTemplate.opsForHash().hasKey(key, field);
+    }
+
+    /**
      * 清空redis缓存
      *
      * @return

@@ -61,16 +61,19 @@ public class MusicDaoTests {
     @Test
     public void getMusicsByCategories() {
         long start = System.currentTimeMillis();
-        //String[] categories = {};//无条件限制
-        String[] categories = {"四拍", "情歌风", "D"}; //满足所有条件
+        String[] categories = {};//无条件限制
+        //String[] categories = {"四拍", "情歌风", "D"}; //满足所有条件
         //String[] categories = {"四拍"}; //满足个别条件
         //String[] categories = {"四拍","情歌风","0"};//最后一个条件不满足
         List<Music> musics = categoryDao.getResourcesByCategories(Music.class, categories);
-        System.out.println("最终满足的music数量 -> " + musics.size());
+        Set<Integer> musicids = new HashSet<Integer>();
         for (Music music : musics) {
             System.out.println(music.toString());
             System.out.println("——————————————————————————————————————");
+            musicids.add(music.getId());
         }
+        System.out.println("最终满足的music数量 -> " + musics.size());
+        System.out.println("distinct music id -> " + musicids.size());
         System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }
 
@@ -100,13 +103,15 @@ public class MusicDaoTests {
     @Test
     public void getAllMusics() {
         List<Music> s_musics = commonDao.getAllResource(Music.class);
-        System.out.println("总共查到" + s_musics.size());
-        for (Music video : s_musics) {
+        Set<Integer> musicids = new HashSet<Integer>();
+        for (Music music : s_musics) {
             System.out.println("----------------");
-            System.out.println("id: " + video.getId());
-            System.out.println(video.toString(true));
-
+            System.out.println("id: " + music.getId());
+            musicids.add(music.getId());
+            System.out.println(music.toString(true));
         }
+        System.out.println("总共查到" + s_musics.size());
+        System.out.println("distinct music id -> " + musicids.size());
     }
 
     @Test

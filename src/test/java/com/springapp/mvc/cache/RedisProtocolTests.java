@@ -1,5 +1,6 @@
 package com.springapp.mvc.cache;
 
+import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.caches.cota.CacheProtocol;
 import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.dao.cota.CommonDao;
@@ -35,6 +36,13 @@ public class RedisProtocolTests {
     CacheProtocol cacheProtocol;
     @Autowired
     CacheDao cacheDao;
+    @Autowired
+    CommonRedisClient redisClient;
+
+    @Test
+    public void isExistsInCache() {
+        System.out.println(redisClient.exists("music-419"));
+    }
 
     @Test
     public void insertResourceIntoCache() {
