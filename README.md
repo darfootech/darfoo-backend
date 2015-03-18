@@ -33,6 +33,18 @@ cd $darfoo_home
 qrsync conf.json
 ```
 
+## 后来写了查看需要同步的本地视屏的容量同步视频的脚本并且可以在web端查看和控制 需要将下面三个文件移植目标路径
+
+* conf3.json
+* upload.sh
+* resourcevolumn.sh
+
+```
+/usr/local/darfoo/apache-tomcat-7.0.47/bin
+```
+
+不知道为什么有时候upload功能脚本在web端执行会有问题
+
 ## Spring中加载多个propertyplaceholder出现错误
 多个配置文件各自包含placeholder,后加载的配置文件无法加载placeholder中对应的prop文件
 解决方法:
