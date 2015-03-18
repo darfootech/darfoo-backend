@@ -1,2 +1,2 @@
-qrsync conf2.json
+qrsync conf3.json
 echo upload done!
