@@ -55,6 +55,8 @@ public class CacheDao {
                 if (!redisClient.exists(resourcekey)) {
                     status = redisClient.rpush(cachekey, resourcekey);
                 }
+            } else if (type == CacheCollType.SORTEDSET) {
+                redisClient.zadd(cachekey, String.format("%s-%d", prefix, id), (double) id);
             } else {
                 System.out.println("wired");
             }
@@ -74,6 +76,12 @@ public class CacheDao {
                 keys = redisClient.lrange(cachekey, 0L, -1L);
             } else {
                 keys = redisClient.lrange(cachekey, points[0], points[1]);
+            }
+        } else if (type == CacheCollType.SORTEDSET) {
+            if (points.length == 0) {
+                keys = redisClient.zrange(cachekey, 0L, -1L, false);
+            } else {
+                keys = redisClient.zrange(cachekey, points[0], points[1], false);
             }
         } else {
             System.out.println("wired");

@@ -10,6 +10,31 @@ import java.util.*;
  * Created by zjh on 14-12-18.
  */
 public class CommonRedisClient extends AbstractBaseRedisDao<String, String> {
+    /**
+     * 向sorted set中插入值以及这个值对应的权重 这个权重就是用来排序的
+     * @param key
+     * @param value
+     * @param score
+     * @return
+     */
+    public Boolean zadd(String key, String value, Double score) {
+        return redisTemplate.opsForZSet().add(key, value, score);
+    }
+
+    /**
+     * 从sorted set中取出所有的值
+     * @param key
+     * @param start
+     * @param end
+     * @param withScore
+     * @return
+     */
+    public Set zrange(String key, Long start, Long end, Boolean withScore) {
+        if (withScore != null && withScore) {
+            return redisTemplate.opsForZSet().rangeWithScores(key, start, end);
+        }
+        return redisTemplate.opsForZSet().range(key, start, end);
+    }
 
     /**
      * 单键值队存储
