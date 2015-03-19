@@ -7,6 +7,7 @@ import akka.actor.ActorSystem;
  */
 public class ActorSysContainer {
     private ActorSystem sys;
+
     private ActorSysContainer() {
         sys = ActorSystem.create("MySystem1");
     }

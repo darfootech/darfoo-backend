@@ -12,6 +12,7 @@ import java.util.*;
 public class CommonRedisClient extends AbstractBaseRedisDao<String, String> {
     /**
      * 向sorted set中插入值以及这个值对应的权重 这个权重就是用来排序的
+     *
      * @param key
      * @param value
      * @param score
@@ -23,6 +24,7 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String> {
 
     /**
      * 从sorted set中取出所有的值
+     *
      * @param key
      * @param start
      * @param end
@@ -34,6 +36,22 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String> {
             return redisTemplate.opsForZSet().rangeWithScores(key, start, end);
         }
         return redisTemplate.opsForZSet().range(key, start, end);
+    }
+
+    /**
+     * 从sorted set中逆序取出所有的值
+     *
+     * @param key
+     * @param start
+     * @param end
+     * @param withScore
+     * @return
+     */
+    public Set zrevrange(String key, Long start, Long end, Boolean withScore) {
+        if (withScore != null && withScore) {
+            return redisTemplate.opsForZSet().reverseRangeWithScores(key, start, end);
+        }
+        return redisTemplate.opsForZSet().reverseRange(key, start, end);
     }
 
     /**
@@ -168,6 +186,7 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String> {
 
     /**
      * 判断某一个key对应的redis集合中是否存在某一个field
+     *
      * @param key
      * @param field
      * @return

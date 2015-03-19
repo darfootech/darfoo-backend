@@ -68,7 +68,7 @@ public class RedisProtocolTests {
         String categories = "0-0-0";
         String cachekey = String.format("%scategory%s", type, categories);
 
-        List result = cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
+        List result = cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, 0L, 10L);
 
         for (Object object : result) {
             System.out.println(commonDao.getResourceAttr(SingleMusic.class, object, "id"));

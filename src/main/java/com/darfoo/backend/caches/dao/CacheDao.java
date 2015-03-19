@@ -79,9 +79,9 @@ public class CacheDao {
             }
         } else if (type == CacheCollType.SORTEDSET) {
             if (points.length == 0) {
-                keys = redisClient.zrange(cachekey, 0L, -1L, false);
+                keys = redisClient.zrevrange(cachekey, 0L, -1L, false);
             } else {
-                keys = redisClient.zrange(cachekey, points[0], points[1], false);
+                keys = redisClient.zrevrange(cachekey, points[0], points[1], false);
             }
         } else {
             System.out.println("wired");
