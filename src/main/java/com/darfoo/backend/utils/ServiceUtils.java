@@ -1,5 +1,6 @@
 package com.darfoo.backend.utils;
 
+import com.darfoo.backend.model.cota.ModelUploadEnum;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.File;
@@ -21,38 +22,14 @@ public class ServiceUtils {
     }
 
     //=> 大文件传得比较慢，所以就先放服务器上用七牛的命令行工具统一传
-    public static String uploadLargeResource(CommonsMultipartFile file, String fileName) {
-        String statusCode = "200";
+    public static String uploadQiniuResource(CommonsMultipartFile file, String fileName, ModelUploadEnum type) {
         String dirName = DiskFileDirConfig.uploaddir + "uploadresources/";
 
-        long startTime = System.currentTimeMillis();
-        //System.out.println("fileName："+file.getOriginalFilename());
-
-        //创建目录
-        FileUtils.createDir(dirName);
-        String path = dirName + fileName;
-
-        File newFile = new File(path);
-        //通过CommonsMultipartFile的方法直接写文件（注意这个时候）
-        try {
-            file.transferTo(newFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-            statusCode = "500";
+        if (type == ModelUploadEnum.SMALL) {
+            dirName = DiskFileDirConfig.uploaddir + "uploadresources/" + new Date().getTime() + file.getOriginalFilename() + "/";
         }
 
-        long endTime = System.currentTimeMillis();
-        System.out.println("方法二的运行时间：" + String.valueOf(endTime - startTime) + "ms");
-
-        return statusCode;
-    }
-
-    //=> 小文件直接上传七牛服务器
-    public static String uploadSmallResource(CommonsMultipartFile file, String fileName) {
-        String dirName = DiskFileDirConfig.uploaddir + "uploadresources/" + new Date().getTime() + file.getOriginalFilename() + "/";
-
         long startTime = System.currentTimeMillis();
-        //System.out.println("fileName："+file.getOriginalFilename());
 
         //创建目录
         FileUtils.createDir(dirName);
@@ -67,22 +44,22 @@ public class ServiceUtils {
             return "500";
         }
 
-        //String statusCode = qiniuUtils.uploadResource(path, file.getOriginalFilename());
         String statusCode = qiniuUtils.uploadResourceStream(path, fileName);
-        System.out.println("status code: " + statusCode);
 
-        //删除目录
-        FileUtils.delete(dirName);
+        if (type == ModelUploadEnum.SMALL) {
+            //删除目录
+            FileUtils.delete(dirName);
+        }
 
         long endTime = System.currentTimeMillis();
-        System.out.println("方法二的运行时间：" + String.valueOf(endTime - startTime) + "ms");
+        System.out.println("运行时间：" + String.valueOf(endTime - startTime) + "ms");
 
         return statusCode;
     }
 
     public static String reUploadSmallResource(CommonsMultipartFile file, String fileName) {
         deleteResource(fileName);
-        return uploadSmallResource(file, fileName);
+        return uploadQiniuResource(file, fileName, ModelUploadEnum.SMALL);
     }
 
     public static void deleteResource(String key) {

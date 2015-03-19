@@ -3,6 +3,7 @@ package com.darfoo.backend.service;
 import com.darfoo.backend.dao.VersionDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.Version;
+import com.darfoo.backend.model.cota.ModelUploadEnum;
 import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
 import com.darfoo.backend.utils.ServiceUtils;
@@ -72,7 +73,7 @@ public class VersionController {
 
         String versionkey = String.format("launcher-%s-%s.apk", newversion, type);
 
-        String status = ServiceUtils.uploadSmallResource(versionresource, versionkey);
+        String status = ServiceUtils.uploadQiniuResource(versionresource, versionkey, ModelUploadEnum.SMALL);
 
         if (status.equals("200")) {
             return "success";

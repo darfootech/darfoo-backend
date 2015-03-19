@@ -1,5 +1,7 @@
 package com.darfoo.backend.service.admin;
 
+import akka.actor.ActorSystem;
+import akka.dispatch.OnComplete;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.cota.ModelInsert;
 import com.darfoo.backend.model.cota.ModelUpload;
@@ -8,6 +10,7 @@ import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.service.cota.ActorSysContainer;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +18,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import scala.concurrent.ExecutionContext;
+import scala.concurrent.Future;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.concurrent.Callable;
+
+import static akka.dispatch.Futures.future;
 
 /**
  * Created by zjh on 14-11-27.
@@ -31,6 +39,9 @@ import java.util.HashMap;
 public class UploadController {
     @Autowired
     CommonDao commonDao;
+
+    final ActorSystem system = ActorSysContainer.getInstance().getSystem();
+    final ExecutionContext ec = system.dispatcher();
 
     public int commonInsertResource(Class resource, HttpServletRequest request, HttpSession session) {
         HashMap<String, String> insertcontents = new HashMap<String, String>();
@@ -90,22 +101,26 @@ public class UploadController {
                 Annotation annotation = field.getAnnotation(ModelUpload.class);
                 ModelUpload modelUpload = (ModelUpload) annotation;
 
-                CommonsMultipartFile file = uploadresources.get(field.getName());
-                String key = session.getAttribute(field.getName()).toString();
+                final CommonsMultipartFile file = uploadresources.get(field.getName());
+                final String key = session.getAttribute(field.getName()).toString();
+                final ModelUploadEnum type = modelUpload.type();
 
-                if (modelUpload.type() == ModelUploadEnum.SMALL) {
-                    String status = ServiceUtils.uploadSmallResource(file, key);
-                    if (!status.equals("200")) {
-                        return "fail";
+                Future<String> future = future(new Callable<String>() {
+                    public String call() {
+                        String status = ServiceUtils.uploadQiniuResource(file, key, type);
+                        return status;
                     }
-                } else if (modelUpload.type() == ModelUploadEnum.LARGE) {
-                    String status = ServiceUtils.uploadLargeResource(file, key);
-                    if (!status.equals("200")) {
-                        return "fail";
+                }, system.dispatcher());
+
+                future.onComplete(new OnComplete<String>() {
+                    public void onComplete(Throwable failure, String status) {
+                        if (failure != null && !status.equals("200")) {
+                            System.out.println("upload file failed");
+                        } else {
+                            System.out.println("upload file success");
+                        }
                     }
-                } else {
-                    System.out.println("wired");
-                }
+                }, ec);
             }
         }
         return "success";
