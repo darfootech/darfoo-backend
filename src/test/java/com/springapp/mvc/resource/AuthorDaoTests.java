@@ -195,8 +195,14 @@ public class AuthorDaoTests {
     }
 
     @Test
+    public void changeAuthorTypeNotWork() {
+        authorDao.updateAuthorType(3, AuthorType.STAR);
+    }
+
+    @Test
     public void changeAuthorType() {
-        Class resource = Author.class;
-        commonDao.saveResource(commonDao.setResourceAttr(resource, commonDao.getResourceById(resource, 3), "type", AuthorType.NORMAL));
+        HashMap<String, Object> updateMap = new HashMap<String, Object>();
+        updateMap.put("type", AuthorType.STAR);
+        commonDao.updateResourceFieldsById(Author.class, 3, updateMap);
     }
 }

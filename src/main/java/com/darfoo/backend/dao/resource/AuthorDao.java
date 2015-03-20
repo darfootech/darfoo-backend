@@ -2,6 +2,7 @@ package com.darfoo.backend.dao.resource;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
+import com.darfoo.backend.model.cota.AuthorType;
 import com.darfoo.backend.model.resource.Author;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -33,6 +34,11 @@ public class AuthorDao {
             result.add(object);
         }
         return result;
+    }
+
+    public void updateAuthorType(Integer id, AuthorType type) {
+        Class resource = Author.class;
+        commonDao.saveResource(commonDao.setResourceAttr(resource, commonDao.getResourceById(resource, id), "type", type));
     }
 
     public List getAuthorsOrderByVideoCountDesc() {
