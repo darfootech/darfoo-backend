@@ -1,4 +1,4 @@
-package com.darfoo.backend.service;
+package com.darfoo.backend.service.resource;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.resource.Music;
