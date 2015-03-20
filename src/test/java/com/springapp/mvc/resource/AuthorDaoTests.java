@@ -4,6 +4,7 @@ import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
+import com.darfoo.backend.model.cota.AuthorType;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
@@ -191,5 +192,11 @@ public class AuthorDaoTests {
             System.out.println("热度值---->" + a.getHottest());
             System.out.println("---------------------------");
         }
+    }
+
+    @Test
+    public void changeAuthorType() {
+        Class resource = Author.class;
+        commonDao.saveResource(commonDao.setResourceAttr(resource, commonDao.getResourceById(resource, 3), "type", AuthorType.NORMAL));
     }
 }

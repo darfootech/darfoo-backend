@@ -2,10 +2,7 @@ package com.darfoo.backend.model.resource;
 
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
-import com.darfoo.backend.model.cota.ModelInsert;
-import com.darfoo.backend.model.cota.ModelUpdate;
-import com.darfoo.backend.model.cota.ModelUpload;
-import com.darfoo.backend.model.cota.ModelUploadEnum;
+import com.darfoo.backend.model.cota.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -52,6 +49,9 @@ public class Author implements Serializable {
     @ModelUpdate
     String imagekey;
 
+    @Column(name = "type", nullable = false, updatable = true, columnDefinition = "int default 0")
+    AuthorType type;
+
     public Author() {
 
     }
@@ -94,6 +94,14 @@ public class Author implements Serializable {
 
     public void setImage(Image image) {
         this.image = image;
+    }
+
+    public AuthorType getType() {
+        return type;
+    }
+
+    public void setType(AuthorType type) {
+        this.type = type;
     }
 
     @Override

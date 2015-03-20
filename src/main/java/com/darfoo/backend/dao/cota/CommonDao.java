@@ -72,16 +72,18 @@ public class CommonDao {
         }
     }
 
-    public void setResourceAttr(Class resource, Object object, String fieldname, Object value) {
+    public Object setResourceAttr(Class resource, Object object, String fieldname, Object value) {
         try {
             Field field = resource.getDeclaredField(fieldname);
             field.setAccessible(true);
             field.set(object, value);
+            return object;
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     public Object getResourceAttr(Class resource, Object object, String fieldname) {
@@ -121,6 +123,10 @@ public class CommonDao {
 
         session.clear();
         session.save(object);
+    }
+
+    public void saveResource(Object object) {
+        sessionFactory.getCurrentSession().saveOrUpdate(object);
     }
 
     /**
