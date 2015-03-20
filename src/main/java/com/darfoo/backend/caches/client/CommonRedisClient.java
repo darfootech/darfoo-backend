@@ -65,6 +65,13 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String> {
     }
 
     /**
+     * 单键值队得到值
+     *
+     * @param key
+     */
+    public String get(String key) { return redisTemplate.opsForValue().get(key); }
+
+    /**
      * 按键值对存入
      *
      * @param key
