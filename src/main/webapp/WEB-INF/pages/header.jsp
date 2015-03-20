@@ -87,6 +87,7 @@
                         <li><a href="/darfoobackend/rest/admin/gallery/author/normal/all">查看修改普通舞队</a></li>
                         <li><a href="/darfoobackend/rest/admin/connectmusic/video/all">关联舞蹈伴奏和舞蹈视频</a></li>
                         <li><a href="/darfoobackend/rest/admin/connectmusic/tutorial/all">关联舞蹈伴奏和舞蹈教程</a></li>
+                        <li><a href="/darfoobackend/rest/admin/author/changetype">切换舞队类型</a></li>
                     </ul>
                 </li>
 
