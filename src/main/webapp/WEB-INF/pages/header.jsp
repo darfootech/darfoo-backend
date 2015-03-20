@@ -83,7 +83,8 @@
                         <li><a href="/darfoobackend/rest/admin/gallery/video/all">查看修改舞蹈欣赏</a></li>
                         <li><a href="/darfoobackend/rest/admin/gallery/tutorial/all">查看修改舞蹈教程</a></li>
                         <li><a href="/darfoobackend/rest/admin/gallery/music/all">查看修改舞蹈伴奏</a></li>
-                        <li><a href="/darfoobackend/rest/admin/gallery/author/all">查看修改明星舞队</a></li>
+                        <li><a href="/darfoobackend/rest/admin/gallery/author/star/all">查看修改明星舞队</a></li>
+                        <li><a href="/darfoobackend/rest/admin/gallery/author/normal/all">查看修改普通舞队</a></li>
                         <li><a href="/darfoobackend/rest/admin/connectmusic/video/all">关联舞蹈伴奏和舞蹈视频</a></li>
                         <li><a href="/darfoobackend/rest/admin/connectmusic/tutorial/all">关联舞蹈伴奏和舞蹈教程</a></li>
                     </ul>

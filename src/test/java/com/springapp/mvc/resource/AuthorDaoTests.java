@@ -195,6 +195,16 @@ public class AuthorDaoTests {
     }
 
     @Test
+    public void getAuthorsByType() {
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("type", AuthorType.NORMAL);
+        List authors = commonDao.getResourcesByFields(Author.class, conditions);
+        for (Object author : authors) {
+            System.out.println(commonDao.getResourceAttr(Author.class, author, "id"));
+        }
+    }
+
+    @Test
     public void changeAuthorTypeNotWork() {
         authorDao.updateAuthorType(3, AuthorType.STAR);
     }
@@ -202,7 +212,7 @@ public class AuthorDaoTests {
     @Test
     public void changeAuthorType() {
         HashMap<String, Object> updateMap = new HashMap<String, Object>();
-        updateMap.put("type", AuthorType.STAR);
+        updateMap.put("type", AuthorType.NORMAL);
         commonDao.updateResourceFieldsById(Author.class, 3, updateMap);
     }
 }

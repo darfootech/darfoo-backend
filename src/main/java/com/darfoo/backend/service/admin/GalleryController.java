@@ -4,6 +4,7 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.cota.AuthorType;
 import com.darfoo.backend.model.resource.*;
 import com.darfoo.backend.model.upload.UploadNoAuthVideo;
 import com.darfoo.backend.service.cota.TypeClassMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -40,12 +42,24 @@ public class GalleryController {
     @Autowired
     MusicCates musicCates;
 
-    @RequestMapping(value = "/admin/gallery/{type}/all", method = RequestMethod.GET)
-    public String showAllResource(@PathVariable String type, ModelMap modelMap) {
-        List resources = commonDao.getAllResource(TypeClassMapping.typeClassMap.get(type));
+    public String galleryAllResources(List resources, ModelMap modelMap, String type) {
         modelMap.addAttribute("resources", resources);
         modelMap.addAttribute("type", type);
         return "resource/allresources";
+    }
+
+    @RequestMapping(value = "/admin/gallery/author/{type}/all", method = RequestMethod.GET)
+    public String showAllAuthor(@PathVariable String type, ModelMap modelMap) {
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("type", TypeClassMapping.authorTypeMap.get(type));
+        List resources = commonDao.getResourcesByFields(Author.class, conditions);
+        return galleryAllResources(resources, modelMap, "author");
+    }
+
+    @RequestMapping(value = "/admin/gallery/{type}/all", method = RequestMethod.GET)
+    public String showAllResource(@PathVariable String type, ModelMap modelMap) {
+        List resources = commonDao.getAllResource(TypeClassMapping.typeClassMap.get(type));
+        return galleryAllResources(resources, modelMap, type);
     }
 
     private ModelMap getResourceModelMap(Class resource, Integer id, ModelMap modelMap) {
