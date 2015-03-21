@@ -3,7 +3,6 @@ package com.darfoo.backend.service.admin;
 import akka.actor.ActorSystem;
 import akka.dispatch.OnComplete;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.cota.AuthorType;
 import com.darfoo.backend.model.cota.ModelInsert;
 import com.darfoo.backend.model.cota.ModelUpload;
 import com.darfoo.backend.model.cota.ModelUploadEnum;
@@ -130,7 +129,7 @@ public class UploadController {
     @RequestMapping(value = "/resources/{type}/new", method = RequestMethod.GET)
     public String uploadResource(@PathVariable String type, ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("type", AuthorType.STAR);
+        conditions.put("type", TypeClassMapping.videoTypeAuthorTypeMap.get(type));
         modelMap.addAttribute("type", type);
         modelMap.addAttribute("authors", commonDao.getResourcesByFields(Author.class, conditions));
         return String.format("upload/upload%s", type);
