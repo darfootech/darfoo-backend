@@ -8,12 +8,15 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.cota.AuthorType;
 import com.darfoo.backend.model.cota.CSVTitle;
 import com.darfoo.backend.model.cota.ModelAttrSuper;
+import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
+import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.TutorialCates;
 import com.darfoo.backend.service.responsemodel.VideoCates;
@@ -32,10 +35,7 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
@@ -252,5 +252,34 @@ public class DownloadTests {
     @Test
     public void writeStatisticsRecordsToCSV() {
         writeResourcesToCSV(ResourceClickCount.class);
+    }
+
+    @Test
+    public void writeVideosOfAuthorToCSV() {
+        int authorid = 2;
+        String authorname = ((Author) commonDao.getResourceById(Author.class, authorid)).getName();
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("author_id", authorid);
+
+        Class videoClass = TypeClassMapping.authorTypeClassMap.get(AuthorType.NORMAL);
+        List videos = commonDao.getResourcesByFields(videoClass, conditions);
+
+        CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
+        CSVPrinter printer = null;
+        try {
+            Writer out = new FileWriter(String.format("%s%s.csv", DiskFileDirConfig.csvdir, String.format("authorvideos-%d", authorid)));
+            printer = new CSVPrinter(out, format.withDelimiter(','));
+
+            printer.printRecord(authorname);
+
+            for (Object video : videos) {
+                printer.printRecord(commonDao.getResourceAttr(videoClass, video, "title"));
+            }
+
+            printer.flush();
+            printer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
