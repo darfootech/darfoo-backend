@@ -4,6 +4,7 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.cota.AuthorType;
 import com.darfoo.backend.model.resource.*;
 import com.darfoo.backend.model.upload.UploadNoAuthVideo;
 import com.darfoo.backend.service.cota.TypeClassMapping;
@@ -48,9 +49,9 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/gallery/author/{type}/all", method = RequestMethod.GET)
-    public String showAllAuthor(@PathVariable String type, ModelMap modelMap) {
+    public String showAllAuthor(@PathVariable AuthorType type, ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("type", TypeClassMapping.authorTypeMap.get(type));
+        conditions.put("type", type);
         List resources = commonDao.getResourcesByFields(Author.class, conditions);
         return galleryAllResources(resources, modelMap, "author");
     }
@@ -163,5 +164,17 @@ public class GalleryController {
         modelMap.addAttribute("id", id);
         modelMap.addAttribute("type", type);
         return String.format("resource/single%s", type);
+    }
+
+    @RequestMapping(value = "/admin/author/{type}/videos/{id}", method = RequestMethod.GET)
+    public String showAuthorVideos(@PathVariable AuthorType type, @PathVariable Integer id, ModelMap modelMap) {
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("author_id", id);
+
+        List videos = commonDao.getResourcesByFields(TypeClassMapping.authorTypeClassMap.get(type), conditions);
+
+        modelMap.put("videos", videos);
+
+        return "author/authorvideos";
     }
 }

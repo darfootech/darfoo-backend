@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%@include file="header.jsp" %>
+<%@include file="../header.jsp" %>
 
 <script>
     var change_to_normal = [];
@@ -56,7 +56,7 @@
             if (change_to_normal.length == 0) {
                 alert("还没有选择要变为普通舞队的明星舞队");
             } else {
-                $.post("/darfoobackend/rest/admin/author/changetype/normal", {
+                $.post("/darfoobackend/rest/admin/author/changetype/NORMAL", {
                     'ids': change_to_normal.join(',')
                 }, function (data) {
                     if (data == 200) {
@@ -72,7 +72,7 @@
             if (change_to_star.length == 0) {
                 alert("还没有选择要变为明星舞队的普通舞队");
             } else {
-                $.post("/darfoobackend/rest/admin/author/changetype/star", {
+                $.post("/darfoobackend/rest/admin/author/changetype/STAR", {
                     'ids': change_to_star.join(',')
                 }, function (data) {
                     if (data == 200) {
@@ -122,4 +122,4 @@
     </div>
 </div>
 
-<%@include file="footer.jsp" %>
+<%@include file="../footer.jsp" %>

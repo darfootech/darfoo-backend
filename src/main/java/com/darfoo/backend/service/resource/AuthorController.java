@@ -3,7 +3,6 @@ package com.darfoo.backend.service.resource;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.cota.AuthorType;
 import com.darfoo.backend.model.resource.Author;
-import com.darfoo.backend.service.cota.TypeClassMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -34,18 +33,18 @@ public class AuthorController {
         List normalAuthors = commonDao.getResourcesByFields(Author.class, conditions);
         modelMap.addAttribute("starauthors", starAuthors);
         modelMap.addAttribute("normalauthors", normalAuthors);
-        return "changeauthortype";
+        return "author/changeauthortype";
     }
 
     @RequestMapping(value = "/admin/author/changetype/{type}", method = RequestMethod.POST)
     public
     @ResponseBody
-    Integer changeAuthorType(@PathVariable String type, HttpServletRequest request) {
+    Integer changeAuthorType(@PathVariable AuthorType type, HttpServletRequest request) {
         String ids = request.getParameter("ids");
         String[] idArray = ids.split(",");
 
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("type", TypeClassMapping.authorTypeMap.get(type));
+        conditions.put("type", type);
 
         for (int i = 0; i < idArray.length; i++) {
             commonDao.updateResourceFieldsById(Author.class, Integer.parseInt(idArray[i]), conditions);

@@ -29,7 +29,7 @@ public class TypeClassMapping {
     public static HashMap<String, Class> cacheResponseMap = new HashMap<String, Class>();
     public static HashMap<String, Class> clickCountStatMap = new HashMap<String, Class>();
     public static HashMap<String, Class> clickTimeStatMap = new HashMap<String, Class>();
-    public static HashMap<String, AuthorType> authorTypeMap = new HashMap<String, AuthorType>();
+    public static HashMap<AuthorType, Class> authorTypeClassMap = new HashMap<AuthorType, Class>();
 
     static {
         typeClassMap.put("video", Video.class);
@@ -58,7 +58,7 @@ public class TypeClassMapping {
         clickTimeStatMap.put("menu", MenuClickTime.class);
         clickTimeStatMap.put("tab", TabClickTime.class);
 
-        authorTypeMap.put("star", AuthorType.STAR);
-        authorTypeMap.put("normal", AuthorType.NORMAL);
+        authorTypeClassMap.put(AuthorType.STAR, Tutorial.class);
+        authorTypeClassMap.put(AuthorType.NORMAL, Video.class);
     }
 }
