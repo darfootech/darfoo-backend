@@ -31,6 +31,7 @@ public class TypeClassMapping {
     public static HashMap<String, Class> clickTimeStatMap = new HashMap<String, Class>();
     public static HashMap<AuthorType, Class> authorTypeClassMap = new HashMap<AuthorType, Class>();
     public static HashMap<String, AuthorType> videoTypeAuthorTypeMap = new HashMap<String, AuthorType>();
+    public static HashMap<AuthorType, String> authorTypeVideoTypeMap = new HashMap<AuthorType, String>();
 
     static {
         typeClassMap.put("video", Video.class);
@@ -64,5 +65,8 @@ public class TypeClassMapping {
 
         videoTypeAuthorTypeMap.put("video", AuthorType.NORMAL);
         videoTypeAuthorTypeMap.put("tutorial", AuthorType.STAR);
+
+        authorTypeVideoTypeMap.put(AuthorType.NORMAL, "video");
+        authorTypeVideoTypeMap.put(AuthorType.STAR, "tutorial");
     }
 }

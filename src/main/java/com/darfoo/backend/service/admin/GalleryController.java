@@ -170,11 +170,7 @@ public class GalleryController {
     public String showAuthorVideos(@PathVariable AuthorType type, @PathVariable Integer id, ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", id);
-
         List videos = commonDao.getResourcesByFields(TypeClassMapping.authorTypeClassMap.get(type), conditions);
-
-        modelMap.put("videos", videos);
-
-        return "author/authorvideos";
+        return galleryAllResources(videos, modelMap, TypeClassMapping.authorTypeVideoTypeMap.get(type));
     }
 }
