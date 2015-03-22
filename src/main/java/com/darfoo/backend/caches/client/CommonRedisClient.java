@@ -55,7 +55,7 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String> {
     }
 
     /**
-     * 单键值队存储
+     * 单键值对存储
      *
      * @param key
      * @param value
@@ -65,11 +65,13 @@ public class CommonRedisClient extends AbstractBaseRedisDao<String, String> {
     }
 
     /**
-     * 单键值队得到值
+     * 单键值对得到值
      *
      * @param key
      */
-    public String get(String key) { return redisTemplate.opsForValue().get(key); }
+    public String get(String key) {
+        return redisTemplate.opsForValue().get(key);
+    }
 
     /**
      * 按键值对存入

@@ -30,7 +30,7 @@ public class MonitorRedis {
                     try {
                         s.connect(addr);
                         new Thread(instance.new ReadRunnable(s)).start();
-                        Thread.sleep(300*1000l); //5min间隔请求redis cluster信息
+                        Thread.sleep(300 * 1000l); //5min间隔请求redis cluster信息
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
@@ -50,9 +50,9 @@ public class MonitorRedis {
         System.out.println("---basic start---");
         for (Iterator<String> basicIter = basicKeys.iterator(); basicIter.hasNext(); ) {
             String basicKey = basicIter.next();
-            if(basicKey.equals("timestamp")){
-                System.out.println(basicKey + ":"+sdf.format(new Date((1000l*(Integer)map.get(basicKey)))));
-            }else
+            if (basicKey.equals("timestamp")) {
+                System.out.println(basicKey + ":" + sdf.format(new Date((1000l * (Integer) map.get(basicKey)))));
+            } else
                 System.out.println(basicKey + ":" + map.get(basicKey));
             if (basicKey.equals("alpha")) {
                 alphaMap = (Map) map.get("alpha");
@@ -103,11 +103,11 @@ public class MonitorRedis {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            } finally{
+            } finally {
                 try {
-                    if(is != null)
+                    if (is != null)
                         is.close();
-                    if(socket != null)
+                    if (socket != null)
                         socket.close();
                     is = null;
                     socket = null;

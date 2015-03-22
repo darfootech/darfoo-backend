@@ -135,8 +135,9 @@ public class RedisProxyTests {
 
     //测试删除dump
     //Twemproxy好像不支持，会报错
+    //试试使用expire过期时间来代替deleteall
     @Test
-    public void deleteAllDb(){
+    public void deleteAllDb() {
         commonRedisClient.deleteCurrentDB();
     }
 
