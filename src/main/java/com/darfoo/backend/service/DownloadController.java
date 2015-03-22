@@ -243,12 +243,12 @@ public class DownloadController {
         }
     }
 
-    public void writeAuthorVideosToCSV(Integer id) {
+    public void writeAuthorVideosToCSV(AuthorType type, Integer id) {
         String authorname = ((Author) commonDao.getResourceById(Author.class, id)).getName();
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", id);
 
-        Class videoClass = TypeClassMapping.authorTypeClassMap.get(AuthorType.NORMAL);
+        Class videoClass = TypeClassMapping.authorTypeClassMap.get(type);
         List videos = commonDao.getResourcesByFields(videoClass, conditions);
 
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
@@ -290,10 +290,10 @@ public class DownloadController {
         return downloadCSVFiles(type);
     }
 
-    @RequestMapping(value = "admin/download/authorvideos/{id}", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> downloadAuthorvideos(@PathVariable Integer id) throws IOException {
+    @RequestMapping(value = "admin/download/authorvideos/{type}/{id}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> downloadAuthorvideos(@PathVariable AuthorType type, @PathVariable Integer id) throws IOException {
         String authorname = ((Author) commonDao.getResourceById(Author.class, id)).getName();
-        writeAuthorVideosToCSV(id);
+        writeAuthorVideosToCSV(type, id);
         return downloadCSVFiles(String.format("author-%s", authorname));
     }
 }
