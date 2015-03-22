@@ -56,6 +56,14 @@
                 <button type="button" class="btn btn-default" style="margin-right: 100px" id="update">更新舞队信息</button>
                 <button type="button" class="btn btn-default" style="margin-right: 100px" id="kickout">删除舞队</button>
                 <button type="button" class="btn btn-default" style="margin-right: 100px" id="updateimage">更新舞队封面图片</button>
+                <br/>
+                <br/>
+                <br/>
+                <a href="/darfoobackend/rest/admin/download/authorvideos/${author.id}" style="margin-right: 100px">
+                    <button type="button" class="btn btn-default">
+                        下载舞队视频资源表格
+                    </button>
+                </a>
                 <a href="/darfoobackend/rest/admin/author/${author.type}/videos/${author.id}">
                     <button type="button" class="btn btn-default">
                         查看和舞队关联的视频资源

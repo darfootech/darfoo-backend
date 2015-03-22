@@ -4,8 +4,10 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.cota.AuthorType;
 import com.darfoo.backend.model.cota.CSVTitle;
 import com.darfoo.backend.model.cota.ModelAttrSuper;
+import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
@@ -241,14 +243,38 @@ public class DownloadController {
         }
     }
 
-    @RequestMapping(value = "admin/download/{type}", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> downloadvideos(@PathVariable String type) throws IOException {
-        writeResourcesToCSV(TypeClassMapping.typeClassMap.get(type));
+    public void writeAuthorVideosToCSV(Integer id) {
+        String authorname = ((Author) commonDao.getResourceById(Author.class, id)).getName();
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("author_id", id);
 
-        String path = String.format("%s%s.csv", DiskFileDirConfig.csvdir, type);
+        Class videoClass = TypeClassMapping.authorTypeClassMap.get(AuthorType.NORMAL);
+        List videos = commonDao.getResourcesByFields(videoClass, conditions);
+
+        CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
+        CSVPrinter printer = null;
+        try {
+            Writer out = new FileWriter(String.format("%s%s.csv", DiskFileDirConfig.csvdir, String.format("author-%s", authorname)));
+            printer = new CSVPrinter(out, format.withDelimiter(','));
+
+            printer.printRecord(authorname);
+
+            for (Object video : videos) {
+                printer.printRecord(commonDao.getResourceAttr(videoClass, video, "title"));
+            }
+
+            printer.flush();
+            printer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ResponseEntity<byte[]> downloadCSVFiles(String filename) throws IOException {
+        String path = String.format("%s%s.csv", DiskFileDirConfig.csvdir, filename);
         File file = new File(path);
         HttpHeaders headers = new HttpHeaders();
-        String fileName = new String(String.format("%s.csv", type).getBytes("UTF-8"), "iso-8859-1");//为了解决中文名称乱码问题
+        String fileName = new String(String.format("%s.csv", filename).getBytes("UTF-8"), "iso-8859-1");//为了解决中文名称乱码问题
         headers.setContentDispositionFormData("attachment", fileName);
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         byte[] fileBytes = FileUtils.readFileToByteArray(file);
@@ -256,5 +282,18 @@ public class DownloadController {
         byte[] download = mergeByteArray(bomHead, fileBytes);
         return new ResponseEntity<byte[]>(download,
                 headers, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "admin/download/{type}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> downloadResources(@PathVariable String type) throws IOException {
+        writeResourcesToCSV(TypeClassMapping.typeClassMap.get(type));
+        return downloadCSVFiles(type);
+    }
+
+    @RequestMapping(value = "admin/download/authorvideos/{id}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> downloadAuthorvideos(@PathVariable Integer id) throws IOException {
+        String authorname = ((Author) commonDao.getResourceById(Author.class, id)).getName();
+        writeAuthorVideosToCSV(id);
+        return downloadCSVFiles(String.format("author-%s", authorname));
     }
 }
