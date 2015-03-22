@@ -50,17 +50,14 @@ public class CacheDao {
             if (type == CacheCollType.SET) {
                 status = redisClient.sadd(cachekey, String.format("%s-%d", prefix, id));
             } else if (type == CacheCollType.LIST) {
-                //因为redis的list数据类型可以让内部元素有重复所以需要手动做到anti duplicate
                 String resourcekey = String.format("%s-%d", prefix, id);
-                if (!redisClient.exists(resourcekey)) {
-                    status = redisClient.rpush(cachekey, resourcekey);
-                }
+                status = redisClient.rpush(cachekey, resourcekey);
             } else if (type == CacheCollType.SORTEDSET) {
                 redisClient.zadd(cachekey, String.format("%s-%d", prefix, id), (double) id);
             } else {
                 System.out.println("wired");
             }
-            System.out.println("insert result -> " + status);
+            System.out.println("insert status -> " + status);
 
             boolean result = insertSingleResource(insertclass, object, prefix);
             System.out.println("insert result -> " + result);
