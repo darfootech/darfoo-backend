@@ -49,8 +49,11 @@ public class Author implements Serializable {
     @ModelUpdate
     String imagekey;
 
-    @Column(name = "type", nullable = false, updatable = true, columnDefinition = "int default 0")
+    @Column(name = "TYPE", nullable = false, updatable = true, columnDefinition = "int default 0")
     AuthorType type;
+
+    @Column(name = "HOT", nullable = false, updatable = true, columnDefinition = "int default 0")
+    AuthorHot hot;
 
     public Author() {
 
@@ -102,6 +105,14 @@ public class Author implements Serializable {
 
     public void setType(AuthorType type) {
         this.type = type;
+    }
+
+    public AuthorHot getHot() {
+        return hot;
+    }
+
+    public void setHot(AuthorHot hot) {
+        this.hot = hot;
     }
 
     @Override
