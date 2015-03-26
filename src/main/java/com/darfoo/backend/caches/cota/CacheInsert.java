@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
  * Created by zjh on 15-2-14.
  */
 
+//需要插入到缓存层中的字段
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface CacheInsert {
