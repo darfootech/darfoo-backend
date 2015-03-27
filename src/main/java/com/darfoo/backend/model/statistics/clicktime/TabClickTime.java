@@ -2,9 +2,6 @@ package com.darfoo.backend.model.statistics.clicktime;
 
 import com.darfoo.backend.model.cota.CSVTitle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
 
 /**

@@ -1,14 +1,9 @@
 package com.darfoo.backend.dao.statistic;
 
-import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.cota.ModelAttrSuper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;

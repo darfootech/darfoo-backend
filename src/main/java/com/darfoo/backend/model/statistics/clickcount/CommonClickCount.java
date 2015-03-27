@@ -3,8 +3,6 @@ package com.darfoo.backend.model.statistics.clickcount;
 import com.darfoo.backend.model.cota.CSVTitle;
 import com.darfoo.backend.model.cota.ModelAttrSuper;
 
-import javax.persistence.*;
-
 /**
  * Created by zjh on 15-3-2.
  */
