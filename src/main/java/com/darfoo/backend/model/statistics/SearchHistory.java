@@ -12,9 +12,6 @@ import java.util.Date;
 
 //记录搜索行为
 public class SearchHistory {
-    @ModelAttrSuper
-    public Integer id;
-
     @CSVTitle(title = "搜索内容")
     public String searchcontent;
 
@@ -22,8 +19,8 @@ public class SearchHistory {
     public String searchtype;
 
     @CSVTitle(title = "搜索时间戳")
-    public Long timestamp = System.currentTimeMillis() / 1000;
+    public Long timestamp;
 
     @CSVTitle(title = "搜索日期")
-    public Date date = new Date();
+    public String date;
 }

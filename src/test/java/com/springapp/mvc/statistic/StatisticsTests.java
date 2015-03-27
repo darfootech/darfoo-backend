@@ -37,7 +37,7 @@ public class StatisticsTests {
         conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
         conditions.put("uuid", "123");
         conditions.put("type", "video");
-        conditions.put("resourceid", 81);
+        conditions.put("resourceid", 33);
 
         statisticsDao.insertOrUpdateClickBehavior(ResourceClickCount.class, conditions);
     }
@@ -78,7 +78,7 @@ public class StatisticsTests {
         conditions.put("type", "video");
         conditions.put("resourceid", 81);
 
-        statisticsDao.insertBehavior(ResourceClickTime.class, conditions);
+        statisticsDao.insertTimeBehavior(ResourceClickTime.class, conditions);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class StatisticsTests {
         conditions.put("uuid", "123");
         conditions.put("menuid", 1);
 
-        statisticsDao.insertBehavior(MenuClickTime.class, conditions);
+        statisticsDao.insertTimeBehavior(MenuClickTime.class, conditions);
     }
 
     @Test
@@ -100,7 +100,7 @@ public class StatisticsTests {
         conditions.put("uuid", "123");
         conditions.put("tabid", 3);
 
-        statisticsDao.insertBehavior(TabClickTime.class, conditions);
+        statisticsDao.insertTimeBehavior(TabClickTime.class, conditions);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class StatisticsTests {
         conditions.put("searchcontent", "呵呵");
         conditions.put("searchtype", "video");
 
-        statisticsDao.insertBehavior(SearchHistory.class, conditions);
+        statisticsDao.insertTimeBehavior(SearchHistory.class, conditions);
     }
 
     @Test
@@ -117,6 +117,6 @@ public class StatisticsTests {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("log", "exception 呵呵");
 
-        statisticsDao.insertBehavior(CrashLog.class, conditions);
+        statisticsDao.insertTimeBehavior(CrashLog.class, conditions);
     }
 }

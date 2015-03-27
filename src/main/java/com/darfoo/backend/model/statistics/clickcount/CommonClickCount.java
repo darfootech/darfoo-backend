@@ -11,9 +11,6 @@ import javax.persistence.*;
 
 public class CommonClickCount {
     @ModelAttrSuper
-    public Integer id;
-
-    @ModelAttrSuper
     @CSVTitle(title = "mac地址")
     public String mac;
 
@@ -27,5 +24,5 @@ public class CommonClickCount {
 
     @ModelAttrSuper
     @CSVTitle(title = "热度")
-    public Long hottest;
+    public Long hot;
 }

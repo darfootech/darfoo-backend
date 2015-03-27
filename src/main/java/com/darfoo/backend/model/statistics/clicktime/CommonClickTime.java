@@ -4,6 +4,7 @@ import com.darfoo.backend.model.cota.CSVTitle;
 import com.darfoo.backend.model.cota.ModelAttrSuper;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -11,9 +12,6 @@ import java.util.Date;
  */
 
 public class CommonClickTime {
-    @ModelAttrSuper
-    public Integer id;
-
     @ModelAttrSuper
     @CSVTitle(title = "mac地址")
     public String mac;
@@ -28,9 +26,9 @@ public class CommonClickTime {
 
     @ModelAttrSuper
     @CSVTitle(title = "时间戳")
-    public Long timestamp = System.currentTimeMillis() / 1000;
+    public Long timestamp;
 
     @ModelAttrSuper
     @CSVTitle(title = "日期")
-    public Date date = new Date();
+    public String date;
 }

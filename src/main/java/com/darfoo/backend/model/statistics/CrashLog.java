@@ -12,15 +12,12 @@ import java.util.Date;
 
 //记录launcher崩溃日志
 public class CrashLog {
-    @ModelAttrSuper
-    public Integer id;
-
     @CSVTitle(title = "崩溃原因")
     public String log;
 
     @CSVTitle(title = "崩溃时间戳")
-    public Long timestamp = System.currentTimeMillis() / 1000;
+    public Long timestamp;
 
     @CSVTitle(title = "崩溃日期")
-    public Date date = new Date();
+    public String date;
 }
