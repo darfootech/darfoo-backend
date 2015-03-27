@@ -12,10 +12,7 @@ import java.io.Serializable;
  */
 
 //统计菜单的点击时间
-@Entity
-@Table(name = "menuclicktime")
 public class MenuClickTime extends CommonClickTime implements Serializable {
-    @Column(name = "menuid", nullable = false)
     @CSVTitle(title = "菜单编号")
     public Integer menuid;
 }

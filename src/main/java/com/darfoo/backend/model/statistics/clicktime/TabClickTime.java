@@ -12,10 +12,7 @@ import java.io.Serializable;
  */
 
 //底部菜单的点击时间
-@Entity
-@Table(name = "tabclicktime")
 public class TabClickTime extends CommonClickTime implements Serializable {
-    @Column(name = "tabid", nullable = false)
     @CSVTitle(title = "底部菜单标识")
     public Integer tabid;
 }

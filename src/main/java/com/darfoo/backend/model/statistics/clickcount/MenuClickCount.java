@@ -12,10 +12,7 @@ import java.io.Serializable;
  */
 
 //统计菜单的点击热度
-@Entity
-@Table(name = "menuclickcount")
 public class MenuClickCount extends CommonClickCount implements Serializable {
-    @Column(name = "menuid", nullable = false)
     @CSVTitle(title = "菜单编号")
     public Integer menuid;
 }
