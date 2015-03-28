@@ -1,4 +1,4 @@
-package com.darfoo.backend.model.statistics;
+package com.darfoo.backend.model.statistics.mongo;
 
 import com.darfoo.backend.model.cota.CSVTitle;
 

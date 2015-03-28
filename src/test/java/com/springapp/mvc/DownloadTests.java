@@ -15,7 +15,7 @@ import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
-import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
+import com.darfoo.backend.model.statistics.mongo.clickcount.ResourceClickCount;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.TutorialCates;

@@ -4,16 +4,15 @@ package com.springapp.mvc.statistic;
  * Created by zjh on 15-3-2.
  */
 
-import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.statistic.StatisticsDao;
-import com.darfoo.backend.model.statistics.CrashLog;
-import com.darfoo.backend.model.statistics.SearchHistory;
-import com.darfoo.backend.model.statistics.clickcount.MenuClickCount;
-import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
-import com.darfoo.backend.model.statistics.clickcount.TabClickCount;
-import com.darfoo.backend.model.statistics.clicktime.MenuClickTime;
-import com.darfoo.backend.model.statistics.clicktime.ResourceClickTime;
-import com.darfoo.backend.model.statistics.clicktime.TabClickTime;
+import com.darfoo.backend.model.statistics.mongo.CrashLog;
+import com.darfoo.backend.model.statistics.mongo.SearchHistory;
+import com.darfoo.backend.model.statistics.mongo.clickcount.MenuClickCount;
+import com.darfoo.backend.model.statistics.mongo.clickcount.ResourceClickCount;
+import com.darfoo.backend.model.statistics.mongo.clickcount.TabClickCount;
+import com.darfoo.backend.model.statistics.mongo.clicktime.MenuClickTime;
+import com.darfoo.backend.model.statistics.mongo.clicktime.ResourceClickTime;
+import com.darfoo.backend.model.statistics.mongo.clicktime.TabClickTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
