@@ -5,5 +5,6 @@ package com.springapp.mvc.offlinejobs;
  */
 
 //将rds中的统计数据导入到mongodb中
-public class MIgrateStatisticsData {
+public class MigrateStatisticsData {
+
 }
