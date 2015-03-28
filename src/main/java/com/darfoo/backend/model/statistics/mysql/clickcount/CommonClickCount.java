@@ -34,5 +34,5 @@ public class CommonClickCount {
     @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 1")
     @ModelAttrSuper
     @CSVTitle(title = "热度")
-    public Long hottest;
+    public Long hot;
 }

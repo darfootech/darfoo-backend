@@ -1,4 +1,4 @@
-package com.springapp.mvc;
+package com.springapp.mvc.statistic;
 
 import com.darfoo.backend.dao.statistic.MongoManager;
 import com.mongodb.BasicDBObject;
