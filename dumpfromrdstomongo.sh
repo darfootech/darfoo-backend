@@ -1,0 +1,1 @@
+mvn -Dtest=MigrateStatisticsData test
