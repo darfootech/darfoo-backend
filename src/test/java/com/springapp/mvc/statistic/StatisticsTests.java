@@ -27,8 +27,6 @@ import java.util.HashMap;
 public class StatisticsTests {
     @Autowired
     StatisticsDao statisticsDao;
-    @Autowired
-    CommonDao commonDao;
 
     @Test
     public void insertOrUpdateResourceClickCount() {
