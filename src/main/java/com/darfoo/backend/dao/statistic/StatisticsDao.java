@@ -1,59 +1,58 @@
 package com.darfoo.backend.dao.statistic;
 
-import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.cota.ModelAttrSuper;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
  * Created by zjh on 15-3-2.
  */
 public class StatisticsDao {
-    @Autowired
-    SessionFactory sessionFactory;
-    @Autowired
-    CommonDao commonDao;
+    MongoClient client = MongoManager.getMongoClientInstance();
+    DB db = client.getDB("statistics");
 
-    public void insertBehavior(Class resource, HashMap<String, Object> conditions) {
-        System.out.println("insert resource");
-        try {
-            Object object = resource.newInstance();
-
-            for (Field field : resource.getFields()) {
-                String fieldname = field.getName();
-                if (conditions.keySet().contains(fieldname)) {
-                    if (field.isAnnotationPresent(ModelAttrSuper.class)) {
-                        commonDao.setResourceAttr(resource.getSuperclass(), object, fieldname, conditions.get(fieldname));
-                    } else {
-                        commonDao.setResourceAttr(resource, object, fieldname, conditions.get(fieldname));
-                    }
+    private BasicDBObject createDBObject(Class resource, HashMap<String, Object> conditions) {
+        BasicDBObject doc = new BasicDBObject();
+        for (Field field : resource.getFields()) {
+            String fieldname = field.getName();
+            if (conditions.keySet().contains(fieldname)) {
+                doc.append(fieldname, conditions.get(fieldname));
+            } else {
+                if (fieldname.equals("timestamp")) {
+                    doc.append(fieldname, System.currentTimeMillis() / 1000);
                 }
-                if (fieldname.equals("hottest")) {
-                    commonDao.setResourceAttr(resource.getSuperclass(), object, fieldname, 1L);
+                if (fieldname.equals("date")) {
+                    doc.append(fieldname, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 }
             }
-            sessionFactory.getCurrentSession().save(object);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
         }
+        return doc;
     }
 
-    public void updateClickBehavior(Class resource, HashMap<String, Object> conditions) {
-        Object object = commonDao.getResourceByFields(resource, conditions);
-        System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(resource.getSuperclass(), object, "hottest")));
+    public void insertTimeBehavior(Class resource, HashMap<String, Object> conditions) {
+        DBCollection coll = db.getCollection(resource.getSimpleName().toLowerCase());
+        coll.insert(createDBObject(resource, conditions));
     }
 
     public void insertOrUpdateClickBehavior(Class resource, HashMap<String, Object> conditions) {
-        if (commonDao.isResourceExistsByFields(resource, conditions)) {
-            updateClickBehavior(resource, conditions);
+        DBCollection coll = db.getCollection(resource.getSimpleName().toLowerCase());
+        BasicDBObject query = createDBObject(resource, conditions);
+
+        if (coll.find(query).count() > 0) {
+            System.out.println("记录已经存在");
+            BasicDBObject update = new BasicDBObject()
+                    .append("$inc", new BasicDBObject("hot", 1L));
+            coll.update(query, update);
         } else {
-            insertBehavior(resource, conditions);
+            System.out.println("记录还不存在");
+            BasicDBObject doc = query.append("hot", 1L);
+            coll.insert(doc);
         }
     }
 }

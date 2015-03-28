@@ -18,6 +18,7 @@ in `src/main/resources/`
 
 * cp datasource.properties.example datasource.properties
 * cp redis.properties.example redis.properties
+* cp mongodb.conf.example mongodb.conf
 * cp uploaddir.conf.example uploaddir.conf
 
 in root directory

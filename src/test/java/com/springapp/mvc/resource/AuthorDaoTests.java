@@ -4,6 +4,7 @@ import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
+import com.darfoo.backend.model.cota.AuthorHot;
 import com.darfoo.backend.model.cota.AuthorType;
 import com.darfoo.backend.model.resource.Author;
 import com.darfoo.backend.model.resource.Tutorial;
@@ -213,6 +214,23 @@ public class AuthorDaoTests {
     public void changeAuthorType() {
         HashMap<String, Object> updateMap = new HashMap<String, Object>();
         updateMap.put("type", AuthorType.NORMAL);
-        commonDao.updateResourceFieldsById(Author.class, 3, updateMap);
+        commonDao.updateResourceFieldsById(Author.class, 7, updateMap);
+    }
+
+    @Test
+    public void getHotAuthors() {
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("hot", AuthorHot.ISHOT);
+        List authors = commonDao.getResourcesByFields(Author.class, conditions);
+        for (Object author : authors) {
+            System.out.println(commonDao.getResourceAttr(Author.class, author, "id"));
+        }
+    }
+
+    @Test
+    public void makeAuthorHot() {
+        HashMap<String, Object> updateMap = new HashMap<String, Object>();
+        updateMap.put("hot", AuthorHot.ISHOT);
+        commonDao.updateResourceFieldsById(Author.class, 7, updateMap);
     }
 }

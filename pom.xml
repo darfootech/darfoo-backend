@@ -23,6 +23,11 @@
             <url>http://maven.oschina.net/content/groups/public/</url>
         </repository>
         <repository>
+            <id>center</id>
+            <name>center Repository</name>
+            <url>http://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
             <id>typesafe</id>
             <name>Typesafe Repository</name>
             <url>http://repo.typesafe.com/typesafe/releases/</url>
@@ -225,6 +230,13 @@
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>0.3m</version>
+        </dependency>
+
+        <!-- for mongodb -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>2.13.0</version>
         </dependency>
     </dependencies>
 

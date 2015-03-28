@@ -58,8 +58,14 @@ public class GalleryController {
 
     @RequestMapping(value = "/admin/gallery/{type}/all", method = RequestMethod.GET)
     public String showAllResource(@PathVariable String type, ModelMap modelMap) {
-        List resources = commonDao.getAllResource(TypeClassMapping.typeClassMap.get(type));
-        return galleryAllResources(resources, modelMap, type);
+        if (type.equals("author")) {
+            modelMap.addAttribute("type", "manage");
+            modelMap.addAttribute("typenames", TypeClassMapping.authorTypeNameMap);
+            return "author/allauthortype";
+        } else {
+            List resources = commonDao.getAllResource(TypeClassMapping.typeClassMap.get(type));
+            return galleryAllResources(resources, modelMap, type);
+        }
     }
 
     private ModelMap getResourceModelMap(Class resource, Integer id, ModelMap modelMap) {
