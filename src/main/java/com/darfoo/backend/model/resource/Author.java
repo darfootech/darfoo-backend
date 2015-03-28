@@ -50,10 +50,10 @@ public class Author implements Serializable {
     String imagekey;
 
     @Column(name = "TYPE", nullable = false, updatable = true, columnDefinition = "int default 0")
-    AuthorType type;
+    AuthorType type = AuthorType.STAR;
 
     @Column(name = "HOT", nullable = false, updatable = true, columnDefinition = "int default 0")
-    AuthorHot hot;
+    AuthorHot hot = AuthorHot.NOTHOT;
 
     public Author() {
 

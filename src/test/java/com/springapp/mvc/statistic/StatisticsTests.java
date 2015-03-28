@@ -65,11 +65,6 @@ public class StatisticsTests {
     }
 
     @Test
-    public void incResourceClickHottest() {
-        commonDao.incResourceField(ResourceClickCount.class, 1, "hottest");
-    }
-
-    @Test
     public void insertResourceClickTime() {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("mac", "00:ad:05:01:a6:85");
