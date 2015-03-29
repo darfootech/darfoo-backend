@@ -2,6 +2,7 @@ package com.darfoo.backend.service.cota;
 
 import com.darfoo.backend.model.auth.Feedback;
 import com.darfoo.backend.model.cota.DanceGroupType;
+import com.darfoo.backend.model.cota.DanceVideoType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -32,6 +33,7 @@ public class TypeClassMapping {
     public static HashMap<String, DanceGroupType> videoTypeAuthorTypeMap = new HashMap<String, DanceGroupType>();
     public static HashMap<DanceGroupType, String> authorTypeVideoTypeMap = new HashMap<DanceGroupType, String>();
     public static HashMap<DanceGroupType, String> authorTypeNameMap = new HashMap<DanceGroupType, String>();
+    public static HashMap<String, DanceVideoType> danceVideoTypeMap = new HashMap<String, DanceVideoType>();
 
     static {
         typeClassMap.put("dancevideo", DanceVideo.class);
@@ -70,5 +72,8 @@ public class TypeClassMapping {
 
         authorTypeNameMap.put(DanceGroupType.NORMAL, "普通舞队");
         authorTypeNameMap.put(DanceGroupType.STAR, "明星舞队");
+
+        danceVideoTypeMap.put("normal", DanceVideoType.NORMAL);
+        danceVideoTypeMap.put("tutorial", DanceVideoType.TUTORIAL);
     }
 }

@@ -182,6 +182,14 @@ public class DanceVideo implements Serializable {
         this.update_timestamp = update_timestamp;
     }
 
+    public DanceVideoType getType() {
+        return type;
+    }
+
+    public void setType(DanceVideoType type) {
+        this.type = type;
+    }
+
     public String toString(boolean isShowCategory) {
         StringBuilder sb = new StringBuilder();
         sb.append("title:" + title + "\nvideo_key:" + video_key + "\nupdate_timestamp:" + update_timestamp);

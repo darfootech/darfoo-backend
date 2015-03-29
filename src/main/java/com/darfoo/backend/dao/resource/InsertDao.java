@@ -4,9 +4,11 @@ package com.darfoo.backend.dao.resource;
 import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.category.DanceVideoCategory;
+import com.darfoo.backend.model.cota.DanceVideoType;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -111,6 +113,9 @@ public class InsertDao {
             } else if (key.contains("category")) {
                 String category = insertcontents.get(key);
                 categoryTitles.add(category);
+            } else if (key.equals("type")) {
+                DanceVideoType type = TypeClassMapping.danceVideoTypeMap.get(insertcontents.get(key));
+                commonDao.setResourceAttr(resource, object, key, type);
             } else {
                 commonDao.setResourceAttr(resource, object, key, insertcontents.get(key));
             }
@@ -139,6 +144,9 @@ public class InsertDao {
         resultMap.put("statuscode", 200);
         resultMap.put("insertid", insertid);
         return resultMap;
+    }
+
+    public HashMap<String, Integer> insertDanceMusic(HashMap<String, String>) {
 
     }
 }

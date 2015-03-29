@@ -3,6 +3,7 @@ package com.darfoo.backend.resource.Dance;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.*;
 import com.darfoo.backend.dao.resource.InsertDao;
+import com.darfoo.backend.model.cota.DanceVideoType;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.responsemodel.VideoCates;
@@ -44,10 +45,12 @@ public class DanceVideoDaoTests {
         insertcontents.put("title", videoTitle);
         insertcontents.put("authorname", authorName);
         insertcontents.put("imagekey", imagekey);
-        insertcontents.put("category1", "正面教学");
+        /*insertcontents.put("category1", "正面教学");
         insertcontents.put("category2", "口令分解");
         insertcontents.put("category3", "背面教学");
-        insertcontents.put("category4", "队形教学");
+        insertcontents.put("category4", "队形教学");*/
+        insertcontents.put("category", "");
+        insertcontents.put("type", "tutorial");
         insertcontents.put("videotype", "mp4");
         insertcontents.put("connectmusic", "ccccc-memeda-33");
 
