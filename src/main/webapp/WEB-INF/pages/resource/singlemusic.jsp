@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="authorname">舞蹈伴奏作者名字</label>
+                    <label for="authorname">舞蹈伴奏舞队名字</label>
                     <input type="text" class="form-control" id="authorname"
                            placeholder="${music.authorname}" disabled="disabled">
                 </div>

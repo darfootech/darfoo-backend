@@ -54,7 +54,7 @@ public class InsertDao {
                     DanceGroup author = (DanceGroup) commonDao.getResourceByTitleOrName(DanceGroup.class, authorname, "name");
 
                     if (author == null) {
-                        System.out.println("作者还不存在");
+                        System.out.println("舞队还不存在");
                         resultMap.put("statuscode", 502);
                         resultMap.put("insertid", -1);
                         return resultMap;
@@ -69,11 +69,11 @@ public class InsertDao {
                     Object queryVideo = commonDao.getResourceByFields(resource, conditions);
 
                     if (queryVideo == null) {
-                        System.out.println("视频名字和作者id组合不存在，可以进行插入");
+                        System.out.println("视频名字和舞队id组合不存在，可以进行插入");
                         commonDao.setResourceAttr(resource, object, key, title);
                         commonDao.setResourceAttr(resource, object, "video_key", title + System.currentTimeMillis());
                     } else {
-                        System.out.println("视频名字和作者id组合已存在，不可以进行插入了，是否需要修改");
+                        System.out.println("视频名字和舞队id组合已存在，不可以进行插入了，是否需要修改");
                         resultMap.put("statuscode", 500);
                         resultMap.put("insertid", -1);
                         return resultMap;
@@ -102,7 +102,7 @@ public class InsertDao {
                     if (criteria.list().size() == 1) {
                         commonDao.setResourceAttr(resource, object, "author", criteria.uniqueResult());
                     } else {
-                        System.out.println("作者还不存在");
+                        System.out.println("舞队还不存在");
                         resultMap.put("statuscode", 502);
                         resultMap.put("insertid", -1);
                         return resultMap;

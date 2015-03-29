@@ -17,8 +17,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="authorname">舞蹈伴奏作者名字</label>
-                    <input type="text" class="form-control" name="authorname" id="authorname" placeholder="请输入舞蹈伴奏作者名字">
+                    <label for="authorname">舞蹈伴奏舞队名字</label>
+                    <input type="text" class="form-control" name="authorname" id="authorname" placeholder="请输入舞蹈伴奏舞队名字">
                 </div>
 
                 <div class="form-group">

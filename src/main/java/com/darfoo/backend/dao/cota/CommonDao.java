@@ -125,7 +125,7 @@ public class CommonDao {
                         DanceGroup author = (DanceGroup) getResourceByTitleOrName(DanceGroup.class, authorname, "name");
 
                         if (author == null) {
-                            System.out.println("作者还不存在");
+                            System.out.println("舞队还不存在");
                             resultMap.put("statuscode", 502);
                             resultMap.put("insertid", -1);
                             return resultMap;
@@ -140,11 +140,11 @@ public class CommonDao {
                         Object queryVideo = getResourceByFields(resource, conditions);
 
                         if (queryVideo == null) {
-                            System.out.println("视频名字和作者id组合不存在，可以进行插入");
+                            System.out.println("视频名字和舞队id组合不存在，可以进行插入");
                             setResourceAttr(resource, object, key, title);
                             setResourceAttr(resource, object, "video_key", title + System.currentTimeMillis());
                         } else {
-                            System.out.println("视频名字和作者id组合已存在，不可以进行插入了，是否需要修改");
+                            System.out.println("视频名字和舞队id组合已存在，不可以进行插入了，是否需要修改");
                             resultMap.put("statuscode", 500);
                             resultMap.put("insertid", -1);
                             return resultMap;
@@ -156,11 +156,11 @@ public class CommonDao {
                         Object queryMusic = getResourceByFields(resource, conditions);
 
                         if (queryMusic == null) {
-                            System.out.println("伴奏名字和作者名字组合不存在，可以进行插入");
+                            System.out.println("伴奏名字和舞队名字组合不存在，可以进行插入");
                             setResourceAttr(resource, object, key, title);
                             setResourceAttr(resource, object, "music_key", title + System.currentTimeMillis());
                         } else {
-                            System.out.println("伴奏名字和作者名字组合已存在，不可以进行插入了，是否需要修改");
+                            System.out.println("伴奏名字和舞队名字组合已存在，不可以进行插入了，是否需要修改");
                             resultMap.put("statuscode", 505);
                             resultMap.put("insertid", -1);
                             return resultMap;
@@ -193,7 +193,7 @@ public class CommonDao {
                         if (criteria.list().size() == 1) {
                             setResourceAttr(resource, object, "author", criteria.uniqueResult());
                         } else {
-                            System.out.println("作者还不存在");
+                            System.out.println("舞队还不存在");
                             resultMap.put("statuscode", 502);
                             resultMap.put("insertid", -1);
                             return resultMap;
@@ -296,7 +296,7 @@ public class CommonDao {
      * @param updatecontents
      * @return image_key这个字段创建了就不需要更新的 更新这个字段没有意义
      */
-    //视频title可以重名,但是不可能出现视频title一样,作者id都一样的情况,也就是一个作者的作品中不会出现重名的情况
+    //视频title可以重名,但是不可能出现视频title一样,舞队id都一样的情况,也就是一个舞队的作品中不会出现重名的情况
     //伴奏title可以重名,但是不可能出现伴奏title一样authorname也一样的情况
     public HashMap<String, Integer> updateResource(Class resource, Integer id, HashMap<String, String> updatecontents) {
         Set<String> categoryTitles = new HashSet<String>();
@@ -343,10 +343,10 @@ public class CommonDao {
                                     Object queryResource = getResourceByFields(resource, conditions);
 
                                     if (queryOldResource == null && queryResource == null) {
-                                        System.out.println("资源名字和作者id组合不存在，可以进行插入");
+                                        System.out.println("资源名字和舞队id组合不存在，可以进行插入");
                                         setResourceAttr(resource, object, "author", author);
                                     } else {
-                                        System.out.println("资源名字和作者id组合已存在，不可以进行插入了，是否需要修改");
+                                        System.out.println("资源名字和舞队id组合已存在，不可以进行插入了，是否需要修改");
                                         resultMap.put("statuscode", 502);
                                         return resultMap;
                                     }
@@ -366,10 +366,10 @@ public class CommonDao {
                                 Object queryResource = getResourceByFields(resource, conditions);
 
                                 if (queryOldResource == null && queryResource == null) {
-                                    System.out.println("伴奏名字和作者名字组合不存在，可以进行插入");
+                                    System.out.println("伴奏名字和舞队名字组合不存在，可以进行插入");
                                     setResourceAttr(resource, object, key, authorname);
                                 } else {
-                                    System.out.println("伴奏名字和作者名字组合已存在，不可以进行插入了，是否需要修改");
+                                    System.out.println("伴奏名字和舞队名字组合已存在，不可以进行插入了，是否需要修改");
                                     resultMap.put("statuscode", 505);
                                     return resultMap;
                                 }
@@ -400,10 +400,10 @@ public class CommonDao {
                             Object queryResource = getResourceByFields(resource, conditions);
 
                             if (queryResource == null) {
-                                System.out.println("资源名字和作者id组合不存在，可以进行插入");
+                                System.out.println("资源名字和舞队id组合不存在，可以进行插入");
                                 setResourceAttr(resource, object, key, title);
                             } else {
-                                System.out.println("资源名字和作者id组合已存在，不可以进行插入了，是否需要修改");
+                                System.out.println("资源名字和舞队id组合已存在，不可以进行插入了，是否需要修改");
                                 resultMap.put("statuscode", 502);
                                 return resultMap;
                             }
@@ -414,10 +414,10 @@ public class CommonDao {
 
                             Object queryResource = getResourceByFields(resource, conditions);
                             if (queryResource == null) {
-                                System.out.println("伴奏名字和作者名字组合不存在，可以进行插入");
+                                System.out.println("伴奏名字和舞队名字组合不存在，可以进行插入");
                                 setResourceAttr(resource, object, key, title);
                             } else {
-                                System.out.println("伴奏名字和作者名字组合已存在，不可以进行插入了，是否需要修改");
+                                System.out.println("伴奏名字和舞队名字组合已存在，不可以进行插入了，是否需要修改");
                                 resultMap.put("statuscode", 505);
                                 return resultMap;
                             }

@@ -48,7 +48,7 @@ public class DanceMusic implements Serializable {
     @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
     Long hottest = 0L;
 
-    //因为伴奏的作者不需要其他的信息 所以伴奏只需要一个作者名字就可以了
+    //因为伴奏的舞队不需要其他的信息 所以伴奏只需要一个舞队名字就可以了
     @Column(name = "AUTHOR_NAME", nullable = true, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     @ModelInsert

@@ -26,7 +26,7 @@ $(function () {
                 } else if (data == "504") {
                     alert("相同名称的明星舞队已经存在");
                 } else if (data == "505") {
-                    alert("伴奏名字和作者名字组合已存在");
+                    alert("伴奏名字和舞队名字组合已存在");
                 } else if (data == "506") {
                     alert("请保证图片名字带有后缀");
                 } else if (data == "507") {
@@ -36,7 +36,7 @@ $(function () {
                 }
             },
             error: function () {
-                alert("更新作者信息失败");
+                alert("更新舞队信息失败");
             }
         });
     });

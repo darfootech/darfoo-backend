@@ -189,9 +189,9 @@ public class DanceVideo implements Serializable {
         } else {
             sb.append("\nauthor:" + author.getName() + "  演唱家信息:" + author.getDescription());
             if (author.getImage() == null) {
-                sb.append(" 作者图片:" + null);
+                sb.append(" 舞队图片:" + null);
             } else {
-                sb.append(" 作者图片:" + author.getImage().getImage_key());
+                sb.append(" 舞队图片:" + author.getImage().getImage_key());
             }
         }
         if (image == null) {

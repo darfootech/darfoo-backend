@@ -284,4 +284,4 @@ redis-server
 
 * incResourceField中使用openSession正常使用getCurrentSession无法进行更新操作
 
-* isResourceExistsByFields, isResourceExistsByFields, getResourceByTitleOrName, getResourceByFields四个函数中可能存在uniqueResult无法找到唯一的结果而出错的情况 需要保证传入的条件字段对应的所有值都是唯一的, 因为video, tutorial, music这些资源的title是可以duplicate的但是和作者id或者作者name的字段的组合是unique的, 使用这些函数时特别注意!
+* isResourceExistsByFields, isResourceExistsByFields, getResourceByTitleOrName, getResourceByFields四个函数中可能存在uniqueResult无法找到唯一的结果而出错的情况 需要保证传入的条件字段对应的所有值都是唯一的, 因为video, tutorial, music这些资源的title是可以duplicate的但是和舞队id或者舞队name的字段的组合是unique的, 使用这些函数时特别注意!
