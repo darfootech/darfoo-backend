@@ -52,19 +52,17 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">新建资源 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/darfoobackend/rest/resources/video/new">舞蹈欣赏</a></li>
-                        <li><a href="/darfoobackend/rest/resources/tutorial/new">舞蹈教程</a></li>
-                        <li><a href="/darfoobackend/rest/resources/music/new">舞蹈伴奏</a></li>
-                        <li><a href="/darfoobackend/rest/resources/author/new">明星舞队</a></li>
+                        <li><a href="/darfoobackend/rest/resources/dancevideo/new">舞蹈视频</a></li>
+                        <li><a href="/darfoobackend/rest/resources/dancemusic/new">舞蹈伴奏</a></li>
+                        <li><a href="/darfoobackend/rest/resources/dancegroup/new">舞蹈舞队</a></li>
                     </ul>
                 </li>
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">下载表格 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/darfoobackend/rest/admin/download/video">下载视频资源表格</a></li>
-                        <li><a href="/darfoobackend/rest/admin/download/tutorial">下载教程资源表格</a></li>
-                        <li><a href="/darfoobackend/rest/admin/download/music">下载伴奏资源表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/dancevideo">下载视舞蹈频资源表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/dancemusic">下载伴舞蹈奏资源表格</a></li>
                         <li><a href="/darfoobackend/rest/admin/download/feedback">下载用户反馈表格</a></li>
                         <li><a href="/darfoobackend/rest/admin/download/stat/resourceclickcount">下载资源点击热度表格</a></li>
                         <li><a href="/darfoobackend/rest/admin/download/stat/menuclickcount">下载菜单点击热度表格</a></li>
@@ -80,21 +78,18 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">查看和修改资源 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/darfoobackend/rest/admin/gallery/video/all">查看修改舞蹈欣赏</a></li>
-                        <li><a href="/darfoobackend/rest/admin/gallery/tutorial/all">查看修改舞蹈教程</a></li>
-                        <li><a href="/darfoobackend/rest/admin/gallery/music/all">查看修改舞蹈伴奏</a></li>
-                        <li><a href="/darfoobackend/rest/admin/gallery/author/all">查看修改舞队</a></li>
-                        <li><a href="/darfoobackend/rest/admin/author/changetype">切换舞队类型</a></li>
-                        <li><a href="/darfoobackend/rest/admin/connectmusic/video/all">关联舞蹈伴奏和舞蹈视频</a></li>
-                        <li><a href="/darfoobackend/rest/admin/connectmusic/tutorial/all">关联舞蹈伴奏和舞蹈教程</a></li>
+                        <li><a href="/darfoobackend/rest/admin/gallery/dancevideo/all">查看修改舞蹈视频</a></li>
+                        <li><a href="/darfoobackend/rest/admin/gallery/dancemusic/all">查看修改舞蹈伴奏</a></li>
+                        <li><a href="/darfoobackend/rest/admin/gallery/dancegroup/all">查看修改舞队</a></li>
+                        <li><a href="/darfoobackend/rest/admin/dancegroup/changetype">切换舞队类型</a></li>
+                        <li><a href="/darfoobackend/rest/admin/connectmusic/dancevideo/all">关联舞蹈伴奏和舞蹈视频</a></li>
                     </ul>
                 </li>
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">资源推荐 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/darfoobackend/rest/admin/recommend/video">首页推荐舞蹈欣赏</a></li>
-                        <li><a href="/darfoobackend/rest/admin/recommend/tutorial">首页推荐舞蹈教程</a></li>
+                        <li><a href="/darfoobackend/rest/admin/recommend/dancevideo">首页推荐舞蹈欣赏</a></li>
                         <li><a href="/darfoobackend/rest/admin/recommend/updateimage/all">查看修改推荐舞蹈视频图片</a></li>
                     </ul>
                 </li>
