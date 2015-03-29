@@ -3,10 +3,9 @@ package com.darfoo.backend.caches.dao;
 import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.caches.cota.CacheProtocol;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.resource.Author;
-import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Tutorial;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.TutorialCates;
@@ -96,7 +95,7 @@ public class CacheDao {
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
 
-        if (resource == Video.class) {
+        if (resource == DanceVideo.class) {
             if (!requestCategories[0].equals("0")) {
                 String speedCate = videoCates.getSpeedCategory().get(requestCategories[0]);
                 targetCategories.add(speedCate);
@@ -113,20 +112,7 @@ public class CacheDao {
                 String letterCate = requestCategories[3];
                 targetCategories.add(letterCate);
             }
-        } else if (resource == Tutorial.class) {
-            if (!requestCategories[0].equals("0")) {
-                String speedCate = tutorialCates.getSpeedCategory().get(requestCategories[0]);
-                targetCategories.add(speedCate);
-            }
-            if (!requestCategories[1].equals("0")) {
-                String difficultyCate = tutorialCates.getDifficultyCategory().get(requestCategories[1]);
-                targetCategories.add(difficultyCate);
-            }
-            if (!requestCategories[2].equals("0")) {
-                String styleCate = tutorialCates.getStyleCategory().get(requestCategories[2]);
-                targetCategories.add(styleCate);
-            }
-        } else if (resource == Music.class) {
+        } else if (resource == DanceMusic.class) {
             if (!requestCategories[0].equals("0")) {
                 String beatCate = musicCates.getBeatCategory().get(requestCategories[0]);
                 targetCategories.add(beatCate);
@@ -149,8 +135,8 @@ public class CacheDao {
     public List getSearchResourcesWithAuthor(Class resource, String searchContent) {
         List objects = commonDao.getResourcesBySearch(resource, searchContent);
 
-        List<Author> authors = commonDao.getResourcesBySearch(Author.class, searchContent);
-        for (Author author : authors) {
+        List<DanceGroup> authors = commonDao.getResourcesBySearch(DanceGroup.class, searchContent);
+        for (DanceGroup author : authors) {
             int aid = author.getId();
             HashMap<String, Object> conditions = new HashMap<String, Object>();
             conditions.put("author_id", aid);

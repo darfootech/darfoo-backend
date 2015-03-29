@@ -6,8 +6,8 @@ import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
@@ -114,7 +114,7 @@ public class CacheController {
     Object getMusicByVideoId(@PathVariable Integer id) {
         String type = "music";
         Class resource = TypeClassMapping.typeClassMap.get(type);
-        Music targetMusic = ((Video) commonDao.getResourceById(Video.class, id)).getMusic();
+        DanceMusic targetMusic = ((DanceVideo) commonDao.getResourceById(DanceVideo.class, id)).getMusic();
         if (targetMusic != null) {
             int music_id = targetMusic.getId();
             videoCacheDao.insertMusic(id, music_id);

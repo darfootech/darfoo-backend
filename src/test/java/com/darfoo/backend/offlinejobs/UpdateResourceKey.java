@@ -1,8 +1,7 @@
 package com.darfoo.backend.offlinejobs;
 
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.resource.Tutorial;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,27 +24,14 @@ public class UpdateResourceKey {
 
     @Test
     public void updateVideoKey() {
-        List<Video> s_videos = commonDao.getAllResource(Video.class);
-        for (Video video : s_videos) {
+        List<DanceVideo> s_videos = commonDao.getAllResource(DanceVideo.class);
+        for (DanceVideo video : s_videos) {
             int videoid = video.getId();
             String videokey = video.getVideo_key() + ".mp4";
             HashMap<String, Object> updateMap = new HashMap<String, Object>();
             updateMap.put("video_key", videokey);
-            commonDao.updateResourceFieldsById(Video.class, videoid, updateMap);
+            commonDao.updateResourceFieldsById(DanceVideo.class, videoid, updateMap);
         }
         System.out.println("总共查到" + s_videos.size());
-    }
-
-    @Test
-    public void updateTutorialKey() {
-        List<Tutorial> s_tutorials = commonDao.getAllResource(Tutorial.class);
-        for (Tutorial tutorial : s_tutorials) {
-            int tutorialid = tutorial.getId();
-            String tutorialkey = tutorial.getVideo_key() + ".mp4";
-            HashMap<String, Object> updateMap = new HashMap<String, Object>();
-            updateMap.put("video_key", tutorialkey);
-            commonDao.updateResourceFieldsById(Tutorial.class, tutorialid, updateMap);
-        }
-        System.out.println("总共查到" + s_tutorials.size());
     }
 }

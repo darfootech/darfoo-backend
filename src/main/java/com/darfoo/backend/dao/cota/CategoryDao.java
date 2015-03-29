@@ -1,8 +1,8 @@
 package com.darfoo.backend.dao.cota;
 
-import com.darfoo.backend.model.category.MusicCategory;
-import com.darfoo.backend.model.category.TutorialCategory;
-import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.category.DanceMusicCategory;
+import com.darfoo.backend.model.category.DanceVideoCategory;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -59,7 +59,7 @@ public class CategoryDao {
                 "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
         };
 
-        insertResourceCategories(VideoCategory.class, categories);
+        insertResourceCategories(DanceVideo.class, categories);
     }
 
     //插入所有教学视频的类型
@@ -68,7 +68,7 @@ public class CategoryDao {
                 "简单", "适中", "稍难",                    //按难度
                 "队形表演", "背面教学", "分解教学"};  //按教学类型
 
-        insertResourceCategories(TutorialCategory.class, categories);
+        insertResourceCategories(DanceVideoCategory.class, categories);
     }
 
     //插入所有伴奏的类型
@@ -77,7 +77,7 @@ public class CategoryDao {
                 "情歌风", "红歌风", "草原风", "戏曲风", "印巴风", "江南风", "民歌风", "儿歌风",  //按风格
                 "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};//按字母
 
-        insertResourceCategories(MusicCategory.class, categories);
+        insertResourceCategories(DanceMusicCategory.class, categories);
     }
 
     /**

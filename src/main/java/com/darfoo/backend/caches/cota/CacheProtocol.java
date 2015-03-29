@@ -2,10 +2,10 @@ package com.darfoo.backend.caches.cota;
 
 import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.resource.Author;
+import com.darfoo.backend.model.cota.DanceVideoType;
 import com.darfoo.backend.model.resource.Image;
-import com.darfoo.backend.model.resource.Tutorial;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class CacheProtocol {
 
                         if (cacheInsert.type() == CacheInsertEnum.NORMAL) {
                             if (field.getName().equals("author")) {
-                                Author author = (Author) field.get(object);
+                                DanceGroup author = (DanceGroup) field.get(object);
                                 cacheInsertMap.put("authorname", author.getName());
                                 System.out.println(field.getName() + " -> " + author.getName());
                             } else if (field.getName().equals("authorname")) {
@@ -81,11 +81,15 @@ public class CacheProtocol {
                         }
                     }
                 }
-                if (model == Video.class) {
-                    cacheInsertMap.put("type", 1 + "");
-                }
-                if (model == Tutorial.class) {
-                    cacheInsertMap.put("type", 0 + "");
+                if (model == DanceVideo.class) {
+                    DanceVideoType type = (DanceVideoType) commonDao.getResourceAttr(model, object, "type");
+                    if (type == DanceVideoType.NORMAL) {
+                        cacheInsertMap.put("type", 1 + "");
+                    } else if (type == DanceVideoType.TUTORIAL) {
+                        cacheInsertMap.put("type", 0 + "");
+                    } else {
+                        System.out.println("wired");
+                    }
                 }
                 commonRedisClient.hmset(cachekey, cacheInsertMap);
             }

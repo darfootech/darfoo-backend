@@ -2,8 +2,8 @@ package com.darfoo.backend.resource;
 
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.*;
-import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.responsemodel.VideoCates;
 import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
@@ -48,7 +48,7 @@ public class VideoDaoTests {
         insertcontents.put("videotype", "mp3");
         insertcontents.put("connectmusic", "ccccc-memeda-33");
 
-        HashMap<String, Integer> insertresult = commonDao.insertResource(Video.class, insertcontents);
+        HashMap<String, Integer> insertresult = commonDao.insertResource(DanceVideo.class, insertcontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
         System.out.println("insertid -> " + insertresult.get("insertid"));
     }
@@ -57,13 +57,13 @@ public class VideoDaoTests {
     public void updateVideokeyById() {
         HashMap<String, Object> updateMap = new HashMap<String, Object>();
         updateMap.put("video_key", "cleanthacleantha.mp4");
-        commonDao.updateResourceFieldsById(Video.class, 3, updateMap);
+        commonDao.updateResourceFieldsById(DanceVideo.class, 3, updateMap);
     }
 
     @Test
     public void getVideoByVideoId() {
         long start = System.currentTimeMillis();
-        Video video = (Video) commonDao.getResourceById(Video.class, 59);
+        DanceVideo video = (DanceVideo) commonDao.getResourceById(DanceVideo.class, 59);
         System.out.println(video.toString(true));
         System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }
@@ -78,7 +78,7 @@ public class VideoDaoTests {
         conditions.put("title", "ccc");
         conditions.put("author_id", 3);
 
-        Video video = (Video) commonDao.getResourceByFields(Video.class, conditions);
+        DanceVideo video = (DanceVideo) commonDao.getResourceByFields(DanceVideo.class, conditions);
         if (video == null) {
             System.out.println("对象不存在，可以进行插入");
         } else {
@@ -95,9 +95,9 @@ public class VideoDaoTests {
         //String[] categories = {"较快","稍难","情歌风","S"}; //满足所有条件
         //String[] categories = {"较快","普通","优美","0"}; //有一个条件不满足
         String[] categories = {"较快"};//满足单个条件
-        List<Video> videos = categoryDao.getResourcesByCategories(Video.class, categories);
+        List<DanceVideo> videos = categoryDao.getResourcesByCategories(DanceVideo.class, categories);
         System.out.println("最终满足的video数量 -> " + videos.size());
-        for (Video video : videos) {
+        for (DanceVideo video : videos) {
             System.out.println(video.getId());
             System.out.println("——————————————————————————————————————");
         }
@@ -135,7 +135,7 @@ public class VideoDaoTests {
 
     @Test
     public void deleteVideoCascade() {
-        System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Video.class, 91)));
+        System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(DanceVideo.class, 91)));
     }
 
     /**
@@ -158,7 +158,7 @@ public class VideoDaoTests {
         updatecontents.put("category4", "q".toUpperCase());
         updatecontents.put("connectmusic", "");
 
-        HashMap<String, Integer> insertresult = commonDao.updateResource(Video.class, id, updatecontents);
+        HashMap<String, Integer> insertresult = commonDao.updateResource(DanceVideo.class, id, updatecontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
     }
 
@@ -168,8 +168,8 @@ public class VideoDaoTests {
      */
     @Test
     public void getAllVideos() {
-        List<Video> s_videos = commonDao.getAllResource(Video.class);
-        for (Video video : s_videos) {
+        List<DanceVideo> s_videos = commonDao.getAllResource(DanceVideo.class);
+        for (DanceVideo video : s_videos) {
             System.out.println("----------------");
             System.out.println("videois: " + video.getId());
             //System.out.println(video.toString(true));
@@ -185,7 +185,7 @@ public class VideoDaoTests {
     public void insertOrUpdateMusic() {
         Integer vId = 1;
         Integer mId = 6;
-        System.out.println(CRUDEvent.getResponse(accompanyDao.updateResourceMusic(Video.class, vId, mId)));
+        System.out.println(CRUDEvent.getResponse(accompanyDao.updateResourceMusic(DanceVideo.class, vId, mId)));
     }
 
     /**
@@ -195,7 +195,7 @@ public class VideoDaoTests {
     @Test
     public void getMusicFromVideo() {
         Integer id = 79;
-        Music music = ((Video) commonDao.getResourceById(Video.class, id)).getMusic();
+        DanceMusic music = ((DanceVideo) commonDao.getResourceById(DanceVideo.class, id)).getMusic();
         if (music != null) {
             System.out.println(music.toString(false));
         } else {
@@ -210,7 +210,7 @@ public class VideoDaoTests {
     @Test
     public void disconnectVideoMusic() {
         Integer vId = 81;
-        System.out.println(CRUDEvent.getResponse(accompanyDao.deleteMusicFromResource(Video.class, vId)));
+        System.out.println(CRUDEvent.getResponse(accompanyDao.deleteMusicFromResource(DanceVideo.class, vId)));
     }
 
     /**
@@ -220,7 +220,7 @@ public class VideoDaoTests {
     @Test
     public void updateVideoHottest() {
         Integer id = 81;
-        System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Video.class, id, "hottest")));
+        System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(DanceVideo.class, id, "hottest")));
     }
 
     /**
@@ -230,9 +230,9 @@ public class VideoDaoTests {
     @Test
     public void getVideosByHottest() {
         int number = 20;
-        List<Video> videos = commonDao.getResourcesByHottest(Video.class, number);
+        List<DanceVideo> videos = commonDao.getResourcesByHottest(DanceVideo.class, number);
         System.out.println("---------返回" + videos.size() + "个视频---------");
-        for (Video v : videos) {
+        for (DanceVideo v : videos) {
             System.out.println("热度值---->" + v.getHottest());
             System.out.println(v.toString(false));
             System.out.println("---------------------------");
@@ -246,8 +246,8 @@ public class VideoDaoTests {
     @Test
     public void getVideosByNewest() {
         int number = 12;
-        List<Video> videos = commonDao.getResourcesByNewest(Video.class, number);
-        for (Video v : videos) {
+        List<DanceVideo> videos = commonDao.getResourcesByNewest(DanceVideo.class, number);
+        for (DanceVideo v : videos) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
             System.out.println(v.toString(true));
             System.out.println("---------------------------");
@@ -265,9 +265,9 @@ public class VideoDaoTests {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("music_id", mId);
 
-        List<Video> videos = commonDao.getResourcesByFields(Video.class, conditions);
+        List<DanceVideo> videos = commonDao.getResourcesByFields(DanceVideo.class, conditions);
         System.out.println("---------返回" + videos.size() + "个视频---------");
-        for (Video v : videos) {
+        for (DanceVideo v : videos) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
             System.out.println(v.getTitle());
             System.out.println("---------------------------");
@@ -281,9 +281,9 @@ public class VideoDaoTests {
     public void getVideosWithoutMusicId() {
         Integer mId = 33;
 
-        List<Video> videos = accompanyDao.getResourcesWithoutMusicId(Video.class, mId);
+        List<DanceVideo> videos = accompanyDao.getResourcesWithoutMusicId(DanceVideo.class, mId);
         System.out.println("---------返回" + videos.size() + "个视频---------");
-        for (Video v : videos) {
+        for (DanceVideo v : videos) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
             System.out.println(v.getTitle());
             System.out.println("---------------------------");
@@ -300,9 +300,9 @@ public class VideoDaoTests {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", aId);
 
-        List<Video> videos = commonDao.getResourcesByFields(Video.class, conditions);
+        List<DanceVideo> videos = commonDao.getResourcesByFields(DanceVideo.class, conditions);
         System.out.println("---------返回" + videos.size() + "个视频---------");
-        for (Video v : videos) {
+        for (DanceVideo v : videos) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
             System.out.println(v.getTitle());
             System.out.println("---------------------------");
@@ -311,12 +311,12 @@ public class VideoDaoTests {
 
     @Test
     public void getPageCount() {
-        System.out.println("pagecount -> " + paginationDao.getResourcePageCount(Video.class));
+        System.out.println("pagecount -> " + paginationDao.getResourcePageCount(DanceVideo.class));
     }
 
     @Test
     public void getVideosByPage() {
-        List<Video> result = paginationDao.getResourcesByPage(Video.class, 1);
+        List<DanceVideo> result = paginationDao.getResourcesByPage(DanceVideo.class, 1);
         System.out.println(result.size());
     }
 
@@ -324,7 +324,7 @@ public class VideoDaoTests {
     public void getPageCountByCategories() {
         String[] categories = {};//无条件限制
         //String[] categories = {"较快"};//满足单个条件
-        System.out.println("pagecount -> " + paginationDao.getResourcePageCountByCategories(Video.class, categories));
+        System.out.println("pagecount -> " + paginationDao.getResourcePageCountByCategories(DanceVideo.class, categories));
     }
 
     @Test
@@ -334,8 +334,8 @@ public class VideoDaoTests {
         //String[] categories = {"较快","简单", "欢快"}; //满足所有条件
         //String[] categories = {"较快","简单", "欢快", "A"}; //满足所有条件
         String[] categories = {"适中"};//满足单个条件
-        List<Video> videos = paginationDao.getResourcesByCategoriesByPage(Video.class, categories, 1);
-        for (Video video : videos) {
+        List<DanceVideo> videos = paginationDao.getResourcesByCategoriesByPage(DanceVideo.class, categories, 1);
+        for (DanceVideo video : videos) {
             System.out.println(video.getId());
             System.out.println("——————————————————————————————————————");
         }
@@ -346,34 +346,34 @@ public class VideoDaoTests {
     @Test
     public void isDuplicateWithPageQuery() {
         String[] categories = {};//满足单个条件
-        int pagecount = (int) paginationDao.getResourcePageCountByCategories(Video.class, categories);
+        int pagecount = (int) paginationDao.getResourcePageCountByCategories(DanceVideo.class, categories);
         Set<Integer> idSet = new HashSet<Integer>();
         for (int i = 0; i < pagecount; i++) {
-            List<Video> videos = paginationDao.getResourcesByCategoriesByPage(Video.class, categories, i + 1);
-            for (Video video : videos) {
+            List<DanceVideo> videos = paginationDao.getResourcesByCategoriesByPage(DanceVideo.class, categories, i + 1);
+            for (DanceVideo video : videos) {
                 System.out.println(video.getId());
                 idSet.add(video.getId());
             }
         }
 
-        System.out.println("video count -> " + commonDao.getAllResource(Video.class).size());
+        System.out.println("video count -> " + commonDao.getAllResource(DanceVideo.class).size());
         System.out.println("video count -> " + idSet.size());
     }
 
     @Test
     public void getAllVideosWithoutId() {
         int vid = 1;
-        List<Video> allvideos = commonDao.getAllResourceWithoutId(Video.class, vid);
-        for (Video video : allvideos) {
+        List<DanceVideo> allvideos = commonDao.getAllResourceWithoutId(DanceVideo.class, vid);
+        for (DanceVideo video : allvideos) {
             System.out.println(video.getId());
         }
     }
 
     @Test
     public void getSideBarVideos() {
-        List<Video> result = commonDao.getSideBarResources(Video.class, 79);
+        List<DanceVideo> result = commonDao.getSideBarResources(DanceVideo.class, 79);
         System.out.println(result.size());
-        for (Video video : result) {
+        for (DanceVideo video : result) {
             System.out.println(video.getTitle() + "-" + video.getId());
         }
     }
@@ -382,27 +382,27 @@ public class VideoDaoTests {
     public void doRecommendVideo() {
         int[] vids = {89, 84, 83};
         for (Integer id : vids) {
-            recommendDao.doRecommendResource(Video.class, id);
+            recommendDao.doRecommendResource(DanceVideo.class, id);
         }
     }
 
     @Test
     public void unRecommendVideo() {
-        recommendDao.unRecommendResource(Video.class, 1);
+        recommendDao.unRecommendResource(DanceVideo.class, 1);
     }
 
     @Test
     public void getUnRecommendVideos() {
-        List<Video> videos = recommendDao.getUnRecommendResources(Video.class);
-        for (Video video : videos) {
+        List<DanceVideo> videos = recommendDao.getUnRecommendResources(DanceVideo.class);
+        for (DanceVideo video : videos) {
             System.out.println(video.getTitle());
         }
     }
 
     @Test
     public void getRecommendVideos() {
-        List<Video> videos = recommendDao.getRecommendResources(Video.class);
-        for (Video video : videos) {
+        List<DanceVideo> videos = recommendDao.getRecommendResources(DanceVideo.class);
+        for (DanceVideo video : videos) {
             System.out.println(video.getTitle());
         }
     }

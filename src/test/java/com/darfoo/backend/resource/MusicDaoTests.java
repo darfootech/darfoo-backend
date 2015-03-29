@@ -4,7 +4,7 @@ import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
-import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +39,7 @@ public class MusicDaoTests {
         insertcontents.put("category2", "情歌风");
         insertcontents.put("category4", "D");
 
-        HashMap<String, Integer> insertresult = commonDao.insertResource(Music.class, insertcontents);
+        HashMap<String, Integer> insertresult = commonDao.insertResource(DanceMusic.class, insertcontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
         System.out.println("insertid -> " + insertresult.get("insertid"));
     }
@@ -47,7 +47,7 @@ public class MusicDaoTests {
     @Test
     public void getMusicById() {
         long start = System.currentTimeMillis();
-        Music music = (Music) commonDao.getResourceById(Music.class, 30);
+        DanceMusic music = (DanceMusic) commonDao.getResourceById(DanceMusic.class, 30);
         System.out.println(music.toString(true));
         String authorname = music.getAuthorname();
         if (authorname.equals("")) {
@@ -65,9 +65,9 @@ public class MusicDaoTests {
         //String[] categories = {"四拍", "情歌风", "D"}; //满足所有条件
         //String[] categories = {"四拍"}; //满足个别条件
         //String[] categories = {"四拍","情歌风","0"};//最后一个条件不满足
-        List<Music> musics = categoryDao.getResourcesByCategories(Music.class, categories);
+        List<DanceMusic> musics = categoryDao.getResourcesByCategories(DanceMusic.class, categories);
         Set<Integer> musicids = new HashSet<Integer>();
-        for (Music music : musics) {
+        for (DanceMusic music : musics) {
             System.out.println(music.toString());
             System.out.println("——————————————————————————————————————");
             musicids.add(music.getId());
@@ -79,7 +79,7 @@ public class MusicDaoTests {
 
     @Test
     public void deleteMusicById() {
-        System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Music.class, 2)));   //--->DELETE_SUCCESS
+        System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(DanceMusic.class, 2)));   //--->DELETE_SUCCESS
     }
 
     @Test
@@ -96,15 +96,15 @@ public class MusicDaoTests {
         updatecontents.put("category2", "戏曲风");
         updatecontents.put("category3", "q".toUpperCase());
 
-        HashMap<String, Integer> insertresult = commonDao.updateResource(Music.class, id, updatecontents);
+        HashMap<String, Integer> insertresult = commonDao.updateResource(DanceMusic.class, id, updatecontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
     }
 
     @Test
     public void getAllMusics() {
-        List<Music> s_musics = commonDao.getAllResource(Music.class);
+        List<DanceMusic> s_musics = commonDao.getAllResource(DanceMusic.class);
         Set<Integer> musicids = new HashSet<Integer>();
-        for (Music music : s_musics) {
+        for (DanceMusic music : s_musics) {
             System.out.println("----------------");
             System.out.println("id: " + music.getId());
             musicids.add(music.getId());
@@ -117,14 +117,14 @@ public class MusicDaoTests {
     @Test
     public void updateMusicHottest() {
         Integer id = 1;
-        System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Music.class, id, "hottest")));
+        System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(DanceMusic.class, id, "hottest")));
     }
 
     @Test
     public void getMusicsByHottest() {
         int number = 10;
-        List<Music> musics = commonDao.getResourcesByHottest(Music.class, number);
-        for (Music v : musics) {
+        List<DanceMusic> musics = commonDao.getResourcesByHottest(DanceMusic.class, number);
+        for (DanceMusic v : musics) {
             System.out.println("热度值---->" + v.getHottest());
             System.out.println(v.toString(true));
             System.out.println("---------------------------");
@@ -135,9 +135,9 @@ public class MusicDaoTests {
     @Test
     public void getMusicsByNewest() {
         int number = 20;
-        List<Music> musics = commonDao.getResourcesByNewest(Music.class, number);
+        List<DanceMusic> musics = commonDao.getResourcesByNewest(DanceMusic.class, number);
         System.out.println("---------返回" + musics.size() + "个视频---------");
-        for (Music v : musics) {
+        for (DanceMusic v : musics) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
             System.out.println(v.toString(true));
             System.out.println("---------------------------");
@@ -151,8 +151,8 @@ public class MusicDaoTests {
         //String[] categories = {"四拍","情歌风","D"}; //满足所有条件
         //String[] categories = {"四拍"}; //满足个别条件
         //String[] categories = {"四拍","情歌风","0"};//最后一个条件不满足
-        List<Music> musics = paginationDao.getResourcesByCategoriesByPage(Music.class, categories, 1);
-        for (Music music : musics) {
+        List<DanceMusic> musics = paginationDao.getResourcesByCategoriesByPage(DanceMusic.class, categories, 1);
+        for (DanceMusic music : musics) {
             System.out.println(music.getId());
             System.out.println("——————————————————————————————————————");
         }
@@ -163,11 +163,11 @@ public class MusicDaoTests {
     @Test
     public void isDuplicateWithPageQuery() {
         String[] categories = {};//无条件限制
-        int pagecount = (int) paginationDao.getResourcePageCountByCategories(Music.class, categories);
+        int pagecount = (int) paginationDao.getResourcePageCountByCategories(DanceMusic.class, categories);
         Set<Integer> idSet = new HashSet<Integer>();
         for (int i = 0; i < pagecount; i++) {
-            List<Music> musics = paginationDao.getResourcesByCategoriesByPage(Music.class, categories, i + 1);
-            for (Music music : musics) {
+            List<DanceMusic> musics = paginationDao.getResourcesByCategoriesByPage(DanceMusic.class, categories, i + 1);
+            for (DanceMusic music : musics) {
                 System.out.println(music.getId());
                 idSet.add(music.getId());
                 System.out.println("——————————————————————————————————————");
@@ -175,24 +175,24 @@ public class MusicDaoTests {
             System.out.println("最终满足的music数量>>>>>>>>>>>>>>>>>>>>>" + musics.size());
         }
 
-        System.out.println("music count -> " + commonDao.getAllResource(Music.class).size());
+        System.out.println("music count -> " + commonDao.getAllResource(DanceMusic.class).size());
         System.out.println("music count -> " + idSet.size());
     }
 
     @Test
     public void getAllMusicsWithoutId() {
         int vid = 1;
-        List<Music> allmusics = commonDao.getAllResourceWithoutId(Music.class, vid);
-        for (Music music : allmusics) {
+        List<DanceMusic> allmusics = commonDao.getAllResourceWithoutId(DanceMusic.class, vid);
+        for (DanceMusic music : allmusics) {
             System.out.println(music.getId());
         }
     }
 
     @Test
     public void getSideBarMusics() {
-        List<Music> result = commonDao.getSideBarResources(Music.class, 2);
+        List<DanceMusic> result = commonDao.getSideBarResources(DanceMusic.class, 2);
         System.out.println(result.size());
-        for (Music music : result) {
+        for (DanceMusic music : result) {
             System.out.println(music.getTitle() + "-" + music.getId());
         }
     }

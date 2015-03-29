@@ -1,4 +1,4 @@
-package com.darfoo.backend.model.statistics.mongo.clickcount;
+package com.darfoo.backend.model.statistics.clickcount;
 
 import com.darfoo.backend.model.cota.CSVTitle;
 

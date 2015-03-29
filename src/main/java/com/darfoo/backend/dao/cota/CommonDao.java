@@ -2,10 +2,12 @@ package com.darfoo.backend.dao.cota;
 
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.model.category.MusicCategory;
-import com.darfoo.backend.model.category.TutorialCategory;
-import com.darfoo.backend.model.category.VideoCategory;
-import com.darfoo.backend.model.resource.*;
+import com.darfoo.backend.model.category.DanceMusicCategory;
+import com.darfoo.backend.model.category.DanceVideoCategory;
+import com.darfoo.backend.model.resource.Image;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -35,7 +37,7 @@ public class CommonDao {
     AuthorDao authorDao;
 
     public int getResourceHottestLimit(Class resource) {
-        if (resource == Music.class) {
+        if (resource == DanceMusic.class) {
             return 5;
         } else {
             return 0;
@@ -57,7 +59,7 @@ public class CommonDao {
     }
 
     public boolean ifHasCategoryResource(Class resource) {
-        if (resource == Video.class || resource == Tutorial.class || resource == Music.class) {
+        if (resource == DanceVideo.class || resource == DanceMusic.class) {
             return true;
         } else {
             return false;
@@ -65,7 +67,7 @@ public class CommonDao {
     }
 
     public boolean ifHasHottestResource(Class resource) {
-        if (ifHasCategoryResource(resource) || resource == Author.class) {
+        if (ifHasCategoryResource(resource) || resource == DanceGroup.class) {
             return true;
         } else {
             return false;
@@ -102,16 +104,13 @@ public class CommonDao {
     public void saveResourceWithCategory(Class resource, Object object, Set<String> categoryTitles) {
         Class categoryClass = null;
         Set categories;
-        if (resource == Video.class) {
-            categoryClass = VideoCategory.class;
+
+        if (resource == DanceVideo.class) {
+            categoryClass = DanceVideoCategory.class;
         }
 
-        if (resource == Tutorial.class) {
-            categoryClass = TutorialCategory.class;
-        }
-
-        if (resource == Music.class) {
-            categoryClass = MusicCategory.class;
+        if (resource == DanceMusic.class) {
+            categoryClass = DanceMusicCategory.class;
         }
 
         Session session = sessionFactory.getCurrentSession();
@@ -155,8 +154,8 @@ public class CommonDao {
                     String title = insertcontents.get(key);
                     String authorname = insertcontents.get("authorname");
 
-                    if (resource == Video.class || resource == Tutorial.class) {
-                        Author author = (Author) getResourceByTitleOrName(Author.class, authorname, "name");
+                    if (resource == DanceVideo.class) {
+                        DanceGroup author = (DanceGroup) getResourceByTitleOrName(DanceGroup.class, authorname, "name");
 
                         if (author == null) {
                             System.out.println("作者还不存在");
@@ -183,7 +182,7 @@ public class CommonDao {
                             resultMap.put("insertid", -1);
                             return resultMap;
                         }
-                    } else if (resource == Music.class) {
+                    } else if (resource == DanceMusic.class) {
                         HashMap<String, Object> conditions = new HashMap<String, Object>();
                         conditions.put("title", title);
                         conditions.put("authorname", authorname);
@@ -222,8 +221,8 @@ public class CommonDao {
                     }
                 } else if (key.equals("authorname")) {
                     String authorname = insertcontents.get(key);
-                    if (resource == Video.class || resource == Tutorial.class) {
-                        criteria = session.createCriteria(Author.class).add(Restrictions.eq("name", authorname));
+                    if (resource == DanceVideo.class) {
+                        criteria = session.createCriteria(DanceGroup.class).add(Restrictions.eq("name", authorname));
                         if (criteria.list().size() == 1) {
                             setResourceAttr(resource, object, "author", criteria.uniqueResult());
                         } else {
@@ -232,7 +231,7 @@ public class CommonDao {
                             resultMap.put("insertid", -1);
                             return resultMap;
                         }
-                    } else if (resource == Music.class) {
+                    } else if (resource == DanceMusic.class) {
                         setResourceAttr(resource, object, key, insertcontents.get(key));
                     } else {
                         System.out.println("authorname something is wired class -> " + resource.getName());
@@ -245,7 +244,7 @@ public class CommonDao {
                     categoryTitles.add(category);
                 } else if (key.equals("name")) {
                     String name = insertcontents.get(key);
-                    if (isResourceExistsByField(Author.class, "name", name)) {
+                    if (isResourceExistsByField(DanceGroup.class, "name", name)) {
                         System.out.println("相同名字明星舞队已存在，不能创建新明星舞队");
                         resultMap.put("statuscode", 506);
                         resultMap.put("insertid", -1);
@@ -264,7 +263,7 @@ public class CommonDao {
             if (ifHasCategoryResource(resource)) {
                 setResourceAttr(resource, object, "update_timestamp", System.currentTimeMillis());
 
-                if (resource == Video.class || resource == Music.class) {
+                if (resource == DanceVideo.class || resource == DanceMusic.class) {
                     if (!isCategoryHasSingleChar) {
                         resultMap.put("statuscode", 503);
                         resultMap.put("insertid", -1);
@@ -274,16 +273,13 @@ public class CommonDao {
 
                 Class categoryClass = null;
                 Set categories;
-                if (resource == Video.class) {
-                    categoryClass = VideoCategory.class;
+
+                if (resource == DanceVideo.class) {
+                    categoryClass = DanceVideoCategory.class;
                 }
 
-                if (resource == Tutorial.class) {
-                    categoryClass = TutorialCategory.class;
-                }
-
-                if (resource == Music.class) {
-                    categoryClass = MusicCategory.class;
+                if (resource == DanceMusic.class) {
+                    categoryClass = DanceMusicCategory.class;
                 }
 
                 criteria = session.createCriteria(categoryClass).add(Restrictions.in("title", categoryTitles));
@@ -297,7 +293,7 @@ public class CommonDao {
                 setResourceAttr(resource, object, "hottest", 0L);
             }
 
-            if (resource == Video.class || resource == Tutorial.class) {
+            if (resource == DanceVideo.class) {
                 setResourceAttr(resource, object, "recommend", 0);
             }
 
@@ -305,7 +301,7 @@ public class CommonDao {
 
             int insertid = (Integer) getResourceAttr(resource, object, "id");
 
-            if (resource == Video.class || resource == Tutorial.class) {
+            if (resource == DanceVideo.class) {
                 HashMap<String, Object> updateMap = new HashMap<String, Object>();
                 updateMap.put("video_key", insertcontents.get("title") + "-" + resource.getSimpleName().toLowerCase() + "-" + insertid + "." + insertcontents.get("videotype"));
                 updateResourceFieldsById(resource, insertid, updateMap);
@@ -317,7 +313,7 @@ public class CommonDao {
                 }
             }
 
-            if (resource == Music.class) {
+            if (resource == DanceMusic.class) {
                 HashMap<String, Object> updateMap = new HashMap<String, Object>();
                 updateMap.put("music_key", insertcontents.get("title") + "-" + insertid);
                 updateResourceFieldsById(resource, insertid, updateMap);
@@ -366,12 +362,12 @@ public class CommonDao {
                 if (key.equals("authorname")) {
                     String authorname = updatecontents.get(key);
                     if (!authorname.equals("") && authorname != null) {
-                        if (resource == Video.class || resource == Tutorial.class) {
-                            String oldAuthorname = ((Author) getResourceAttr(resource, object, "author")).getName();
+                        if (resource == DanceVideo.class) {
+                            String oldAuthorname = ((DanceGroup) getResourceAttr(resource, object, "author")).getName();
                             if (!authorname.equals(oldAuthorname)) {
-                                criteria = session.createCriteria(Author.class).add(Restrictions.eq("name", authorname));
+                                criteria = session.createCriteria(DanceGroup.class).add(Restrictions.eq("name", authorname));
                                 criteria.setReadOnly(true);
-                                Author author = (Author) criteria.uniqueResult();
+                                DanceGroup author = (DanceGroup) criteria.uniqueResult();
                                 if (author == null) {
                                     System.out.println("要更新的资源的的明星舞队不存在，请先完成明星舞队信息的创建");
                                     resultMap.put("statuscode", 501);
@@ -399,7 +395,7 @@ public class CommonDao {
                                     }
                                 }
                             }
-                        } else if (resource == Music.class) {
+                        } else if (resource == DanceMusic.class) {
                             String oldAuthorname = getResourceAttr(resource, object, "authorname").toString();
                             if (!authorname.equals(oldAuthorname)) {
                                 HashMap<String, Object> conditions = new HashMap<String, Object>();
@@ -438,8 +434,8 @@ public class CommonDao {
                     String oldTitle = getResourceAttr(resource, object, key).toString();
 
                     if (!title.equals("") && title != null && !title.equals(oldTitle)) {
-                        if (resource == Video.class || resource == Tutorial.class) {
-                            int oldAuthorid = ((Author) getResourceAttr(resource, object, "author")).getId();
+                        if (resource == DanceVideo.class) {
+                            int oldAuthorid = ((DanceGroup) getResourceAttr(resource, object, "author")).getId();
                             HashMap<String, Object> conditions = new HashMap<String, Object>();
                             conditions.put("title", title);
                             conditions.put("author_id", oldAuthorid);
@@ -454,7 +450,7 @@ public class CommonDao {
                                 resultMap.put("statuscode", 502);
                                 return resultMap;
                             }
-                        } else if (resource == Music.class) {
+                        } else if (resource == DanceMusic.class) {
                             HashMap<String, Object> conditions = new HashMap<String, Object>();
                             conditions.put("title", title);
                             conditions.put("authorname", updatecontents.get("authorname"));
@@ -493,9 +489,9 @@ public class CommonDao {
                     }
                 } else if (key.equals("imagekey")) {
                     //为之前没有关联图片的明星舞队更新图片
-                    if (resource == Author.class) {
+                    if (resource == DanceGroup.class) {
                         String imagekey = updatecontents.get(key);
-                        String oldImagekey = ((Author) object).getImage().getImage_key();
+                        String oldImagekey = ((DanceGroup) object).getImage().getImage_key();
 
                         if (!imagekey.equals("") && !imagekey.equals(oldImagekey)) {
                             if (!ServiceUtils.isValidImageKey(imagekey)) {
@@ -519,7 +515,7 @@ public class CommonDao {
                 }
             }
 
-            if (resource == Video.class || resource == Tutorial.class) {
+            if (resource == DanceVideo.class) {
                 String connectmusic = updatecontents.get("connectmusic");
                 if (connectmusic != null && !connectmusic.equals("")) {
                     int mid = Integer.parseInt(connectmusic.split("-")[2]);
@@ -530,7 +526,7 @@ public class CommonDao {
             if (ifHasCategoryResource(resource)) {
                 setResourceAttr(resource, object, "update_timestamp", System.currentTimeMillis());
 
-                if (resource == Video.class || resource == Music.class) {
+                if (resource == DanceVideo.class || resource == DanceMusic.class) {
                     if (!isCategoryHasSingleChar) {
                         resultMap.put("statuscode", 503);
                         return resultMap;
@@ -539,16 +535,13 @@ public class CommonDao {
 
                 Class categoryClass = null;
                 Set categories;
-                if (resource == Video.class) {
-                    categoryClass = VideoCategory.class;
+
+                if (resource == DanceVideo.class) {
+                    categoryClass = DanceVideoCategory.class;
                 }
 
-                if (resource == Tutorial.class) {
-                    categoryClass = TutorialCategory.class;
-                }
-
-                if (resource == Music.class) {
-                    categoryClass = MusicCategory.class;
+                if (resource == DanceMusic.class) {
+                    categoryClass = DanceMusicCategory.class;
                 }
 
                 criteria = session.createCriteria(categoryClass).add(Restrictions.in("title", categoryTitles));
@@ -819,7 +812,7 @@ public class CommonDao {
                     .setProjection(Projections.property("id"));
             if (ifHasCategoryResource(resource)) {
                 criteria.add(Restrictions.like("title", sb.toString(), MatchMode.ANYWHERE));
-            } else if (resource == Author.class) {
+            } else if (resource == DanceGroup.class) {
                 criteria.add(Restrictions.like("name", sb.toString(), MatchMode.ANYWHERE));
             } else {
                 System.out.println("something is bad");
@@ -857,19 +850,19 @@ public class CommonDao {
         List result = new ArrayList();
         List sameAuthorList = new ArrayList();
         try {
-            if (resource == Video.class || resource == Tutorial.class) {
+            if (resource == DanceVideo.class) {
                 Field field = resource.getDeclaredField("author");
                 field.setAccessible(true);
                 Object object = getResourceById(resource, id);
 
-                Author author = (Author) field.get(object);
+                DanceGroup author = (DanceGroup) field.get(object);
                 int authorid = author.getId();
 
                 HashMap<String, Object> conditions = new HashMap<String, Object>();
                 conditions.put("author_id", authorid);
 
                 sameAuthorList = getResourcesByFieldsWithoutId(resource, conditions, id);
-            } else if (resource == Music.class) {
+            } else if (resource == DanceMusic.class) {
                 Field field = resource.getDeclaredField("author_name");
                 field.setAccessible(true);
                 Object object = getResourceById(resource, id);

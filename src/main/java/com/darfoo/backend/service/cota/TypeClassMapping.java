@@ -2,18 +2,17 @@ package com.darfoo.backend.service.cota;
 
 import com.darfoo.backend.model.auth.Feedback;
 import com.darfoo.backend.model.cota.AuthorType;
-import com.darfoo.backend.model.resource.Author;
-import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Tutorial;
-import com.darfoo.backend.model.resource.Video;
-import com.darfoo.backend.model.statistics.mongo.CrashLog;
-import com.darfoo.backend.model.statistics.mongo.SearchHistory;
-import com.darfoo.backend.model.statistics.mongo.clickcount.MenuClickCount;
-import com.darfoo.backend.model.statistics.mongo.clickcount.ResourceClickCount;
-import com.darfoo.backend.model.statistics.mongo.clickcount.TabClickCount;
-import com.darfoo.backend.model.statistics.mongo.clicktime.MenuClickTime;
-import com.darfoo.backend.model.statistics.mongo.clicktime.ResourceClickTime;
-import com.darfoo.backend.model.statistics.mongo.clicktime.TabClickTime;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.statistics.CrashLog;
+import com.darfoo.backend.model.statistics.SearchHistory;
+import com.darfoo.backend.model.statistics.clickcount.MenuClickCount;
+import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
+import com.darfoo.backend.model.statistics.clickcount.TabClickCount;
+import com.darfoo.backend.model.statistics.clicktime.MenuClickTime;
+import com.darfoo.backend.model.statistics.clicktime.ResourceClickTime;
+import com.darfoo.backend.model.statistics.clicktime.TabClickTime;
 import com.darfoo.backend.model.upload.UploadNoAuthVideo;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
@@ -35,10 +34,9 @@ public class TypeClassMapping {
     public static HashMap<AuthorType, String> authorTypeNameMap = new HashMap<AuthorType, String>();
 
     static {
-        typeClassMap.put("video", Video.class);
-        typeClassMap.put("tutorial", Tutorial.class);
-        typeClassMap.put("music", Music.class);
-        typeClassMap.put("author", Author.class);
+        typeClassMap.put("dancevideo", DanceVideo.class);
+        typeClassMap.put("dancemusic", DanceMusic.class);
+        typeClassMap.put("dancegroup", DanceGroup.class);
         typeClassMap.put("uploadnoauthvideo", UploadNoAuthVideo.class);
         typeClassMap.put("resourceclickcount", ResourceClickCount.class);
         typeClassMap.put("menuclickcount", MenuClickCount.class);
@@ -61,8 +59,8 @@ public class TypeClassMapping {
         clickTimeStatMap.put("menu", MenuClickTime.class);
         clickTimeStatMap.put("tab", TabClickTime.class);
 
-        authorTypeClassMap.put(AuthorType.STAR, Tutorial.class);
-        authorTypeClassMap.put(AuthorType.NORMAL, Video.class);
+        authorTypeClassMap.put(AuthorType.STAR, DanceVideo.class);
+        authorTypeClassMap.put(AuthorType.NORMAL, DanceVideo.class);
 
         videoTypeAuthorTypeMap.put("video", AuthorType.NORMAL);
         videoTypeAuthorTypeMap.put("tutorial", AuthorType.STAR);

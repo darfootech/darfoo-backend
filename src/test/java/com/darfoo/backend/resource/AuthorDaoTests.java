@@ -6,9 +6,8 @@ import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.model.cota.AuthorHot;
 import com.darfoo.backend.model.cota.AuthorType;
-import com.darfoo.backend.model.resource.Author;
-import com.darfoo.backend.model.resource.Tutorial;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
@@ -35,7 +34,7 @@ public class AuthorDaoTests {
     @Test
     public void getAuthorByName() {
         String name = "T-ara";
-        Author a = (Author) commonDao.getResourceByTitleOrName(Author.class, name, "name");
+        DanceGroup a = (DanceGroup) commonDao.getResourceByTitleOrName(DanceGroup.class, name, "name");
         if (a != null)
             System.out.println(a.getName());
         else
@@ -45,7 +44,7 @@ public class AuthorDaoTests {
     @Test
     public void isExistAuthor() {
         String name = "cleantha";
-        if (commonDao.isResourceExistsByField(Author.class, "name", name)) {
+        if (commonDao.isResourceExistsByField(DanceGroup.class, "name", name)) {
             System.out.println("已存在");
         } else {
             System.out.println("无该author记录");
@@ -62,7 +61,7 @@ public class AuthorDaoTests {
         insertcontents.put("imagekey", imagekey);
         insertcontents.put("description", "台湾人气偶像组合");
 
-        HashMap<String, Integer> insertresult = commonDao.insertResource(Author.class, insertcontents);
+        HashMap<String, Integer> insertresult = commonDao.insertResource(DanceGroup.class, insertcontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
         System.out.println("insertid -> " + insertresult.get("insertid"));
     }
@@ -79,14 +78,14 @@ public class AuthorDaoTests {
         updatecontents.put("imagekey", imagekey);
         updatecontents.put("description", "日本女歌手");
 
-        HashMap<String, Integer> insertresult = commonDao.updateResource(Author.class, id, updatecontents);
+        HashMap<String, Integer> insertresult = commonDao.updateResource(DanceGroup.class, id, updatecontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
     }
 
     @Test
     public void getAllAuthor() {
-        List<Author> l_author = commonDao.getAllResource(Author.class);
-        for (Author a : l_author) {
+        List<DanceGroup> l_author = commonDao.getAllResource(DanceGroup.class);
+        for (DanceGroup a : l_author) {
             System.out.println(a.toString());
         }
     }
@@ -94,14 +93,14 @@ public class AuthorDaoTests {
     @Test
     public void deleteAuthor() {
         Integer id = 6;
-        System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(Author.class, id)));
+        System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(DanceGroup.class, id)));
     }
 
     @Test
     public void getVideoResourceByAuthorid() {
         int aid = 2;
 
-        Author author = (Author) commonDao.getResourceById(Author.class, aid);
+        DanceGroup author = (DanceGroup) commonDao.getResourceById(DanceGroup.class, aid);
         String authorname = author.getName();
 
         List<SingleVideo> result = new ArrayList<SingleVideo>();
@@ -109,24 +108,14 @@ public class AuthorDaoTests {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", aid);
 
-        List<Video> videos = commonDao.getResourcesByFields(Video.class, conditions);
-        List<Tutorial> tutorials = commonDao.getResourcesByFields(Tutorial.class, conditions);
+        List<DanceVideo> videos = commonDao.getResourcesByFields(DanceVideo.class, conditions);
 
-        for (Video video : videos) {
-            int vid = video.getId();
-            String video_download_url = qiniuUtils.getQiniuResourceUrl(video.getVideo_key(), QiniuResourceEnum.RAW);
+        for (DanceVideo video : videos) {
+            int tid = video.getId();
+            String tutorial_download_url = qiniuUtils.getQiniuResourceUrl(video.getVideo_key(), QiniuResourceEnum.RAW);
             String image_download_url = qiniuUtils.getQiniuResourceUrl(video.getImage().getImage_key(), QiniuResourceEnum.RAW);
             String title = video.getTitle();
             long timestamp = video.getUpdate_timestamp();
-            result.add(new SingleVideo(vid, title, authorname, video_download_url, image_download_url, 1, timestamp));
-        }
-
-        for (Tutorial tutorial : tutorials) {
-            int tid = tutorial.getId();
-            String tutorial_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getVideo_key(), QiniuResourceEnum.RAW);
-            String image_download_url = qiniuUtils.getQiniuResourceUrl(tutorial.getImage().getImage_key(), QiniuResourceEnum.RAW);
-            String title = tutorial.getTitle();
-            long timestamp = tutorial.getUpdate_timestamp();
             result.add(new SingleVideo(tid, title, authorname, tutorial_download_url, image_download_url, 0, timestamp));
         }
 
@@ -139,8 +128,8 @@ public class AuthorDaoTests {
 
     @Test
     public void getAuthorOrderByVideoCountDesc() {
-        List<Author> result = authorDao.getAuthorsOrderByVideoCountDesc();
-        for (Author author : result) {
+        List<DanceGroup> result = authorDao.getAuthorsOrderByVideoCountDesc();
+        for (DanceGroup author : result) {
             System.out.println(String.format("%d -> %s", author.getId(), author.getName()));
         }
         System.out.println("result size -> " + result.size());
@@ -148,8 +137,8 @@ public class AuthorDaoTests {
 
     @Test
     public void getAuthorOrderByVideoCountDescByPage() {
-        List<Author> result = authorDao.getAuthorsOrderByVideoCountDescByPage(2);
-        for (Author author : result) {
+        List<DanceGroup> result = authorDao.getAuthorsOrderByVideoCountDescByPage(2);
+        for (DanceGroup author : result) {
             System.out.println(String.format("%d -> %s", author.getId(), author.getName()));
         }
         System.out.println("result size -> " + result.size());
@@ -157,16 +146,16 @@ public class AuthorDaoTests {
 
     @Test
     public void getAllPages() {
-        System.out.println("pagecount -> " + paginationDao.getResourcePageCount(Author.class));
+        System.out.println("pagecount -> " + paginationDao.getResourcePageCount(DanceGroup.class));
     }
 
     @Test
     public void isDuplicateWithPageQuery() {
-        int pagesize = (int) paginationDao.getResourcePageCount(Author.class);
+        int pagesize = (int) paginationDao.getResourcePageCount(DanceGroup.class);
         Set<Integer> idSet = new HashSet<Integer>();
         for (int i = 0; i < pagesize; i++) {
-            List<Author> result = authorDao.getAuthorsOrderByVideoCountDescByPage(i + 1);
-            for (Author author : result) {
+            List<DanceGroup> result = authorDao.getAuthorsOrderByVideoCountDescByPage(i + 1);
+            for (DanceGroup author : result) {
                 System.out.println(String.format("%d -> %s", author.getId(), author.getName()));
                 idSet.add(author.getId());
             }
@@ -180,15 +169,15 @@ public class AuthorDaoTests {
     @Test
     public void updateAuthorHottest() {
         Integer id = 1;
-        System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(Author.class, id, "hottest")));
+        System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(DanceGroup.class, id, "hottest")));
     }
 
     @Test
     public void getAuthorsByHottest() {
         int number = 20;
-        List<Author> authors = commonDao.getResourcesByHottest(Author.class, number);
+        List<DanceGroup> authors = commonDao.getResourcesByHottest(DanceGroup.class, number);
         System.out.println("---------返回" + authors.size() + "个视频---------");
-        for (Author a : authors) {
+        for (DanceGroup a : authors) {
             System.out.println(a.getName());
             System.out.println("热度值---->" + a.getHottest());
             System.out.println("---------------------------");
@@ -199,9 +188,9 @@ public class AuthorDaoTests {
     public void getAuthorsByType() {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("type", AuthorType.NORMAL);
-        List authors = commonDao.getResourcesByFields(Author.class, conditions);
+        List authors = commonDao.getResourcesByFields(DanceGroup.class, conditions);
         for (Object author : authors) {
-            System.out.println(commonDao.getResourceAttr(Author.class, author, "id"));
+            System.out.println(commonDao.getResourceAttr(DanceGroup.class, author, "id"));
         }
     }
 
@@ -214,16 +203,16 @@ public class AuthorDaoTests {
     public void changeAuthorType() {
         HashMap<String, Object> updateMap = new HashMap<String, Object>();
         updateMap.put("type", AuthorType.NORMAL);
-        commonDao.updateResourceFieldsById(Author.class, 7, updateMap);
+        commonDao.updateResourceFieldsById(DanceGroup.class, 7, updateMap);
     }
 
     @Test
     public void getHotAuthors() {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("hot", AuthorHot.ISHOT);
-        List authors = commonDao.getResourcesByFields(Author.class, conditions);
+        List authors = commonDao.getResourcesByFields(DanceGroup.class, conditions);
         for (Object author : authors) {
-            System.out.println(commonDao.getResourceAttr(Author.class, author, "id"));
+            System.out.println(commonDao.getResourceAttr(DanceGroup.class, author, "id"));
         }
     }
 
@@ -231,6 +220,6 @@ public class AuthorDaoTests {
     public void makeAuthorHot() {
         HashMap<String, Object> updateMap = new HashMap<String, Object>();
         updateMap.put("hot", AuthorHot.ISHOT);
-        commonDao.updateResourceFieldsById(Author.class, 7, updateMap);
+        commonDao.updateResourceFieldsById(DanceGroup.class, 7, updateMap);
     }
 }

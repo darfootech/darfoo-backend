@@ -1,8 +1,8 @@
-package com.darfoo.backend.model.resource;
+package com.darfoo.backend.model.resource.dance;
 
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
-import com.darfoo.backend.model.category.MusicCategory;
+import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.cota.ModelInsert;
 import com.darfoo.backend.model.cota.ModelUpdate;
 import com.darfoo.backend.model.cota.ModelUpload;
@@ -17,18 +17,18 @@ import java.util.Set;
  * Created by zjh on 14-11-16.
  */
 @Entity
-@Table(name = "music")
-public class Music implements Serializable {
+@Table(name = "dancemusic")
+public class DanceMusic implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     Integer id;
 
     //music & musiccategory 双向N-N
-    @ManyToMany(targetEntity = MusicCategory.class, fetch = FetchType.EAGER)
-    @JoinTable(name = "music_category", joinColumns = {@JoinColumn(name = "music_id", referencedColumnName = "id", nullable = false, columnDefinition = "int(11) not null")},
+    @ManyToMany(targetEntity = DanceMusicCategory.class, fetch = FetchType.EAGER)
+    @JoinTable(name = "dancemusic_category", joinColumns = {@JoinColumn(name = "music_id", referencedColumnName = "id", nullable = false, columnDefinition = "int(11) not null")},
             inverseJoinColumns = {@JoinColumn(name = "category_id", nullable = false, columnDefinition = "int(11) not null")})
-    Set<MusicCategory> categories = new HashSet<MusicCategory>();
+    Set<DanceMusicCategory> dancemusiccategories = new HashSet<DanceMusicCategory>();
 
     @Column(name = "TITLE", nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
@@ -46,7 +46,7 @@ public class Music implements Serializable {
 
     //点击量
     @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
-    Long hottest;
+    Long hottest = 0L;
 
     //因为伴奏的作者不需要其他的信息 所以伴奏只需要一个作者名字就可以了
     @Column(name = "AUTHOR_NAME", nullable = true, columnDefinition = "varchar(255) not null")
@@ -59,7 +59,7 @@ public class Music implements Serializable {
     @ModelUpload(type = ModelUploadEnum.LARGE)
     String musickey;
 
-    public Music() {
+    public DanceMusic() {
     }
 
     public String getAuthorname() {
@@ -78,12 +78,12 @@ public class Music implements Serializable {
         this.hottest = hottest;
     }
 
-    public Set<MusicCategory> getCategories() {
-        return categories;
+    public Set<DanceMusicCategory> getDancemusiccategories() {
+        return dancemusiccategories;
     }
 
-    public void setCategories(Set<MusicCategory> categories) {
-        this.categories = categories;
+    public void setDancemusiccategories(Set<DanceMusicCategory> dancemusiccategories) {
+        this.dancemusiccategories = dancemusiccategories;
     }
 
     public Integer getId() {

@@ -1,11 +1,13 @@
 package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.category.MusicCategory;
-import com.darfoo.backend.model.category.TutorialCategory;
-import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.category.DanceMusicCategory;
+import com.darfoo.backend.model.category.DanceVideoCategory;
 import com.darfoo.backend.model.cota.AuthorType;
-import com.darfoo.backend.model.resource.*;
+import com.darfoo.backend.model.resource.Image;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.model.upload.UploadNoAuthVideo;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.MusicCates;
@@ -52,7 +54,7 @@ public class GalleryController {
     public String showAllAuthor(@PathVariable AuthorType type, ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("type", type);
-        List resources = commonDao.getResourcesByFields(Author.class, conditions);
+        List resources = commonDao.getResourcesByFields(DanceGroup.class, conditions);
         return galleryAllResources(resources, modelMap, "author");
     }
 
@@ -70,26 +72,10 @@ public class GalleryController {
 
     private ModelMap getResourceModelMap(Class resource, Integer id, ModelMap modelMap) {
         Object object = commonDao.getResourceById(resource, id);
-        if (resource == Video.class) {
-            Video video = (Video) object;
-            Set<VideoCategory> categories = video.getCategories();
-            for (VideoCategory category : categories) {
-                String categorytitle = category.getTitle();
-                System.out.println(categorytitle);
-                if (videoCates.getSpeedCategory().containsValue(categorytitle)) {
-                    modelMap.addAttribute("speed", categorytitle);
-                } else if (videoCates.getDifficultyCategory().containsValue(categorytitle)) {
-                    modelMap.addAttribute("difficult", categorytitle);
-                } else if (videoCates.getStyleCategory().containsValue(categorytitle)) {
-                    modelMap.addAttribute("style", categorytitle);
-                } else {
-                    modelMap.addAttribute("letter", categorytitle);
-                }
-            }
-        } else if (resource == Tutorial.class) {
-            Tutorial tutorial = (Tutorial) object;
-            Set<TutorialCategory> categories = tutorial.getCategories();
-            for (TutorialCategory category : categories) {
+        if (resource == DanceVideo.class) {
+            DanceVideo video = (DanceVideo) object;
+            Set<DanceVideoCategory> categories = video.getDancevideocategories();
+            for (DanceVideoCategory category : categories) {
                 String categorytitle = category.getTitle();
                 System.out.println(categorytitle);
                 if (tutorialCates.getSpeedCategory().containsValue(categorytitle)) {
@@ -102,10 +88,10 @@ public class GalleryController {
                     System.out.println("something is wrong with the category");
                 }
             }
-        } else if (resource == Music.class) {
-            Music music = (Music) object;
-            Set<MusicCategory> categories = music.getCategories();
-            for (MusicCategory category : categories) {
+        } else if (resource == DanceMusic.class) {
+            DanceMusic music = (DanceMusic) object;
+            Set<DanceMusicCategory> categories = music.getDancemusiccategories();
+            for (DanceMusicCategory category : categories) {
                 String categorytitle = category.getTitle();
                 System.out.println(categorytitle);
                 if (musicCates.getBeatCategory().containsValue(categorytitle)) {
@@ -124,14 +110,14 @@ public class GalleryController {
             System.out.println("wired");
         }
 
-        if (resource == Video.class || resource == Tutorial.class) {
+        if (resource == DanceVideo.class) {
             String videotype = commonDao.getResourceAttr(resource, object, "video_key").toString().split("\\.")[1];
             String videokey = commonDao.getResourceAttr(resource, object, "video_key").toString();
             String imagekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
-            Music music = (Music) commonDao.getResourceAttr(resource, object, "music");
+            DanceMusic music = (DanceMusic) commonDao.getResourceAttr(resource, object, "music");
             modelMap.addAttribute("videotype", videotype);
             modelMap.addAttribute("video", object);
-            modelMap.addAttribute("authors", commonDao.getAllResource(Author.class));
+            modelMap.addAttribute("authors", commonDao.getAllResource(DanceGroup.class));
             modelMap.addAttribute("videourl", qiniuUtils.getQiniuResourceUrl(videokey, QiniuResourceEnum.RAW));
             modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(imagekey, QiniuResourceEnum.RAW));
             if (music != null) {
@@ -142,13 +128,13 @@ public class GalleryController {
             }
         }
 
-        if (resource == Music.class) {
+        if (resource == DanceMusic.class) {
             String musickey = commonDao.getResourceAttr(resource, object, "music_key").toString() + ".mp3";
             modelMap.addAttribute("musicurl", qiniuUtils.getQiniuResourceUrl(musickey, QiniuResourceEnum.RAW));
             modelMap.addAttribute("music", object);
         }
 
-        if (resource == Author.class) {
+        if (resource == DanceGroup.class) {
             modelMap.addAttribute("author", object);
             Image image = (Image) commonDao.getResourceAttr(resource, object, "image");
             if (image != null) {

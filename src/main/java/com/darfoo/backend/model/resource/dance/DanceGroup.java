@@ -1,8 +1,9 @@
-package com.darfoo.backend.model.resource;
+package com.darfoo.backend.model.resource.dance;
 
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
 import com.darfoo.backend.model.cota.*;
+import com.darfoo.backend.model.resource.Image;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -12,9 +13,11 @@ import java.io.Serializable;
 /**
  * Created by zjh on 14-11-16.
  */
+
+//舞队
 @Entity
-@Table(name = "author")
-public class Author implements Serializable {
+@Table(name = "dancegroup")
+public class DanceGroup implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //引用下面名为mysql的主键生成方式
     @CacheInsert(type = CacheInsertEnum.NORMAL)
@@ -41,7 +44,7 @@ public class Author implements Serializable {
 
     //点击量
     @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
-    Long hottest;
+    Long hottest = 0L;
 
     @Transient
     @ModelInsert
@@ -55,7 +58,7 @@ public class Author implements Serializable {
     @Column(name = "HOT", nullable = false, updatable = true, columnDefinition = "int default 0")
     AuthorHot hot = AuthorHot.NOTHOT;
 
-    public Author() {
+    public DanceGroup() {
 
     }
 

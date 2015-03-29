@@ -1,9 +1,8 @@
 package com.darfoo.backend.dao.cota;
 
-import com.darfoo.backend.model.resource.Author;
-import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Tutorial;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -29,11 +28,11 @@ public class PaginationDao {
      * @return
      */
     public int getResourcePageSize(Class resource) {
-        if (resource == Video.class || resource == Tutorial.class) {
+        if (resource == DanceVideo.class) {
             return 12;
-        } else if (resource == Music.class) {
+        } else if (resource == DanceMusic.class) {
             return 22;
-        } else if (resource == Author.class) {
+        } else if (resource == DanceGroup.class) {
             return 15;
         } else {
             System.out.println("something is wired");

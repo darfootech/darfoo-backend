@@ -6,16 +6,14 @@ package com.darfoo.backend;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.statistic.StatisticsDao;
-import com.darfoo.backend.model.category.MusicCategory;
-import com.darfoo.backend.model.category.TutorialCategory;
-import com.darfoo.backend.model.category.VideoCategory;
+import com.darfoo.backend.model.category.DanceMusicCategory;
+import com.darfoo.backend.model.category.DanceVideoCategory;
 import com.darfoo.backend.model.cota.AuthorType;
 import com.darfoo.backend.model.cota.CSVTitle;
-import com.darfoo.backend.model.resource.Author;
-import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Tutorial;
-import com.darfoo.backend.model.resource.Video;
-import com.darfoo.backend.model.statistics.mongo.clickcount.ResourceClickCount;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.TutorialCates;
@@ -78,60 +76,12 @@ public class DownloadTests {
             printer = new CSVPrinter(out, format.withDelimiter(','));
             HashMap<String, String> styleMap = new HashMap<String, String>();
 
-            if (resource == Video.class) {
-                printer.printRecord("视频标题", "明星舞队名称", "舞蹈速度", "舞蹈难度", "舞蹈风格", "首字母");
-                for (Object object : resources) {
-                    Video video = (Video) object;
-                    Set<VideoCategory> categories = video.getCategories();
-                    for (VideoCategory category : categories) {
-                        String categorytitle = category.getTitle();
-                        if (videoCates.getSpeedCategory().containsValue(categorytitle)) {
-                            styleMap.put("speed", categorytitle);
-                        } else if (videoCates.getDifficultyCategory().containsValue(categorytitle)) {
-                            styleMap.put("difficult", categorytitle);
-                        } else if (videoCates.getStyleCategory().containsValue(categorytitle)) {
-                            styleMap.put("style", categorytitle);
-                        } else {
-                            styleMap.put("letter", categorytitle);
-                        }
-                    }
-                    List<String> itemData = new ArrayList<String>();
-                    itemData.add(video.getTitle());
-                    if (video.getAuthor() != null) {
-                        itemData.add(video.getAuthor().getName());
-                    } else {
-                        itemData.add("没有关联明星舞队");
-                    }
-                    if (styleMap.get("speed") != null) {
-                        itemData.add(styleMap.get("speed"));
-                    } else {
-                        itemData.add("没有填视频速度");
-                    }
-                    if (styleMap.get("difficult") != null) {
-                        itemData.add(styleMap.get("difficult"));
-                    } else {
-                        itemData.add("没有填视频难度");
-                    }
-                    if (styleMap.get("style") != null) {
-                        itemData.add(styleMap.get("style"));
-                    } else {
-                        itemData.add("没有填视频风格");
-                    }
-                    if (styleMap.get("letter") != null) {
-                        itemData.add(styleMap.get("letter"));
-                    } else {
-                        itemData.add("没有填首字母");
-                    }
-
-                    itemData.add(timestampTodatetime(video.getUpdate_timestamp()));
-                    printer.printRecord(itemData);
-                }
-            } else if (resource == Tutorial.class) {
+            if (resource == DanceVideo.class) {
                 printer.printRecord("教程标题", "明星舞队名称", "舞蹈速度", "舞蹈难度", "舞蹈风格");
                 for (Object object : resources) {
-                    Tutorial tutorial = (Tutorial) object;
-                    Set<TutorialCategory> categories = tutorial.getCategories();
-                    for (TutorialCategory category : categories) {
+                    DanceVideo video = (DanceVideo) object;
+                    Set<DanceVideoCategory> categories = video.getDancevideocategories();
+                    for (DanceVideoCategory category : categories) {
                         String categorytitle = category.getTitle();
                         if (tutorialCates.getSpeedCategory().containsValue(categorytitle)) {
                             styleMap.put("speed", categorytitle);
@@ -144,9 +94,9 @@ public class DownloadTests {
                         }
                     }
                     List<String> itemData = new ArrayList<String>();
-                    itemData.add(tutorial.getTitle());
-                    if (tutorial.getAuthor() != null) {
-                        itemData.add(tutorial.getAuthor().getName());
+                    itemData.add(video.getTitle());
+                    if (video.getAuthor() != null) {
+                        itemData.add(video.getAuthor().getName());
                     } else {
                         itemData.add("没有关联明星舞队");
                     }
@@ -166,15 +116,15 @@ public class DownloadTests {
                         itemData.add("没有填教程风格");
                     }
 
-                    itemData.add(timestampTodatetime(tutorial.getUpdate_timestamp()));
+                    itemData.add(timestampTodatetime(video.getUpdate_timestamp()));
                     printer.printRecord(itemData);
                 }
-            } else if (resource == Music.class) {
+            } else if (resource == DanceMusic.class) {
                 printer.printRecord("伴奏标题", "舞蹈节奏", "舞蹈风格", "首字母");
                 for (Object object : resources) {
-                    Music music = (Music) object;
-                    Set<MusicCategory> categories = music.getCategories();
-                    for (MusicCategory category : categories) {
+                    DanceMusic music = (DanceMusic) object;
+                    Set<DanceMusicCategory> categories = music.getDancemusiccategories();
+                    for (DanceMusicCategory category : categories) {
                         String categorytitle = category.getTitle();
                         if (musicCates.getBeatCategory().containsValue(categorytitle)) {
                             styleMap.put("beat", categorytitle);
@@ -261,17 +211,12 @@ public class DownloadTests {
 
     @Test
     public void writeVideosToCSV() {
-        writeResourcesToCSV(Video.class);
-    }
-
-    @Test
-    public void writeTutorialsToCSV() {
-        writeResourcesToCSV(Tutorial.class);
+        writeResourcesToCSV(DanceVideo.class);
     }
 
     @Test
     public void writeMusicsToCSV() {
-        writeResourcesToCSV(Music.class);
+        writeResourcesToCSV(DanceMusic.class);
     }
 
     @Test
@@ -282,7 +227,7 @@ public class DownloadTests {
     @Test
     public void writeVideosOfAuthorToCSV() {
         int authorid = 2;
-        String authorname = ((Author) commonDao.getResourceById(Author.class, authorid)).getName();
+        String authorname = ((DanceGroup) commonDao.getResourceById(DanceGroup.class, authorid)).getName();
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", authorid);
 

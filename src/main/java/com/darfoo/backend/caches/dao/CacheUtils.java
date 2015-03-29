@@ -4,7 +4,7 @@ import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
@@ -141,7 +141,7 @@ public class CacheUtils {
             return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.LIST);
         } else {
             int page = pageArray[0];
-            int pageSize = paginationDao.getResourcePageSize(Video.class);
+            int pageSize = paginationDao.getResourcePageSize(DanceVideo.class);
             long start = (page - 1) * pageSize;
             long end = page * pageSize - 1;
 

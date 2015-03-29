@@ -1,10 +1,9 @@
 package com.darfoo.backend.offlinejobs;
 
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.Image;
-import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Tutorial;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.qiniu.api.auth.digest.Mac;
 import com.qiniu.api.config.Config;
 import com.qiniu.api.rs.RSClient;
@@ -77,20 +76,15 @@ public class DeleteTrashResource {
     public void deleteTrashResource() {
         List<String> keyList = new ArrayList<String>();
 
-        List<Video> videoList = commonDao.getAllResource(Video.class);
-        List<Tutorial> tutorialList = commonDao.getAllResource(Tutorial.class);
-        List<Music> musicList = commonDao.getAllResource(Music.class);
+        List<DanceVideo> videoList = commonDao.getAllResource(DanceVideo.class);
+        List<DanceMusic> musicList = commonDao.getAllResource(DanceMusic.class);
         List<Image> imageList = commonDao.getAllResource(Image.class);
 
-        for (Video video : videoList) {
+        for (DanceVideo video : videoList) {
             keyList.add(video.getVideo_key());
         }
 
-        for (Tutorial tutorial : tutorialList) {
-            keyList.add(tutorial.getVideo_key());
-        }
-
-        for (Music music : musicList) {
+        for (DanceMusic music : musicList) {
             keyList.add(music.getMusic_key() + ".mp3");
         }
 

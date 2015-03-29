@@ -1,7 +1,7 @@
 package com.darfoo.backend.dao.cota;
 
 import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -36,7 +36,7 @@ public class AccompanyDao {
             Session session = sessionFactory.getCurrentSession();
             Object object = session.get(resource, id);
             if (object != null) {
-                Music music = (Music) session.createCriteria(Music.class).add(Restrictions.eq("id", musicid)).uniqueResult();
+                DanceMusic music = (DanceMusic) session.createCriteria(DanceMusic.class).add(Restrictions.eq("id", musicid)).uniqueResult();
                 if (music == null) {
                     System.out.println("被更新的music的id在music表中未发现对应记录，请先完成music的插入");
                     res = CRUDEvent.UPDATE_MUSIC_NOTFOUND;

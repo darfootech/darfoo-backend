@@ -5,9 +5,8 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.AuthorDao;
 import com.darfoo.backend.model.cota.ModelUpdate;
 import com.darfoo.backend.model.resource.Image;
-import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Tutorial;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,20 +43,13 @@ public class UpdateController {
             }
         }
 
-        if (resource == Video.class) {
-            updatecontents.put("category1", request.getParameter("videospeed"));
-            updatecontents.put("category2", request.getParameter("videodifficult"));
-            updatecontents.put("category3", request.getParameter("videostyle"));
-            updatecontents.put("category4", request.getParameter("videoletter").toUpperCase());
-        }
-
-        if (resource == Tutorial.class) {
+        if (resource == DanceVideo.class) {
             updatecontents.put("category1", request.getParameter("tutorialspeed"));
             updatecontents.put("category2", request.getParameter("tutorialdifficult"));
             updatecontents.put("category3", request.getParameter("tutorialstyle"));
         }
 
-        if (resource == Music.class) {
+        if (resource == DanceMusic.class) {
             updatecontents.put("category1", request.getParameter("musicbeat"));
             updatecontents.put("category2", request.getParameter("musicstyle"));
             updatecontents.put("category3", request.getParameter("musicletter").toUpperCase());

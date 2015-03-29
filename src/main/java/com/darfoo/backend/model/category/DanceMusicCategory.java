@@ -1,6 +1,6 @@
 package com.darfoo.backend.model.category;
 
-import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,8 +11,8 @@ import java.util.Set;
  * Created by zjh on 14-11-16.
  */
 @Entity
-@Table(name = "musiccategory")
-public class MusicCategory implements Serializable {
+@Table(name = "dancemusiccategory")
+public class DanceMusicCategory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
@@ -21,14 +21,10 @@ public class MusicCategory implements Serializable {
     @Column(name = "DESCRIPTION", nullable = false, columnDefinition = "varchar(255) not null")
     String description;
     //建立于music表的 双向N-N关系
-    @ManyToMany(mappedBy = "categories", targetEntity = Music.class)
-    Set<Music> musics = new HashSet<Music>();
+    @ManyToMany(mappedBy = "dancemusiccategories", targetEntity = DanceMusic.class)
+    Set<DanceMusic> musics = new HashSet<DanceMusic>();
 
-    public MusicCategory() {
-    }
-
-    public MusicCategory(String title) {
-        this.title = title;
+    public DanceMusicCategory() {
     }
 
     public Integer getId() {
@@ -47,11 +43,11 @@ public class MusicCategory implements Serializable {
         this.title = title;
     }
 
-    public Set<Music> getMusics() {
+    public Set<DanceMusic> getMusics() {
         return musics;
     }
 
-    public void setMusics(Set<Music> musics) {
+    public void setMusics(Set<DanceMusic> musics) {
         this.musics = musics;
     }
 

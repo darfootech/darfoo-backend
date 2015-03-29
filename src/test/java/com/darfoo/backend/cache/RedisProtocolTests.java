@@ -5,10 +5,9 @@ import com.darfoo.backend.caches.cota.CacheProtocol;
 import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.resource.Author;
-import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Tutorial;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.SingleAuthor;
@@ -77,8 +76,8 @@ public class RedisProtocolTests {
 
     @Test
     public void insertResourceIntoCache() {
-        Video video = (Video) commonDao.getResourceById(Video.class, 35);
-        cacheDao.insertSingleResource(Video.class, video, "video");
+        DanceVideo video = (DanceVideo) commonDao.getResourceById(DanceVideo.class, 35);
+        cacheDao.insertSingleResource(DanceVideo.class, video, "video");
     }
 
     @Test
@@ -96,8 +95,8 @@ public class RedisProtocolTests {
 
     @Test
     public void insertVideoResourceIntoCache() {
-        Video video = (Video) commonDao.getResourceById(Video.class, 35);
-        cacheProtocol.insertResourceIntoCache(Video.class, video, "video");
+        DanceVideo video = (DanceVideo) commonDao.getResourceById(DanceVideo.class, 35);
+        cacheProtocol.insertResourceIntoCache(DanceVideo.class, video, "video");
     }
 
     @Test
@@ -111,12 +110,6 @@ public class RedisProtocolTests {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-    }
-
-    @Test
-    public void insertTutorialResourceIntoCache() {
-        Tutorial tutorial = (Tutorial) commonDao.getResourceById(Tutorial.class, 30);
-        cacheProtocol.insertResourceIntoCache(Tutorial.class, tutorial, "tutorial");
     }
 
     @Test
@@ -134,8 +127,8 @@ public class RedisProtocolTests {
 
     @Test
     public void insertAuthorResourceIntoCache() {
-        Author author = (Author) commonDao.getResourceById(Author.class, 13);
-        cacheProtocol.insertResourceIntoCache(Author.class, author, "author");
+        DanceGroup author = (DanceGroup) commonDao.getResourceById(DanceGroup.class, 13);
+        cacheProtocol.insertResourceIntoCache(DanceGroup.class, author, "author");
     }
 
     @Test
@@ -153,8 +146,8 @@ public class RedisProtocolTests {
 
     @Test
     public void insertMusicResourceIntoCache() {
-        Music music = (Music) commonDao.getResourceById(Music.class, 30);
-        cacheProtocol.insertResourceIntoCache(Music.class, music, "music");
+        DanceMusic music = (DanceMusic) commonDao.getResourceById(DanceMusic.class, 30);
+        cacheProtocol.insertResourceIntoCache(DanceMusic.class, music, "music");
     }
 
     @Test

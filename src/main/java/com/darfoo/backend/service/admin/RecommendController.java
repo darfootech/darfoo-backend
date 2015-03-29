@@ -3,8 +3,7 @@ package com.darfoo.backend.service.admin;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
-import com.darfoo.backend.model.resource.Tutorial;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
@@ -73,10 +72,8 @@ public class RecommendController {
 
     @RequestMapping(value = "/admin/recommend/updateimage/all", method = RequestMethod.GET)
     public String updateRecommendResourcesImage(ModelMap modelMap, HttpSession session) {
-        List<Video> recommendVideos = recommendDao.getRecommendResources(Video.class);
-        List<Tutorial> recommendTutorials = recommendDao.getRecommendResources(Tutorial.class);
+        List recommendVideos = recommendDao.getRecommendResources(DanceVideo.class);
         modelMap.addAttribute("videos", recommendVideos);
-        modelMap.addAttribute("tutorials", recommendTutorials);
         return "recommend/updaterecommendimageall";
     }
 

@@ -6,10 +6,9 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.cota.ModelInsert;
 import com.darfoo.backend.model.cota.ModelUpload;
 import com.darfoo.backend.model.cota.ModelUploadEnum;
-import com.darfoo.backend.model.resource.Author;
-import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Tutorial;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.ActorSysContainer;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
@@ -53,20 +52,13 @@ public class UploadController {
             }
         }
 
-        if (resource == Video.class) {
-            insertcontents.put("category1", request.getParameter("videospeed"));
-            insertcontents.put("category2", request.getParameter("videodifficult"));
-            insertcontents.put("category3", request.getParameter("videostyle"));
-            insertcontents.put("category4", request.getParameter("videoletter").toUpperCase());
-        }
-
-        if (resource == Tutorial.class) {
+        if (resource == DanceVideo.class) {
             insertcontents.put("category1", request.getParameter("videospeed"));
             insertcontents.put("category2", request.getParameter("videodifficult"));
             insertcontents.put("category3", request.getParameter("videostyle"));
         }
 
-        if (resource == Music.class) {
+        if (resource == DanceMusic.class) {
             insertcontents.put("category1", request.getParameter("musicbeat"));
             insertcontents.put("category2", request.getParameter("musicstyle"));
             insertcontents.put("category3", request.getParameter("musicletter").toUpperCase());
@@ -78,16 +70,16 @@ public class UploadController {
 
         System.out.println("status code is -> " + statuscode);
 
-        if (resource == Video.class || resource == Tutorial.class) {
+        if (resource == DanceVideo.class) {
             session.setAttribute("videokey", insertcontents.get("title") + "-" + resource.getSimpleName().toLowerCase() + "-" + insertid + "." + insertcontents.get("videotype"));
             session.setAttribute("imagekey", insertcontents.get("imagekey"));
         }
 
-        if (resource == Music.class) {
+        if (resource == DanceMusic.class) {
             session.setAttribute("musickey", insertcontents.get("title") + "-" + insertid + ".mp3");
         }
 
-        if (resource == Author.class) {
+        if (resource == DanceGroup.class) {
             session.setAttribute("imagekey", insertcontents.get("imagekey"));
         }
 
@@ -131,7 +123,7 @@ public class UploadController {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("type", TypeClassMapping.videoTypeAuthorTypeMap.get(type));
         modelMap.addAttribute("type", type);
-        modelMap.addAttribute("authors", commonDao.getResourcesByFields(Author.class, conditions));
+        modelMap.addAttribute("authors", commonDao.getResourcesByFields(DanceGroup.class, conditions));
         return String.format("upload/upload%s", type);
     }
 
@@ -159,13 +151,13 @@ public class UploadController {
     public String createMusicResourceNoPic(@RequestParam("musicresource") CommonsMultipartFile musicresource, HttpSession session) {
         HashMap<String, CommonsMultipartFile> uploadresources = new HashMap<String, CommonsMultipartFile>();
         uploadresources.put("musickey", musicresource);
-        return commonUploadResource(Music.class, uploadresources, session);
+        return commonUploadResource(DanceMusic.class, uploadresources, session);
     }
 
     @RequestMapping("/resources/authorresource/create")
     public String createAuthorResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session) {
         HashMap<String, CommonsMultipartFile> uploadresources = new HashMap<String, CommonsMultipartFile>();
         uploadresources.put("imagekey", imageresource);
-        return commonUploadResource(Author.class, uploadresources, session);
+        return commonUploadResource(DanceGroup.class, uploadresources, session);
     }
 }

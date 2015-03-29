@@ -3,7 +3,7 @@ package com.darfoo.backend.dao.resource;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.model.cota.AuthorType;
-import com.darfoo.backend.model.resource.Author;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -30,14 +30,14 @@ public class AuthorDao {
         for (Object[] rows : idCntList) {
             int authorid = (Integer) rows[1];
             System.out.println(authorid + " -> " + ((BigInteger) rows[0]).intValue());
-            Object object = commonDao.getResourceById(Author.class, authorid);
+            Object object = commonDao.getResourceById(DanceGroup.class, authorid);
             result.add(object);
         }
         return result;
     }
 
     public void updateAuthorType(Integer id, AuthorType type) {
-        Class resource = Author.class;
+        Class resource = DanceGroup.class;
         commonDao.saveResource(commonDao.setResourceAttr(resource, commonDao.getResourceById(resource, id), "type", type));
     }
 
@@ -56,8 +56,8 @@ public class AuthorDao {
 
     public List getAuthorsOrderByVideoCountDescByPage(int pageNo) {
         List<Object[]> result = new ArrayList<Object[]>();
-        int pageSize = paginationDao.getResourcePageSize(Author.class);
-        long pageCount = paginationDao.getResourcePageCount(Author.class);
+        int pageSize = paginationDao.getResourcePageSize(DanceGroup.class);
+        long pageCount = paginationDao.getResourcePageCount(DanceGroup.class);
         try {
             Session session = sessionFactory.getCurrentSession();
             //String sql = "select vv.count + tt.count as cnt, vv.id as aid from (select IFNULL(v.cnt, 0) as count, author.id as id from author left outer join (select count(*) as cnt, author_id as mid from video group by author_id)v on author.id = v.mid order by v.cnt desc)vv left outer join (select IFNULL(t.cnt, 0) as count, author.id as id from author left outer join (select count(*) as cnt, author_id as mid from tutorial group by author_id)t on author.id = t.mid order by t.cnt desc)tt on vv.id = tt.id order by cnt desc limit " + pageSize + " offset " + (pageNo - 1) * pageSize;

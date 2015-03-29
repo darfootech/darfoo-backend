@@ -1,7 +1,7 @@
 package com.darfoo.backend.service.resource;
 
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +27,9 @@ public class MusicController {
     public
     @ResponseBody
     List<HashMap<String, Object>> getAllMusicService() {
-        List<Music> musics = commonDao.getAllResource(Music.class);
+        List<DanceMusic> musics = commonDao.getAllResource(DanceMusic.class);
         List<HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
-        for (Music music : musics) {
+        for (DanceMusic music : musics) {
             HashMap<String, Object> item = new HashMap<String, Object>();
             item.put("word", music.getTitle() + "-" + music.getAuthorname() + "-" + music.getId());
             result.add(item);

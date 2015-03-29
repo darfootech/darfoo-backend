@@ -2,7 +2,7 @@ package com.darfoo.backend.service.resource;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.cota.AuthorType;
-import com.darfoo.backend.model.resource.Author;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,9 +28,9 @@ public class AuthorController {
     public String prepareChangeAuthorType(ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("type", AuthorType.STAR);
-        List starAuthors = commonDao.getResourcesByFields(Author.class, conditions);
+        List starAuthors = commonDao.getResourcesByFields(DanceGroup.class, conditions);
         conditions.put("type", AuthorType.NORMAL);
-        List normalAuthors = commonDao.getResourcesByFields(Author.class, conditions);
+        List normalAuthors = commonDao.getResourcesByFields(DanceGroup.class, conditions);
         modelMap.addAttribute("starauthors", starAuthors);
         modelMap.addAttribute("normalauthors", normalAuthors);
         return "author/changeauthortype";
@@ -47,7 +47,7 @@ public class AuthorController {
         conditions.put("type", type);
 
         for (int i = 0; i < idArray.length; i++) {
-            commonDao.updateResourceFieldsById(Author.class, Integer.parseInt(idArray[i]), conditions);
+            commonDao.updateResourceFieldsById(DanceGroup.class, Integer.parseInt(idArray[i]), conditions);
         }
         return 200;
     }

@@ -1,14 +1,11 @@
-package com.darfoo.backend.model.resource;
+package com.darfoo.backend.model.resource.dance;
 
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
-import com.darfoo.backend.model.category.VideoCategory;
-import com.darfoo.backend.model.cota.ModelInsert;
-import com.darfoo.backend.model.cota.ModelUpdate;
-import com.darfoo.backend.model.cota.ModelUpload;
-import com.darfoo.backend.model.cota.ModelUploadEnum;
+import com.darfoo.backend.model.category.DanceVideoCategory;
+import com.darfoo.backend.model.cota.*;
+import com.darfoo.backend.model.resource.Image;
 import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,33 +13,37 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by zjh on 14-11-16.
- * modify by yy on 14-11-22
+ * Created by zjh on 15-3-25.
  */
+
+//广场舞视频(欣赏与教程)
 @Entity
-@Table(name = "video")
-public class Video implements Serializable {
+@Table(name = "dancevideo")
+public class DanceVideo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     Integer id;
 
+    //视频关联的封面图片
     @OneToOne(targetEntity = Image.class, fetch = FetchType.EAGER)
-    @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+    @Cascade(value = {org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     @JoinColumn(name = "IMAGE_ID", referencedColumnName = "id", updatable = true)
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
     Image image;
 
-    @ManyToOne(targetEntity = Author.class)
-    @Cascade(value = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.SAVE_UPDATE})
-    @JoinColumn(name = "AUTHOR_ID", referencedColumnName = "id", updatable = true)
+    //视频关联的舞队 一个舞队可以有多个视频
+    @ManyToOne(targetEntity = DanceGroup.class)
+    @Cascade(value = {org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.SAVE_UPDATE})
+    @JoinColumn(name = "AUTHOR_ID", referencedColumnName = "id")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
-    Author author;
+    DanceGroup author;
 
-    @ManyToMany(targetEntity = VideoCategory.class, fetch = FetchType.EAGER)
-    @JoinTable(name = "video_category", joinColumns = {@JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false, columnDefinition = "int(11) not null")},
+    //视频对应的类别
+    @ManyToMany(targetEntity = DanceVideoCategory.class, fetch = FetchType.EAGER)
+    @JoinTable(name = "dancevideo_category", joinColumns = {@JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false, columnDefinition = "int(11) not null")},
             inverseJoinColumns = {@JoinColumn(name = "category_id", nullable = false, columnDefinition = "int(11) not null")})
-    Set<VideoCategory> categories = new HashSet<VideoCategory>();
+    Set<DanceVideoCategory> dancevideocategories = new HashSet<DanceVideoCategory>();
 
     @Column(name = "VIDEO_KEY", unique = true, nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
@@ -58,17 +59,22 @@ public class Video implements Serializable {
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     Long update_timestamp;
 
-    @ManyToOne(targetEntity = Music.class)
+    @ManyToOne(targetEntity = DanceMusic.class)
     @JoinColumn(name = "MUSIC_ID", referencedColumnName = "id", updatable = true, nullable = true)
-    Music music;
+    DanceMusic music;
 
     //点击量
     @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
-    Long hottest;
+    Long hottest = 0L;
 
     @Column(name = "RECOMMEND", nullable = true, updatable = true, columnDefinition = "int default 0")
-    Integer recommend;
+    Integer recommend = 0;
 
+    //欣赏 教学
+    @Column(name = "VIDEO_TYPE", nullable = true, updatable = true, columnDefinition = "int default 0")
+    DanceVideoType type;
+
+    //mp4 flv
     @Transient
     @ModelInsert
     String videotype;
@@ -92,7 +98,7 @@ public class Video implements Serializable {
     @ModelUpload(type = ModelUploadEnum.LARGE)
     String videokey;
 
-    public Video() {
+    public DanceVideo() {
     }
 
     public Integer getRecommend() {
@@ -103,7 +109,6 @@ public class Video implements Serializable {
         this.recommend = recommend;
     }
 
-
     public Long getHottest() {
         return hottest;
     }
@@ -112,11 +117,11 @@ public class Video implements Serializable {
         this.hottest = hottest;
     }
 
-    public Music getMusic() {
+    public DanceMusic getMusic() {
         return music;
     }
 
-    public void setMusic(Music music) {
+    public void setMusic(DanceMusic music) {
         this.music = music;
     }
 
@@ -124,28 +129,32 @@ public class Video implements Serializable {
         return id;
     }
 
-    public Author getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Author author) {
-        this.author = author;
-    }
-
-    public Set<VideoCategory> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(Set<VideoCategory> categories) {
-        this.categories = categories;
-    }
-
     public void setId(Integer id) {
         this.id = id;
     }
 
+    public DanceGroup getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(DanceGroup author) {
+        this.author = author;
+    }
+
+    public Set<DanceVideoCategory> getDancevideocategories() {
+        return dancevideocategories;
+    }
+
+    public void setDancevideocategories(Set<DanceVideoCategory> dancevideocategories) {
+        this.dancevideocategories = dancevideocategories;
+    }
+
     public String getVideo_key() {
         return video_key;
+    }
+
+    public void setVideo_key(String video_key) {
+        this.video_key = video_key;
     }
 
     public Image getImage() {
@@ -154,10 +163,6 @@ public class Video implements Serializable {
 
     public void setImage(Image image) {
         this.image = image;
-    }
-
-    public void setVideo_key(String video_key) {
-        this.video_key = video_key;
     }
 
     public String getTitle() {
@@ -195,10 +200,10 @@ public class Video implements Serializable {
             sb.append("\n视频图片:" + image.getImage_key());
         }
         if (isShowCategory) {
-            if (categories == null) {
+            if (dancevideocategories == null) {
                 sb.append("种类为空");
             } else {
-                for (VideoCategory category : categories) {
+                for (DanceVideoCategory category : dancevideocategories) {
                     sb.append("\n").append("种类:" + category.getTitle() + " 描述:" + category.getDescription());
                 }
             }
