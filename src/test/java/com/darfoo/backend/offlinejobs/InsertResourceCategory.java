@@ -19,17 +19,12 @@ public class InsertResourceCategory {
     CategoryDao categoryDao;
 
     @Test
-    public void insertAllVideoCategories() {
-        categoryDao.insertAllVideoCategories();
+    public void insertAllDanceVideoCategories() {
+        categoryDao.insertAllDanceVideoCategories();
     }
 
     @Test
-    public void insertAllTutorialCategories() {
-        categoryDao.insertAllTutorialCategories();
-    }
-
-    @Test
-    public void insertAllMusicCategories() {
-        categoryDao.insertAllMusicCategories();
+    public void insertAllDanceMusicCategories() {
+        categoryDao.insertAllDanceMusicCategories();
     }
 }

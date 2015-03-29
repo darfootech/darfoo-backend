@@ -1,4 +1,4 @@
-package com.darfoo.backend.resource;
+package com.darfoo.backend.resource.Dance;
 
 import com.darfoo.backend.caches.dao.CacheUtils;
 import com.darfoo.backend.service.responsemodel.SingleMusic;
@@ -20,7 +20,7 @@ import java.util.List;
         "file:src/main/webapp/WEB-INF/redis-context.xml",
         "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml"
 })
-public class MusicCacheTests {
+public class DanceMusicCacheTests {
     @Autowired
     CacheUtils cacheUtils;
 

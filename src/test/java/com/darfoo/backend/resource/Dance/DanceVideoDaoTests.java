@@ -1,4 +1,4 @@
-package com.darfoo.backend.resource;
+package com.darfoo.backend.resource.Dance;
 
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.*;
@@ -17,7 +17,7 @@ import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
-public class VideoDaoTests {
+public class DanceVideoDaoTests {
     @Autowired
     CommonDao commonDao;
     @Autowired

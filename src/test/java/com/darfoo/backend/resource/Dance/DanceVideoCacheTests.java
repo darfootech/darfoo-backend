@@ -1,4 +1,4 @@
-package com.darfoo.backend.resource;
+package com.darfoo.backend.resource.Dance;
 
 import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.caches.dao.CacheUtils;
@@ -29,7 +29,7 @@ import java.util.List;
         "file:src/main/webapp/WEB-INF/redis-context.xml",
         "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml"
 })
-public class VideoCacheTests {
+public class DanceVideoCacheTests {
     @Autowired
     VideoCacheDao videoCacheDao;
     @Autowired

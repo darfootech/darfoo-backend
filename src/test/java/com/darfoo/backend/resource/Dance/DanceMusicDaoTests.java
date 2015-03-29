@@ -1,4 +1,4 @@
-package com.darfoo.backend.resource;
+package com.darfoo.backend.resource.Dance;
 
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CategoryDao;
@@ -19,7 +19,7 @@ import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
-public class MusicDaoTests {
+public class DanceMusicDaoTests {
     @Autowired
     CommonDao commonDao;
     @Autowired

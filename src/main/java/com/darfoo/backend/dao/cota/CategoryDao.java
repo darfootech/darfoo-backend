@@ -2,8 +2,6 @@ package com.darfoo.backend.dao.cota;
 
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
-import com.darfoo.backend.model.resource.dance.DanceVideo;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -31,8 +29,8 @@ public class CategoryDao {
             Session session = sessionFactory.getCurrentSession();
             for (String category : categories) {
                 Object object = resource.newInstance();
-                Field titleField = resource.getField("title");
-                Field descField = resource.getField("description");
+                Field titleField = resource.getDeclaredField("title");
+                Field descField = resource.getDeclaredField("description");
                 titleField.setAccessible(true);
                 descField.setAccessible(true);
 
@@ -51,31 +49,15 @@ public class CategoryDao {
     }
 
     //插入所有欣赏视频的类型
-    public void insertAllVideoCategories() {
-        String[] categories = {
-                "较快", "适中", "较慢", //按速度
-                "简单", "普通", "稍难", //按难度
-                "欢快", "活泼", "优美", "情歌风", "红歌风", "草原风", "戏曲风", "印巴风", "江南风", "民歌风", "儿歌风", //按风格
-                "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-        };
-
-        insertResourceCategories(DanceVideo.class, categories);
-    }
-
-    //插入所有教学视频的类型
-    public void insertAllTutorialCategories() {
-        String[] categories = {"快", "中", "慢",    //按速度
-                "简单", "适中", "稍难",                    //按难度
-                "队形表演", "背面教学", "分解教学"};  //按教学类型
+    public void insertAllDanceVideoCategories() {
+        String[] categories = {"正面教学", "口令分解", "背面教学", "队形教学"};
 
         insertResourceCategories(DanceVideoCategory.class, categories);
     }
 
-    //插入所有伴奏的类型
-    public void insertAllMusicCategories() {
-        String[] categories = {"四拍", "八拍", "十六拍", "三十二拍",    //按节拍
-                "情歌风", "红歌风", "草原风", "戏曲风", "印巴风", "江南风", "民歌风", "儿歌风",  //按风格
-                "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};//按字母
+    //插入所有舞蹈伴奏的类型
+    public void insertAllDanceMusicCategories() {
+        String[] categories = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 
         insertResourceCategories(DanceMusicCategory.class, categories);
     }
@@ -92,9 +74,7 @@ public class CategoryDao {
     public List getResourcesByCategories(Class resource, String[] categories) {
         List result = new ArrayList();
         try {
-            Session session = sessionFactory.getCurrentSession();
             List<Integer> l_interact_id = new ArrayList<Integer>(); //存符合部分条件的video id
-            Criteria c;
             for (int i = 0; i < categories.length; i++) {
                 List<Integer> l_id = commonDao.getCommonQueryCriteria(resource)
                         .addOrder(Order.desc("id"))

@@ -1,8 +1,8 @@
 package com.darfoo.backend.offlinejobs;
 
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.Image;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.qiniu.api.auth.digest.Mac;
 import com.qiniu.api.config.Config;

@@ -66,14 +66,6 @@ public class CommonDao {
         }
     }
 
-    public boolean ifHasHottestResource(Class resource) {
-        if (ifHasCategoryResource(resource) || resource == DanceGroup.class) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public Object setResourceAttr(Class resource, Object object, String fieldname, Object value) {
         try {
             Field field = resource.getDeclaredField(fieldname);
@@ -101,29 +93,6 @@ public class CommonDao {
         return null;
     }
 
-    public void saveResourceWithCategory(Class resource, Object object, Set<String> categoryTitles) {
-        Class categoryClass = null;
-        Set categories;
-
-        if (resource == DanceVideo.class) {
-            categoryClass = DanceVideoCategory.class;
-        }
-
-        if (resource == DanceMusic.class) {
-            categoryClass = DanceMusicCategory.class;
-        }
-
-        Session session = sessionFactory.getCurrentSession();
-        Criteria criteria = session.createCriteria(categoryClass).add(Restrictions.in("title", categoryTitles));
-        List categoryList = criteria.list();
-        categories = new HashSet(categoryList);
-
-        setResourceAttr(resource, object, "categories", categories);
-
-        session.clear();
-        session.save(object);
-    }
-
     public void saveResource(Object object) {
         sessionFactory.getCurrentSession().saveOrUpdate(object);
     }
@@ -137,9 +106,7 @@ public class CommonDao {
      */
     public HashMap<String, Integer> insertResource(Class resource, HashMap<String, String> insertcontents) {
         Set<String> categoryTitles = new HashSet<String>();
-
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
-
         boolean isCategoryHasSingleChar = false;
 
         try {
@@ -253,17 +220,15 @@ public class CommonDao {
                         System.out.println("可以创建新明星舞队");
                         setResourceAttr(resource, object, key, insertcontents.get(key));
                     }
-                } else if (key.equals("description") || key.equals("macaddr") || key.equals("video_key")) {
-                    setResourceAttr(resource, object, key, insertcontents.get(key));
                 } else {
-                    System.out.println("key something is wired key -> " + key);
+                    setResourceAttr(resource, object, key, insertcontents.get(key));
                 }
             }
 
             if (ifHasCategoryResource(resource)) {
                 setResourceAttr(resource, object, "update_timestamp", System.currentTimeMillis());
 
-                if (resource == DanceVideo.class || resource == DanceMusic.class) {
+                if (resource == DanceMusic.class) {
                     if (!isCategoryHasSingleChar) {
                         resultMap.put("statuscode", 503);
                         resultMap.put("insertid", -1);
@@ -287,14 +252,6 @@ public class CommonDao {
                 categories = new HashSet(categoryList);
 
                 setResourceAttr(resource, object, "categories", categories);
-            }
-
-            if (ifHasHottestResource(resource)) {
-                setResourceAttr(resource, object, "hottest", 0L);
-            }
-
-            if (resource == DanceVideo.class) {
-                setResourceAttr(resource, object, "recommend", 0);
             }
 
             session.save(object);
