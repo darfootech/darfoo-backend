@@ -6,6 +6,7 @@ package com.darfoo.backend;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.statistic.MongoManager;
+import com.darfoo.backend.dao.statistic.StatisticsDao;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.category.VideoCategory;
@@ -17,6 +18,7 @@ import com.darfoo.backend.model.resource.Music;
 import com.darfoo.backend.model.resource.Tutorial;
 import com.darfoo.backend.model.resource.Video;
 import com.darfoo.backend.model.statistics.mongo.clickcount.ResourceClickCount;
+import com.darfoo.backend.model.statistics.mongo.clicktime.ResourceClickTime;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.TutorialCates;
@@ -53,10 +55,8 @@ public class DownloadTests {
     TutorialCates tutorialCates;
     @Autowired
     MusicCates musicCates;
-
-    MongoClient client = MongoManager.getMongoClientInstance();
-    DB db = client.getDB("statistics");
-    DBCollection coll = db.getCollection("resourceclickcount");
+    @Autowired
+    StatisticsDao statisticsDao;
 
     public String timestampTodatetime(long timestampfromdb) {
         Timestamp timestamp = new Timestamp(timestampfromdb);
@@ -219,7 +219,7 @@ public class DownloadTests {
     }
 
     public void writeStatisticDataToCSV(Class resource) {
-        DBCursor cursor = coll.find();
+        DBCursor cursor = statisticsDao.getAllStatisticData(resource);
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
         CSVPrinter printer = null;
 

@@ -1,9 +1,6 @@
 package com.darfoo.backend.dao.statistic;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
+import com.mongodb.*;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -16,6 +13,21 @@ import java.util.HashMap;
 public class StatisticsDao {
     MongoClient client = MongoManager.getMongoClientInstance();
     DB db = client.getDB("statistics");
+
+    public DBCursor getAllStatisticData(Class resource) {
+        DBCollection coll = db.getCollection(resource.getSimpleName().toLowerCase());
+        boolean hasDateField = false;
+        for (Field field : resource.getFields()) {
+            if (field.getName().equals("date")) {
+                hasDateField = true;
+            }
+        }
+        if (hasDateField) {
+            return coll.find().sort(new BasicDBObject("date", -1));
+        } else {
+            return coll.find();
+        }
+    }
 
     private BasicDBObject createDBObject(Class resource, HashMap<String, Object> conditions) {
         BasicDBObject doc = new BasicDBObject();

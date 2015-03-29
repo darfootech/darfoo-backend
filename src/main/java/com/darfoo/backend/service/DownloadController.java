@@ -1,6 +1,8 @@
 package com.darfoo.backend.service;
 
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.statistic.MongoManager;
+import com.darfoo.backend.dao.statistic.StatisticsDao;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.category.VideoCategory;
@@ -16,6 +18,7 @@ import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.TutorialCates;
 import com.darfoo.backend.service.responsemodel.VideoCates;
 import com.darfoo.backend.utils.DiskFileDirConfig;
+import com.mongodb.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.FileUtils;
@@ -56,6 +59,8 @@ public class DownloadController {
     TutorialCates tutorialCates;
     @Autowired
     MusicCates musicCates;
+    @Autowired
+    StatisticsDao statisticsDao;
 
     public String timestampTodatetime(long timestampfromdb) {
         Timestamp timestamp = new Timestamp(timestampfromdb);
@@ -243,6 +248,49 @@ public class DownloadController {
         }
     }
 
+    public void writeStatisticDataToCSV(Class resource) {
+        DBCursor cursor = statisticsDao.getAllStatisticData(resource);
+        CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
+        CSVPrinter printer = null;
+
+        try {
+            Writer out = new FileWriter(String.format("%s%s.csv", DiskFileDirConfig.csvdir, resource.getSimpleName().toLowerCase()));
+            printer = new CSVPrinter(out, format.withDelimiter(','));
+            HashMap<String, String> styleMap = new HashMap<String, String>();
+
+            List<String> headers = new ArrayList<String>();
+            List<String> attrs = new ArrayList<String>();
+
+            for (Field field : resource.getFields()) {
+                if (field.isAnnotationPresent(CSVTitle.class)) {
+                    String title = field.getAnnotation(CSVTitle.class).title();
+                    headers.add(title);
+                    attrs.add(field.getName());
+                }
+            }
+            printer.printRecord(headers);
+
+            while (cursor.hasNext()) {
+                List itemData = new ArrayList();
+                DBObject object = cursor.next();
+                for (String attr : attrs) {
+                    Field field = resource.getField(attr);
+                    Object value = object.get(field.getName().toLowerCase());
+                    System.out.println(value);
+                    itemData.add(value);
+                }
+                printer.printRecord(itemData);
+            }
+
+            printer.flush();
+            printer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void writeAuthorVideosToCSV(AuthorType type, Integer id) {
         String authorname = ((Author) commonDao.getResourceById(Author.class, id)).getName();
         HashMap<String, Object> conditions = new HashMap<String, Object>();
@@ -287,6 +335,12 @@ public class DownloadController {
     @RequestMapping(value = "admin/download/{type}", method = RequestMethod.GET)
     public ResponseEntity<byte[]> downloadResources(@PathVariable String type) throws IOException {
         writeResourcesToCSV(TypeClassMapping.typeClassMap.get(type));
+        return downloadCSVFiles(type);
+    }
+
+    @RequestMapping(value = "admin/download/stat/{type}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> downloadStatResources(@PathVariable String type) throws IOException {
+        writeStatisticDataToCSV(TypeClassMapping.typeClassMap.get(type));
         return downloadCSVFiles(type);
     }
 
