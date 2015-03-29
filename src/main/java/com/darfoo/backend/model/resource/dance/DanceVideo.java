@@ -43,7 +43,7 @@ public class DanceVideo implements Serializable {
     @ManyToMany(targetEntity = DanceVideoCategory.class, fetch = FetchType.EAGER)
     @JoinTable(name = "dancevideo_category", joinColumns = {@JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false, columnDefinition = "int(11) not null")},
             inverseJoinColumns = {@JoinColumn(name = "category_id", nullable = false, columnDefinition = "int(11) not null")})
-    Set<DanceVideoCategory> dancevideocategories = new HashSet<DanceVideoCategory>();
+    Set<DanceVideoCategory> categories = new HashSet<DanceVideoCategory>();
 
     @Column(name = "VIDEO_KEY", unique = true, nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
@@ -141,12 +141,12 @@ public class DanceVideo implements Serializable {
         this.author = author;
     }
 
-    public Set<DanceVideoCategory> getDancevideocategories() {
-        return dancevideocategories;
+    public Set<DanceVideoCategory> getCategories() {
+        return categories;
     }
 
-    public void setDancevideocategories(Set<DanceVideoCategory> dancevideocategories) {
-        this.dancevideocategories = dancevideocategories;
+    public void setCategories(Set<DanceVideoCategory> categories) {
+        this.categories = categories;
     }
 
     public String getVideo_key() {
@@ -200,10 +200,10 @@ public class DanceVideo implements Serializable {
             sb.append("\n视频图片:" + image.getImage_key());
         }
         if (isShowCategory) {
-            if (dancevideocategories == null) {
+            if (categories == null) {
                 sb.append("种类为空");
             } else {
-                for (DanceVideoCategory category : dancevideocategories) {
+                for (DanceVideoCategory category : categories) {
                     sb.append("\n").append("种类:" + category.getTitle() + " 描述:" + category.getDescription());
                 }
             }

@@ -74,7 +74,7 @@ public class GalleryController {
         Object object = commonDao.getResourceById(resource, id);
         if (resource == DanceVideo.class) {
             DanceVideo video = (DanceVideo) object;
-            Set<DanceVideoCategory> categories = video.getDancevideocategories();
+            Set<DanceVideoCategory> categories = video.getCategories();
             for (DanceVideoCategory category : categories) {
                 String categorytitle = category.getTitle();
                 System.out.println(categorytitle);
@@ -90,7 +90,7 @@ public class GalleryController {
             }
         } else if (resource == DanceMusic.class) {
             DanceMusic music = (DanceMusic) object;
-            Set<DanceMusicCategory> categories = music.getDancemusiccategories();
+            Set<DanceMusicCategory> categories = music.getCategories();
             for (DanceMusicCategory category : categories) {
                 String categorytitle = category.getTitle();
                 System.out.println(categorytitle);

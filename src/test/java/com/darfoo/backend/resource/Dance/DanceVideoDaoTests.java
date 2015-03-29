@@ -38,17 +38,17 @@ public class DanceVideoDaoTests {
     public void insertVideoResource() {
         HashMap<String, String> insertcontents = new HashMap<String, String>();
         String videoTitle = "videotitle-" + System.currentTimeMillis();
-        String authorName = "周杰伦";
+        String authorName = "王广成广场舞";
         String imagekey = "imagekey-" + System.currentTimeMillis() + ".jpg";
 
         insertcontents.put("title", videoTitle);
         insertcontents.put("authorname", authorName);
         insertcontents.put("imagekey", imagekey);
-        insertcontents.put("category1", "适中");
-        insertcontents.put("category2", "中等");
-        insertcontents.put("category3", "情歌风");
-        insertcontents.put("category4", "D");
-        insertcontents.put("videotype", "mp3");
+        insertcontents.put("category1", "正面教学");
+        insertcontents.put("category2", "口令分解");
+        insertcontents.put("category3", "背面教学");
+        insertcontents.put("category4", "队形教学");
+        insertcontents.put("videotype", "mp4");
         insertcontents.put("connectmusic", "ccccc-memeda-33");
 
         HashMap<String, Integer> insertresult = insertDao.insertDanceGroup(insertcontents);

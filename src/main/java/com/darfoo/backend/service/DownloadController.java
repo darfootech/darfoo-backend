@@ -86,7 +86,7 @@ public class DownloadController {
                 printer.printRecord("教程标题", "明星舞队名称", "舞蹈速度", "舞蹈难度", "舞蹈风格");
                 for (Object object : resources) {
                     DanceVideo tutorial = (DanceVideo) object;
-                    Set<DanceVideoCategory> categories = tutorial.getDancevideocategories();
+                    Set<DanceVideoCategory> categories = tutorial.getCategories();
                     for (DanceVideoCategory category : categories) {
                         String categorytitle = category.getTitle();
                         if (tutorialCates.getSpeedCategory().containsValue(categorytitle)) {
@@ -129,7 +129,7 @@ public class DownloadController {
                 printer.printRecord("伴奏标题", "舞蹈节奏", "舞蹈风格", "首字母");
                 for (Object object : resources) {
                     DanceMusic music = (DanceMusic) object;
-                    Set<DanceMusicCategory> categories = music.getDancemusiccategories();
+                    Set<DanceMusicCategory> categories = music.getCategories();
                     for (DanceMusicCategory category : categories) {
                         String categorytitle = category.getTitle();
                         if (musicCates.getBeatCategory().containsValue(categorytitle)) {

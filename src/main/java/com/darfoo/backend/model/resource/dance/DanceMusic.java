@@ -28,7 +28,7 @@ public class DanceMusic implements Serializable {
     @ManyToMany(targetEntity = DanceMusicCategory.class, fetch = FetchType.EAGER)
     @JoinTable(name = "dancemusic_category", joinColumns = {@JoinColumn(name = "music_id", referencedColumnName = "id", nullable = false, columnDefinition = "int(11) not null")},
             inverseJoinColumns = {@JoinColumn(name = "category_id", nullable = false, columnDefinition = "int(11) not null")})
-    Set<DanceMusicCategory> dancemusiccategories = new HashSet<DanceMusicCategory>();
+    Set<DanceMusicCategory> categories = new HashSet<DanceMusicCategory>();
 
     @Column(name = "TITLE", nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
@@ -78,12 +78,12 @@ public class DanceMusic implements Serializable {
         this.hottest = hottest;
     }
 
-    public Set<DanceMusicCategory> getDancemusiccategories() {
-        return dancemusiccategories;
+    public Set<DanceMusicCategory> getCategories() {
+        return categories;
     }
 
-    public void setDancemusiccategories(Set<DanceMusicCategory> dancemusiccategories) {
-        this.dancemusiccategories = dancemusiccategories;
+    public void setCategories(Set<DanceMusicCategory> categories) {
+        this.categories = categories;
     }
 
     public Integer getId() {

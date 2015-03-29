@@ -21,7 +21,7 @@ public class DanceMusicCategory implements Serializable {
     @Column(name = "DESCRIPTION", nullable = false, columnDefinition = "varchar(255) not null")
     String description;
     //建立于music表的 双向N-N关系
-    @ManyToMany(mappedBy = "dancemusiccategories", targetEntity = DanceMusic.class)
+    @ManyToMany(mappedBy = "categories", targetEntity = DanceMusic.class)
     Set<DanceMusic> musics = new HashSet<DanceMusic>();
 
     public DanceMusicCategory() {
