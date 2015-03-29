@@ -3,10 +3,7 @@ package com.darfoo.backend.model.resource.dance;
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
 import com.darfoo.backend.model.category.DanceMusicCategory;
-import com.darfoo.backend.model.cota.ModelInsert;
-import com.darfoo.backend.model.cota.ModelUpdate;
-import com.darfoo.backend.model.cota.ModelUpload;
-import com.darfoo.backend.model.cota.ModelUploadEnum;
+import com.darfoo.backend.model.cota.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,6 +15,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "dancemusic")
+@ModelOperation(insertMethod = "insertDanceMusic", updateMethod = "updateDanceMusic")
 public class DanceMusic implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

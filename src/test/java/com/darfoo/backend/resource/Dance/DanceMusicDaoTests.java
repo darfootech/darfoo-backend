@@ -4,6 +4,7 @@ import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
+import com.darfoo.backend.dao.resource.InsertDao;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
@@ -26,6 +27,8 @@ public class DanceMusicDaoTests {
     PaginationDao paginationDao;
     @Autowired
     CategoryDao categoryDao;
+    @Autowired
+    InsertDao insertDao;
 
     @Test
     public void insertMusicResource() {
@@ -35,9 +38,7 @@ public class DanceMusicDaoTests {
 
         insertcontents.put("title", musicTitle);
         insertcontents.put("authorname", authorName);
-        insertcontents.put("category1", "八拍");
-        insertcontents.put("category2", "情歌风");
-        insertcontents.put("category4", "D");
+        insertcontents.put("category", "D");
 
         HashMap<String, Integer> insertresult = commonDao.insertResource(DanceMusic.class, insertcontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));

@@ -3,10 +3,12 @@ package com.darfoo.backend.dao.resource;
 
 import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
 import com.darfoo.backend.model.cota.DanceVideoType;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
@@ -146,7 +148,90 @@ public class InsertDao {
         return resultMap;
     }
 
-    public HashMap<String, Integer> insertDanceMusic(HashMap<String, String>) {
+    public HashMap<String, Integer> insertDanceMusic(HashMap<String, String> insertcontents) throws IllegalAccessException, InstantiationException {
+        Set<String> categoryTitles = new HashSet<String>();
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+        boolean isCategoryHasSingleChar = false;
 
+        Class resource = DanceMusic.class;
+
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria;
+
+        Object object = DanceMusic.class.newInstance();
+
+        for (String key : insertcontents.keySet()) {
+            if (key.equals("title")) {
+                String title = insertcontents.get(key);
+                String authorname = insertcontents.get("authorname");
+                HashMap<String, Object> conditions = new HashMap<String, Object>();
+                conditions.put("title", title);
+                conditions.put("authorname", authorname);
+                Object queryMusic = commonDao.getResourceByFields(resource, conditions);
+
+                if (queryMusic == null) {
+                    System.out.println("伴奏名字和舞队名字组合不存在，可以进行插入");
+                    commonDao.setResourceAttr(resource, object, key, title);
+                    commonDao.setResourceAttr(resource, object, "music_key", title + System.currentTimeMillis());
+                } else {
+                    System.out.println("伴奏名字和舞队名字组合已存在，不可以进行插入了，是否需要修改");
+                    resultMap.put("statuscode", 505);
+                    resultMap.put("insertid", -1);
+                    return resultMap;
+                }
+            } else if (key.equals("imagekey")) {
+                String imagekey = insertcontents.get(key);
+
+                if (!ServiceUtils.isValidImageKey(imagekey)) {
+                    resultMap.put("statuscode", 504);
+                    resultMap.put("insertid", -1);
+                    return resultMap;
+                }
+
+                criteria = session.createCriteria(Image.class).add(Restrictions.eq("image_key", imagekey));
+                if (criteria.list().size() == 1) {
+                    System.out.println("相同imagekey的图片已经存在了");
+                    resultMap.put("statuscode", 501);
+                    resultMap.put("insertid", -1);
+                    return resultMap;
+                } else {
+                    commonDao.setResourceAttr(resource, object, "image", new Image(imagekey));
+                }
+            } else if (key.equals("authorname")) {
+                commonDao.setResourceAttr(resource, object, key, insertcontents.get(key));
+            } else if (key.contains("category")) {
+                String category = insertcontents.get(key);
+                if (ServiceUtils.isSingleCharacter(category)) {
+                    isCategoryHasSingleChar = true;
+                }
+                categoryTitles.add(category);
+            } else {
+                commonDao.setResourceAttr(resource, object, key, insertcontents.get(key));
+            }
+        }
+
+        if (!isCategoryHasSingleChar) {
+            resultMap.put("statuscode", 503);
+            resultMap.put("insertid", -1);
+            return resultMap;
+        }
+
+        criteria = session.createCriteria(DanceMusicCategory.class).add(Restrictions.in("title", categoryTitles));
+        List categoryList = criteria.list();
+        Set categories = new HashSet(categoryList);
+
+        commonDao.setResourceAttr(resource, object, "categories", categories);
+
+        session.save(object);
+
+        int insertid = (Integer) commonDao.getResourceAttr(resource, object, "id");
+
+        HashMap<String, Object> updateMap = new HashMap<String, Object>();
+        updateMap.put("music_key", insertcontents.get("title") + "-" + insertid);
+        commonDao.updateResourceFieldsById(resource, insertid, updateMap);
+
+        resultMap.put("statuscode", 200);
+        resultMap.put("insertid", insertid);
+        return resultMap;
     }
 }
