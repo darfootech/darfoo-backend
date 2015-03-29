@@ -19,6 +19,7 @@ import java.util.Set;
 //广场舞视频(欣赏与教程)
 @Entity
 @Table(name = "dancevideo")
+@ModelOperation(insertMethod = "insertDanceVideo", updateMethod = "updateDanceVideo")
 public class DanceVideo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

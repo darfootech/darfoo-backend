@@ -51,7 +51,7 @@ public class DanceVideoDaoTests {
         insertcontents.put("videotype", "mp4");
         insertcontents.put("connectmusic", "ccccc-memeda-33");
 
-        HashMap<String, Integer> insertresult = insertDao.insertDanceGroup(insertcontents);
+        HashMap<String, Integer> insertresult = commonDao.insertResource(DanceVideo.class, insertcontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
         System.out.println("insertid -> " + insertresult.get("insertid"));
     }

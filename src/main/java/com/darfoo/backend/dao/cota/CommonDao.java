@@ -2,8 +2,10 @@ package com.darfoo.backend.dao.cota;
 
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
+import com.darfoo.backend.dao.resource.InsertDao;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
+import com.darfoo.backend.model.cota.ModelOperation;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
@@ -21,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -35,6 +39,8 @@ public class CommonDao {
     AccompanyDao accompanyDao;
     @Autowired
     DanceGroupDao authorDao;
+    @Autowired
+    InsertDao insertDao;
 
     public int getResourceHottestLimit(Class resource) {
         if (resource == DanceMusic.class) {
@@ -105,6 +111,25 @@ public class CommonDao {
      * @return
      */
     public HashMap<String, Integer> insertResource(Class resource, HashMap<String, String> insertcontents) {
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+
+        try {
+            String methodName = ((ModelOperation) resource.getAnnotation(ModelOperation.class)).insertMethod();
+            Method method = InsertDao.class.getDeclaredMethod(methodName, new Class[] {HashMap.class});
+            return (HashMap<String, Integer>) method.invoke(insertDao, new Object[] {insertcontents});
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        resultMap.put("statuscode", 404);
+        resultMap.put("insertid", -1);
+        return resultMap;
+    }
+    /*public HashMap<String, Integer> insertResource(Class resource, HashMap<String, String> insertcontents) {
         Set<String> categoryTitles = new HashSet<String>();
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
         boolean isCategoryHasSingleChar = false;
@@ -287,7 +312,7 @@ public class CommonDao {
         resultMap.put("statuscode", 404);
         resultMap.put("insertid", -1);
         return resultMap;
-    }
+    }*/
 
     /**
      * 更新已有资源
@@ -957,6 +982,12 @@ public class CommonDao {
         int res;
         try {
             Session session = sessionFactory.getCurrentSession();
+
+            if (resource == DanceGroup.class) {
+                String prepareSql = "update dancevideo set AUTHOR_ID=null where AUTHOR_ID=:author_id";
+                System.out.println(session.createSQLQuery(prepareSql).setInteger("author_id", id).executeUpdate());
+            }
+
             Object target = session.get(resource, id);
             if (target == null) {
                 res = CRUDEvent.DELETE_NOTFOUND;
