@@ -3,9 +3,9 @@ package com.darfoo.backend.resource.Dance;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
-import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.model.cota.AuthorHot;
-import com.darfoo.backend.model.cota.AuthorType;
+import com.darfoo.backend.dao.resource.DanceGroupDao;
+import com.darfoo.backend.model.cota.DanceGroupHot;
+import com.darfoo.backend.model.cota.DanceGroupType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
@@ -23,7 +23,7 @@ import java.util.*;
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
 public class DanceGroupDaoTests {
     @Autowired
-    AuthorDao authorDao;
+    DanceGroupDao authorDao;
     @Autowired
     CommonDao commonDao;
     @Autowired
@@ -187,7 +187,7 @@ public class DanceGroupDaoTests {
     @Test
     public void getAuthorsByType() {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("type", AuthorType.NORMAL);
+        conditions.put("type", DanceGroupType.NORMAL);
         List authors = commonDao.getResourcesByFields(DanceGroup.class, conditions);
         for (Object author : authors) {
             System.out.println(commonDao.getResourceAttr(DanceGroup.class, author, "id"));
@@ -196,20 +196,20 @@ public class DanceGroupDaoTests {
 
     @Test
     public void changeAuthorTypeNotWork() {
-        authorDao.updateAuthorType(3, AuthorType.STAR);
+        authorDao.updateAuthorType(3, DanceGroupType.STAR);
     }
 
     @Test
     public void changeAuthorType() {
         HashMap<String, Object> updateMap = new HashMap<String, Object>();
-        updateMap.put("type", AuthorType.NORMAL);
+        updateMap.put("type", DanceGroupType.NORMAL);
         commonDao.updateResourceFieldsById(DanceGroup.class, 7, updateMap);
     }
 
     @Test
     public void getHotAuthors() {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("hot", AuthorHot.ISHOT);
+        conditions.put("hot", DanceGroupHot.ISHOT);
         List authors = commonDao.getResourcesByFields(DanceGroup.class, conditions);
         for (Object author : authors) {
             System.out.println(commonDao.getResourceAttr(DanceGroup.class, author, "id"));
@@ -219,7 +219,7 @@ public class DanceGroupDaoTests {
     @Test
     public void makeAuthorHot() {
         HashMap<String, Object> updateMap = new HashMap<String, Object>();
-        updateMap.put("hot", AuthorHot.ISHOT);
+        updateMap.put("hot", DanceGroupHot.ISHOT);
         commonDao.updateResourceFieldsById(DanceGroup.class, 7, updateMap);
     }
 }

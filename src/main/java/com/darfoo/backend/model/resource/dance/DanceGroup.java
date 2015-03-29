@@ -53,10 +53,10 @@ public class DanceGroup implements Serializable {
     String imagekey;
 
     @Column(name = "TYPE", nullable = false, updatable = true, columnDefinition = "int default 0")
-    AuthorType type = AuthorType.STAR;
+    DanceGroupType type = DanceGroupType.STAR;
 
     @Column(name = "HOT", nullable = false, updatable = true, columnDefinition = "int default 0")
-    AuthorHot hot = AuthorHot.NOTHOT;
+    DanceGroupHot hot = DanceGroupHot.NOTHOT;
 
     public DanceGroup() {
 
@@ -102,19 +102,19 @@ public class DanceGroup implements Serializable {
         this.image = image;
     }
 
-    public AuthorType getType() {
+    public DanceGroupType getType() {
         return type;
     }
 
-    public void setType(AuthorType type) {
+    public void setType(DanceGroupType type) {
         this.type = type;
     }
 
-    public AuthorHot getHot() {
+    public DanceGroupHot getHot() {
         return hot;
     }
 
-    public void setHot(AuthorHot hot) {
+    public void setHot(DanceGroupHot hot) {
         this.hot = hot;
     }
 

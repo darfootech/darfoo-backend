@@ -1,7 +1,7 @@
 package com.darfoo.backend.service.cota;
 
 import com.darfoo.backend.model.auth.Feedback;
-import com.darfoo.backend.model.cota.AuthorType;
+import com.darfoo.backend.model.cota.DanceGroupType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -28,10 +28,10 @@ public class TypeClassMapping {
     public static HashMap<String, Class> cacheResponseMap = new HashMap<String, Class>();
     public static HashMap<String, Class> clickCountStatMap = new HashMap<String, Class>();
     public static HashMap<String, Class> clickTimeStatMap = new HashMap<String, Class>();
-    public static HashMap<AuthorType, Class> authorTypeClassMap = new HashMap<AuthorType, Class>();
-    public static HashMap<String, AuthorType> videoTypeAuthorTypeMap = new HashMap<String, AuthorType>();
-    public static HashMap<AuthorType, String> authorTypeVideoTypeMap = new HashMap<AuthorType, String>();
-    public static HashMap<AuthorType, String> authorTypeNameMap = new HashMap<AuthorType, String>();
+    public static HashMap<DanceGroupType, Class> authorTypeClassMap = new HashMap<DanceGroupType, Class>();
+    public static HashMap<String, DanceGroupType> videoTypeAuthorTypeMap = new HashMap<String, DanceGroupType>();
+    public static HashMap<DanceGroupType, String> authorTypeVideoTypeMap = new HashMap<DanceGroupType, String>();
+    public static HashMap<DanceGroupType, String> authorTypeNameMap = new HashMap<DanceGroupType, String>();
 
     static {
         typeClassMap.put("dancevideo", DanceVideo.class);
@@ -59,16 +59,16 @@ public class TypeClassMapping {
         clickTimeStatMap.put("menu", MenuClickTime.class);
         clickTimeStatMap.put("tab", TabClickTime.class);
 
-        authorTypeClassMap.put(AuthorType.STAR, DanceVideo.class);
-        authorTypeClassMap.put(AuthorType.NORMAL, DanceVideo.class);
+        authorTypeClassMap.put(DanceGroupType.STAR, DanceVideo.class);
+        authorTypeClassMap.put(DanceGroupType.NORMAL, DanceVideo.class);
 
-        videoTypeAuthorTypeMap.put("video", AuthorType.NORMAL);
-        videoTypeAuthorTypeMap.put("tutorial", AuthorType.STAR);
+        videoTypeAuthorTypeMap.put("video", DanceGroupType.NORMAL);
+        videoTypeAuthorTypeMap.put("tutorial", DanceGroupType.STAR);
 
-        authorTypeVideoTypeMap.put(AuthorType.NORMAL, "video");
-        authorTypeVideoTypeMap.put(AuthorType.STAR, "tutorial");
+        authorTypeVideoTypeMap.put(DanceGroupType.NORMAL, "video");
+        authorTypeVideoTypeMap.put(DanceGroupType.STAR, "tutorial");
 
-        authorTypeNameMap.put(AuthorType.NORMAL, "普通舞队");
-        authorTypeNameMap.put(AuthorType.STAR, "明星舞队");
+        authorTypeNameMap.put(DanceGroupType.NORMAL, "普通舞队");
+        authorTypeNameMap.put(DanceGroupType.STAR, "明星舞队");
     }
 }

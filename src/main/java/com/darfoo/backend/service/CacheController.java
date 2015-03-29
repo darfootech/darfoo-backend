@@ -5,7 +5,7 @@ import com.darfoo.backend.caches.dao.CacheUtils;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
-import com.darfoo.backend.dao.resource.AuthorDao;
+import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.CacheCollType;
@@ -34,7 +34,7 @@ public class CacheController {
     @Autowired
     CacheDao cacheDao;
     @Autowired
-    AuthorDao authorDao;
+    DanceGroupDao authorDao;
     @Autowired
     CommonDao commonDao;
     @Autowired

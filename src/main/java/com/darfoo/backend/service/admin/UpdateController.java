@@ -2,7 +2,7 @@ package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.resource.AuthorDao;
+import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.model.cota.ModelUpdate;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
@@ -26,7 +26,7 @@ import java.util.HashMap;
 @Controller
 public class UpdateController {
     @Autowired
-    AuthorDao authorDao;
+    DanceGroupDao authorDao;
     @Autowired
     CommonDao commonDao;
     @Autowired

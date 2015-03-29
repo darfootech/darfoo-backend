@@ -3,7 +3,7 @@ package com.darfoo.backend.service.admin;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
-import com.darfoo.backend.model.cota.AuthorType;
+import com.darfoo.backend.model.cota.DanceGroupType;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
@@ -51,7 +51,7 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/gallery/author/{type}/all", method = RequestMethod.GET)
-    public String showAllAuthor(@PathVariable AuthorType type, ModelMap modelMap) {
+    public String showAllAuthor(@PathVariable DanceGroupType type, ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("type", type);
         List resources = commonDao.getResourcesByFields(DanceGroup.class, conditions);
@@ -159,7 +159,7 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/author/{type}/videos/{id}", method = RequestMethod.GET)
-    public String showAuthorVideos(@PathVariable AuthorType type, @PathVariable Integer id, ModelMap modelMap) {
+    public String showAuthorVideos(@PathVariable DanceGroupType type, @PathVariable Integer id, ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", id);
         List videos = commonDao.getResourcesByFields(TypeClassMapping.authorTypeClassMap.get(type), conditions);

@@ -8,7 +8,7 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.statistic.StatisticsDao;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
-import com.darfoo.backend.model.cota.AuthorType;
+import com.darfoo.backend.model.cota.DanceGroupType;
 import com.darfoo.backend.model.cota.CSVTitle;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
@@ -231,7 +231,7 @@ public class DownloadTests {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", authorid);
 
-        Class videoClass = TypeClassMapping.authorTypeClassMap.get(AuthorType.NORMAL);
+        Class videoClass = TypeClassMapping.authorTypeClassMap.get(DanceGroupType.NORMAL);
         List videos = commonDao.getResourcesByFields(videoClass, conditions);
 
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');

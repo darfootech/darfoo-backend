@@ -3,7 +3,7 @@ package com.darfoo.backend.caches.dao;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
-import com.darfoo.backend.dao.resource.AuthorDao;
+import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
@@ -24,7 +24,7 @@ public class CacheUtils {
     @Autowired
     CacheDao cacheDao;
     @Autowired
-    AuthorDao authorDao;
+    DanceGroupDao authorDao;
     @Autowired
     CategoryDao categoryDao;
     @Autowired

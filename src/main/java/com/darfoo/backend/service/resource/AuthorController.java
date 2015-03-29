@@ -1,7 +1,7 @@
 package com.darfoo.backend.service.resource;
 
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.cota.AuthorType;
+import com.darfoo.backend.model.cota.DanceGroupType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,9 +27,9 @@ public class AuthorController {
     @RequestMapping(value = "/admin/author/changetype", method = RequestMethod.GET)
     public String prepareChangeAuthorType(ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("type", AuthorType.STAR);
+        conditions.put("type", DanceGroupType.STAR);
         List starAuthors = commonDao.getResourcesByFields(DanceGroup.class, conditions);
-        conditions.put("type", AuthorType.NORMAL);
+        conditions.put("type", DanceGroupType.NORMAL);
         List normalAuthors = commonDao.getResourcesByFields(DanceGroup.class, conditions);
         modelMap.addAttribute("starauthors", starAuthors);
         modelMap.addAttribute("normalauthors", normalAuthors);
@@ -39,7 +39,7 @@ public class AuthorController {
     @RequestMapping(value = "/admin/author/changetype/{type}", method = RequestMethod.POST)
     public
     @ResponseBody
-    Integer changeAuthorType(@PathVariable AuthorType type, HttpServletRequest request) {
+    Integer changeAuthorType(@PathVariable DanceGroupType type, HttpServletRequest request) {
         String ids = request.getParameter("ids");
         String[] idArray = ids.split(",");
 

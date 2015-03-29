@@ -2,7 +2,7 @@ package com.darfoo.backend.dao.resource;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
-import com.darfoo.backend.model.cota.AuthorType;
+import com.darfoo.backend.model.cota.DanceGroupType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @Component
 @SuppressWarnings("unchecked")
-public class AuthorDao {
+public class DanceGroupDao {
     @Autowired
     SessionFactory sessionFactory;
     @Autowired
@@ -36,7 +36,7 @@ public class AuthorDao {
         return result;
     }
 
-    public void updateAuthorType(Integer id, AuthorType type) {
+    public void updateAuthorType(Integer id, DanceGroupType type) {
         Class resource = DanceGroup.class;
         commonDao.saveResource(commonDao.setResourceAttr(resource, commonDao.getResourceById(resource, id), "type", type));
     }

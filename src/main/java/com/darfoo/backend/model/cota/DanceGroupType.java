@@ -5,6 +5,6 @@ package com.darfoo.backend.model.cota;
  */
 
 //舞队暂时分为明星舞队和普通舞队
-public enum AuthorType {
+public enum DanceGroupType {
     STAR, NORMAL
 }

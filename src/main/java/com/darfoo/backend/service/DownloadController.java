@@ -4,7 +4,7 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.statistic.StatisticsDao;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
-import com.darfoo.backend.model.cota.AuthorType;
+import com.darfoo.backend.model.cota.DanceGroupType;
 import com.darfoo.backend.model.cota.CSVTitle;
 import com.darfoo.backend.model.cota.ModelAttrSuper;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
@@ -241,7 +241,7 @@ public class DownloadController {
         }
     }
 
-    public void writeAuthorVideosToCSV(AuthorType type, Integer id) {
+    public void writeAuthorVideosToCSV(DanceGroupType type, Integer id) {
         String authorname = ((DanceGroup) commonDao.getResourceById(DanceGroup.class, id)).getName();
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", id);
@@ -295,7 +295,7 @@ public class DownloadController {
     }
 
     @RequestMapping(value = "admin/download/authorvideos/{type}/{id}", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> downloadAuthorvideos(@PathVariable AuthorType type, @PathVariable Integer id) throws IOException {
+    public ResponseEntity<byte[]> downloadAuthorvideos(@PathVariable DanceGroupType type, @PathVariable Integer id) throws IOException {
         String authorname = ((DanceGroup) commonDao.getResourceById(DanceGroup.class, id)).getName();
         writeAuthorVideosToCSV(type, id);
         return downloadCSVFiles(String.format("author-%s", authorname));

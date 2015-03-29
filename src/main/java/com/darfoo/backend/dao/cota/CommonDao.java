@@ -1,7 +1,7 @@
 package com.darfoo.backend.dao.cota;
 
 import com.darfoo.backend.dao.CRUDEvent;
-import com.darfoo.backend.dao.resource.AuthorDao;
+import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
 import com.darfoo.backend.model.resource.Image;
@@ -34,7 +34,7 @@ public class CommonDao {
     @Autowired
     AccompanyDao accompanyDao;
     @Autowired
-    AuthorDao authorDao;
+    DanceGroupDao authorDao;
 
     public int getResourceHottestLimit(Class resource) {
         if (resource == DanceMusic.class) {
