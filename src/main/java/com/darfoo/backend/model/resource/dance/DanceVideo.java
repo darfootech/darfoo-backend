@@ -57,7 +57,7 @@ public class DanceVideo implements Serializable {
 
     @Column(name = "UPDATE_TIMESTAMP", nullable = false, columnDefinition = "bigint(64) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
-    Long update_timestamp;
+    Long update_timestamp = System.currentTimeMillis();
 
     @ManyToOne(targetEntity = DanceMusic.class)
     @JoinColumn(name = "MUSIC_ID", referencedColumnName = "id", updatable = true, nullable = true)

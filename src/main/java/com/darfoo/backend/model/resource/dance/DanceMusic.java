@@ -42,7 +42,7 @@ public class DanceMusic implements Serializable {
 
     @Column(name = "UPDATE_TIMESTAMP", nullable = false, columnDefinition = "bigint(64) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
-    Long update_timestamp;
+    Long update_timestamp = System.currentTimeMillis();
 
     //点击量
     @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
