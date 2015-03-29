@@ -1,7 +1,6 @@
 package com.darfoo.backend.service;
 
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.statistic.MongoManager;
 import com.darfoo.backend.dao.statistic.StatisticsDao;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
@@ -18,7 +17,8 @@ import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.TutorialCates;
 import com.darfoo.backend.service.responsemodel.VideoCates;
 import com.darfoo.backend.utils.DiskFileDirConfig;
-import com.mongodb.*;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.FileUtils;
