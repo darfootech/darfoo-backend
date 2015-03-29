@@ -34,6 +34,7 @@ public class TypeClassMapping {
     public static HashMap<DanceGroupType, String> authorTypeVideoTypeMap = new HashMap<DanceGroupType, String>();
     public static HashMap<DanceGroupType, String> authorTypeNameMap = new HashMap<DanceGroupType, String>();
     public static HashMap<String, DanceVideoType> danceVideoTypeMap = new HashMap<String, DanceVideoType>();
+    public static HashMap<String, DanceGroupType> danceGroupTypeMap = new HashMap<String, DanceGroupType>();
 
     static {
         typeClassMap.put("dancevideo", DanceVideo.class);
@@ -75,5 +76,7 @@ public class TypeClassMapping {
 
         danceVideoTypeMap.put("normal", DanceVideoType.NORMAL);
         danceVideoTypeMap.put("tutorial", DanceVideoType.TUTORIAL);
+        danceGroupTypeMap.put("normal", DanceGroupType.NORMAL);
+        danceGroupTypeMap.put("star", DanceGroupType.STAR);
     }
 }

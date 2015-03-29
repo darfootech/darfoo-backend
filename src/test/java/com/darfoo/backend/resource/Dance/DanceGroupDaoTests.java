@@ -60,6 +60,7 @@ public class DanceGroupDaoTests {
         insertcontents.put("name", authorName);
         insertcontents.put("imagekey", imagekey);
         insertcontents.put("description", "台湾人气偶像组合");
+        insertcontents.put("type", "normal");
 
         HashMap<String, Integer> insertresult = commonDao.insertResource(DanceGroup.class, insertcontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
