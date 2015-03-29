@@ -2,6 +2,7 @@ package com.darfoo.backend.resource.Dance;
 
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.*;
+import com.darfoo.backend.dao.resource.InsertDao;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.responsemodel.VideoCates;
@@ -28,6 +29,8 @@ public class DanceVideoDaoTests {
     CategoryDao categoryDao;
     @Autowired
     AccompanyDao accompanyDao;
+    @Autowired
+    InsertDao insertDao;
 
     VideoCates videoCates = new VideoCates();
 
@@ -48,7 +51,7 @@ public class DanceVideoDaoTests {
         insertcontents.put("videotype", "mp3");
         insertcontents.put("connectmusic", "ccccc-memeda-33");
 
-        HashMap<String, Integer> insertresult = commonDao.insertResource(DanceVideo.class, insertcontents);
+        HashMap<String, Integer> insertresult = insertDao.insertDanceGroup(insertcontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
         System.out.println("insertid -> " + insertresult.get("insertid"));
     }
