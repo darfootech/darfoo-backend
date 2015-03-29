@@ -5,6 +5,7 @@ package com.darfoo.backend;
  */
 
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.statistic.MongoManager;
 import com.darfoo.backend.model.category.MusicCategory;
 import com.darfoo.backend.model.category.TutorialCategory;
 import com.darfoo.backend.model.category.VideoCategory;
@@ -21,6 +22,7 @@ import com.darfoo.backend.service.responsemodel.MusicCates;
 import com.darfoo.backend.service.responsemodel.TutorialCates;
 import com.darfoo.backend.service.responsemodel.VideoCates;
 import com.darfoo.backend.utils.DiskFileDirConfig;
+import com.mongodb.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.junit.Test;
@@ -51,6 +53,10 @@ public class DownloadTests {
     TutorialCates tutorialCates;
     @Autowired
     MusicCates musicCates;
+
+    MongoClient client = MongoManager.getMongoClientInstance();
+    DB db = client.getDB("statistics");
+    DBCollection coll = db.getCollection("resourceclickcount");
 
     public String timestampTodatetime(long timestampfromdb) {
         Timestamp timestamp = new Timestamp(timestampfromdb);
@@ -203,31 +209,49 @@ public class DownloadTests {
                     printer.printRecord(itemData);
                 }
             } else {
-                List<String> headers = new ArrayList<String>();
-                List<String> attrs = new ArrayList<String>();
+                System.out.println("wired");
+            }
+            printer.flush();
+            printer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-                for (Field field : resource.getFields()) {
-                    if (field.isAnnotationPresent(CSVTitle.class)) {
-                        String title = field.getAnnotation(CSVTitle.class).title();
-                        headers.add(title);
-                        attrs.add(field.getName());
-                    }
-                }
-                printer.printRecord(headers);
+    public void writeStatisticDataToCSV(Class resource) {
+        DBCursor cursor = coll.find();
+        CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
+        CSVPrinter printer = null;
 
-                for (Object object : resources) {
-                    List itemData = new ArrayList();
-                    for (String attr : attrs) {
-                        Field field = resource.getField(attr);
-                        if (field.isAnnotationPresent(ModelAttrSuper.class)) {
-                            itemData.add(commonDao.getResourceAttr(resource.getSuperclass(), object, attr));
-                        } else {
-                            itemData.add(commonDao.getResourceAttr(resource, object, attr));
-                        }
-                    }
-                    printer.printRecord(itemData);
+        try {
+            Writer out = new FileWriter(String.format("%s%s.csv", DiskFileDirConfig.csvdir, resource.getSimpleName().toLowerCase()));
+            printer = new CSVPrinter(out, format.withDelimiter(','));
+            HashMap<String, String> styleMap = new HashMap<String, String>();
+
+            List<String> headers = new ArrayList<String>();
+            List<String> attrs = new ArrayList<String>();
+
+            for (Field field : resource.getFields()) {
+                if (field.isAnnotationPresent(CSVTitle.class)) {
+                    String title = field.getAnnotation(CSVTitle.class).title();
+                    headers.add(title);
+                    attrs.add(field.getName());
                 }
             }
+            printer.printRecord(headers);
+
+            while (cursor.hasNext()) {
+                List itemData = new ArrayList();
+                DBObject object = cursor.next();
+                for (String attr : attrs) {
+                    Field field = resource.getField(attr);
+                    Object value = object.get(field.getName().toLowerCase());
+                    System.out.println(value);
+                    itemData.add(value);
+                }
+                printer.printRecord(itemData);
+            }
+
             printer.flush();
             printer.close();
         } catch (IOException e) {
@@ -254,7 +278,7 @@ public class DownloadTests {
 
     @Test
     public void writeStatisticsRecordsToCSV() {
-        writeResourcesToCSV(ResourceClickCount.class);
+        writeStatisticDataToCSV(ResourceClickCount.class);
     }
 
     @Test

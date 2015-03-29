@@ -1,10 +1,7 @@
 package com.darfoo.backend.statistic;
 
 import com.darfoo.backend.dao.statistic.MongoManager;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
+import com.mongodb.*;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
@@ -18,6 +15,14 @@ public class MongoTests {
     MongoClient client = MongoManager.getMongoClientInstance();
     DB db = client.getDB("statistics");
     DBCollection coll = db.getCollection("resourceclickcount");
+
+    @Test
+    public void testQuery() {
+        DBCursor cursor = coll.find();
+        while (cursor.hasNext()) {
+            System.out.println(cursor.next().get("type"));
+        }
+    }
 
     @Test
     public void testInsert() {
