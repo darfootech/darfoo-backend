@@ -62,7 +62,7 @@ public class GalleryController {
     public String showAllResource(@PathVariable String type, ModelMap modelMap) {
         if (type.equals("author")) {
             modelMap.addAttribute("type", "manage");
-            modelMap.addAttribute("typenames", TypeClassMapping.authorTypeNameMap);
+            modelMap.addAttribute("typenames", TypeClassMapping.danceGroupTypeNameMap);
             return "author/allauthortype";
         } else {
             List resources = commonDao.getAllResource(TypeClassMapping.typeClassMap.get(type));

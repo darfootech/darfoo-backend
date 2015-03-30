@@ -52,9 +52,9 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">新建资源 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/darfoobackend/rest/resources/dancevideo/new">舞蹈视频</a></li>
-                        <li><a href="/darfoobackend/rest/resources/dancemusic/new">舞蹈伴奏</a></li>
-                        <li><a href="/darfoobackend/rest/resources/dancegroup/new">舞蹈舞队</a></li>
+                        <li><a href="/darfoobackend/rest/resources/new/dancevideo">舞蹈视频</a></li>
+                        <li><a href="/darfoobackend/rest/resources/new/dancemusic">舞蹈伴奏</a></li>
+                        <li><a href="/darfoobackend/rest/resources/new/dancegroup">舞蹈舞队</a></li>
                     </ul>
                 </li>
 

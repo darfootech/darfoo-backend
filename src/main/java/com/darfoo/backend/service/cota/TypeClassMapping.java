@@ -30,9 +30,12 @@ public class TypeClassMapping {
     public static HashMap<String, Class> clickCountStatMap = new HashMap<String, Class>();
     public static HashMap<String, Class> clickTimeStatMap = new HashMap<String, Class>();
     public static HashMap<DanceGroupType, Class> authorTypeClassMap = new HashMap<DanceGroupType, Class>();
-    public static HashMap<String, DanceGroupType> videoTypeAuthorTypeMap = new HashMap<String, DanceGroupType>();
+    public static HashMap<DanceVideoType, DanceGroupType> danceVideoTypeDanceGroupTypeMap = new HashMap<DanceVideoType, DanceGroupType>();
     public static HashMap<DanceGroupType, String> authorTypeVideoTypeMap = new HashMap<DanceGroupType, String>();
-    public static HashMap<DanceGroupType, String> authorTypeNameMap = new HashMap<DanceGroupType, String>();
+
+    public static HashMap<DanceVideoType, String> danceVideoTypeNameMap = new HashMap<DanceVideoType, String>();
+    public static HashMap<DanceGroupType, String> danceGroupTypeNameMap = new HashMap<DanceGroupType, String>();
+
     public static HashMap<String, DanceVideoType> danceVideoTypeMap = new HashMap<String, DanceVideoType>();
     public static HashMap<String, DanceGroupType> danceGroupTypeMap = new HashMap<String, DanceGroupType>();
 
@@ -65,14 +68,16 @@ public class TypeClassMapping {
         authorTypeClassMap.put(DanceGroupType.STAR, DanceVideo.class);
         authorTypeClassMap.put(DanceGroupType.NORMAL, DanceVideo.class);
 
-        videoTypeAuthorTypeMap.put("video", DanceGroupType.NORMAL);
-        videoTypeAuthorTypeMap.put("tutorial", DanceGroupType.STAR);
+        danceVideoTypeDanceGroupTypeMap.put(DanceVideoType.NORMAL, DanceGroupType.NORMAL);
+        danceVideoTypeDanceGroupTypeMap.put(DanceVideoType.TUTORIAL, DanceGroupType.STAR);
 
         authorTypeVideoTypeMap.put(DanceGroupType.NORMAL, "video");
         authorTypeVideoTypeMap.put(DanceGroupType.STAR, "tutorial");
 
-        authorTypeNameMap.put(DanceGroupType.NORMAL, "普通舞队");
-        authorTypeNameMap.put(DanceGroupType.STAR, "明星舞队");
+        danceVideoTypeNameMap.put(DanceVideoType.NORMAL, "欣赏视频");
+        danceVideoTypeNameMap.put(DanceVideoType.TUTORIAL, "教学视频");
+        danceGroupTypeNameMap.put(DanceGroupType.NORMAL, "普通舞队");
+        danceGroupTypeNameMap.put(DanceGroupType.STAR, "明星舞队");
 
         danceVideoTypeMap.put("normal", DanceVideoType.NORMAL);
         danceVideoTypeMap.put("tutorial", DanceVideoType.TUTORIAL);

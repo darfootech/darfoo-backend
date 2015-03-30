@@ -3,9 +3,7 @@ package com.darfoo.backend.service.admin;
 import akka.actor.ActorSystem;
 import akka.dispatch.OnComplete;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.cota.ModelInsert;
-import com.darfoo.backend.model.cota.ModelUpload;
-import com.darfoo.backend.model.cota.ModelUploadEnum;
+import com.darfoo.backend.model.cota.*;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -118,12 +116,34 @@ public class UploadController {
         return "success";
     }
 
-    @RequestMapping(value = "/resources/{type}/new", method = RequestMethod.GET)
-    public String uploadResource(@PathVariable String type, ModelMap modelMap) {
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("type", TypeClassMapping.videoTypeAuthorTypeMap.get(type));
-        modelMap.addAttribute("type", type);
-        modelMap.addAttribute("authors", commonDao.getResourcesByFields(DanceGroup.class, conditions));
+    @RequestMapping(value = "/resources/new/{type}", method = RequestMethod.GET)
+    public String uploadResourceWithType(@PathVariable String type, ModelMap modelMap) {
+        if (type.equals("dancegroup")) {
+            modelMap.put("typenames", TypeClassMapping.danceGroupTypeNameMap);
+        }
+        if (type.equals("dancevideo")) {
+            modelMap.put("typenames", TypeClassMapping.danceVideoTypeNameMap);
+        }
+        if (type.equals("dancemusic")) {
+            return "upload/uploaddancemusic";
+        }
+        modelMap.put("type", type);
+        return "upload/uploadresource";
+    }
+
+    @RequestMapping(value = "/resources/new/{type}/{innertype}", method = RequestMethod.GET)
+    public String uploadResource(@PathVariable String type, @PathVariable String innertype, ModelMap modelMap) {
+        if (type.equals("dancevideo")) {
+            DanceVideoType danceVideoType = DanceVideoType.valueOf(innertype.toUpperCase());
+            HashMap<String, Object> conditions = new HashMap<String, Object>();
+            conditions.put("type", TypeClassMapping.danceVideoTypeDanceGroupTypeMap.get(danceVideoType));
+            modelMap.addAttribute("authors", commonDao.getResourcesByFields(DanceGroup.class, conditions));
+            modelMap.addAttribute("type", danceVideoType);
+        } else if (type.equals("dancegroup")) {
+            DanceGroupType danceGroupType = DanceGroupType.valueOf(innertype.toUpperCase());
+            modelMap.addAttribute("type", danceGroupType);
+        }
+
         return String.format("upload/upload%s", type);
     }
 

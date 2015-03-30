@@ -5,6 +5,7 @@ package com.darfoo.backend.admin;
  */
 
 import com.darfoo.backend.dao.DashboardDao;
+import com.darfoo.backend.model.cota.DanceVideoType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +41,11 @@ public class DashboardDaoTests {
     @Test
     public void closeDashboard() {
         dashboardDao.closeDashBoard();
+    }
+
+    @Test
+    public void stringToEnum() {
+        DanceVideoType type = DanceVideoType.valueOf("normal".toUpperCase());
+        System.out.println(type);
     }
 }
