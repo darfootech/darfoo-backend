@@ -41,6 +41,26 @@ public class InsertDao {
     @Autowired
     AccompanyDao accompanyDao;
 
+    public HashMap<String, Integer> insertImage(Session session, Class resource, Object object, HashMap<String, Integer> resultMap, String imagekey) {
+        if (!ServiceUtils.isValidImageKey(imagekey)) {
+            System.out.println("imagekey没有加上合法的后缀");
+            resultMap.put("statuscode", 504);
+            resultMap.put("insertid", -1);
+            return resultMap;
+        }
+
+        Criteria criteria = session.createCriteria(Image.class).add(Restrictions.eq("image_key", imagekey));
+        if (criteria.list().size() == 1) {
+            System.out.println("相同imagekey的图片已经存在了");
+            resultMap.put("statuscode", 501);
+            resultMap.put("insertid", -1);
+            return resultMap;
+        } else {
+            commonDao.setResourceAttr(resource, object, "image", new Image(imagekey));
+            return resultMap;
+        }
+    }
+
     public HashMap<String, Integer> insertDanceVideo(HashMap<String, String> insertcontents) throws IllegalAccessException, InstantiationException {
         Set<String> categoryTitles = new HashSet<String>();
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
@@ -85,21 +105,9 @@ public class InsertDao {
                 }
             } else if (key.equals("imagekey")) {
                 String imagekey = insertcontents.get(key);
-
-                if (!ServiceUtils.isValidImageKey(imagekey)) {
-                    resultMap.put("statuscode", 504);
-                    resultMap.put("insertid", -1);
+                resultMap = insertImage(session, resource, object, resultMap, imagekey);
+                if (resultMap.keySet().size() > 0) {
                     return resultMap;
-                }
-
-                criteria = session.createCriteria(Image.class).add(Restrictions.eq("image_key", imagekey));
-                if (criteria.list().size() == 1) {
-                    System.out.println("相同imagekey的图片已经存在了");
-                    resultMap.put("statuscode", 501);
-                    resultMap.put("insertid", -1);
-                    return resultMap;
-                } else {
-                    commonDao.setResourceAttr(resource, object, "image", new Image(imagekey));
                 }
             } else if (key.equals("authorname")) {
                 String authorname = insertcontents.get(key);
@@ -239,21 +247,9 @@ public class InsertDao {
                 }
             } else if (key.equals("imagekey")) {
                 String imagekey = insertcontents.get(key);
-
-                if (!ServiceUtils.isValidImageKey(imagekey)) {
-                    resultMap.put("statuscode", 504);
-                    resultMap.put("insertid", -1);
+                resultMap = insertImage(session, resource, object, resultMap, imagekey);
+                if (resultMap.keySet().size() > 0) {
                     return resultMap;
-                }
-
-                criteria = session.createCriteria(Image.class).add(Restrictions.eq("image_key", imagekey));
-                if (criteria.list().size() == 1) {
-                    System.out.println("相同imagekey的图片已经存在了");
-                    resultMap.put("statuscode", 501);
-                    resultMap.put("insertid", -1);
-                    return resultMap;
-                } else {
-                    commonDao.setResourceAttr(resource, object, "image", new Image(imagekey));
                 }
             } else if (key.equals("type")) {
                 DanceGroupType type = TypeClassMapping.danceGroupTypeMap.get(insertcontents.get(key));

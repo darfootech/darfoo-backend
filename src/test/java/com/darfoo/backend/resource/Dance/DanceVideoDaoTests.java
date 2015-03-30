@@ -3,6 +3,7 @@ package com.darfoo.backend.resource.Dance;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.*;
 import com.darfoo.backend.dao.resource.InsertDao;
+import com.darfoo.backend.dao.resource.UpdateDao;
 import com.darfoo.backend.model.cota.DanceVideoType;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -32,6 +33,8 @@ public class DanceVideoDaoTests {
     AccompanyDao accompanyDao;
     @Autowired
     InsertDao insertDao;
+    @Autowired
+    UpdateDao updateDao;
 
     VideoCates videoCates = new VideoCates();
 
@@ -57,6 +60,31 @@ public class DanceVideoDaoTests {
         HashMap<String, Integer> insertresult = commonDao.insertResource(DanceVideo.class, insertcontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
         System.out.println("insertid -> " + insertresult.get("insertid"));
+    }
+
+    /**
+     * 更新操作可以参考这个测试
+     * *
+     */
+    @Test
+    public void updateVideoById() {
+        HashMap<String, String> updatecontents = new HashMap<String, String>();
+        String videoTitle = "呵呵-" + System.currentTimeMillis();
+        String authorName = "王广成广场舞";
+
+        Integer id = 1055;
+
+        updatecontents.put("title", videoTitle);
+        updatecontents.put("authorname", authorName);
+        //updatecontents.put("category1", "正面教学");
+        //updatecontents.put("category2", "口令分解");
+        //updatecontents.put("category3", "背面教学");
+        //updatecontents.put("category4", "队形教学");
+        updatecontents.put("category", "");
+        updatecontents.put("connectmusic", "");
+
+        HashMap<String, Integer> insertresult = updateDao.updateDanceVideo(id, updatecontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
     }
 
     @Test
@@ -142,30 +170,6 @@ public class DanceVideoDaoTests {
     @Test
     public void deleteVideoCascade() {
         System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(DanceVideo.class, 91)));
-    }
-
-    /**
-     * 更新操作可以参考这个测试
-     * *
-     */
-    @Test
-    public void updateVideoById() {
-        HashMap<String, String> updatecontents = new HashMap<String, String>();
-        String videoTitle = "呵呵-" + System.currentTimeMillis();
-        String authorName = "仓木麻衣";
-
-        Integer id = 81;
-
-        updatecontents.put("title", "");
-        updatecontents.put("authorname", authorName);
-        updatecontents.put("category1", "适中");
-        updatecontents.put("category2", "稍难");
-        updatecontents.put("category3", "戏曲风");
-        updatecontents.put("category4", "q".toUpperCase());
-        updatecontents.put("connectmusic", "");
-
-        HashMap<String, Integer> insertresult = commonDao.updateResource(DanceVideo.class, id, updatecontents);
-        System.out.println("statuscode -> " + insertresult.get("statuscode"));
     }
 
     /**

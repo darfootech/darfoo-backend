@@ -3,6 +3,7 @@ package com.darfoo.backend.dao.cota;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.dao.resource.InsertDao;
+import com.darfoo.backend.dao.resource.UpdateDao;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
 import com.darfoo.backend.model.cota.ModelOperation;
@@ -41,6 +42,8 @@ public class CommonDao {
     DanceGroupDao authorDao;
     @Autowired
     InsertDao insertDao;
+    @Autowired
+    UpdateDao updateDao;
 
     public int getResourceHottestLimit(Class resource) {
         if (resource == DanceMusic.class) {
@@ -140,219 +143,23 @@ public class CommonDao {
     //视频title可以重名,但是不可能出现视频title一样,舞队id都一样的情况,也就是一个舞队的作品中不会出现重名的情况
     //伴奏title可以重名,但是不可能出现伴奏title一样authorname也一样的情况
     public HashMap<String, Integer> updateResource(Class resource, Integer id, HashMap<String, String> updatecontents) {
-        Set<String> categoryTitles = new HashSet<String>();
-
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
-        boolean isCategoryHasSingleChar = false;
-
-        Session session = sessionFactory.getCurrentSession();
-        Criteria criteria;
-
-        Object object = session.get(resource, id);
-
-        if (object == null) {
-            System.out.println("需要更新的资源不存在");
-            resultMap.put("statuscode", 500);
-            return resultMap;
-        } else {
-            for (String key : updatecontents.keySet()) {
-                if (key.equals("authorname")) {
-                    String authorname = updatecontents.get(key);
-                    if (!authorname.equals("") && authorname != null) {
-                        if (resource == DanceVideo.class) {
-                            String oldAuthorname = ((DanceGroup) getResourceAttr(resource, object, "author")).getName();
-                            if (!authorname.equals(oldAuthorname)) {
-                                criteria = session.createCriteria(DanceGroup.class).add(Restrictions.eq("name", authorname));
-                                criteria.setReadOnly(true);
-                                DanceGroup author = (DanceGroup) criteria.uniqueResult();
-                                if (author == null) {
-                                    System.out.println("要更新的资源的的明星舞队不存在，请先完成明星舞队信息的创建");
-                                    resultMap.put("statuscode", 501);
-                                    return resultMap;
-                                } else {
-                                    int authorid = author.getId();
-
-                                    HashMap<String, Object> conditions = new HashMap<String, Object>();
-                                    conditions.put("title", getResourceAttr(resource, object, "title"));
-                                    conditions.put("author_id", authorid);
-
-                                    Object queryOldResource = getResourceByFields(resource, conditions);
-
-                                    conditions.put("title", updatecontents.get("title"));
-
-                                    Object queryResource = getResourceByFields(resource, conditions);
-
-                                    if (queryOldResource == null && queryResource == null) {
-                                        System.out.println("资源名字和舞队id组合不存在，可以进行插入");
-                                        setResourceAttr(resource, object, "author", author);
-                                    } else {
-                                        System.out.println("资源名字和舞队id组合已存在，不可以进行插入了，是否需要修改");
-                                        resultMap.put("statuscode", 502);
-                                        return resultMap;
-                                    }
-                                }
-                            }
-                        } else if (resource == DanceMusic.class) {
-                            String oldAuthorname = getResourceAttr(resource, object, "authorname").toString();
-                            if (!authorname.equals(oldAuthorname)) {
-                                HashMap<String, Object> conditions = new HashMap<String, Object>();
-                                conditions.put("title", getResourceAttr(resource, object, "title"));
-                                conditions.put("authorname", authorname);
-
-                                Object queryOldResource = getResourceByFields(resource, conditions);
-
-                                conditions.put("title", updatecontents.get("title"));
-
-                                Object queryResource = getResourceByFields(resource, conditions);
-
-                                if (queryOldResource == null && queryResource == null) {
-                                    System.out.println("伴奏名字和舞队名字组合不存在，可以进行插入");
-                                    setResourceAttr(resource, object, key, authorname);
-                                } else {
-                                    System.out.println("伴奏名字和舞队名字组合已存在，不可以进行插入了，是否需要修改");
-                                    resultMap.put("statuscode", 505);
-                                    return resultMap;
-                                }
-                            }
-                        } else {
-                            System.out.println("wired");
-                        }
-                    }
-                } else if (key.contains("category")) {
-                    String category = updatecontents.get(key);
-                    if (category != null && !category.equals("")) {
-                        if (ServiceUtils.isSingleCharacter(category)) {
-                            isCategoryHasSingleChar = true;
-                        }
-                        categoryTitles.add(category);
-                    }
-                } else if (key.equals("title")) {
-                    String title = updatecontents.get(key);
-                    String oldTitle = getResourceAttr(resource, object, key).toString();
-
-                    if (!title.equals("") && title != null && !title.equals(oldTitle)) {
-                        if (resource == DanceVideo.class) {
-                            int oldAuthorid = ((DanceGroup) getResourceAttr(resource, object, "author")).getId();
-                            HashMap<String, Object> conditions = new HashMap<String, Object>();
-                            conditions.put("title", title);
-                            conditions.put("author_id", oldAuthorid);
-
-                            Object queryResource = getResourceByFields(resource, conditions);
-
-                            if (queryResource == null) {
-                                System.out.println("资源名字和舞队id组合不存在，可以进行插入");
-                                setResourceAttr(resource, object, key, title);
-                            } else {
-                                System.out.println("资源名字和舞队id组合已存在，不可以进行插入了，是否需要修改");
-                                resultMap.put("statuscode", 502);
-                                return resultMap;
-                            }
-                        } else if (resource == DanceMusic.class) {
-                            HashMap<String, Object> conditions = new HashMap<String, Object>();
-                            conditions.put("title", title);
-                            conditions.put("authorname", updatecontents.get("authorname"));
-
-                            Object queryResource = getResourceByFields(resource, conditions);
-                            if (queryResource == null) {
-                                System.out.println("伴奏名字和舞队名字组合不存在，可以进行插入");
-                                setResourceAttr(resource, object, key, title);
-                            } else {
-                                System.out.println("伴奏名字和舞队名字组合已存在，不可以进行插入了，是否需要修改");
-                                resultMap.put("statuscode", 505);
-                                return resultMap;
-                            }
-                        } else {
-                            System.out.println("wired");
-                        }
-                    }
-                } else if (key.equals("name")) {
-                    String name = updatecontents.get(key);
-                    String oldName = getResourceAttr(resource, object, key).toString();
-
-                    if (!name.equals("") && name != null && !name.equals(oldName)) {
-                        Object queryResource = getResourceByTitleOrName(resource, name, key);
-                        if (queryResource == null) {
-                            setResourceAttr(resource, object, key, name);
-                        } else {
-                            resultMap.put("statuscode", 504);
-                            return resultMap;
-                        }
-                    }
-                } else if (key.equals("description")) {
-                    String value = updatecontents.get(key);
-                    String oldValue = getResourceAttr(resource, object, key).toString();
-                    if (!value.equals("") && value != null && !value.equals(oldValue)) {
-                        setResourceAttr(resource, object, key, value);
-                    }
-                } else if (key.equals("imagekey")) {
-                    //为之前没有关联图片的明星舞队更新图片
-                    if (resource == DanceGroup.class) {
-                        String imagekey = updatecontents.get(key);
-                        String oldImagekey = ((DanceGroup) object).getImage().getImage_key();
-
-                        if (!imagekey.equals("") && !imagekey.equals(oldImagekey)) {
-                            if (!ServiceUtils.isValidImageKey(imagekey)) {
-                                resultMap.put("statuscode", 506);
-                                resultMap.put("insertid", -1);
-                                return resultMap;
-                            }
-                            criteria = session.createCriteria(Image.class).add(Restrictions.eq("image_key", imagekey));
-                            if (criteria.list().size() == 1) {
-                                System.out.println("相同imagekey的图片已经存在了");
-                                resultMap.put("statuscode", 507);
-                                resultMap.put("insertid", -1);
-                                return resultMap;
-                            } else {
-                                setResourceAttr(resource, object, "image", new Image(imagekey));
-                            }
-                        }
-                    }
-                } else {
-                    System.out.println("wired");
-                }
-            }
-
-            if (resource == DanceVideo.class) {
-                String connectmusic = updatecontents.get("connectmusic");
-                if (connectmusic != null && !connectmusic.equals("")) {
-                    int mid = Integer.parseInt(connectmusic.split("-")[2]);
-                    accompanyDao.updateResourceMusic(resource, id, mid);
-                }
-            }
-
-            if (ifHasCategoryResource(resource)) {
-                setResourceAttr(resource, object, "update_timestamp", System.currentTimeMillis());
-
-                if (resource == DanceVideo.class || resource == DanceMusic.class) {
-                    if (!isCategoryHasSingleChar) {
-                        resultMap.put("statuscode", 503);
-                        return resultMap;
-                    }
-                }
-
-                Class categoryClass = null;
-                Set categories;
-
-                if (resource == DanceVideo.class) {
-                    categoryClass = DanceVideoCategory.class;
-                }
-
-                if (resource == DanceMusic.class) {
-                    categoryClass = DanceMusicCategory.class;
-                }
-
-                criteria = session.createCriteria(categoryClass).add(Restrictions.in("title", categoryTitles));
-                List categoryList = criteria.list();
-                categories = new HashSet(categoryList);
-
-                setResourceAttr(resource, object, "categories", categories);
-            }
-
-            session.saveOrUpdate(object);
-            resultMap.put("statuscode", 200);
-            return resultMap;
+        try {
+            String methodName = ((ModelOperation) resource.getAnnotation(ModelOperation.class)).updateMethod();
+            Method method = UpdateDao.class.getDeclaredMethod(methodName, new Class[] {Integer.class, HashMap.class});
+            return (HashMap<String, Integer>) method.invoke(updateDao, new Object[] {id, updatecontents});
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
+
+        resultMap.put("statuscode", 404);
+        resultMap.put("insertid", -1);
+        return resultMap;
     }
 
     /**
