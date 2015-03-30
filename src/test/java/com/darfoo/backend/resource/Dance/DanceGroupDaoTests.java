@@ -58,7 +58,7 @@ public class DanceGroupDaoTests {
         String imagekey = "imagekey-" + System.currentTimeMillis() + ".jpg";
 
         insertcontents.put("name", authorName);
-        insertcontents.put("imagekey", imagekey);
+        insertcontents.put("imagetype", "png");
         insertcontents.put("description", "台湾人气偶像组合");
         insertcontents.put("type", "normal");
 

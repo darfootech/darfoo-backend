@@ -47,7 +47,7 @@ public class DanceVideoDaoTests {
 
         insertcontents.put("title", videoTitle);
         insertcontents.put("authorname", authorName);
-        insertcontents.put("imagekey", imagekey);
+        insertcontents.put("imagetype", "jpg");
         /*insertcontents.put("category1", "正面教学");
         insertcontents.put("category2", "口令分解");
         insertcontents.put("category3", "背面教学");

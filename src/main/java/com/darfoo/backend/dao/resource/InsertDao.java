@@ -41,26 +41,6 @@ public class InsertDao {
     @Autowired
     AccompanyDao accompanyDao;
 
-    public HashMap<String, Integer> insertImage(Session session, Class resource, Object object, HashMap<String, Integer> resultMap, String imagekey) {
-        if (!ServiceUtils.isValidImageKey(imagekey)) {
-            System.out.println("imagekey没有加上合法的后缀");
-            resultMap.put("statuscode", 504);
-            resultMap.put("insertid", -1);
-            return resultMap;
-        }
-
-        Criteria criteria = session.createCriteria(Image.class).add(Restrictions.eq("image_key", imagekey));
-        if (criteria.list().size() == 1) {
-            System.out.println("相同imagekey的图片已经存在了");
-            resultMap.put("statuscode", 501);
-            resultMap.put("insertid", -1);
-            return resultMap;
-        } else {
-            commonDao.setResourceAttr(resource, object, "image", new Image(imagekey));
-            return resultMap;
-        }
-    }
-
     public HashMap<String, Integer> insertDanceVideo(HashMap<String, String> insertcontents) throws IllegalAccessException, InstantiationException {
         Set<String> categoryTitles = new HashSet<String>();
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
@@ -103,12 +83,6 @@ public class InsertDao {
                     resultMap.put("insertid", -1);
                     return resultMap;
                 }
-            } else if (key.equals("imagekey")) {
-                String imagekey = insertcontents.get(key);
-                resultMap = insertImage(session, resource, object, resultMap, imagekey);
-                if (resultMap.keySet().size() > 0) {
-                    return resultMap;
-                }
             } else if (key.equals("authorname")) {
                 String authorname = insertcontents.get(key);
                 criteria = session.createCriteria(DanceGroup.class).add(Restrictions.eq("name", authorname));
@@ -127,9 +101,12 @@ public class InsertDao {
                 DanceVideoType type = TypeClassMapping.danceVideoTypeMap.get(insertcontents.get(key));
                 commonDao.setResourceAttr(resource, object, key, type);
             } else {
-                commonDao.setResourceAttr(resource, object, key, insertcontents.get(key));
+                System.out.println("wired");
             }
         }
+
+        String imagekey = String.format("dancevideo-imagekey-%s.%s", System.currentTimeMillis(), insertcontents.get("imagetype"));
+        commonDao.setResourceAttr(resource, object, "image", new Image(imagekey));
 
         criteria = session.createCriteria(DanceVideoCategory.class).add(Restrictions.in("title", categoryTitles));
         List categoryList = criteria.list();
@@ -142,7 +119,8 @@ public class InsertDao {
         int insertid = (Integer) commonDao.getResourceAttr(resource, object, "id");
 
         HashMap<String, Object> updateMap = new HashMap<String, Object>();
-        updateMap.put("video_key", insertcontents.get("title") + "-" + resource.getSimpleName().toLowerCase() + "-" + insertid + "." + insertcontents.get("videotype"));
+        String videokey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase() , insertid, insertcontents.get("videotype"));
+        updateMap.put("video_key", videokey);
         commonDao.updateResourceFieldsById(resource, insertid, updateMap);
 
         String connectmusic = insertcontents.get("connectmusic");
@@ -195,7 +173,7 @@ public class InsertDao {
                 }
                 categoryTitles.add(category);
             } else {
-                commonDao.setResourceAttr(resource, object, key, insertcontents.get(key));
+                System.out.println("wired");
             }
         }
 
@@ -216,7 +194,8 @@ public class InsertDao {
         int insertid = (Integer) commonDao.getResourceAttr(resource, object, "id");
 
         HashMap<String, Object> updateMap = new HashMap<String, Object>();
-        updateMap.put("music_key", insertcontents.get("title") + "-" + insertid);
+        String musickey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase() , insertid, ".mp3");
+        updateMap.put("music_key", musickey);
         commonDao.updateResourceFieldsById(resource, insertid, updateMap);
 
         resultMap.put("statuscode", 200);
@@ -245,19 +224,18 @@ public class InsertDao {
                     System.out.println("可以创建新明星舞队");
                     commonDao.setResourceAttr(resource, object, key, insertcontents.get(key));
                 }
-            } else if (key.equals("imagekey")) {
-                String imagekey = insertcontents.get(key);
-                resultMap = insertImage(session, resource, object, resultMap, imagekey);
-                if (resultMap.keySet().size() > 0) {
-                    return resultMap;
-                }
             } else if (key.equals("type")) {
                 DanceGroupType type = TypeClassMapping.danceGroupTypeMap.get(insertcontents.get(key));
                 commonDao.setResourceAttr(resource, object, key, type);
-            } else {
+            } else if (key.equals("description")) {
                 commonDao.setResourceAttr(resource, object, key, insertcontents.get(key));
+            } else {
+                System.out.println("wired");
             }
         }
+
+        String imagekey = String.format("dancegroup-imagekey-%s.%s", System.currentTimeMillis(), insertcontents.get("imagetype"));
+        commonDao.setResourceAttr(resource, object, "image", new Image(imagekey));
 
         session.save(object);
 
