@@ -73,7 +73,7 @@ public class DanceGroupDaoTests {
         String authorName = "滨崎步" + System.currentTimeMillis();
         String imagekey = "imagekey-" + System.currentTimeMillis() + ".jpg";
 
-        Integer id = 39;
+        Integer id = 110;
 
         updatecontents.put("name", authorName);
         updatecontents.put("imagekey", imagekey);

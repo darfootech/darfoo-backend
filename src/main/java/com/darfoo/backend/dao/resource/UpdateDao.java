@@ -145,8 +145,6 @@ public class UpdateDao {
                 } else if (key.equals("type")) {
                     DanceVideoType type = TypeClassMapping.danceVideoTypeMap.get(updatecontents.get(key));
                     commonDao.setResourceAttr(resource, object, key, type);
-                } else {
-                    commonDao.setResourceAttr(resource, object, key, updatecontents.get(key));
                 }
             }
 
@@ -255,6 +253,68 @@ public class UpdateDao {
 
             commonDao.setResourceAttr(resource, object, "categories", categories);
 
+            session.saveOrUpdate(object);
+            resultMap.put("statuscode", 200);
+            return resultMap;
+        }
+    }
+
+    public HashMap<String, Integer> updateDanceGroup(Integer id,  HashMap<String, String> updatecontents) {
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria;
+
+        Class resource = DanceGroup.class;
+        Object object = session.get(resource, id);
+
+        if (object == null) {
+            System.out.println("需要更新的资源不存在");
+            resultMap.put("statuscode", 500);
+            return resultMap;
+        } else {
+            for (String key : updatecontents.keySet()) {
+                if (key.equals("name")) {
+                    String name = updatecontents.get(key);
+                    String oldName = commonDao.getResourceAttr(resource, object, key).toString();
+
+                    if (!name.equals("") && name != null && !name.equals(oldName)) {
+                        Object queryResource = commonDao.getResourceByTitleOrName(resource, name, key);
+                        if (queryResource == null) {
+                            commonDao.setResourceAttr(resource, object, key, name);
+                        } else {
+                            resultMap.put("statuscode", 504);
+                            return resultMap;
+                        }
+                    }
+                } else if (key.equals("description")) {
+                    String value = updatecontents.get(key);
+                    String oldValue = commonDao.getResourceAttr(resource, object, key).toString();
+                    if (!value.equals("") && value != null && !value.equals(oldValue)) {
+                        commonDao.setResourceAttr(resource, object, key, value);
+                    }
+                } else if (key.equals("imagekey")) {
+                    String imagekey = updatecontents.get(key);
+                    String oldImagekey = ((DanceGroup) object).getImage().getImage_key();
+
+                    if (!imagekey.equals("") && !imagekey.equals(oldImagekey)) {
+                        if (!ServiceUtils.isValidImageKey(imagekey)) {
+                            resultMap.put("statuscode", 506);
+                            resultMap.put("insertid", -1);
+                            return resultMap;
+                        }
+                        criteria = session.createCriteria(Image.class).add(Restrictions.eq("image_key", imagekey));
+                        if (criteria.list().size() == 1) {
+                            System.out.println("相同imagekey的图片已经存在了");
+                            resultMap.put("statuscode", 507);
+                            resultMap.put("insertid", -1);
+                            return resultMap;
+                        } else {
+                            commonDao.setResourceAttr(resource, object, "image", new Image(imagekey));
+                        }
+                    }
+                }
+            }
             session.saveOrUpdate(object);
             resultMap.put("statuscode", 200);
             return resultMap;
