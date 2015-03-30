@@ -27,11 +27,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="imagekey">舞蹈视频封面图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
-                    <input type="text" class="form-control" name="imagekey" id="imagekey" placeholder="请输入舞蹈视频封面图片名称">
-                </div>
-
-                <div class="form-group">
                     <label for="videotype">舞蹈视频文件格式</label>
                     <select data-toggle="select" name="videotype" id="videotype"
                             class="form-control select select-success mrs mbm">
@@ -41,9 +36,29 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="imagetype">舞蹈图片文件格式</label>
+                    <select data-toggle="select" name="imagetype" id="imagetype"
+                            class="form-control select select-success mrs mbm">
+                        <option value="jpg">jpg</option>
+                        <option value="png">png</option>
+                    </select>
+                </div>
+
+                <select data-toggle="select" id="categories" name="categories" multiple class="form-control multiselect multiselect-default mrs mbm">
+                    <option value="1">正面教学</option>
+                    <option value="2">口令分解</option>
+                    <option value="3">背面教学</option>
+                    <option value="4">队形教学</option>
+                </select>
+
+                <div class="form-group">
                     <label for="connectmusic">视频要关联的伴奏(没有可以暂时不填)</label>
                     <input class="form-control typeahead-only input-lg" name="connectmusic" type="text"
                            id="connectmusic" placeholder="请输入要关联的伴奏并选择"/>
+                </div>
+
+                <div style="display: none">
+                    <input name="innertype" type="text" value="${innertype}"/>
                 </div>
 
                 <button type="button" class="btn btn-default" id="start">提交舞蹈视频信息</button>

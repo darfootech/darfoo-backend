@@ -24,6 +24,8 @@ $(function () {
                     alert("伴奏名字和舞队名字组合已经存在,请修改伴奏名字");
                 } else if (data == "506") {
                     alert("相同名字的明星舞队已经存在");
+                } else if (data == "507") {
+                    alert("资源名字不能为空");
                 } else {
                     alert("提交资源信息失败");
                 }

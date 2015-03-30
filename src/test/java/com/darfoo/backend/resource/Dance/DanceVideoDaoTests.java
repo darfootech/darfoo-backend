@@ -43,8 +43,9 @@ public class DanceVideoDaoTests {
         HashMap<String, String> insertcontents = new HashMap<String, String>();
         String videoTitle = "videotitle-" + System.currentTimeMillis();
         String authorName = "王广成广场舞";
-        String imagekey = "imagekey-" + System.currentTimeMillis() + ".jpg";
+        String imagekey = String.format("dancevideo-imagekey-%s.%s", System.currentTimeMillis(), ".jpg");
 
+        insertcontents.put("imagekey", imagekey);
         insertcontents.put("title", videoTitle);
         insertcontents.put("authorname", authorName);
         insertcontents.put("imagetype", "jpg");

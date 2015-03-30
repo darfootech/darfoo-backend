@@ -39,6 +39,8 @@ public class TypeClassMapping {
     public static HashMap<String, DanceVideoType> danceVideoTypeMap = new HashMap<String, DanceVideoType>();
     public static HashMap<String, DanceGroupType> danceGroupTypeMap = new HashMap<String, DanceGroupType>();
 
+    public static HashMap<String, String> danceVideoCategoryMap = new HashMap<String, String>();
+
     static {
         typeClassMap.put("dancevideo", DanceVideo.class);
         typeClassMap.put("dancemusic", DanceMusic.class);
@@ -83,5 +85,10 @@ public class TypeClassMapping {
         danceVideoTypeMap.put("tutorial", DanceVideoType.TUTORIAL);
         danceGroupTypeMap.put("normal", DanceGroupType.NORMAL);
         danceGroupTypeMap.put("star", DanceGroupType.STAR);
+
+        danceVideoCategoryMap.put("1", "正面教学");
+        danceVideoCategoryMap.put("2", "口令分解");
+        danceVideoCategoryMap.put("3", "背面教学");
+        danceVideoCategoryMap.put("4", "队形教学");
     }
 }

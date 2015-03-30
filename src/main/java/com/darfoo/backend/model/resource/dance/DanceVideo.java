@@ -86,7 +86,6 @@ public class DanceVideo implements Serializable {
     String authorname;
 
     @Transient
-    @ModelInsert
     @ModelUpload(type = ModelUploadEnum.SMALL)
     String imagekey;
 

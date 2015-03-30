@@ -21,6 +21,7 @@ import scala.concurrent.Future;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
@@ -51,9 +52,14 @@ public class UploadController {
         }
 
         if (resource == DanceVideo.class) {
-            insertcontents.put("category1", request.getParameter("videospeed"));
-            insertcontents.put("category2", request.getParameter("videodifficult"));
-            insertcontents.put("category3", request.getParameter("videostyle"));
+            String[] categories = request.getParameterValues("categories");
+            for (String category : categories) {
+                insertcontents.put(String.format("category%s", category), TypeClassMapping.danceVideoCategoryMap.get(category));
+            }
+
+            String imagekey = String.format("dancevideo-imagekey-%s.%s", System.currentTimeMillis(), insertcontents.get("imagetype"));
+            insertcontents.put("imagekey", imagekey);
+            session.setAttribute("imagekey", imagekey);
         }
 
         if (resource == DanceMusic.class) {
@@ -70,7 +76,6 @@ public class UploadController {
 
         if (resource == DanceVideo.class) {
             session.setAttribute("videokey", insertcontents.get("title") + "-" + resource.getSimpleName().toLowerCase() + "-" + insertid + "." + insertcontents.get("videotype"));
-            session.setAttribute("imagekey", insertcontents.get("imagekey"));
         }
 
         if (resource == DanceMusic.class) {
@@ -138,10 +143,11 @@ public class UploadController {
             HashMap<String, Object> conditions = new HashMap<String, Object>();
             conditions.put("type", TypeClassMapping.danceVideoTypeDanceGroupTypeMap.get(danceVideoType));
             modelMap.addAttribute("authors", commonDao.getResourcesByFields(DanceGroup.class, conditions));
-            modelMap.addAttribute("type", danceVideoType);
+            modelMap.addAttribute("type", type);
+            modelMap.addAttribute("innertype", innertype);
         } else if (type.equals("dancegroup")) {
-            DanceGroupType danceGroupType = DanceGroupType.valueOf(innertype.toUpperCase());
-            modelMap.addAttribute("type", danceGroupType);
+            modelMap.addAttribute("type", type);
+            modelMap.addAttribute("innertype", innertype);
         }
 
         return String.format("upload/upload%s", type);
