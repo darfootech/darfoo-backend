@@ -80,10 +80,11 @@ public class DanceVideoDaoTests {
         //updatecontents.put("category2", "口令分解");
         //updatecontents.put("category3", "背面教学");
         //updatecontents.put("category4", "队形教学");
+        updatecontents.put("type", "normal");
         updatecontents.put("category", "");
         updatecontents.put("connectmusic", "");
 
-        HashMap<String, Integer> insertresult = updateDao.updateDanceVideo(id, updatecontents);
+        HashMap<String, Integer> insertresult = commonDao.updateResource(DanceVideo.class, id, updatecontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
     }
 

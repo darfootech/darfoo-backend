@@ -2,10 +2,14 @@ package com.darfoo.backend.dao.resource;
 
 import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
+import com.darfoo.backend.model.cota.DanceVideoType;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -138,6 +142,9 @@ public class UpdateDao {
                             }
                         }
                     }
+                } else if (key.equals("type")) {
+                    DanceVideoType type = TypeClassMapping.danceVideoTypeMap.get(updatecontents.get(key));
+                    commonDao.setResourceAttr(resource, object, key, type);
                 } else {
                     commonDao.setResourceAttr(resource, object, key, updatecontents.get(key));
                 }
@@ -152,6 +159,97 @@ public class UpdateDao {
             commonDao.setResourceAttr(resource, object, "update_timestamp", System.currentTimeMillis());
 
             criteria = session.createCriteria(DanceVideoCategory.class).add(Restrictions.in("title", categoryTitles));
+            List categoryList = criteria.list();
+            Set categories = new HashSet(categoryList);
+
+            commonDao.setResourceAttr(resource, object, "categories", categories);
+
+            session.saveOrUpdate(object);
+            resultMap.put("statuscode", 200);
+            return resultMap;
+        }
+    }
+
+    public HashMap<String, Integer> updateDanceMusic(Integer id, HashMap<String, String> updatecontents) {
+        Set<String> categoryTitles = new HashSet<String>();
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+        boolean isCategoryHasSingleChar = false;
+
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria;
+
+        Class resource = DanceMusic.class;
+        Object object = session.get(resource, id);
+
+        if (object == null) {
+            System.out.println("需要更新的资源不存在");
+            resultMap.put("statuscode", 500);
+            return resultMap;
+        } else {
+            for (String key : updatecontents.keySet()) {
+                if (key.equals("authorname")) {
+                    String authorname = updatecontents.get(key);
+                    if (!authorname.equals("") && authorname != null) {
+                        String oldAuthorname = commonDao.getResourceAttr(resource, object, "authorname").toString();
+                        if (!authorname.equals(oldAuthorname)) {
+                            HashMap<String, Object> conditions = new HashMap<String, Object>();
+                            conditions.put("title", commonDao.getResourceAttr(resource, object, "title"));
+                            conditions.put("authorname", authorname);
+
+                            Object queryOldResource = commonDao.getResourceByFields(resource, conditions);
+
+                            conditions.put("title", updatecontents.get("title"));
+
+                            Object queryResource = commonDao.getResourceByFields(resource, conditions);
+
+                            if (queryOldResource == null && queryResource == null) {
+                                System.out.println("伴奏名字和舞队名字组合不存在，可以进行插入");
+                                commonDao.setResourceAttr(resource, object, key, authorname);
+                            } else {
+                                System.out.println("伴奏名字和舞队名字组合已存在，不可以进行插入了，是否需要修改");
+                                resultMap.put("statuscode", 505);
+                                return resultMap;
+                            }
+                        }
+                    }
+                } else if (key.contains("category")) {
+                    String category = updatecontents.get(key);
+                    if (category != null && !category.equals("")) {
+                        if (ServiceUtils.isSingleCharacter(category)) {
+                            isCategoryHasSingleChar = true;
+                        }
+                        categoryTitles.add(category);
+                    }
+                } else if (key.equals("title")) {
+                    String title = updatecontents.get(key);
+                    String oldTitle = commonDao.getResourceAttr(resource, object, key).toString();
+
+                    if (!title.equals("") && title != null && !title.equals(oldTitle)) {
+                        HashMap<String, Object> conditions = new HashMap<String, Object>();
+                        conditions.put("title", title);
+                        conditions.put("authorname", updatecontents.get("authorname"));
+
+                        Object queryResource = commonDao.getResourceByFields(resource, conditions);
+                        if (queryResource == null) {
+                            System.out.println("伴奏名字和舞队名字组合不存在，可以进行插入");
+                            commonDao.setResourceAttr(resource, object, key, title);
+                        } else {
+                            System.out.println("伴奏名字和舞队名字组合已存在，不可以进行插入了，是否需要修改");
+                            resultMap.put("statuscode", 505);
+                            return resultMap;
+                        }
+                    }
+                }
+            }
+
+            commonDao.setResourceAttr(resource, object, "update_timestamp", System.currentTimeMillis());
+
+            if (!isCategoryHasSingleChar) {
+                resultMap.put("statuscode", 503);
+                return resultMap;
+            }
+
+            criteria = session.createCriteria(DanceMusicCategory.class).add(Restrictions.in("title", categoryTitles));
             List categoryList = criteria.list();
             Set categories = new HashSet(categoryList);
 

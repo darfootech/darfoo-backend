@@ -46,6 +46,22 @@ public class DanceMusicDaoTests {
     }
 
     @Test
+    public void updateMusicById() {
+        HashMap<String, String> updatecontents = new HashMap<String, String>();
+        String musicTitle = "呵呵-" + System.currentTimeMillis();
+        String authorName = "仓木麻衣";
+
+        Integer id = 430;
+
+        updatecontents.put("title", musicTitle);
+        updatecontents.put("authorname", authorName);
+        updatecontents.put("category", "q".toUpperCase());
+
+        HashMap<String, Integer> insertresult = commonDao.updateResource(DanceMusic.class, id, updatecontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
+    }
+
+    @Test
     public void getMusicById() {
         long start = System.currentTimeMillis();
         DanceMusic music = (DanceMusic) commonDao.getResourceById(DanceMusic.class, 30);
@@ -81,24 +97,6 @@ public class DanceMusicDaoTests {
     @Test
     public void deleteMusicById() {
         System.out.println(CRUDEvent.getResponse(commonDao.deleteResourceById(DanceMusic.class, 2)));   //--->DELETE_SUCCESS
-    }
-
-    @Test
-    public void updateMusicById() {
-        HashMap<String, String> updatecontents = new HashMap<String, String>();
-        String musicTitle = "呵呵-" + System.currentTimeMillis();
-        String authorName = "仓木麻衣";
-
-        Integer id = 39;
-
-        updatecontents.put("title", musicTitle);
-        updatecontents.put("authorname", authorName);
-        updatecontents.put("category1", "八拍");
-        updatecontents.put("category2", "戏曲风");
-        updatecontents.put("category3", "q".toUpperCase());
-
-        HashMap<String, Integer> insertresult = commonDao.updateResource(DanceMusic.class, id, updatecontents);
-        System.out.println("statuscode -> " + insertresult.get("statuscode"));
     }
 
     @Test
