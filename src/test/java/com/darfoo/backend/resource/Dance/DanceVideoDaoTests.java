@@ -119,13 +119,15 @@ public class DanceVideoDaoTests {
     public void getVideosByCategory() {
         String request = "0";
         String category = DanceVideoCates.danceVideoCategoryMap.get(request);
-        System.out.println(category);
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("type", DanceVideoType.TUTORIAL);
+        //List<DanceVideo> videos = categoryDao.getResourcesByCategoryWithFields(DanceVideo.class, category, conditions);
         List<DanceVideo> videos = categoryDao.getResourcesByCategory(DanceVideo.class, category);
-        System.out.println("最终满足的video数量 -> " + videos.size());
         for (DanceVideo video : videos) {
             System.out.println(video.getId());
             System.out.println("——————————————————————————————————————");
         }
+        System.out.println("最终满足的video数量 -> " + videos.size());
     }
 
     @Test
