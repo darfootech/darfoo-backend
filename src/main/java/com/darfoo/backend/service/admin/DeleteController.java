@@ -40,7 +40,7 @@ public class DeleteController {
             ServiceUtils.deleteResource(imagekey);
             ServiceUtils.deleteResource(videokey);
         } else if (resource == DanceMusic.class) {
-            String musickey = commonDao.getResourceAttr(resource, object, "music_key").toString() + ".mp3";
+            String musickey = commonDao.getResourceAttr(resource, object, "music_key").toString();
 
             ServiceUtils.deleteResource(musickey);
         } else if (resource == DanceGroup.class) {

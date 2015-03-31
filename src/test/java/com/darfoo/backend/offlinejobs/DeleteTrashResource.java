@@ -85,7 +85,7 @@ public class DeleteTrashResource {
         }
 
         for (DanceMusic music : musicList) {
-            keyList.add(music.getMusic_key() + ".mp3");
+            keyList.add(music.getMusic_key());
         }
 
         for (Image image : imageList) {
