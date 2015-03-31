@@ -110,7 +110,7 @@ public class CacheDao {
                 targetCategories.add(letterCate);
             }*/
         } else if (resource == DanceMusic.class) {
-            if (!requestCategories[0].equals("0")) {
+            /*if (!requestCategories[0].equals("0")) {
                 String beatCate = musicCates.getBeatCategory().get(requestCategories[0]);
                 targetCategories.add(beatCate);
             }
@@ -121,7 +121,7 @@ public class CacheDao {
             if (!requestCategories[2].equals("0")) {
                 String letterCate = requestCategories[2];
                 targetCategories.add(letterCate);
-            }
+            }*/
         } else {
             System.out.println("wired");
         }

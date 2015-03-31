@@ -8,7 +8,6 @@
     $(function () {
         var authorname = $("#oldauthorname").text();
 
-        $('#videotype option[value="' + videotype + '"]').attr("selected", true);
         $('#authorname option[value="' + authorname + '"]').attr("selected", true);
     });
 </script>

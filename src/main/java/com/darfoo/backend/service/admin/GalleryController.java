@@ -63,17 +63,12 @@ public class GalleryController {
         } else if (resource == DanceMusic.class) {
             DanceMusic music = (DanceMusic) object;
             Set<DanceMusicCategory> categories = music.getCategories();
-            /*for (DanceMusicCategory category : categories) {
+            for (DanceMusicCategory category : categories) {
                 String categorytitle = category.getTitle();
-                System.out.println(categorytitle);
-                if (musicCates.getBeatCategory().containsValue(categorytitle)) {
-                    modelMap.addAttribute("beat", categorytitle);
-                } else if (musicCates.getStyleCategory().containsValue(categorytitle)) {
-                    modelMap.addAttribute("style", categorytitle);
-                } else {
+                if (DanceMusicCates.letterCategories.containsValue(categorytitle)) {
                     modelMap.addAttribute("letter", categorytitle);
                 }
-            }*/
+            }
         } else if (resource == UploadNoAuthVideo.class) {
             String videokey = commonDao.getResourceAttr(resource, object, "video_key").toString();
             modelMap.addAttribute("video", object);

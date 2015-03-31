@@ -7,29 +7,12 @@ import java.util.Map;
  * Created by zjh on 14-11-26.
  */
 public class DanceMusicCates {
-    private Map<String, String> beatCategory = new HashMap<String, String>();
-    private Map<String, String> styleCategory = new HashMap<String, String>();
+    public static HashMap<Integer, String> letterCategories = new HashMap<Integer, String>();
+    static String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 
-    private int beatCount = 5;
-    private String[] beatArray = {"全部", "四拍", "八拍", "十六拍", "三十二拍"};
-    private int styleCount = 9;
-    private String[] styleArray = {"全部", "情歌风", "红歌风", "草原风", "戏曲风", "印巴风", "江南风", "民歌风", "儿歌风"};
-
-    public DanceMusicCates() {
-        for (int i = 0; i < beatCount; i++) {
-            beatCategory.put(i + "", beatArray[i]);
+    static {
+        for (int i=0; i<letters.length; i++) {
+            letterCategories.put(i+1, letters[i]);
         }
-
-        for (int i = 0; i < styleCount; i++) {
-            styleCategory.put(i + "", styleArray[i]);
-        }
-    }
-
-    public Map<String, String> getBeatCategory() {
-        return beatCategory;
-    }
-
-    public Map<String, String> getStyleCategory() {
-        return styleCategory;
     }
 }

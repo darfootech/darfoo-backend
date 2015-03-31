@@ -216,7 +216,7 @@ public class InsertDao {
         int insertid = (Integer) commonDao.getResourceAttr(resource, object, "id");
 
         HashMap<String, Object> updateMap = new HashMap<String, Object>();
-        String musickey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase() , insertid, ".mp3");
+        String musickey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase() , insertid, "mp3");
         updateMap.put("music_key", musickey);
         commonDao.updateResourceFieldsById(resource, insertid, updateMap);
 
@@ -271,7 +271,7 @@ public class InsertDao {
             }
         }
 
-        String imagekey = String.format("dancegroup-imagekey-%s.%s", System.currentTimeMillis(), insertcontents.get("imagetype"));
+        String imagekey = insertcontents.get("imagekey");
         commonDao.setResourceAttr(resource, object, "image", new Image(imagekey));
 
         session.save(object);

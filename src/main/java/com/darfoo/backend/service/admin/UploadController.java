@@ -87,7 +87,7 @@ public class UploadController {
         }
 
         if (resource == DanceMusic.class) {
-            String musickey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase() , insertid, ".mp3");
+            String musickey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase() , insertid, "mp3");
             session.setAttribute("musickey", musickey);
         }
         return statuscode;

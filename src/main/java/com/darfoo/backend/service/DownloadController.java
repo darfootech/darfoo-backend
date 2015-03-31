@@ -129,13 +129,13 @@ public class DownloadController {
                     Set<DanceMusicCategory> categories = music.getCategories();
                     for (DanceMusicCategory category : categories) {
                         String categorytitle = category.getTitle();
-                        if (musicCates.getBeatCategory().containsValue(categorytitle)) {
+                        /*if (musicCates.getBeatCategory().containsValue(categorytitle)) {
                             styleMap.put("beat", categorytitle);
                         } else if (musicCates.getStyleCategory().containsValue(categorytitle)) {
                             styleMap.put("style", categorytitle);
                         } else {
                             styleMap.put("letter", categorytitle);
-                        }
+                        }*/
                     }
                     List<String> itemData = new ArrayList<String>();
                     itemData.add(music.getTitle());
