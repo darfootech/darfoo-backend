@@ -6,7 +6,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <form role="form" action="/darfoobackend/rest/resources/musicresource/create" method="post"
+            <form role="form" action="/darfoobackend/rest/resources/dancemusic/resource/create" method="post"
                   enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="musicresource">选择要上传的音频资源(请确保是MP3格式的音频文件)</label>

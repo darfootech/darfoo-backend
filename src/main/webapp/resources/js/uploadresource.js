@@ -9,7 +9,7 @@ $(function () {
             success: function (data) {
                 if (data == "200") {
                     alert("提交资源信息成功");
-                    window.location.href = "/darfoobackend/rest/resources/" + type + "resource/new"
+                    window.location.href = "/darfoobackend/rest/resources/" + type + "/resource/new"
                 } else if (data == "500") {
                     alert("资源名字与明星舞队的组合已经存在,请更换资源标题或者名字");
                 } else if (data == "501") {
@@ -41,7 +41,7 @@ $(function () {
     });
 
     $.ajax({
-        url: '/darfoobackend/rest/resources/music/all/service',
+        url: '/darfoobackend/rest/resources/dancemusic/all/service',
         type: 'GET',
         data: {},
         success: function (response) {

@@ -165,27 +165,27 @@ public class UploadController {
         return commonInsertResource(TypeClassMapping.typeClassMap.get(type), request, session);
     }
 
-    @RequestMapping(value = "/resources/{type}resource/new", method = RequestMethod.GET)
+    @RequestMapping(value = "/resources/{type}/resource/new", method = RequestMethod.GET)
     public String uploadMediaResource(@PathVariable String type) {
         return String.format("upload/upload%sresource", type);
     }
 
-    @RequestMapping(value = "/resources/{type}resource/create")
-    public String createMediaResource(@RequestParam("videoresource") CommonsMultipartFile videoresource, @RequestParam("imageresource") CommonsMultipartFile imageresource, @PathVariable String type, HttpSession session) {
+    @RequestMapping(value = "/resources/dancevideo/resource/create", method = RequestMethod.POST)
+    public String createMediaResource(@RequestParam("videoresource") CommonsMultipartFile videoresource, @RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session) {
         HashMap<String, CommonsMultipartFile> uploadresources = new HashMap<String, CommonsMultipartFile>();
         uploadresources.put("videokey", videoresource);
         uploadresources.put("imagekey", imageresource);
-        return commonUploadResource(TypeClassMapping.typeClassMap.get(type), uploadresources, session);
+        return commonUploadResource(DanceVideo.class, uploadresources, session);
     }
 
-    @RequestMapping("/resources/musicresource/create")
+    @RequestMapping(value = "/resources/dancemusic/resource/create", method = RequestMethod.POST)
     public String createMusicResourceNoPic(@RequestParam("musicresource") CommonsMultipartFile musicresource, HttpSession session) {
         HashMap<String, CommonsMultipartFile> uploadresources = new HashMap<String, CommonsMultipartFile>();
         uploadresources.put("musickey", musicresource);
         return commonUploadResource(DanceMusic.class, uploadresources, session);
     }
 
-    @RequestMapping("/resources/authorresource/create")
+    @RequestMapping(value = "/resources/dancegroup/resource/create", method = RequestMethod.POST)
     public String createAuthorResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session) {
         HashMap<String, CommonsMultipartFile> uploadresources = new HashMap<String, CommonsMultipartFile>();
         uploadresources.put("imagekey", imageresource);

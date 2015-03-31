@@ -6,10 +6,10 @@
 
     <div class="row">
         <div class="col-md-12">
-            <form role="form" action="/darfoobackend/rest/resources/videoresource/create" method="post"
+            <form role="form" action="/darfoobackend/rest/resources/dancevideo/resource/create" method="post"
                   enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="videoresource">选择要上传的视频资源(请确保是MP4格式的视频文件)</label>
+                    <label for="videoresource">选择要上传的视频资源(请确保是MP4或者FLV格式的视频文件)</label>
                     <input type="file" id="videoresource" name="videoresource">
                 </div>
 
