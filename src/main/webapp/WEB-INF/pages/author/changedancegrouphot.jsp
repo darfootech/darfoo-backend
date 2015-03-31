@@ -2,62 +2,60 @@
 <%@include file="../header.jsp" %>
 
 <script>
-    var change_to_normal = [];
-    var change_to_star = [];
+    var change_to_hot = [];
+    var change_to_nothot = [];
 
     $(function () {
-        var type = $("#type").text();
-
-        $(".changetonormal").click(function () {
+        $(".changetohot").click(function () {
             if (parseInt($(this).attr("picked")) == 0) {
                 var eid = $(this).attr("eid");
                 $(this).attr("picked", 1);
                 $(this).parents("li").css("background-color", "green");
-                if ($.inArray(parseInt(eid), change_to_normal) == -1) {
-                    change_to_normal.push(parseInt(eid));
+                if ($.inArray(parseInt(eid), change_to_hot) == -1) {
+                    change_to_hot.push(parseInt(eid));
                 }
-                console.log(change_to_normal);
+                console.log(change_to_hot);
             } else {
                 var eid = $(this).attr("eid");
                 $(this).attr("picked", 0);
                 $(this).parents("li").css("background-color", "white");
-                if ($.inArray(parseInt(eid), change_to_normal) != -1) {
-                    change_to_normal = $.grep(change_to_normal, function (value) {
+                if ($.inArray(parseInt(eid), change_to_hot) != -1) {
+                    change_to_hot = $.grep(change_to_hot, function (value) {
                         return value != parseInt(eid);
                     });
                 }
-                console.log(change_to_normal);
+                console.log(change_to_hot);
             }
         });
 
-        $(".changetostar").click(function () {
+        $(".changetonothot").click(function () {
             if (parseInt($(this).attr("picked")) == 0) {
                 var eid = $(this).attr("eid");
                 $(this).attr("picked", 1);
                 $(this).parents("li").css("background-color", "red");
-                if ($.inArray(parseInt(eid), change_to_star) == -1) {
-                    change_to_star.push(parseInt(eid));
+                if ($.inArray(parseInt(eid), change_to_nothot) == -1) {
+                    change_to_nothot.push(parseInt(eid));
                 }
-                console.log(change_to_star);
+                console.log(change_to_nothot);
             } else {
                 var eid = $(this).attr("eid");
                 $(this).attr("picked", 0);
                 $(this).parents("li").css("background-color", "white");
-                if ($.inArray(parseInt(eid), change_to_star) != -1) {
-                    change_to_star = $.grep(change_to_star, function (value) {
+                if ($.inArray(parseInt(eid), change_to_nothot) != -1) {
+                    change_to_nothot = $.grep(change_to_nothot, function (value) {
                         return value != parseInt(eid);
                     });
                 }
-                console.log(change_to_star);
+                console.log(change_to_nothot);
             }
         });
 
-        $("#changetonormal").click(function () {
-            if (change_to_normal.length == 0) {
-                alert("还没有选择要变为普通舞队的明星舞队");
+        $("#changetohot").click(function () {
+            if (change_to_hot.length == 0) {
+                alert("还没有选择要变为非热门舞队的热门舞队");
             } else {
-                $.post("/darfoobackend/rest/admin/dancegroup/changetype/NORMAL", {
-                    'ids': change_to_normal.join(',')
+                $.post("/darfoobackend/rest/admin/dancegroup/changehot/ISHOT", {
+                    'ids': change_to_hot.join(',')
                 }, function (data) {
                     if (data == 200) {
                         window.location.reload();
@@ -68,12 +66,12 @@
             }
         });
 
-        $("#changetostar").click(function () {
-            if (change_to_star.length == 0) {
-                alert("还没有选择要变为明星舞队的普通舞队");
+        $("#changetonothot").click(function () {
+            if (change_to_nothot.length == 0) {
+                alert("还没有选择要变为热门舞队的非热门舞队");
             } else {
-                $.post("/darfoobackend/rest/admin/dancegroup/changetype/STAR", {
-                    'ids': change_to_star.join(',')
+                $.post("/darfoobackend/rest/admin/dancegroup/changehot/NOTHOT", {
+                    'ids': change_to_nothot.join(',')
                 }, function (data) {
                     if (data == 200) {
                         window.location.reload();
@@ -90,13 +88,13 @@
     <div style="margin-top:33px;"></div>
     <div class="row marketing">
         <div class="col-lg-6">
-            <p><a id="changetonormal" class="btn btn-lg btn-success" href="#" role="button">选中要变为普通舞队的明星舞队然后点这里</a></p>
-            <c:if test="${not empty starauthors}">
+            <p><a id="changetohot" class="btn btn-lg btn-success" href="#" role="button">选中要变为热门舞队的非热门舞队然后点这里</a></p>
+            <c:if test="${not empty nothotdancegroups}">
                 <ul class="list-group">
-                    <c:forEach var="author" items="${starauthors}">
+                    <c:forEach var="dancegroup" items="${nothotdancegroups}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
-                            <div class="content changetonormal" picked="0" eid="${author.id}">
-                                ${author.name}
+                            <div class="content changetohot" picked="0" eid="${dancegroup.id}">
+                                ${dancegroup.name}
                             </div>
                         </li>
                     </c:forEach>
@@ -105,14 +103,14 @@
         </div>
 
         <div class="col-lg-6">
-            <p><a id="changetostar" class="btn btn-lg btn-success" href="#" role="button">选中要变为明星舞队的普通舞队然后点这里</a>
+            <p><a id="changetonothot" class="btn btn-lg btn-success" href="#" role="button">选中要变为非热门舞队的热门舞队然后点这里</a>
             </p>
-            <c:if test="${not empty normalauthors}">
+            <c:if test="${not empty hotdancegroups}">
                 <ul class="list-group">
-                    <c:forEach var="author" items="${normalauthors}">
+                    <c:forEach var="dancegroup" items="${hotdancegroups}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
-                            <div class="content changetostar" picked="0" eid="${author.id}">
-                                ${author.name}
+                            <div class="content changetonothot" picked="0" eid="${dancegroup.id}">
+                                ${dancegroup.name}
                             </div>
                         </li>
                     </c:forEach>

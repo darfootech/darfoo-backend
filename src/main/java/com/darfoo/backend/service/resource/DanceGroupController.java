@@ -2,6 +2,7 @@ package com.darfoo.backend.service.resource;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.DanceVideoDao;
+import com.darfoo.backend.model.cota.DanceGroupHot;
 import com.darfoo.backend.model.cota.DanceGroupType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.service.cota.TypeClassMapping;
@@ -29,21 +30,21 @@ public class DanceGroupController {
     DanceVideoDao danceVideoDao;
 
     @RequestMapping(value = "/admin/dancegroup/changetype", method = RequestMethod.GET)
-    public String prepareChangeAuthorType(ModelMap modelMap) {
+    public String prepareChangeDanceGroupType(ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("type", DanceGroupType.STAR);
-        List starAuthors = commonDao.getResourcesByFields(DanceGroup.class, conditions);
+        List starDanceGroups = commonDao.getResourcesByFields(DanceGroup.class, conditions);
         conditions.put("type", DanceGroupType.NORMAL);
-        List normalAuthors = commonDao.getResourcesByFields(DanceGroup.class, conditions);
-        modelMap.addAttribute("starauthors", starAuthors);
-        modelMap.addAttribute("normalauthors", normalAuthors);
-        return "author/changeauthortype";
+        List normalDanceGroups = commonDao.getResourcesByFields(DanceGroup.class, conditions);
+        modelMap.addAttribute("stardancegroups", starDanceGroups);
+        modelMap.addAttribute("normaldancegroups", normalDanceGroups);
+        return "author/changedancegrouptype";
     }
 
     @RequestMapping(value = "/admin/dancegroup/changetype/{type}", method = RequestMethod.POST)
     public
     @ResponseBody
-    Integer changeAuthorType(@PathVariable DanceGroupType type, HttpServletRequest request) {
+    Integer changeDanceGroupType(@PathVariable DanceGroupType type, HttpServletRequest request) {
         String ids = request.getParameter("ids");
         String[] idArray = ids.split(",");
 
@@ -54,6 +55,35 @@ public class DanceGroupController {
             Integer danceGroupId = Integer.parseInt(id);
             commonDao.updateResourceFieldsById(DanceGroup.class, danceGroupId, conditions);
             danceVideoDao.updateDanceVideoTypeWithDanceGroupId(danceGroupId, TypeClassMapping.danceGroupTypeDanceVideoTypeMap.get(type));
+        }
+        return 200;
+    }
+
+    @RequestMapping(value = "/admin/dancegroup/changehot", method = RequestMethod.GET)
+    public String prepareChangeDanceGroupHot(ModelMap modelMap) {
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("hot", DanceGroupHot.NOTHOT);
+        List nothotDanceGroups = commonDao.getResourcesByFields(DanceGroup.class, conditions);
+        conditions.put("hot", DanceGroupHot.ISHOT);
+        List hotDanceGroups = commonDao.getResourcesByFields(DanceGroup.class, conditions);
+        modelMap.addAttribute("nothotdancegroups", nothotDanceGroups);
+        modelMap.addAttribute("hotdancegroups", hotDanceGroups);
+        return "author/changedancegrouphot";
+    }
+
+    @RequestMapping(value = "/admin/dancegroup/changehot/{hot}", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    Integer changeDanceGroupHot(@PathVariable DanceGroupHot hot, HttpServletRequest request) {
+        String ids = request.getParameter("ids");
+        String[] idArray = ids.split(",");
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("hot", hot);
+
+        for (String id : idArray) {
+            Integer danceGroupId = Integer.parseInt(id);
+            commonDao.updateResourceFieldsById(DanceGroup.class, danceGroupId, conditions);
         }
         return 200;
     }

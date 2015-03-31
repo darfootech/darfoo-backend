@@ -65,6 +65,7 @@
                         <li><a href="/darfoobackend/rest/admin/gallery/dancemusic/all">查看修改舞蹈伴奏</a></li>
                         <li><a href="/darfoobackend/rest/admin/gallery/dancegroup/all">查看修改舞队</a></li>
                         <li><a href="/darfoobackend/rest/admin/dancegroup/changetype">切换舞队类型</a></li>
+                        <li><a href="/darfoobackend/rest/admin/dancegroup/changehot">推荐热门舞队</a></li>
                         <li><a href="/darfoobackend/rest/admin/connectmusic/dancevideo/all">关联舞蹈伴奏和舞蹈视频</a></li>
                     </ul>
                 </li>
