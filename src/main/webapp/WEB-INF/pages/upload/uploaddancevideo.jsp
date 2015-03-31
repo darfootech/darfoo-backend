@@ -44,12 +44,18 @@
                     </select>
                 </div>
 
-                <select data-toggle="select" id="categories" name="categories" multiple class="form-control multiselect multiselect-default mrs mbm">
-                    <option value="1">正面教学</option>
-                    <option value="2">口令分解</option>
-                    <option value="3">背面教学</option>
-                    <option value="4">队形教学</option>
-                </select>
+                <c:choose>
+                    <c:when test="${innertype == 'TUTORIAL'}">
+                        <select data-toggle="select" id="categories" name="categories" multiple class="form-control multiselect multiselect-default mrs mbm">
+                            <option value="1">正面教学</option>
+                            <option value="2">口令分解</option>
+                            <option value="3">背面教学</option>
+                            <option value="4">队形教学</option>
+                        </select>
+                    </c:when>
+                    <c:otherwise>
+                    </c:otherwise>
+                </c:choose>
 
                 <div class="form-group">
                     <label for="connectmusic">视频要关联的伴奏(没有可以暂时不填)</label>

@@ -22,33 +22,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="musicbeat">舞蹈伴奏节拍</label>
-                    <select data-toggle="select" name="musicbeat" id="musicbeat"
-                            class="form-control select select-success mrs mbm">
-                        <option value="四拍">四拍</option>
-                        <option value="八拍">八拍</option>
-                        <option value="十六拍">十六拍</option>
-                        <option value="三十二拍">三十二拍</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="musicstyle">舞蹈伴奏风格</label>
-                    <select data-toggle="select" name="musicstyle" id="musicstyle"
-                            class="form-control select select-success mrs mbm">
-                        <option value="草原风">草原风</option>
-                        <option value="儿歌风">儿歌风</option>
-                        <option value="情歌风">情歌风</option>
-                        <option value="红歌风">红歌风</option>
-                        <option value="戏曲风">戏曲风</option>
-                        <option value="印巴风">印巴风</option>
-                        <option value="江南风">江南风</option>
-                        <option value="民歌风">民歌风</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="musicletter">视频首字母(大小写均可)</label>
+                    <label for="musicletter">伴奏首字母(大小写均可)</label>
                     <input type="text" class="form-control" name="musicletter" id="musicletter"
                            placeholder="请输入舞蹈伴奏首字母,大小写均可">
                 </div>

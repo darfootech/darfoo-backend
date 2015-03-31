@@ -26,6 +26,10 @@ $(function () {
                     alert("相同名字的明星舞队已经存在");
                 } else if (data == "507") {
                     alert("资源名字不能为空");
+                } else if (data == "508") {
+                    alert("作者名字不能为空");
+                } else if (data == "509") {
+                    alert("作者简介不能为空");
                 } else {
                     alert("提交资源信息失败");
                 }

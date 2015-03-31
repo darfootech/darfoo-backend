@@ -155,24 +155,39 @@ public class InsertDao {
         for (String key : insertcontents.keySet()) {
             if (key.equals("title")) {
                 String title = insertcontents.get(key);
-                String authorname = insertcontents.get("authorname");
-                HashMap<String, Object> conditions = new HashMap<String, Object>();
-                conditions.put("title", title);
-                conditions.put("authorname", authorname);
-                Object queryMusic = commonDao.getResourceByFields(resource, conditions);
+                if (!title.equals("")) {
+                    String authorname = insertcontents.get("authorname");
+                    HashMap<String, Object> conditions = new HashMap<String, Object>();
+                    conditions.put("title", title);
+                    conditions.put("authorname", authorname);
+                    Object queryMusic = commonDao.getResourceByFields(resource, conditions);
 
-                if (queryMusic == null) {
-                    System.out.println("伴奏名字和舞队名字组合不存在，可以进行插入");
-                    commonDao.setResourceAttr(resource, object, key, title);
-                    commonDao.setResourceAttr(resource, object, "music_key", title + System.currentTimeMillis());
+                    if (queryMusic == null) {
+                        System.out.println("伴奏名字和舞队名字组合不存在，可以进行插入");
+                        commonDao.setResourceAttr(resource, object, key, title);
+                        commonDao.setResourceAttr(resource, object, "music_key", title + System.currentTimeMillis());
+                    } else {
+                        System.out.println("伴奏名字和舞队名字组合已存在，不可以进行插入了，是否需要修改");
+                        resultMap.put("statuscode", 505);
+                        resultMap.put("insertid", -1);
+                        return resultMap;
+                    }
                 } else {
-                    System.out.println("伴奏名字和舞队名字组合已存在，不可以进行插入了，是否需要修改");
-                    resultMap.put("statuscode", 505);
+                    System.out.println("伴奏名字不能为空");
+                    resultMap.put("statuscode", 507);
                     resultMap.put("insertid", -1);
                     return resultMap;
                 }
             } else if (key.equals("authorname")) {
-                commonDao.setResourceAttr(resource, object, key, insertcontents.get(key));
+                String authorname = insertcontents.get("authorname");
+                if (!authorname.equals("")) {
+                    commonDao.setResourceAttr(resource, object, key, insertcontents.get(key));
+                } else {
+                    System.out.println("作者名字不能为空");
+                    resultMap.put("statuscode", 508);
+                    resultMap.put("insertid", -1);
+                    return resultMap;
+                }
             } else if (key.contains("category")) {
                 String category = insertcontents.get(key);
                 if (ServiceUtils.isSingleCharacter(category)) {
@@ -222,20 +237,35 @@ public class InsertDao {
         for (String key : insertcontents.keySet()) {
             if (key.equals("name")) {
                 String name = insertcontents.get(key);
-                if (commonDao.isResourceExistsByField(DanceGroup.class, "name", name)) {
-                    System.out.println("相同名字明星舞队已存在，不能创建新明星舞队");
-                    resultMap.put("statuscode", 506);
+                if (!name.equals("")) {
+                    if (commonDao.isResourceExistsByField(DanceGroup.class, "name", name)) {
+                        System.out.println("相同名字明星舞队已存在，不能创建新明星舞队");
+                        resultMap.put("statuscode", 506);
+                        resultMap.put("insertid", -1);
+                        return resultMap;
+                    } else {
+                        System.out.println("可以创建新明星舞队");
+                        commonDao.setResourceAttr(resource, object, key, insertcontents.get(key));
+                    }
+                } else {
+                    System.out.println("舞队名字不能为空");
+                    resultMap.put("statuscode", 508);
                     resultMap.put("insertid", -1);
                     return resultMap;
-                } else {
-                    System.out.println("可以创建新明星舞队");
-                    commonDao.setResourceAttr(resource, object, key, insertcontents.get(key));
                 }
             } else if (key.equals("type")) {
                 DanceGroupType type = TypeClassMapping.danceGroupTypeMap.get(insertcontents.get(key));
                 commonDao.setResourceAttr(resource, object, key, type);
             } else if (key.equals("description")) {
-                commonDao.setResourceAttr(resource, object, key, insertcontents.get(key));
+                String description = insertcontents.get(key);
+                if (!description.equals("")) {
+                    commonDao.setResourceAttr(resource, object, key, insertcontents.get(key));
+                } else {
+                    System.out.println("舞队简介不能为空");
+                    resultMap.put("statuscode", 509);
+                    resultMap.put("insertid", -1);
+                    return resultMap;
+                }
             } else {
                 System.out.println("wired");
             }

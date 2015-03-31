@@ -19,10 +19,11 @@
                     <label for="description">明星舞队简介</label>
                     <input type="text" class="form-control" name="description" id="description" placeholder="请输入明星舞队简介">
                 </div>
-                <div class="form-group">
-                    <label for="imagekey">明星舞队图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
-                    <input type="text" class="form-control" name="imagekey" id="imagekey" placeholder="请输入明星舞队图片名称">
+
+                <div style="display: none">
+                    <input name="innertype" type="text" value="${innertype}"/>
                 </div>
+
                 <button type="button" class="btn btn-default" id="start">创建明星舞队</button>
             </form>
         </div>

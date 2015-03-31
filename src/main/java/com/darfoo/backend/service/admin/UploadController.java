@@ -60,18 +60,18 @@ public class UploadController {
                     insertcontents.put(String.format("category%s", category), TypeClassMapping.danceVideoCategoryMap.get(category));
                 }
             }
+        }
 
-            String imagekey = String.format("dancevideo-imagekey-%s.%s", System.currentTimeMillis(), request.getParameter("imagetype"));
-            insertcontents.put("imagekey", imagekey);
-
+        if (resource == DanceVideo.class || resource == DanceGroup.class) {
             insertcontents.put("type", request.getParameter("innertype").toLowerCase());
+
+            String imagekey = String.format("%s-imagekey-%s.%s", resource.getSimpleName().toLowerCase(), System.currentTimeMillis(), request.getParameter("imagetype"));
+            insertcontents.put("imagekey", imagekey);
             session.setAttribute("imagekey", imagekey);
         }
 
         if (resource == DanceMusic.class) {
-            insertcontents.put("category1", request.getParameter("musicbeat"));
-            insertcontents.put("category2", request.getParameter("musicstyle"));
-            insertcontents.put("category3", request.getParameter("musicletter").toUpperCase());
+            insertcontents.put("category", request.getParameter("musicletter").toUpperCase());
         }
 
         HashMap<String, Integer> result = commonDao.insertResource(resource, insertcontents);
@@ -86,13 +86,9 @@ public class UploadController {
         }
 
         if (resource == DanceMusic.class) {
-            session.setAttribute("musickey", insertcontents.get("title") + "-" + insertid + ".mp3");
+            String musickey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase() , insertid, ".mp3");
+            session.setAttribute("musickey", musickey);
         }
-
-        if (resource == DanceGroup.class) {
-            session.setAttribute("imagekey", insertcontents.get("imagekey"));
-        }
-
         return statuscode;
     }
 
