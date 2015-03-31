@@ -47,10 +47,10 @@
                 <c:choose>
                     <c:when test="${innertype == 'TUTORIAL'}">
                         <select data-toggle="select" id="categories" name="categories" multiple class="form-control multiselect multiselect-default mrs mbm">
-                            <option value="1">正面教学</option>
-                            <option value="2">口令分解</option>
-                            <option value="3">背面教学</option>
-                            <option value="4">队形教学</option>
+                            <option value="0">正面教学</option>
+                            <option value="1">口令分解</option>
+                            <option value="2">背面教学</option>
+                            <option value="3">队形教学</option>
                         </select>
                     </c:when>
                     <c:otherwise>

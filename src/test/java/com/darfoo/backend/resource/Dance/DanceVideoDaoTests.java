@@ -4,10 +4,9 @@ import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.*;
 import com.darfoo.backend.dao.resource.InsertDao;
 import com.darfoo.backend.dao.resource.UpdateDao;
-import com.darfoo.backend.model.cota.DanceVideoType;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
-import com.darfoo.backend.service.responsemodel.VideoCates;
+import com.darfoo.backend.service.responsemodel.DanceVideoCates;
 import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +35,7 @@ public class DanceVideoDaoTests {
     @Autowired
     UpdateDao updateDao;
 
-    VideoCates videoCates = new VideoCates();
+    DanceVideoCates videoCates = new DanceVideoCates();
 
     @Test
     public void insertVideoResource() {
@@ -145,7 +144,7 @@ public class DanceVideoDaoTests {
         String categories = "0-1-4-3";
         String[] requestCategories = categories.split("-");
         List<String> targetCategories = new ArrayList<String>();
-        if (!requestCategories[0].equals("0")) {
+        /*if (!requestCategories[0].equals("0")) {
             String speedCate = videoCates.getSpeedCategory().get(requestCategories[0]);
             targetCategories.add(speedCate);
         }
@@ -161,7 +160,7 @@ public class DanceVideoDaoTests {
         if (!requestCategories[3].equals("0")) {
             String letterCate = requestCategories[3];
             targetCategories.add(letterCate);
-        }
+        }*/
 
         System.out.println(targetCategories.toString());
         System.out.println(requestCategories[0]);

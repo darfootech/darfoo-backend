@@ -7,9 +7,8 @@ import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.CacheCollType;
-import com.darfoo.backend.service.responsemodel.MusicCates;
-import com.darfoo.backend.service.responsemodel.TutorialCates;
-import com.darfoo.backend.service.responsemodel.VideoCates;
+import com.darfoo.backend.service.responsemodel.DanceMusicCates;
+import com.darfoo.backend.service.responsemodel.DanceVideoCates;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -28,11 +27,9 @@ public class CacheDao {
     @Autowired
     CommonDao commonDao;
     @Autowired
-    VideoCates videoCates;
+    DanceVideoCates videoCates;
     @Autowired
-    TutorialCates tutorialCates;
-    @Autowired
-    MusicCates musicCates;
+    DanceMusicCates musicCates;
 
     public boolean insertSingleResource(Class resource, Object object, String prefix) {
         return cacheProtocol.insertResourceIntoCache(resource, object, prefix);
@@ -96,7 +93,7 @@ public class CacheDao {
         List<String> targetCategories = new ArrayList<String>();
 
         if (resource == DanceVideo.class) {
-            if (!requestCategories[0].equals("0")) {
+            /*if (!requestCategories[0].equals("0")) {
                 String speedCate = videoCates.getSpeedCategory().get(requestCategories[0]);
                 targetCategories.add(speedCate);
             }
@@ -111,7 +108,7 @@ public class CacheDao {
             if (!requestCategories[3].equals("0")) {
                 String letterCate = requestCategories[3];
                 targetCategories.add(letterCate);
-            }
+            }*/
         } else if (resource == DanceMusic.class) {
             if (!requestCategories[0].equals("0")) {
                 String beatCate = musicCates.getBeatCategory().get(requestCategories[0]);

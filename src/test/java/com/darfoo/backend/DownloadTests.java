@@ -15,9 +15,8 @@ import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
 import com.darfoo.backend.service.cota.TypeClassMapping;
-import com.darfoo.backend.service.responsemodel.MusicCates;
-import com.darfoo.backend.service.responsemodel.TutorialCates;
-import com.darfoo.backend.service.responsemodel.VideoCates;
+import com.darfoo.backend.service.responsemodel.DanceMusicCates;
+import com.darfoo.backend.service.responsemodel.DanceVideoCates;
 import com.darfoo.backend.utils.DiskFileDirConfig;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
@@ -46,11 +45,9 @@ public class DownloadTests {
     @Autowired
     CommonDao commonDao;
     @Autowired
-    VideoCates videoCates;
+    DanceVideoCates videoCates;
     @Autowired
-    TutorialCates tutorialCates;
-    @Autowired
-    MusicCates musicCates;
+    DanceMusicCates musicCates;
     @Autowired
     StatisticsDao statisticsDao;
 
@@ -83,7 +80,7 @@ public class DownloadTests {
                     Set<DanceVideoCategory> categories = video.getCategories();
                     for (DanceVideoCategory category : categories) {
                         String categorytitle = category.getTitle();
-                        if (tutorialCates.getSpeedCategory().containsValue(categorytitle)) {
+                        /*if (tutorialCates.getSpeedCategory().containsValue(categorytitle)) {
                             styleMap.put("speed", categorytitle);
                         } else if (tutorialCates.getDifficultyCategory().containsValue(categorytitle)) {
                             styleMap.put("difficult", categorytitle);
@@ -91,7 +88,7 @@ public class DownloadTests {
                             styleMap.put("style", categorytitle);
                         } else {
                             System.out.println("something is wrong with the category");
-                        }
+                        }*/
                     }
                     List<String> itemData = new ArrayList<String>();
                     itemData.add(video.getTitle());

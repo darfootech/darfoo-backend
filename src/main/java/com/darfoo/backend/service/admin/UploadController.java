@@ -9,6 +9,7 @@ import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.ActorSysContainer;
 import com.darfoo.backend.service.cota.TypeClassMapping;
+import com.darfoo.backend.service.responsemodel.DanceVideoCates;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -57,7 +58,7 @@ public class UploadController {
                 insertcontents.put("category", "");
             } else {
                 for (String category : categories) {
-                    insertcontents.put(String.format("category%s", category), TypeClassMapping.danceVideoCategoryMap.get(category));
+                    insertcontents.put(String.format("category%s", category), DanceVideoCates.danceVideoCategoryMap.get(category));
                 }
             }
         }
