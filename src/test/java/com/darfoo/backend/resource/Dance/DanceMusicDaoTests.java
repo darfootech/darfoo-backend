@@ -77,21 +77,12 @@ public class DanceMusicDaoTests {
 
     @Test
     public void getMusicsByCategories() {
-        long start = System.currentTimeMillis();
-        String[] categories = {};//无条件限制
-        //String[] categories = {"四拍", "情歌风", "D"}; //满足所有条件
-        //String[] categories = {"四拍"}; //满足个别条件
-        //String[] categories = {"四拍","情歌风","0"};//最后一个条件不满足
-        List<DanceMusic> musics = categoryDao.getResourcesByCategories(DanceMusic.class, categories);
-        Set<Integer> musicids = new HashSet<Integer>();
+        String letterCategory = "A";
+        List<DanceMusic> musics = categoryDao.getResourcesByCategory(DanceMusic.class, letterCategory);
         for (DanceMusic music : musics) {
             System.out.println(music.toString());
             System.out.println("——————————————————————————————————————");
-            musicids.add(music.getId());
         }
-        System.out.println("最终满足的music数量 -> " + musics.size());
-        System.out.println("distinct music id -> " + musicids.size());
-        System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }
 
     @Test

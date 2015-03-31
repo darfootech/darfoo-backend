@@ -91,10 +91,8 @@ public class DanceVideoDaoTests {
 
     @Test
     public void getVideoByVideoId() {
-        long start = System.currentTimeMillis();
-        DanceVideo video = (DanceVideo) commonDao.getResourceById(DanceVideo.class, 59);
+        DanceVideo video = (DanceVideo) commonDao.getResourceById(DanceVideo.class, 1075);
         System.out.println(video.toString(true));
-        System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }
 
     /**
@@ -119,18 +117,15 @@ public class DanceVideoDaoTests {
 
     @Test
     public void getVideosByCategory() {
-        long start = System.currentTimeMillis();
-        //String[] categories = {};//无条件限制
-        //String[] categories = {"较快","稍难","情歌风","S"}; //满足所有条件
-        //String[] categories = {"较快","普通","优美","0"}; //有一个条件不满足
-        String[] categories = {"较快"};//满足单个条件
-        List<DanceVideo> videos = categoryDao.getResourcesByCategories(DanceVideo.class, categories);
+        String request = "0";
+        String category = DanceVideoCates.danceVideoCategoryMap.get(request);
+        System.out.println(category);
+        List<DanceVideo> videos = categoryDao.getResourcesByCategory(DanceVideo.class, category);
         System.out.println("最终满足的video数量 -> " + videos.size());
         for (DanceVideo video : videos) {
             System.out.println(video.getId());
             System.out.println("——————————————————————————————————————");
         }
-        System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }
 
     @Test

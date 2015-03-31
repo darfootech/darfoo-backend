@@ -64,67 +64,22 @@ public class CategoryDao {
 
     /**
      * 根据类别返回满足类别筛选条件的所有资源记录
-     * (较快-简单—欢快-A) -> {"较快","简单","欢快","A"}
-     * 一个类别属性没有选择就表示只要考虑剩下的类别属性来筛选资源记录
      *
      * @param resource
-     * @param categories
+     * @param category
      * @return
      */
-    public List getResourcesByCategories(Class resource, String[] categories) {
-        List result = new ArrayList();
-        try {
-            List<Integer> l_interact_id = new ArrayList<Integer>(); //存符合部分条件的video id
-            for (int i = 0; i < categories.length; i++) {
-                List<Integer> l_id = commonDao.getCommonQueryCriteria(resource)
-                        .addOrder(Order.desc("id"))
-                        .setProjection(Projections.property("id"))
-                        .createCriteria("categories").add(Restrictions.eq("title", categories[i]))
-                        .list();
+    public List getResourcesByCategory(Class resource, String category) {
+        List resultids = commonDao.getCommonQueryCriteria(resource)
+                .addOrder(Order.desc("id"))
+                //如果不映射一下就会查询超时
+                .setProjection(Projections.property("id"))
+                .createCriteria("categories").add(Restrictions.eq("title", category))
+                .list();
 
-                System.out.println("满足条件 " + categories[i] + " 的video数量 -> " + l_id.size());
-
-                if (l_id.size() == 0) {
-                    //只要有一项查询结果长度为0，说明视频表无法满足该种类组合，返回一个空的List<Video>对象,长度为0
-                    result = new ArrayList();
-                    l_interact_id.clear();//清空，表示无交集
-                    break;
-                } else {
-                    if (l_interact_id.size() == 0) {
-                        l_interact_id = l_id;
-                        continue;
-                    } else {
-                        l_interact_id.retainAll(l_id);
-                        boolean hasItersection = l_interact_id.size() > 0 ? true : false;
-                        if (!hasItersection) {
-                            //之前查询的结果与当前的无交集，说明视频表无法满足该种类组合，返回一个空的List<Video>对象,长度为0
-                            result = new ArrayList();
-                            break;
-                        }
-                    }
-                }
-            }
-            if (categories.length == 0) {
-                //categories长度为0，即没有筛选条件,返回所有视频
-                l_interact_id = commonDao.getCommonQueryCriteria(resource)
-                        .addOrder(Order.desc("id"))
-                        .setProjection(Projections.property("id"))
-                        .list();
-            }
-
-            if (l_interact_id.size() > 0) {
-                //交集内的id数量大于0个
-                return commonDao.getCommonQueryCriteria(resource)
-                        .addOrder(Order.desc("id"))
-                        .add(Restrictions.in("id", l_interact_id))
-                        .list();
-            } else {
-                return result;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //Collections.reverse(l_video);
-        return result;
+        return commonDao.getCommonQueryCriteria(resource)
+                .addOrder(Order.desc("id"))
+                .add(Restrictions.in("id", resultids))
+                .list();
     }
 }

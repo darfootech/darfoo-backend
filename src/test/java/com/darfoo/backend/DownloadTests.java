@@ -123,13 +123,13 @@ public class DownloadTests {
                     Set<DanceMusicCategory> categories = music.getCategories();
                     for (DanceMusicCategory category : categories) {
                         String categorytitle = category.getTitle();
-                        if (musicCates.getBeatCategory().containsValue(categorytitle)) {
+                        /*if (musicCates.getBeatCategory().containsValue(categorytitle)) {
                             styleMap.put("beat", categorytitle);
                         } else if (musicCates.getStyleCategory().containsValue(categorytitle)) {
                             styleMap.put("style", categorytitle);
                         } else {
                             styleMap.put("letter", categorytitle);
-                        }
+                        }*/
                     }
                     List<String> itemData = new ArrayList<String>();
                     itemData.add(music.getTitle());
@@ -228,7 +228,7 @@ public class DownloadTests {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", authorid);
 
-        Class videoClass = TypeClassMapping.authorTypeClassMap.get(DanceGroupType.NORMAL);
+        Class videoClass = DanceVideo.class;
         List videos = commonDao.getResourcesByFields(videoClass, conditions);
 
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');

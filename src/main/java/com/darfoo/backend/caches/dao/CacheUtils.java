@@ -59,7 +59,8 @@ public class CacheUtils {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         String cachekey = String.format("%scategory%s", type, categories);
 
-        List resources = categoryDao.getResourcesByCategories(resource, ServiceUtils.convertList2Array(cacheDao.parseResourceCategories(resource, categories)));
+        //List resources = categoryDao.getResourcesByCategories(resource, ServiceUtils.convertList2Array(cacheDao.parseResourceCategories(resource, categories)));
+        List resources = null;
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
         return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
     }
