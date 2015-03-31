@@ -30,7 +30,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             if (dashboardDao.isDashboardOpen()) {
                 System.out.println("在请求登陆页面");
                 if (request.getSession() != null && request.getSession().getAttribute("loginUser") != null) {
-                    response.sendRedirect(request.getContextPath() + "/rest/resources/video/new");
+                    response.sendRedirect(request.getContextPath() + "/rest/resources/new/dancevideo");
                 } else {
                     return true;
                 }

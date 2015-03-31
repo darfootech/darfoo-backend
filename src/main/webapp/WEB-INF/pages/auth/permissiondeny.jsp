@@ -47,7 +47,7 @@
             success: function (data) {
                 if (data == "200") {
                     alert("登陆成功");
-                    window.location.href = "/darfoobackend/rest/resources/video/new"
+                    window.location.href = "/darfoobackend/rest/resources/new/dancevideo"
                 } else if (data == "501") {
                     alert("登陆失败，用户名或者密码错误");
                 }
