@@ -4,6 +4,7 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
 import com.darfoo.backend.model.cota.DanceGroupType;
+import com.darfoo.backend.model.cota.DanceVideoType;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -50,24 +52,37 @@ public class GalleryController {
         return "resource/allresources";
     }
 
-    @RequestMapping(value = "/admin/gallery/author/{type}/all", method = RequestMethod.GET)
-    public String showAllAuthor(@PathVariable DanceGroupType type, ModelMap modelMap) {
+    @RequestMapping(value = "/admin/gallery/all/{type}/{innertype}", method = RequestMethod.GET)
+    public String showAllAuthor(@PathVariable String type, @PathVariable String innertype, ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("type", type);
-        List resources = commonDao.getResourcesByFields(DanceGroup.class, conditions);
-        return galleryAllResources(resources, modelMap, "author");
+        conditions.put("type", Enum.valueOf(TypeClassMapping.innerTypeClassMap.get(type), innertype));
+        List resources = commonDao.getResourcesByFields(TypeClassMapping.typeClassMap.get(type), conditions);
+        /*if (type.equals("dancevideo")) {
+            conditions.put("type", DanceVideoType.valueOf(innertype));
+            resources = commonDao.getResourcesByFields(DanceVideo.class, conditions);
+        }
+        if (type.equals("dancegroup")) {
+            conditions.put("type", DanceGroupType.valueOf(innertype));
+            resources = commonDao.getResourcesByFields(DanceGroup.class, conditions);
+        }*/
+        return galleryAllResources(resources, modelMap, type);
     }
 
     @RequestMapping(value = "/admin/gallery/{type}/all", method = RequestMethod.GET)
     public String showAllResource(@PathVariable String type, ModelMap modelMap) {
-        if (type.equals("author")) {
-            modelMap.addAttribute("type", "manage");
-            modelMap.addAttribute("typenames", TypeClassMapping.danceGroupTypeNameMap);
-            return "author/allauthortype";
-        } else {
+        if (type.equals("dancegroup")) {
+            modelMap.put("typenames", TypeClassMapping.danceGroupTypeNameMap);
+        }
+        if (type.equals("dancevideo")) {
+            modelMap.put("typenames", TypeClassMapping.danceVideoTypeNameMap);
+        }
+        if (type.equals("dancemusic")) {
             List resources = commonDao.getAllResource(TypeClassMapping.typeClassMap.get(type));
             return galleryAllResources(resources, modelMap, type);
         }
+        modelMap.addAttribute("operation", "manage");
+        modelMap.put("type", type);
+        return "resource/resourcetype";
     }
 
     private ModelMap getResourceModelMap(Class resource, Integer id, ModelMap modelMap) {

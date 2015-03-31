@@ -135,8 +135,9 @@ public class UploadController {
         if (type.equals("dancemusic")) {
             return "upload/uploaddancemusic";
         }
+        modelMap.put("operation", "upload");
         modelMap.put("type", type);
-        return "upload/uploadresource";
+        return "resource/resourcetype";
     }
 
     @RequestMapping(value = "/resources/new/{type}/{innertype}", method = RequestMethod.GET)

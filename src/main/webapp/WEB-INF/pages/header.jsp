@@ -59,6 +59,17 @@
                 </li>
 
                 <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">查看和修改资源 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/darfoobackend/rest/admin/gallery/dancevideo/all">查看修改舞蹈视频</a></li>
+                        <li><a href="/darfoobackend/rest/admin/gallery/dancemusic/all">查看修改舞蹈伴奏</a></li>
+                        <li><a href="/darfoobackend/rest/admin/gallery/dancegroup/all">查看修改舞队</a></li>
+                        <li><a href="/darfoobackend/rest/admin/dancegroup/changetype">切换舞队类型</a></li>
+                        <li><a href="/darfoobackend/rest/admin/connectmusic/dancevideo/all">关联舞蹈伴奏和舞蹈视频</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">下载表格 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="/darfoobackend/rest/admin/download/dancevideo">下载视舞蹈频资源表格</a></li>
@@ -72,17 +83,6 @@
                         <li><a href="/darfoobackend/rest/admin/download/stat/tabclicktime">下载底部菜单点击时间表格</a></li>
                         <li><a href="/darfoobackend/rest/admin/download/stat/searchhistory">下载用户搜索记录表格</a></li>
                         <li><a href="/darfoobackend/rest/admin/download/stat/crashlog">下载崩溃日志表格</a></li>
-                    </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">查看和修改资源 <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/darfoobackend/rest/admin/gallery/dancevideo/all">查看修改舞蹈视频</a></li>
-                        <li><a href="/darfoobackend/rest/admin/gallery/dancemusic/all">查看修改舞蹈伴奏</a></li>
-                        <li><a href="/darfoobackend/rest/admin/gallery/dancegroup/all">查看修改舞队</a></li>
-                        <li><a href="/darfoobackend/rest/admin/dancegroup/changetype">切换舞队类型</a></li>
-                        <li><a href="/darfoobackend/rest/admin/connectmusic/dancevideo/all">关联舞蹈伴奏和舞蹈视频</a></li>
                     </ul>
                 </li>
 

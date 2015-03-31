@@ -26,6 +26,7 @@ import java.util.HashMap;
  */
 public class TypeClassMapping {
     public static HashMap<String, Class> typeClassMap = new HashMap<String, Class>();
+    public static HashMap<String, Class> innerTypeClassMap = new HashMap<String, Class>();
     public static HashMap<String, Class> cacheResponseMap = new HashMap<String, Class>();
     public static HashMap<String, Class> clickCountStatMap = new HashMap<String, Class>();
     public static HashMap<String, Class> clickTimeStatMap = new HashMap<String, Class>();
@@ -45,6 +46,7 @@ public class TypeClassMapping {
         typeClassMap.put("dancevideo", DanceVideo.class);
         typeClassMap.put("dancemusic", DanceMusic.class);
         typeClassMap.put("dancegroup", DanceGroup.class);
+
         typeClassMap.put("uploadnoauthvideo", UploadNoAuthVideo.class);
         typeClassMap.put("resourceclickcount", ResourceClickCount.class);
         typeClassMap.put("menuclickcount", MenuClickCount.class);
@@ -55,6 +57,9 @@ public class TypeClassMapping {
         typeClassMap.put("searchhistory", SearchHistory.class);
         typeClassMap.put("feedback", Feedback.class);
         typeClassMap.put("crashlog", CrashLog.class);
+
+        innerTypeClassMap.put("dancevideo", DanceVideoType.class);
+        innerTypeClassMap.put("dancegroup", DanceGroupType.class);
 
         cacheResponseMap.put("video", SingleVideo.class);
         cacheResponseMap.put("tutorial", SingleVideo.class);
