@@ -160,11 +160,11 @@ public class GalleryController {
         return String.format("resource/single%s", type);
     }
 
-    @RequestMapping(value = "/admin/author/{type}/videos/{id}", method = RequestMethod.GET)
-    public String showAuthorVideos(@PathVariable DanceGroupType type, @PathVariable Integer id, ModelMap modelMap) {
+    @RequestMapping(value = "/admin/author/videos/{id}", method = RequestMethod.GET)
+    public String showAuthorVideos(@PathVariable Integer id, ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", id);
-        List videos = commonDao.getResourcesByFields(TypeClassMapping.authorTypeClassMap.get(type), conditions);
-        return galleryAllResources(videos, modelMap, TypeClassMapping.authorTypeVideoTypeMap.get(type));
+        List videos = commonDao.getResourcesByFields(DanceVideo.class, conditions);
+        return galleryAllResources(videos, modelMap, "dancevideo");
     }
 }

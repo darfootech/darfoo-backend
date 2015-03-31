@@ -2,8 +2,10 @@ package com.darfoo.backend.resource.Dance;
 
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.*;
+import com.darfoo.backend.dao.resource.DanceVideoDao;
 import com.darfoo.backend.dao.resource.InsertDao;
 import com.darfoo.backend.dao.resource.UpdateDao;
+import com.darfoo.backend.model.cota.DanceVideoType;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.responsemodel.DanceVideoCates;
@@ -31,9 +33,7 @@ public class DanceVideoDaoTests {
     @Autowired
     AccompanyDao accompanyDao;
     @Autowired
-    InsertDao insertDao;
-    @Autowired
-    UpdateDao updateDao;
+    DanceVideoDao danceVideoDao;
 
     DanceVideoCates videoCates = new DanceVideoCates();
 
@@ -416,5 +416,12 @@ public class DanceVideoDaoTests {
         for (DanceVideo video : videos) {
             System.out.println(video.getTitle());
         }
+    }
+
+    @Test
+    public void changeVideoTypeWithGroupId() {
+        Integer danceGroupId = 109;
+        DanceVideoType targetType = DanceVideoType.NORMAL;
+        danceVideoDao.updateDanceVideoTypeWithDanceGroupId(danceGroupId, targetType);
     }
 }

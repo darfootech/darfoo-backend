@@ -30,9 +30,9 @@ public class TypeClassMapping {
     public static HashMap<String, Class> cacheResponseMap = new HashMap<String, Class>();
     public static HashMap<String, Class> clickCountStatMap = new HashMap<String, Class>();
     public static HashMap<String, Class> clickTimeStatMap = new HashMap<String, Class>();
-    public static HashMap<DanceGroupType, Class> authorTypeClassMap = new HashMap<DanceGroupType, Class>();
+
+    public static HashMap<DanceGroupType, DanceVideoType> danceGroupTypeDanceVideoTypeMap = new HashMap<DanceGroupType, DanceVideoType>();
     public static HashMap<DanceVideoType, DanceGroupType> danceVideoTypeDanceGroupTypeMap = new HashMap<DanceVideoType, DanceGroupType>();
-    public static HashMap<DanceGroupType, String> authorTypeVideoTypeMap = new HashMap<DanceGroupType, String>();
 
     public static HashMap<DanceVideoType, String> danceVideoTypeNameMap = new HashMap<DanceVideoType, String>();
     public static HashMap<DanceGroupType, String> danceGroupTypeNameMap = new HashMap<DanceGroupType, String>();
@@ -70,14 +70,10 @@ public class TypeClassMapping {
         clickTimeStatMap.put("menu", MenuClickTime.class);
         clickTimeStatMap.put("tab", TabClickTime.class);
 
-        authorTypeClassMap.put(DanceGroupType.STAR, DanceVideo.class);
-        authorTypeClassMap.put(DanceGroupType.NORMAL, DanceVideo.class);
-
+        danceGroupTypeDanceVideoTypeMap.put(DanceGroupType.NORMAL, DanceVideoType.NORMAL);
+        danceGroupTypeDanceVideoTypeMap.put(DanceGroupType.STAR, DanceVideoType.TUTORIAL);
         danceVideoTypeDanceGroupTypeMap.put(DanceVideoType.NORMAL, DanceGroupType.NORMAL);
         danceVideoTypeDanceGroupTypeMap.put(DanceVideoType.TUTORIAL, DanceGroupType.STAR);
-
-        authorTypeVideoTypeMap.put(DanceGroupType.NORMAL, "video");
-        authorTypeVideoTypeMap.put(DanceGroupType.STAR, "tutorial");
 
         danceVideoTypeNameMap.put(DanceVideoType.NORMAL, "欣赏视频");
         danceVideoTypeNameMap.put(DanceVideoType.TUTORIAL, "教学视频");

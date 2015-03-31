@@ -18,7 +18,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/resources/music")
-public class MusicController {
+public class DanceMusicController {
     @Autowired
     CommonDao commonDao;
 

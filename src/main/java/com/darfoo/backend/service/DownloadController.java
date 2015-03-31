@@ -243,7 +243,7 @@ public class DownloadController {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", id);
 
-        Class videoClass = TypeClassMapping.authorTypeClassMap.get(type);
+        Class videoClass = DanceVideo.class;
         List videos = commonDao.getResourcesByFields(videoClass, conditions);
 
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');

@@ -21,8 +21,8 @@
 
                 <div class="form-group">
                     <label for="description">舞队简介</label>
-                    <input type="text" class="form-control" name="description" id="description"
-                           placeholder="${author.description}"/>
+                    <textarea type="text" class="form-control" name="description" id="description"
+                           placeholder="${author.description}"></textarea>
                 </div>
 
                 <c:choose>
@@ -64,7 +64,7 @@
                         下载舞队视频资源表格
                     </button>
                 </a>
-                <a href="/darfoobackend/rest/admin/author/${author.type}/videos/${author.id}">
+                <a href="/darfoobackend/rest/admin/author/videos/${author.id}">
                     <button type="button" class="btn btn-default">
                         查看和舞队关联的视频资源
                     </button>

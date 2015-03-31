@@ -1,8 +1,10 @@
 package com.darfoo.backend.service.resource;
 
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.dao.resource.DanceVideoDao;
 import com.darfoo.backend.model.cota.DanceGroupType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
+import com.darfoo.backend.service.cota.TypeClassMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,11 +22,13 @@ import java.util.List;
  */
 
 @Controller
-public class AuthorController {
+public class DanceGroupController {
     @Autowired
     CommonDao commonDao;
+    @Autowired
+    DanceVideoDao danceVideoDao;
 
-    @RequestMapping(value = "/admin/author/changetype", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/dancegroup/changetype", method = RequestMethod.GET)
     public String prepareChangeAuthorType(ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("type", DanceGroupType.STAR);
@@ -36,7 +40,7 @@ public class AuthorController {
         return "author/changeauthortype";
     }
 
-    @RequestMapping(value = "/admin/author/changetype/{type}", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/dancegroup/changetype/{type}", method = RequestMethod.POST)
     public
     @ResponseBody
     Integer changeAuthorType(@PathVariable DanceGroupType type, HttpServletRequest request) {
@@ -46,8 +50,10 @@ public class AuthorController {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("type", type);
 
-        for (int i = 0; i < idArray.length; i++) {
-            commonDao.updateResourceFieldsById(DanceGroup.class, Integer.parseInt(idArray[i]), conditions);
+        for (String id : idArray) {
+            Integer danceGroupId = Integer.parseInt(id);
+            commonDao.updateResourceFieldsById(DanceGroup.class, danceGroupId, conditions);
+            danceVideoDao.updateDanceVideoTypeWithDanceGroupId(danceGroupId, TypeClassMapping.danceGroupTypeDanceVideoTypeMap.get(type));
         }
         return 200;
     }

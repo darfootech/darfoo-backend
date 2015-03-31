@@ -56,7 +56,7 @@
             if (change_to_normal.length == 0) {
                 alert("还没有选择要变为普通舞队的明星舞队");
             } else {
-                $.post("/darfoobackend/rest/admin/author/changetype/NORMAL", {
+                $.post("/darfoobackend/rest/admin/dancegroup/changetype/NORMAL", {
                     'ids': change_to_normal.join(',')
                 }, function (data) {
                     if (data == 200) {
@@ -72,7 +72,7 @@
             if (change_to_star.length == 0) {
                 alert("还没有选择要变为明星舞队的普通舞队");
             } else {
-                $.post("/darfoobackend/rest/admin/author/changetype/STAR", {
+                $.post("/darfoobackend/rest/admin/dancegroup/changetype/STAR", {
                     'ids': change_to_star.join(',')
                 }, function (data) {
                     if (data == 200) {
