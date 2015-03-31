@@ -35,8 +35,6 @@ public class DanceVideoDaoTests {
     @Autowired
     DanceVideoDao danceVideoDao;
 
-    DanceVideoCates videoCates = new DanceVideoCates();
-
     @Test
     public void insertVideoResource() {
         HashMap<String, String> insertcontents = new HashMap<String, String>();
@@ -62,10 +60,6 @@ public class DanceVideoDaoTests {
         System.out.println("insertid -> " + insertresult.get("insertid"));
     }
 
-    /**
-     * 更新操作可以参考这个测试
-     * *
-     */
     @Test
     public void updateVideoById() {
         HashMap<String, String> updatecontents = new HashMap<String, String>();
@@ -107,7 +101,7 @@ public class DanceVideoDaoTests {
      * video的标题可以重复但是同一个明星舞队下面的video标题不可以重复
      */
     @Test
-    public void getVideoByTitleAndAuthorId() {
+    public void getVideoByTitleAndDanceGroupId() {
         long start = System.currentTimeMillis();
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("title", "ccc");
@@ -124,7 +118,7 @@ public class DanceVideoDaoTests {
     }
 
     @Test
-    public void getVideosByCategories() {
+    public void getVideosByCategory() {
         long start = System.currentTimeMillis();
         //String[] categories = {};//无条件限制
         //String[] categories = {"较快","稍难","情歌风","S"}; //满足所有条件
@@ -138,35 +132,6 @@ public class DanceVideoDaoTests {
         }
         System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
     }
-
-    @Test
-    public void requestVideosByCategories() {
-        String categories = "0-1-4-3";
-        String[] requestCategories = categories.split("-");
-        List<String> targetCategories = new ArrayList<String>();
-        /*if (!requestCategories[0].equals("0")) {
-            String speedCate = videoCates.getSpeedCategory().get(requestCategories[0]);
-            targetCategories.add(speedCate);
-        }
-        if (!requestCategories[1].equals("0")) {
-            String difficultyCate = videoCates.getDifficultyCategory().get(requestCategories[1]);
-            targetCategories.add(difficultyCate);
-            System.out.println("!!!!speedcate!!!!" + difficultyCate);
-        }
-        if (!requestCategories[2].equals("0")) {
-            String styleCate = videoCates.getStyleCategory().get(requestCategories[2]);
-            targetCategories.add(styleCate);
-        }
-        if (!requestCategories[3].equals("0")) {
-            String letterCate = requestCategories[3];
-            targetCategories.add(letterCate);
-        }*/
-
-        System.out.println(targetCategories.toString());
-        System.out.println(requestCategories[0]);
-        System.out.println(requestCategories[0].equals("0"));
-    }
-
 
     @Test
     public void deleteVideoCascade() {

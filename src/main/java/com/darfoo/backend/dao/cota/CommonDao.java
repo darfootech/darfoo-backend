@@ -610,6 +610,10 @@ public class CommonDao {
                 String prepareSql = "update dancevideo set AUTHOR_ID=null where AUTHOR_ID=:author_id";
                 System.out.println(session.createSQLQuery(prepareSql).setInteger("author_id", id).executeUpdate());
             }
+            if (resource == DanceMusic.class) {
+                String prepareSql = "update dancevideo set MUSIC_ID=null where MUSIC_ID=:music_id";
+                System.out.println(session.createSQLQuery(prepareSql).setInteger("music_id", id).executeUpdate());
+            }
 
             Object target = session.get(resource, id);
             if (target == null) {
