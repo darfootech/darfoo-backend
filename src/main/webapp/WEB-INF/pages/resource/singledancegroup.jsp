@@ -59,7 +59,7 @@
                 <br/>
                 <br/>
                 <br/>
-                <a href="/darfoobackend/rest/admin/download/authorvideos/${author.type}/${author.id}" style="margin-right: 100px">
+                <a href="/darfoobackend/rest/admin/download/authorvideos/${author.id}" style="margin-right: 100px">
                     <button type="button" class="btn btn-default">
                         下载舞队视频资源表格
                     </button>

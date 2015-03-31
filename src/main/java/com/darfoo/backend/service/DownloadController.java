@@ -238,7 +238,7 @@ public class DownloadController {
         }
     }
 
-    public void writeAuthorVideosToCSV(DanceGroupType type, Integer id) {
+    public void writeAuthorVideosToCSV(Integer id) {
         String authorname = ((DanceGroup) commonDao.getResourceById(DanceGroup.class, id)).getName();
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", id);
@@ -291,10 +291,10 @@ public class DownloadController {
         return downloadCSVFiles(type);
     }
 
-    @RequestMapping(value = "admin/download/authorvideos/{type}/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "admin/download/authorvideos/{id}", method = RequestMethod.GET)
     public ResponseEntity<byte[]> downloadAuthorvideos(@PathVariable DanceGroupType type, @PathVariable Integer id) throws IOException {
         String authorname = ((DanceGroup) commonDao.getResourceById(DanceGroup.class, id)).getName();
-        writeAuthorVideosToCSV(type, id);
+        writeAuthorVideosToCSV(id);
         return downloadCSVFiles(String.format("author-%s", authorname));
     }
 }
