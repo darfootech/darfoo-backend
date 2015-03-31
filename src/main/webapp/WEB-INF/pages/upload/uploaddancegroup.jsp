@@ -17,7 +17,16 @@
                 </div>
                 <div class="form-group">
                     <label for="description">明星舞队简介</label>
-                    <input type="text" class="form-control" name="description" id="description" placeholder="请输入明星舞队简介">
+                    <textarea type="text" class="form-control" name="description" id="description" placeholder="请输入明星舞队简介"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="imagetype">舞队图片文件格式</label>
+                    <select data-toggle="select" name="imagetype" id="imagetype"
+                            class="form-control select select-success mrs mbm">
+                        <option value="jpg">jpg</option>
+                        <option value="png">png</option>
+                    </select>
                 </div>
 
                 <div style="display: none">

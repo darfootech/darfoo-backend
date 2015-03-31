@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="imagetype">舞蹈图片文件格式</label>
+                    <label for="imagetype">舞蹈视频图片文件格式</label>
                     <select data-toggle="select" name="imagetype" id="imagetype"
                             class="form-control select select-success mrs mbm">
                         <option value="jpg">jpg</option>
