@@ -53,12 +53,18 @@ public class UploadController {
 
         if (resource == DanceVideo.class) {
             String[] categories = request.getParameterValues("categories");
-            for (String category : categories) {
-                insertcontents.put(String.format("category%s", category), TypeClassMapping.danceVideoCategoryMap.get(category));
+            if (categories == null) {
+                insertcontents.put("category", "");
+            } else {
+                for (String category : categories) {
+                    insertcontents.put(String.format("category%s", category), TypeClassMapping.danceVideoCategoryMap.get(category));
+                }
             }
 
-            String imagekey = String.format("dancevideo-imagekey-%s.%s", System.currentTimeMillis(), insertcontents.get("imagetype"));
+            String imagekey = String.format("dancevideo-imagekey-%s.%s", System.currentTimeMillis(), request.getParameter("imagetype"));
             insertcontents.put("imagekey", imagekey);
+
+            insertcontents.put("type", request.getParameter("innertype").toLowerCase());
             session.setAttribute("imagekey", imagekey);
         }
 
@@ -75,7 +81,8 @@ public class UploadController {
         System.out.println("status code is -> " + statuscode);
 
         if (resource == DanceVideo.class) {
-            session.setAttribute("videokey", insertcontents.get("title") + "-" + resource.getSimpleName().toLowerCase() + "-" + insertid + "." + insertcontents.get("videotype"));
+            String videokey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase() , insertid, insertcontents.get("videotype"));
+            session.setAttribute("videokey", videokey);
         }
 
         if (resource == DanceMusic.class) {
