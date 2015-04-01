@@ -129,7 +129,7 @@ public class CacheDao {
         return targetCategories;
     }
 
-    public List getSearchResourcesWithAuthor(Class resource, String searchContent) {
+    public List getSearchResourcesWithDanceGroup(Class resource, String searchContent) {
         List objects = commonDao.getResourcesBySearch(resource, searchContent);
 
         List<DanceGroup> authors = commonDao.getResourcesBySearch(DanceGroup.class, searchContent);

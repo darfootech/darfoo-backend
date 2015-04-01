@@ -45,14 +45,6 @@ public class CommonDao {
     @Autowired
     UpdateDao updateDao;
 
-    public int getResourceHottestLimit(Class resource) {
-        if (resource == DanceMusic.class) {
-            return 5;
-        } else {
-            return 0;
-        }
-    }
-
     public Criteria getCommonQueryCriteria(Class resource) {
         Criteria criteria = sessionFactory
                 .getCurrentSession()

@@ -34,7 +34,7 @@ public class CacheController {
     @Autowired
     CacheDao cacheDao;
     @Autowired
-    DanceGroupDao authorDao;
+    DanceGroupDao danceGroupDao;
     @Autowired
     CommonDao commonDao;
     @Autowired
@@ -59,7 +59,6 @@ public class CacheController {
         List recommendResources = recommendDao.getRecommendResources(resource);
         cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, cachekey, CacheCollType.LIST);
 
-
         return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.LIST);
     }
 
@@ -70,7 +69,7 @@ public class CacheController {
         return cacheUtils.cacheIndexResources(type);
     }
 
-    @RequestMapping(value = "/author/index/page/{page}", method = RequestMethod.GET)
+    @RequestMapping(value = "/dancegroup/index/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
     List cacheIndexResourcesByPage(@PathVariable Integer page) {
@@ -78,7 +77,7 @@ public class CacheController {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         String cachekey = String.format("%sindexpage%d", type, page);
 
-        List resources = authorDao.getAuthorsOrderByVideoCountDescByPage(page);
+        List resources = danceGroupDao.getAuthorsOrderByVideoCountDescByPage(page);
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
         return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
@@ -88,21 +87,21 @@ public class CacheController {
     public
     @ResponseBody
     List getResourcesByCategories(@PathVariable String type, @PathVariable String categories) {
-        return cacheUtils.cacheResourcesByCategories(type, categories);
+        return cacheUtils.cacheResourcesByCategory(type, categories);
     }
 
     @RequestMapping(value = "/{type}/category/{categories}/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
     List getResourcesByCategoriesByPage(@PathVariable String type, @PathVariable String categories, @PathVariable Integer page) {
-        return cacheUtils.cacheResourcesByCategoriesByPage(type, categories, page);
+        return cacheUtils.cacheResourcesByCategory(type, categories, page);
     }
 
-    @RequestMapping("/{type}/hottest")
+    @RequestMapping("/{type}/hot")
     public
     @ResponseBody
     List getHottestResources(@PathVariable String type) {
-        return cacheUtils.cacheHottestResources(type);
+        return cacheUtils.cacheHotResources(type);
     }
 
     @RequestMapping(value = "/video/getmusic/{id}", method = RequestMethod.GET)
@@ -123,16 +122,16 @@ public class CacheController {
         }
     }
 
-    @RequestMapping(value = "/author/videos/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/dancegroup/videos/{id}", method = RequestMethod.GET)
     @ResponseBody
     public List getVideoListForAuthor(@PathVariable Integer id) {
-        return cacheUtils.cacheAuthorVideos(id);
+        return cacheUtils.cacheDanceGroupVideos(id);
     }
 
-    @RequestMapping(value = "/author/videos/{id}/page/{page}", method = RequestMethod.GET)
+    @RequestMapping(value = "/dancegroup/videos/{id}/page/{page}", method = RequestMethod.GET)
     @ResponseBody
     public List getVideoListForAuthorByPage(@PathVariable Integer id, @PathVariable Integer page) {
-        return cacheUtils.cacheAuthorVideos(id, page);
+        return cacheUtils.cacheDanceGroupVideos(id, page);
     }
 
     //http://localhost:8080/darfoobackend/rest/cache/{type}/search?search=s

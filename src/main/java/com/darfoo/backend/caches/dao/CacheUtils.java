@@ -4,9 +4,13 @@ import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
+import com.darfoo.backend.model.cota.DanceGroupHot;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
+import com.darfoo.backend.service.responsemodel.DanceMusicCates;
+import com.darfoo.backend.service.responsemodel.DanceVideoCates;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +28,18 @@ public class CacheUtils {
     @Autowired
     CacheDao cacheDao;
     @Autowired
-    DanceGroupDao authorDao;
+    DanceGroupDao danceGroupDao;
     @Autowired
     CategoryDao categoryDao;
     @Autowired
     PaginationDao paginationDao;
 
+    /**
+     * 将单个资源缓存进入redis
+     * @param type
+     * @param id
+     * @return
+     */
     public Object cacheSingleResource(String type, Integer id) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         Object object = commonDao.getResourceById(resource, id);
@@ -37,15 +47,22 @@ public class CacheUtils {
         return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), String.format("%s-%d", type, id));
     }
 
+    /**
+     * 将首页资源缓存进入redis
+     * 对于dancevideo就是获取最新的12个资源
+     * 对于dancegroup就是获取所有资源并且根据关联的视频个数倒排序 也是为了和老api相兼容
+     * @param type
+     * @return
+     */
     public List cacheIndexResources(String type) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         String cachekey = String.format("%sindex", type);
 
         List resources;
-        if (type.equals("video")) {
+        if (type.equals("dancevideo")) {
             resources = commonDao.getResourcesByNewest(resource, 12);
-        } else if (type.equals("author")) {
-            resources = authorDao.getAuthorsOrderByVideoCountDesc();
+        } else if (type.equals("dancegroup")) {
+            resources = danceGroupDao.getAuthorsOrderByVideoCountDesc();
         } else {
             System.out.println("wired");
             resources = new ArrayList();
@@ -55,30 +72,49 @@ public class CacheUtils {
         return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
     }
 
-    public List cacheResourcesByCategories(String type, String categories) {
+    /**
+     * 根据类别获取相应的资源
+     * 对于dancevideo 类别有 {0 -> 正面教学, 1 -> 口令分解, 2 -> 背面教学, 3 -> 队形教学}
+     * 对于dancemusic 类别为 1->26 表示A->Z 26个字母
+     * @param type
+     * @param category
+     * @param pageArray
+     * @return
+     */
+    public List cacheResourcesByCategory(String type, String category, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
-        String cachekey = String.format("%scategory%s", type, categories);
+        String cachekey = String.format("%scategory%s", type, category);
 
-        //List resources = categoryDao.getResourcesByCategories(resource, ServiceUtils.convertList2Array(cacheDao.parseResourceCategories(resource, categories)));
-        List resources = null;
+        List resources;
+        if (type.equals("dancevideo")) {
+            resources = categoryDao.getResourcesByCategory(resource, DanceVideoCates.danceVideoCategoryMap.get(category));
+        } else if (type.equals("dancemusic")) {
+            resources = categoryDao.getResourcesByCategory(resource, DanceMusicCates.letterCategories.get(category));
+        } else {
+            System.out.println("wired");
+            resources = new ArrayList();
+        }
+
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
         return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
     }
 
-    public List cacheResourcesByCategoriesByPage(String type, String categories, Integer page) {
+    /**
+     * 获取热门资源
+     * @param type
+     * @return
+     */
+    public List cacheHotResources(String type, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
-        String cachekey = String.format("%scategory%spage%d", type, categories, page);
-
-        List resources = paginationDao.getResourcesByCategoriesByPage(resource, ServiceUtils.convertList2Array(cacheDao.parseResourceCategories(resource, categories)), page);
-        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
-        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
-    }
-
-    public List cacheHottestResources(String type) {
-        Class resource = TypeClassMapping.typeClassMap.get(type);
-        int limit = commonDao.getResourceHottestLimit(resource);
-        List resources = commonDao.getResourcesByHottest(resource, limit);
-        String cachekey = String.format("%shottest", type);
+        List resources;
+        if (type.equals("dancegroup")) {
+            HashMap<String, Object> conditions = new HashMap<String, Object>();
+            conditions.put("hot", DanceGroupHot.ISHOT);
+            resources = commonDao.getResourcesByFields(resource, conditions);
+        } else {
+            resources = new ArrayList();
+        }
+        String cachekey = String.format("%shot", type);
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
         return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
@@ -89,15 +125,10 @@ public class CacheUtils {
         //因为这里的分页是一次性把所有查询结果都放入缓存中然后在前端用redis游标来得到分页结果所以缓存的key中不需要包含页码号不然没请求一个页码都会在redis中生成一个完全一样的缓存结果
         String cachekey = String.format("%ssearch%s", type, searchContent);
 
-        if (type.equals("video")) {
-            String[] types = {"video", "tutorial"};
-
-            for (String innertype : types) {
-                Class innerresource = TypeClassMapping.typeClassMap.get(innertype);
-                List resources = cacheDao.getSearchResourcesWithAuthor(innerresource, searchContent);
-                cacheDao.insertResourcesIntoCache(innerresource, resources, cachekey, innertype, CacheCollType.LIST);
-            }
-        } else if (type.equals("music")) {
+        if (type.equals("dancevideo")) {
+            List resources = cacheDao.getSearchResourcesWithDanceGroup(resource, searchContent);
+            cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
+        } else if (type.equals("dancemusic")) {
             List resources = commonDao.getResourcesBySearch(resource, searchContent);
             cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
         } else {
@@ -124,19 +155,15 @@ public class CacheUtils {
         return cacheDao.extractResourcesFromCache(resource, cachekey, CacheCollType.LIST);
     }
 
-    public List cacheAuthorVideos(Integer id, Integer... pageArray) {
+    public List cacheDanceGroupVideos(Integer id, Integer... pageArray) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", id);
         //因为这里的分页是一次性把所有查询结果都放入缓存中然后在前端用redis游标来得到分页结果所以缓存的key中不需要包含页码号不然没请求一个页码都会在redis中生成一个完全一样的缓存结果
-        String cachekey = String.format("authorvideos%d", id);
+        String cachekey = String.format("dancegroupvideos%d", id);
 
-        String[] types = {"video", "tutorial"};
-
-        for (String type : types) {
-            Class resource = TypeClassMapping.typeClassMap.get(type);
-            List resources = commonDao.getResourcesByFields(resource, conditions);
-            cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
-        }
+        Class resource = DanceVideo.class;
+        List resources = commonDao.getResourcesByFields(resource, conditions);
+        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, resource.getSimpleName().toLowerCase(), CacheCollType.LIST);
 
         if (pageArray.length == 0) {
             return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.LIST);
