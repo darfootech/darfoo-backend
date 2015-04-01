@@ -45,53 +45,6 @@ public class DanceVideoDaoTests {
     }
 
     @Test
-    public void insertVideoResource() {
-        HashMap<String, String> insertcontents = new HashMap<String, String>();
-        String videoTitle = "videotitle-" + System.currentTimeMillis();
-        String authorName = "王广成广场舞";
-        String imagekey = String.format("dancevideo-imagekey-%s.%s", System.currentTimeMillis(), ".jpg");
-
-        insertcontents.put("imagekey", imagekey);
-        insertcontents.put("title", videoTitle);
-        insertcontents.put("authorname", authorName);
-        insertcontents.put("imagetype", "jpg");
-        /*insertcontents.put("category1", "正面教学");
-        insertcontents.put("category2", "口令分解");
-        insertcontents.put("category3", "背面教学");
-        insertcontents.put("category4", "队形教学");*/
-        insertcontents.put("category", "");
-        insertcontents.put("type", "tutorial");
-        insertcontents.put("videotype", "mp4");
-        insertcontents.put("connectmusic", "ccccc-memeda-33");
-
-        HashMap<String, Integer> insertresult = commonDao.insertResource(DanceVideo.class, insertcontents);
-        System.out.println("statuscode -> " + insertresult.get("statuscode"));
-        System.out.println("insertid -> " + insertresult.get("insertid"));
-    }
-
-    @Test
-    public void updateVideoById() {
-        HashMap<String, String> updatecontents = new HashMap<String, String>();
-        String videoTitle = "呵呵-" + System.currentTimeMillis();
-        String authorName = "王广成广场舞";
-
-        Integer id = 1055;
-
-        updatecontents.put("title", videoTitle);
-        updatecontents.put("authorname", authorName);
-        //updatecontents.put("category1", "正面教学");
-        //updatecontents.put("category2", "口令分解");
-        //updatecontents.put("category3", "背面教学");
-        //updatecontents.put("category4", "队形教学");
-        updatecontents.put("type", "normal");
-        updatecontents.put("category", "");
-        updatecontents.put("connectmusic", "");
-
-        HashMap<String, Integer> insertresult = commonDao.updateResource(DanceVideo.class, id, updatecontents);
-        System.out.println("statuscode -> " + insertresult.get("statuscode"));
-    }
-
-    @Test
     public void updateVideokeyById() {
         HashMap<String, Object> updateMap = new HashMap<String, Object>();
         updateMap.put("video_key", "cleanthacleantha.mp4");

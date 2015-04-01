@@ -2,7 +2,7 @@ package com.darfoo.backend.service.resource;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.DanceVideoDao;
-import com.darfoo.backend.model.cota.DanceGroupHot;
+import com.darfoo.backend.model.cota.ResourceHot;
 import com.darfoo.backend.model.cota.DanceGroupType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.service.cota.TypeClassMapping;
@@ -62,9 +62,9 @@ public class DanceGroupController {
     @RequestMapping(value = "/admin/dancegroup/changehot", method = RequestMethod.GET)
     public String prepareChangeDanceGroupHot(ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("hot", DanceGroupHot.NOTHOT);
+        conditions.put("hot", ResourceHot.NOTHOT);
         List nothotDanceGroups = commonDao.getResourcesByFields(DanceGroup.class, conditions);
-        conditions.put("hot", DanceGroupHot.ISHOT);
+        conditions.put("hot", ResourceHot.ISHOT);
         List hotDanceGroups = commonDao.getResourcesByFields(DanceGroup.class, conditions);
         modelMap.addAttribute("nothotdancegroups", nothotDanceGroups);
         modelMap.addAttribute("hotdancegroups", hotDanceGroups);
@@ -74,7 +74,7 @@ public class DanceGroupController {
     @RequestMapping(value = "/admin/dancegroup/changehot/{hot}", method = RequestMethod.POST)
     public
     @ResponseBody
-    Integer changeDanceGroupHot(@PathVariable DanceGroupHot hot, HttpServletRequest request) {
+    Integer changeDanceGroupHot(@PathVariable ResourceHot hot, HttpServletRequest request) {
         String ids = request.getParameter("ids");
         String[] idArray = ids.split(",");
 

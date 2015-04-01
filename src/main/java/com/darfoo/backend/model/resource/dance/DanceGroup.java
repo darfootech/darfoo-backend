@@ -57,7 +57,7 @@ public class DanceGroup implements Serializable {
     DanceGroupType type = DanceGroupType.STAR;
 
     @Column(name = "HOT", nullable = false, updatable = true, columnDefinition = "int default 0")
-    DanceGroupHot hot = DanceGroupHot.NOTHOT;
+    ResourceHot hot = ResourceHot.NOTHOT;
 
     public DanceGroup() {
 
@@ -111,11 +111,11 @@ public class DanceGroup implements Serializable {
         this.type = type;
     }
 
-    public DanceGroupHot getHot() {
+    public ResourceHot getHot() {
         return hot;
     }
 
-    public void setHot(DanceGroupHot hot) {
+    public void setHot(ResourceHot hot) {
         this.hot = hot;
     }
 

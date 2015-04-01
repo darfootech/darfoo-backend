@@ -5,7 +5,7 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
-import com.darfoo.backend.model.cota.DanceGroupHot;
+import com.darfoo.backend.model.cota.ResourceHot;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.CacheCollType;
@@ -175,7 +175,7 @@ public class CacheUtils {
 
         List resources;
         if (type.equals("dancegroup")) {
-            conditions.put("hot", DanceGroupHot.ISHOT);
+            conditions.put("hot", ResourceHot.ISHOT);
             resources = commonDao.getResourcesByFields(resource, conditions);
         } else {
             resources = new ArrayList();

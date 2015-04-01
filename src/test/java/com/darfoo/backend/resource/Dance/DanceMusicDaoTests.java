@@ -5,6 +5,8 @@ import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.InsertDao;
+import com.darfoo.backend.model.cota.ResourceHot;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.utils.ModelUtils;
 import org.junit.Test;
@@ -29,37 +31,6 @@ public class DanceMusicDaoTests {
     CategoryDao categoryDao;
     @Autowired
     InsertDao insertDao;
-
-    @Test
-    public void insertMusicResource() {
-        HashMap<String, String> insertcontents = new HashMap<String, String>();
-        String musicTitle = "musictitle-" + System.currentTimeMillis();
-        String authorName = "吉卉";
-
-        insertcontents.put("title", musicTitle);
-        insertcontents.put("authorname", authorName);
-        insertcontents.put("category", "D");
-
-        HashMap<String, Integer> insertresult = commonDao.insertResource(DanceMusic.class, insertcontents);
-        System.out.println("statuscode -> " + insertresult.get("statuscode"));
-        System.out.println("insertid -> " + insertresult.get("insertid"));
-    }
-
-    @Test
-    public void updateMusicById() {
-        HashMap<String, String> updatecontents = new HashMap<String, String>();
-        String musicTitle = "呵呵-" + System.currentTimeMillis();
-        String authorName = "仓木麻衣";
-
-        Integer id = 430;
-
-        updatecontents.put("title", musicTitle);
-        updatecontents.put("authorname", authorName);
-        updatecontents.put("category", "q".toUpperCase());
-
-        HashMap<String, Integer> insertresult = commonDao.updateResource(DanceMusic.class, id, updatecontents);
-        System.out.println("statuscode -> " + insertresult.get("statuscode"));
-    }
 
     @Test
     public void getMusicById() {
@@ -149,6 +120,23 @@ public class DanceMusicDaoTests {
         System.out.println(result.size());
         for (DanceMusic music : result) {
             System.out.println(music.getTitle() + "-" + music.getId());
+        }
+    }
+
+    @Test
+    public void makeDanceMusicHot() {
+        HashMap<String, Object> updateMap = new HashMap<String, Object>();
+        updateMap.put("hot", ResourceHot.ISHOT);
+        commonDao.updateResourceFieldsById(DanceMusic.class, 437, updateMap);
+    }
+
+    @Test
+    public void getHotDanceMusics() {
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("hot", ResourceHot.ISHOT);
+        List musics = commonDao.getResourcesByFields(DanceMusic.class, conditions);
+        for (Object music : musics) {
+            System.out.println(commonDao.getResourceAttr(DanceMusic.class, music, "id"));
         }
     }
 }

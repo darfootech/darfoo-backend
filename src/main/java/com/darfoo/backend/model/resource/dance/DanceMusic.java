@@ -57,6 +57,9 @@ public class DanceMusic implements Serializable {
     @ModelUpload(type = ModelUploadEnum.LARGE)
     String musickey;
 
+    @Column(name = "HOT", nullable = false, updatable = true, columnDefinition = "int default 0")
+    ResourceHot hot = ResourceHot.NOTHOT;
+
     public DanceMusic() {
     }
 
@@ -114,6 +117,14 @@ public class DanceMusic implements Serializable {
 
     public void setUpdate_timestamp(Long update_timestamp) {
         this.update_timestamp = update_timestamp;
+    }
+
+    public ResourceHot getHot() {
+        return hot;
+    }
+
+    public void setHot(ResourceHot hot) {
+        this.hot = hot;
     }
 
     public String toString() {

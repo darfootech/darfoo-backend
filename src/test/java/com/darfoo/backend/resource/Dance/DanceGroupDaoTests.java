@@ -4,7 +4,7 @@ import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
-import com.darfoo.backend.model.cota.DanceGroupHot;
+import com.darfoo.backend.model.cota.ResourceHot;
 import com.darfoo.backend.model.cota.DanceGroupType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -30,39 +30,6 @@ public class DanceGroupDaoTests {
     PaginationDao paginationDao;
 
     QiniuUtils qiniuUtils = new QiniuUtils();
-
-    @Test
-    public void insertDanceGroupResource() {
-        HashMap<String, String> insertcontents = new HashMap<String, String>();
-        String authorName = "周杰伦" + System.currentTimeMillis();
-        String imagekey = "imagekey-" + System.currentTimeMillis() + ".jpg";
-
-        insertcontents.put("imagekey", imagekey);
-        insertcontents.put("name", authorName);
-        insertcontents.put("imagetype", "png");
-        insertcontents.put("description", "台湾人气偶像组合");
-        insertcontents.put("type", "normal");
-
-        HashMap<String, Integer> insertresult = commonDao.insertResource(DanceGroup.class, insertcontents);
-        System.out.println("statuscode -> " + insertresult.get("statuscode"));
-        System.out.println("insertid -> " + insertresult.get("insertid"));
-    }
-
-    @Test
-    public void updateDanceGroupById() {
-        HashMap<String, String> updatecontents = new HashMap<String, String>();
-        String authorName = "滨崎步" + System.currentTimeMillis();
-        String imagekey = "imagekey-" + System.currentTimeMillis() + ".jpg";
-
-        Integer id = 110;
-
-        updatecontents.put("name", authorName);
-        updatecontents.put("imagekey", imagekey);
-        updatecontents.put("description", "日本女歌手");
-
-        HashMap<String, Integer> insertresult = commonDao.updateResource(DanceGroup.class, id, updatecontents);
-        System.out.println("statuscode -> " + insertresult.get("statuscode"));
-    }
 
     @Test
     public void getDanceGroupsByType() {
@@ -191,7 +158,7 @@ public class DanceGroupDaoTests {
     @Test
     public void getHotDanceGroups() {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("hot", DanceGroupHot.ISHOT);
+        conditions.put("hot", ResourceHot.ISHOT);
         List authors = commonDao.getResourcesByFields(DanceGroup.class, conditions);
         for (Object author : authors) {
             System.out.println(commonDao.getResourceAttr(DanceGroup.class, author, "id"));
@@ -199,9 +166,9 @@ public class DanceGroupDaoTests {
     }
 
     @Test
-    public void makeAuthorHot() {
+    public void makeDanceGroupHot() {
         HashMap<String, Object> updateMap = new HashMap<String, Object>();
-        updateMap.put("hot", DanceGroupHot.ISHOT);
+        updateMap.put("hot", ResourceHot.ISHOT);
         commonDao.updateResourceFieldsById(DanceGroup.class, 7, updateMap);
     }
 }
