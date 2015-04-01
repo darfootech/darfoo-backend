@@ -4,14 +4,10 @@ import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.dao.resource.InsertDao;
 import com.darfoo.backend.dao.resource.UpdateDao;
-import com.darfoo.backend.model.category.DanceMusicCategory;
-import com.darfoo.backend.model.category.DanceVideoCategory;
 import com.darfoo.backend.model.cota.ModelOperation;
-import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
-import com.darfoo.backend.utils.ServiceUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
@@ -26,7 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by zjh on 15-2-17.
@@ -110,8 +109,8 @@ public class CommonDao {
 
         try {
             String methodName = ((ModelOperation) resource.getAnnotation(ModelOperation.class)).insertMethod();
-            Method method = InsertDao.class.getDeclaredMethod(methodName, new Class[] {HashMap.class});
-            return (HashMap<String, Integer>) method.invoke(insertDao, new Object[] {insertcontents});
+            Method method = InsertDao.class.getDeclaredMethod(methodName, new Class[]{HashMap.class});
+            return (HashMap<String, Integer>) method.invoke(insertDao, new Object[]{insertcontents});
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -139,8 +138,8 @@ public class CommonDao {
 
         try {
             String methodName = ((ModelOperation) resource.getAnnotation(ModelOperation.class)).updateMethod();
-            Method method = UpdateDao.class.getDeclaredMethod(methodName, new Class[] {Integer.class, HashMap.class});
-            return (HashMap<String, Integer>) method.invoke(updateDao, new Object[] {id, updatecontents});
+            Method method = UpdateDao.class.getDeclaredMethod(methodName, new Class[]{Integer.class, HashMap.class});
+            return (HashMap<String, Integer>) method.invoke(updateDao, new Object[]{id, updatecontents});
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

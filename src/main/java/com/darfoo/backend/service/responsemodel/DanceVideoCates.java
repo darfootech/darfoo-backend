@@ -1,7 +1,6 @@
 package com.darfoo.backend.service.responsemodel;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by zjh on 14-11-25.

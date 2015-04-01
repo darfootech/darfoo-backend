@@ -20,8 +20,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -126,7 +124,7 @@ public class InsertDao {
         int insertid = (Integer) commonDao.getResourceAttr(resource, object, "id");
 
         HashMap<String, Object> updateMap = new HashMap<String, Object>();
-        String videokey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase() , insertid, insertcontents.get("videotype"));
+        String videokey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase(), insertid, insertcontents.get("videotype"));
         updateMap.put("video_key", videokey);
         commonDao.updateResourceFieldsById(resource, insertid, updateMap);
 
@@ -216,7 +214,7 @@ public class InsertDao {
         int insertid = (Integer) commonDao.getResourceAttr(resource, object, "id");
 
         HashMap<String, Object> updateMap = new HashMap<String, Object>();
-        String musickey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase() , insertid, "mp3");
+        String musickey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase(), insertid, "mp3");
         updateMap.put("music_key", musickey);
         commonDao.updateResourceFieldsById(resource, insertid, updateMap);
 

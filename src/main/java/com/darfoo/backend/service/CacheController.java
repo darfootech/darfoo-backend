@@ -44,6 +44,7 @@ public class CacheController {
 
     /**
      * 根据id获取某一类资源的单个记录
+     *
      * @param type
      * @param id
      * @return
@@ -57,6 +58,7 @@ public class CacheController {
 
     /**
      * 获取首页推荐的舞蹈视频
+     *
      * @return
      */
     @RequestMapping(value = "/dancevideo/recommend", method = RequestMethod.GET)
@@ -75,6 +77,7 @@ public class CacheController {
     /**
      * 获取首页最新的舞蹈视频
      * 获取所有的舞队(与老版本的launcher兼容)
+     *
      * @param type
      * @return
      */
@@ -87,6 +90,7 @@ public class CacheController {
 
     /**
      * 根据类别获取资源
+     *
      * @param type
      * @param category
      * @return
@@ -100,6 +104,7 @@ public class CacheController {
 
     /**
      * 根据类别获取资源分页
+     *
      * @param type
      * @param category
      * @param page
@@ -114,28 +119,35 @@ public class CacheController {
 
     /**
      * 根据子类型获取某一类资源
+     *
      * @param type
      * @param innertype
      * @return
      */
     @RequestMapping(value = "{type}/innertype/{innertype}", method = RequestMethod.GET)
-    public @ResponseBody List getResourcesByInnertype(@PathVariable String type, @PathVariable String innertype) {
+    public
+    @ResponseBody
+    List getResourcesByInnertype(@PathVariable String type, @PathVariable String innertype) {
         return cacheUtils.cacheResourcesByInnertype(type, innertype);
     }
 
     /**
      * 根据子类型获取某一类资源分页
+     *
      * @param type
      * @param innertype
      * @return
      */
     @RequestMapping(value = "{type}/innertype/{innertype}/page/{page}", method = RequestMethod.GET)
-    public @ResponseBody List getResourcesByInnertypeByPage(@PathVariable String type, @PathVariable String innertype, Integer page) {
+    public
+    @ResponseBody
+    List getResourcesByInnertypeByPage(@PathVariable String type, @PathVariable String innertype, Integer page) {
         return cacheUtils.cacheResourcesByInnertype(type, innertype, page);
     }
 
     /**
      * 获取热门资源 暂时只有热门舞队
+     *
      * @param type
      * @return
      */
@@ -148,6 +160,7 @@ public class CacheController {
 
     /**
      * 根据舞蹈视频获取对应的舞队伴奏
+     *
      * @param id
      * @return
      */
@@ -171,6 +184,7 @@ public class CacheController {
 
     /**
      * 获取某一个舞队下的所有舞蹈视频
+     *
      * @param id
      * @return
      */
@@ -182,6 +196,7 @@ public class CacheController {
 
     /**
      * 获取某一个舞队下的所有舞蹈视频分页
+     *
      * @param id
      * @param page
      * @return
@@ -195,10 +210,11 @@ public class CacheController {
 
     /**
      * 搜索内容
+     *
      * @param type
      * @param request
-     * @example http://localhost:8080/darfoobackend/rest/cache/{type}/search?search=s
      * @return
+     * @example http://localhost:8080/darfoobackend/rest/cache/{type}/search?search=s
      */
     @RequestMapping(value = "/{type}/search", method = RequestMethod.GET)
     public
@@ -212,6 +228,7 @@ public class CacheController {
 
     /**
      * 搜索内容分页
+     *
      * @param type
      * @param page
      * @param request
@@ -229,6 +246,7 @@ public class CacheController {
 
     /**
      * 获取播放界面侧边资源列表
+     *
      * @param type
      * @param id
      * @return

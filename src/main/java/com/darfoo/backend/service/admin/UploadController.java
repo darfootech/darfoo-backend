@@ -3,7 +3,10 @@ package com.darfoo.backend.service.admin;
 import akka.actor.ActorSystem;
 import akka.dispatch.OnComplete;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.cota.*;
+import com.darfoo.backend.model.cota.DanceVideoType;
+import com.darfoo.backend.model.cota.ModelInsert;
+import com.darfoo.backend.model.cota.ModelUpload;
+import com.darfoo.backend.model.cota.ModelUploadEnum;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -22,7 +25,6 @@ import scala.concurrent.Future;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
@@ -82,12 +84,12 @@ public class UploadController {
         System.out.println("status code is -> " + statuscode);
 
         if (resource == DanceVideo.class) {
-            String videokey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase() , insertid, insertcontents.get("videotype"));
+            String videokey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase(), insertid, insertcontents.get("videotype"));
             session.setAttribute("videokey", videokey);
         }
 
         if (resource == DanceMusic.class) {
-            String musickey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase() , insertid, "mp3");
+            String musickey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase(), insertid, "mp3");
             session.setAttribute("musickey", musickey);
         }
         return statuscode;

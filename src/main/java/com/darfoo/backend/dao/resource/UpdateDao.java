@@ -18,7 +18,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -259,7 +258,7 @@ public class UpdateDao {
         }
     }
 
-    public HashMap<String, Integer> updateDanceGroup(Integer id,  HashMap<String, String> updatecontents) {
+    public HashMap<String, Integer> updateDanceGroup(Integer id, HashMap<String, String> updatecontents) {
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
         Session session = sessionFactory.getCurrentSession();

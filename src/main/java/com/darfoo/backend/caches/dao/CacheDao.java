@@ -4,11 +4,7 @@ import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.caches.cota.CacheProtocol;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
-import com.darfoo.backend.model.resource.dance.DanceMusic;
-import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.CacheCollType;
-import com.darfoo.backend.service.responsemodel.DanceMusicCates;
-import com.darfoo.backend.service.responsemodel.DanceVideoCates;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;

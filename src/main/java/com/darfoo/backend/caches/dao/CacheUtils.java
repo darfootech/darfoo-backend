@@ -5,15 +5,11 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.model.cota.DanceGroupHot;
-import com.darfoo.backend.model.cota.DanceVideoType;
-import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
-import com.darfoo.backend.service.responsemodel.DanceMusicCates;
 import com.darfoo.backend.service.responsemodel.DanceVideoCates;
 import com.darfoo.backend.service.responsemodel.SingleVideo;
-import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -38,6 +34,7 @@ public class CacheUtils {
     /**
      * 分页统一在cache层做
      * 先将满足条件的资源全部插入redis 然后直接在redis层进行切片来达到分页的效果
+     *
      * @param resource
      * @param response
      * @param cachekey
@@ -59,6 +56,7 @@ public class CacheUtils {
 
     /**
      * 将单个资源缓存进入redis
+     *
      * @param type
      * @param id
      * @return
@@ -74,6 +72,7 @@ public class CacheUtils {
      * 将首页资源缓存进入redis
      * 对于dancevideo就是获取最新的12个资源
      * 对于dancegroup就是获取所有资源并且根据关联的视频个数倒排序 也是为了和老api相兼容
+     *
      * @param type
      * @return
      */
@@ -99,6 +98,7 @@ public class CacheUtils {
      * 根据类别获取相应的资源
      * 对于dancevideo 类别有 {0 -> 正面教学, 1 -> 口令分解, 2 -> 背面教学, 3 -> 队形教学}
      * 对于dancemusic 类别为 1->26 表示A->Z 26个字母
+     *
      * @param type
      * @param category
      * @param pageArray
@@ -127,6 +127,7 @@ public class CacheUtils {
      * 根据子类别获取相应的资源
      * 对于dancevideo 子类别有 {NORMAL -> 欣赏, TUTORIAL -> 教学}
      * 对于dancegroup 子类别有 {NORMAL -> 普通舞队, STAR -> 明星舞队}
+     *
      * @param type
      * @param innertype
      * @param pageArray
@@ -147,6 +148,7 @@ public class CacheUtils {
 
     /**
      * 获取热门资源
+     *
      * @param type
      * @return
      */
