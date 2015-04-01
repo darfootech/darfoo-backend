@@ -208,7 +208,7 @@ public class CacheUtils {
         String cachekey = String.format("%ssidebar%d", type, id);
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
-        return cacheDao.extractResourcesFromCache(resource, cachekey, CacheCollType.SORTEDSET);
+        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
     }
 
     public List cacheDanceGroupVideos(Integer id, Integer... pageArray) {

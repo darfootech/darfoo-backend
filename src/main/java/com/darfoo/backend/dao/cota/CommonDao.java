@@ -459,14 +459,14 @@ public class CommonDao {
 
                 sameAuthorList = getResourcesByFieldsWithoutId(resource, conditions, id);
             } else if (resource == DanceMusic.class) {
-                Field field = resource.getDeclaredField("author_name");
+                Field field = resource.getDeclaredField("authorname");
                 field.setAccessible(true);
                 Object object = getResourceById(resource, id);
 
                 String authorname = field.get(object).toString();
 
                 HashMap<String, Object> conditions = new HashMap<String, Object>();
-                conditions.put("author_name", authorname);
+                conditions.put("authorname", authorname);
 
                 sameAuthorList = getResourcesByFieldsWithoutId(resource, conditions, id);
             } else {

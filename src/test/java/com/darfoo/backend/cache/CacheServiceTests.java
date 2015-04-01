@@ -137,4 +137,35 @@ public class CacheServiceTests {
         Integer page = 1;
         logResources(cacheUtils.cacheDanceGroupVideos(dancegroupid, page));
     }
+
+    @Test
+    public void cacheResourcesBySearch() {
+        HashMap<String, String> typesearch = new HashMap<String, String>();
+        typesearch.put("dancevideo", "三亚");
+        typesearch.put("dancemusic", "那时候");
+        for (String type : typesearch.keySet()) {
+            logResources(cacheUtils.cacheResourcesBySearch(type, typesearch.get(type)));
+        }
+    }
+
+    @Test
+    public void cacheResourcesBySearchByPage() {
+        HashMap<String, String> typesearch = new HashMap<String, String>();
+        typesearch.put("dancevideo", "三亚");
+        typesearch.put("dancemusic", "那时候");
+        Integer page = 1;
+        for (String type : typesearch.keySet()) {
+            logResources(cacheUtils.cacheResourcesBySearch(type, typesearch.get(type), page));
+        }
+    }
+
+    @Test
+    public void cacheSidebarResources() {
+        HashMap<String, Integer> typeidpair = new HashMap<String, Integer>();
+        typeidpair.put("dancevideo", 1073);
+        typeidpair.put("dancemusic", 436);
+        for (String type : typeidpair.keySet()) {
+            logResources(cacheUtils.cacheSidebarResources(type, typeidpair.get(type)));
+        }
+    }
 }
