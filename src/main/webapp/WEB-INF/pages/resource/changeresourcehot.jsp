@@ -6,6 +6,8 @@
     var change_to_nothot = [];
 
     $(function () {
+        var type = $("#type").text();
+
         $(".changetohot").click(function () {
             if (parseInt($(this).attr("picked")) == 0) {
                 var eid = $(this).attr("eid");
@@ -54,7 +56,7 @@
             if (change_to_hot.length == 0) {
                 alert("还没有选择要变为非热门舞队的热门舞队");
             } else {
-                $.post("/darfoobackend/rest/admin/dancegroup/changehot/ISHOT", {
+                $.post("/darfoobackend/rest/admin/" + type + "/changehot/ISHOT", {
                     'ids': change_to_hot.join(',')
                 }, function (data) {
                     if (data == 200) {
@@ -70,7 +72,7 @@
             if (change_to_nothot.length == 0) {
                 alert("还没有选择要变为热门舞队的非热门舞队");
             } else {
-                $.post("/darfoobackend/rest/admin/dancegroup/changehot/NOTHOT", {
+                $.post("/darfoobackend/rest/admin/" + type + "/changehot/NOTHOT", {
                     'ids': change_to_nothot.join(',')
                 }, function (data) {
                     if (data == 200) {
@@ -84,17 +86,27 @@
     });
 </script>
 
+<div id="type" style="display: none">${type}</div>
+
 <div class="container">
     <div style="margin-top:33px;"></div>
     <div class="row marketing">
         <div class="col-lg-6">
             <p><a id="changetohot" class="btn btn-lg btn-success" href="#" role="button">选中要变为热门舞队的非热门舞队然后点这里</a></p>
-            <c:if test="${not empty nothotdancegroups}">
+            <c:if test="${not empty nothotresources}">
                 <ul class="list-group">
-                    <c:forEach var="dancegroup" items="${nothotdancegroups}">
+                    <c:forEach var="resource" items="${nothotresources}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
-                            <div class="content changetohot" picked="0" eid="${dancegroup.id}">
-                                ${dancegroup.name}
+                            <div class="content changetohot" picked="0" eid="${resource.id}">
+                                <c:choose>
+                                    <c:when test="${type == 'dancegroup'}">
+                                        ${resource.name}
+                                    </c:when>
+
+                                    <c:otherwise>
+                                        ${resource.title}
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </li>
                     </c:forEach>
@@ -105,12 +117,20 @@
         <div class="col-lg-6">
             <p><a id="changetonothot" class="btn btn-lg btn-success" href="#" role="button">选中要变为非热门舞队的热门舞队然后点这里</a>
             </p>
-            <c:if test="${not empty hotdancegroups}">
+            <c:if test="${not empty hotresources}">
                 <ul class="list-group">
-                    <c:forEach var="dancegroup" items="${hotdancegroups}">
+                    <c:forEach var="resource" items="${hotresources}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
-                            <div class="content changetonothot" picked="0" eid="${dancegroup.id}">
-                                ${dancegroup.name}
+                            <div class="content changetonothot" picked="0" eid="${resource.id}">
+                                <c:choose>
+                                    <c:when test="${type == 'dancegroup'}">
+                                        ${resource.name}
+                                    </c:when>
+
+                                    <c:otherwise>
+                                        ${resource.title}
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </li>
                     </c:forEach>

@@ -58,33 +58,4 @@ public class DanceGroupController {
         }
         return 200;
     }
-
-    @RequestMapping(value = "/admin/dancegroup/changehot", method = RequestMethod.GET)
-    public String prepareChangeDanceGroupHot(ModelMap modelMap) {
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("hot", ResourceHot.NOTHOT);
-        List nothotDanceGroups = commonDao.getResourcesByFields(DanceGroup.class, conditions);
-        conditions.put("hot", ResourceHot.ISHOT);
-        List hotDanceGroups = commonDao.getResourcesByFields(DanceGroup.class, conditions);
-        modelMap.addAttribute("nothotdancegroups", nothotDanceGroups);
-        modelMap.addAttribute("hotdancegroups", hotDanceGroups);
-        return "author/changedancegrouphot";
-    }
-
-    @RequestMapping(value = "/admin/dancegroup/changehot/{hot}", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    Integer changeDanceGroupHot(@PathVariable ResourceHot hot, HttpServletRequest request) {
-        String ids = request.getParameter("ids");
-        String[] idArray = ids.split(",");
-
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("hot", hot);
-
-        for (String id : idArray) {
-            Integer danceGroupId = Integer.parseInt(id);
-            commonDao.updateResourceFieldsById(DanceGroup.class, danceGroupId, conditions);
-        }
-        return 200;
-    }
 }
