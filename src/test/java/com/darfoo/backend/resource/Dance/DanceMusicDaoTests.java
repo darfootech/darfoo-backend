@@ -135,41 +135,6 @@ public class DanceMusicDaoTests {
     }
 
     @Test
-    public void getMusicsByCategoriesByPage() {
-        long start = System.currentTimeMillis();
-        String[] categories = {};//无条件限制
-        //String[] categories = {"四拍","情歌风","D"}; //满足所有条件
-        //String[] categories = {"四拍"}; //满足个别条件
-        //String[] categories = {"四拍","情歌风","0"};//最后一个条件不满足
-        List<DanceMusic> musics = paginationDao.getResourcesByCategoriesByPage(DanceMusic.class, categories, 1);
-        for (DanceMusic music : musics) {
-            System.out.println(music.getId());
-            System.out.println("——————————————————————————————————————");
-        }
-        System.out.println("最终满足的music数量>>>>>>>>>>>>>>>>>>>>>" + musics.size());
-        System.out.println("time elapse:" + (System.currentTimeMillis() - start) / 1000f);
-    }
-
-    @Test
-    public void isDuplicateWithPageQuery() {
-        String[] categories = {};//无条件限制
-        int pagecount = (int) paginationDao.getResourcePageCountByCategories(DanceMusic.class, categories);
-        Set<Integer> idSet = new HashSet<Integer>();
-        for (int i = 0; i < pagecount; i++) {
-            List<DanceMusic> musics = paginationDao.getResourcesByCategoriesByPage(DanceMusic.class, categories, i + 1);
-            for (DanceMusic music : musics) {
-                System.out.println(music.getId());
-                idSet.add(music.getId());
-                System.out.println("——————————————————————————————————————");
-            }
-            System.out.println("最终满足的music数量>>>>>>>>>>>>>>>>>>>>>" + musics.size());
-        }
-
-        System.out.println("music count -> " + commonDao.getAllResource(DanceMusic.class).size());
-        System.out.println("music count -> " + idSet.size());
-    }
-
-    @Test
     public void getAllMusicsWithoutId() {
         int vid = 1;
         List<DanceMusic> allmusics = commonDao.getAllResourceWithoutId(DanceMusic.class, vid);

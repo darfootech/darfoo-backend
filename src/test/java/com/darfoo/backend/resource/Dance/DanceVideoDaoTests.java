@@ -268,30 +268,6 @@ public class DanceVideoDaoTests {
     }
 
     @Test
-    public void getPageCountByCategories() {
-        String[] categories = {};//无条件限制
-        //String[] categories = {"较快"};//满足单个条件
-        System.out.println("pagecount -> " + paginationDao.getResourcePageCountByCategories(DanceVideo.class, categories));
-    }
-
-    @Test
-    public void isDuplicateWithPageQuery() {
-        String[] categories = {};//满足单个条件
-        int pagecount = (int) paginationDao.getResourcePageCountByCategories(DanceVideo.class, categories);
-        Set<Integer> idSet = new HashSet<Integer>();
-        for (int i = 0; i < pagecount; i++) {
-            List<DanceVideo> videos = paginationDao.getResourcesByCategoriesByPage(DanceVideo.class, categories, i + 1);
-            for (DanceVideo video : videos) {
-                System.out.println(video.getId());
-                idSet.add(video.getId());
-            }
-        }
-
-        System.out.println("video count -> " + commonDao.getAllResource(DanceVideo.class).size());
-        System.out.println("video count -> " + idSet.size());
-    }
-
-    @Test
     public void getAllVideosWithoutId() {
         int vid = 1;
         List<DanceVideo> allvideos = commonDao.getAllResourceWithoutId(DanceVideo.class, vid);

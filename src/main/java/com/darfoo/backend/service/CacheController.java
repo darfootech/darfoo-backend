@@ -38,8 +38,6 @@ public class CacheController {
     @Autowired
     CommonDao commonDao;
     @Autowired
-    RecommendDao recommendDao;
-    @Autowired
     CacheUtils cacheUtils;
 
     /**
@@ -61,17 +59,11 @@ public class CacheController {
      *
      * @return
      */
-    @RequestMapping(value = "/dancevideo/recommend", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/recommend", method = RequestMethod.GET)
     public
     @ResponseBody
-    List cacheRecommendVideos() {
-        String cachekey = "recommenddancevideo";
-
-        Class resource = DanceVideo.class;
-        List recommendResources = recommendDao.getRecommendResources(resource);
-        cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, cachekey, CacheCollType.LIST);
-
-        return cacheDao.extractResourcesFromCache(SingleDanceVideo.class, cachekey, CacheCollType.LIST);
+    List cacheRecommendVideos(@PathVariable String type) {
+        return cacheUtils.cacheRecommendResources(type);
     }
 
     /**

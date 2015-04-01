@@ -3,6 +3,7 @@ package com.darfoo.backend.caches.dao;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
+import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.model.cota.DanceGroupHot;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -25,6 +26,8 @@ public class CacheUtils {
     @Autowired
     CacheDao cacheDao;
     @Autowired
+    RecommendDao recommendDao;
+    @Autowired
     DanceGroupDao danceGroupDao;
     @Autowired
     CategoryDao categoryDao;
@@ -44,13 +47,13 @@ public class CacheUtils {
      */
     public List returnWithPagination(Class resource, Class response, String cachekey, CacheCollType cachetype, Integer[] pageArray) {
         if (pageArray.length == 0) {
-            return cacheDao.extractResourcesFromCache(response, cachekey, CacheCollType.LIST);
+            return cacheDao.extractResourcesFromCache(response, cachekey, cachetype);
         } else {
             int page = pageArray[0];
             int pageSize = paginationDao.getResourcePageSize(resource);
             long start = (page - 1) * pageSize;
             long end = page * pageSize - 1;
-            return cacheDao.extractResourcesFromCache(response, cachekey, CacheCollType.LIST, start, end);
+            return cacheDao.extractResourcesFromCache(response, cachekey, cachetype, start, end);
         }
     }
 
@@ -66,6 +69,16 @@ public class CacheUtils {
         Object object = commonDao.getResourceById(resource, id);
         cacheDao.insertSingleResource(resource, object, type);
         return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), String.format("%s-%d", type, id));
+    }
+
+    public List cacheRecommendResources(String type) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        String cachekey = String.format("recommend%s", type);
+
+        List recommendResources = recommendDao.getRecommendResources(resource);
+        cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, cachekey, CacheCollType.LIST);
+
+        return cacheDao.extractResourcesFromCache(SingleDanceVideo.class, cachekey, CacheCollType.LIST);
     }
 
     /**
@@ -119,7 +132,6 @@ public class CacheUtils {
         }
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
-        //return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
         return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
     }
 
