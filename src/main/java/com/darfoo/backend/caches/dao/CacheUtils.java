@@ -6,10 +6,12 @@ import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.model.cota.DanceGroupHot;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.category.DanceVideoCates;
+import com.darfoo.backend.service.responsemodel.SingleDanceMusic;
 import com.darfoo.backend.service.responsemodel.SingleDanceVideo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -33,6 +35,8 @@ public class CacheUtils {
     CategoryDao categoryDao;
     @Autowired
     PaginationDao paginationDao;
+    @Autowired
+    VideoCacheDao videoCacheDao;
 
     /**
      * 分页统一在cache层做
@@ -217,5 +221,20 @@ public class CacheUtils {
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, resource.getSimpleName().toLowerCase(), CacheCollType.LIST);
 
         return returnWithPagination(DanceVideo.class, SingleDanceVideo.class, cachekey, CacheCollType.LIST, pageArray);
+    }
+
+    public Object cacheDanceMusicForDanceVideo(Integer id) {
+        String type = "dancemusic";
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        DanceMusic targetMusic = ((DanceVideo) commonDao.getResourceById(DanceVideo.class, id)).getMusic();
+        if (targetMusic != null) {
+            int mid = targetMusic.getId();
+            videoCacheDao.insertMusic(id, mid);
+            Object object = commonDao.getResourceById(resource, mid);
+            cacheDao.insertSingleResource(resource, object, type);
+            return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), String.format("%s-%d", type, mid));
+        } else {
+            return new SingleDanceMusic(-1, "", "", "", 0L);
+        }
     }
 }

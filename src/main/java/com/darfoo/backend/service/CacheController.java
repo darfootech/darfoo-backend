@@ -30,8 +30,6 @@ import java.util.List;
 @RequestMapping("/cache")
 public class CacheController {
     @Autowired
-    VideoCacheDao videoCacheDao;
-    @Autowired
     CacheDao cacheDao;
     @Autowired
     DanceGroupDao danceGroupDao;
@@ -169,22 +167,11 @@ public class CacheController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/video/getmusic/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/dancevideo/getmusic/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
     Object getMusicByVideoId(@PathVariable Integer id) {
-        String type = "dancemusic";
-        Class resource = TypeClassMapping.typeClassMap.get(type);
-        DanceMusic targetMusic = ((DanceVideo) commonDao.getResourceById(DanceVideo.class, id)).getMusic();
-        if (targetMusic != null) {
-            int music_id = targetMusic.getId();
-            videoCacheDao.insertMusic(id, music_id);
-            Object object = commonDao.getResourceById(resource, music_id);
-            cacheDao.insertSingleResource(resource, object, type);
-            return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), type);
-        } else {
-            return new SingleDanceMusic(-1, "", "", "", 0L);
-        }
+        return cacheUtils.cacheDanceMusicForDanceVideo(id);
     }
 
     /**

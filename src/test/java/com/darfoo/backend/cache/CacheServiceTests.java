@@ -116,4 +116,12 @@ public class CacheServiceTests {
         Integer page = 1;
         logResources(cacheUtils.cacheHotResources(type, page));
     }
+
+    @Test
+    public void cacheDanceMusicForDanceVideo() {
+        Integer[] ids = {1073, 1075};
+        for (Integer id : ids) {
+            System.out.println(cacheUtils.cacheDanceMusicForDanceVideo(id));
+        }
+    }
 }
