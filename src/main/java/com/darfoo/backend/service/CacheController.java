@@ -49,19 +49,16 @@ public class CacheController {
         return cacheUtils.cacheSingleResource(type, id);
     }
 
-    @RequestMapping(value = "/video/recommend", method = RequestMethod.GET)
+    @RequestMapping(value = "/dancevideo/recommend", method = RequestMethod.GET)
     public
     @ResponseBody
     List cacheRecommendVideos() {
-        String cachekey = "recommend";
+        String cachekey = "recommenddancevideo";
 
-        String[] types = {"video", "tutorial"};
+        Class resource = DanceVideo.class;
+        List recommendResources = recommendDao.getRecommendResources(resource);
+        cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, cachekey, CacheCollType.LIST);
 
-        for (String type : types) {
-            Class resource = TypeClassMapping.typeClassMap.get(type);
-            List recommendResources = recommendDao.getRecommendResources(resource);
-            cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, cachekey + type, CacheCollType.LIST);
-        }
 
         return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.LIST);
     }
