@@ -42,6 +42,12 @@ public class CacheController {
     @Autowired
     CacheUtils cacheUtils;
 
+    /**
+     * 根据id获取某一类资源的单个记录
+     * @param type
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/{type}/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
@@ -49,6 +55,10 @@ public class CacheController {
         return cacheUtils.cacheSingleResource(type, id);
     }
 
+    /**
+     * 获取首页推荐的舞蹈视频
+     * @return
+     */
     @RequestMapping(value = "/dancevideo/recommend", method = RequestMethod.GET)
     public
     @ResponseBody
@@ -62,6 +72,12 @@ public class CacheController {
         return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.LIST);
     }
 
+    /**
+     * 获取首页最新的舞蹈视频
+     * 获取所有的舞队(与老版本的launcher兼容)
+     * @param type
+     * @return
+     */
     @RequestMapping(value = "/{type}/index", method = RequestMethod.GET)
     public
     @ResponseBody
@@ -69,34 +85,60 @@ public class CacheController {
         return cacheUtils.cacheIndexResources(type);
     }
 
-    @RequestMapping(value = "/dancegroup/index/page/{page}", method = RequestMethod.GET)
+    /**
+     * 根据类别获取资源
+     * @param type
+     * @param category
+     * @return
+     */
+    @RequestMapping(value = "/{type}/category/{category}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List cacheIndexResourcesByPage(@PathVariable Integer page) {
-        String type = "author";
-        Class resource = TypeClassMapping.typeClassMap.get(type);
-        String cachekey = String.format("%sindexpage%d", type, page);
-
-        List resources = danceGroupDao.getAuthorsOrderByVideoCountDescByPage(page);
-
-        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
-        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
+    List getResourcesByCategories(@PathVariable String type, @PathVariable String category) {
+        return cacheUtils.cacheResourcesByCategory(type, category);
     }
 
-    @RequestMapping(value = "/{type}/category/{categories}", method = RequestMethod.GET)
+    /**
+     * 根据类别获取资源分页
+     * @param type
+     * @param category
+     * @param page
+     * @return
+     */
+    @RequestMapping(value = "/{type}/category/{category}/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List getResourcesByCategories(@PathVariable String type, @PathVariable String categories) {
-        return cacheUtils.cacheResourcesByCategory(type, categories);
+    List getResourcesByCategoriesByPage(@PathVariable String type, @PathVariable String category, @PathVariable Integer page) {
+        return cacheUtils.cacheResourcesByCategory(type, category, page);
     }
 
-    @RequestMapping(value = "/{type}/category/{categories}/page/{page}", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    List getResourcesByCategoriesByPage(@PathVariable String type, @PathVariable String categories, @PathVariable Integer page) {
-        return cacheUtils.cacheResourcesByCategory(type, categories, page);
+    /**
+     * 根据子类型获取某一类资源
+     * @param type
+     * @param innertype
+     * @return
+     */
+    @RequestMapping(value = "{type}/innertype/{innertype}", method = RequestMethod.GET)
+    public @ResponseBody List getResourcesByInnertype(@PathVariable String type, @PathVariable String innertype) {
+        return cacheUtils.cacheResourcesByInnertype(type, innertype);
     }
 
+    /**
+     * 根据子类型获取某一类资源分页
+     * @param type
+     * @param innertype
+     * @return
+     */
+    @RequestMapping(value = "{type}/innertype/{innertype}/page/{page}", method = RequestMethod.GET)
+    public @ResponseBody List getResourcesByInnertypeByPage(@PathVariable String type, @PathVariable String innertype, Integer page) {
+        return cacheUtils.cacheResourcesByInnertype(type, innertype, page);
+    }
+
+    /**
+     * 获取热门资源 暂时只有热门舞队
+     * @param type
+     * @return
+     */
     @RequestMapping("/{type}/hot")
     public
     @ResponseBody
@@ -104,11 +146,16 @@ public class CacheController {
         return cacheUtils.cacheHotResources(type);
     }
 
+    /**
+     * 根据舞蹈视频获取对应的舞队伴奏
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/video/getmusic/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
     Object getMusicByVideoId(@PathVariable Integer id) {
-        String type = "music";
+        String type = "dancemusic";
         Class resource = TypeClassMapping.typeClassMap.get(type);
         DanceMusic targetMusic = ((DanceVideo) commonDao.getResourceById(DanceVideo.class, id)).getMusic();
         if (targetMusic != null) {
@@ -122,19 +169,37 @@ public class CacheController {
         }
     }
 
+    /**
+     * 获取某一个舞队下的所有舞蹈视频
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/dancegroup/videos/{id}", method = RequestMethod.GET)
     @ResponseBody
     public List getVideoListForAuthor(@PathVariable Integer id) {
         return cacheUtils.cacheDanceGroupVideos(id);
     }
 
+    /**
+     * 获取某一个舞队下的所有舞蹈视频分页
+     * @param id
+     * @param page
+     * @return
+     */
     @RequestMapping(value = "/dancegroup/videos/{id}/page/{page}", method = RequestMethod.GET)
     @ResponseBody
     public List getVideoListForAuthorByPage(@PathVariable Integer id, @PathVariable Integer page) {
         return cacheUtils.cacheDanceGroupVideos(id, page);
     }
 
-    //http://localhost:8080/darfoobackend/rest/cache/{type}/search?search=s
+
+    /**
+     * 搜索内容
+     * @param type
+     * @param request
+     * @example http://localhost:8080/darfoobackend/rest/cache/{type}/search?search=s
+     * @return
+     */
     @RequestMapping(value = "/{type}/search", method = RequestMethod.GET)
     public
     @ResponseBody
@@ -145,6 +210,13 @@ public class CacheController {
         return cacheUtils.cacheResourcesBySearch(type, searchContent);
     }
 
+    /**
+     * 搜索内容分页
+     * @param type
+     * @param page
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/{type}/search/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
@@ -155,6 +227,12 @@ public class CacheController {
         return cacheUtils.cacheResourcesBySearch(type, searchContent, page);
     }
 
+    /**
+     * 获取播放界面侧边资源列表
+     * @param type
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/{type}/sidebar/{id}", method = RequestMethod.GET)
     public
     @ResponseBody

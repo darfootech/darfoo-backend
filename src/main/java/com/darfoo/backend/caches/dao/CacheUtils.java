@@ -119,7 +119,8 @@ public class CacheUtils {
         }
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
-        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
+        //return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
+        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
     }
 
     /**
@@ -131,7 +132,7 @@ public class CacheUtils {
      * @param pageArray
      * @return
      */
-    public List cacheResourcesByType(String type, String innertype, Integer... pageArray) {
+    public List cacheResourcesByInnertype(String type, String innertype, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         String cachekey = String.format("%stype%s", type, innertype);
         HashMap<String, Object> conditions = new HashMap<String, Object>();
@@ -140,7 +141,8 @@ public class CacheUtils {
         List resources = commonDao.getResourcesByFields(resource, conditions);
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
-        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
+        //return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
+        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
     }
 
     /**
@@ -162,7 +164,8 @@ public class CacheUtils {
         }
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
-        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
+        //return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
+        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST, pageArray);
     }
 
     public List cacheResourcesBySearch(String type, String searchContent, Integer... pageArray) {

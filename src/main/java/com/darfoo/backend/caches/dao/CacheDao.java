@@ -26,10 +26,6 @@ public class CacheDao {
     CommonRedisClient redisClient;
     @Autowired
     CommonDao commonDao;
-    @Autowired
-    DanceVideoCates videoCates;
-    @Autowired
-    DanceMusicCates musicCates;
 
     public boolean insertSingleResource(Class resource, Object object, String prefix) {
         return cacheProtocol.insertResourceIntoCache(resource, object, prefix);
@@ -86,47 +82,6 @@ public class CacheDao {
             result.add(getSingleResource(responseclass, key));
         }
         return result;
-    }
-
-    public List<String> parseResourceCategories(Class resource, String categories) {
-        String[] requestCategories = categories.split("-");
-        List<String> targetCategories = new ArrayList<String>();
-
-        if (resource == DanceVideo.class) {
-            /*if (!requestCategories[0].equals("0")) {
-                String speedCate = videoCates.getSpeedCategory().get(requestCategories[0]);
-                targetCategories.add(speedCate);
-            }
-            if (!requestCategories[1].equals("0")) {
-                String difficultyCate = videoCates.getDifficultyCategory().get(requestCategories[1]);
-                targetCategories.add(difficultyCate);
-            }
-            if (!requestCategories[2].equals("0")) {
-                String styleCate = videoCates.getStyleCategory().get(requestCategories[2]);
-                targetCategories.add(styleCate);
-            }
-            if (!requestCategories[3].equals("0")) {
-                String letterCate = requestCategories[3];
-                targetCategories.add(letterCate);
-            }*/
-        } else if (resource == DanceMusic.class) {
-            /*if (!requestCategories[0].equals("0")) {
-                String beatCate = musicCates.getBeatCategory().get(requestCategories[0]);
-                targetCategories.add(beatCate);
-            }
-            if (!requestCategories[1].equals("0")) {
-                String styleCate = musicCates.getStyleCategory().get(requestCategories[1]);
-                targetCategories.add(styleCate);
-            }
-            if (!requestCategories[2].equals("0")) {
-                String letterCate = requestCategories[2];
-                targetCategories.add(letterCate);
-            }*/
-        } else {
-            System.out.println("wired");
-        }
-
-        return targetCategories;
     }
 
     public List getSearchResourcesWithDanceGroup(Class resource, String searchContent) {
