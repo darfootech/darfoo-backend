@@ -36,6 +36,28 @@ public class CacheUtils {
     PaginationDao paginationDao;
 
     /**
+     * 分页统一在cache层做
+     * 先将满足条件的资源全部插入redis 然后直接在redis层进行切片来达到分页的效果
+     * @param resource
+     * @param response
+     * @param cachekey
+     * @param cachetype
+     * @param pageArray
+     * @return
+     */
+    public List returnWithPagination(Class resource, Class response, String cachekey, CacheCollType cachetype, Integer[] pageArray) {
+        if (pageArray.length == 0) {
+            return cacheDao.extractResourcesFromCache(response, cachekey, CacheCollType.LIST);
+        } else {
+            int page = pageArray[0];
+            int pageSize = paginationDao.getResourcePageSize(resource);
+            long start = (page - 1) * pageSize;
+            long end = page * pageSize - 1;
+            return cacheDao.extractResourcesFromCache(response, cachekey, CacheCollType.LIST, start, end);
+        }
+    }
+
+    /**
      * 将单个资源缓存进入redis
      * @param type
      * @param id
@@ -158,15 +180,7 @@ public class CacheUtils {
             System.out.println("wired");
         }
 
-        if (pageArray.length == 0) {
-            return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
-        } else {
-            int page = pageArray[0];
-            int pageSize = paginationDao.getResourcePageSize(resource);
-            long start = (page - 1) * pageSize;
-            long end = page * pageSize - 1;
-            return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST, start, end);
-        }
+        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST, pageArray);
     }
 
     public List cacheSidebarResources(String type, Integer id) {
@@ -188,15 +202,6 @@ public class CacheUtils {
         List resources = commonDao.getResourcesByFields(resource, conditions);
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, resource.getSimpleName().toLowerCase(), CacheCollType.LIST);
 
-        if (pageArray.length == 0) {
-            return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.LIST);
-        } else {
-            int page = pageArray[0];
-            int pageSize = paginationDao.getResourcePageSize(DanceVideo.class);
-            long start = (page - 1) * pageSize;
-            long end = page * pageSize - 1;
-
-            return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.LIST, start, end);
-        }
+        return returnWithPagination(DanceVideo.class, SingleVideo.class, cachekey, CacheCollType.LIST, pageArray);
     }
 }
