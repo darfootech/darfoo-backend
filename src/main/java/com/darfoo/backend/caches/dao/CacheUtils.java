@@ -45,6 +45,7 @@ public class CacheUtils {
      * @param pageArray
      * @return
      */
+    //因为这里的分页是一次性把所有查询结果都放入缓存中然后在前端用redis游标来得到分页结果所以缓存的key中不需要包含页码号不然每请求一个页码都会在redis中生成一个完全一样的缓存结果
     public List returnWithPagination(Class resource, Class response, String cachekey, CacheCollType cachetype, Integer[] pageArray) {
         if (pageArray.length == 0) {
             return cacheDao.extractResourcesFromCache(response, cachekey, cachetype);
@@ -97,7 +98,7 @@ public class CacheUtils {
         if (type.equals("dancevideo")) {
             resources = commonDao.getResourcesByNewest(resource, 12);
         } else if (type.equals("dancegroup")) {
-            resources = danceGroupDao.getAuthorsOrderByVideoCountDesc();
+            resources = danceGroupDao.getDanceGroupsOrderByVideoCountDesc();
         } else {
             System.out.println("wired");
             resources = new ArrayList();
@@ -154,7 +155,6 @@ public class CacheUtils {
         List resources = commonDao.getResourcesByFields(resource, conditions);
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
-        //return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
         return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
     }
 
@@ -178,13 +178,11 @@ public class CacheUtils {
         }
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
-        //return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
         return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST, pageArray);
     }
 
     public List cacheResourcesBySearch(String type, String searchContent, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
-        //因为这里的分页是一次性把所有查询结果都放入缓存中然后在前端用redis游标来得到分页结果所以缓存的key中不需要包含页码号不然没请求一个页码都会在redis中生成一个完全一样的缓存结果
         String cachekey = String.format("%ssearch%s", type, searchContent);
 
         if (type.equals("dancevideo")) {
@@ -212,7 +210,6 @@ public class CacheUtils {
     public List cacheDanceGroupVideos(Integer id, Integer... pageArray) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", id);
-        //因为这里的分页是一次性把所有查询结果都放入缓存中然后在前端用redis游标来得到分页结果所以缓存的key中不需要包含页码号不然没请求一个页码都会在redis中生成一个完全一样的缓存结果
         String cachekey = String.format("dancegroupvideos%d", id);
 
         Class resource = DanceVideo.class;

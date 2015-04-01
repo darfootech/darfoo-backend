@@ -73,7 +73,7 @@ public class CategoryDao {
     public List getResourcesByCategory(Class resource, String category) {
         List resultids = commonDao.getCommonQueryCriteria(resource)
                 .addOrder(Order.desc("id"))
-                        //如果不映射一下就会查询超时
+                //如果不映射一下就会查询超时
                 .setProjection(Projections.property("id"))
                 .createCriteria("categories").add(Restrictions.eq("title", category))
                 .list();

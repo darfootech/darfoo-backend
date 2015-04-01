@@ -151,6 +151,19 @@ public class CacheController {
     }
 
     /**
+     * 获取热门资源 分页 暂时只有热门舞队
+     *
+     * @param type
+     * @return
+     */
+    @RequestMapping("/{type}/hot/page/{page}")
+    public
+    @ResponseBody
+    List getHottestResourcesByPage(@PathVariable String type, @PathVariable Integer page) {
+        return cacheUtils.cacheHotResources(type, page);
+    }
+
+    /**
      * 根据舞蹈视频获取对应的舞队伴奏
      *
      * @param id

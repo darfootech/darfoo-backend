@@ -140,17 +140,8 @@ public class DanceGroupDaoTests {
     }
 
     @Test
-    public void getAuthorOrderByVideoCountDesc() {
-        List<DanceGroup> result = authorDao.getAuthorsOrderByVideoCountDesc();
-        for (DanceGroup author : result) {
-            System.out.println(String.format("%d -> %s", author.getId(), author.getName()));
-        }
-        System.out.println("result size -> " + result.size());
-    }
-
-    @Test
-    public void getAuthorOrderByVideoCountDescByPage() {
-        List<DanceGroup> result = authorDao.getAuthorsOrderByVideoCountDescByPage(2);
+    public void getDanceGroupsOrderByVideoCountDesc() {
+        List<DanceGroup> result = authorDao.getDanceGroupsOrderByVideoCountDesc();
         for (DanceGroup author : result) {
             System.out.println(String.format("%d -> %s", author.getId(), author.getName()));
         }
@@ -160,23 +151,6 @@ public class DanceGroupDaoTests {
     @Test
     public void getAllPages() {
         System.out.println("pagecount -> " + paginationDao.getResourcePageCount(DanceGroup.class));
-    }
-
-    @Test
-    public void isDuplicateWithPageQuery() {
-        int pagesize = (int) paginationDao.getResourcePageCount(DanceGroup.class);
-        Set<Integer> idSet = new HashSet<Integer>();
-        for (int i = 0; i < pagesize; i++) {
-            List<DanceGroup> result = authorDao.getAuthorsOrderByVideoCountDescByPage(i + 1);
-            for (DanceGroup author : result) {
-                System.out.println(String.format("%d -> %s", author.getId(), author.getName()));
-                idSet.add(author.getId());
-            }
-            System.out.println("result size -> " + result.size());
-        }
-
-        System.out.println("author count -> " + authorDao.getAuthorsOrderByVideoCountDesc().size());
-        System.out.println("author count -> " + idSet.size());
     }
 
     @Test
@@ -205,11 +179,6 @@ public class DanceGroupDaoTests {
         for (Object author : authors) {
             System.out.println(commonDao.getResourceAttr(DanceGroup.class, author, "id"));
         }
-    }
-
-    @Test
-    public void changeAuthorTypeNotWork() {
-        authorDao.updateAuthorType(3, DanceGroupType.STAR);
     }
 
     @Test

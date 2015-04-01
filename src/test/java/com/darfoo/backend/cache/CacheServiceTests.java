@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -32,9 +33,13 @@ public class CacheServiceTests {
 
     @Test
     public void cacheSingleResource() {
-        String type = "dancevideo";
-        Integer id = 1073;
-        System.out.println(cacheUtils.cacheSingleResource(type, id));
+        HashMap<String, Integer> typeidpair = new HashMap<String, Integer>();
+        typeidpair.put("dancevideo", 1073);
+        typeidpair.put("dancemusic", 436);
+        typeidpair.put("dancegroup", 116);
+        for (String type : typeidpair.keySet()) {
+            System.out.println(cacheUtils.cacheSingleResource(type, typeidpair.get(type)));
+        }
     }
 
     @Test
@@ -45,22 +50,70 @@ public class CacheServiceTests {
 
     @Test
     public void cacheIndexResources() {
-        String type = "dancevideo";
-        logResources(cacheUtils.cacheIndexResources(type));
+        String[] types = {"dancevideo", "dancegroup"};
+        for (String type : types) {
+            logResources(cacheUtils.cacheIndexResources(type));
+        }
     }
 
     @Test
     public void cacheResourcesByCategory() {
-        String type = "dancevideo";
-        String category = "0";
-        logResources(cacheUtils.cacheResourcesByCategory(type, category));
+        HashMap<String, String> typecategorypair = new HashMap<String, String>();
+        typecategorypair.put("dancevideo", "0");
+        typecategorypair.put("dancemusic", "A");
+        for (String type : typecategorypair.keySet()) {
+            logResources(cacheUtils.cacheResourcesByCategory(type, typecategorypair.get(type)));
+        }
     }
 
     @Test
     public void cacheResourcesByCategoryByPage() {
-        String type = "dancevideo";
-        String category = "0";
+        HashMap<String, String> typecategorypair = new HashMap<String, String>();
+        typecategorypair.put("dancevideo", "0");
+        typecategorypair.put("dancemusic", "A");
         Integer page = 1;
-        logResources(cacheUtils.cacheResourcesByCategory(type, category, page));
+        for (String type : typecategorypair.keySet()) {
+            logResources(cacheUtils.cacheResourcesByCategory(type, typecategorypair.get(type), page));
+        }
+    }
+
+    @Test
+    public void cacheResourcesByInnertype() {
+        HashMap<String, String[]> typeinnertypepair = new HashMap<String, String[]>();
+        typeinnertypepair.put("dancevideo", new String[]{"TUTORIAL", "NORMAL"});
+        typeinnertypepair.put("dancegroup", new String[]{"STAR", "NORMAL"});
+        for (String type : typeinnertypepair.keySet()) {
+            String[] innertypes = typeinnertypepair.get(type);
+            for (String innertype : innertypes) {
+                logResources(cacheUtils.cacheResourcesByInnertype(type, innertype));
+            }
+        }
+    }
+
+    @Test
+    public void cacheResourcesByInnertypeByPage() {
+        HashMap<String, String[]> typeinnertypepair = new HashMap<String, String[]>();
+        typeinnertypepair.put("dancevideo", new String[]{"TUTORIAL", "NORMAL"});
+        typeinnertypepair.put("dancegroup", new String[]{"STAR", "NORMAL"});
+        Integer page = 1;
+        for (String type : typeinnertypepair.keySet()) {
+            String[] innertypes = typeinnertypepair.get(type);
+            for (String innertype : innertypes) {
+                logResources(cacheUtils.cacheResourcesByInnertype(type, innertype, page));
+            }
+        }
+    }
+
+    @Test
+    public void cacheHotResources() {
+        String type = "dancegroup";
+        logResources(cacheUtils.cacheHotResources(type));
+    }
+
+    @Test
+    public void cacheHotResourcesByPage() {
+        String type = "dancegroup";
+        Integer page = 1;
+        logResources(cacheUtils.cacheHotResources(type, page));
     }
 }
