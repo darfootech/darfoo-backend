@@ -124,4 +124,17 @@ public class CacheServiceTests {
             System.out.println(cacheUtils.cacheDanceMusicForDanceVideo(id));
         }
     }
+
+    @Test
+    public void cacheVideosForDanceGroup() {
+        Integer dancegroupid = 109;
+        logResources(cacheUtils.cacheDanceGroupVideos(dancegroupid));
+    }
+
+    @Test
+    public void cacheVideosForDanceGroupByPage() {
+        Integer dancegroupid = 109;
+        Integer page = 1;
+        logResources(cacheUtils.cacheDanceGroupVideos(dancegroupid, page));
+    }
 }
