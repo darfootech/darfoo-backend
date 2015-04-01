@@ -5,6 +5,7 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.PaginationDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.model.cota.DanceGroupHot;
+import com.darfoo.backend.model.cota.DanceVideoType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.CacheCollType;
@@ -89,11 +90,32 @@ public class CacheUtils {
         if (type.equals("dancevideo")) {
             resources = categoryDao.getResourcesByCategory(resource, DanceVideoCates.danceVideoCategoryMap.get(category));
         } else if (type.equals("dancemusic")) {
-            resources = categoryDao.getResourcesByCategory(resource, DanceMusicCates.letterCategories.get(category));
+            resources = categoryDao.getResourcesByCategory(resource, category);
         } else {
             System.out.println("wired");
             resources = new ArrayList();
         }
+
+        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
+        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
+    }
+
+    /**
+     * 根据子类别获取相应的资源
+     * 对于dancevideo 子类别有 {NORMAL -> 欣赏, TUTORIAL -> 教学}
+     * 对于dancegroup 子类别有 {NORMAL -> 普通舞队, STAR -> 明星舞队}
+     * @param type
+     * @param innertype
+     * @param pageArray
+     * @return
+     */
+    public List cacheResourcesByType(String type, String innertype, Integer... pageArray) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        String cachekey = String.format("%stype%s", type, innertype);
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("type", Enum.valueOf(TypeClassMapping.innerTypeClassMap.get(type), innertype));
+
+        List resources = commonDao.getResourcesByFields(resource, conditions);
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
         return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
@@ -106,15 +128,16 @@ public class CacheUtils {
      */
     public List cacheHotResources(String type, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
+        String cachekey = String.format("%shot", type);
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+
         List resources;
         if (type.equals("dancegroup")) {
-            HashMap<String, Object> conditions = new HashMap<String, Object>();
             conditions.put("hot", DanceGroupHot.ISHOT);
             resources = commonDao.getResourcesByFields(resource, conditions);
         } else {
             resources = new ArrayList();
         }
-        String cachekey = String.format("%shot", type);
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
         return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);

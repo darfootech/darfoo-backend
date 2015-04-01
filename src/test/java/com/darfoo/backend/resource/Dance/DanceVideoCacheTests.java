@@ -77,9 +77,9 @@ public class DanceVideoCacheTests {
 
     @Test
     public void cacheVideosByCategories() {
-        String categories = "0-0-0-0";
+        String category = "0";
 
-        List<SingleVideo> videos = cacheUtils.cacheResourcesByCategories("video", categories);
+        List<SingleVideo> videos = cacheUtils.cacheResourcesByCategory("video", category);
         for (SingleVideo video : videos) {
             System.out.println(video);
         }

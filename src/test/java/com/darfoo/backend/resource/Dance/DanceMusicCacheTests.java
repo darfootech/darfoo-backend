@@ -26,14 +26,14 @@ public class DanceMusicCacheTests {
 
     @Test
     public void cacheSingleMusic() {
-        SingleMusic music = (SingleMusic) cacheUtils.cacheSingleResource("music", 39);
+        SingleMusic music = (SingleMusic) cacheUtils.cacheSingleResource("dancemusic", 39);
         System.out.println(music);
     }
 
     @Test
     public void cacheMusicsByCategories() {
-        String categories = "1-0-0";
-        List<SingleMusic> musics = cacheUtils.cacheResourcesByCategories("music", categories);
+        String categories = "A";
+        List<SingleMusic> musics = cacheUtils.cacheResourcesByCategory("dancemusic", categories);
         for (SingleMusic music : musics) {
             System.out.println(music);
         }
@@ -41,7 +41,7 @@ public class DanceMusicCacheTests {
 
     @Test
     public void cacheHottestMusics() {
-        List<SingleMusic> musics = cacheUtils.cacheHottestResources("music");
+        List<SingleMusic> musics = cacheUtils.cacheHotResources("dancemusic");
         for (SingleMusic music : musics) {
             System.out.println(music);
         }
