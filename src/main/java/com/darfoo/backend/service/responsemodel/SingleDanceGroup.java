@@ -3,16 +3,16 @@ package com.darfoo.backend.service.responsemodel;
 /**
  * Created by zjh on 14-12-9.
  */
-public class SingleAuthor {
+public class SingleDanceGroup {
     Integer id;
     String name;
     String description;
     String image_url;
 
-    public SingleAuthor() {
+    public SingleDanceGroup() {
     }
 
-    public SingleAuthor(Integer id, String name, String description, String image_url) {
+    public SingleDanceGroup(Integer id, String name, String description, String image_url) {
         this.id = id;
         this.name = name;
         this.description = description;

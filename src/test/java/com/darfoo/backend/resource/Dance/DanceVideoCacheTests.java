@@ -5,12 +5,7 @@ import com.darfoo.backend.caches.dao.CacheUtils;
 import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
-import com.darfoo.backend.model.resource.dance.DanceMusic;
-import com.darfoo.backend.model.resource.dance.DanceVideo;
-import com.darfoo.backend.service.cota.CacheCollType;
-import com.darfoo.backend.service.cota.TypeClassMapping;
-import com.darfoo.backend.service.responsemodel.SingleMusic;
-import com.darfoo.backend.service.responsemodel.SingleVideo;
+import com.darfoo.backend.service.responsemodel.SingleDanceVideo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,34 +38,14 @@ public class DanceVideoCacheTests {
 
     @Test
     public void cacheSingleVideo() {
-        SingleVideo video = (SingleVideo) cacheUtils.cacheSingleResource("video", 81);
+        SingleDanceVideo video = (SingleDanceVideo) cacheUtils.cacheSingleResource("video", 81);
         System.out.println(video);
     }
 
     @Test
     public void cacheIndexVideos() {
-        List<SingleVideo> videos = cacheUtils.cacheIndexResources("video");
-        for (SingleVideo video : videos) {
-            System.out.println(video.toString());
-        }
-    }
-
-    @Test
-    public void cacheRecommendVideos() {
-        String cachekey = "recommend";
-
-        String[] types = {"video", "tutorial"};
-
-        for (String type : types) {
-            Class resource = TypeClassMapping.typeClassMap.get(type);
-
-            List recommendResources = recommendDao.getRecommendResources(resource);
-            cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, type, CacheCollType.SET);
-        }
-
-        List<SingleVideo> videos = cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.SET);
-
-        for (SingleVideo video : videos) {
+        List<SingleDanceVideo> videos = cacheUtils.cacheIndexResources("video");
+        for (SingleDanceVideo video : videos) {
             System.out.println(video.toString());
         }
     }
@@ -79,27 +54,9 @@ public class DanceVideoCacheTests {
     public void cacheVideosByCategories() {
         String category = "0";
 
-        List<SingleVideo> videos = cacheUtils.cacheResourcesByCategory("video", category);
-        for (SingleVideo video : videos) {
+        List<SingleDanceVideo> videos = cacheUtils.cacheResourcesByCategory("video", category);
+        for (SingleDanceVideo video : videos) {
             System.out.println(video);
-        }
-    }
-
-    @Test
-    public void cacheVideoMusic() {
-        int id = 81;
-        String type = "music";
-        Class resource = TypeClassMapping.typeClassMap.get(type);
-        DanceMusic targetMusic = ((DanceVideo) commonDao.getResourceById(DanceVideo.class, id)).getMusic();
-        if (targetMusic != null) {
-            int music_id = targetMusic.getId();
-            videoCacheDao.insertMusic(id, music_id);
-            Object object = commonDao.getResourceById(resource, music_id);
-            cacheDao.insertSingleResource(resource, object, type);
-            SingleMusic music = (SingleMusic) cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), type);
-            System.out.println(music);
-        } else {
-            System.out.println("there is no music attach to the target video");
         }
     }
 }

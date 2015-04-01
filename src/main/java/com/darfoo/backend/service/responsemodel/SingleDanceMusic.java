@@ -3,17 +3,17 @@ package com.darfoo.backend.service.responsemodel;
 /**
  * Created by zjh on 14-11-26.
  */
-public class SingleMusic {
+public class SingleDanceMusic {
     Integer id;
     String title;
     String authorname;
     String music_url;
     Long update_timestamp;
 
-    public SingleMusic() {
+    public SingleDanceMusic() {
     }
 
-    public SingleMusic(Integer id, String title, String authorname, String music_url, Long update_timestamp) {
+    public SingleDanceMusic(Integer id, String title, String authorname, String music_url, Long update_timestamp) {
         this.id = id;
         this.title = title;
         this.authorname = authorname;

@@ -1,7 +1,7 @@
 package com.darfoo.backend.resource.Dance;
 
 import com.darfoo.backend.caches.dao.CacheUtils;
-import com.darfoo.backend.service.responsemodel.SingleMusic;
+import com.darfoo.backend.service.responsemodel.SingleDanceMusic;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,23 +26,23 @@ public class DanceMusicCacheTests {
 
     @Test
     public void cacheSingleMusic() {
-        SingleMusic music = (SingleMusic) cacheUtils.cacheSingleResource("dancemusic", 39);
+        SingleDanceMusic music = (SingleDanceMusic) cacheUtils.cacheSingleResource("dancemusic", 39);
         System.out.println(music);
     }
 
     @Test
     public void cacheMusicsByCategories() {
         String categories = "A";
-        List<SingleMusic> musics = cacheUtils.cacheResourcesByCategory("dancemusic", categories);
-        for (SingleMusic music : musics) {
+        List<SingleDanceMusic> musics = cacheUtils.cacheResourcesByCategory("dancemusic", categories);
+        for (SingleDanceMusic music : musics) {
             System.out.println(music);
         }
     }
 
     @Test
     public void cacheHottestMusics() {
-        List<SingleMusic> musics = cacheUtils.cacheHotResources("dancemusic");
-        for (SingleMusic music : musics) {
+        List<SingleDanceMusic> musics = cacheUtils.cacheHotResources("dancemusic");
+        for (SingleDanceMusic music : musics) {
             System.out.println(music);
         }
     }

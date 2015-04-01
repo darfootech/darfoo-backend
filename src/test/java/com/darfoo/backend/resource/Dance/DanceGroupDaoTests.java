@@ -8,7 +8,7 @@ import com.darfoo.backend.model.cota.DanceGroupHot;
 import com.darfoo.backend.model.cota.DanceGroupType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
-import com.darfoo.backend.service.responsemodel.SingleVideo;
+import com.darfoo.backend.service.responsemodel.SingleDanceVideo;
 import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.junit.Test;
@@ -116,7 +116,7 @@ public class DanceGroupDaoTests {
         DanceGroup author = (DanceGroup) commonDao.getResourceById(DanceGroup.class, aid);
         String authorname = author.getName();
 
-        List<SingleVideo> result = new ArrayList<SingleVideo>();
+        List<SingleDanceVideo> result = new ArrayList<SingleDanceVideo>();
 
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", aid);
@@ -129,10 +129,10 @@ public class DanceGroupDaoTests {
             String image_download_url = qiniuUtils.getQiniuResourceUrl(video.getImage().getImage_key(), QiniuResourceEnum.RAW);
             String title = video.getTitle();
             long timestamp = video.getUpdate_timestamp();
-            result.add(new SingleVideo(tid, title, authorname, tutorial_download_url, image_download_url, 0, timestamp));
+            result.add(new SingleDanceVideo(tid, title, authorname, tutorial_download_url, image_download_url, 0, timestamp));
         }
 
-        for (SingleVideo video : result) {
+        for (SingleDanceVideo video : result) {
             System.out.println(video.getTitle());
         }
 

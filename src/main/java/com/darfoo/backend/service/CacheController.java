@@ -10,8 +10,8 @@ import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
-import com.darfoo.backend.service.responsemodel.SingleMusic;
-import com.darfoo.backend.service.responsemodel.SingleVideo;
+import com.darfoo.backend.service.responsemodel.SingleDanceMusic;
+import com.darfoo.backend.service.responsemodel.SingleDanceVideo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,7 +71,7 @@ public class CacheController {
         List recommendResources = recommendDao.getRecommendResources(resource);
         cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, cachekey, CacheCollType.LIST);
 
-        return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.LIST);
+        return cacheDao.extractResourcesFromCache(SingleDanceVideo.class, cachekey, CacheCollType.LIST);
     }
 
     /**
@@ -178,7 +178,7 @@ public class CacheController {
             cacheDao.insertSingleResource(resource, object, type);
             return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), type);
         } else {
-            return new SingleMusic(-1, "", "", "", 0L);
+            return new SingleDanceMusic(-1, "", "", "", 0L);
         }
     }
 

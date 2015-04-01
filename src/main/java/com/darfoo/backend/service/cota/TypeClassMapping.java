@@ -15,9 +15,9 @@ import com.darfoo.backend.model.statistics.clicktime.MenuClickTime;
 import com.darfoo.backend.model.statistics.clicktime.ResourceClickTime;
 import com.darfoo.backend.model.statistics.clicktime.TabClickTime;
 import com.darfoo.backend.model.upload.UploadNoAuthVideo;
-import com.darfoo.backend.service.responsemodel.SingleAuthor;
-import com.darfoo.backend.service.responsemodel.SingleMusic;
-import com.darfoo.backend.service.responsemodel.SingleVideo;
+import com.darfoo.backend.service.responsemodel.SingleDanceGroup;
+import com.darfoo.backend.service.responsemodel.SingleDanceMusic;
+import com.darfoo.backend.service.responsemodel.SingleDanceVideo;
 
 import java.util.HashMap;
 
@@ -59,10 +59,9 @@ public class TypeClassMapping {
         innerTypeClassMap.put("dancevideo", DanceVideoType.class);
         innerTypeClassMap.put("dancegroup", DanceGroupType.class);
 
-        cacheResponseMap.put("video", SingleVideo.class);
-        cacheResponseMap.put("tutorial", SingleVideo.class);
-        cacheResponseMap.put("music", SingleMusic.class);
-        cacheResponseMap.put("author", SingleAuthor.class);
+        cacheResponseMap.put("dancevideo", SingleDanceVideo.class);
+        cacheResponseMap.put("dancemusic", SingleDanceMusic.class);
+        cacheResponseMap.put("dancegroup", SingleDanceGroup.class);
 
         clickCountStatMap.put("menu", MenuClickCount.class);
         clickCountStatMap.put("tab", TabClickCount.class);

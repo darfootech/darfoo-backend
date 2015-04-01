@@ -1,8 +1,8 @@
 package com.darfoo.backend.resource;
 
 import com.darfoo.backend.caches.dao.CacheUtils;
-import com.darfoo.backend.service.responsemodel.SingleMusic;
-import com.darfoo.backend.service.responsemodel.SingleVideo;
+import com.darfoo.backend.service.responsemodel.SingleDanceMusic;
+import com.darfoo.backend.service.responsemodel.SingleDanceVideo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,8 @@ public class SearchCacheTests {
     @Test
     public void cacheVideosBySearch() {
         String searchContent = "么么";
-        List<SingleVideo> videos = cacheUtils.cacheResourcesBySearch("video", searchContent);
-        for (SingleVideo video : videos) {
+        List<SingleDanceVideo> videos = cacheUtils.cacheResourcesBySearch("video", searchContent);
+        for (SingleDanceVideo video : videos) {
             System.out.println(video);
         }
     }
@@ -33,8 +33,8 @@ public class SearchCacheTests {
     @Test
     public void cacheMusicsBySearch() {
         String searchContent = "呵呵";
-        List<SingleMusic> musics = cacheUtils.cacheResourcesBySearch("music", searchContent);
-        for (SingleMusic music : musics) {
+        List<SingleDanceMusic> musics = cacheUtils.cacheResourcesBySearch("music", searchContent);
+        for (SingleDanceMusic music : musics) {
             System.out.println(music);
         }
     }

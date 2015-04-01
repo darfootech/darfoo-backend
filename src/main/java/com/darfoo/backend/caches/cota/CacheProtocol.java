@@ -45,8 +45,12 @@ public class CacheProtocol {
                         if (cacheInsert.type() == CacheInsertEnum.NORMAL) {
                             if (field.getName().equals("author")) {
                                 DanceGroup author = (DanceGroup) field.get(object);
-                                cacheInsertMap.put("authorname", author.getName());
-                                System.out.println(field.getName() + " -> " + author.getName());
+                                if (author != null) {
+                                    System.out.println(field.getName() + " -> " + author.getName());
+                                    cacheInsertMap.put("authorname", author.getName());
+                                } else {
+                                    cacheInsertMap.put("authorname", "");
+                                }
                             } else if (field.getName().equals("authorname")) {
                                 cacheInsertMap.put("authorname", field.get(object).toString());
                                 System.out.println(field.getName() + " -> " + field.get(object));
@@ -83,13 +87,7 @@ public class CacheProtocol {
                 }
                 if (model == DanceVideo.class) {
                     DanceVideoType type = (DanceVideoType) commonDao.getResourceAttr(model, object, "type");
-                    if (type == DanceVideoType.NORMAL) {
-                        cacheInsertMap.put("type", 1 + "");
-                    } else if (type == DanceVideoType.TUTORIAL) {
-                        cacheInsertMap.put("type", 0 + "");
-                    } else {
-                        System.out.println("wired");
-                    }
+                    cacheInsertMap.put("type", type.ordinal() + "");
                 }
                 commonRedisClient.hmset(cachekey, cacheInsertMap);
             }

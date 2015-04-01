@@ -5,7 +5,7 @@ package com.darfoo.backend.service.responsemodel;
  */
 
 //-> 替换之前的singlevideo加上了判别是欣赏视频还是教学视频的字段
-public class SingleVideo {
+public class SingleDanceVideo {
     Integer id;
     String title;
     String authorname;
@@ -15,10 +15,10 @@ public class SingleVideo {
     Integer type;
     Long update_timestamp;
 
-    public SingleVideo() {
+    public SingleDanceVideo() {
     }
 
-    public SingleVideo(Integer id, String title, String authorname, String video_url, String image_url, Integer type, Long update_timestamp) {
+    public SingleDanceVideo(Integer id, String title, String authorname, String video_url, String image_url, Integer type, Long update_timestamp) {
         this.id = id;
         this.title = title;
         this.authorname = authorname;

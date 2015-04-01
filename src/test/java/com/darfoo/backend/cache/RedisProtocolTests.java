@@ -10,9 +10,9 @@ import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
-import com.darfoo.backend.service.responsemodel.SingleAuthor;
-import com.darfoo.backend.service.responsemodel.SingleMusic;
-import com.darfoo.backend.service.responsemodel.SingleVideo;
+import com.darfoo.backend.service.responsemodel.SingleDanceGroup;
+import com.darfoo.backend.service.responsemodel.SingleDanceMusic;
+import com.darfoo.backend.service.responsemodel.SingleDanceVideo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +70,7 @@ public class RedisProtocolTests {
         List result = cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, 0L, 10L);
 
         for (Object object : result) {
-            System.out.println(commonDao.getResourceAttr(SingleMusic.class, object, "id"));
+            System.out.println(commonDao.getResourceAttr(SingleDanceMusic.class, object, "id"));
         }
     }
 
@@ -82,9 +82,9 @@ public class RedisProtocolTests {
 
     @Test
     public void extractResourceFromCache() {
-        SingleVideo result = (SingleVideo) cacheDao.getSingleResource(SingleVideo.class, "video-" + 81);
+        SingleDanceVideo result = (SingleDanceVideo) cacheDao.getSingleResource(SingleDanceVideo.class, "video-" + 81);
         try {
-            for (Field field : SingleVideo.class.getDeclaredFields()) {
+            for (Field field : SingleDanceVideo.class.getDeclaredFields()) {
                 field.setAccessible(true);
                 System.out.println(field.getName() + " -> " + field.get(result));
             }
@@ -101,9 +101,9 @@ public class RedisProtocolTests {
 
     @Test
     public void extractVideoResourceFromCache() {
-        SingleVideo result = (SingleVideo) cacheProtocol.extractResourceFromCache(SingleVideo.class, "video-" + 81);
+        SingleDanceVideo result = (SingleDanceVideo) cacheProtocol.extractResourceFromCache(SingleDanceVideo.class, "video-" + 81);
         try {
-            for (Field field : SingleVideo.class.getDeclaredFields()) {
+            for (Field field : SingleDanceVideo.class.getDeclaredFields()) {
                 field.setAccessible(true);
                 System.out.println(field.getName() + " -> " + field.get(result));
             }
@@ -114,9 +114,9 @@ public class RedisProtocolTests {
 
     @Test
     public void extractTutorialResourceFromCache() {
-        SingleVideo result = (SingleVideo) cacheProtocol.extractResourceFromCache(SingleVideo.class, "tutorial-" + 30);
+        SingleDanceVideo result = (SingleDanceVideo) cacheProtocol.extractResourceFromCache(SingleDanceVideo.class, "tutorial-" + 30);
         try {
-            for (Field field : SingleVideo.class.getDeclaredFields()) {
+            for (Field field : SingleDanceVideo.class.getDeclaredFields()) {
                 field.setAccessible(true);
                 System.out.println(field.getName() + " -> " + field.get(result));
             }
@@ -133,9 +133,9 @@ public class RedisProtocolTests {
 
     @Test
     public void extractAuthorResourceFromCache() {
-        SingleAuthor result = (SingleAuthor) cacheProtocol.extractResourceFromCache(SingleAuthor.class, "author-" + 13);
+        SingleDanceGroup result = (SingleDanceGroup) cacheProtocol.extractResourceFromCache(SingleDanceGroup.class, "author-" + 13);
         try {
-            for (Field field : SingleAuthor.class.getDeclaredFields()) {
+            for (Field field : SingleDanceGroup.class.getDeclaredFields()) {
                 field.setAccessible(true);
                 System.out.println(field.getName() + " -> " + field.get(result));
             }
@@ -152,9 +152,9 @@ public class RedisProtocolTests {
 
     @Test
     public void extractMusicResourceFromCache() {
-        SingleMusic result = (SingleMusic) cacheProtocol.extractResourceFromCache(SingleMusic.class, "music-" + 30);
+        SingleDanceMusic result = (SingleDanceMusic) cacheProtocol.extractResourceFromCache(SingleDanceMusic.class, "music-" + 30);
         try {
-            for (Field field : SingleMusic.class.getDeclaredFields()) {
+            for (Field field : SingleDanceMusic.class.getDeclaredFields()) {
                 field.setAccessible(true);
                 System.out.println(field.getName() + " -> " + field.get(result));
             }

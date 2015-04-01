@@ -8,8 +8,8 @@ import com.darfoo.backend.model.cota.DanceGroupHot;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
-import com.darfoo.backend.service.responsemodel.DanceVideoCates;
-import com.darfoo.backend.service.responsemodel.SingleVideo;
+import com.darfoo.backend.service.category.DanceVideoCates;
+import com.darfoo.backend.service.responsemodel.SingleDanceVideo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -207,6 +207,6 @@ public class CacheUtils {
         List resources = commonDao.getResourcesByFields(resource, conditions);
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, resource.getSimpleName().toLowerCase(), CacheCollType.LIST);
 
-        return returnWithPagination(DanceVideo.class, SingleVideo.class, cachekey, CacheCollType.LIST, pageArray);
+        return returnWithPagination(DanceVideo.class, SingleDanceVideo.class, cachekey, CacheCollType.LIST, pageArray);
     }
 }
