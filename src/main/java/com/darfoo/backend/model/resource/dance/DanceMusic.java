@@ -116,7 +116,7 @@ public class DanceMusic implements Serializable {
         this.update_timestamp = update_timestamp;
     }
 
-    public String toString(boolean isShowCategory) {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("title:" + title + "\nmusic_key:" + music_key + "\nupdate_timestamp:" + update_timestamp);
         return sb.toString();

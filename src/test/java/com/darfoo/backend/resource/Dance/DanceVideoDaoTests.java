@@ -170,7 +170,7 @@ public class DanceVideoDaoTests {
         Integer id = 79;
         DanceMusic music = ((DanceVideo) commonDao.getResourceById(DanceVideo.class, id)).getMusic();
         if (music != null) {
-            System.out.println(music.toString(false));
+            System.out.println(music.toString());
         } else {
             System.out.println("id为" + id + "对应的video还未包含相应的music");
         }

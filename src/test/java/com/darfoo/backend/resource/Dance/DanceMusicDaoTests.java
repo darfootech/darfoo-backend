@@ -65,7 +65,7 @@ public class DanceMusicDaoTests {
     public void getMusicById() {
         long start = System.currentTimeMillis();
         DanceMusic music = (DanceMusic) commonDao.getResourceById(DanceMusic.class, 30);
-        System.out.println(music.toString(true));
+        System.out.println(music.toString());
         String authorname = music.getAuthorname();
         if (authorname.equals("")) {
             System.out.println("authorname is empty please fill it");
@@ -76,7 +76,7 @@ public class DanceMusicDaoTests {
     }
 
     @Test
-    public void getMusicsByCategories() {
+    public void getMusicsByCategory() {
         String letterCategory = "A";
         List<DanceMusic> musics = categoryDao.getResourcesByCategory(DanceMusic.class, letterCategory);
         for (DanceMusic music : musics) {
@@ -98,7 +98,7 @@ public class DanceMusicDaoTests {
             System.out.println("----------------");
             System.out.println("id: " + music.getId());
             musicids.add(music.getId());
-            System.out.println(music.toString(true));
+            System.out.println(music.toString());
         }
         System.out.println("总共查到" + s_musics.size());
         System.out.println("distinct music id -> " + musicids.size());
@@ -116,7 +116,7 @@ public class DanceMusicDaoTests {
         List<DanceMusic> musics = commonDao.getResourcesByHottest(DanceMusic.class, number);
         for (DanceMusic v : musics) {
             System.out.println("热度值---->" + v.getHottest());
-            System.out.println(v.toString(true));
+            System.out.println(v.toString());
             System.out.println("---------------------------");
         }
         System.out.println("---------返回" + musics.size() + "个视频---------");
@@ -129,7 +129,7 @@ public class DanceMusicDaoTests {
         System.out.println("---------返回" + musics.size() + "个视频---------");
         for (DanceMusic v : musics) {
             System.out.println("更新时间---->" + ModelUtils.dateFormat(v.getUpdate_timestamp(), "yyyy-MM-dd HH:mm:ss"));
-            System.out.println(v.toString(true));
+            System.out.println(v.toString());
             System.out.println("---------------------------");
         }
     }
