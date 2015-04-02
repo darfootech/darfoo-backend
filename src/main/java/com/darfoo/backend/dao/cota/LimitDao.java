@@ -1,6 +1,7 @@
 package com.darfoo.backend.dao.cota;
 
 import com.darfoo.backend.model.cota.annotations.HotSize;
+import com.darfoo.backend.model.cota.annotations.NewestSize;
 import com.darfoo.backend.model.cota.annotations.PageSize;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
@@ -36,6 +37,15 @@ public class LimitDao {
      */
     public int getResourceHotSize(Class resource) {
         return ((HotSize) resource.getAnnotation(HotSize.class)).hotsize();
+    }
+
+    /**
+     * 获取某一类别资源的最新资源的个数
+     * @param resource
+     * @return
+     */
+    public int getResourceNewestSize(Class resource) {
+        return ((NewestSize) resource.getAnnotation(HotSize.class)).newestsize();
     }
 
     /**

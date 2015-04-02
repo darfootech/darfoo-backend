@@ -20,6 +20,7 @@ import java.util.Set;
 @ModelOperation(insertMethod = "insertDanceMusic", updateMethod = "updateDanceMusic")
 @PageSize(pagesize = 22)
 @HotSize(hotsize = 80)
+@NewestSize(newestsize = 80)
 public class DanceMusic implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

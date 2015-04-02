@@ -70,6 +70,11 @@ public class CacheController {
         return cacheUtils.cacheIndexResources(type);
     }
 
+    @RequestMapping(value = "{type}/newest", method = RequestMethod.GET)
+    public @ResponseBody List cacheNewestResources(@PathVariable String type){
+        return cacheUtils.cacheNewestResources(type);
+    }
+
     /**
      * 根据类别获取资源
      *

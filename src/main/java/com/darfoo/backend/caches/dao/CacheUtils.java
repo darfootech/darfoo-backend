@@ -114,6 +114,17 @@ public class CacheUtils {
         return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
     }
 
+    public List cacheNewestResources(String type) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        String cachekey = String.format("%snewest", type);
+
+        int newestsize = limitDao.getResourceNewestSize(resource);
+        List resources = commonDao.getResourcesByNewest(resource, newestsize);
+
+        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
+        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
+    }
+
     /**
      * 根据类别获取相应的资源
      * 对于dancevideo 类别有 {0 -> 正面教学, 1 -> 口令分解, 2 -> 背面教学, 3 -> 队形教学}

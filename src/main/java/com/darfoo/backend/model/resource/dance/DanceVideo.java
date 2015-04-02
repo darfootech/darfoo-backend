@@ -23,6 +23,7 @@ import java.util.Set;
 @Table(name = "dancevideo")
 @ModelOperation(insertMethod = "insertDanceVideo", updateMethod = "updateDanceVideo")
 @PageSize(pagesize = 12)
+@NewestSize(newestsize = 12)
 public class DanceVideo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
