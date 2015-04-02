@@ -34,6 +34,7 @@ public class DanceGroupDao {
 
     /**
      * excludeids指名了返回的舞队列表中不能包含有这个set中包含的id指向的舞队资源
+     *
      * @param idCntList
      * @param excludeids
      * @return
@@ -71,6 +72,7 @@ public class DanceGroupDao {
 
     /**
      * 根据舞队关联的舞蹈视频的数量来进行倒排序获得所有舞队 不包括excludeids中包含的id指向的舞队资源
+     *
      * @param excludeids
      * @return
      */

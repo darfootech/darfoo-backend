@@ -7,7 +7,6 @@ import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.model.cota.annotations.HotSize;
 import com.darfoo.backend.model.cota.enums.DanceGroupType;
-import com.darfoo.backend.model.cota.enums.ResourceHot;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;

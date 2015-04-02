@@ -20,7 +20,6 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import sun.misc.LRUCache;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -305,6 +304,7 @@ public class CommonDao {
      * 返回热门资源 被选出的热门资源按照id倒排序放在前面
      * 后面则根据点击量再倒排序放在后面
      * 总共返回的资源数量由hotsize这个注解指名的数量决定
+     *
      * @param resource
      * @return
      */
