@@ -510,13 +510,15 @@ public class CommonDao {
                 field.setAccessible(true);
                 Object object = getResourceById(resource, id);
 
-                DanceGroup author = (DanceGroup) field.get(object);
-                int authorid = author.getId();
+                DanceGroup danceGroup = (DanceGroup) field.get(object);
+                if (danceGroup != null) {
+                    int authorid = danceGroup.getId();
 
-                HashMap<String, Object> conditions = new HashMap<String, Object>();
-                conditions.put("author_id", authorid);
+                    HashMap<String, Object> conditions = new HashMap<String, Object>();
+                    conditions.put("author_id", authorid);
 
-                sameAuthorList = getResourcesByFieldsWithoutId(resource, conditions, id);
+                    sameAuthorList = getResourcesByFieldsWithoutId(resource, conditions, id);
+                }
             } else if (resource == DanceMusic.class) {
                 Field field = resource.getDeclaredField("authorname");
                 field.setAccessible(true);

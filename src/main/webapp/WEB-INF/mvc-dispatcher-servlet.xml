@@ -14,7 +14,7 @@
 
     <!--<context:component-scan base-package="com.darfoo.backend.service" />
     <context:component-scan base-package="com.springapp.mvc" />-->
-    <context:component-scan base-package="com.darfoo.backend.service, com.springapp.mvc"/>
+    <context:component-scan base-package="com.darfoo.backend.service"/>
 
     <mvc:annotation-driven/>
 
@@ -49,10 +49,6 @@
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean class="com.darfoo.backend.Interceptors.LoginInterceptor"/>
-        </mvc:interceptor>
-        <mvc:interceptor>
-            <mvc:mapping path="/**"/>
-            <bean class="com.darfoo.backend.Interceptors.HotClickInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 
