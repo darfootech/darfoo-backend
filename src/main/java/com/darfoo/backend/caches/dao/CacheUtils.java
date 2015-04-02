@@ -177,6 +177,9 @@ public class CacheUtils {
         if (type.equals("dancegroup")) {
             conditions.put("hot", ResourceHot.ISHOT);
             resources = commonDao.getResourcesByFields(resource, conditions);
+        } else if (type.equals("dancemusic")) {
+            conditions.put("hot", ResourceHot.ISHOT);
+            resources = commonDao.getResourcesByFields(resource, conditions);
         } else {
             resources = new ArrayList();
         }

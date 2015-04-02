@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -296,6 +297,10 @@ public class CommonDao {
             return new ArrayList();
         }
     }
+
+    /*public List getResourcesByFieldsWithPriority(Class resource, ) {
+
+    }*/
 
     /**
      * 根据字段值获取资源 并且record的id值不能和制定id相同

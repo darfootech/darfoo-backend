@@ -3,10 +3,7 @@ package com.darfoo.backend.model.resource.dance;
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
 import com.darfoo.backend.model.category.DanceVideoCategory;
-import com.darfoo.backend.model.cota.annotations.ModelInsert;
-import com.darfoo.backend.model.cota.annotations.ModelOperation;
-import com.darfoo.backend.model.cota.annotations.ModelUpdate;
-import com.darfoo.backend.model.cota.annotations.ModelUpload;
+import com.darfoo.backend.model.cota.annotations.*;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
 import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
 import com.darfoo.backend.model.resource.Image;
@@ -25,6 +22,7 @@ import java.util.Set;
 @Entity
 @Table(name = "dancevideo")
 @ModelOperation(insertMethod = "insertDanceVideo", updateMethod = "updateDanceVideo")
+@PageSize(pagesize = 12)
 public class DanceVideo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

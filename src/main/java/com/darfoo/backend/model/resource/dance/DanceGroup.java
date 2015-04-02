@@ -2,10 +2,7 @@ package com.darfoo.backend.model.resource.dance;
 
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
-import com.darfoo.backend.model.cota.annotations.ModelInsert;
-import com.darfoo.backend.model.cota.annotations.ModelOperation;
-import com.darfoo.backend.model.cota.annotations.ModelUpdate;
-import com.darfoo.backend.model.cota.annotations.ModelUpload;
+import com.darfoo.backend.model.cota.annotations.*;
 import com.darfoo.backend.model.cota.enums.DanceGroupType;
 import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
 import com.darfoo.backend.model.cota.enums.ResourceHot;
@@ -25,6 +22,8 @@ import java.io.Serializable;
 @Entity
 @Table(name = "dancegroup")
 @ModelOperation(insertMethod = "insertDanceGroup", updateMethod = "updateDanceGroup")
+@PageSize(pagesize = 15)
+@HotSize(hotsize = 100)
 public class DanceGroup implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //引用下面名为mysql的主键生成方式

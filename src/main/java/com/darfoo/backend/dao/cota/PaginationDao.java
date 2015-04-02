@@ -1,5 +1,7 @@
 package com.darfoo.backend.dao.cota;
 
+import com.darfoo.backend.model.cota.annotations.HotSize;
+import com.darfoo.backend.model.cota.annotations.PageSize;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -28,16 +30,16 @@ public class PaginationDao {
      * @return
      */
     public int getResourcePageSize(Class resource) {
-        if (resource == DanceVideo.class) {
-            return 12;
-        } else if (resource == DanceMusic.class) {
-            return 22;
-        } else if (resource == DanceGroup.class) {
-            return 15;
-        } else {
-            System.out.println("something is wired");
-            return 1;
-        }
+        return ((PageSize) resource.getAnnotation(PageSize.class)).pagesize();
+    }
+
+    /**
+     * 获得某一类别资源的热门资源的个数
+     * @param resource
+     * @return
+     */
+    public int getResourceHotSize(Class resource) {
+        return ((HotSize) resource.getAnnotation(HotSize.class)).hotsize();
     }
 
     /**
