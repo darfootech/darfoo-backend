@@ -5,6 +5,7 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.LimitDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
+import com.darfoo.backend.model.cota.annotations.HotSize;
 import com.darfoo.backend.model.cota.enums.ResourceHot;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -171,15 +172,10 @@ public class CacheUtils {
     public List cacheHotResources(String type, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         String cachekey = String.format("%shot", type);
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
 
         List resources;
-        if (type.equals("dancegroup")) {
-            conditions.put("hot", ResourceHot.ISHOT);
-            resources = commonDao.getResourcesByFields(resource, conditions);
-        } else if (type.equals("dancemusic")) {
-            conditions.put("hot", ResourceHot.ISHOT);
-            resources = commonDao.getResourcesByFields(resource, conditions);
+        if (resource.isAnnotationPresent(HotSize.class)) {
+            resources = commonDao.getResourcesWithHotPriority(resource);
         } else {
             resources = new ArrayList();
         }

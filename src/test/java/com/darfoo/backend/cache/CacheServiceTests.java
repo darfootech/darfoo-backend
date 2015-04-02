@@ -1,12 +1,14 @@
 package com.darfoo.backend.cache;
 
 import com.darfoo.backend.caches.dao.CacheUtils;
+import com.darfoo.backend.dao.cota.CommonDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,11 +26,14 @@ import java.util.List;
 public class CacheServiceTests {
     @Autowired
     CacheUtils cacheUtils;
+    @Autowired
+    CommonDao commonDao;
 
     public void logResources(List resources) {
         for (Object object : resources) {
             System.out.println(object);
         }
+        System.out.println("resources total size -> " + resources.size());
     }
 
     @Test
@@ -106,15 +111,19 @@ public class CacheServiceTests {
 
     @Test
     public void cacheHotResources() {
-        String type = "dancegroup";
-        logResources(cacheUtils.cacheHotResources(type));
+        String[] types = {"dancegroup", "dancemusic"};
+        for (String type : types) {
+            logResources(cacheUtils.cacheHotResources(type));
+        }
     }
 
     @Test
     public void cacheHotResourcesByPage() {
-        String type = "dancegroup";
+        String[] types = {"dancegroup", "dancemusic"};
         Integer page = 1;
-        logResources(cacheUtils.cacheHotResources(type, page));
+        for (String type : types) {
+            logResources(cacheUtils.cacheHotResources(type, page));
+        }
     }
 
     @Test

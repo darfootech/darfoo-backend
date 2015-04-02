@@ -63,7 +63,7 @@ public class SingleDanceMusic {
 
     @Override
     public String toString() {
-        return "SingleMusic{" +
+        return "SingleDanceMusic{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", authorname='" + authorname + '\'' +

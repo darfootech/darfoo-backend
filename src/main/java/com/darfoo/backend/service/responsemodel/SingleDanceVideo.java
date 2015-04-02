@@ -86,7 +86,7 @@ public class SingleDanceVideo {
 
     @Override
     public String toString() {
-        return "SingleVideo{" +
+        return "SingleDanceVideo{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", authorname='" + authorname + '\'' +

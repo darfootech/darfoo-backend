@@ -53,7 +53,7 @@ public class SingleDanceGroup {
 
     @Override
     public String toString() {
-        return "SingleAuthor{" +
+        return "SingleDanceGroup{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +

@@ -5,6 +5,7 @@ import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.dao.resource.InsertDao;
 import com.darfoo.backend.dao.resource.UpdateDao;
 import com.darfoo.backend.model.cota.annotations.ModelOperation;
+import com.darfoo.backend.model.cota.enums.ResourceHot;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -18,14 +19,12 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import sun.misc.LRUCache;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by zjh on 15-2-17.
@@ -35,6 +34,8 @@ import java.util.List;
 public class CommonDao {
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    LimitDao limitDao;
     @Autowired
     AccompanyDao accompanyDao;
     @Autowired
@@ -305,7 +306,29 @@ public class CommonDao {
      * @return
      */
     public List getResourcesWithHotPriority(Class resource) {
-        return null;
+        int hotsize = limitDao.getResourceHotSize(resource);
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("hot", ResourceHot.ISHOT);
+        List hotResources = getResourcesByFields(resource, conditions);
+        int realHotSize = hotResources.size();
+        if (realHotSize > hotsize) {
+            //subList的结尾index不需要dec 结尾index指向的元素不会被获取到
+            return hotResources.subList(0, hotsize);
+        } else if (realHotSize == hotsize) {
+            return hotResources;
+        } else {
+            Set<Integer> hotids = new HashSet<Integer>();
+            for (Object object : hotResources) {
+                hotids.add((Integer) getResourceAttr(resource, object, "id"));
+            }
+            Criteria criteria = getCommonQueryCriteria(resource)
+                    .addOrder(Order.desc("hottest"))
+                    .add(Restrictions.not(Restrictions.in("id", hotids)));
+            List nothotResources = criteria.list();
+
+            hotResources.addAll(nothotResources.subList(0, (hotsize - realHotSize)));
+            return hotResources;
+        }
     }
 
     /**
