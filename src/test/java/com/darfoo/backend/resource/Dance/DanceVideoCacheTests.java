@@ -1,8 +1,8 @@
 package com.darfoo.backend.resource.Dance;
 
+import com.darfoo.backend.caches.dao.AccompanyCacheDao;
 import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.caches.dao.CacheUtils;
-import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.service.responsemodel.SingleDanceVideo;
@@ -26,7 +26,7 @@ import java.util.List;
 })
 public class DanceVideoCacheTests {
     @Autowired
-    VideoCacheDao videoCacheDao;
+    AccompanyCacheDao accompanyCacheDao;
     @Autowired
     CommonDao commonDao;
     @Autowired

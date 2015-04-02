@@ -40,7 +40,7 @@ public class CacheUtils {
     @Autowired
     LimitDao limitDao;
     @Autowired
-    VideoCacheDao videoCacheDao;
+    AccompanyCacheDao accompanyCacheDao;
 
     /**
      * 分页统一在cache层做
@@ -244,7 +244,7 @@ public class CacheUtils {
         DanceMusic targetMusic = ((DanceVideo) commonDao.getResourceById(DanceVideo.class, id)).getMusic();
         if (targetMusic != null) {
             int mid = targetMusic.getId();
-            videoCacheDao.insertMusic(id, mid);
+            accompanyCacheDao.insertAccompany(DanceVideo.class, DanceMusic.class, id, mid);
             Object object = commonDao.getResourceById(resource, mid);
             cacheDao.insertSingleResource(resource, object, type);
             return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), String.format("%s-%d", type, mid));

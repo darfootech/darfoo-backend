@@ -44,7 +44,7 @@
     <bean id="commonRedisClient" class="com.darfoo.backend.caches.client.CommonRedisClient"/>
     <bean id="qiniuUtils" class="com.darfoo.backend.utils.QiniuUtils"/>
 
-    <bean id="videoCacheDao" class="com.darfoo.backend.caches.dao.VideoCacheDao"/>
+    <bean id="accompanyCacheDao" class="com.darfoo.backend.caches.dao.AccompanyCacheDao"/>
     <bean id="cacheDao" class="com.darfoo.backend.caches.dao.CacheDao"/>
     <bean id="cacheUtils" class="com.darfoo.backend.caches.dao.CacheUtils"/>
 

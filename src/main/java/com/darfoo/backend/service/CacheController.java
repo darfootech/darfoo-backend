@@ -185,7 +185,7 @@ public class CacheController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/dancevideo/getmusic/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/dancevideo/getdancemusic/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
     Object getMusicByVideoId(@PathVariable Integer id) {

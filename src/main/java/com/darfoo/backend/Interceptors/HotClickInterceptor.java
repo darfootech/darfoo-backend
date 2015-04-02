@@ -53,7 +53,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
             }
         }
 
-        if (uri.matches("(.*)/resources/video/getmusic/\\d+$")) {
+        if (uri.matches("(.*)/resources/dancevideo/getdancemusic/\\d+$")) {
             int videoid = Integer.parseInt(getNumbers(uri));
             DanceMusic music = ((DanceVideo) commonDao.getResourceById(DanceVideo.class, videoid)).getMusic();
             if (music != null) {
