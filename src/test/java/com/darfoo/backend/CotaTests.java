@@ -45,7 +45,7 @@ public class CotaTests {
         Class limit = PageSize.class;
         try {
             Method method = limit.getDeclaredMethod(limit.getSimpleName().toLowerCase());
-            System.out.println(method.invoke(resource.getAnnotation(PageSize.class), new Object[]{}));
+            System.out.println(method.invoke(resource.getAnnotation(limit), new Object[]{}));
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

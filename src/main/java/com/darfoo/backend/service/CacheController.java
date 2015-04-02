@@ -57,7 +57,6 @@ public class CacheController {
     }
 
     /**
-     * 获取首页最新的舞蹈视频
      * 获取所有的舞队(与老版本的launcher兼容)
      *
      * @param type
@@ -70,9 +69,31 @@ public class CacheController {
         return cacheUtils.cacheIndexResources(type);
     }
 
+    /**
+     * 获取最新的资源
+     *
+     * @param type
+     * @return
+     */
     @RequestMapping(value = "{type}/newest", method = RequestMethod.GET)
-    public @ResponseBody List cacheNewestResources(@PathVariable String type){
+    public
+    @ResponseBody
+    List cacheNewestResources(@PathVariable String type) {
         return cacheUtils.cacheNewestResources(type);
+    }
+
+    /**
+     * 获取最新的资源分页
+     *
+     * @param type
+     * @param page
+     * @return
+     */
+    @RequestMapping(value = "{type}/newest/page/{page}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List cacheNewestResourcesByPage(@PathVariable String type, @PathVariable Integer page) {
+        return cacheUtils.cacheNewestResources(type, page);
     }
 
     /**

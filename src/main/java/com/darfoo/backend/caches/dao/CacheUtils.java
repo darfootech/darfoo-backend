@@ -91,8 +91,6 @@ public class CacheUtils {
     }
 
     /**
-     * 将首页资源缓存进入redis
-     * 对于dancevideo就是获取最新的12个资源
      * 对于dancegroup就是获取所有资源并且根据关联的视频个数倒排序 也是为了和老api相兼容
      *
      * @param type
@@ -103,12 +101,9 @@ public class CacheUtils {
         String cachekey = String.format("%sindex", type);
 
         List resources;
-        if (type.equals("dancevideo")) {
-            resources = commonDao.getResourcesByNewest(resource, 12);
-        } else if (type.equals("dancegroup")) {
+        if (type.equals("dancegroup")) {
             resources = danceGroupDao.getDanceGroupsOrderByVideoCountDesc();
         } else {
-            System.out.println("wired");
             resources = new ArrayList();
         }
 
@@ -116,7 +111,7 @@ public class CacheUtils {
         return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
     }
 
-    public List cacheNewestResources(String type) {
+    public List cacheNewestResources(String type, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         String cachekey = String.format("%snewest", type);
 
@@ -124,7 +119,7 @@ public class CacheUtils {
         List resources = commonDao.getResourcesByNewest(resource, newestsize);
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
-        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
+        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
     }
 
     /**

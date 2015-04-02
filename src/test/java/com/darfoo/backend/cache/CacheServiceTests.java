@@ -54,9 +54,24 @@ public class CacheServiceTests {
 
     @Test
     public void cacheIndexResources() {
-        String[] types = {"dancevideo", "dancegroup"};
+        String type = "dancegroup";
+        logResources(cacheUtils.cacheIndexResources(type));
+    }
+
+    @Test
+    public void cacheNewestResources() {
+        String[] types = {"dancevideo", "dancemusic"};
         for (String type : types) {
-            logResources(cacheUtils.cacheIndexResources(type));
+            logResources(cacheUtils.cacheNewestResources(type));
+        }
+    }
+
+    @Test
+    public void cacheNewestResourcesByPage() {
+        String[] types = {"dancevideo", "dancemusic"};
+        Integer page = 1;
+        for (String type : types) {
+            logResources(cacheUtils.cacheNewestResources(type, page));
         }
     }
 
