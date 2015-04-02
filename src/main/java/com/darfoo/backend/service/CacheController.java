@@ -149,7 +149,7 @@ public class CacheController {
     @RequestMapping(value = "{type}/innertype/{innertype}/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List getResourcesByInnertypeByPage(@PathVariable String type, @PathVariable String innertype, Integer page) {
+    List getResourcesByInnertypeByPage(@PathVariable String type, @PathVariable String innertype, @PathVariable Integer page) {
         return cacheUtils.cacheResourcesByInnertype(type, innertype, page);
     }
 

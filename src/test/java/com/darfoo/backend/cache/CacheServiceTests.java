@@ -191,4 +191,17 @@ public class CacheServiceTests {
             logResources(cacheUtils.cacheSidebarResources(type, typeidpair.get(type)));
         }
     }
+
+    public void inner(Integer... ids) {
+        System.out.println(ids[0]);
+    }
+
+    public void outer(Integer... ids) {
+        inner(ids);
+    }
+
+    @Test
+    public void testNestedUlimitParams() {
+        outer(3);
+    }
 }
