@@ -5,6 +5,7 @@ import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.dao.resource.InsertDao;
 import com.darfoo.backend.dao.resource.UpdateDao;
 import com.darfoo.backend.model.cota.annotations.ModelOperation;
+import com.darfoo.backend.model.cota.enums.DanceGroupType;
 import com.darfoo.backend.model.cota.enums.ResourceHot;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
@@ -40,6 +41,8 @@ public class CommonDao {
     AccompanyDao accompanyDao;
     @Autowired
     DanceGroupDao authorDao;
+    @Autowired
+    DanceGroupDao danceGroupDao;
     @Autowired
     InsertDao insertDao;
     @Autowired
@@ -329,6 +332,27 @@ public class CommonDao {
             hotResources.addAll(nothotResources.subList(0, (hotsize - realHotSize)));
             return hotResources;
         }
+    }
+
+    public List getResourcesWithPriority(Class resource) {
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("priority", ResourceHot.ISHOT);
+        List priorityResources = getResourcesByFields(resource, conditions);
+        HashSet<Integer> hotids = new HashSet<Integer>();
+        for (Object object : priorityResources) {
+            hotids.add((Integer) getResourceAttr(resource, object, "id"));
+        }
+        List notpriorityResources;
+        if (resource == DanceGroup.class) {
+            notpriorityResources = danceGroupDao.getDanceGroupsOrderByVideoCountDesc(DanceGroupType.STAR, hotids);
+        } else {
+            Criteria criteria = getCommonQueryCriteria(resource)
+                    .addOrder(Order.desc("id"))
+                    .add(Restrictions.not(Restrictions.in("id", hotids)));
+            notpriorityResources = criteria.list();
+        }
+        priorityResources.addAll(notpriorityResources);
+        return priorityResources;
     }
 
     /**

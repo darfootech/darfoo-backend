@@ -6,7 +6,9 @@ import com.darfoo.backend.dao.cota.LimitDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.model.cota.annotations.HotSize;
+import com.darfoo.backend.model.cota.enums.DanceGroupType;
 import com.darfoo.backend.model.cota.enums.ResourceHot;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.category.DanceVideoCates;
@@ -155,9 +157,16 @@ public class CacheUtils {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         String cachekey = String.format("%stype%s", type, innertype);
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("type", Enum.valueOf(TypeClassMapping.innerTypeClassMap.get(type), innertype));
+        Enum innertypeValue = Enum.valueOf(TypeClassMapping.innerTypeClassMap.get(type), innertype);
+        conditions.put("type", innertypeValue);
 
-        List resources = commonDao.getResourcesByFields(resource, conditions);
+        List resources;
+
+        if (resource == DanceGroup.class && innertypeValue == DanceGroupType.STAR) {
+            resources = commonDao.getResourcesWithPriority(resource);
+        } else {
+            resources = commonDao.getResourcesByFields(resource, conditions);
+        }
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
         return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
