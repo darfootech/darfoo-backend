@@ -297,9 +297,16 @@ public class CommonDao {
         }
     }
 
-    /*public List getResourcesByFieldsWithPriority(Class resource, ) {
-
-    }*/
+    /**
+     * 返回热门资源 被选出的热门资源按照id倒排序放在前面
+     * 后面则根据点击量再倒排序放在后面
+     * 总共返回的资源数量由hotsize这个注解指名的数量决定
+     * @param resource
+     * @return
+     */
+    public List getResourcesWithHotPriority(Class resource) {
+        return null;
+    }
 
     /**
      * 根据字段值获取资源 并且record的id值不能和制定id相同

@@ -42,7 +42,7 @@ public class HotClickInterceptor extends HandlerInterceptorAdapter {
         String uri = request.getRequestURI();
         System.out.println("current uri is: " + uri + "\n");
 
-        String[] types = {"video", "tutorial", "music", "author"};
+        String[] types = {"dancevideo", "dancemusic", "dancegroup"};
 
         for (String type : types) {
             if (uri.matches(String.format("(.*)/resources/%s/\\d+$", type))) {
