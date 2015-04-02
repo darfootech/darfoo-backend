@@ -9,6 +9,7 @@ import com.darfoo.backend.model.cota.annotations.ModelUpload;
 import com.darfoo.backend.model.cota.enums.DanceGroupType;
 import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
 import com.darfoo.backend.model.cota.enums.ResourceHot;
+import com.darfoo.backend.model.cota.enums.ResourcePriority;
 import com.darfoo.backend.model.resource.Image;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -66,7 +67,7 @@ public class DanceGroup implements Serializable {
     ResourceHot hot = ResourceHot.NOTHOT;
 
     @Column(name = "PRIORITY", nullable = false, updatable = true, columnDefinition = "int default 0")
-    ResourceHot priority = ResourceHot.NOTHOT;
+    ResourcePriority priority = ResourcePriority.NOTPRIORITY;
 
     public DanceGroup() {
 

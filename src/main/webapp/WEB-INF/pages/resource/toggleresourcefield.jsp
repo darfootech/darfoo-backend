@@ -2,62 +2,65 @@
 <%@include file="../header.jsp" %>
 
 <script>
-    var change_to_hot = [];
-    var change_to_nothot = [];
+    var change_to_positive = [];
+    var change_to_negative = [];
 
     $(function () {
         var type = $("#type").text();
+        var field = $("#field").text();
+        var negativeValue = "NOT" + field.toUpperCase();
+        var positiveValue = "IS" + field.toUpperCase();
 
-        $(".changetohot").click(function () {
+        $(".toggletopositive").click(function () {
             if (parseInt($(this).attr("picked")) == 0) {
                 var eid = $(this).attr("eid");
                 $(this).attr("picked", 1);
                 $(this).parents("li").css("background-color", "green");
-                if ($.inArray(parseInt(eid), change_to_hot) == -1) {
-                    change_to_hot.push(parseInt(eid));
+                if ($.inArray(parseInt(eid), change_to_positive) == -1) {
+                    change_to_positive.push(parseInt(eid));
                 }
-                console.log(change_to_hot);
+                console.log(change_to_positive);
             } else {
                 var eid = $(this).attr("eid");
                 $(this).attr("picked", 0);
                 $(this).parents("li").css("background-color", "white");
-                if ($.inArray(parseInt(eid), change_to_hot) != -1) {
-                    change_to_hot = $.grep(change_to_hot, function (value) {
+                if ($.inArray(parseInt(eid), change_to_positive) != -1) {
+                    change_to_positive = $.grep(change_to_positive, function (value) {
                         return value != parseInt(eid);
                     });
                 }
-                console.log(change_to_hot);
+                console.log(change_to_positive);
             }
         });
 
-        $(".changetonothot").click(function () {
+        $(".toggletonegative").click(function () {
             if (parseInt($(this).attr("picked")) == 0) {
                 var eid = $(this).attr("eid");
                 $(this).attr("picked", 1);
                 $(this).parents("li").css("background-color", "red");
-                if ($.inArray(parseInt(eid), change_to_nothot) == -1) {
-                    change_to_nothot.push(parseInt(eid));
+                if ($.inArray(parseInt(eid), change_to_negative) == -1) {
+                    change_to_negative.push(parseInt(eid));
                 }
-                console.log(change_to_nothot);
+                console.log(change_to_negative);
             } else {
                 var eid = $(this).attr("eid");
                 $(this).attr("picked", 0);
                 $(this).parents("li").css("background-color", "white");
-                if ($.inArray(parseInt(eid), change_to_nothot) != -1) {
-                    change_to_nothot = $.grep(change_to_nothot, function (value) {
+                if ($.inArray(parseInt(eid), change_to_negative) != -1) {
+                    change_to_negative = $.grep(change_to_negative, function (value) {
                         return value != parseInt(eid);
                     });
                 }
-                console.log(change_to_nothot);
+                console.log(change_to_negative);
             }
         });
 
-        $("#changetohot").click(function () {
-            if (change_to_hot.length == 0) {
+        $("#toggletopositive").click(function () {
+            if (change_to_positive.length == 0) {
                 alert("还没有选择要变为非热门舞队的热门舞队");
             } else {
-                $.post("/darfoobackend/rest/admin/" + type + "/changehot/ISHOT", {
-                    'ids': change_to_hot.join(',')
+                $.post("/darfoobackend/rest/admin/" + type + "/change/" + field + "/" + positiveValue, {
+                    'ids': change_to_positive.join(',')
                 }, function (data) {
                     if (data == 200) {
                         window.location.reload();
@@ -68,12 +71,12 @@
             }
         });
 
-        $("#changetonothot").click(function () {
-            if (change_to_nothot.length == 0) {
+        $("#toggletonegative").click(function () {
+            if (change_to_negative.length == 0) {
                 alert("还没有选择要变为热门舞队的非热门舞队");
             } else {
-                $.post("/darfoobackend/rest/admin/" + type + "/changehot/NOTHOT", {
-                    'ids': change_to_nothot.join(',')
+                $.post("/darfoobackend/rest/admin/" + type + "/change/" + field + "/" + negativeValue, {
+                    'ids': change_to_negative.join(',')
                 }, function (data) {
                     if (data == 200) {
                         window.location.reload();
@@ -87,17 +90,18 @@
 </script>
 
 <div id="type" style="display: none">${type}</div>
+<div id="field" style="display: none">${field}</div>
 
 <div class="container">
     <div style="margin-top:33px;"></div>
     <div class="row marketing">
         <div class="col-lg-6">
-            <p><a id="changetohot" class="btn btn-lg btn-success" href="#" role="button">选中要变为热门舞队的非热门舞队然后点这里</a></p>
-            <c:if test="${not empty nothotresources}">
+            <p><a id="toggletopositive" class="btn btn-lg btn-success" href="#" role="button">选中要变为热门舞队的非热门舞队然后点这里</a></p>
+            <c:if test="${not empty negativeresources}">
                 <ul class="list-group">
-                    <c:forEach var="resource" items="${nothotresources}">
+                    <c:forEach var="resource" items="${negativeresources}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
-                            <div class="content changetohot" picked="0" eid="${resource.id}">
+                            <div class="content toggletopositive" picked="0" eid="${resource.id}">
                                 <c:choose>
                                     <c:when test="${type == 'dancegroup'}">
                                         ${resource.name}
@@ -115,13 +119,13 @@
         </div>
 
         <div class="col-lg-6">
-            <p><a id="changetonothot" class="btn btn-lg btn-success" href="#" role="button">选中要变为非热门舞队的热门舞队然后点这里</a>
+            <p><a id="toggletonegative" class="btn btn-lg btn-success" href="#" role="button">选中要变为非热门舞队的热门舞队然后点这里</a>
             </p>
-            <c:if test="${not empty hotresources}">
+            <c:if test="${not empty positiveresources}">
                 <ul class="list-group">
-                    <c:forEach var="resource" items="${hotresources}">
+                    <c:forEach var="resource" items="${positiveresources}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
-                            <div class="content changetonothot" picked="0" eid="${resource.id}">
+                            <div class="content toggletonegative" picked="0" eid="${resource.id}">
                                 <c:choose>
                                     <c:when test="${type == 'dancegroup'}">
                                         ${resource.name}
