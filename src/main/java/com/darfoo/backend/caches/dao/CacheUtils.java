@@ -162,7 +162,7 @@ public class CacheUtils {
      */
     public List cacheResourcesByInnertype(String type, String innertype, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
-        String cachekey = String.format("%stype%s", type, innertype);
+        String cachekey = String.format("%sinnertype%s", type, innertype);
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         Enum innertypeValue = Enum.valueOf(TypeClassMapping.innerTypeClassMap.get(type), innertype);
         conditions.put("type", innertypeValue);
