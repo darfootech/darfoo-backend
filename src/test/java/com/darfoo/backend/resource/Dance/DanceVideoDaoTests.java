@@ -208,17 +208,6 @@ public class DanceVideoDaoTests {
     }
 
     @Test
-    public void getPageCount() {
-        System.out.println("pagecount -> " + limitDao.getResourcePageCount(DanceVideo.class));
-    }
-
-    @Test
-    public void getVideosByPage() {
-        List<DanceVideo> result = limitDao.getResourcesByPage(DanceVideo.class, 1);
-        System.out.println(result.size());
-    }
-
-    @Test
     public void getAllVideosWithoutId() {
         int vid = 1;
         List<DanceVideo> allvideos = commonDao.getAllResourceWithoutId(DanceVideo.class, vid);

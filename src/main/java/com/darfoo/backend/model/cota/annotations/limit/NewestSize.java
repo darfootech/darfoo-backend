@@ -1,4 +1,4 @@
-package com.darfoo.backend.model.cota.annotations;
+package com.darfoo.backend.model.cota.annotations.limit;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

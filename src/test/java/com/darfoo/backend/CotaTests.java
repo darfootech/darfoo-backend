@@ -1,7 +1,8 @@
 package com.darfoo.backend;
 
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.cota.annotations.PageSize;
+import com.darfoo.backend.dao.cota.LimitDao;
+import com.darfoo.backend.model.cota.annotations.limit.PageSize;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import org.junit.Test;
@@ -10,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -24,6 +23,8 @@ import java.lang.reflect.Method;
 public class CotaTests {
     @Autowired
     CommonDao commonDao;
+    @Autowired
+    LimitDao limitDao;
 
     @Test
     public void getEnumValueFromMetaData() {
@@ -43,7 +44,7 @@ public class CotaTests {
         Class resource = DanceVideo.class;
         Class limit = PageSize.class;
         try {
-            Method method = limit.getDeclaredMethod("pagesize");
+            Method method = limit.getDeclaredMethod(limit.getSimpleName().toLowerCase());
             System.out.println(method.invoke(resource.getAnnotation(PageSize.class), new Object[]{}));
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -52,5 +53,7 @@ public class CotaTests {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+
+        System.out.println(limitDao.getResourceLimitSize(resource, limit));
     }
 }

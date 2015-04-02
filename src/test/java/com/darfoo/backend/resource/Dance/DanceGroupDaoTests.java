@@ -118,11 +118,6 @@ public class DanceGroupDaoTests {
     }
 
     @Test
-    public void getAllPages() {
-        System.out.println("pagecount -> " + limitDao.getResourcePageCount(DanceGroup.class));
-    }
-
-    @Test
     public void updateAuthorHottest() {
         Integer id = 1;
         System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(DanceGroup.class, id, "hottest")));

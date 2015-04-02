@@ -5,7 +5,9 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.LimitDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
-import com.darfoo.backend.model.cota.annotations.HotSize;
+import com.darfoo.backend.model.cota.annotations.limit.HotSize;
+import com.darfoo.backend.model.cota.annotations.limit.NewestSize;
+import com.darfoo.backend.model.cota.annotations.limit.PageSize;
 import com.darfoo.backend.model.cota.enums.DanceGroupType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
@@ -57,7 +59,7 @@ public class CacheUtils {
             return cacheDao.extractResourcesFromCache(response, cachekey, cachetype);
         } else {
             int page = pageArray[0];
-            int pageSize = limitDao.getResourcePageSize(resource);
+            int pageSize = limitDao.getResourceLimitSize(resource, PageSize.class);
             long start = (page - 1) * pageSize;
             long end = page * pageSize - 1;
             return cacheDao.extractResourcesFromCache(response, cachekey, cachetype, start, end);
@@ -118,7 +120,7 @@ public class CacheUtils {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         String cachekey = String.format("%snewest", type);
 
-        int newestsize = limitDao.getResourceNewestSize(resource);
+        int newestsize = limitDao.getResourceLimitSize(resource, NewestSize.class);
         List resources = commonDao.getResourcesByNewest(resource, newestsize);
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);

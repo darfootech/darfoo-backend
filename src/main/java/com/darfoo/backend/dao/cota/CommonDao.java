@@ -5,6 +5,7 @@ import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.dao.resource.InsertDao;
 import com.darfoo.backend.dao.resource.UpdateDao;
 import com.darfoo.backend.model.cota.annotations.ModelOperation;
+import com.darfoo.backend.model.cota.annotations.limit.HotSize;
 import com.darfoo.backend.model.cota.enums.DanceGroupType;
 import com.darfoo.backend.model.cota.enums.ResourceHot;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
@@ -309,7 +310,7 @@ public class CommonDao {
      * @return
      */
     public List getResourcesWithHotPriority(Class resource) {
-        int hotsize = limitDao.getResourceHotSize(resource);
+        int hotsize = limitDao.getResourceLimitSize(resource, HotSize.class);
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("hot", ResourceHot.ISHOT);
         List hotResources = getResourcesByFields(resource, conditions);
