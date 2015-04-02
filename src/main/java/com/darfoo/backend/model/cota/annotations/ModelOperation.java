@@ -1,4 +1,4 @@
-package com.darfoo.backend.model.cota;
+package com.darfoo.backend.model.cota.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

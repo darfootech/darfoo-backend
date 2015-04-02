@@ -1,8 +1,8 @@
 package com.darfoo.backend.service.cota;
 
 import com.darfoo.backend.model.auth.Feedback;
-import com.darfoo.backend.model.cota.DanceGroupType;
-import com.darfoo.backend.model.cota.DanceVideoType;
+import com.darfoo.backend.model.cota.enums.DanceGroupType;
+import com.darfoo.backend.model.cota.enums.DanceVideoType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;

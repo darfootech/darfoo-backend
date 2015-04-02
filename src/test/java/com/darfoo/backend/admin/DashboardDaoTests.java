@@ -5,7 +5,7 @@ package com.darfoo.backend.admin;
  */
 
 import com.darfoo.backend.dao.DashboardDao;
-import com.darfoo.backend.model.cota.DanceVideoType;
+import com.darfoo.backend.model.cota.enums.DanceVideoType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

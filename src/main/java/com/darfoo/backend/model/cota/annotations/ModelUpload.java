@@ -1,4 +1,6 @@
-package com.darfoo.backend.model.cota;
+package com.darfoo.backend.model.cota.annotations;
+
+import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,7 +1,7 @@
 package com.darfoo.backend.model.statistics.clickcount;
 
-import com.darfoo.backend.model.cota.CSVTitle;
-import com.darfoo.backend.model.cota.ModelAttrSuper;
+import com.darfoo.backend.model.cota.annotations.CSVTitle;
+import com.darfoo.backend.model.cota.annotations.ModelAttrSuper;
 
 /**
  * Created by zjh on 15-3-2.

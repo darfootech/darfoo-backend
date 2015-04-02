@@ -1,6 +1,6 @@
 package com.darfoo.backend.model.statistics.clickcount;
 
-import com.darfoo.backend.model.cota.CSVTitle;
+import com.darfoo.backend.model.cota.annotations.CSVTitle;
 
 import java.io.Serializable;
 

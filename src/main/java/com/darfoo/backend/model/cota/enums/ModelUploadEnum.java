@@ -1,4 +1,4 @@
-package com.darfoo.backend.model.cota;
+package com.darfoo.backend.model.cota.enums;
 
 /**
  * Created by zjh on 15-2-24.

@@ -2,8 +2,7 @@ package com.darfoo.backend.service.resource;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.DanceVideoDao;
-import com.darfoo.backend.model.cota.ResourceHot;
-import com.darfoo.backend.model.cota.DanceGroupType;
+import com.darfoo.backend.model.cota.enums.DanceGroupType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import org.springframework.beans.factory.annotation.Autowired;

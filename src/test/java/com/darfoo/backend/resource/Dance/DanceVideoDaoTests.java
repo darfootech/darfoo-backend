@@ -3,7 +3,7 @@ package com.darfoo.backend.resource.Dance;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.*;
 import com.darfoo.backend.dao.resource.DanceVideoDao;
-import com.darfoo.backend.model.cota.DanceVideoType;
+import com.darfoo.backend.model.cota.enums.DanceVideoType;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.TypeClassMapping;
@@ -15,9 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

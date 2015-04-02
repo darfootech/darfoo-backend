@@ -2,7 +2,7 @@ package com.darfoo.backend.caches.cota;
 
 import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.cota.DanceVideoType;
+import com.darfoo.backend.model.cota.enums.DanceVideoType;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceVideo;

@@ -1,10 +1,7 @@
 package com.darfoo.backend.dao.resource;
 
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.cota.PaginationDao;
-import com.darfoo.backend.model.cota.DanceGroupType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Component

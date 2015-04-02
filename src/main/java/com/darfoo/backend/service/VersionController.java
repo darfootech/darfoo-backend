@@ -3,7 +3,7 @@ package com.darfoo.backend.service;
 import com.darfoo.backend.dao.VersionDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.Version;
-import com.darfoo.backend.model.cota.ModelUploadEnum;
+import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
 import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
 import com.darfoo.backend.utils.ServiceUtils;

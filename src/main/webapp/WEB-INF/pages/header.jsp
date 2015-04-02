@@ -91,8 +91,9 @@
                     <ul class="dropdown-menu">
                         <li><a href="/darfoobackend/rest/admin/recommend/dancevideo">首页推荐舞蹈欣赏</a></li>
                         <li><a href="/darfoobackend/rest/admin/recommend/updateimage/all">查看修改推荐舞蹈视频图片</a></li>
-                        <li><a href="/darfoobackend/rest/admin/dancegroup/changehot">推荐热门舞队</a></li>
-                        <li><a href="/darfoobackend/rest/admin/dancemusic/changehot">推荐热门舞蹈伴奏</a></li>
+                        <li><a href="/darfoobackend/rest/admin/dancegroup/change/hot">推荐热门舞队</a></li>
+                        <li><a href="/darfoobackend/rest/admin/dancegroup/change/priority">推荐热门舞队</a></li>
+                        <li><a href="/darfoobackend/rest/admin/dancemusic/change/hot">推荐热门舞蹈伴奏</a></li>
                     </ul>
                 </li>
 

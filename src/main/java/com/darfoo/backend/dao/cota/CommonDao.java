@@ -4,7 +4,7 @@ import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.dao.resource.InsertDao;
 import com.darfoo.backend.dao.resource.UpdateDao;
-import com.darfoo.backend.model.cota.ModelOperation;
+import com.darfoo.backend.model.cota.annotations.ModelOperation;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;

@@ -1,6 +1,6 @@
 package com.darfoo.backend.utils;
 
-import com.darfoo.backend.model.cota.ModelUploadEnum;
+import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.File;
