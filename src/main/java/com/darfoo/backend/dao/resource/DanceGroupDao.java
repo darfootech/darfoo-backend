@@ -32,6 +32,7 @@ public class DanceGroupDao {
 
     /**
      * 根据舞队关联的舞蹈视频的数量来进行倒排序获得所有舞队
+     *
      * @return
      */
     public List getDanceGroupsOrderByVideoCountDesc() {

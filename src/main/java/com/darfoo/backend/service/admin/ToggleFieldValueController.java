@@ -1,7 +1,6 @@
 package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.cota.enums.ResourceHot;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

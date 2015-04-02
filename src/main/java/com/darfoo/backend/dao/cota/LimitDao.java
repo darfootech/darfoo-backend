@@ -2,13 +2,8 @@ package com.darfoo.backend.dao.cota;
 
 import com.darfoo.backend.model.cota.annotations.HotSize;
 import com.darfoo.backend.model.cota.annotations.PageSize;
-import com.darfoo.backend.model.resource.dance.DanceGroup;
-import com.darfoo.backend.model.resource.dance.DanceMusic;
-import com.darfoo.backend.model.resource.dance.DanceVideo;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -18,7 +13,7 @@ import java.util.List;
  * Created by zjh on 15-2-20.
  */
 
-//for the pagination stuff 分页加载机制
+//限制显示资源的数量 分页显示 热门资源个数
 public class LimitDao {
     @Autowired
     CommonDao commonDao;
@@ -35,6 +30,7 @@ public class LimitDao {
 
     /**
      * 获得某一类别资源的热门资源的个数
+     *
      * @param resource
      * @return
      */

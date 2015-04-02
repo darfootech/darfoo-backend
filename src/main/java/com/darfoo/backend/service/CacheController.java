@@ -2,16 +2,8 @@ package com.darfoo.backend.service;
 
 import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.caches.dao.CacheUtils;
-import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
-import com.darfoo.backend.model.resource.dance.DanceMusic;
-import com.darfoo.backend.model.resource.dance.DanceVideo;
-import com.darfoo.backend.service.cota.CacheCollType;
-import com.darfoo.backend.service.cota.TypeClassMapping;
-import com.darfoo.backend.service.responsemodel.SingleDanceMusic;
-import com.darfoo.backend.service.responsemodel.SingleDanceVideo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
