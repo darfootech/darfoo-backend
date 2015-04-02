@@ -2,7 +2,7 @@ package com.darfoo.backend.resource.Dance;
 
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.cota.PaginationDao;
+import com.darfoo.backend.dao.cota.LimitDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.model.cota.enums.ResourceHot;
 import com.darfoo.backend.model.cota.enums.DanceGroupType;
@@ -27,7 +27,7 @@ public class DanceGroupDaoTests {
     @Autowired
     CommonDao commonDao;
     @Autowired
-    PaginationDao paginationDao;
+    LimitDao limitDao;
 
     QiniuUtils qiniuUtils = new QiniuUtils();
 
@@ -117,7 +117,7 @@ public class DanceGroupDaoTests {
 
     @Test
     public void getAllPages() {
-        System.out.println("pagecount -> " + paginationDao.getResourcePageCount(DanceGroup.class));
+        System.out.println("pagecount -> " + limitDao.getResourcePageCount(DanceGroup.class));
     }
 
     @Test

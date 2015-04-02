@@ -3,7 +3,7 @@ package com.darfoo.backend.resource.Dance;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.cota.PaginationDao;
+import com.darfoo.backend.dao.cota.LimitDao;
 import com.darfoo.backend.dao.resource.InsertDao;
 import com.darfoo.backend.model.cota.enums.ResourceHot;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
@@ -25,7 +25,7 @@ public class DanceMusicDaoTests {
     @Autowired
     CommonDao commonDao;
     @Autowired
-    PaginationDao paginationDao;
+    LimitDao limitDao;
     @Autowired
     CategoryDao categoryDao;
     @Autowired

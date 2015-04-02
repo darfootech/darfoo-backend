@@ -19,7 +19,7 @@ import java.util.List;
  */
 
 //for the pagination stuff 分页加载机制
-public class PaginationDao {
+public class LimitDao {
     @Autowired
     CommonDao commonDao;
 

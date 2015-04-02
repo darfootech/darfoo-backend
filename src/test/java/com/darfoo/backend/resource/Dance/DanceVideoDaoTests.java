@@ -26,7 +26,7 @@ public class DanceVideoDaoTests {
     @Autowired
     RecommendDao recommendDao;
     @Autowired
-    PaginationDao paginationDao;
+    LimitDao limitDao;
     @Autowired
     CategoryDao categoryDao;
     @Autowired
@@ -209,12 +209,12 @@ public class DanceVideoDaoTests {
 
     @Test
     public void getPageCount() {
-        System.out.println("pagecount -> " + paginationDao.getResourcePageCount(DanceVideo.class));
+        System.out.println("pagecount -> " + limitDao.getResourcePageCount(DanceVideo.class));
     }
 
     @Test
     public void getVideosByPage() {
-        List<DanceVideo> result = paginationDao.getResourcesByPage(DanceVideo.class, 1);
+        List<DanceVideo> result = limitDao.getResourcesByPage(DanceVideo.class, 1);
         System.out.println(result.size());
     }
 

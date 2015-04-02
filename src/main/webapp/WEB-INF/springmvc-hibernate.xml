@@ -85,11 +85,11 @@
     <bean id="commonDao" class="com.darfoo.backend.dao.cota.CommonDao"/>
     <bean id="recommendDao" class="com.darfoo.backend.dao.cota.RecommendDao"/>
     <bean id="categoryDao" class="com.darfoo.backend.dao.cota.CategoryDao"/>
-    <bean id="paginationDao" class="com.darfoo.backend.dao.cota.PaginationDao"/>
+    <bean id="limitDao" class="com.darfoo.backend.dao.cota.LimitDao"/>
     <bean id="accompanyDao" class="com.darfoo.backend.dao.cota.AccompanyDao"/>
     <bean id="statisticsDao" class="com.darfoo.backend.dao.statistic.StatisticsDao"/>
     <bean id="authenticateDao" class="com.darfoo.backend.dao.auth.AuthenticateDao"/>
 
-    <bean id="videoCates" class="com.darfoo.backend.service.category.DanceVideoCates"/>
-    <bean id="musicCates" class="com.darfoo.backend.service.category.DanceMusicCates"/>
+    <bean id="danceVideoCates" class="com.darfoo.backend.service.category.DanceVideoCates"/>
+    <bean id="danceMusicCates" class="com.darfoo.backend.service.category.DanceMusicCates"/>
 </beans>

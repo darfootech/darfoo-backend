@@ -2,7 +2,7 @@ package com.darfoo.backend.caches.dao;
 
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.cota.PaginationDao;
+import com.darfoo.backend.dao.cota.LimitDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.model.cota.enums.ResourceHot;
@@ -34,7 +34,7 @@ public class CacheUtils {
     @Autowired
     CategoryDao categoryDao;
     @Autowired
-    PaginationDao paginationDao;
+    LimitDao limitDao;
     @Autowired
     VideoCacheDao videoCacheDao;
 
@@ -55,7 +55,7 @@ public class CacheUtils {
             return cacheDao.extractResourcesFromCache(response, cachekey, cachetype);
         } else {
             int page = pageArray[0];
-            int pageSize = paginationDao.getResourcePageSize(resource);
+            int pageSize = limitDao.getResourcePageSize(resource);
             long start = (page - 1) * pageSize;
             long end = page * pageSize - 1;
             return cacheDao.extractResourcesFromCache(response, cachekey, cachetype, start, end);
