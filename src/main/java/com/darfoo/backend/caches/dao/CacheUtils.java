@@ -82,7 +82,7 @@ public class CacheUtils {
 
     public List cacheRecommendResources(String type) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
-        String cachekey = String.format("recommend%s", type);
+        String cachekey = String.format("%srecommend", type);
 
         List recommendResources = recommendDao.getRecommendResources(resource);
         cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, cachekey, CacheCollType.SORTEDSET);
