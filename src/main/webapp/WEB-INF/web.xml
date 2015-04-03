@@ -29,6 +29,7 @@
             /WEB-INF/pre-deal.xml
             /WEB-INF/springmvc-hibernate.xml
             /WEB-INF/redis-context.xml
+            /WEB-INF/util-context.xml
         </param-value>
     </context-param>
 

@@ -12,8 +12,6 @@
         http://www.springframework.org/schema/task
         http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
-    <!--<context:component-scan base-package="com.darfoo.backend.service" />
-    <context:component-scan base-package="com.springapp.mvc" />-->
     <context:component-scan base-package="com.darfoo.backend.service"/>
 
     <mvc:annotation-driven/>
@@ -58,12 +56,4 @@
     <!--定时服务后面可以作为定时清理redis，清理session的cronjob-->
     <!--<bean id="reportCurrentTime" class="com.darfoo.backend.utils.ScheduledTasks"/>-->
     <bean id="flushRedisCache" class="com.darfoo.backend.utils.ScheduledTasks"/>
-
-    <!-- 引入同文件夹下的redis属性配置文件 -->
-    <!--<import resource="redis-context.xml"/>-->
-
-    <!-- 错误路径和错误页面，注意指定viewResolver -->
-    <!--<mvc:view-controller path="/error/404" view-name="404"/>
-    <mvc:view-controller path="/error/500" view-name="500"/>
-    <mvc:view-controller path="/error/uncaughtException" view-name="uncaughtexception"/>-->
 </beans>
