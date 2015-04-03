@@ -57,6 +57,7 @@ public class CacheController {
     }
 
     /**
+     * 舞曲大全 所有舞队
      * 获取所有的舞队(与老版本的launcher兼容)
      *
      * @param type
@@ -67,6 +68,18 @@ public class CacheController {
     @ResponseBody
     List cacheIndexResources(@PathVariable String type) {
         return cacheUtils.cacheIndexResources(type);
+    }
+
+    /**
+     * index分页
+     * @param type
+     * @return
+     */
+    @RequestMapping(value = "/{type}/index/page/{page}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List cacheIndexResourcesByPage(@PathVariable String type, @PathVariable Integer page) {
+        return cacheUtils.cacheIndexResources(type, page);
     }
 
     /**

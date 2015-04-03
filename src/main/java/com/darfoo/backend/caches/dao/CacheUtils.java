@@ -96,7 +96,7 @@ public class CacheUtils {
      * @param type
      * @return
      */
-    public List cacheIndexResources(String type) {
+    public List cacheIndexResources(String type, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         String cachekey = String.format("%sindex", type);
 
@@ -104,13 +104,19 @@ public class CacheUtils {
         if (type.equals("dancegroup")) {
             resources = danceGroupDao.getDanceGroupsOrderByVideoCountDesc();
         } else {
-            resources = new ArrayList();
+            resources = commonDao.getAllResource(resource);
         }
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
-        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET);
+        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
     }
 
+    /**
+     * 根据最新资源个数限制根据修改日期倒排序返回资源列表
+     * @param type
+     * @param pageArray
+     * @return
+     */
     public List cacheNewestResources(String type, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         String cachekey = String.format("%snewest", type);
