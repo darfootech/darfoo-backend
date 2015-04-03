@@ -12,7 +12,7 @@ import java.util.HashMap;
  */
 public class StatisticsDao {
     MongoClient client = MongoManager.getMongoClientInstance();
-    DB db = client.getDB("statistics");
+    DB db = client.getDB("darfoolog");
 
     public DBCursor getAllStatisticData(Class resource) {
         DBCollection coll = db.getCollection(resource.getSimpleName().toLowerCase());
