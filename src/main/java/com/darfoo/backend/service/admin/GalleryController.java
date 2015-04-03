@@ -121,7 +121,7 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/gallery/all/{type}/{innertype}", method = RequestMethod.GET)
-    public String showAllAuthor(@PathVariable String type, @PathVariable String innertype, ModelMap modelMap) {
+    public String showAllResourcesByInnerType(@PathVariable String type, @PathVariable String innertype, ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("type", Enum.valueOf(TypeClassMapping.innerTypeClassMap.get(type), innertype));
         List resources = commonDao.getResourcesByFields(TypeClassMapping.typeClassMap.get(type), conditions);
@@ -153,7 +153,7 @@ public class GalleryController {
         return String.format("resource/single%s", type);
     }
 
-    @RequestMapping(value = "/admin/author/videos/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/dancegroup/videos/{id}", method = RequestMethod.GET)
     public String showAuthorVideos(@PathVariable Integer id, ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", id);

@@ -72,8 +72,9 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">下载表格 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/darfoobackend/rest/admin/download/dancevideo">下载视舞蹈频资源表格</a></li>
-                        <li><a href="/darfoobackend/rest/admin/download/dancemusic">下载伴舞蹈奏资源表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/dancevideo">下载舞蹈视频资源表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/dancemusic">下载舞蹈伴奏资源表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/dancegroup">下载舞队资源表格</a></li>
                         <li><a href="/darfoobackend/rest/admin/download/feedback">下载用户反馈表格</a></li>
                         <li><a href="/darfoobackend/rest/admin/download/stat/resourceclickcount">下载资源点击热度表格</a></li>
                         <li><a href="/darfoobackend/rest/admin/download/stat/menuclickcount">下载菜单点击热度表格</a></li>

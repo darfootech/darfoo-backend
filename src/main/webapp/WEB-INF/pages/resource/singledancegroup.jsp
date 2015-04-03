@@ -59,12 +59,12 @@
                 <br/>
                 <br/>
                 <br/>
-                <a href="/darfoobackend/rest/admin/download/authorvideos/${author.id}" style="margin-right: 100px">
+                <a href="/darfoobackend/rest/admin/download/dancegroupvideos/${author.id}" style="margin-right: 100px">
                     <button type="button" class="btn btn-default">
                         下载舞队视频资源表格
                     </button>
                 </a>
-                <a href="/darfoobackend/rest/admin/author/videos/${author.id}">
+                <a href="/darfoobackend/rest/admin/dancegroup/videos/${author.id}">
                     <button type="button" class="btn btn-default">
                         查看和舞队关联的视频资源
                     </button>

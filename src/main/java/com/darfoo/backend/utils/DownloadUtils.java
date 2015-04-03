@@ -166,7 +166,7 @@ public class DownloadUtils {
      *
      * @param id
      */
-    public String writeVideosOfDanceGroupToCSV(Integer id) {
+    public void writeVideosOfDanceGroupToCSV(Integer id) {
         String dancegroupName = ((DanceGroup) commonDao.getResourceById(DanceGroup.class, id)).getName();
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", id);
@@ -191,6 +191,5 @@ public class DownloadUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return dancegroupName;
     }
 }
