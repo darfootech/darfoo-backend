@@ -107,7 +107,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">资源同步 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/darfoobackend/rest/admin/runscript/upload">同步视频音频资源</a></li>
+                        <li><a href="/darfoobackend/rest/cache/admin/refreshcache">刷新缓存资源</a></li>
                         <li><a href="/darfoobackend/rest/admin/runscript/resourcevolumn">查看未同步视频音频容量</a></li>
                     </ul>
                 </li>

@@ -1,11 +1,13 @@
 package com.darfoo.backend.service;
 
+import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.caches.dao.CacheUtils;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +31,19 @@ public class CacheController {
     CommonDao commonDao;
     @Autowired
     CacheUtils cacheUtils;
+    @Autowired
+    CommonRedisClient redisClient;
+
+    //当在dashboard中修改了资源之后需要刷新(清空)redis
+    @RequestMapping(value = "/admin/refreshcache", method = RequestMethod.GET)
+    public String refreshCache(ModelMap modelMap) {
+        if (redisClient.deleteCurrentDB()) {
+            modelMap.put("message", "刷新成功");
+        } else {
+            modelMap.put("message", "刷新失败");
+        }
+        return "refreshcache";
+    }
 
     /**
      * 根据id获取某一类资源的单个记录
