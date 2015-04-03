@@ -1,8 +1,6 @@
 package com.darfoo.backend.caches.dao;
 
 import com.darfoo.backend.caches.client.CommonRedisClient;
-import com.darfoo.backend.model.resource.dance.DanceMusic;
-import com.darfoo.backend.model.resource.dance.DanceVideo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

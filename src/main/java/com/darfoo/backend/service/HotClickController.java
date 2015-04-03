@@ -26,13 +26,17 @@ public class HotClickController {
     String hottestField = "hottest";
 
     @RequestMapping(value = "{type}/{id}", method = RequestMethod.GET)
-    public @ResponseBody String singleResourceHotClick(@PathVariable String type, @PathVariable Integer id) {
+    public
+    @ResponseBody
+    String singleResourceHotClick(@PathVariable String type, @PathVariable Integer id) {
         System.out.println(CRUDEvent.getResponse(commonDao.incResourceField(TypeClassMapping.typeClassMap.get(type), id, hottestField)));
         return "ok";
     }
 
     @RequestMapping(value = "{type}/{accompanytype}/{id}", method = RequestMethod.GET)
-    public @ResponseBody String accompanyResourceHotClick(@PathVariable String type, @PathVariable String accompanytype, @PathVariable Integer id) {
+    public
+    @ResponseBody
+    String accompanyResourceHotClick(@PathVariable String type, @PathVariable String accompanytype, @PathVariable Integer id) {
         if (type.equals("dancevideo") && accompanytype.equals("dancemusic")) {
             DanceMusic music = ((DanceVideo) commonDao.getResourceById(DanceVideo.class, id)).getMusic();
             if (music != null) {

@@ -1,6 +1,7 @@
 package com.darfoo.backend.offlinejobs;
 
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,14 +25,28 @@ public class UpdateResourceKey {
 
     @Test
     public void updateVideoKey() {
-        List<DanceVideo> s_videos = commonDao.getAllResource(DanceVideo.class);
-        for (DanceVideo video : s_videos) {
+        List<DanceVideo> videos = commonDao.getAllResource(DanceVideo.class);
+        for (DanceVideo video : videos) {
             int videoid = video.getId();
             String videokey = video.getVideo_key() + ".mp4";
             HashMap<String, Object> updateMap = new HashMap<String, Object>();
             updateMap.put("video_key", videokey);
             commonDao.updateResourceFieldsById(DanceVideo.class, videoid, updateMap);
         }
-        System.out.println("总共查到" + s_videos.size());
+        System.out.println("总共查到" + videos.size());
+    }
+
+    @Test
+    public void updateMusicKey() {
+        List<DanceMusic> musics = commonDao.getAllResource(DanceMusic.class);
+        for (DanceMusic music : musics) {
+            int musicid = music.getId();
+            String musickey = music.getMusic_key() + ".mp3";
+            HashMap<String, Object> updateMap = new HashMap<String, Object>();
+            updateMap.put("music_key", musickey);
+            commonDao.updateResourceFieldsById(DanceMusic.class, musicid, updateMap);
+
+        }
+        System.out.println("总共查到" + musics.size());
     }
 }
