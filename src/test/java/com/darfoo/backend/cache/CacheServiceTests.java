@@ -20,7 +20,8 @@ import java.util.List;
 @ContextConfiguration({
         "file:src/main/webapp/WEB-INF/pre-deal.xml",
         "file:src/main/webapp/WEB-INF/redis-context.xml",
-        "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml"
+        "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml",        "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml",
+        "file:src/main/webapp/WEB-INF/util-context.xml"
 })
 public class CacheServiceTests {
     @Autowired

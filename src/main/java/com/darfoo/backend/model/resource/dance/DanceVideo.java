@@ -3,10 +3,7 @@ package com.darfoo.backend.model.resource.dance;
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
 import com.darfoo.backend.model.category.DanceVideoCategory;
-import com.darfoo.backend.model.cota.annotations.ModelInsert;
-import com.darfoo.backend.model.cota.annotations.ModelOperation;
-import com.darfoo.backend.model.cota.annotations.ModelUpdate;
-import com.darfoo.backend.model.cota.annotations.ModelUpload;
+import com.darfoo.backend.model.cota.annotations.*;
 import com.darfoo.backend.model.cota.annotations.limit.NewestSize;
 import com.darfoo.backend.model.cota.annotations.limit.PageSize;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
@@ -47,6 +44,7 @@ public class DanceVideo implements Serializable {
     @Cascade(value = {org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.SAVE_UPDATE})
     @JoinColumn(name = "AUTHOR_ID", referencedColumnName = "id")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
+    @CSVTitle(title = "舞队名称")
     DanceGroup author;
 
     //视频对应的类别
@@ -63,6 +61,7 @@ public class DanceVideo implements Serializable {
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     @ModelInsert
     @ModelUpdate
+    @CSVTitle(title = "视频标题")
     String title;
 
     @Column(name = "UPDATE_TIMESTAMP", nullable = false, columnDefinition = "bigint(64) not null")
@@ -82,6 +81,7 @@ public class DanceVideo implements Serializable {
 
     //欣赏 教学
     @Column(name = "VIDEO_TYPE", nullable = true, updatable = true, columnDefinition = "int default 0")
+    @CSVTitle(title = "视频类型")
     DanceVideoType type;
 
     //mp4 flv

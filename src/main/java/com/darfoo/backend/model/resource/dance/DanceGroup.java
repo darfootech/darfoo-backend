@@ -2,10 +2,7 @@ package com.darfoo.backend.model.resource.dance;
 
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
-import com.darfoo.backend.model.cota.annotations.ModelInsert;
-import com.darfoo.backend.model.cota.annotations.ModelOperation;
-import com.darfoo.backend.model.cota.annotations.ModelUpdate;
-import com.darfoo.backend.model.cota.annotations.ModelUpload;
+import com.darfoo.backend.model.cota.annotations.*;
 import com.darfoo.backend.model.cota.annotations.limit.HotSize;
 import com.darfoo.backend.model.cota.annotations.limit.PageSize;
 import com.darfoo.backend.model.cota.enums.DanceGroupType;
@@ -39,12 +36,14 @@ public class DanceGroup implements Serializable {
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     @ModelInsert
     @ModelUpdate
+    @CSVTitle(title = "舞队名字")
     String name;
 
     @Column(name = "DESCRIPTION", nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     @ModelInsert
     @ModelUpdate
+    @CSVTitle(title = "舞队简介")
     String description;
 
     //暂时弄成单向对应关系
@@ -65,6 +64,7 @@ public class DanceGroup implements Serializable {
     String imagekey;
 
     @Column(name = "TYPE", nullable = false, updatable = true, columnDefinition = "int default 0")
+    @CSVTitle(title = "舞队类型")
     DanceGroupType type = DanceGroupType.STAR;
 
     @Column(name = "HOT", nullable = false, updatable = true, columnDefinition = "int default 0")

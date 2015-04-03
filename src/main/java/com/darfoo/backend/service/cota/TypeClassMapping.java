@@ -42,6 +42,8 @@ public class TypeClassMapping {
     public static HashMap<String, DanceVideoType> danceVideoTypeMap = new HashMap<String, DanceVideoType>();
     public static HashMap<String, DanceGroupType> danceGroupTypeMap = new HashMap<String, DanceGroupType>();
 
+    public static HashMap<Enum, String> typeNameMap = new HashMap<Enum, String>();
+
     public static HashMap<String, Class> resourceFieldClassMap = new HashMap<String, Class>();
 
     static {
@@ -82,6 +84,11 @@ public class TypeClassMapping {
         danceVideoTypeNameMap.put(DanceVideoType.TUTORIAL, "教学视频");
         danceGroupTypeNameMap.put(DanceGroupType.NORMAL, "普通舞队");
         danceGroupTypeNameMap.put(DanceGroupType.STAR, "明星舞队");
+
+        typeNameMap.put(DanceVideoType.NORMAL, "欣赏视频");
+        typeNameMap.put(DanceVideoType.TUTORIAL, "教学视频");
+        typeNameMap.put(DanceGroupType.NORMAL, "普通舞队");
+        typeNameMap.put(DanceGroupType.STAR, "明星舞队");
 
         danceVideoTypeMap.put("normal", DanceVideoType.NORMAL);
         danceVideoTypeMap.put("tutorial", DanceVideoType.TUTORIAL);

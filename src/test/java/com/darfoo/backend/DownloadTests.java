@@ -12,10 +12,18 @@ import com.darfoo.backend.model.cota.annotations.CSVTitle;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.statistics.CrashLog;
+import com.darfoo.backend.model.statistics.SearchHistory;
+import com.darfoo.backend.model.statistics.clickcount.MenuClickCount;
 import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
+import com.darfoo.backend.model.statistics.clickcount.TabClickCount;
+import com.darfoo.backend.model.statistics.clicktime.MenuClickTime;
+import com.darfoo.backend.model.statistics.clicktime.ResourceClickTime;
+import com.darfoo.backend.model.statistics.clicktime.TabClickTime;
 import com.darfoo.backend.service.category.DanceMusicCates;
 import com.darfoo.backend.service.category.DanceVideoCates;
 import com.darfoo.backend.utils.DiskFileDirConfig;
+import com.darfoo.backend.utils.DownloadUtils;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import org.apache.commons.csv.CSVFormat;
@@ -38,188 +46,42 @@ import java.util.List;
 import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
+@ContextConfiguration({
+        "file:src/main/webapp/WEB-INF/pre-deal.xml",
+        "file:src/main/webapp/WEB-INF/redis-context.xml",
+        "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml",        "file:src/main/webapp/WEB-INF/springmvc-hibernate.xml",
+        "file:src/main/webapp/WEB-INF/util-context.xml"
+})
 public class DownloadTests {
     @Autowired
-    CommonDao commonDao;
-    @Autowired
-    DanceVideoCates videoCates;
-    @Autowired
-    DanceMusicCates musicCates;
-    @Autowired
-    StatisticsDao statisticsDao;
-
-    public String timestampTodatetime(long timestampfromdb) {
-        Timestamp timestamp = new Timestamp(timestampfromdb);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return simpleDateFormat.format(timestamp);
-    }
-
-    public byte[] mergeByteArray(byte[] bomHead, byte[] fileBytes) {
-        byte[] download = new byte[bomHead.length + fileBytes.length];
-        System.arraycopy(bomHead, 0, download, 0, bomHead.length);
-        System.arraycopy(fileBytes, 0, download, bomHead.length, fileBytes.length);
-        return download;
-    }
-
-    public void writeResourcesToCSV(Class resource) {
-        List resources = commonDao.getAllResource(resource);
-        CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
-        CSVPrinter printer = null;
-        try {
-            Writer out = new FileWriter(String.format("%s%s.csv", DiskFileDirConfig.csvdir, resource.getSimpleName().toLowerCase()));
-            printer = new CSVPrinter(out, format.withDelimiter(','));
-            HashMap<String, String> styleMap = new HashMap<String, String>();
-
-            if (resource == DanceVideo.class) {
-                printer.printRecord("教程标题", "明星舞队名称", "舞蹈速度", "舞蹈难度", "舞蹈风格");
-                for (Object object : resources) {
-                    DanceVideo video = (DanceVideo) object;
-                    Set<DanceVideoCategory> categories = video.getCategories();
-                    for (DanceVideoCategory category : categories) {
-                        String categorytitle = category.getTitle();
-                        /*if (tutorialCates.getSpeedCategory().containsValue(categorytitle)) {
-                            styleMap.put("speed", categorytitle);
-                        } else if (tutorialCates.getDifficultyCategory().containsValue(categorytitle)) {
-                            styleMap.put("difficult", categorytitle);
-                        } else if (tutorialCates.getStyleCategory().containsValue(categorytitle)) {
-                            styleMap.put("style", categorytitle);
-                        } else {
-                            System.out.println("something is wrong with the category");
-                        }*/
-                    }
-                    List<String> itemData = new ArrayList<String>();
-                    itemData.add(video.getTitle());
-                    if (video.getAuthor() != null) {
-                        itemData.add(video.getAuthor().getName());
-                    } else {
-                        itemData.add("没有关联明星舞队");
-                    }
-                    if (styleMap.get("speed") != null) {
-                        itemData.add(styleMap.get("speed"));
-                    } else {
-                        itemData.add("没有填教程速度");
-                    }
-                    if (styleMap.get("difficult") != null) {
-                        itemData.add(styleMap.get("difficult"));
-                    } else {
-                        itemData.add("没有填教程难度");
-                    }
-                    if (styleMap.get("style") != null) {
-                        itemData.add(styleMap.get("style"));
-                    } else {
-                        itemData.add("没有填教程风格");
-                    }
-
-                    itemData.add(timestampTodatetime(video.getUpdate_timestamp()));
-                    printer.printRecord(itemData);
-                }
-            } else if (resource == DanceMusic.class) {
-                printer.printRecord("伴奏标题", "舞蹈节奏", "舞蹈风格", "首字母");
-                for (Object object : resources) {
-                    DanceMusic music = (DanceMusic) object;
-                    Set<DanceMusicCategory> categories = music.getCategories();
-                    for (DanceMusicCategory category : categories) {
-                        String categorytitle = category.getTitle();
-                        /*if (musicCates.getBeatCategory().containsValue(categorytitle)) {
-                            styleMap.put("beat", categorytitle);
-                        } else if (musicCates.getStyleCategory().containsValue(categorytitle)) {
-                            styleMap.put("style", categorytitle);
-                        } else {
-                            styleMap.put("letter", categorytitle);
-                        }*/
-                    }
-                    List<String> itemData = new ArrayList<String>();
-                    itemData.add(music.getTitle());
-
-                    if (styleMap.get("beat") != null) {
-                        itemData.add(styleMap.get("beat"));
-                    } else {
-                        itemData.add("没有填舞蹈节奏");
-                    }
-                    if (styleMap.get("style") != null) {
-                        itemData.add(styleMap.get("style"));
-                    } else {
-                        itemData.add("没有填舞蹈风格");
-                    }
-                    if (styleMap.get("letter") != null) {
-                        itemData.add(styleMap.get("letter"));
-                    } else {
-                        itemData.add("没有填首字母");
-                    }
-
-                    itemData.add(timestampTodatetime(music.getUpdate_timestamp()));
-                    printer.printRecord(itemData);
-                }
-            } else {
-                System.out.println("wired");
-            }
-            printer.flush();
-            printer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void writeStatisticDataToCSV(Class resource) {
-        DBCursor cursor = statisticsDao.getAllStatisticData(resource);
-        CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
-        CSVPrinter printer = null;
-
-        try {
-            Writer out = new FileWriter(String.format("%s%s.csv", DiskFileDirConfig.csvdir, resource.getSimpleName().toLowerCase()));
-            printer = new CSVPrinter(out, format.withDelimiter(','));
-            HashMap<String, String> styleMap = new HashMap<String, String>();
-
-            List<String> headers = new ArrayList<String>();
-            List<String> attrs = new ArrayList<String>();
-
-            for (Field field : resource.getFields()) {
-                if (field.isAnnotationPresent(CSVTitle.class)) {
-                    String title = field.getAnnotation(CSVTitle.class).title();
-                    headers.add(title);
-                    attrs.add(field.getName());
-                }
-            }
-            printer.printRecord(headers);
-
-            while (cursor.hasNext()) {
-                List itemData = new ArrayList();
-                DBObject object = cursor.next();
-                for (String attr : attrs) {
-                    Field field = resource.getField(attr);
-                    Object value = object.get(field.getName().toLowerCase());
-                    System.out.println(value);
-                    itemData.add(value);
-                }
-                printer.printRecord(itemData);
-            }
-
-            printer.flush();
-            printer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-    }
+    DownloadUtils downloadUtils;
 
     @Test
-    public void writeVideosToCSV() {
-        writeResourcesToCSV(DanceVideo.class);
-    }
-
-    @Test
-    public void writeMusicsToCSV() {
-        writeResourcesToCSV(DanceMusic.class);
+    public void writeResourcesToCSV() {
+        Class[] classes = {DanceVideo.class, DanceMusic.class, DanceGroup.class};
+        for (Class c : classes) {
+            downloadUtils.writeResourcesToCSV(c);
+        }
     }
 
     @Test
     public void writeStatisticsRecordsToCSV() {
-        writeStatisticDataToCSV(ResourceClickCount.class);
+        Class[] classes = {
+                ResourceClickCount.class,
+                ResourceClickTime.class,
+                MenuClickCount.class,
+                MenuClickTime.class,
+                TabClickCount.class,
+                TabClickTime.class,
+                CrashLog.class,
+                SearchHistory.class
+        };
+        for (Class c : classes) {
+            downloadUtils.writeStatisticDataToCSV(c);
+        }
     }
 
-    @Test
+    /*@Test
     public void writeVideosOfAuthorToCSV() {
         int authorid = 2;
         String authorname = ((DanceGroup) commonDao.getResourceById(DanceGroup.class, authorid)).getName();
@@ -246,5 +108,5 @@ public class DownloadTests {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }
