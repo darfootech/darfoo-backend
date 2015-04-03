@@ -75,7 +75,7 @@ public class CacheController {
      * @param type
      * @return
      */
-    @RequestMapping(value = "{type}/newest", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/newest", method = RequestMethod.GET)
     public
     @ResponseBody
     List cacheNewestResources(@PathVariable String type) {
@@ -89,7 +89,7 @@ public class CacheController {
      * @param page
      * @return
      */
-    @RequestMapping(value = "{type}/newest/page/{page}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/newest/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
     List cacheNewestResourcesByPage(@PathVariable String type, @PathVariable Integer page) {
@@ -132,7 +132,7 @@ public class CacheController {
      * @param innertype
      * @return
      */
-    @RequestMapping(value = "{type}/innertype/{innertype}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/innertype/{innertype}", method = RequestMethod.GET)
     public
     @ResponseBody
     List getResourcesByInnertype(@PathVariable String type, @PathVariable String innertype) {
@@ -146,7 +146,7 @@ public class CacheController {
      * @param innertype
      * @return
      */
-    @RequestMapping(value = "{type}/innertype/{innertype}/page/{page}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/innertype/{innertype}/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
     List getResourcesByInnertypeByPage(@PathVariable String type, @PathVariable String innertype, @PathVariable Integer page) {
@@ -159,7 +159,7 @@ public class CacheController {
      * @param type
      * @return
      */
-    @RequestMapping("/{type}/hot")
+    @RequestMapping(value = "/{type}/hot", method = RequestMethod.GET)
     public
     @ResponseBody
     List getHottestResources(@PathVariable String type) {
@@ -172,7 +172,7 @@ public class CacheController {
      * @param type
      * @return
      */
-    @RequestMapping("/{type}/hot/page/{page}")
+    @RequestMapping(value = "/{type}/hot/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
     List getHottestResourcesByPage(@PathVariable String type, @PathVariable Integer page) {
