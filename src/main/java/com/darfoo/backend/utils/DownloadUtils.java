@@ -2,11 +2,8 @@ package com.darfoo.backend.utils;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.statistic.StatisticsDao;
-import com.darfoo.backend.model.category.DanceMusicCategory;
-import com.darfoo.backend.model.category.DanceVideoCategory;
 import com.darfoo.backend.model.cota.annotations.CSVTitle;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
-import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.category.DanceMusicCates;
 import com.darfoo.backend.service.category.DanceVideoCates;
@@ -16,7 +13,12 @@ import com.mongodb.DBObject;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -26,7 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by zjh on 15-4-3.
@@ -54,6 +55,21 @@ public class DownloadUtils {
         return download;
     }
 
+
+    public ResponseEntity<byte[]> downloadCSVFiles(String filename) throws IOException {
+        String path = String.format("%s%s.csv", DiskFileDirConfig.csvdir, filename);
+        File file = new File(path);
+        HttpHeaders headers = new HttpHeaders();
+        String fileName = new String(String.format("%s.csv", filename).getBytes("UTF-8"), "iso-8859-1");//为了解决中文名称乱码问题
+        headers.setContentDispositionFormData("attachment", fileName);
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        byte[] fileBytes = org.apache.commons.io.FileUtils.readFileToByteArray(file);
+        byte[] bomHead = new byte[]{(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
+        byte[] download = mergeByteArray(bomHead, fileBytes);
+        return new ResponseEntity<byte[]>(download,
+                headers, HttpStatus.CREATED);
+    }
+
     public void writeResourcesToCSV(Class resource) {
         List resources = commonDao.getAllResource(resource);
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
@@ -68,7 +84,6 @@ public class DownloadUtils {
             List<String> attrs = new ArrayList<String>();
 
             for (Field field : resource.getDeclaredFields()) {
-                System.out.println("2333333333");
                 if (field.isAnnotationPresent(CSVTitle.class)) {
                     String title = field.getAnnotation(CSVTitle.class).title();
                     headers.add(title);
@@ -148,9 +163,10 @@ public class DownloadUtils {
 
     /**
      * id指向的舞队所关联的所有舞蹈视频
+     *
      * @param id
      */
-    public void writeVideosOfDanceGroupToCSV(Integer id) {
+    public String writeVideosOfDanceGroupToCSV(Integer id) {
         String dancegroupName = ((DanceGroup) commonDao.getResourceById(DanceGroup.class, id)).getName();
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", id);
@@ -175,5 +191,6 @@ public class DownloadUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return dancegroupName;
     }
 }
