@@ -145,4 +145,35 @@ public class DownloadUtils {
             e.printStackTrace();
         }
     }
+
+    /**
+     * id指向的舞队所关联的所有舞蹈视频
+     * @param id
+     */
+    public void writeVideosOfDanceGroupToCSV(Integer id) {
+        String dancegroupName = ((DanceGroup) commonDao.getResourceById(DanceGroup.class, id)).getName();
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("author_id", id);
+
+        Class videoClass = DanceVideo.class;
+        List videos = commonDao.getResourcesByFields(videoClass, conditions);
+
+        CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
+        CSVPrinter printer = null;
+        try {
+            Writer out = new FileWriter(String.format("%s%s.csv", DiskFileDirConfig.csvdir, String.format("dancegroupvideos-%d", id)));
+            printer = new CSVPrinter(out, format.withDelimiter(','));
+
+            printer.printRecord(dancegroupName);
+
+            for (Object video : videos) {
+                printer.printRecord(commonDao.getResourceAttr(videoClass, video, "title"));
+            }
+
+            printer.flush();
+            printer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

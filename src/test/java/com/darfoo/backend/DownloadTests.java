@@ -81,32 +81,9 @@ public class DownloadTests {
         }
     }
 
-    /*@Test
+    @Test
     public void writeVideosOfAuthorToCSV() {
-        int authorid = 2;
-        String authorname = ((DanceGroup) commonDao.getResourceById(DanceGroup.class, authorid)).getName();
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("author_id", authorid);
-
-        Class videoClass = DanceVideo.class;
-        List videos = commonDao.getResourcesByFields(videoClass, conditions);
-
-        CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
-        CSVPrinter printer = null;
-        try {
-            Writer out = new FileWriter(String.format("%s%s.csv", DiskFileDirConfig.csvdir, String.format("authorvideos-%d", authorid)));
-            printer = new CSVPrinter(out, format.withDelimiter(','));
-
-            printer.printRecord(authorname);
-
-            for (Object video : videos) {
-                printer.printRecord(commonDao.getResourceAttr(videoClass, video, "title"));
-            }
-
-            printer.flush();
-            printer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
+        Integer id = 109;
+        downloadUtils.writeVideosOfDanceGroupToCSV(id);
+    }
 }
