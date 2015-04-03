@@ -4,6 +4,7 @@ package com.darfoo.backend.statistic;
  * Created by zjh on 15-3-2.
  */
 
+import com.darfoo.backend.dao.statistic.MongoManager;
 import com.darfoo.backend.dao.statistic.StatisticsDao;
 import com.darfoo.backend.model.statistics.CrashLog;
 import com.darfoo.backend.model.statistics.SearchHistory;
@@ -13,6 +14,7 @@ import com.darfoo.backend.model.statistics.clickcount.TabClickCount;
 import com.darfoo.backend.model.statistics.clicktime.MenuClickTime;
 import com.darfoo.backend.model.statistics.clicktime.ResourceClickTime;
 import com.darfoo.backend.model.statistics.clicktime.TabClickTime;
+import com.mongodb.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,5 +112,23 @@ public class StatisticsTests {
         conditions.put("log", "exception 呵呵");
 
         statisticsDao.insertTimeBehavior(CrashLog.class, conditions);
+    }
+
+    @Test
+    public void hotSearchKeyWords() {
+        MongoClient client = MongoManager.getMongoClientInstance();
+        DB db = client.getDB("statistics");
+
+        DBCollection collection = db.getCollection("searchhistory");
+
+        DBObject groupFields = new BasicDBObject("_id", "$searchcontent");
+        groupFields.put("count", new BasicDBObject("$sum", 1));
+        AggregationOutput output = collection.aggregate(
+                new BasicDBObject("$group", groupFields),
+                new BasicDBObject("$sort", new BasicDBObject("count", -1)));
+
+        for (DBObject obj : output.results()) {
+            System.out.println(obj.get("_id") + "--->" + obj.get("count"));
+        }
     }
 }
