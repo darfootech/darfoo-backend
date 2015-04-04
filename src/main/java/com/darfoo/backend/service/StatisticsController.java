@@ -111,7 +111,7 @@ public class StatisticsController {
 
         try {
             Method method = statisticsDao.getClass().getDeclaredMethod(methodname, new Class[]{String[].class});
-            method.invoke(statisticsDao, new Object[] {keywordArray});
+            method.invoke(statisticsDao, new Object[]{keywordArray});
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

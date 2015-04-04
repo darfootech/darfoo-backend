@@ -1,7 +1,6 @@
 package com.darfoo.backend.caches.dao;
 
 import com.darfoo.backend.caches.client.CommonRedisClient;
-import com.darfoo.backend.service.cota.CacheCollType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;

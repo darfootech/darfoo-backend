@@ -298,7 +298,9 @@ public class CacheController {
     }
 
     @RequestMapping(value = "/hotsearch", method = RequestMethod.GET)
-    public @ResponseBody List getHotSearchKeyWords() {
+    public
+    @ResponseBody
+    List getHotSearchKeyWords() {
         return cacheUtils.cacheHotSearchKeyWords();
     }
 }

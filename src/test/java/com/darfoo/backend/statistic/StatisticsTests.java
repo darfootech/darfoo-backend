@@ -4,7 +4,6 @@ package com.darfoo.backend.statistic;
  * Created by zjh on 15-3-2.
  */
 
-import com.darfoo.backend.dao.statistic.MongoManager;
 import com.darfoo.backend.dao.statistic.StatisticsDao;
 import com.darfoo.backend.model.statistics.CrashLog;
 import com.darfoo.backend.model.statistics.SearchHistory;
@@ -14,7 +13,6 @@ import com.darfoo.backend.model.statistics.clickcount.TabClickCount;
 import com.darfoo.backend.model.statistics.clicktime.MenuClickTime;
 import com.darfoo.backend.model.statistics.clicktime.ResourceClickTime;
 import com.darfoo.backend.model.statistics.clicktime.TabClickTime;
-import com.mongodb.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +23,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
