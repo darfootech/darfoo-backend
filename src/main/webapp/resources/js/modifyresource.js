@@ -6,7 +6,7 @@ $(function () {
     var type = $("#type").text();
     var id = $("#id").text();
 
-    $("#update").click(function() {
+    $("#update").click(function () {
         $.ajax({
             type: "POST",
             url: "/darfoobackend/rest/admin/" + type + "/update",
@@ -41,7 +41,7 @@ $(function () {
         });
     });
 
-    $("#kickout").click(function(){
+    $("#kickout").click(function () {
         $.ajax({
             type: "POST",
             url: "/darfoobackend/rest/admin/" + type + "/delete",
@@ -62,33 +62,7 @@ $(function () {
         });
     });
 
-    $("#updateimage").click(function(){
+    $("#updateimage").click(function () {
         window.location.href = "/darfoobackend/rest/admin/" + type + "/updateimage/" + id;
-    });
-
-    $.ajax({
-        url: '/darfoobackend/rest/resources/music/all/service',
-        type: 'GET',
-        data: {},
-        success: function (response) {
-            console.log(response);
-
-            var states = new Bloodhound({
-                datumTokenizer: function (d) {
-                    return Bloodhound.tokenizers.whitespace(d.word);
-                },
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                limit: 4,
-                local: response
-            });
-
-            states.initialize();
-
-            $('input.typeahead-only').typeahead(null, {
-                name: 'states',
-                displayKey: 'word',
-                source: states.ttAdapter()
-            });
-        }
     });
 });

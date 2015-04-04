@@ -3,6 +3,7 @@
 
 <div class="container">
     <h6>总共有${resources.size()}个资源</h6>
+
     <div class="row">
         <div class="col-md-12">
             <c:if test="${not empty resources}">

@@ -10,7 +10,8 @@
 
                 <ul>
                     <c:forEach var="video" items="${videos}">
-                        <a style="color: #FFF" href="/darfoobackend/rest/admin/recommend/updateimage/dancevideo/${video.id}">
+                        <a style="color: #FFF"
+                           href="/darfoobackend/rest/admin/recommend/updateimage/dancevideo/${video.id}">
                             <button type="button" id="${video.id}" class="btn btn-primary btn-lg btn-block">
                                     ${video.title}
                             </button>

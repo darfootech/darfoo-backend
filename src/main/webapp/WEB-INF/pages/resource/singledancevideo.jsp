@@ -1,7 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@include file="../header.jsp" %>
-<%@include file="../update/updatecota.jsp"%>
+<%@include file="../update/updatecota.jsp" %>
 
+<script src="/darfoobackend/resources/js/getalldancemusic.js"></script>
 <script src="/darfoobackend/resources/js/modifyresource.js"></script>
 
 <script>
@@ -51,7 +52,8 @@
 
                 <c:choose>
                     <c:when test="${innertype == 'TUTORIAL'}">
-                        <select data-toggle="select" id="categories" name="categories" multiple class="form-control multiselect multiselect-default mrs mbm">
+                        <select data-toggle="select" id="categories" name="categories" multiple
+                                class="form-control multiselect multiselect-default mrs mbm">
                             <c:forEach var="category" items="${bindcategories}">
                                 <option value="${category.key}" selected>${category.value}</option>
                             </c:forEach>

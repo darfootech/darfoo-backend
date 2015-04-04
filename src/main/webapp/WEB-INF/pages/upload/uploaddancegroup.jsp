@@ -17,7 +17,8 @@
                 </div>
                 <div class="form-group">
                     <label for="description">明星舞队简介</label>
-                    <textarea type="text" class="form-control" name="description" id="description" placeholder="请输入明星舞队简介"></textarea>
+                    <textarea type="text" class="form-control" name="description" id="description"
+                              placeholder="请输入明星舞队简介"></textarea>
                 </div>
 
                 <div class="form-group">

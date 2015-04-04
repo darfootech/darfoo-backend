@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@include file="../header.jsp" %>
 
+<script src="/darfoobackend/resources/js/getalldancemusic.js"></script>
 <script src="/darfoobackend/resources/js/uploadresource.js"></script>
 
 <div id="type" style="display: none">${type}</div>
@@ -46,7 +47,8 @@
 
                 <c:choose>
                     <c:when test="${innertype == 'TUTORIAL'}">
-                        <select data-toggle="select" id="categories" name="categories" multiple class="form-control multiselect multiselect-default mrs mbm">
+                        <select data-toggle="select" id="categories" name="categories" multiple
+                                class="form-control multiselect multiselect-default mrs mbm">
                             <option value="0">正面教学</option>
                             <option value="1">口令分解</option>
                             <option value="2">背面教学</option>

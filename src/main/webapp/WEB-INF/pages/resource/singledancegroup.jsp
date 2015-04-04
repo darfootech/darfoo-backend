@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@include file="../header.jsp" %>
-<%@include file="../update/updatecota.jsp"%>
+<%@include file="../update/updatecota.jsp" %>
 
 <script src="/darfoobackend/resources/js/modifyresource.js"></script>
 
@@ -22,7 +22,7 @@
                 <div class="form-group">
                     <label for="description">舞队简介</label>
                     <textarea type="text" class="form-control" name="description" id="description"
-                           placeholder="${author.description}"></textarea>
+                              placeholder="${author.description}"></textarea>
                 </div>
 
                 <c:choose>
@@ -43,7 +43,8 @@
 
                         <div class="form-group">
                             <label for="imagekey">舞队图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
-                            <input type="text" class="form-control" id="imagekey" placeholder="${author.image.image_key}"
+                            <input type="text" class="form-control" id="imagekey"
+                                   placeholder="${author.image.image_key}"
                                    disabled="disabled">
                         </div>
                     </c:otherwise>
@@ -55,7 +56,8 @@
 
                 <button type="button" class="btn btn-default" style="margin-right: 100px" id="update">更新舞队信息</button>
                 <button type="button" class="btn btn-default" style="margin-right: 100px" id="kickout">删除舞队</button>
-                <button type="button" class="btn btn-default" style="margin-right: 100px" id="updateimage">更新舞队封面图片</button>
+                <button type="button" class="btn btn-default" style="margin-right: 100px" id="updateimage">更新舞队封面图片
+                </button>
                 <br/>
                 <br/>
                 <br/>

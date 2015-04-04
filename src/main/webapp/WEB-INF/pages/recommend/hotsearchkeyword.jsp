@@ -94,7 +94,7 @@
                     <c:forEach var="resource" items="${negativeresources}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
                             <div class="content toggletopositive" picked="0" keyword="${resource}">
-                                ${resource}
+                                    ${resource}
                             </div>
                         </li>
                     </c:forEach>
@@ -110,7 +110,7 @@
                     <c:forEach var="resource" items="${positiveresources}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
                             <div class="content toggletonegative" picked="0" keyword="${resource}">
-                                ${resource}
+                                    ${resource}
                             </div>
                         </li>
                     </c:forEach>

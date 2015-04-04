@@ -19,7 +19,8 @@
                             </c:when>
 
                             <c:when test="${operation == 'manage'}">
-                                <a style="color: #FFF" href="/darfoobackend/rest/admin/gallery/all/${type}/${typename.key}">
+                                <a style="color: #FFF"
+                                   href="/darfoobackend/rest/admin/gallery/all/${type}/${typename.key}">
                                     <button type="button" class="btn btn-primary btn-lg btn-block">
                                             ${typename.value}
                                     </button>
