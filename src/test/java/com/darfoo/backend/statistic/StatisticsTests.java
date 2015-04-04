@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -129,16 +131,29 @@ public class StatisticsTests {
         logResources(statisticsDao.getSearchKeyWordsOrderByHot());
     }
 
+    private void operateHotSearch(String operation, String[] keywordArray) {
+        String methodname = String.format("%sHotSearchKeyWords", operation);
+
+        try {
+            Method method = statisticsDao.getClass().getDeclaredMethod(methodname, new Class[]{String[].class});
+            method.invoke(statisticsDao, new Object[]{keywordArray});
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
     public void insertHotSearch() {
-        String[] searchHistory = {"艺子龙", "佳木斯", "依依"};
-        statisticsDao.insertHotSearchKeyWords(searchHistory);
+        operateHotSearch("insert", new String[]{"艺子龙", "佳木斯", "依依"});
     }
 
     @Test
     public void removeHotSearch() {
-        String[] searchHistory = {"艺子龙", "佳木斯", "依依"};
-        statisticsDao.removeHotSearchKeyWords(searchHistory);
+        operateHotSearch("remove", new String[]{"艺子龙", "佳木斯", "依依"});
     }
 
     @Test

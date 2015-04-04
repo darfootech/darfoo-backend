@@ -46,6 +46,10 @@ public class TypeClassMapping {
 
     public static HashMap<String, Class> resourceFieldClassMap = new HashMap<String, Class>();
 
+    public static HashMap<String, String> typeNameLiteralMap = new HashMap<String, String>();
+
+    public static HashMap<String, String> fieldNameLiteralMap = new HashMap<String, String>();
+
     static {
         typeClassMap.put("dancevideo", DanceVideo.class);
         typeClassMap.put("dancemusic", DanceMusic.class);
@@ -89,6 +93,12 @@ public class TypeClassMapping {
         typeNameMap.put(DanceVideoType.TUTORIAL, "教学视频");
         typeNameMap.put(DanceGroupType.NORMAL, "普通舞队");
         typeNameMap.put(DanceGroupType.STAR, "明星舞队");
+
+        typeNameLiteralMap.put("dancemusic", "舞蹈伴奏");
+        typeNameLiteralMap.put("dancegroup", "舞队");
+
+        fieldNameLiteralMap.put("hot", "热门");
+        fieldNameLiteralMap.put("priority", "高优先级");
 
         danceVideoTypeMap.put("normal", DanceVideoType.NORMAL);
         danceVideoTypeMap.put("tutorial", DanceVideoType.TUTORIAL);

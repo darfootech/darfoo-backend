@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 
@@ -98,22 +100,25 @@ public class StatisticsController {
         return "recommend/hotsearchkeyword";
     }
 
-    /*@RequestMapping(value = "/admin/recommend/hotsearch", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/recommend/hotsearch/{operation}", method = RequestMethod.POST)
     public
     @ResponseBody
-    Integer recommendHotSearch(HttpServletRequest request) {
-        Class resource = TypeClassMapping.typeClassMap.get(type);
-        String ids = request.getParameter("ids");
-        String[] idArray = ids.split(",");
+    Integer recommendHotSearch(@PathVariable String operation, HttpServletRequest request) {
+        String methodname = String.format("%sHotSearchKeyWords", operation);
+        String keywords = request.getParameter("keywords");
+        System.out.println(keywords);
+        String[] keywordArray = keywords.split(",");
 
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        Enum targetValue = Enum.valueOf(TypeClassMapping.resourceFieldClassMap.get(field), value);
-        conditions.put(field, targetValue);
-
-        for (String id : idArray) {
-            Integer resourceid = Integer.parseInt(id);
-            commonDao.updateResourceFieldsById(resource, resourceid, conditions);
+        try {
+            Method method = statisticsDao.getClass().getDeclaredMethod(methodname, new Class[]{String[].class});
+            method.invoke(statisticsDao, new Object[] {keywordArray});
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
         return 200;
-    }*/
+    }
 }

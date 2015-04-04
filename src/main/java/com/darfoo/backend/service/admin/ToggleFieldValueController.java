@@ -35,9 +35,16 @@ public class ToggleFieldValueController {
         conditions.put(field, positiveValue);
         List positiveResources = commonDao.getResourcesByFields(resource, conditions);
 
+        String literaltype = TypeClassMapping.typeNameLiteralMap.get(type);
+        String literalfield = TypeClassMapping.fieldNameLiteralMap.get(field);
+
         //貌似可以直接把pathvariable传到jsp中 比如这里的type和field 可以直接在jsp中访问
         modelMap.addAttribute("negativeresources", negativeResources);
         modelMap.addAttribute("positiveresources", positiveResources);
+        modelMap.addAttribute("negativemessage", String.format("选中下面的%s然后点击这里变为%s%s", literaltype, literalfield, literaltype));
+        modelMap.addAttribute("positivemessage", String.format("选中下面的%s然后点击这里变为非%s%s", literaltype, literalfield, literaltype));
+        modelMap.addAttribute("negativealert", String.format("还没有选中要变为%s%s的%s", literalfield, literaltype, literaltype));
+        modelMap.addAttribute("positivealert", String.format("还没有选中要变为非%s%s的%s", literalfield, literaltype, literaltype));
         return "resource/toggleresourcefield";
     }
 

@@ -8,6 +8,9 @@
     $(function () {
         var type = $("#type").text();
         var field = $("#field").text();
+        var negativealert = $("#negativealert").text();
+        var positivealert = $("#positivealert").text();
+
         var negativeValue = "NOT" + field.toUpperCase();
         var positiveValue = "IS" + field.toUpperCase();
 
@@ -57,7 +60,7 @@
 
         $("#toggletopositive").click(function () {
             if (change_to_positive.length == 0) {
-                alert("还没有选择要变为非热门舞队的热门舞队");
+                alert(negativealert);
             } else {
                 $.post("/darfoobackend/rest/admin/" + type + "/change/" + field + "/" + positiveValue, {
                     'ids': change_to_positive.join(',')
@@ -73,7 +76,7 @@
 
         $("#toggletonegative").click(function () {
             if (change_to_negative.length == 0) {
-                alert("还没有选择要变为热门舞队的非热门舞队");
+                alert(positivealert);
             } else {
                 $.post("/darfoobackend/rest/admin/" + type + "/change/" + field + "/" + negativeValue, {
                     'ids': change_to_negative.join(',')
@@ -91,12 +94,14 @@
 
 <div id="type" style="display: none">${type}</div>
 <div id="field" style="display: none">${field}</div>
+<div id="negativealert" style="display: none">${negativealert}</div>
+<div id="positivealert" style="display: none">${positivealert}</div>
 
 <div class="container">
     <div style="margin-top:33px;"></div>
     <div class="row marketing">
         <div class="col-lg-6">
-            <p><a id="toggletopositive" class="btn btn-lg btn-success" href="#" role="button">选中要变为热门舞队的非热门舞队然后点这里</a></p>
+            <p><a id="toggletopositive" class="btn btn-lg btn-success" href="#" role="button">${negativemessage}</a></p>
             <c:if test="${not empty negativeresources}">
                 <ul class="list-group">
                     <c:forEach var="resource" items="${negativeresources}">
@@ -119,8 +124,7 @@
         </div>
 
         <div class="col-lg-6">
-            <p><a id="toggletonegative" class="btn btn-lg btn-success" href="#" role="button">选中要变为非热门舞队的热门舞队然后点这里</a>
-            </p>
+            <p><a id="toggletonegative" class="btn btn-lg btn-success" href="#" role="button">${positivemessage}</a></p>
             <c:if test="${not empty positiveresources}">
                 <ul class="list-group">
                     <c:forEach var="resource" items="${positiveresources}">
