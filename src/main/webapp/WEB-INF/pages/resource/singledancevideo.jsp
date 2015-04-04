@@ -2,6 +2,7 @@
 <%@include file="../header.jsp" %>
 <%@include file="../update/updatecota.jsp" %>
 
+<script src="/darfoobackend/resources/js/searchdancegroup.js"></script>
 <script src="/darfoobackend/resources/js/getalldancemusic.js"></script>
 <script src="/darfoobackend/resources/js/modifyresource.js"></script>
 
