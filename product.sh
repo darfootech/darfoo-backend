@@ -1,4 +1,4 @@
-git pull --rebase upstream release
+#git pull --rebase upstream $1
 ## just for the production env to automatic deploy the project on remote server
 rm -rf target/
 mvn package -Dmaven.test.skip=true
@@ -18,4 +18,4 @@ ps -ef | grep tomcat | awk '{print $2}' | xargs kill -9
 #/usr/local/darfoo/tomcat_bak1/bin/startup.sh
 #/usr/local/darfoo/tomcat_bak2/bin/startup.sh
 #/usr/local/darfoo/apache-tomcat-7.0.47/bin/startup.sh
-#catalina.sh run
+/usr/local/darfoo/apache-tomcat-7.0.47/bin/catalina.sh run
