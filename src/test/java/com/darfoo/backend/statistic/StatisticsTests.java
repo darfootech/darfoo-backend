@@ -22,6 +22,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/springmvc-hibernate.xml")
@@ -121,6 +123,10 @@ public class StatisticsTests {
 
         DBCollection collection = db.getCollection("searchhistory");
 
+        Pattern whitespace = Pattern.compile("\\s+|\\?+|[a-zA-Z\\d\\+]+");
+
+        Pattern special = Pattern.compile("[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]");
+
         DBObject groupFields = new BasicDBObject("_id", "$searchcontent");
         groupFields.put("count", new BasicDBObject("$sum", 1));
         AggregationOutput output = collection.aggregate(
@@ -128,7 +134,15 @@ public class StatisticsTests {
                 new BasicDBObject("$sort", new BasicDBObject("count", -1)));
 
         for (DBObject obj : output.results()) {
-            System.out.println(obj.get("_id") + "--->" + obj.get("count"));
+            String content = (String) obj.get("_id");
+            Integer count = (Integer) obj.get("count");
+
+            Matcher whitespaceMatcher = whitespace.matcher(content);
+            Matcher specialMatcher = special.matcher(content);
+
+            if (!whitespaceMatcher.find() && !specialMatcher.find()) {
+                System.out.println(content + "--->" + count);
+            }
         }
     }
 }
