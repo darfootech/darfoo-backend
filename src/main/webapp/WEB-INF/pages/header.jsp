@@ -95,6 +95,7 @@
                         <li><a href="/darfoobackend/rest/admin/dancegroup/change/hot">推荐热门舞队</a></li>
                         <li><a href="/darfoobackend/rest/admin/dancegroup/change/priority">推荐明星舞队</a></li>
                         <li><a href="/darfoobackend/rest/admin/dancemusic/change/hot">推荐热门舞蹈伴奏</a></li>
+                        <li><a href="/darfoobackend/rest/statistics/admin/hotsearch">推荐热门搜索关键词</a></li>
                     </ul>
                 </li>
 

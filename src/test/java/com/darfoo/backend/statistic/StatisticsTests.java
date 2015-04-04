@@ -22,6 +22,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +31,13 @@ import java.util.regex.Pattern;
 public class StatisticsTests {
     @Autowired
     StatisticsDao statisticsDao;
+
+    public void logResources(List resources) {
+        for (Object object : resources) {
+            System.out.println(object);
+        }
+        System.out.println("resources total size -> " + resources.size());
+    }
 
     @Test
     public void insertOrUpdateResourceClickCount() {
@@ -118,31 +126,23 @@ public class StatisticsTests {
 
     @Test
     public void hotSearchKeyWords() {
-        MongoClient client = MongoManager.getMongoClientInstance();
-        DB db = client.getDB("statistics");
+        logResources(statisticsDao.getSearchKeyWordsOrderByHot());
+    }
 
-        DBCollection collection = db.getCollection("searchhistory");
+    @Test
+    public void insertHotSearch() {
+        String[] searchHistory = {"艺子龙", "佳木斯", "依依"};
+        statisticsDao.insertHotSearchKeyWords(searchHistory);
+    }
 
-        Pattern whitespace = Pattern.compile("\\s+|\\?+|[a-zA-Z\\d\\+]+");
+    @Test
+    public void removeHotSearch() {
+        String[] searchHistory = {"艺子龙", "佳木斯", "依依"};
+        statisticsDao.removeHotSearchKeyWords(searchHistory);
+    }
 
-        Pattern special = Pattern.compile("[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]");
-
-        DBObject groupFields = new BasicDBObject("_id", "$searchcontent");
-        groupFields.put("count", new BasicDBObject("$sum", 1));
-        AggregationOutput output = collection.aggregate(
-                new BasicDBObject("$group", groupFields),
-                new BasicDBObject("$sort", new BasicDBObject("count", -1)));
-
-        for (DBObject obj : output.results()) {
-            String content = (String) obj.get("_id");
-            Integer count = (Integer) obj.get("count");
-
-            Matcher whitespaceMatcher = whitespace.matcher(content);
-            Matcher specialMatcher = special.matcher(content);
-
-            if (!whitespaceMatcher.find() && !specialMatcher.find()) {
-                System.out.println(content + "--->" + count);
-            }
-        }
+    @Test
+    public void getHotSearch() {
+        logResources(statisticsDao.getHotSearchKeyWords());
     }
 }

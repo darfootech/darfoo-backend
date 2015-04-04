@@ -4,8 +4,12 @@ import com.mongodb.*;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by zjh on 15-3-2.
@@ -13,6 +17,7 @@ import java.util.HashMap;
 public class StatisticsDao {
     MongoClient client = MongoManager.getMongoClientInstance();
     DB db = client.getDB("darfoolog");
+    DBCollection hotsearch = db.getCollection("hotsearch");
 
     public DBCursor getAllStatisticData(Class resource) {
         DBCollection coll = db.getCollection(resource.getSimpleName().toLowerCase());
@@ -65,6 +70,58 @@ public class StatisticsDao {
             System.out.println("记录还不存在");
             BasicDBObject doc = query.append("hot", 1L);
             coll.insert(doc);
+        }
+    }
+
+    //根据搜索热度倒排序得到所有的搜索关键词
+    public List getSearchKeyWordsOrderByHot() {
+        DBCollection collection = db.getCollection("searchhistory");
+
+        List<String> keywords = new ArrayList<String>();
+        List hotsearchKeyWords = getHotSearchKeyWords();
+
+        Pattern whitespace = Pattern.compile("\\s+|\\?+|[a-zA-Z\\d\\+]+");
+        Pattern special = Pattern.compile("[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]");
+
+        DBObject groupFields = new BasicDBObject("_id", "$searchcontent");
+        groupFields.put("count", new BasicDBObject("$sum", 1));
+        AggregationOutput output = collection.aggregate(
+                new BasicDBObject("$group", groupFields),
+                new BasicDBObject("$sort", new BasicDBObject("count", -1)));
+
+        for (DBObject obj : output.results()) {
+            String content = (String) obj.get("_id");
+            Integer count = (Integer) obj.get("count");
+
+            Matcher whitespaceMatcher = whitespace.matcher(content);
+            Matcher specialMatcher = special.matcher(content);
+
+            if (!whitespaceMatcher.find() && !specialMatcher.find() && !hotsearchKeyWords.contains(content)) {
+                System.out.println(content + "--->" + count);
+                keywords.add(content);
+            }
+        }
+        return keywords;
+    }
+
+    public List getHotSearchKeyWords() {
+        List<String> keywords = new ArrayList<String>();
+        DBCursor cursor = hotsearch.find();
+        while (cursor.hasNext()) {
+            keywords.add((String) cursor.next().get("keyword"));
+        }
+        return keywords;
+    }
+
+    public void insertHotSearchKeyWords(String[] keywords) {
+        for (String keyword : keywords) {
+            hotsearch.insert(new BasicDBObject().append("keyword", keyword));
+        }
+    }
+
+    public void removeHotSearchKeyWords(String[] keywords) {
+        for (String keyword : keywords) {
+            hotsearch.remove(new BasicDBObject().append("keyword", keyword));
         }
     }
 }

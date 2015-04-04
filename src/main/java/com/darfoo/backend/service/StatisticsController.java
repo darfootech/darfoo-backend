@@ -10,12 +10,15 @@ import com.darfoo.backend.model.statistics.clicktime.ResourceClickTime;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by zjh on 15-3-3.
@@ -84,4 +87,33 @@ public class StatisticsController {
         statisticsDao.insertTimeBehavior(CrashLog.class, conditions);
         return "ok";
     }
+
+    @RequestMapping(value = "/admin/hotsearch", method = RequestMethod.GET)
+    public String prepareRecommendHotSearch(ModelMap modelMap) {
+        List negativeResources = statisticsDao.getSearchKeyWordsOrderByHot();
+        List positiveResources = statisticsDao.getHotSearchKeyWords();
+
+        modelMap.addAttribute("negativeresources", negativeResources);
+        modelMap.addAttribute("positiveresources", positiveResources);
+        return "recommend/hotsearchkeyword";
+    }
+
+    /*@RequestMapping(value = "/admin/recommend/hotsearch", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    Integer recommendHotSearch(HttpServletRequest request) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        String ids = request.getParameter("ids");
+        String[] idArray = ids.split(",");
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        Enum targetValue = Enum.valueOf(TypeClassMapping.resourceFieldClassMap.get(field), value);
+        conditions.put(field, targetValue);
+
+        for (String id : idArray) {
+            Integer resourceid = Integer.parseInt(id);
+            commonDao.updateResourceFieldsById(resource, resourceid, conditions);
+        }
+        return 200;
+    }*/
 }
