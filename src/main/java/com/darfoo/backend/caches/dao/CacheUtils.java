@@ -5,6 +5,7 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.LimitDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
+import com.darfoo.backend.dao.statistic.StatisticsDao;
 import com.darfoo.backend.model.cota.annotations.limit.HotSize;
 import com.darfoo.backend.model.cota.annotations.limit.NewestSize;
 import com.darfoo.backend.model.cota.annotations.limit.PageSize;
@@ -41,6 +42,10 @@ public class CacheUtils {
     LimitDao limitDao;
     @Autowired
     AccompanyCacheDao accompanyCacheDao;
+    @Autowired
+    StatisticsDao statisticsDao;
+    @Autowired
+    StatisticsCacheDao statisticsCacheDao;
 
     /**
      * 分页统一在cache层做
@@ -259,5 +264,10 @@ public class CacheUtils {
         } else {
             return new SingleDanceMusic(-1, "", "", "", 0L);
         }
+    }
+
+    public List cacheHotSearchKeyWords() {
+        statisticsCacheDao.insertHotSearchIntoCache(statisticsDao.getHotSearchKeyWords());
+        return statisticsCacheDao.extractHotSearchFromCache();
     }
 }

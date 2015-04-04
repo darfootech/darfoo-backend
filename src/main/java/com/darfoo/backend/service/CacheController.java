@@ -296,4 +296,9 @@ public class CacheController {
     List getSidebarResources(@PathVariable String type, @PathVariable Integer id) {
         return cacheUtils.cacheSidebarResources(type, id);
     }
+
+    @RequestMapping(value = "/hotsearch", method = RequestMethod.GET)
+    public @ResponseBody List getHotSearchKeyWords() {
+        return cacheUtils.cacheHotSearchKeyWords();
+    }
 }

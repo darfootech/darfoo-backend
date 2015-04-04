@@ -35,6 +35,8 @@
     <bean id="commonRedisClient" class="com.darfoo.backend.caches.client.CommonRedisClient"/>
 
     <bean id="accompanyCacheDao" class="com.darfoo.backend.caches.dao.AccompanyCacheDao"/>
+    <bean id="statisticsCacheDao" class="com.darfoo.backend.caches.dao.StatisticsCacheDao"/>
+
     <bean id="cacheDao" class="com.darfoo.backend.caches.dao.CacheDao"/>
     <bean id="cacheUtils" class="com.darfoo.backend.caches.dao.CacheUtils"/>
 
