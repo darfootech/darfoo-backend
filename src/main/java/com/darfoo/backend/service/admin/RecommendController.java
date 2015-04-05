@@ -92,12 +92,7 @@ public class RecommendController {
     @RequestMapping("/admin/recommend/resource/updateimage")
     public String uploadRecommendResourceImage(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session) {
         String imagekey = (String) session.getAttribute("imagekey");
-        String imageStatusCode = ServiceUtils.reUploadSmallResource(imageresource, imagekey);
-
-        if (imageStatusCode.equals("200")) {
-            return "success";
-        } else {
-            return "fail";
-        }
+        ServiceUtils.reUploadQiniuResourceAsync(imageresource, imagekey);
+        return "success";
     }
 }

@@ -29,7 +29,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 
-import static akka.dispatch.Futures.future;
+
 
 /**
  * Created by zjh on 14-11-27.
@@ -40,9 +40,6 @@ import static akka.dispatch.Futures.future;
 public class UploadController {
     @Autowired
     CommonDao commonDao;
-
-    final ActorSystem system = ActorSysContainer.getInstance().getSystem();
-    final ExecutionContext ec = system.dispatcher();
 
     public int commonInsertResource(Class resource, HttpServletRequest request, HttpSession session) {
         HashMap<String, String> insertcontents = new HashMap<String, String>();
@@ -106,22 +103,7 @@ public class UploadController {
                 final String key = session.getAttribute(field.getName()).toString();
                 final ModelUploadEnum type = modelUpload.type();
 
-                Future<String> future = future(new Callable<String>() {
-                    public String call() {
-                        String status = ServiceUtils.uploadQiniuResource(file, key, type);
-                        return status;
-                    }
-                }, system.dispatcher());
-
-                future.onComplete(new OnComplete<String>() {
-                    public void onComplete(Throwable failure, String status) {
-                        if (failure != null && !status.equals("200")) {
-                            System.out.println("upload file failed");
-                        } else {
-                            System.out.println("upload file success");
-                        }
-                    }
-                }, ec);
+                ServiceUtils.uploadQiniuResourceAsync(file, key, type);
             }
         }
         return "success";

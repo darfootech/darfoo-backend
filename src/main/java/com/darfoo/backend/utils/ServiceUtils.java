@@ -1,19 +1,30 @@
 package com.darfoo.backend.utils;
 
+import akka.actor.ActorSystem;
+import akka.dispatch.OnComplete;
 import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
+import com.darfoo.backend.service.cota.ActorSysContainer;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import scala.concurrent.ExecutionContext;
+import scala.concurrent.Future;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
+
+import static akka.dispatch.Futures.future;
 
 /**
  * Created by zjh on 14-11-26.
  */
 public class ServiceUtils {
     static QiniuUtils qiniuUtils = new QiniuUtils();
+
+    final static ActorSystem system = ActorSysContainer.getInstance().getSystem();
+    final static ExecutionContext ec = system.dispatcher();
 
     public static String[] convertList2Array(List<String> vidoes) {
         String[] stockArr = new String[vidoes.size()];
@@ -57,9 +68,52 @@ public class ServiceUtils {
         return statusCode;
     }
 
-    public static String reUploadSmallResource(CommonsMultipartFile file, String fileName) {
+    public static String reUploadQiniuResource(CommonsMultipartFile file, String fileName) {
         deleteResource(fileName);
         return uploadQiniuResource(file, fileName, ModelUploadEnum.SMALL);
+    }
+
+    public static void uploadQiniuResourceAsync(CommonsMultipartFile file, String key, ModelUploadEnum type) {
+        final CommonsMultipartFile innerfile = file;
+        final String innerkey = key;
+        final ModelUploadEnum innertype = type;
+
+        Future<String> future = future(new Callable<String>() {
+            public String call() {
+                return uploadQiniuResource(innerfile, innerkey, innertype);
+            }
+        }, system.dispatcher());
+
+        future.onComplete(new OnComplete<String>() {
+            public void onComplete(Throwable failure, String status) {
+                if (failure != null && !status.equals("200")) {
+                    System.out.println("upload file failed");
+                } else {
+                    System.out.println("upload file success");
+                }
+            }
+        }, ec);
+    }
+
+    public static void reUploadQiniuResourceAsync(CommonsMultipartFile file, String key) {
+        final CommonsMultipartFile innerfile = file;
+        final String innerkey = key;
+
+        Future<String> future = future(new Callable<String>() {
+            public String call() {
+                return reUploadQiniuResource(innerfile, innerkey);
+            }
+        }, system.dispatcher());
+
+        future.onComplete(new OnComplete<String>() {
+            public void onComplete(Throwable failure, String status) {
+                if (failure != null && !status.equals("200")) {
+                    System.out.println("upload file failed");
+                } else {
+                    System.out.println("upload file success");
+                }
+            }
+        }, ec);
     }
 
     public static void deleteResource(String key) {

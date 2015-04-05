@@ -87,15 +87,9 @@ public class UpdateController {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         Object object = commonDao.getResourceById(resource, id);
         String imagekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
-
         System.out.println(id + " " + imagekey);
 
-        String imageStatusCode = ServiceUtils.reUploadSmallResource(imageresource, imagekey);
-
-        if (imageStatusCode.equals("200")) {
-            return "success";
-        } else {
-            return "fail";
-        }
+        ServiceUtils.reUploadQiniuResourceAsync(imageresource, imagekey);
+        return "success";
     }
 }

@@ -73,9 +73,14 @@
                            id="connectmusic" placeholder="${connectmusic}"/>
                 </div>
 
-                <button type="button" class="btn btn-default" style="margin-right: 100px" id="update">更新舞蹈视频信息</button>
-                <button type="button" class="btn btn-default" style="margin-right: 100px" id="kickout">删除舞蹈视频</button>
-                <button type="button" class="btn btn-default" id="updateimage">更新舞蹈视频封面图片</button>
+                <div class="btn-toolbar">
+                    <div class="btn-group btn-group-lg">
+                        <button type="button" class="btn btn-default" id="update">更新舞蹈视频信息</button>
+                        <button type="button" class="btn btn-default" id="kickout">删除舞蹈视频</button>
+                        <button type="button" class="btn btn-default" id="updateimage">更新舞蹈视频封面图片</button>
+                    </div>
+                </div>
+
             </form>
         </div>
     </div>
