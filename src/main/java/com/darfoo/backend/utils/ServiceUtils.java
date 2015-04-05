@@ -66,6 +66,10 @@ public class ServiceUtils {
             FileUtils.delete(dirName);
         }
 
+        if (type == ModelUploadEnum.LARGE) {
+            FileUtils.delete(path);
+        }
+
         long endTime = System.currentTimeMillis();
         System.out.println("运行时间：" + String.valueOf(endTime - startTime) + "ms");
 
@@ -81,13 +85,14 @@ public class ServiceUtils {
         final CommonsMultipartFile innerfile = file;
         final String innerkey = key;
         final ModelUploadEnum innertype = type;
-        final QiniuOperationType inneroperation = operation;
+
+        //删除七牛资源的操作如果放在异步任务里会出现akka的空指针错误 暂时还无法定位问题原因只能暂时先移植外面
+        if (operation == QiniuOperationType.REUPLOAD) {
+            deleteResource(innerkey);
+        }
 
         Future<String> future = future(new Callable<String>() {
             public String call() {
-                if (inneroperation == QiniuOperationType.REUPLOAD) {
-                    deleteResource(innerkey);
-                }
                 return uploadQiniuResource(innerfile, innerkey, innertype);
             }
         }, system.dispatcher());

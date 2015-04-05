@@ -75,22 +75,34 @@ public class UpdateController {
         return commonUpdateResource(TypeClassMapping.typeClassMap.get(type), request);
     }
 
-    @RequestMapping(value = "/admin/{type}/updateimage/{id}", method = RequestMethod.GET)
-    public String updateVideoImage(@PathVariable String type, @PathVariable Integer id, ModelMap modelMap) {
+    @RequestMapping(value = "/admin/{type}/update{resourcetype}/{id}", method = RequestMethod.GET)
+    public String updateVideoImage(@PathVariable String type, @PathVariable String resourcetype, @PathVariable Integer id, ModelMap modelMap) {
         modelMap.addAttribute("resourceid", id);
         modelMap.addAttribute("type", type);
+        modelMap.addAttribute("resourcetype", resourcetype);
         return "update/updateresourceimage";
     }
 
-    @RequestMapping(value = "/admin/{type}/updateimageresource", method = RequestMethod.POST)
-    public String updateVideoImageResource(@PathVariable String type, @RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request) {
+    @RequestMapping(value = "/admin/{type}/update{resourcetype}resource", method = RequestMethod.POST)
+    public String updateVideoImageResource(@PathVariable String type, @PathVariable String resourcetype, @RequestParam("resourcefile") CommonsMultipartFile resourcefile, HttpServletRequest request) {
         int id = Integer.parseInt(request.getParameter("id"));
         Class resource = TypeClassMapping.typeClassMap.get(type);
         Object object = commonDao.getResourceById(resource, id);
-        String imagekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
-        System.out.println(id + " " + imagekey);
+        String resourcekey;
+        ModelUploadEnum uploadtype;
+        if (resourcetype.equals("image")) {
+            uploadtype = ModelUploadEnum.SMALL;
+            resourcekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
+        } else if (resourcetype.equals("video") || resourcetype.equals("music")) {
+            uploadtype = ModelUploadEnum.LARGE;
+            resourcekey = (String) commonDao.getResourceAttr(resource, object, String.format("%s_key", resourcetype));
+        } else {
+            uploadtype = null;
+            resourcekey = "";
+        }
+        System.out.println(id + " " + resourcekey);
 
-        ServiceUtils.operateQiniuResourceAsync(imageresource, imagekey, ModelUploadEnum.SMALL, ServiceUtils.QiniuOperationType.REUPLOAD);
+        ServiceUtils.operateQiniuResourceAsync(resourcefile, resourcekey, uploadtype, ServiceUtils.QiniuOperationType.REUPLOAD);
         return "success";
     }
 }

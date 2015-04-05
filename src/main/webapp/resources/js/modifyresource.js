@@ -65,4 +65,12 @@ $(function () {
     $("#updateimage").click(function () {
         window.location.href = "/darfoobackend/rest/admin/" + type + "/updateimage/" + id;
     });
+
+    $("#updatevideo").click(function () {
+        window.location.href = "/darfoobackend/rest/admin/" + type + "/updatevideo/" + id;
+    });
+
+    $("#updatemusic").click(function () {
+        window.location.href = "/darfoobackend/rest/admin/" + type + "/updatemusic/" + id;
+    });
 });
