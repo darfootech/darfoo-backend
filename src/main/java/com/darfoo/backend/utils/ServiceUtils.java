@@ -23,6 +23,10 @@ import static akka.dispatch.Futures.future;
 public class ServiceUtils {
     static QiniuUtils qiniuUtils = new QiniuUtils();
 
+    public enum QiniuOperationType {
+        UPLOAD, REUPLOAD
+    }
+
     final static ActorSystem system = ActorSysContainer.getInstance().getSystem();
     final static ExecutionContext ec = system.dispatcher();
 
@@ -68,40 +72,23 @@ public class ServiceUtils {
         return statusCode;
     }
 
-    public static String reUploadQiniuResource(CommonsMultipartFile file, String fileName) {
+    public static String reUploadQiniuResource(CommonsMultipartFile file, String fileName, ModelUploadEnum type) {
         deleteResource(fileName);
-        return uploadQiniuResource(file, fileName, ModelUploadEnum.SMALL);
+        return uploadQiniuResource(file, fileName, type);
     }
 
-    public static void uploadQiniuResourceAsync(CommonsMultipartFile file, String key, ModelUploadEnum type) {
+    public static void operateQiniuResourceAsync(CommonsMultipartFile file, String key, ModelUploadEnum type, QiniuOperationType operation) {
         final CommonsMultipartFile innerfile = file;
         final String innerkey = key;
         final ModelUploadEnum innertype = type;
+        final QiniuOperationType inneroperation = operation;
 
         Future<String> future = future(new Callable<String>() {
             public String call() {
-                return uploadQiniuResource(innerfile, innerkey, innertype);
-            }
-        }, system.dispatcher());
-
-        future.onComplete(new OnComplete<String>() {
-            public void onComplete(Throwable failure, String status) {
-                if (failure != null && !status.equals("200")) {
-                    System.out.println("upload file failed");
-                } else {
-                    System.out.println("upload file success");
+                if (inneroperation == QiniuOperationType.REUPLOAD) {
+                    deleteResource(innerkey);
                 }
-            }
-        }, ec);
-    }
-
-    public static void reUploadQiniuResourceAsync(CommonsMultipartFile file, String key) {
-        final CommonsMultipartFile innerfile = file;
-        final String innerkey = key;
-
-        Future<String> future = future(new Callable<String>() {
-            public String call() {
-                return reUploadQiniuResource(innerfile, innerkey);
+                return uploadQiniuResource(innerfile, innerkey, innertype);
             }
         }, system.dispatcher());
 

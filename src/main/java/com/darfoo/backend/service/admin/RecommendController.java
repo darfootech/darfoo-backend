@@ -3,6 +3,7 @@ package com.darfoo.backend.service.admin;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
+import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.QiniuResourceEnum;
@@ -92,7 +93,7 @@ public class RecommendController {
     @RequestMapping("/admin/recommend/resource/updateimage")
     public String uploadRecommendResourceImage(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session) {
         String imagekey = (String) session.getAttribute("imagekey");
-        ServiceUtils.reUploadQiniuResourceAsync(imageresource, imagekey);
+        ServiceUtils.operateQiniuResourceAsync(imageresource, imagekey, ModelUploadEnum.SMALL, ServiceUtils.QiniuOperationType.REUPLOAD);
         return "success";
     }
 }

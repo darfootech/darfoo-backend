@@ -4,6 +4,7 @@ import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.resource.DanceGroupDao;
 import com.darfoo.backend.model.cota.annotations.ModelUpdate;
+import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -89,7 +90,7 @@ public class UpdateController {
         String imagekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
         System.out.println(id + " " + imagekey);
 
-        ServiceUtils.reUploadQiniuResourceAsync(imageresource, imagekey);
+        ServiceUtils.operateQiniuResourceAsync(imageresource, imagekey, ModelUploadEnum.SMALL, ServiceUtils.QiniuOperationType.REUPLOAD);
         return "success";
     }
 }
