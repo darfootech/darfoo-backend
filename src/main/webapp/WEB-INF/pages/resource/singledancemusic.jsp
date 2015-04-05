@@ -42,8 +42,13 @@
                     <a href="${musicurl}" target="_blank">点击此处预览对应的音频资源</a>
                 </div>
 
-                <button type="button" class="btn btn-default" style="margin-right: 100px" id="update">更新舞蹈伴奏信息</button>
-                <button type="button" class="btn btn-default" id="kickout">删除舞蹈伴奏</button>
+                <div class="btn-toolbar">
+                    <div class="btn-group btn-group-lg">
+                        <button type="button" class="btn btn-default" id="update">更新舞蹈伴奏信息</button>
+                        <button type="button" class="btn btn-default" id="kickout">删除舞蹈伴奏</button>
+                        <button type="button" class="btn btn-default" id="updatemusic">更新舞蹈伴奏音频资源</button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>

@@ -81,7 +81,6 @@
                         <button type="button" class="btn btn-default" id="updatevideo">更新舞蹈视频视频资源</button>
                     </div>
                 </div>
-
             </form>
         </div>
     </div>
