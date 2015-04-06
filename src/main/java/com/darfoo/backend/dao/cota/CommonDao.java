@@ -325,13 +325,18 @@ public class CommonDao {
             for (Object object : hotResources) {
                 hotids.add((Integer) getResourceAttr(resource, object, "id"));
             }
-            Criteria criteria = getCommonQueryCriteria(resource)
-                    .addOrder(Order.desc("hottest"))
-                    .add(Restrictions.not(Restrictions.in("id", hotids)));
-            List nothotResources = criteria.list();
 
-            hotResources.addAll(nothotResources.subList(0, (hotsize - realHotSize)));
-            return hotResources;
+            Criteria criteria = getCommonQueryCriteria(resource)
+                    .addOrder(Order.desc("hottest"));
+
+            if (hotids.size() > 0) {
+                criteria = criteria.add(Restrictions.not(Restrictions.in("id", hotids)));
+                List nothotResources = criteria.list();
+                hotResources.addAll(nothotResources.subList(0, (hotsize - realHotSize)));
+                return hotResources;
+            } else {
+                return criteria.list();
+            }
         }
     }
 
