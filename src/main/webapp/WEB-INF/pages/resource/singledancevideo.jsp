@@ -76,7 +76,13 @@
                 <div class="btn-toolbar">
                     <div class="btn-group btn-group-lg">
                         <button type="button" class="btn btn-default" id="update">更新舞蹈视频信息</button>
-                        <button type="button" class="btn btn-default" id="kickout">删除舞蹈视频</button>
+                        <c:choose>
+                            <c:when test="${role == 'cleantha'}">
+                                <button type="button" class="btn btn-default" id="kickout">删除舞蹈视频</button>
+                            </c:when>
+                            <c:otherwise>
+                            </c:otherwise>
+                        </c:choose>
                         <button type="button" class="btn btn-default" id="updateimage">更新舞蹈视频封面图片</button>
                         <button type="button" class="btn btn-default" id="updatevideo">更新舞蹈视频视频资源</button>
                     </div>

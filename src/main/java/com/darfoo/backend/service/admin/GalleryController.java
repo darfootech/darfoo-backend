@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -146,10 +147,11 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/{type}/{id}", method = RequestMethod.GET)
-    public String showSingleResource(@PathVariable String type, @PathVariable Integer id, ModelMap modelMap) {
+    public String showSingleResource(@PathVariable String type, @PathVariable Integer id, HttpServletRequest request, ModelMap modelMap) {
         getResourceModelMap(TypeClassMapping.typeClassMap.get(type), id, modelMap);
         modelMap.addAttribute("id", id);
         modelMap.addAttribute("type", type);
+        modelMap.addAttribute("role", request.getSession().getAttribute("loginUser"));
         return String.format("resource/single%s", type);
     }
 

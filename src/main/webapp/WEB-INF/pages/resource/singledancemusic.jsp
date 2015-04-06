@@ -45,7 +45,13 @@
                 <div class="btn-toolbar">
                     <div class="btn-group btn-group-lg">
                         <button type="button" class="btn btn-default" id="update">更新舞蹈伴奏信息</button>
-                        <button type="button" class="btn btn-default" id="kickout">删除舞蹈伴奏</button>
+                        <c:choose>
+                            <c:when test="${role == 'cleantha'}">
+                                <button type="button" class="btn btn-default" id="kickout">删除舞蹈伴奏</button>
+                            </c:when>
+                            <c:otherwise>
+                            </c:otherwise>
+                        </c:choose>
                         <button type="button" class="btn btn-default" id="updatemusic">更新舞蹈伴奏音频资源</button>
                     </div>
                 </div>

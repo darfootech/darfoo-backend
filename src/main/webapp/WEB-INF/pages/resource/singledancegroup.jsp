@@ -57,7 +57,13 @@
                 <div class="btn-toolbar">
                     <div class="btn-group btn-group-lg">
                         <button type="button" class="btn btn-default" id="update">更新舞队信息</button>
-                        <button type="button" class="btn btn-default" id="kickout">删除舞队</button>
+                        <c:choose>
+                            <c:when test="${role == 'cleantha'}">
+                                <button type="button" class="btn btn-default" id="kickout">删除舞队</button>
+                            </c:when>
+                            <c:otherwise>
+                            </c:otherwise>
+                        </c:choose>
                         <button type="button" class="btn btn-default" id="updateimage">更新舞队封面图片</button>
                     </div>
                 </div>

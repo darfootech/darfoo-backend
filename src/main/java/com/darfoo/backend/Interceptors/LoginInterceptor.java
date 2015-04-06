@@ -37,24 +37,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             } else {
                 return false;
             }
-        } else if (uri.contains("admin")) {
-            // 其他情况判断session中是否有key，有的话继续用户的操作
-            if (request.getSession() != null && request.getSession().getAttribute("loginUser") != null && request.getSession().getAttribute("loginUser").equals("cleantha")) {
-                System.out.println("在管理资源");
-                return true;
-            } else {
-                response.sendRedirect(request.getContextPath() + "/rest/login");
-                return false;
-            }
-        } else if (uri.contains("/resources/") && (uri.contains("new") || uri.contains("create"))) {
-            //上传资源需要一个低权限的用户
-            System.out.println("在新建资源");
-            if (request.getSession() != null && request.getSession().getAttribute("loginUser") != null && (request.getSession().getAttribute("loginUser").equals("upload") || request.getSession().getAttribute("loginUser").equals("cleantha"))) {
-                return true;
-            } else {
-                response.sendRedirect(request.getContextPath() + "/rest/login");
-                return false;
-            }
+        } else if (uri.contains("admin") || uri.contains("resources")) {
+            return true;
         } else if (uri.contains("cache")) {
             System.out.println("在请求缓存资源");
             return true;
