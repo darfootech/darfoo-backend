@@ -59,15 +59,25 @@ public class CacheUtils {
      * @return
      */
     //因为这里的分页是一次性把所有查询结果都放入缓存中然后在前端用redis游标来得到分页结果所以缓存的key中不需要包含页码号不然每请求一个页码都会在redis中生成一个完全一样的缓存结果
+    //一种请求方式是按照定死的每一页显示的格式与页码来请求分页信息
+    //一种请求方式是根据请求的跳过的个数与要返回的个数来获取翻页信息
     public List returnWithPagination(Class resource, Class response, String cachekey, CacheCollType cachetype, Integer[] pageArray) {
         if (pageArray.length == 0) {
             return cacheDao.extractResourcesFromCache(response, cachekey, cachetype);
-        } else {
+        } else if (pageArray.length == 1) {
             int page = pageArray[0];
             int pageSize = limitDao.getResourceLimitSize(resource, PageSize.class);
             long start = (page - 1) * pageSize;
             long end = page * pageSize - 1;
             return cacheDao.extractResourcesFromCache(response, cachekey, cachetype, start, end);
+        } else if (pageArray.length == 2) {
+            int skipNum = pageArray[0];
+            int returnNum = pageArray[1];
+            long start = skipNum;
+            long end = skipNum + returnNum - 1;
+            return cacheDao.extractResourcesFromCache(response, cachekey, cachetype, start, end);
+        } else {
+            return new ArrayList();
         }
     }
 

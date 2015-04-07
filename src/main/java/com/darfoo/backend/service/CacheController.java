@@ -98,6 +98,13 @@ public class CacheController {
         return cacheUtils.cacheIndexResources(type, page);
     }
 
+    @RequestMapping(value = "/{type}/index/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List cacheIndexResourcesBySkip(@PathVariable String type, @PathVariable Integer skipnum, @PathVariable Integer returnnum) {
+        return cacheUtils.cacheIndexResources(type, skipnum, returnnum);
+    }
+
     /**
      * 获取最新的资源
      *
@@ -123,6 +130,13 @@ public class CacheController {
     @ResponseBody
     List cacheNewestResourcesByPage(@PathVariable String type, @PathVariable Integer page) {
         return cacheUtils.cacheNewestResources(type, page);
+    }
+
+    @RequestMapping(value = "/{type}/newest/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List cacheNewestResourcesBySkip(@PathVariable String type, @PathVariable Integer skipnum, @PathVariable Integer returnnum) {
+        return cacheUtils.cacheNewestResources(type, skipnum, returnnum);
     }
 
     /**
@@ -154,6 +168,13 @@ public class CacheController {
         return cacheUtils.cacheResourcesByCategory(type, category, page);
     }
 
+    @RequestMapping(value = "/{type}/category/{category}/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List getResourcesByCategoriesBySkip(@PathVariable String type, @PathVariable String category, @PathVariable Integer skipnum, @PathVariable Integer returnnum) {
+        return cacheUtils.cacheResourcesByCategory(type, category, skipnum, returnnum);
+    }
+
     /**
      * 根据子类型获取某一类资源
      *
@@ -182,6 +203,13 @@ public class CacheController {
         return cacheUtils.cacheResourcesByInnertype(type, innertype, page);
     }
 
+    @RequestMapping(value = "/{type}/innertype/{innertype}/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List getResourcesByInnertypeBySkip(@PathVariable String type, @PathVariable String innertype, @PathVariable Integer skipnum, @PathVariable Integer returnnum) {
+        return cacheUtils.cacheResourcesByInnertype(type, innertype, skipnum, returnnum);
+    }
+
     /**
      * 获取热门资源 暂时只有热门舞队
      *
@@ -208,6 +236,13 @@ public class CacheController {
         return cacheUtils.cacheHotResources(type, page);
     }
 
+    @RequestMapping(value = "/{type}/hot/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List getHottestResourcesBySkip(@PathVariable String type, @PathVariable Integer skipnum, @PathVariable Integer returnnum) {
+        return cacheUtils.cacheHotResources(type, skipnum, returnnum);
+    }
+
     /**
      * 根据舞蹈视频获取对应的舞队伴奏
      *
@@ -229,7 +264,7 @@ public class CacheController {
      */
     @RequestMapping(value = "/dancegroup/videos/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public List getVideoListForAuthor(@PathVariable Integer id) {
+    public List getVideoListForDanceGroup(@PathVariable Integer id) {
         return cacheUtils.cacheDanceGroupVideos(id);
     }
 
@@ -242,10 +277,15 @@ public class CacheController {
      */
     @RequestMapping(value = "/dancegroup/videos/{id}/page/{page}", method = RequestMethod.GET)
     @ResponseBody
-    public List getVideoListForAuthorByPage(@PathVariable Integer id, @PathVariable Integer page) {
+    public List getVideoListForDanceGroupByPage(@PathVariable Integer id, @PathVariable Integer page) {
         return cacheUtils.cacheDanceGroupVideos(id, page);
     }
 
+    @RequestMapping(value = "/dancegroup/videos/{id}/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
+    @ResponseBody
+    public List getVideoListForDanceGroupBySkip(@PathVariable Integer id, @PathVariable Integer skipnum, @PathVariable Integer returnnum) {
+        return cacheUtils.cacheDanceGroupVideos(id, skipnum, returnnum);
+    }
 
     /**
      * 搜索内容
@@ -281,6 +321,16 @@ public class CacheController {
         System.out.println(searchContent);
 
         return cacheUtils.cacheResourcesBySearch(type, searchContent, page);
+    }
+
+    @RequestMapping(value = "/{type}/search/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List searchResourceBySkip(@PathVariable String type, @PathVariable Integer skipnum, @PathVariable Integer returnnum, HttpServletRequest request) {
+        String searchContent = request.getParameter("search");
+        System.out.println(searchContent);
+
+        return cacheUtils.cacheResourcesBySearch(type, searchContent, skipnum, returnnum);
     }
 
     /**

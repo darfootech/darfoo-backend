@@ -195,6 +195,7 @@ public class CacheServiceTests {
 
     public void inner(Integer... ids) {
         System.out.println(ids[0]);
+        System.out.println(ids[1]);
     }
 
     public void outer(Integer... ids) {
@@ -203,6 +204,6 @@ public class CacheServiceTests {
 
     @Test
     public void testNestedUlimitParams() {
-        outer(3);
+        outer(3, 3);
     }
 }
