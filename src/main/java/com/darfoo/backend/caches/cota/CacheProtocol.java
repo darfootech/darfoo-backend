@@ -77,7 +77,7 @@ public class CacheProtocol {
                                 cacheInsertMap.put("video_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
                                 System.out.println("video_url -> " + field.get(object).toString());
                             } else {
-                                cacheInsertMap.put("music_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString() + ".mp3", QiniuResourceEnum.ENCRYPT));
+                                cacheInsertMap.put("music_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
                                 System.out.println("music_url -> " + field.get(object).toString());
                             }
                         } else {
