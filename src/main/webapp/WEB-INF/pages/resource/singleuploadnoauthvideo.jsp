@@ -31,7 +31,7 @@
 </script>
 
 <div class="container">
-    <h1>填写舞蹈视频信息</h1>
+    <h1>查看舞蹈视频信息</h1>
 
     <div class="row">
         <div class="col-md-12">

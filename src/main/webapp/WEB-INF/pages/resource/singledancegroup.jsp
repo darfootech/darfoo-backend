@@ -16,13 +16,13 @@
 
                 <div class="form-group">
                     <label for="name">舞队名字</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="${author.name}"/>
+                    <input type="text" class="form-control" name="name" id="name" value="${author.name}"/>
                 </div>
 
                 <div class="form-group">
                     <label for="description">舞队简介</label>
                     <textarea type="text" class="form-control" name="description" id="description"
-                              placeholder="${author.description}"></textarea>
+                              >${author.description}</textarea>
                 </div>
 
                 <c:choose>

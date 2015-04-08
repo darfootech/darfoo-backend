@@ -14,23 +14,15 @@
                     <input type="text" name="id" value="${music.id}">
                 </div>
 
-                <div style="display: none">
-                    <input type="text" name="title" value="${music.title}">
-                </div>
-
                 <div class="form-group">
                     <label for="title">舞蹈伴奏标题(也就是上传伴奏文件的文件名,不需要后缀)</label>
-                    <input type="text" class="form-control" id="title" placeholder="${music.title}" disabled="disabled">
-                </div>
-
-                <div style="display: none">
-                    <input type="text" name="authorname" value="${music.authorname}">
+                    <input type="text" class="form-control" id="title" name="title" value="${music.title}">
                 </div>
 
                 <div class="form-group">
                     <label for="authorname">舞蹈伴奏舞队名字</label>
-                    <input type="text" class="form-control" id="authorname"
-                           placeholder="${music.authorname}" disabled="disabled">
+                    <input type="text" class="form-control" id="authorname" name="authorname"
+                           value="${music.authorname}">
                 </div>
 
                 <div class="form-group">
