@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="authorname">舞蹈伴奏舞队名字</label>
+                    <label for="authorname">舞蹈伴奏演唱者名字</label>
                     <input type="text" class="form-control" id="authorname" name="authorname"
                            value="${music.authorname}">
                 </div>
