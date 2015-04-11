@@ -174,10 +174,11 @@ public class UploadController {
             result.put("error", "nop");
         } else {
             result.put("error", "yep");
+            result.put("status", String.format("%d", status));
         }
 
-        System.out.println("title -> " + request.getAttribute("title"));
-        System.out.println("authorname -> " + request.getAttribute("authorname"));
+        System.out.println("title -> " + request.getParameter("title"));
+        System.out.println("authorname -> " + request.getParameter("authorname"));
         System.out.println("insertstatus ->" + status);
         return result;
     }
