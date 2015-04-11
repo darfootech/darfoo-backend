@@ -18,7 +18,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 获得请求路径的uri
         String uri = request.getRequestURI();
-        System.out.println(request.getRemoteUser() + " - " + request.getRemoteHost() + " - " + request.getRemoteAddr());
+        System.out.println(uri + " - " + request.getRemoteUser() + " - " + request.getRemoteHost() + " - " + request.getRemoteAddr());
 
         // 判断路径是登出还是登录验证，是这两者之一的话执行Controller中定义的方法
         // 客户端的restfulapi的url不能拦截

@@ -5,6 +5,7 @@ import com.darfoo.backend.model.cota.annotations.ModelInsert;
 import com.darfoo.backend.model.cota.annotations.ModelUpload;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
 import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
+import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -82,6 +83,8 @@ public class UploadController {
             String musickey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase(), insertid, "mp3");
             session.setAttribute("musickey", musickey);
         }
+
+        session.setAttribute("insertid", insertid);
         return statuscode;
     }
 
@@ -140,6 +143,43 @@ public class UploadController {
     @ResponseBody
     Integer createResource(@PathVariable String type, HttpServletRequest request, HttpSession session) {
         return commonInsertResource(TypeClassMapping.typeClassMap.get(type), request, session);
+    }
+
+    //给自动上传工具提供resourcekey
+    @RequestMapping(value = "/resources/{type}/autocreate", method = RequestMethod.POST)
+    public @ResponseBody HashMap<String, String> autoCreateResource(@PathVariable String type, HttpServletRequest request, HttpSession session) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        int status = commonInsertResource(resource, request, session);
+        HashMap<String, String> result = new HashMap<String, String>();
+        if (status == 200) {
+            int insertid = (Integer) session.getAttribute("insertid");
+            Object object = commonDao.getResourceById(resource, insertid);
+            if (type.equals("dancevideo")) {
+                String videokey = (String) commonDao.getResourceAttr(resource, object, "video_key");
+                String imagekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
+                result.put("videokey", videokey);
+                result.put("imagekey", imagekey);
+            }
+
+            if (type.equals("dancemusic")) {
+                String musickey = (String) commonDao.getResourceAttr(resource, object, "music_key");
+                result.put("musickey", musickey);
+            }
+
+            if (type.equals("dancegroup")) {
+                String imagekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
+                result.put("imagekey", imagekey);
+            }
+
+            result.put("error", "nop");
+        } else {
+            result.put("error", "yep");
+        }
+
+        System.out.println("title -> " + request.getAttribute("title"));
+        System.out.println("authorname -> " + request.getAttribute("authorname"));
+        System.out.println("insertstatus ->" + status);
+        return result;
     }
 
     @RequestMapping(value = "/resources/{type}/resource/new", method = RequestMethod.GET)
