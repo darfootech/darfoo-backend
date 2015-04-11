@@ -1,10 +1,7 @@
 package com.darfoo.backend.service.cota;
 
 import com.darfoo.backend.model.auth.Feedback;
-import com.darfoo.backend.model.cota.enums.DanceGroupType;
-import com.darfoo.backend.model.cota.enums.DanceVideoType;
-import com.darfoo.backend.model.cota.enums.ResourceHot;
-import com.darfoo.backend.model.cota.enums.ResourcePriority;
+import com.darfoo.backend.model.cota.enums.*;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -41,6 +38,8 @@ public class TypeClassMapping {
 
     public static HashMap<String, DanceVideoType> danceVideoTypeMap = new HashMap<String, DanceVideoType>();
     public static HashMap<String, DanceGroupType> danceGroupTypeMap = new HashMap<String, DanceGroupType>();
+
+    public static HashMap<String, OperaVideoType> operaVideoTypeMap = new HashMap<String, OperaVideoType>();
 
     public static HashMap<Enum, String> typeNameMap = new HashMap<Enum, String>();
 
@@ -104,6 +103,8 @@ public class TypeClassMapping {
         danceVideoTypeMap.put("tutorial", DanceVideoType.TUTORIAL);
         danceGroupTypeMap.put("normal", DanceGroupType.NORMAL);
         danceGroupTypeMap.put("star", DanceGroupType.STAR);
+        operaVideoTypeMap.put("series", OperaVideoType.SERIES);
+        operaVideoTypeMap.put("single", OperaVideoType.SINGLE);
 
         resourceFieldClassMap.put("hot", ResourceHot.class);
         resourceFieldClassMap.put("priority", ResourcePriority.class);

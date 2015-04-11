@@ -147,7 +147,9 @@ public class UploadController {
 
     //给自动上传工具提供resourcekey
     @RequestMapping(value = "/resources/{type}/autocreate", method = RequestMethod.POST)
-    public @ResponseBody HashMap<String, String> autoCreateResource(@PathVariable String type, HttpServletRequest request, HttpSession session) {
+    public
+    @ResponseBody
+    HashMap<String, String> autoCreateResource(@PathVariable String type, HttpServletRequest request, HttpSession session) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         int status = commonInsertResource(resource, request, session);
         HashMap<String, String> result = new HashMap<String, String>();

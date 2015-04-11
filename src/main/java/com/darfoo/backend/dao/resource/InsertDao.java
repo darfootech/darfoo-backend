@@ -7,10 +7,13 @@ import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
 import com.darfoo.backend.model.cota.enums.DanceGroupType;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
+import com.darfoo.backend.model.cota.enums.OperaVideoType;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaSeries;
+import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.hibernate.Criteria;
@@ -275,6 +278,91 @@ public class InsertDao {
         session.save(object);
 
         int insertid = (Integer) commonDao.getResourceAttr(resource, object, "id");
+
+        resultMap.put("statuscode", 200);
+        resultMap.put("insertid", insertid);
+        return resultMap;
+    }
+
+    public HashMap<String, Integer> insertOperaSeries(HashMap<String, String> insertcontents) throws IllegalAccessException, InstantiationException {
+        Set<String> categoryTitles = new HashSet<String>();
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria;
+
+        Class resource = OperaVideo.class;
+        Object object = resource.newInstance();
+
+        for (String key : insertcontents.keySet()) {
+            if (key.equals("title")) {
+                String title = insertcontents.get(key);
+                if (!title.equals("")) {
+                    String seriesname = insertcontents.get("seriesname");
+
+                    OperaSeries series = (OperaSeries) commonDao.getResourceByTitleOrName(OperaSeries.class, seriesname, "title");
+
+                    if (series == null) {
+                        System.out.println("越剧连续剧还不存在");
+                        resultMap.put("statuscode", 510);
+                        resultMap.put("insertid", -1);
+                        return resultMap;
+                    }
+
+                    int seriesid = series.getId();
+
+                    HashMap<String, Object> conditions = new HashMap<String, Object>();
+                    conditions.put("title", title);
+                    conditions.put("series_id", seriesid);
+
+                    Object queryVideo = commonDao.getResourceByFields(resource, conditions);
+
+                    if (queryVideo == null) {
+                        System.out.println("视频名字和连续剧id组合不存在，可以进行插入");
+                        commonDao.setResourceAttr(resource, object, key, title);
+                        commonDao.setResourceAttr(resource, object, "video_key", title + System.currentTimeMillis());
+                    } else {
+                        System.out.println("视频名字和连续剧id组合已存在，不可以进行插入了，是否需要修改");
+                        resultMap.put("statuscode", 511);
+                        resultMap.put("insertid", -1);
+                        return resultMap;
+                    }
+                } else {
+                    System.out.println("视频名字不能为空");
+                    resultMap.put("statuscode", 507);
+                    resultMap.put("insertid", -1);
+                    return resultMap;
+                }
+            } else if (key.equals("seriesname")) {
+                String authorname = insertcontents.get(key);
+                criteria = session.createCriteria(OperaSeries.class).add(Restrictions.eq("title", authorname));
+                if (criteria.list().size() == 1) {
+                    commonDao.setResourceAttr(resource, object, "series", criteria.uniqueResult());
+                } else {
+                    System.out.println("越剧连续剧还不存在");
+                    resultMap.put("statuscode", 512);
+                    resultMap.put("insertid", -1);
+                    return resultMap;
+                }
+            } else if (key.equals("type")) {
+                OperaVideoType type = TypeClassMapping.operaVideoTypeMap.get(insertcontents.get(key));
+                commonDao.setResourceAttr(resource, object, key, type);
+            } else {
+                System.out.println("wired");
+            }
+        }
+
+        String imagekey = insertcontents.get("imagekey");
+        commonDao.setResourceAttr(resource, object, "image", new Image(imagekey));
+
+        session.save(object);
+
+        int insertid = (Integer) commonDao.getResourceAttr(resource, object, "id");
+
+        HashMap<String, Object> updateMap = new HashMap<String, Object>();
+        String videokey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase(), insertid, insertcontents.get("videotype"));
+        updateMap.put("video_key", videokey);
+        commonDao.updateResourceFieldsById(resource, insertid, updateMap);
 
         resultMap.put("statuscode", 200);
         resultMap.put("insertid", insertid);
