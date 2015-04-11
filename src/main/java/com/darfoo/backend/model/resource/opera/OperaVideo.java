@@ -2,10 +2,8 @@ package com.darfoo.backend.model.resource.opera;
 
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
-import com.darfoo.backend.model.cota.annotations.CSVTitle;
-import com.darfoo.backend.model.cota.annotations.ModelInsert;
-import com.darfoo.backend.model.cota.annotations.ModelOperation;
-import com.darfoo.backend.model.cota.annotations.ModelUpdate;
+import com.darfoo.backend.model.cota.annotations.*;
+import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
 import com.darfoo.backend.model.cota.enums.OperaVideoType;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
@@ -62,6 +60,24 @@ public class OperaVideo implements Serializable {
     @Column(name = "VIDEO_TYPE", nullable = true, updatable = true, columnDefinition = "int default 0")
     @CSVTitle(title = "视频类型")
     OperaVideoType type;
+
+    //mp4 flv
+    @Transient
+    @ModelInsert
+    String videotype;
+
+    @Transient
+    @ModelInsert
+    @ModelUpdate
+    String seriesname;
+
+    @Transient
+    @ModelUpload(type = ModelUploadEnum.SMALL)
+    String imagekey;
+
+    @Transient
+    @ModelUpload(type = ModelUploadEnum.LARGE)
+    String videokey;
 
     public OperaVideo() {
     }

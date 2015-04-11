@@ -2,8 +2,10 @@ package com.darfoo.backend.model.resource.opera;
 
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
-import com.darfoo.backend.model.cota.annotations.*;
-import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
+import com.darfoo.backend.model.cota.annotations.CSVTitle;
+import com.darfoo.backend.model.cota.annotations.ModelInsert;
+import com.darfoo.backend.model.cota.annotations.ModelOperation;
+import com.darfoo.backend.model.cota.annotations.ModelUpdate;
 import com.darfoo.backend.model.resource.Image;
 import org.hibernate.annotations.Cascade;
 
@@ -41,12 +43,6 @@ public class OperaSeries implements Serializable {
     @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
     Long hottest = 0L;
 
-    @Transient
-    @ModelInsert
-    @ModelUpload(type = ModelUploadEnum.SMALL)
-    @ModelUpdate
-    String imagekey;
-
     public OperaSeries() {
     }
 
@@ -82,14 +78,6 @@ public class OperaSeries implements Serializable {
         this.hottest = hottest;
     }
 
-    public String getImagekey() {
-        return imagekey;
-    }
-
-    public void setImagekey(String imagekey) {
-        this.imagekey = imagekey;
-    }
-
     @Override
     public String toString() {
         return "OperaSeries{" +
@@ -97,7 +85,6 @@ public class OperaSeries implements Serializable {
                 ", title='" + title + '\'' +
                 ", image=" + image +
                 ", hottest=" + hottest +
-                ", imagekey='" + imagekey + '\'' +
                 '}';
     }
 }
