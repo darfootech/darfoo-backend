@@ -5,6 +5,8 @@ import com.darfoo.backend.model.cota.enums.*;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaSeries;
+import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.model.statistics.CrashLog;
 import com.darfoo.backend.model.statistics.SearchHistory;
 import com.darfoo.backend.model.statistics.clickcount.MenuClickCount;
@@ -54,6 +56,8 @@ public class TypeClassMapping {
         typeClassMap.put("dancevideo", DanceVideo.class);
         typeClassMap.put("dancemusic", DanceMusic.class);
         typeClassMap.put("dancegroup", DanceGroup.class);
+        typeClassMap.put("operavideo", OperaVideo.class);
+        typeClassMap.put("operaseries", OperaSeries.class);
 
         typeClassMap.put("uploadnoauthvideo", UploadNoAuthVideo.class);
         typeClassMap.put("resourceclickcount", ResourceClickCount.class);

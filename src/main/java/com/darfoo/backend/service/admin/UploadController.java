@@ -201,25 +201,25 @@ public class UploadController {
         return String.format("upload/upload%sresource", type);
     }
 
-    @RequestMapping(value = "/resources/dancevideo/resource/create", method = RequestMethod.POST)
-    public String createMediaResource(@RequestParam("videoresource") CommonsMultipartFile videoresource, @RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session) {
+    @RequestMapping(value = "/resources/{type}/videoimage/create", method = RequestMethod.POST)
+    public String uploadVideoImageResource(@PathVariable String type, @RequestParam("videoresource") CommonsMultipartFile videoresource, @RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session) {
         HashMap<String, CommonsMultipartFile> uploadresources = new HashMap<String, CommonsMultipartFile>();
         uploadresources.put("videokey", videoresource);
         uploadresources.put("imagekey", imageresource);
-        return commonUploadResource(DanceVideo.class, uploadresources, session);
+        return commonUploadResource(TypeClassMapping.typeClassMap.get(type), uploadresources, session);
     }
 
-    @RequestMapping(value = "/resources/dancemusic/resource/create", method = RequestMethod.POST)
-    public String createMusicResourceNoPic(@RequestParam("musicresource") CommonsMultipartFile musicresource, HttpSession session) {
+    @RequestMapping(value = "/resources/{type}/music/create", method = RequestMethod.POST)
+    public String uploadMusicResource(@PathVariable String type, @RequestParam("musicresource") CommonsMultipartFile musicresource, HttpSession session) {
         HashMap<String, CommonsMultipartFile> uploadresources = new HashMap<String, CommonsMultipartFile>();
         uploadresources.put("musickey", musicresource);
-        return commonUploadResource(DanceMusic.class, uploadresources, session);
+        return commonUploadResource(TypeClassMapping.typeClassMap.get(type), uploadresources, session);
     }
 
-    @RequestMapping(value = "/resources/dancegroup/resource/create", method = RequestMethod.POST)
-    public String createAuthorResource(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session) {
+    @RequestMapping(value = "/resources/{type}/image/create", method = RequestMethod.POST)
+    public String uploadImageResource(@PathVariable String type, @RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session) {
         HashMap<String, CommonsMultipartFile> uploadresources = new HashMap<String, CommonsMultipartFile>();
         uploadresources.put("imagekey", imageresource);
-        return commonUploadResource(DanceGroup.class, uploadresources, session);
+        return commonUploadResource(TypeClassMapping.typeClassMap.get(type), uploadresources, session);
     }
 }

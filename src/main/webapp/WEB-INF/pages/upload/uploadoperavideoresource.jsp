@@ -2,11 +2,11 @@
 <%@include file="../header.jsp" %>
 
 <div class="container">
-    <h1>上传舞蹈视频资源</h1>
+    <h1>上传越剧视频资源</h1>
 
     <div class="row">
         <div class="col-md-12">
-            <form role="form" action="/darfoobackend/rest/resources/dancevideo/videoimage/create" method="post"
+            <form role="form" action="/darfoobackend/rest/resources/operavideo/videoimage/create" method="post"
                   enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="videoresource">选择要上传的视频资源(请确保是MP4或者FLV格式的视频文件)</label>
@@ -18,7 +18,7 @@
                     <input type="file" id="imageresource" name="imageresource">
                 </div>
 
-                <button type="submit" class="btn btn-default">上传舞蹈视频资源</button>
+                <button type="submit" class="btn btn-default">上传越剧视频资源</button>
             </form>
         </div>
     </div>
