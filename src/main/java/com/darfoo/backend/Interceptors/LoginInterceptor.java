@@ -37,7 +37,16 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             } else {
                 return false;
             }
-        } else if (uri.contains("admin") || uri.contains("resources")) {
+        } else if (uri.contains("admin")) {
+            if (request.getSession() != null && request.getSession().getAttribute("loginUser") != null) {
+                return true;
+            } else {
+                System.out.println("需要登陆");
+                response.sendRedirect(request.getContextPath() + "/rest/login");
+                return false;
+            }
+        } else if (uri.contains("resources")) {
+            System.out.println("请求资源");
             return true;
         } else if (uri.contains("cache")) {
             System.out.println("在请求缓存资源");
