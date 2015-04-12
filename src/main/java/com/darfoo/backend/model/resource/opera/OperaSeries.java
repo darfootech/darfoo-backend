@@ -2,10 +2,8 @@ package com.darfoo.backend.model.resource.opera;
 
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
-import com.darfoo.backend.model.cota.annotations.CSVTitle;
-import com.darfoo.backend.model.cota.annotations.ModelInsert;
-import com.darfoo.backend.model.cota.annotations.ModelOperation;
-import com.darfoo.backend.model.cota.annotations.ModelUpdate;
+import com.darfoo.backend.model.cota.annotations.*;
+import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
 import com.darfoo.backend.model.resource.Image;
 import org.hibernate.annotations.Cascade;
 
@@ -38,6 +36,12 @@ public class OperaSeries implements Serializable {
     @JoinColumn(name = "IMAGE_ID", referencedColumnName = "id", updatable = true)
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
     Image image;
+
+    @Transient
+    @ModelInsert
+    @ModelUpload(type = ModelUploadEnum.SMALL)
+    @ModelUpdate
+    String imagekey;
 
     //点击量
     @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")

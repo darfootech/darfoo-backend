@@ -40,13 +40,6 @@
                         <div style="display: none">
                             <input type="text" name="imagekey" value="${author.image.image_key}">
                         </div>
-
-                        <div class="form-group">
-                            <label for="imagekey">舞队图片标题(也就是上传图片文件的文件名,需要加上后缀)</label>
-                            <input type="text" class="form-control" id="imagekey"
-                                   placeholder="${author.image.image_key}"
-                                   disabled="disabled">
-                        </div>
                     </c:otherwise>
                 </c:choose>
 
