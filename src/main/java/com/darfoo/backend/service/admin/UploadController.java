@@ -11,6 +11,7 @@ import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.model.resource.opera.OperaSeries;
+import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.service.category.DanceVideoCates;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
@@ -58,9 +59,11 @@ public class UploadController {
             }
         }
 
-        if (resource == DanceVideo.class || resource == DanceGroup.class) {
+        if (resource == DanceVideo.class || resource == DanceGroup.class || resource == OperaVideo.class) {
             insertcontents.put("type", request.getParameter("innertype").toLowerCase());
+        }
 
+        if (resource == DanceVideo.class || resource == DanceGroup.class || resource == OperaVideo.class || resource == OperaSeries.class) {
             String imagekey = String.format("%s-imagekey-%s.%s", resource.getSimpleName().toLowerCase(), System.currentTimeMillis(), request.getParameter("imagetype"));
             insertcontents.put("imagekey", imagekey);
             session.setAttribute("imagekey", imagekey);
@@ -76,7 +79,7 @@ public class UploadController {
 
         System.out.println("status code is -> " + statuscode);
 
-        if (resource == DanceVideo.class) {
+        if (resource == DanceVideo.class || resource == OperaVideo.class) {
             String videokey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase(), insertid, insertcontents.get("videotype"));
             session.setAttribute("videokey", videokey);
         }

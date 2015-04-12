@@ -339,14 +339,16 @@ public class InsertDao {
                 }
             } else if (key.equals("seriesname")) {
                 String seriesname = insertcontents.get(key);
-                criteria = session.createCriteria(OperaSeries.class).add(Restrictions.eq("title", seriesname));
-                if (criteria.list().size() == 1) {
-                    commonDao.setResourceAttr(resource, object, "series", criteria.uniqueResult());
-                } else {
-                    System.out.println("越剧连续剧还不存在");
-                    resultMap.put("statuscode", 510);
-                    resultMap.put("insertid", -1);
-                    return resultMap;
+                if (seriesname != null && !seriesname.equals("")) {
+                    criteria = session.createCriteria(OperaSeries.class).add(Restrictions.eq("title", seriesname));
+                    if (criteria.list().size() == 1) {
+                        commonDao.setResourceAttr(resource, object, "series", criteria.uniqueResult());
+                    } else {
+                        System.out.println("越剧连续剧还不存在");
+                        resultMap.put("statuscode", 510);
+                        resultMap.put("insertid", -1);
+                        return resultMap;
+                    }
                 }
             } else if (key.equals("type")) {
                 OperaVideoType type = TypeClassMapping.operaVideoTypeMap.get(insertcontents.get(key));
