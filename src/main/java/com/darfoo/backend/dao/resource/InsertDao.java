@@ -230,7 +230,6 @@ public class InsertDao {
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
         Session session = sessionFactory.getCurrentSession();
-        Criteria criteria;
 
         Class resource = DanceGroup.class;
         Object object = resource.newInstance();
@@ -285,7 +284,6 @@ public class InsertDao {
     }
 
     public HashMap<String, Integer> insertOperaVideo(HashMap<String, String> insertcontents) throws IllegalAccessException, InstantiationException {
-        Set<String> categoryTitles = new HashSet<String>();
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
         Session session = sessionFactory.getCurrentSession();
@@ -340,8 +338,8 @@ public class InsertDao {
                     return resultMap;
                 }
             } else if (key.equals("seriesname")) {
-                String authorname = insertcontents.get(key);
-                criteria = session.createCriteria(OperaSeries.class).add(Restrictions.eq("title", authorname));
+                String seriesname = insertcontents.get(key);
+                criteria = session.createCriteria(OperaSeries.class).add(Restrictions.eq("title", seriesname));
                 if (criteria.list().size() == 1) {
                     commonDao.setResourceAttr(resource, object, "series", criteria.uniqueResult());
                 } else {
@@ -379,7 +377,6 @@ public class InsertDao {
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
         Session session = sessionFactory.getCurrentSession();
-        Criteria criteria;
 
         Class resource = OperaSeries.class;
         Object object = resource.newInstance();

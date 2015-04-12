@@ -55,6 +55,10 @@ public class OperaVideo implements Serializable {
     @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
     Long hottest = 0L;
 
+    @Column(name = "UPDATE_TIMESTAMP", nullable = false, columnDefinition = "bigint(64) not null")
+    @CacheInsert(type = CacheInsertEnum.NORMAL)
+    Long update_timestamp = System.currentTimeMillis();
+
     //欣赏 教学
     @Column(name = "VIDEO_TYPE", nullable = true, updatable = true, columnDefinition = "int default 0")
     @CSVTitle(title = "视频类型")

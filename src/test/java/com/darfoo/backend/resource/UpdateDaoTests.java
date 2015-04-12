@@ -4,6 +4,8 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaSeries;
+import com.darfoo.backend.model.resource.opera.OperaVideo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +75,35 @@ public class UpdateDaoTests {
         updatecontents.put("description", "日本女歌手");
 
         HashMap<String, Integer> insertresult = commonDao.updateResource(DanceGroup.class, id, updatecontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
+    }
+
+    @Test
+    public void updateOperaSeriesById() {
+        HashMap<String, String> updatecontents = new HashMap<String, String>();
+        String seriesname = "墨梅";
+
+        Integer id = 1;
+
+        updatecontents.put("title", seriesname);
+
+        HashMap<String, Integer> insertresult = commonDao.updateResource(OperaSeries.class, id, updatecontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
+    }
+
+    @Test
+    public void updateOperaVideoById() {
+        HashMap<String, String> updatecontents = new HashMap<String, String>();
+        String videoTitle = "么么-" + System.currentTimeMillis();
+        String seriesname = "红楼梦";
+
+        Integer id = 1;
+
+        updatecontents.put("title", videoTitle);
+        updatecontents.put("seriesname", seriesname);
+        updatecontents.put("type", "series");
+
+        HashMap<String, Integer> insertresult = commonDao.updateResource(OperaVideo.class, id, updatecontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
     }
 }

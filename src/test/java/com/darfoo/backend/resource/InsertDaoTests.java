@@ -108,8 +108,8 @@ public class InsertDaoTests {
 
         insertcontents.put("imagekey", imagekey);
         insertcontents.put("title", videoTitle);
-        /*insertcontents.put("seriesname", operaseriesname);
-        insertcontents.put("type", "series");*/
+        //insertcontents.put("seriesname", operaseriesname);
+        //insertcontents.put("type", "series");
         insertcontents.put("type", "single");
         insertcontents.put("videotype", "mp4");
 

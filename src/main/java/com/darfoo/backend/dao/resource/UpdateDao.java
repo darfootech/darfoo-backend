@@ -5,10 +5,13 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
+import com.darfoo.backend.model.cota.enums.OperaVideoType;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaSeries;
+import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.hibernate.Criteria;
@@ -310,6 +313,136 @@ public class UpdateDao {
                             return resultMap;
                         } else {
                             commonDao.setResourceAttr(resource, object, "image", new Image(imagekey));
+                        }
+                    }
+                }
+            }
+            session.saveOrUpdate(object);
+            resultMap.put("statuscode", 200);
+            return resultMap;
+        }
+    }
+
+    public HashMap<String, Integer> updateOperaVideo(Integer id, HashMap<String, String> updatecontents) {
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria;
+
+        Class resource = OperaVideo.class;
+        Object object = session.get(resource, id);
+
+        OperaVideoType type = TypeClassMapping.operaVideoTypeMap.get(updatecontents.get("type"));
+
+        if (object == null) {
+            System.out.println("需要更新的资源不存在");
+            resultMap.put("statuscode", 500);
+            return resultMap;
+        } else {
+            for (String key : updatecontents.keySet()) {
+                if (key.equals("seriesname")) {
+                    if (type == OperaVideoType.SERIES) {
+                        String seriesname = updatecontents.get(key);
+                        if (!seriesname.equals("") && seriesname != null) {
+                            String oldSeriesname = ((OperaSeries) commonDao.getResourceAttr(resource, object, "series")).getTitle();
+                            if (!seriesname.equals(oldSeriesname)) {
+                                criteria = session.createCriteria(OperaSeries.class).add(Restrictions.eq("title", seriesname));
+                                criteria.setReadOnly(true);
+                                OperaSeries series = (OperaSeries) criteria.uniqueResult();
+                                if (series == null) {
+                                    System.out.println("要更新的资源的的越剧连续剧不存在，请先完成越剧连续剧信息的创建");
+                                    resultMap.put("statuscode", 508);
+                                    return resultMap;
+                                } else {
+                                    int seriesid = series.getId();
+
+                                    HashMap<String, Object> conditions = new HashMap<String, Object>();
+                                    conditions.put("title", commonDao.getResourceAttr(resource, object, "title"));
+                                    conditions.put("series_id", seriesid);
+
+                                    Object queryOldResource = commonDao.getResourceByFields(resource, conditions);
+
+                                    conditions.put("title", updatecontents.get("title"));
+
+                                    Object queryResource = commonDao.getResourceByFields(resource, conditions);
+
+                                    if (queryOldResource == null && queryResource == null) {
+                                        System.out.println("资源名字和越剧连续剧id组合不存在，可以进行插入");
+                                        commonDao.setResourceAttr(resource, object, "series", series);
+                                    } else {
+                                        System.out.println("资源名字和越剧连续剧id组合已存在，不可以进行插入了，是否需要修改");
+                                        resultMap.put("statuscode", 509);
+                                        return resultMap;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else if (key.equals("title")) {
+                    String title = updatecontents.get(key);
+                    String oldTitle = commonDao.getResourceAttr(resource, object, key).toString();
+
+                    if (!title.equals("") && title != null && !title.equals(oldTitle)) {
+                        if (type == OperaVideoType.SERIES) {
+                            int oldSeriesid = ((OperaSeries) commonDao.getResourceAttr(resource, object, "series")).getId();
+                            HashMap<String, Object> conditions = new HashMap<String, Object>();
+                            conditions.put("title", title);
+                            conditions.put("series_id", oldSeriesid);
+
+                            Object queryResource = commonDao.getResourceByFields(resource, conditions);
+
+                            if (queryResource == null) {
+                                System.out.println("资源名字和越剧连续剧id组合不存在，可以进行插入");
+                                commonDao.setResourceAttr(resource, object, key, title);
+                            } else {
+                                System.out.println("资源名字和越剧连续剧id组合已存在，不可以进行插入了，是否需要修改");
+                                resultMap.put("statuscode", 509);
+                                return resultMap;
+                            }
+                        } else {
+                            commonDao.setResourceAttr(resource, object, key, title);
+                        }
+                    }
+                } else if (key.equals("type")) {
+                    //DanceVideoType type = TypeClassMapping.danceVideoTypeMap.get(updatecontents.get(key));
+                    commonDao.setResourceAttr(resource, object, key, type);
+                }
+            }
+
+            commonDao.setResourceAttr(resource, object, "update_timestamp", System.currentTimeMillis());
+
+            session.saveOrUpdate(object);
+            resultMap.put("statuscode", 200);
+            return resultMap;
+        }
+    }
+
+    public HashMap<String, Integer> updateOperaSeries(Integer id, HashMap<String, String> updatecontents) {
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+
+        Session session = sessionFactory.getCurrentSession();
+
+        Class resource = OperaSeries.class;
+        Object object = session.get(resource, id);
+
+        if (object == null) {
+            System.out.println("需要更新的资源不存在");
+            resultMap.put("statuscode", 500);
+            return resultMap;
+        } else {
+            for (String key : updatecontents.keySet()) {
+                if (key.equals("title")) {
+                    String name = updatecontents.get(key);
+                    String oldName = commonDao.getResourceAttr(resource, object, key).toString();
+
+                    if (!name.equals("") && name != null && !name.equals(oldName)) {
+                        Object queryResource = commonDao.getResourceByTitleOrName(resource, name, key);
+                        if (queryResource == null) {
+                            commonDao.setResourceAttr(resource, object, key, name);
+                        } else {
+                            System.out.println("相同名字的越剧连续剧已经存在了");
+                            resultMap.put("statuscode", 510);
+                            return resultMap;
                         }
                     }
                 }
