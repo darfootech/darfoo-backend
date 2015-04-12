@@ -94,10 +94,11 @@ public class UpdateDaoTests {
     @Test
     public void updateOperaVideoById() {
         HashMap<String, String> updatecontents = new HashMap<String, String>();
-        String videoTitle = "么么-" + System.currentTimeMillis();
+        //String videoTitle = "么么-" + System.currentTimeMillis();
+        String videoTitle = "哈哈";
         String seriesname = "红楼梦";
 
-        Integer id = 1;
+        Integer id = 4;
 
         updatecontents.put("title", videoTitle);
         updatecontents.put("seriesname", seriesname);

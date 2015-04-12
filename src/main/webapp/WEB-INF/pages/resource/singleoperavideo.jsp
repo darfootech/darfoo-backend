@@ -25,6 +25,10 @@
                     <input type="text" name="id" value="${video.id}">
                 </div>
 
+                <div style="display: none">
+                    <input type="text" name="type" value="${video.type}">
+                </div>
+
                 <div class="form-group">
                     <label for="title">越剧视频标题(也就是上传视频文件的文件名,不需要后缀)</label>
                     <input type="text" class="form-control" name="title" id="title" value="${video.title}">

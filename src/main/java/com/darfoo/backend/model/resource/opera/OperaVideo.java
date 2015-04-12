@@ -62,6 +62,7 @@ public class OperaVideo implements Serializable {
     //欣赏 教学
     @Column(name = "VIDEO_TYPE", nullable = true, updatable = true, columnDefinition = "int default 0")
     @CSVTitle(title = "视频类型")
+    @ModelUpdate
     OperaVideoType type;
 
     //mp4 flv

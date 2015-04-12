@@ -77,11 +77,7 @@ public class UpdateDao {
 
                                 Object queryOldResource = commonDao.getResourceByFields(resource, conditions);
 
-                                conditions.put("title", updatecontents.get("title"));
-
-                                Object queryResource = commonDao.getResourceByFields(resource, conditions);
-
-                                if (queryOldResource == null && queryResource == null) {
+                                if (queryOldResource == null) {
                                     System.out.println("资源名字和舞队id组合不存在，可以进行插入");
                                     commonDao.setResourceAttr(resource, object, "author", author);
                                 } else {
@@ -332,7 +328,7 @@ public class UpdateDao {
         Class resource = OperaVideo.class;
         Object object = session.get(resource, id);
 
-        OperaVideoType type = TypeClassMapping.operaVideoTypeMap.get(updatecontents.get("type"));
+        OperaVideoType type = TypeClassMapping.operaVideoTypeMap.get(updatecontents.get("type").toLowerCase());
 
         if (object == null) {
             System.out.println("需要更新的资源不存在");
@@ -362,11 +358,7 @@ public class UpdateDao {
 
                                     Object queryOldResource = commonDao.getResourceByFields(resource, conditions);
 
-                                    conditions.put("title", updatecontents.get("title"));
-
-                                    Object queryResource = commonDao.getResourceByFields(resource, conditions);
-
-                                    if (queryOldResource == null && queryResource == null) {
+                                    if (queryOldResource == null) {
                                         System.out.println("资源名字和越剧连续剧id组合不存在，可以进行插入");
                                         commonDao.setResourceAttr(resource, object, "series", series);
                                     } else {
