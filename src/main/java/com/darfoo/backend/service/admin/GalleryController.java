@@ -133,11 +133,11 @@ public class GalleryController {
     public String showAllResource(@PathVariable String type, ModelMap modelMap) {
         if (type.equals("dancegroup")) {
             modelMap.put("typenames", TypeClassMapping.danceGroupTypeNameMap);
-        }
-        if (type.equals("dancevideo")) {
+        } else if (type.equals("dancevideo")) {
             modelMap.put("typenames", TypeClassMapping.danceVideoTypeNameMap);
-        }
-        if (type.equals("dancemusic")) {
+        } else if (type.equals("operavideo")) {
+            modelMap.put("typenames", TypeClassMapping.operaVideoTypeNameMap);
+        } else {
             List resources = commonDao.getAllResource(TypeClassMapping.typeClassMap.get(type));
             return galleryAllResources(resources, modelMap, type);
         }
