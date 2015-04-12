@@ -113,8 +113,14 @@ public class UploadController {
         if (type.equals("dancevideo")) {
             modelMap.put("typenames", TypeClassMapping.danceVideoTypeNameMap);
         }
+        if (type.equals("operavideo")) {
+            modelMap.put("typenames", TypeClassMapping.operaVideoTypeNameMap);
+        }
         if (type.equals("dancemusic")) {
             return "upload/uploaddancemusic";
+        }
+        if (type.equals("operaseries")) {
+            return "upload/uploadoperaseries";
         }
         modelMap.put("operation", "upload");
         modelMap.put("type", type);
