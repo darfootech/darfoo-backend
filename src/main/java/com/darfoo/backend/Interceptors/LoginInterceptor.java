@@ -55,6 +55,9 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         } else if (uri.contains("auth")) {
             System.out.println("用户操作");
             return true;
+        } else if (uri.contains("autocreate")) {
+            System.out.println("自动上传");
+            return true;
         } else if (uri.contains("admin") || (uri.contains("resources") && (uri.contains("new") || uri.contains("create")))) {
             if (request.getSession() != null && request.getSession().getAttribute("loginUser") != null) {
                 return true;
