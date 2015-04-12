@@ -3,10 +3,13 @@ package com.darfoo.backend.service.admin;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
+import com.darfoo.backend.model.cota.enums.OperaVideoType;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaSeries;
+import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.model.upload.UploadNoAuthVideo;
 import com.darfoo.backend.service.category.DanceMusicCates;
 import com.darfoo.backend.service.category.DanceVideoCates;
@@ -77,19 +80,22 @@ public class GalleryController {
         }
 
         if (resource == DanceVideo.class) {
-            String videokey = commonDao.getResourceAttr(resource, object, "video_key").toString();
-            String imagekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
+            modelMap = putVideoLikeResourceToModelMap(resource, object, modelMap);
             DanceMusic music = (DanceMusic) commonDao.getResourceAttr(resource, object, "music");
-            modelMap.addAttribute("video", object);
-            modelMap.addAttribute("innertype", commonDao.getResourceAttr(resource, object, "type"));
             modelMap.addAttribute("authors", commonDao.getAllResource(DanceGroup.class));
-            modelMap.addAttribute("videourl", qiniuUtils.getQiniuResourceUrl(videokey, QiniuResourceEnum.RAW));
-            modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(imagekey, QiniuResourceEnum.RAW));
             if (music != null) {
                 String connectmusic = music.getTitle() + "-" + music.getAuthorname();
                 modelMap.addAttribute("connectmusic", connectmusic);
             } else {
                 modelMap.addAttribute("connectmusic", "请输入要关联的伴奏并选择");
+            }
+        }
+
+        if (resource == OperaVideo.class) {
+            modelMap = putVideoLikeResourceToModelMap(resource, object, modelMap);
+            OperaVideoType type = (OperaVideoType) commonDao.getResourceAttr(resource, object, "type");
+            if (type == OperaVideoType.SERIES) {
+                modelMap.addAttribute("serieses", commonDao.getAllResource(OperaSeries.class));
             }
         }
 
@@ -101,17 +107,37 @@ public class GalleryController {
 
         if (resource == DanceGroup.class) {
             modelMap.addAttribute("author", object);
-            Image image = (Image) commonDao.getResourceAttr(resource, object, "image");
-            if (image != null) {
-                modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(image.getImage_key(), QiniuResourceEnum.RAW));
-                if (image.getImage_key().equals("")) {
-                    modelMap.addAttribute("updateauthorimage", 1);
-                }
-            } else {
-                modelMap.addAttribute("imageurl", "");
-            }
+            modelMap = putImageToModelMap(resource, object, modelMap);
         }
 
+        if (resource == OperaSeries.class) {
+            modelMap.addAttribute("series", object);
+            modelMap = putImageToModelMap(resource, object, modelMap);
+        }
+
+        return modelMap;
+    }
+
+    public ModelMap putImageToModelMap(Class resource, Object object, ModelMap modelMap) {
+        Image image = (Image) commonDao.getResourceAttr(resource, object, "image");
+        if (image != null) {
+            modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(image.getImage_key(), QiniuResourceEnum.RAW));
+            if (image.getImage_key().equals("")) {
+                modelMap.addAttribute("updateauthorimage", 1);
+            }
+        } else {
+            modelMap.addAttribute("imageurl", "");
+        }
+        return modelMap;
+    }
+
+    public ModelMap putVideoLikeResourceToModelMap(Class resource, Object object, ModelMap modelMap) {
+        modelMap.addAttribute("video", object);
+        modelMap.addAttribute("innertype", commonDao.getResourceAttr(resource, object, "type"));
+        String videokey = commonDao.getResourceAttr(resource, object, "video_key").toString();
+        String imagekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
+        modelMap.addAttribute("videourl", qiniuUtils.getQiniuResourceUrl(videokey, QiniuResourceEnum.RAW));
+        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(imagekey, QiniuResourceEnum.RAW));
         return modelMap;
     }
 

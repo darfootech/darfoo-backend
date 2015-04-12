@@ -72,6 +72,7 @@ public class TypeClassMapping {
 
         innerTypeClassMap.put("dancevideo", DanceVideoType.class);
         innerTypeClassMap.put("dancegroup", DanceGroupType.class);
+        innerTypeClassMap.put("operavideo", OperaVideoType.class);
 
         cacheResponseMap.put("dancevideo", SingleDanceVideo.class);
         cacheResponseMap.put("dancemusic", SingleDanceMusic.class);
