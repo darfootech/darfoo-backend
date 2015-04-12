@@ -11,6 +11,7 @@ import com.darfoo.backend.model.cota.enums.ResourceHot;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaVideo;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
@@ -470,7 +471,7 @@ public class CommonDao {
             System.out.println("匹配>>>>" + sb.toString());
             Criteria criteria = getCommonQueryCriteria(resource)
                     .setProjection(Projections.property("id"));
-            if (ifHasCategoryResource(resource)) {
+            if (ifHasCategoryResource(resource) || resource == OperaVideo.class) {
                 criteria.add(Restrictions.like("title", sb.toString(), MatchMode.ANYWHERE));
             } else if (resource == DanceGroup.class) {
                 criteria.add(Restrictions.like("name", sb.toString(), MatchMode.ANYWHERE));

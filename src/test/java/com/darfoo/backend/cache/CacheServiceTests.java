@@ -165,7 +165,13 @@ public class CacheServiceTests {
     }
 
     @Test
-    public void cacheVideosForDanceGroupByPage() {
+    public void cacheVideosForOperaSeries() {
+        Integer operaseriesid = 3;
+        logResources(cacheUtils.cacheOperaSeriesVideos(operaseriesid));
+    }
+
+    @Test
+     public void cacheVideosForDanceGroupByPage() {
         Integer dancegroupid = 109;
         Integer page = 1;
         logResources(cacheUtils.cacheDanceGroupVideos(dancegroupid, page));
@@ -176,6 +182,7 @@ public class CacheServiceTests {
         HashMap<String, String> typesearch = new HashMap<String, String>();
         typesearch.put("dancevideo", "三亚");
         typesearch.put("dancemusic", "那时候");
+        typesearch.put("operavideo", "哈哈");
         for (String type : typesearch.keySet()) {
             logResources(cacheUtils.cacheResourcesBySearch(type, typesearch.get(type)));
         }

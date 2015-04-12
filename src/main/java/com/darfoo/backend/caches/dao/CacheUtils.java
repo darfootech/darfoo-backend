@@ -13,11 +13,13 @@ import com.darfoo.backend.model.cota.enums.DanceGroupType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.service.category.DanceVideoCates;
 import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.SingleDanceMusic;
 import com.darfoo.backend.service.responsemodel.SingleDanceVideo;
+import com.darfoo.backend.service.responsemodel.SingleOperaVideo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -237,15 +239,16 @@ public class CacheUtils {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         String cachekey = String.format("%ssearch%s", type, searchContent);
 
+        List resources;
         if (type.equals("dancevideo")) {
-            List resources = cacheDao.getSearchResourcesWithDanceGroup(resource, searchContent);
-            cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
-        } else if (type.equals("dancemusic")) {
-            List resources = commonDao.getResourcesBySearch(resource, searchContent);
-            cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
+            resources = cacheDao.getSearchResourcesWithDanceGroup(resource, searchContent);
+        } else if (type.equals("dancemusic") || type.equals("operavideo")) {
+            resources = commonDao.getResourcesBySearch(resource, searchContent);
         } else {
             System.out.println("wired");
+            resources = new ArrayList();
         }
+        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
 
         return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
     }
@@ -268,7 +271,19 @@ public class CacheUtils {
         List resources = commonDao.getResourcesByFields(resource, conditions);
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, resource.getSimpleName().toLowerCase(), CacheCollType.SORTEDSET);
 
-        return returnWithPagination(DanceVideo.class, SingleDanceVideo.class, cachekey, CacheCollType.SORTEDSET, pageArray);
+        return returnWithPagination(resource, SingleDanceVideo.class, cachekey, CacheCollType.SORTEDSET, pageArray);
+    }
+
+    public List cacheOperaSeriesVideos(Integer id, Integer... pageArray) {
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("series_id", id);
+        String cachekey = String.format("operaseriesvideos%d", id);
+
+        Class resource = OperaVideo.class;
+        List resources = commonDao.getResourcesByFields(resource, conditions);
+        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, resource.getSimpleName().toLowerCase(), CacheCollType.SORTEDSET);
+
+        return returnWithPagination(resource, SingleOperaVideo.class, cachekey, CacheCollType.SORTEDSET, pageArray);
     }
 
     public Object cacheDanceMusicForDanceVideo(Integer id) {
