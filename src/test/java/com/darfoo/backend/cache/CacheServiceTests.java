@@ -68,6 +68,15 @@ public class CacheServiceTests {
     }
 
     @Test
+    public void cacheAllResources() {
+        String[] types = {"operavideo"};
+        //String[] types = {"operaseries"};
+        for (String type : types) {
+            logResources(cacheUtils.cacheAllResources(type));
+        }
+    }
+
+    @Test
     public void cacheNewestResourcesByPage() {
         String[] types = {"dancevideo", "dancemusic"};
         Integer page = 1;

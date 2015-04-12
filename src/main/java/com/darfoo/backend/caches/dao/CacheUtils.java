@@ -144,6 +144,16 @@ public class CacheUtils {
         return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
     }
 
+    public List cacheAllResources(String type, Integer... pageArray) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        String cachekey = String.format("%sall", type);
+
+        List resources = commonDao.getAllResource(resource);
+
+        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
+        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
+    }
+
     /**
      * 根据类别获取相应的资源
      * 对于dancevideo 类别有 {0 -> 正面教学, 1 -> 口令分解, 2 -> 背面教学, 3 -> 队形教学}

@@ -3,13 +3,16 @@ package com.darfoo.backend.caches.cota;
 import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
+import com.darfoo.backend.model.cota.enums.OperaVideoType;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaSeries;
 import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -50,6 +53,14 @@ public class CacheProtocol {
                                     cacheInsertMap.put("authorname", author.getName());
                                 } else {
                                     cacheInsertMap.put("authorname", "");
+                                }
+                            } else if (field.getName().equals("series")) {
+                                OperaVideoType type = (OperaVideoType) commonDao.getResourceAttr(model, object, "type");
+                                if (type == OperaVideoType.SERIES) {
+                                    OperaSeries series = (OperaSeries) field.get(object);
+                                    cacheInsertMap.put("seriesname", series.getTitle());
+                                } else {
+                                    cacheInsertMap.put("seriesname", "");
                                 }
                             } else if (field.getName().equals("authorname")) {
                                 cacheInsertMap.put("authorname", field.get(object).toString());

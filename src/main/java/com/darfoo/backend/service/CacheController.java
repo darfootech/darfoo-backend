@@ -139,6 +139,27 @@ public class CacheController {
         return cacheUtils.cacheNewestResources(type, skipnum, returnnum);
     }
 
+    @RequestMapping(value = "/{type}/all", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List cacheAllResources(@PathVariable String type) {
+        return cacheUtils.cacheAllResources(type);
+    }
+
+    @RequestMapping(value = "/{type}/all/page/{page}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List cacheAllResourcesByPage(@PathVariable String type, @PathVariable Integer page) {
+        return cacheUtils.cacheAllResources(type, page);
+    }
+
+    @RequestMapping(value = "/{type}/all/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List cacheAllResourcesBySkip(@PathVariable String type, @PathVariable Integer skipnum, @PathVariable Integer returnnum) {
+        return cacheUtils.cacheAllResources(type, skipnum, returnnum);
+    }
+
     /**
      * 根据类别获取资源
      *
