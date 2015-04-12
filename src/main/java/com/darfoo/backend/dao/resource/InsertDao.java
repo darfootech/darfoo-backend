@@ -344,7 +344,7 @@ public class InsertDao {
                     commonDao.setResourceAttr(resource, object, "series", criteria.uniqueResult());
                 } else {
                     System.out.println("越剧连续剧还不存在");
-                    resultMap.put("statuscode", 512);
+                    resultMap.put("statuscode", 510);
                     resultMap.put("insertid", -1);
                     return resultMap;
                 }
@@ -387,7 +387,7 @@ public class InsertDao {
                 if (!name.equals("")) {
                     if (commonDao.isResourceExistsByField(OperaSeries.class, "title", name)) {
                         System.out.println("相同名字越剧连续剧存在，不能创建新明星舞队");
-                        resultMap.put("statuscode", 513);
+                        resultMap.put("statuscode", 512);
                         resultMap.put("insertid", -1);
                         return resultMap;
                     } else {
@@ -395,8 +395,8 @@ public class InsertDao {
                         commonDao.setResourceAttr(resource, object, key, insertcontents.get(key));
                     }
                 } else {
-                    System.out.println("越剧连续剧不能为空");
-                    resultMap.put("statuscode", 514);
+                    System.out.println("越剧连续剧标题不能为空");
+                    resultMap.put("statuscode", 513);
                     resultMap.put("insertid", -1);
                     return resultMap;
                 }

@@ -5,10 +5,12 @@ import com.darfoo.backend.model.cota.annotations.ModelInsert;
 import com.darfoo.backend.model.cota.annotations.ModelUpload;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
 import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
+import com.darfoo.backend.model.cota.enums.OperaVideoType;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaSeries;
 import com.darfoo.backend.service.category.DanceVideoCates;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
@@ -134,12 +136,15 @@ public class UploadController {
             HashMap<String, Object> conditions = new HashMap<String, Object>();
             conditions.put("type", TypeClassMapping.danceVideoTypeDanceGroupTypeMap.get(danceVideoType));
             modelMap.addAttribute("authors", commonDao.getResourcesByFields(DanceGroup.class, conditions));
-            modelMap.addAttribute("type", type);
-            modelMap.addAttribute("innertype", innertype);
-        } else if (type.equals("dancegroup")) {
-            modelMap.addAttribute("type", type);
-            modelMap.addAttribute("innertype", innertype);
+        } else if (type.equals("operavideo")) {
+            OperaVideoType operaVideoType = OperaVideoType.valueOf(innertype.toUpperCase());
+            if (operaVideoType == OperaVideoType.SERIES) {
+                modelMap.addAttribute("serieses", commonDao.getAllResource(OperaSeries.class));
+            }
         }
+
+        modelMap.addAttribute("type", type);
+        modelMap.addAttribute("innertype", innertype);
 
         return String.format("upload/upload%s", type);
     }

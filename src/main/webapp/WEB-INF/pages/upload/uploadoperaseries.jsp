@@ -6,19 +6,14 @@
 <div id="type" style="display: none">${type}</div>
 
 <div class="container">
-    <h1>填写明星舞队信息</h1>
+    <h1>填写越剧连续剧信息</h1>
 
     <div class="row">
         <div class="col-md-12">
             <form role="form" id="createresourceform">
                 <div class="form-group">
-                    <label for="name">明星舞队名字</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="请输入明星舞队名字">
-                </div>
-                <div class="form-group">
-                    <label for="description">明星舞队简介</label>
-                    <textarea type="text" class="form-control" name="description" id="description"
-                              placeholder="请输入明星舞队简介"></textarea>
+                    <label for="title">越剧连续剧名字</label>
+                    <input type="text" class="form-control" name="title" id="title" placeholder="请输入越剧连续剧名字">
                 </div>
 
                 <div class="form-group">
@@ -30,11 +25,7 @@
                     </select>
                 </div>
 
-                <div style="display: none">
-                    <input name="innertype" type="text" value="${innertype}"/>
-                </div>
-
-                <button type="button" class="btn btn-default" id="start">创建明星舞队</button>
+                <button type="button" class="btn btn-default" id="start">创建越剧连续剧</button>
             </form>
         </div>
     </div>

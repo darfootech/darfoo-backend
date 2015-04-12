@@ -30,6 +30,14 @@ $(function () {
                     alert("作者名字不能为空");
                 } else if (data == "509") {
                     alert("作者简介不能为空");
+                } else if (data == "510") {
+                    alert("越剧连续剧还不存在");
+                } else if (data == "511") {
+                    alert("视频名字和连续剧id组合已存在,不可以进行插入了,是否需要修改");
+                } else if (data == "512") {
+                    alert("相同名字越剧连续剧存在,不能创建新明星舞队");
+                } else if (data == "513") {
+                    alert("越剧连续剧标题不能为空");
                 } else {
                     alert("提交资源信息失败");
                 }
