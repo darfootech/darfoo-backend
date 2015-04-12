@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -283,10 +284,16 @@ public class CacheController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/dancegroup/videos/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/videos/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public List getVideoListForDanceGroup(@PathVariable Integer id) {
-        return cacheUtils.cacheDanceGroupVideos(id);
+    public List getVideoListForDanceGroup(@PathVariable String type, @PathVariable Integer id) {
+        if (type.equals("dancegroup")) {
+            return cacheUtils.cacheDanceGroupVideos(id);
+        }
+        if (type.equals("operaseries")) {
+            return cacheUtils.cacheOperaSeriesVideos(id);
+        }
+        return new ArrayList();
     }
 
     /**
@@ -296,16 +303,28 @@ public class CacheController {
      * @param page
      * @return
      */
-    @RequestMapping(value = "/dancegroup/videos/{id}/page/{page}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/videos/{id}/page/{page}", method = RequestMethod.GET)
     @ResponseBody
-    public List getVideoListForDanceGroupByPage(@PathVariable Integer id, @PathVariable Integer page) {
-        return cacheUtils.cacheDanceGroupVideos(id, page);
+    public List getVideoListForDanceGroupByPage(@PathVariable String type, @PathVariable Integer id, @PathVariable Integer page) {
+        if (type.equals("dancegroup")) {
+            return cacheUtils.cacheDanceGroupVideos(id, page);
+        }
+        if (type.equals("operaseries")) {
+            return cacheUtils.cacheOperaSeriesVideos(id, page);
+        }
+        return new ArrayList();
     }
 
-    @RequestMapping(value = "/dancegroup/videos/{id}/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/videos/{id}/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
     @ResponseBody
-    public List getVideoListForDanceGroupBySkip(@PathVariable Integer id, @PathVariable Integer skipnum, @PathVariable Integer returnnum) {
-        return cacheUtils.cacheDanceGroupVideos(id, skipnum, returnnum);
+    public List getVideoListForDanceGroupBySkip(@PathVariable String type, @PathVariable Integer id, @PathVariable Integer skipnum, @PathVariable Integer returnnum) {
+        if (type.equals("dancegroup")) {
+            return cacheUtils.cacheDanceGroupVideos(id, skipnum, returnnum);
+        }
+        if (type.equals("operaseries")) {
+            return cacheUtils.cacheOperaSeriesVideos(id, skipnum, returnnum);
+        }
+        return new ArrayList();
     }
 
     /**
