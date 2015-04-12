@@ -328,8 +328,19 @@ public class InsertDao {
                             return resultMap;
                         }
                     } else {
-                        commonDao.setResourceAttr(resource, object, key, title);
-                        commonDao.setResourceAttr(resource, object, "video_key", title + System.currentTimeMillis());
+                        HashMap<String, Object> conditions = new HashMap<String, Object>();
+                        conditions.put("title", title);
+                        Object queryVideo = commonDao.getResourceByFields(resource, conditions);
+                        if (queryVideo == null) {
+                            System.out.println("不存在同名的越剧电影,可以进行插入");
+                            commonDao.setResourceAttr(resource, object, key, title);
+                            commonDao.setResourceAttr(resource, object, "video_key", title + System.currentTimeMillis());
+                        } else {
+                            System.out.println("已经存在同名的越剧电影,不可以进行插入");
+                            resultMap.put("statuscode", 514);
+                            resultMap.put("insertid", -1);
+                            return resultMap;
+                        }
                     }
                 } else {
                     System.out.println("视频名字不能为空");

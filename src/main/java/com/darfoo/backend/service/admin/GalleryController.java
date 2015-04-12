@@ -3,6 +3,7 @@ package com.darfoo.backend.service.admin;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
+import com.darfoo.backend.model.cota.enums.DanceVideoType;
 import com.darfoo.backend.model.cota.enums.OperaVideoType;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
@@ -81,8 +82,12 @@ public class GalleryController {
 
         if (resource == DanceVideo.class) {
             modelMap = putVideoLikeResourceToModelMap(resource, object, modelMap);
+            DanceVideoType danceVideoType = (DanceVideoType) commonDao.getResourceAttr(resource, object, "type");
+            HashMap<String, Object> conditions = new HashMap<String, Object>();
+            conditions.put("type", TypeClassMapping.danceVideoTypeDanceGroupTypeMap.get(danceVideoType));
+            modelMap.addAttribute("authors", commonDao.getResourcesByFields(DanceGroup.class, conditions));
+
             DanceMusic music = (DanceMusic) commonDao.getResourceAttr(resource, object, "music");
-            modelMap.addAttribute("authors", commonDao.getAllResource(DanceGroup.class));
             if (music != null) {
                 String connectmusic = music.getTitle() + "-" + music.getAuthorname();
                 modelMap.addAttribute("connectmusic", connectmusic);

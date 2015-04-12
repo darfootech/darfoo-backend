@@ -170,9 +170,11 @@ public class UploadController {
         if (status == 200) {
             int insertid = (Integer) session.getAttribute("insertid");
             Object object = commonDao.getResourceById(resource, insertid);
-            if (type.equals("dancevideo")) {
+            if (type.equals("dancevideo") || type.equals("operavideo")) {
                 String videokey = (String) commonDao.getResourceAttr(resource, object, "video_key");
                 String imagekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
+                System.out.println("videokey ->" + videokey);
+                System.out.println("imagekey ->" + imagekey);
                 result.put("videokey", videokey);
                 result.put("imagekey", imagekey);
             }
@@ -194,7 +196,6 @@ public class UploadController {
         }
 
         System.out.println("title -> " + request.getParameter("title"));
-        System.out.println("authorname -> " + request.getParameter("authorname"));
         System.out.println("insertstatus ->" + status);
         return result;
     }
