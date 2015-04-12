@@ -55,6 +55,8 @@
                         <li><a href="/darfoobackend/rest/resources/new/dancevideo">舞蹈视频</a></li>
                         <li><a href="/darfoobackend/rest/resources/new/dancemusic">舞蹈伴奏</a></li>
                         <li><a href="/darfoobackend/rest/resources/new/dancegroup">舞蹈舞队</a></li>
+                        <li><a href="/darfoobackend/rest/resources/new/operaseries">越剧连续剧</a></li>
+                        <li><a href="/darfoobackend/rest/resources/new/operavideo">越剧视频</a></li>
                     </ul>
                 </li>
 

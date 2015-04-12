@@ -284,7 +284,7 @@ public class InsertDao {
         return resultMap;
     }
 
-    public HashMap<String, Integer> insertOperaSeries(HashMap<String, String> insertcontents) throws IllegalAccessException, InstantiationException {
+    public HashMap<String, Integer> insertOperaVideo(HashMap<String, String> insertcontents) throws IllegalAccessException, InstantiationException {
         Set<String> categoryTitles = new HashSet<String>();
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
@@ -298,34 +298,40 @@ public class InsertDao {
             if (key.equals("title")) {
                 String title = insertcontents.get(key);
                 if (!title.equals("")) {
-                    String seriesname = insertcontents.get("seriesname");
+                    OperaVideoType type = TypeClassMapping.operaVideoTypeMap.get(insertcontents.get("type"));
+                    if (type == OperaVideoType.SERIES) {
+                        String seriesname = insertcontents.get("seriesname");
 
-                    OperaSeries series = (OperaSeries) commonDao.getResourceByTitleOrName(OperaSeries.class, seriesname, "title");
+                        OperaSeries series = (OperaSeries) commonDao.getResourceByTitleOrName(OperaSeries.class, seriesname, "title");
 
-                    if (series == null) {
-                        System.out.println("越剧连续剧还不存在");
-                        resultMap.put("statuscode", 510);
-                        resultMap.put("insertid", -1);
-                        return resultMap;
-                    }
+                        if (series == null) {
+                            System.out.println("越剧连续剧还不存在");
+                            resultMap.put("statuscode", 510);
+                            resultMap.put("insertid", -1);
+                            return resultMap;
+                        }
 
-                    int seriesid = series.getId();
+                        int seriesid = series.getId();
 
-                    HashMap<String, Object> conditions = new HashMap<String, Object>();
-                    conditions.put("title", title);
-                    conditions.put("series_id", seriesid);
+                        HashMap<String, Object> conditions = new HashMap<String, Object>();
+                        conditions.put("title", title);
+                        conditions.put("series_id", seriesid);
 
-                    Object queryVideo = commonDao.getResourceByFields(resource, conditions);
+                        Object queryVideo = commonDao.getResourceByFields(resource, conditions);
 
-                    if (queryVideo == null) {
-                        System.out.println("视频名字和连续剧id组合不存在，可以进行插入");
+                        if (queryVideo == null) {
+                            System.out.println("视频名字和连续剧id组合不存在，可以进行插入");
+                            commonDao.setResourceAttr(resource, object, key, title);
+                            commonDao.setResourceAttr(resource, object, "video_key", title + System.currentTimeMillis());
+                        } else {
+                            System.out.println("视频名字和连续剧id组合已存在，不可以进行插入了，是否需要修改");
+                            resultMap.put("statuscode", 511);
+                            resultMap.put("insertid", -1);
+                            return resultMap;
+                        }
+                    } else {
                         commonDao.setResourceAttr(resource, object, key, title);
                         commonDao.setResourceAttr(resource, object, "video_key", title + System.currentTimeMillis());
-                    } else {
-                        System.out.println("视频名字和连续剧id组合已存在，不可以进行插入了，是否需要修改");
-                        resultMap.put("statuscode", 511);
-                        resultMap.put("insertid", -1);
-                        return resultMap;
                     }
                 } else {
                     System.out.println("视频名字不能为空");
@@ -363,6 +369,51 @@ public class InsertDao {
         String videokey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase(), insertid, insertcontents.get("videotype"));
         updateMap.put("video_key", videokey);
         commonDao.updateResourceFieldsById(resource, insertid, updateMap);
+
+        resultMap.put("statuscode", 200);
+        resultMap.put("insertid", insertid);
+        return resultMap;
+    }
+
+    public HashMap<String, Integer> insertOperaSeries(HashMap<String, String> insertcontents) throws IllegalAccessException, InstantiationException {
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria;
+
+        Class resource = OperaSeries.class;
+        Object object = resource.newInstance();
+
+        for (String key : insertcontents.keySet()) {
+            if (key.equals("title")) {
+                String name = insertcontents.get(key);
+                if (!name.equals("")) {
+                    if (commonDao.isResourceExistsByField(OperaSeries.class, "title", name)) {
+                        System.out.println("相同名字越剧连续剧存在，不能创建新明星舞队");
+                        resultMap.put("statuscode", 513);
+                        resultMap.put("insertid", -1);
+                        return resultMap;
+                    } else {
+                        System.out.println("可以创建新明星舞队");
+                        commonDao.setResourceAttr(resource, object, key, insertcontents.get(key));
+                    }
+                } else {
+                    System.out.println("越剧连续剧不能为空");
+                    resultMap.put("statuscode", 514);
+                    resultMap.put("insertid", -1);
+                    return resultMap;
+                }
+            } else {
+                System.out.println("wired");
+            }
+        }
+
+        String imagekey = insertcontents.get("imagekey");
+        commonDao.setResourceAttr(resource, object, "image", new Image(imagekey));
+
+        session.save(object);
+
+        int insertid = (Integer) commonDao.getResourceAttr(resource, object, "id");
 
         resultMap.put("statuscode", 200);
         resultMap.put("insertid", insertid);

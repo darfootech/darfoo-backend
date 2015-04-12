@@ -6,7 +6,6 @@ import com.darfoo.backend.model.cota.annotations.*;
 import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
 import com.darfoo.backend.model.cota.enums.OperaVideoType;
 import com.darfoo.backend.model.resource.Image;
-import com.darfoo.backend.model.resource.dance.DanceGroup;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -18,8 +17,8 @@ import java.io.Serializable;
 
 //单个越剧视频
 @Entity
-@Table(name = "operaseriesmovie")
-@ModelOperation(insertMethod = "insertOperaSeriesMovie", updateMethod = "updateOperaSeriesMovie")
+@Table(name = "operavideo")
+@ModelOperation(insertMethod = "insertOperaVideo", updateMethod = "updateOperaVideo")
 public class OperaVideo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +33,7 @@ public class OperaVideo implements Serializable {
     Image image;
 
     //视频关联的舞队 一个舞队可以有多个视频
-    @ManyToOne(targetEntity = DanceGroup.class)
+    @ManyToOne(targetEntity = OperaSeries.class)
     @Cascade(value = {org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.SAVE_UPDATE})
     @JoinColumn(name = "SERIES_ID", referencedColumnName = "id", nullable = true)
     @CacheInsert(type = CacheInsertEnum.NORMAL)

@@ -4,6 +4,8 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaSeries;
+import com.darfoo.backend.model.resource.opera.OperaVideo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +77,43 @@ public class InsertDaoTests {
         insertcontents.put("type", "normal");
 
         HashMap<String, Integer> insertresult = commonDao.insertResource(DanceGroup.class, insertcontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
+        System.out.println("insertid -> " + insertresult.get("insertid"));
+    }
+
+    @Test
+    public void insertOperaSeries() {
+        Class resource = OperaSeries.class;
+        HashMap<String, String> insertcontents = new HashMap<String, String>();
+        String operaseriesname = "红楼梦";
+        String imagetype = "png";
+        String imagekey = String.format("%s-imagekey-%s.%s", resource.getSimpleName().toLowerCase(), System.currentTimeMillis(), imagetype);
+
+        insertcontents.put("imagekey", imagekey);
+        insertcontents.put("title", operaseriesname);
+
+        HashMap<String, Integer> insertresult = commonDao.insertResource(OperaSeries.class, insertcontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
+        System.out.println("insertid -> " + insertresult.get("insertid"));
+    }
+
+    @Test
+    public void insertOperaVideo() {
+        Class resource = OperaVideo.class;
+        HashMap<String, String> insertcontents = new HashMap<String, String>();
+        String videoTitle = "videotitle-" + System.currentTimeMillis();
+        //String videoTitle = "videotitle-1428809230001";
+        String operaseriesname = "红楼梦";
+        String imagekey = String.format("%s-imagekey-%s.%s", resource.getSimpleName().toLowerCase(), System.currentTimeMillis(), ".jpg");
+
+        insertcontents.put("imagekey", imagekey);
+        insertcontents.put("title", videoTitle);
+        /*insertcontents.put("seriesname", operaseriesname);
+        insertcontents.put("type", "series");*/
+        insertcontents.put("type", "single");
+        insertcontents.put("videotype", "mp4");
+
+        HashMap<String, Integer> insertresult = commonDao.insertResource(OperaVideo.class, insertcontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
         System.out.println("insertid -> " + insertresult.get("insertid"));
     }

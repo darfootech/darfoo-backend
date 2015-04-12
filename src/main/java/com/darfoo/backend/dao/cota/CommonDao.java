@@ -263,7 +263,7 @@ public class CommonDao {
         try {
             Criteria criteria = getCommonQueryCriteria(resource);
             for (String key : conditions.keySet()) {
-                if (key.equals("author_id") || key.equals("music_id")) {
+                if (key.equals("author_id") || key.equals("music_id") || key.equals("series_id")) {
                     criteria.add(Restrictions.eq(key.replace("_", "."), conditions.get(key)));
                 } else {
                     criteria.add(Restrictions.eq(key, conditions.get(key)));
