@@ -6,6 +6,8 @@ import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaSeries;
+import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ public class DeleteController {
         Integer id = Integer.parseInt(request.getParameter("id"));
         Class resource = TypeClassMapping.typeClassMap.get(type);
         Object object = commonDao.getResourceById(resource, id);
-        if (resource == DanceVideo.class) {
+        if (resource == DanceVideo.class || resource == OperaVideo.class) {
             String imagekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
             String videokey = commonDao.getResourceAttr(resource, object, "video_key").toString();
 
@@ -43,7 +45,7 @@ public class DeleteController {
             String musickey = commonDao.getResourceAttr(resource, object, "music_key").toString();
 
             ServiceUtils.deleteResource(musickey);
-        } else if (resource == DanceGroup.class) {
+        } else if (resource == DanceGroup.class || resource == OperaSeries.class) {
             Image image = (Image) commonDao.getResourceAttr(resource, object, "image");
             if (image != null) {
                 String imagekey = image.getImage_key();
