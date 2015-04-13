@@ -392,7 +392,19 @@ public class UpdateDao {
                                 return resultMap;
                             }
                         } else {
-                            commonDao.setResourceAttr(resource, object, key, title);
+                            HashMap<String, Object> conditions = new HashMap<String, Object>();
+                            conditions.put("title", title);
+                            conditions.put("type", OperaVideoType.SINGLE);
+                            Object queryVideo = commonDao.getResourceByFields(resource, conditions);
+                            if (queryVideo == null) {
+                                System.out.println("不存在同名的越剧电影,可以进行插入");
+                                commonDao.setResourceAttr(resource, object, key, title);
+                            } else {
+                                System.out.println("已经存在同名的越剧电影,不可以进行插入");
+                                resultMap.put("statuscode", 510);
+                                resultMap.put("insertid", -1);
+                                return resultMap;
+                            }
                         }
                     }
                 } else if (key.equals("type")) {

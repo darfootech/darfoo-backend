@@ -330,6 +330,7 @@ public class InsertDao {
                     } else {
                         HashMap<String, Object> conditions = new HashMap<String, Object>();
                         conditions.put("title", title);
+                        conditions.put("type", OperaVideoType.SINGLE);
                         Object queryVideo = commonDao.getResourceByFields(resource, conditions);
                         if (queryVideo == null) {
                             System.out.println("不存在同名的越剧电影,可以进行插入");
