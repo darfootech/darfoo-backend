@@ -209,6 +209,15 @@ public class CacheServiceTests {
         }
     }
 
+    @Test
+    public void cacheResourcesWithPriority() {
+        HashMap<String, String> typeinnertypepair = new HashMap<String, String>();
+        typeinnertypepair.put("dancegroup", "STAR");
+        for (String type : typeinnertypepair.keySet()) {
+            logResources(cacheUtils.cacheResourcesByInnertype(type, typeinnertypepair.get(type)));
+        }
+    }
+
     public void inner(Integer... ids) {
         System.out.println(ids[0]);
         System.out.println(ids[1]);

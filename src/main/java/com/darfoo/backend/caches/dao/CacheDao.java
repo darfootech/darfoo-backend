@@ -41,7 +41,7 @@ public class CacheDao {
                 String resourcekey = String.format("%s-%d", prefix, id);
                 status = redisClient.rpush(cachekey, resourcekey);
             } else if (type == CacheCollType.SORTEDSET) {
-                redisClient.zadd(cachekey, String.format("%s-%d", prefix, id), (double) id);
+                redisClient.zadd(cachekey, String.format("%s-%d", prefix, id), (double) (resources.size() - resources.indexOf(object)));
             } else {
                 System.out.println("wired");
             }
