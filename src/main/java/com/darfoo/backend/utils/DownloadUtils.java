@@ -6,6 +6,7 @@ import com.darfoo.backend.model.cota.annotations.CSVTitle;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.model.resource.opera.OperaSeries;
+import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.service.category.DanceMusicCates;
 import com.darfoo.backend.service.category.DanceVideoCates;
 import com.darfoo.backend.service.cota.TypeClassMapping;
@@ -174,21 +175,32 @@ public class DownloadUtils {
      *
      * @param id
      */
-    public void writeVideosOfDanceGroupToCSV(Integer id) {
-        String dancegroupName = ((DanceGroup) commonDao.getResourceById(DanceGroup.class, id)).getName();
+    public void writeVideosOfResourceToCSV(Class resource, Integer id) {
+        String name = "";
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("author_id", id);
+        Class videoClass = null;
 
-        Class videoClass = DanceVideo.class;
+        if (resource == DanceGroup.class) {
+            name = (String) commonDao.getResourceAttr(resource, commonDao.getResourceById(resource, id), "name");
+            conditions.put("author_id", id);
+            videoClass = DanceVideo.class;
+        }
+
+        if (resource == OperaSeries.class) {
+            name = (String) commonDao.getResourceAttr(resource, commonDao.getResourceById(resource, id), "title");
+            conditions.put("series_id", id);
+            videoClass = OperaVideo.class;
+        }
+
         List videos = commonDao.getResourcesByFields(videoClass, conditions);
 
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
         CSVPrinter printer = null;
         try {
-            Writer out = new FileWriter(String.format("%s%s.csv", DiskFileDirConfig.csvdir, String.format("dancegroupvideos-%d", id)));
+            Writer out = new FileWriter(String.format("%s%s.csv", DiskFileDirConfig.csvdir, String.format("%svideos-%d", resource.getSimpleName().toLowerCase(), id)));
             printer = new CSVPrinter(out, format.withDelimiter(','));
 
-            printer.printRecord(dancegroupName);
+            printer.printRecord(name);
 
             for (Object video : videos) {
                 printer.printRecord(commonDao.getResourceAttr(videoClass, video, "title"));

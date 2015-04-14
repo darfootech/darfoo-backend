@@ -24,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.HashMap;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({
         "file:src/main/webapp/WEB-INF/pre-deal.xml",
@@ -63,7 +65,11 @@ public class DownloadTests {
 
     @Test
     public void writeVideosOfAuthorToCSV() {
-        Integer id = 109;
-        downloadUtils.writeVideosOfDanceGroupToCSV(id);
+        HashMap<Class, Integer> resourceidpair = new HashMap<Class, Integer>();
+        resourceidpair.put(DanceGroup.class, 109);
+        resourceidpair.put(OperaSeries.class, 3);
+        for (Class resource : resourceidpair.keySet()) {
+            downloadUtils.writeVideosOfResourceToCSV(resource, resourceidpair.get(resource));
+        }
     }
 }

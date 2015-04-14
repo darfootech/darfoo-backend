@@ -33,9 +33,10 @@ public class DownloadController {
         return downloadUtils.downloadCSVFiles(type);
     }
 
-    @RequestMapping(value = "/admin/download/dancegroupvideos/{id}", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> downloadAuthorvideos(@PathVariable Integer id) throws IOException {
-        downloadUtils.writeVideosOfDanceGroupToCSV(id);
-        return downloadUtils.downloadCSVFiles(String.format("dancegroupvideos-%d", id));
+    @RequestMapping(value = "/admin/download/{type}/videos/{id}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> downloadAuthorvideos(@PathVariable String type, @PathVariable Integer id) throws IOException {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        downloadUtils.writeVideosOfResourceToCSV(resource, id);
+        return downloadUtils.downloadCSVFiles(String.format("%svideos-%d", resource.getSimpleName().toLowerCase(), id));
     }
 }
