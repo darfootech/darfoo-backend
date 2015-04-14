@@ -509,7 +509,7 @@ public class CommonDao {
      */
     public List getSideBarResources(Class resource, Integer id) {
         List result = new ArrayList();
-        List sameAuthorList = new ArrayList();
+        List predList = new ArrayList();
         try {
             if (resource == DanceVideo.class) {
                 Field field = resource.getDeclaredField("author");
@@ -523,7 +523,7 @@ public class CommonDao {
                     HashMap<String, Object> conditions = new HashMap<String, Object>();
                     conditions.put("author_id", authorid);
 
-                    sameAuthorList = getResourcesByFieldsWithoutId(resource, conditions, id);
+                    predList = getResourcesByFieldsWithoutId(resource, conditions, id);
                 }
             } else if (resource == DanceMusic.class) {
                 Field field = resource.getDeclaredField("authorname");
@@ -535,7 +535,9 @@ public class CommonDao {
                 HashMap<String, Object> conditions = new HashMap<String, Object>();
                 conditions.put("authorname", authorname);
 
-                sameAuthorList = getResourcesByFieldsWithoutId(resource, conditions, id);
+                predList = getResourcesByFieldsWithoutId(resource, conditions, id);
+            } else if (resource == OperaVideo.class) {
+                predList = getAllResourceWithoutId(resource, id);
             } else {
                 System.out.println("something is wired");
             }
@@ -545,21 +547,21 @@ public class CommonDao {
             e.printStackTrace();
         }
 
-        int sameAuthorLen = sameAuthorList.size();
-        if (sameAuthorLen > 5) {
-            Collections.shuffle(sameAuthorList);
+        int predLen = predList.size();
+        if (predLen > 5) {
+            Collections.shuffle(predList);
             for (int i = 0; i < 5; i++) {
-                result.add(sameAuthorList.get(i));
+                result.add(predList.get(i));
             }
-        } else if (sameAuthorLen == 5) {
-            result = sameAuthorList;
+        } else if (predLen == 5) {
+            result = predList;
         } else {
             List allResources = getAllResourceWithoutId(resource, id);
             Collections.shuffle(allResources);
-            for (int i = 0; i < 5 - sameAuthorLen; i++) {
-                sameAuthorList.add(allResources.get(i));
+            for (int i = 0; i < 5 - predLen; i++) {
+                predList.add(allResources.get(i));
             }
-            result = sameAuthorList;
+            result = predList;
         }
 
         return result;
