@@ -14,17 +14,15 @@ public class StatisticsCacheDao {
     @Autowired
     CommonRedisClient redisClient;
 
-    String hotsearchCachekey = "hotsearch";
-
-    public void insertHotSearchIntoCache(List keywords) {
+    public void insertHotSearchIntoCache(List keywords, String type) {
         for (Object keyword : keywords) {
-            redisClient.zadd(hotsearchCachekey, (String) keyword, 3.0);
+            redisClient.zadd(String.format("%shotsearch", type), (String) keyword, 3.0);
         }
     }
 
-    public List extractHotSearchFromCache() {
+    public List extractHotSearchFromCache(String type) {
         Collection<String> keys;
-        keys = redisClient.zrevrange(hotsearchCachekey, 0L, -1L, false);
+        keys = redisClient.zrevrange(String.format("%shotsearch", type), 0L, -1L, false);
 
         List result = new ArrayList();
         for (String key : keys) {

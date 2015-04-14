@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 public class StatisticsDao {
     MongoClient client = MongoManager.getMongoClientInstance();
     DB db = client.getDB("darfoolog");
-    DBCollection hotsearch = db.getCollection("hotsearch");
 
     public DBCursor getAllStatisticData(Class resource) {
         DBCollection coll = db.getCollection(resource.getSimpleName().toLowerCase());
@@ -74,11 +73,11 @@ public class StatisticsDao {
     }
 
     //根据搜索热度倒排序得到所有的搜索关键词
-    public List getSearchKeyWordsOrderByHot() {
-        DBCollection collection = db.getCollection("searchhistory");
+    public List getSearchKeyWordsOrderByTypeByHot(String type) {
+        DBCollection collection = db.getCollection(String.format("%ssearchhistory", type));
 
         List<String> keywords = new ArrayList<String>();
-        List hotsearchKeyWords = getHotSearchKeyWords();
+        List hotsearchKeyWords = getHotSearchKeyWordsByType(type);
 
         Pattern whitespace = Pattern.compile("\\s+|\\?+|[a-zA-Z\\d\\+]+");
         Pattern special = Pattern.compile("[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]");
@@ -104,8 +103,9 @@ public class StatisticsDao {
         return keywords;
     }
 
-    public List getHotSearchKeyWords() {
+    public List getHotSearchKeyWordsByType(String type) {
         List<String> keywords = new ArrayList<String>();
+        DBCollection hotsearch = db.getCollection(String.format("%shotsearch", type));
         DBCursor cursor = hotsearch.find();
         while (cursor.hasNext()) {
             keywords.add((String) cursor.next().get("keyword"));
@@ -113,13 +113,15 @@ public class StatisticsDao {
         return keywords;
     }
 
-    public void insertHotSearchKeyWords(String[] keywords) {
+    public void insertHotSearchKeyWordsByType(String type, String[] keywords) {
+        DBCollection hotsearch = db.getCollection(String.format("%shotsearch", type));
         for (String keyword : keywords) {
             hotsearch.insert(new BasicDBObject().append("keyword", keyword));
         }
     }
 
-    public void removeHotSearchKeyWords(String[] keywords) {
+    public void removeHotSearchKeyWordsByType(String type, String[] keywords) {
+        DBCollection hotsearch = db.getCollection(String.format("%shotsearch", type));
         for (String keyword : keywords) {
             hotsearch.remove(new BasicDBObject().append("keyword", keyword));
         }

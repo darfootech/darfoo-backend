@@ -97,28 +97,29 @@ public class StatisticsController {
         return "ok";
     }
 
-    @RequestMapping(value = "/admin/hotsearch", method = RequestMethod.GET)
-    public String prepareRecommendHotSearch(ModelMap modelMap) {
-        List negativeResources = statisticsDao.getSearchKeyWordsOrderByHot();
-        List positiveResources = statisticsDao.getHotSearchKeyWords();
+    @RequestMapping(value = "/admin/{type}/hotsearch", method = RequestMethod.GET)
+    public String prepareRecommendHotSearch(@PathVariable String type, ModelMap modelMap) {
+        List negativeResources = statisticsDao.getSearchKeyWordsOrderByTypeByHot(type);
+        List positiveResources = statisticsDao.getHotSearchKeyWordsByType(type);
 
         modelMap.addAttribute("negativeresources", negativeResources);
         modelMap.addAttribute("positiveresources", positiveResources);
+        modelMap.addAttribute("type", type);
         return "recommend/hotsearchkeyword";
     }
 
-    @RequestMapping(value = "/admin/recommend/hotsearch/{operation}", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/recommend/{type}/hotsearch/{operation}", method = RequestMethod.POST)
     public
     @ResponseBody
-    Integer recommendHotSearch(@PathVariable String operation, HttpServletRequest request) {
-        String methodname = String.format("%sHotSearchKeyWords", operation);
+    Integer recommendHotSearch(@PathVariable String type, @PathVariable String operation, HttpServletRequest request) {
+        String methodname = String.format("%sHotSearchKeyWordsByType", operation);
         String keywords = request.getParameter("keywords");
         System.out.println(keywords);
         String[] keywordArray = keywords.split(",");
 
         try {
-            Method method = statisticsDao.getClass().getDeclaredMethod(methodname, new Class[]{String[].class});
-            method.invoke(statisticsDao, new Object[]{keywordArray});
+            Method method = statisticsDao.getClass().getDeclaredMethod(methodname, new Class[]{String.class, String[].class});
+            method.invoke(statisticsDao, new Object[]{type, keywordArray});
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

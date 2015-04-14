@@ -6,6 +6,8 @@
     var change_to_negative = [];
 
     $(function () {
+        var type = $("#type").text();
+
         $(".toggletopositive").click(function () {
             if (parseInt($(this).attr("picked")) == 0) {
                 var keyword = $(this).attr("keyword");
@@ -54,7 +56,7 @@
             if (change_to_positive.length == 0) {
                 alert("还没有选择要变为热门搜索关键词的非热门搜索关键词");
             } else {
-                $.post("/darfoobackend/rest/statistics/admin/recommend/hotsearch/insert", {
+                $.post("/darfoobackend/rest/statistics/admin/recommend/" + type + "/hotsearch/insert", {
                     'keywords': change_to_positive.join(',')
                 }, function (data) {
                     if (data == 200) {
@@ -70,7 +72,7 @@
             if (change_to_negative.length == 0) {
                 alert("还没有选择要变为非热门搜索关键词的热门搜索关键词");
             } else {
-                $.post("/darfoobackend/rest/statistics/admin/recommend/hotsearch/remove", {
+                $.post("/darfoobackend/rest/statistics/admin/recommend/" + type + "/hotsearch/remove", {
                     'keywords': change_to_negative.join(',')
                 }, function (data) {
                     if (data == 200) {
@@ -83,6 +85,8 @@
         });
     });
 </script>
+
+<div id="type" style="display: none">${type}</div>
 
 <div class="container">
     <div style="margin-top:33px;"></div>

@@ -301,8 +301,8 @@ public class CacheUtils {
         }
     }
 
-    public List cacheHotSearchKeyWords() {
-        statisticsCacheDao.insertHotSearchIntoCache(statisticsDao.getHotSearchKeyWords());
-        return statisticsCacheDao.extractHotSearchFromCache();
+    public List cacheHotSearchKeyWords(String type) {
+        statisticsCacheDao.insertHotSearchIntoCache(statisticsDao.getHotSearchKeyWordsByType(type), type);
+        return statisticsCacheDao.extractHotSearchFromCache(type);
     }
 }
