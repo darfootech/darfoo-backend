@@ -171,7 +171,7 @@ public class CacheServiceTests {
     }
 
     @Test
-     public void cacheVideosForDanceGroupByPage() {
+    public void cacheVideosForDanceGroupByPage() {
         Integer dancegroupid = 109;
         Integer page = 1;
         logResources(cacheUtils.cacheDanceGroupVideos(dancegroupid, page));

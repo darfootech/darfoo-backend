@@ -12,7 +12,6 @@ import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
