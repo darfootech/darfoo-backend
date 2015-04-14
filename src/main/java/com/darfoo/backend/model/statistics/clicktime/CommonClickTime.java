@@ -27,4 +27,8 @@ public class CommonClickTime {
     @ModelAttrSuper
     @CSVTitle(title = "日期")
     public String date;
+
+    @ModelAttrSuper
+    @CSVTitle(title = "资源名称")
+    public String title;
 }

@@ -49,12 +49,18 @@ public class StatisticsController {
 
         if (type.equals("menu") || type.equals("tab")) {
             conditions.put(String.format("%sid", type), id);
-
+            if(type.equals("menu")){
+                conditions.put("title",TypeClassMapping.menuTitleMap.get(id));
+            }else {
+                conditions.put("title",TypeClassMapping.tabTitleMap.get(id));
+            }
             statisticsDao.insertTimeBehavior(TypeClassMapping.clickTimeStatMap.get(type), conditions);
             statisticsDao.insertOrUpdateClickBehavior(TypeClassMapping.clickCountStatMap.get(type), conditions);
         } else {
             conditions.put("type", type);
             conditions.put("resourceid", id);
+            Class clazz = TypeClassMapping.typeClassMap.get(type);
+            conditions.put("title", commonDao.getResourceAttr(clazz,commonDao.getResourceById(clazz,id),"title"));
 
             statisticsDao.insertTimeBehavior(ResourceClickTime.class, conditions);
             statisticsDao.insertOrUpdateClickBehavior(ResourceClickCount.class, conditions);

@@ -23,4 +23,8 @@ public class CommonClickCount {
     @ModelAttrSuper
     @CSVTitle(title = "热度")
     public Long hot;
+
+    @ModelAttrSuper
+    @CSVTitle(title = "title")
+    public String title;
 }
