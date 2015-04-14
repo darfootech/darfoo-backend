@@ -63,7 +63,7 @@
                 <br/>
                 <div class="btn-toolbar">
                     <div class="btn-group btn-group-lg">
-                        <a href="/darfoobackend/rest/admin/download/dancegroupvideos/${author.id}">
+                        <a href="/darfoobackend/rest/admin/download/dancegroup/videos/${author.id}">
                             <button type="button" class="btn btn-default">
                                 下载舞队视频资源表格
                             </button>

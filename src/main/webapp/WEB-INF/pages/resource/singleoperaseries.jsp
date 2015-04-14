@@ -39,7 +39,7 @@
                 <br/>
                 <div class="btn-toolbar">
                     <div class="btn-group btn-group-lg">
-                        <a href="/darfoobackend/rest/admin/download/operaseriesvideos/${series.id}">
+                        <a href="/darfoobackend/rest/admin/download/operaseries/videos/${series.id}">
                             <button type="button" class="btn btn-default">
                                 下载越剧连续剧视频资源表格
                             </button>
