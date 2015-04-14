@@ -100,6 +100,8 @@ public class TypeClassMapping {
         typeNameMap.put(DanceVideoType.TUTORIAL, "教学视频");
         typeNameMap.put(DanceGroupType.NORMAL, "普通舞队");
         typeNameMap.put(DanceGroupType.STAR, "明星舞队");
+        typeNameMap.put(OperaVideoType.SERIES, "越剧连续剧");
+        typeNameMap.put(OperaVideoType.SINGLE, "越剧电影");
 
         typeNameLiteralMap.put("dancemusic", "舞蹈伴奏");
         typeNameLiteralMap.put("dancegroup", "舞队");

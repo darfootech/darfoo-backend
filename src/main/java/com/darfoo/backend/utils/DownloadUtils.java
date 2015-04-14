@@ -5,6 +5,7 @@ import com.darfoo.backend.dao.statistic.StatisticsDao;
 import com.darfoo.backend.model.cota.annotations.CSVTitle;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaSeries;
 import com.darfoo.backend.service.category.DanceMusicCates;
 import com.darfoo.backend.service.category.DanceVideoCates;
 import com.darfoo.backend.service.cota.TypeClassMapping;
@@ -102,6 +103,13 @@ public class DownloadUtils {
                             value = danceGroup.getName();
                         } else {
                             value = "未关联舞队";
+                        }
+                    } else if (attr.equals("series")) {
+                        OperaSeries operaSeries = (OperaSeries) commonDao.getResourceAttr(resource, object, attr);
+                        if (operaSeries != null) {
+                            value = operaSeries.getTitle();
+                        } else {
+                            value = "未关联越剧连续剧";
                         }
                     } else if (attr.equals("type")) {
                         value = TypeClassMapping.typeNameMap.get(commonDao.getResourceAttr(resource, object, attr));
