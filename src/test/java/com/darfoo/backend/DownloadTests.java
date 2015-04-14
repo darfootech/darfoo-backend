@@ -5,6 +5,7 @@ package com.darfoo.backend;
  */
 
 import com.darfoo.backend.model.resource.dance.DanceGroup;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.opera.OperaSeries;
 import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.model.statistics.CrashLog;
@@ -38,7 +39,8 @@ public class DownloadTests {
     @Test
     public void writeResourcesToCSV() {
         //Class[] classes = {DanceVideo.class, DanceMusic.class, DanceGroup.class};
-        Class[] classes = {OperaVideo.class, OperaSeries.class};
+        //Class[] classes = {OperaVideo.class, OperaSeries.class};
+        Class[] classes = {DanceMusic.class};
         for (Class c : classes) {
             downloadUtils.writeResourcesToCSV(c);
         }

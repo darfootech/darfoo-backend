@@ -4,6 +4,7 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.statistic.StatisticsDao;
 import com.darfoo.backend.model.cota.annotations.CSVTitle;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.model.resource.opera.OperaSeries;
 import com.darfoo.backend.model.resource.opera.OperaVideo;
@@ -119,6 +120,10 @@ public class DownloadUtils {
                     }
                     System.out.println(value);
                     itemData.add(value);
+                }
+                if (resource == DanceMusic.class) {
+                    DanceMusic music = (DanceMusic) object;
+                    itemData.add(music.getTitle() + "-" + music.getAuthorname() + "-" + music.getId());
                 }
                 printer.printRecord(itemData);
             }

@@ -124,7 +124,8 @@ public class StatisticsTests {
 
     @Test
     public void hotSearchKeyWords() {
-        logResources(statisticsDao.getSearchKeyWordsOrderByHot());
+        String type = "dance";
+        logResources(statisticsDao.getSearchKeyWordsOrderByTypeByHot(type));
     }
 
     private void operateHotSearch(String operation, String[] keywordArray) {
@@ -154,6 +155,7 @@ public class StatisticsTests {
 
     @Test
     public void getHotSearch() {
-        logResources(statisticsDao.getHotSearchKeyWords());
+        String type = "dance";
+        logResources(statisticsDao.getHotSearchKeyWordsByType(type));
     }
 }
