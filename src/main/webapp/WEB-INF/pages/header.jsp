@@ -79,6 +79,8 @@
                         <li><a href="/darfoobackend/rest/admin/download/dancevideo">下载舞蹈视频资源表格</a></li>
                         <li><a href="/darfoobackend/rest/admin/download/dancemusic">下载舞蹈伴奏资源表格</a></li>
                         <li><a href="/darfoobackend/rest/admin/download/dancegroup">下载舞队资源表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/operavideo">下载越剧视频资源表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/operaseries">下载越剧连续剧资源表格</a></li>
                         <li><a href="/darfoobackend/rest/admin/download/feedback">下载用户反馈表格</a></li>
                         <li><a href="/darfoobackend/rest/admin/download/stat/resourceclickcount">下载资源点击热度表格</a></li>
                         <li><a href="/darfoobackend/rest/admin/download/stat/menuclickcount">下载菜单点击热度表格</a></li>
