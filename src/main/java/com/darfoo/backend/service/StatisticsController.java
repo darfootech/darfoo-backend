@@ -4,7 +4,8 @@ import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.statistic.StatisticsDao;
 import com.darfoo.backend.model.statistics.CrashLog;
-import com.darfoo.backend.model.statistics.SearchHistory;
+import com.darfoo.backend.model.statistics.DanceSearchHistory;
+import com.darfoo.backend.model.statistics.OperaSearchHistory;
 import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
 import com.darfoo.backend.model.statistics.clicktime.ResourceClickTime;
 import com.darfoo.backend.service.cota.TypeClassMapping;
@@ -74,7 +75,13 @@ public class StatisticsController {
         conditions.put("searchtype", type);
         conditions.put("searchcontent", content);
 
-        statisticsDao.insertTimeBehavior(SearchHistory.class, conditions);
+        if (type.equals("dancevideo") || type.equals("dancemusic")) {
+            statisticsDao.insertTimeBehavior(DanceSearchHistory.class, conditions);
+        }
+
+        if (type.equals("operavideo")) {
+            statisticsDao.insertTimeBehavior(OperaSearchHistory.class, conditions);
+        }
         return "ok";
     }
 

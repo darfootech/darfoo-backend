@@ -6,8 +6,8 @@ import com.darfoo.backend.model.cota.annotations.CSVTitle;
  * Created by zjh on 15-3-3.
  */
 
-//记录搜索行为
-public class SearchHistory {
+//记录越剧搜索行为
+public class OperaSearchHistory {
     @CSVTitle(title = "搜索内容")
     public String searchcontent;
 

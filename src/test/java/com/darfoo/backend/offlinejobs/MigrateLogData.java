@@ -2,7 +2,7 @@ package com.darfoo.backend.offlinejobs;
 
 import com.darfoo.backend.dao.statistic.MongoManager;
 import com.darfoo.backend.model.statistics.CrashLog;
-import com.darfoo.backend.model.statistics.SearchHistory;
+import com.darfoo.backend.model.statistics.DanceSearchHistory;
 import com.darfoo.backend.model.statistics.clickcount.MenuClickCount;
 import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
 import com.darfoo.backend.model.statistics.clickcount.TabClickCount;
@@ -55,7 +55,7 @@ public class MigrateLogData {
                 MenuClickTime.class,
                 TabClickCount.class,
                 TabClickTime.class,
-                SearchHistory.class,
+                DanceSearchHistory.class,
                 CrashLog.class
         };
 

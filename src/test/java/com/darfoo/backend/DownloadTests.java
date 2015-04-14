@@ -5,12 +5,10 @@ package com.darfoo.backend;
  */
 
 import com.darfoo.backend.model.resource.dance.DanceGroup;
-import com.darfoo.backend.model.resource.dance.DanceMusic;
-import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.model.resource.opera.OperaSeries;
 import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.model.statistics.CrashLog;
-import com.darfoo.backend.model.statistics.SearchHistory;
+import com.darfoo.backend.model.statistics.DanceSearchHistory;
 import com.darfoo.backend.model.statistics.clickcount.MenuClickCount;
 import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
 import com.darfoo.backend.model.statistics.clickcount.TabClickCount;
@@ -56,7 +54,7 @@ public class DownloadTests {
                 TabClickCount.class,
                 TabClickTime.class,
                 CrashLog.class,
-                SearchHistory.class
+                DanceSearchHistory.class
         };
         for (Class c : classes) {
             downloadUtils.writeStatisticDataToCSV(c);

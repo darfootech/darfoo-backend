@@ -8,7 +8,7 @@ import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.model.resource.opera.OperaSeries;
 import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.model.statistics.CrashLog;
-import com.darfoo.backend.model.statistics.SearchHistory;
+import com.darfoo.backend.model.statistics.DanceSearchHistory;
 import com.darfoo.backend.model.statistics.clickcount.MenuClickCount;
 import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
 import com.darfoo.backend.model.statistics.clickcount.TabClickCount;
@@ -64,7 +64,7 @@ public class TypeClassMapping {
         typeClassMap.put("resourceclicktime", ResourceClickTime.class);
         typeClassMap.put("menuclicktime", MenuClickTime.class);
         typeClassMap.put("tabclicktime", TabClickTime.class);
-        typeClassMap.put("searchhistory", SearchHistory.class);
+        typeClassMap.put("searchhistory", DanceSearchHistory.class);
         typeClassMap.put("feedback", Feedback.class);
         typeClassMap.put("crashlog", CrashLog.class);
 

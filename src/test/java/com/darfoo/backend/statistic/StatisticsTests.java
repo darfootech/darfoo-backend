@@ -6,7 +6,7 @@ package com.darfoo.backend.statistic;
 
 import com.darfoo.backend.dao.statistic.StatisticsDao;
 import com.darfoo.backend.model.statistics.CrashLog;
-import com.darfoo.backend.model.statistics.SearchHistory;
+import com.darfoo.backend.model.statistics.DanceSearchHistory;
 import com.darfoo.backend.model.statistics.clickcount.MenuClickCount;
 import com.darfoo.backend.model.statistics.clickcount.ResourceClickCount;
 import com.darfoo.backend.model.statistics.clickcount.TabClickCount;
@@ -111,7 +111,7 @@ public class StatisticsTests {
         conditions.put("searchcontent", "呵呵");
         conditions.put("searchtype", "video");
 
-        statisticsDao.insertTimeBehavior(SearchHistory.class, conditions);
+        statisticsDao.insertTimeBehavior(DanceSearchHistory.class, conditions);
     }
 
     @Test
