@@ -36,7 +36,7 @@ public class VersionController {
     Map<String, Object> getLatestVersion(@PathVariable String type) {
         Map<String, Object> result = new HashMap<String, Object>();
         try {
-            Version version = versionDao.getLatestVersion(Version.class, type);
+            Version version = versionDao.getLatestVersion(Version.class);
             String version_download_url = qiniuUtils.getQiniuResourceUrl(String.format("launcher-%s-%s.apk", version.getVersion(), type), QiniuResourceEnum.RAW);
             result.put("version", version.getVersion());
             result.put("version_url", version_download_url);
@@ -51,7 +51,7 @@ public class VersionController {
     @RequestMapping(value = "/admin/version/{type}/new", method = RequestMethod.GET)
     public String uploadVersion(@PathVariable String type, ModelMap modelMap) {
         try {
-            Version latestVersion = versionDao.getLatestVersion(Version.class, type);
+            Version latestVersion = versionDao.getLatestVersion(Version.class);
             modelMap.addAttribute("latestversion", latestVersion.getVersion());
             modelMap.addAttribute("type", type);
             return "version/newversion";
