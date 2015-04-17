@@ -10,6 +10,7 @@ import com.darfoo.backend.model.cota.annotations.limit.HotSize;
 import com.darfoo.backend.model.cota.annotations.limit.NewestSize;
 import com.darfoo.backend.model.cota.annotations.limit.PageSize;
 import com.darfoo.backend.model.cota.enums.DanceGroupType;
+import com.darfoo.backend.model.cota.enums.OperaVideoType;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -150,7 +151,14 @@ public class CacheUtils {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         String cachekey = String.format("%sall", type);
 
-        List resources = commonDao.getAllResource(resource);
+        List resources;
+        if (type.equals("operavideo")) {
+            HashMap<String, Object> condition = new HashMap<String, Object>();
+            condition.put("type", OperaVideoType.SINGLE);
+            resources = commonDao.getResourcesByFields(resource, condition);
+        } else {
+            resources = new ArrayList();
+        }
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
         return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);

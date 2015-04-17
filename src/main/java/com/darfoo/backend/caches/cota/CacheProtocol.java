@@ -55,8 +55,8 @@ public class CacheProtocol {
                                 }
                             } else if (field.getName().equals("series")) {
                                 OperaVideoType type = (OperaVideoType) commonDao.getResourceAttr(model, object, "type");
-                                if (type == OperaVideoType.SERIES) {
-                                    OperaSeries series = (OperaSeries) field.get(object);
+                                OperaSeries series = (OperaSeries) field.get(object);
+                                if (type == OperaVideoType.SERIES && series != null) {
                                     cacheInsertMap.put("seriesname", series.getTitle());
                                 } else {
                                     cacheInsertMap.put("seriesname", "");
