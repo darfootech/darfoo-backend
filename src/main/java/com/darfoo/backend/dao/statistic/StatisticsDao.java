@@ -1,5 +1,6 @@
 package com.darfoo.backend.dao.statistic;
 
+import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.mongodb.*;
 
 import java.lang.reflect.Field;
@@ -35,19 +36,39 @@ public class StatisticsDao {
 
     private BasicDBObject createDBObject(Class resource, HashMap<String, Object> conditions) {
         BasicDBObject doc = new BasicDBObject();
-        for (Field field : resource.getFields()) {
-            String fieldname = field.getName();
-            if (conditions.keySet().contains(fieldname)) {
-                doc.append(fieldname, conditions.get(fieldname));
-            } else {
-                if (fieldname.equals("timestamp")) {
-                    doc.append(fieldname, System.currentTimeMillis() / 1000);
+        if (resource == DanceGroup.class) {
+            for (Field field : resource.getFields()) {
+                String fieldname = field.getName();
+                if (conditions.keySet().contains(fieldname)) {
+                    doc.append(fieldname, conditions.get(fieldname));
+                } else {
+                    if (fieldname.equals("timestamp")) {
+                        doc.append(fieldname, System.currentTimeMillis() / 1000);
+                    }
+                    if (fieldname.equals("date")) {
+                        doc.append(fieldname, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                    }
+                    if (fieldname.equals("name")) {
+                        doc.append("title", conditions.get("title"));
+                    }
                 }
-                if (fieldname.equals("date")) {
-                    doc.append(fieldname, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+            }
+        } else {
+            for (Field field : resource.getFields()) {
+                String fieldname = field.getName();
+                if (conditions.keySet().contains(fieldname)) {
+                    doc.append(fieldname, conditions.get(fieldname));
+                } else {
+                    if (fieldname.equals("timestamp")) {
+                        doc.append(fieldname, System.currentTimeMillis() / 1000);
+                    }
+                    if (fieldname.equals("date")) {
+                        doc.append(fieldname, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                    }
                 }
             }
         }
+
         return doc;
     }
 
