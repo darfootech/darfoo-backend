@@ -11,6 +11,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -78,10 +79,14 @@ public class CategoryDao {
                 .createCriteria("categories").add(Restrictions.eq("title", category))
                 .list();
 
-        return commonDao.getCommonQueryCriteria(resource)
-                .addOrder(Order.desc("id"))
-                .add(Restrictions.in("id", resultids))
-                .list();
+        if (resultids.size() == 0) {
+            return new ArrayList();
+        } else {
+            return commonDao.getCommonQueryCriteria(resource)
+                    .addOrder(Order.desc("id"))
+                    .add(Restrictions.in("id", resultids))
+                    .list();
+        }
     }
 
     public List getResourcesByCategoryWithFields(Class resource, String category, HashMap<String, Object> conditions) {

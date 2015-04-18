@@ -11,6 +11,7 @@ import com.darfoo.backend.model.cota.enums.ResourceHot;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaSeries;
 import com.darfoo.backend.model.resource.opera.OperaVideo;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -673,6 +674,10 @@ public class CommonDao {
             if (resource == DanceMusic.class) {
                 String prepareSql = "update dancevideo set MUSIC_ID=null where MUSIC_ID=:music_id";
                 System.out.println(session.createSQLQuery(prepareSql).setInteger("music_id", id).executeUpdate());
+            }
+            if (resource == OperaSeries.class) {
+                String prepareSql = "update operavideo set SERIES_ID=null where SERIES_ID=:series_id";
+                System.out.println(session.createSQLQuery(prepareSql).setInteger("series_id", id).executeUpdate());
             }
 
             Object target = session.get(resource, id);
