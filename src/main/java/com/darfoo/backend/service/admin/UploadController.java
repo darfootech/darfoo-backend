@@ -1,6 +1,7 @@
 package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.Advertise;
 import com.darfoo.backend.model.cota.annotations.ModelInsert;
 import com.darfoo.backend.model.cota.annotations.ModelUpload;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
@@ -63,7 +64,7 @@ public class UploadController {
             insertcontents.put("type", request.getParameter("innertype").toLowerCase());
         }
 
-        if (resource == DanceVideo.class || resource == DanceGroup.class || resource == OperaVideo.class || resource == OperaSeries.class) {
+        if (resource == DanceVideo.class || resource == DanceGroup.class || resource == OperaVideo.class || resource == OperaSeries.class || resource == Advertise.class) {
             String imagekey = String.format("%s-imagekey-%s.%s", resource.getSimpleName().toLowerCase(), System.currentTimeMillis(), request.getParameter("imagetype"));
             insertcontents.put("imagekey", imagekey);
             session.setAttribute("imagekey", imagekey);
@@ -126,6 +127,9 @@ public class UploadController {
         }
         if (type.equals("operaseries")) {
             return "upload/uploadoperaseries";
+        }
+        if (type.equals("advertise")) {
+            return "upload/uploadadvertise";
         }
         modelMap.put("operation", "upload");
         modelMap.put("type", type);
