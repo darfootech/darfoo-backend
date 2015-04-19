@@ -2,6 +2,7 @@ package com.darfoo.backend.dao.resource;
 
 import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.Advertise;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
@@ -451,6 +452,31 @@ public class UpdateDao {
                             return resultMap;
                         }
                     }
+                }
+            }
+            session.saveOrUpdate(object);
+            resultMap.put("statuscode", 200);
+            return resultMap;
+        }
+    }
+
+    public HashMap<String, Integer> updateAdvertise(Integer id, HashMap<String, String> updatecontents) {
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+
+        Session session = sessionFactory.getCurrentSession();
+
+        Class resource = Advertise.class;
+        Object object = session.get(resource, id);
+
+        if (object == null) {
+            System.out.println("需要更新的资源不存在");
+            resultMap.put("statuscode", 500);
+            return resultMap;
+        } else {
+            for (String key : updatecontents.keySet()) {
+                if (key.equals("title")) {
+                    String title = updatecontents.get(key);
+                    commonDao.setResourceAttr(resource, object, key, title);
                 }
             }
             session.saveOrUpdate(object);
