@@ -1,6 +1,7 @@
 package com.darfoo.backend.resource;
 
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.Advertise;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -92,7 +93,7 @@ public class InsertDaoTests {
         insertcontents.put("imagekey", imagekey);
         insertcontents.put("title", operaseriesname);
 
-        HashMap<String, Integer> insertresult = commonDao.insertResource(OperaSeries.class, insertcontents);
+        HashMap<String, Integer> insertresult = commonDao.insertResource(resource, insertcontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
         System.out.println("insertid -> " + insertresult.get("insertid"));
     }
@@ -114,7 +115,19 @@ public class InsertDaoTests {
         insertcontents.put("videotype", "mp4");
         //insertcontents.put("order", "1");
 
-        HashMap<String, Integer> insertresult = commonDao.insertResource(OperaVideo.class, insertcontents);
+        HashMap<String, Integer> insertresult = commonDao.insertResource(resource, insertcontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
+        System.out.println("insertid -> " + insertresult.get("insertid"));
+    }
+
+    @Test
+    public void insertAdvertise() {
+        Class resource = Advertise.class;
+        HashMap<String, String> insertcontents = new HashMap<String, String>();
+        String imagekey = String.format("%s-imagekey-%s.%s", resource.getSimpleName().toLowerCase(), System.currentTimeMillis(), ".jpg");
+        insertcontents.put("imagekey", imagekey);
+
+        HashMap<String, Integer> insertresult = commonDao.insertResource(resource, insertcontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
         System.out.println("insertid -> " + insertresult.get("insertid"));
     }

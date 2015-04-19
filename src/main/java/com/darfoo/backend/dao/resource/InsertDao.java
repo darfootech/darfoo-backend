@@ -3,6 +3,7 @@ package com.darfoo.backend.dao.resource;
 
 import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.Advertise;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
 import com.darfoo.backend.model.cota.enums.DanceGroupType;
@@ -420,6 +421,26 @@ public class InsertDao {
                 System.out.println("wired");
             }
         }
+
+        String imagekey = insertcontents.get("imagekey");
+        commonDao.setResourceAttr(resource, object, "image", new Image(imagekey));
+
+        session.save(object);
+
+        int insertid = (Integer) commonDao.getResourceAttr(resource, object, "id");
+
+        resultMap.put("statuscode", 200);
+        resultMap.put("insertid", insertid);
+        return resultMap;
+    }
+
+    public HashMap<String, Integer> insertAdvertise(HashMap<String, String> insertcontents) throws IllegalAccessException, InstantiationException {
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+
+        Session session = sessionFactory.getCurrentSession();
+
+        Class resource = Advertise.class;
+        Object object = resource.newInstance();
 
         String imagekey = insertcontents.get("imagekey");
         commonDao.setResourceAttr(resource, object, "image", new Image(imagekey));
