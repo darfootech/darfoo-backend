@@ -2,10 +2,7 @@ package com.darfoo.backend.model;
 
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
-import com.darfoo.backend.model.cota.annotations.ModelInsert;
-import com.darfoo.backend.model.cota.annotations.ModelOperation;
-import com.darfoo.backend.model.cota.annotations.ModelUpdate;
-import com.darfoo.backend.model.cota.annotations.ModelUpload;
+import com.darfoo.backend.model.cota.annotations.*;
 import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
 import com.darfoo.backend.model.resource.Image;
 import org.hibernate.annotations.*;
@@ -27,6 +24,12 @@ public class Advertise implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
+
+    @Column(name = "TITLE", nullable = false, columnDefinition = "varchar(255) not null")
+    @CacheInsert(type = CacheInsertEnum.NORMAL)
+    @ModelInsert
+    @ModelUpdate
+    String title;
 
     @OneToOne(targetEntity = Image.class, fetch = FetchType.EAGER)
     @Cascade(value = {org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
@@ -51,19 +54,19 @@ public class Advertise implements Serializable {
         this.id = id;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public Image getImage() {
         return image;
     }
 
     public void setImage(Image image) {
         this.image = image;
-    }
-
-    public String getImagekey() {
-        return imagekey;
-    }
-
-    public void setImagekey(String imagekey) {
-        this.imagekey = imagekey;
     }
 }

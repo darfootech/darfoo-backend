@@ -1,6 +1,7 @@
 package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.Advertise;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
@@ -117,6 +118,11 @@ public class GalleryController {
 
         if (resource == OperaSeries.class) {
             modelMap.addAttribute("series", object);
+            modelMap = putImageToModelMap(resource, object, modelMap);
+        }
+
+        if (resource == Advertise.class) {
+            modelMap.addAttribute("advertise", object);
             modelMap = putImageToModelMap(resource, object, modelMap);
         }
 

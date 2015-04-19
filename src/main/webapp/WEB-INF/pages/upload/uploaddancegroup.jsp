@@ -15,6 +15,7 @@
                     <label for="name">舞队名字</label>
                     <input type="text" class="form-control" name="name" id="name" placeholder="请输入舞队名字">
                 </div>
+
                 <div class="form-group">
                     <label for="description">舞队简介</label>
                     <textarea type="text" class="form-control" name="description" id="description"

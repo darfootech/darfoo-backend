@@ -124,7 +124,8 @@ public class InsertDaoTests {
     public void insertAdvertise() {
         Class resource = Advertise.class;
         HashMap<String, String> insertcontents = new HashMap<String, String>();
-        String imagekey = String.format("%s-imagekey-%s.%s", resource.getSimpleName().toLowerCase(), System.currentTimeMillis(), ".jpg");
+        String imagekey = String.format("%s-imagekey-%s.%s", resource.getSimpleName().toLowerCase(), System.currentTimeMillis(), "jpg");
+        insertcontents.put("title", "呵呵");
         insertcontents.put("imagekey", imagekey);
 
         HashMap<String, Integer> insertresult = commonDao.insertResource(resource, insertcontents);

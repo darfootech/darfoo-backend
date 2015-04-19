@@ -442,6 +442,7 @@ public class InsertDao {
         Class resource = Advertise.class;
         Object object = resource.newInstance();
 
+        commonDao.setResourceAttr(resource, object, "title", insertcontents.get("title"));
         String imagekey = insertcontents.get("imagekey");
         commonDao.setResourceAttr(resource, object, "image", new Image(imagekey));
 

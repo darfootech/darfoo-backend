@@ -2,6 +2,7 @@ package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.Advertise;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
@@ -45,7 +46,7 @@ public class DeleteController {
             String musickey = commonDao.getResourceAttr(resource, object, "music_key").toString();
 
             ServiceUtils.deleteResource(musickey);
-        } else if (resource == DanceGroup.class || resource == OperaSeries.class) {
+        } else if (resource == DanceGroup.class || resource == OperaSeries.class || resource == Advertise.class) {
             Image image = (Image) commonDao.getResourceAttr(resource, object, "image");
             if (image != null) {
                 String imagekey = image.getImage_key();
