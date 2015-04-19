@@ -33,7 +33,7 @@ public class DanceVideo implements Serializable {
     Integer id;
 
     //视频关联的封面图片
-    @OneToOne(targetEntity = Image.class, fetch = FetchType.EAGER)
+    @OneToOne(targetEntity = Image.class)
     @Cascade(value = {org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     @JoinColumn(name = "IMAGE_ID", referencedColumnName = "id", updatable = true)
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
