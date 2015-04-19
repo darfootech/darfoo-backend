@@ -39,70 +39,94 @@ public class StatisticsTests {
 
     @Test
     public void insertOrUpdateResourceClickCount() {
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("mac", "00:ad:05:01:a6:85");
-        conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
-        conditions.put("uuid", "123");
-        conditions.put("type", "video");
-        conditions.put("resourceid", 33);
+        String[] types = {"dancevideo", "dancemusic", "dancegroup", "operavideo", "operaseries"};
+        for (String type : types) {
+            HashMap<String, Object> conditions = new HashMap<String, Object>();
+            conditions.put("mac", "00:ad:05:01:a6:85");
+            conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
+            conditions.put("uuid", "123");
+            conditions.put("type", type);
+            conditions.put("resourceid", 33);
+            conditions.put("title", "呵呵");
 
-        statisticsDao.insertOrUpdateClickBehavior(ResourceClickCount.class, conditions);
+            statisticsDao.insertOrUpdateClickBehavior(ResourceClickCount.class, conditions);
+        }
     }
 
     @Test
     public void insertOrUpdateMenuClickCount() {
+        Integer[] menus = {1, 2, 3, 4, 5, 6, 7, 8};
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("mac", "00:ad:05:01:a6:85");
-        conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
-        conditions.put("uuid", "123");
-        conditions.put("menuid", 1);
+        for (Integer menu : menus) {
+            conditions.put("mac", "00:ad:05:01:a6:85");
+            conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
+            conditions.put("uuid", "123");
+            conditions.put("menuid", menu);
+            conditions.put("title", "呵呵");
 
-        statisticsDao.insertOrUpdateClickBehavior(MenuClickCount.class, conditions);
+            statisticsDao.insertOrUpdateClickBehavior(MenuClickCount.class, conditions);
+        }
     }
 
     @Test
     public void insertOrUpdateTabClickCount() {
+        Integer[] tabs = {1, 2, 3, 4, 5, 6, 7};
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("mac", "00:ad:05:01:a6:85");
-        conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
-        conditions.put("uuid", "123");
-        conditions.put("tabid", 3);
+        for (Integer tab : tabs) {
+            conditions.put("mac", "00:ad:05:01:a6:85");
+            conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
+            conditions.put("uuid", "123");
+            conditions.put("tabid", tab);
+            conditions.put("title", "呵呵");
 
-        statisticsDao.insertOrUpdateClickBehavior(TabClickCount.class, conditions);
+            statisticsDao.insertOrUpdateClickBehavior(TabClickCount.class, conditions);
+        }
     }
 
     @Test
     public void insertResourceClickTime() {
+        String[] types = {"dancevideo", "dancemusic", "dancegroup", "operavideo", "operaseries"};
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("mac", "00:ad:05:01:a6:85");
-        conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
-        conditions.put("uuid", "123");
-        conditions.put("type", "video");
-        conditions.put("resourceid", 81);
+        for (String type : types) {
+            conditions.put("mac", "00:ad:05:01:a6:85");
+            conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
+            conditions.put("uuid", "123");
+            conditions.put("type", type);
+            conditions.put("resourceid", 81);
+            conditions.put("title", "呵呵");
 
-        statisticsDao.insertTimeBehavior(ResourceClickTime.class, conditions);
+            statisticsDao.insertTimeBehavior(ResourceClickTime.class, conditions);
+        }
     }
 
     @Test
     public void insertMenuClickTime() {
+        Integer[] menus = {1, 2, 3, 4, 5, 6, 7, 8};
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("mac", "00:ad:05:01:a6:85");
-        conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
-        conditions.put("uuid", "123");
-        conditions.put("menuid", 1);
+        for (Integer menu : menus) {
+            conditions.put("mac", "00:ad:05:01:a6:85");
+            conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
+            conditions.put("uuid", "123");
+            conditions.put("menuid", menu);
+            conditions.put("title", "呵呵");
 
-        statisticsDao.insertTimeBehavior(MenuClickTime.class, conditions);
+            statisticsDao.insertTimeBehavior(MenuClickTime.class, conditions);
+        }
     }
 
     @Test
     public void insertTabClickTime() {
+        Integer[] tabs = {1, 2, 3, 4, 5, 6, 7};
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("mac", "00:ad:05:01:a6:85");
-        conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
-        conditions.put("uuid", "123");
-        conditions.put("tabid", 3);
+        for (Integer tab : tabs) {
+            conditions.put("mac", "00:ad:05:01:a6:85");
+            conditions.put("hostip", "fe80::2ad:5ff:fe01:a685-wlan0");
+            conditions.put("uuid", "123");
+            conditions.put("tabid", tab);
+            conditions.put("title", "呵呵");
 
-        statisticsDao.insertTimeBehavior(TabClickTime.class, conditions);
+            statisticsDao.insertTimeBehavior(TabClickTime.class, conditions);
+        }
     }
 
     @Test

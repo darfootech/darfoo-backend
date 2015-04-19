@@ -7,7 +7,6 @@ package com.darfoo.backend;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.opera.OperaSeries;
-import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.model.statistics.CrashLog;
 import com.darfoo.backend.model.statistics.DanceSearchHistory;
 import com.darfoo.backend.model.statistics.clickcount.MenuClickCount;

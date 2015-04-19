@@ -137,7 +137,5 @@ public class TypeClassMapping {
         tabTitleMap.put(5, "伴奏");
         tabTitleMap.put(6, "本地");
         tabTitleMap.put(7, "搜索");
-
-
     }
 }
