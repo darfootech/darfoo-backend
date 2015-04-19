@@ -121,22 +121,22 @@ public class TypeClassMapping {
         resourceFieldClassMap.put("hot", ResourceHot.class);
         resourceFieldClassMap.put("priority", ResourcePriority.class);
 
-        menuTitleMap.put(1,"广场舞");
-        menuTitleMap.put(2,"越剧");
-        menuTitleMap.put(3,"电视剧");
-        menuTitleMap.put(4,"游戏");
-        menuTitleMap.put(5,"聊天");
-        menuTitleMap.put(6,"本地管理");
-        menuTitleMap.put(7,"链接上网");
-        menuTitleMap.put(8,"设置");
+        menuTitleMap.put(1, "广场舞");
+        menuTitleMap.put(2, "越剧");
+        menuTitleMap.put(3, "电视剧");
+        menuTitleMap.put(4, "游戏");
+        menuTitleMap.put(5, "聊天");
+        menuTitleMap.put(6, "本地管理");
+        menuTitleMap.put(7, "链接上网");
+        menuTitleMap.put(8, "设置");
 
-        tabTitleMap.put(1,"推荐");
-        tabTitleMap.put(2,"舞队");
-        tabTitleMap.put(3,"教学");
-        tabTitleMap.put(4,"欣赏");
-        tabTitleMap.put(5,"伴奏");
-        tabTitleMap.put(6,"本地");
-        tabTitleMap.put(7,"搜索");
+        tabTitleMap.put(1, "推荐");
+        tabTitleMap.put(2, "舞队");
+        tabTitleMap.put(3, "教学");
+        tabTitleMap.put(4, "欣赏");
+        tabTitleMap.put(5, "伴奏");
+        tabTitleMap.put(6, "本地");
+        tabTitleMap.put(7, "搜索");
 
 
     }
