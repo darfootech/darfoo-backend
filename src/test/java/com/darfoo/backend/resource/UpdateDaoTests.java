@@ -103,6 +103,7 @@ public class UpdateDaoTests {
         updatecontents.put("title", videoTitle);
         updatecontents.put("seriesname", seriesname);
         updatecontents.put("type", "series");
+        updatecontents.put("order", "1");
 
         HashMap<String, Integer> insertresult = commonDao.updateResource(OperaVideo.class, id, updatecontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));

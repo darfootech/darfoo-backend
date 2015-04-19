@@ -65,6 +65,12 @@ public class OperaVideo implements Serializable {
     @ModelUpdate
     OperaVideoType type;
 
+    //当前越剧视频在与之关联的越剧连续剧中的顺序位置
+    @Column(name = "VIDEO_ORDER", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
+    @ModelInsert
+    @ModelUpdate
+    Integer order = 0;
+
     //mp4 flv
     @Transient
     @ModelInsert

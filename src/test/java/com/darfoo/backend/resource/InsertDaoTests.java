@@ -112,6 +112,7 @@ public class InsertDaoTests {
         //insertcontents.put("type", "series");
         insertcontents.put("type", "single");
         insertcontents.put("videotype", "mp4");
+        //insertcontents.put("order", "1");
 
         HashMap<String, Integer> insertresult = commonDao.insertResource(OperaVideo.class, insertcontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));

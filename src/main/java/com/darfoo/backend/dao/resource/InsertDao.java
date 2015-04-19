@@ -365,6 +365,8 @@ public class InsertDao {
             } else if (key.equals("type")) {
                 OperaVideoType type = TypeClassMapping.operaVideoTypeMap.get(insertcontents.get(key));
                 commonDao.setResourceAttr(resource, object, key, type);
+            } else if (key.equals("order")) {
+                commonDao.setResourceAttr(resource, object, key, Integer.parseInt(insertcontents.get(key)));
             } else {
                 System.out.println("wired");
             }
