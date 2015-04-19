@@ -157,10 +157,8 @@ public class CacheUtils {
             HashMap<String, Object> condition = new HashMap<String, Object>();
             condition.put("type", OperaVideoType.SINGLE);
             resources = commonDao.getResourcesByFields(resource, condition);
-        } else if (resource == OperaSeries.class) {
-            resources = commonDao.getAllResource(resource);
         } else {
-            resources = new ArrayList();
+            resources = commonDao.getAllResource(resource);
         }
 
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);

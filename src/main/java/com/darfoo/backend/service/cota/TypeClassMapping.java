@@ -81,6 +81,7 @@ public class TypeClassMapping {
         cacheResponseMap.put("dancegroup", SingleDanceGroup.class);
         cacheResponseMap.put("operavideo", SingleOperaVideo.class);
         cacheResponseMap.put("operaseries", SingleOperaSeries.class);
+        cacheResponseMap.put("advertise", SingleAdvertise.class);
 
         clickCountStatMap.put("menu", MenuClickCount.class);
         clickCountStatMap.put("tab", TabClickCount.class);
