@@ -215,7 +215,7 @@ public class GalleryController {
             List videos = commonDao.getResourcesByFieldsByOrder(OperaVideo.class, conditions, Order.asc("order"));
             List<Integer> orders = new ArrayList<Integer>();
             for (int i = 0; i < videos.size(); i++) {
-                orders.add(i);
+                orders.add(i + 1);
             }
             modelMap.addAttribute("resources", videos);
             modelMap.addAttribute("type", "operavideo");
