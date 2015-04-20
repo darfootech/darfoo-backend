@@ -21,6 +21,7 @@ import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.SingleDanceMusic;
 import com.darfoo.backend.service.responsemodel.SingleDanceVideo;
 import com.darfoo.backend.service.responsemodel.SingleOperaVideo;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -288,7 +289,7 @@ public class CacheUtils {
         String cachekey = String.format("operaseriesvideos%d", id);
 
         Class resource = OperaVideo.class;
-        List resources = commonDao.getResourcesByFields(resource, conditions);
+        List resources = commonDao.getResourcesByFieldsByOrder(resource, conditions, Order.asc("order"));
         cacheDao.insertResourcesIntoCache(resource, resources, cachekey, resource.getSimpleName().toLowerCase(), CacheCollType.SORTEDSET);
 
         return returnWithPagination(resource, SingleOperaVideo.class, cachekey, CacheCollType.SORTEDSET, pageArray);
