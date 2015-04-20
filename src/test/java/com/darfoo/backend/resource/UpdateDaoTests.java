@@ -96,15 +96,15 @@ public class UpdateDaoTests {
     public void updateOperaVideoById() {
         HashMap<String, String> updatecontents = new HashMap<String, String>();
         //String videoTitle = "么么-" + System.currentTimeMillis();
-        String videoTitle = "哈哈";
+        String videoTitle = "三三三";
         String seriesname = "红楼梦";
 
-        Integer id = 4;
+        Integer id = 3;
 
         updatecontents.put("title", videoTitle);
-        updatecontents.put("seriesname", seriesname);
-        updatecontents.put("type", "series");
-        updatecontents.put("order", "1");
+        //updatecontents.put("seriesname", seriesname);
+        updatecontents.put("type", "single");
+        //updatecontents.put("order", "1");
 
         HashMap<String, Integer> insertresult = commonDao.updateResource(OperaVideo.class, id, updatecontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));

@@ -412,7 +412,9 @@ public class UpdateDao {
                     //DanceVideoType type = TypeClassMapping.danceVideoTypeMap.get(updatecontents.get(key));
                     commonDao.setResourceAttr(resource, object, key, type);
                 } else if (key.equals("order")) {
-                    commonDao.setResourceAttr(resource, object, key, Integer.parseInt(updatecontents.get(key)));
+                    if (updatecontents.get(key) != null) {
+                        commonDao.setResourceAttr(resource, object, key, Integer.parseInt(updatecontents.get(key)));
+                    }
                 }
             }
 

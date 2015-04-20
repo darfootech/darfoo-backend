@@ -148,6 +148,14 @@ public class OperaVideo implements Serializable {
         this.type = type;
     }
 
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
     @Override
     public String toString() {
         return "OperaVideo{" +
