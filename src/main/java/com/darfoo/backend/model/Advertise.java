@@ -23,6 +23,7 @@ import java.io.Serializable;
 public class Advertise implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @CacheInsert(type = CacheInsertEnum.NORMAL)
     Integer id;
 
     @Column(name = "TITLE", nullable = false, columnDefinition = "varchar(255) not null")
