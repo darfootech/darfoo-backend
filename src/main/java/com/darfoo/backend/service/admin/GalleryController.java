@@ -18,6 +18,7 @@ import com.darfoo.backend.service.category.DanceVideoCates;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -26,10 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by zjh on 14-12-4.
@@ -193,7 +191,7 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/admin/{type}/videos/{id}", method = RequestMethod.GET)
-    public String showAuthorVideos(@PathVariable String type, @PathVariable Integer id, ModelMap modelMap) {
+    public String showAllVideos(@PathVariable String type, @PathVariable Integer id, ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         if (type.equals("dancegroup")) {
             conditions.put("author_id", id);
@@ -204,6 +202,25 @@ public class GalleryController {
             conditions.put("series_id", id);
             List videos = commonDao.getResourcesByFields(OperaVideo.class, conditions);
             return galleryAllResources(videos, modelMap, "operavideo");
+        }
+        return "fail";
+    }
+
+    //设置越剧连续剧中的越剧电影的顺序
+    @RequestMapping(value = "/admin/{type}/videos/order/{id}", method = RequestMethod.GET)
+    public String setVideosOrder(@PathVariable String type, @PathVariable Integer id, ModelMap modelMap) {
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        if (type.equals("operaseries")) {
+            conditions.put("series_id", id);
+            List videos = commonDao.getResourcesByFieldsByOrder(OperaVideo.class, conditions, Order.asc("order"));
+            List<Integer> orders = new ArrayList<Integer>();
+            for (int i = 0; i < videos.size(); i++) {
+                orders.add(i);
+            }
+            modelMap.addAttribute("resources", videos);
+            modelMap.addAttribute("type", "operavideo");
+            modelMap.addAttribute("orders", orders);
+            return "update/setoperavideoorder";
         }
         return "fail";
     }

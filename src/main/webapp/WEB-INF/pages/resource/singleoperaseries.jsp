@@ -49,6 +49,11 @@
                                 查看和越剧连续剧关联的视频资源
                             </button>
                         </a>
+                        <a href="/darfoobackend/rest/admin/operaseries/videos/order/${series.id}">
+                            <button type="button" class="btn btn-default">
+                                修改和越剧连续剧关联的视频资源的显示顺序
+                            </button>
+                        </a>
                     </div>
                 </div>
             </form>

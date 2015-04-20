@@ -8,6 +8,7 @@ import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.service.category.DanceVideoCates;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
+import java.util.Enumeration;
 import java.util.HashMap;
 
 /**
@@ -81,6 +83,27 @@ public class UpdateController {
         modelMap.addAttribute("type", type);
         modelMap.addAttribute("resourcetype", resourcetype);
         return "update/updateresourceimage";
+    }
+
+    @RequestMapping(value = "/admin/operavideo/updateorder", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    Integer updateOperavideoOrder(HttpServletRequest request) {
+        Enumeration<String> names = request.getParameterNames();
+        while (names.hasMoreElements()) {
+            String name = names.nextElement();
+            String value = request.getParameter(name);
+            int operavideoid = Integer.parseInt(name.split("-")[1]);
+            int order = Integer.parseInt(value);
+            System.out.println("operavideoid -> " + operavideoid);
+            System.out.println("set order -> " + order);
+
+            HashMap<String, Object> updatecontents = new HashMap<String, Object>();
+            updatecontents.put("order", order);
+            commonDao.updateResourceFieldsById(OperaVideo.class, operavideoid, updatecontents);
+        }
+
+        return 200;
     }
 
     @RequestMapping(value = "/admin/{type}/update{resourcetype}resource", method = RequestMethod.POST)

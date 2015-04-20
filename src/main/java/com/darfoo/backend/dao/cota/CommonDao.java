@@ -304,6 +304,31 @@ public class CommonDao {
     }
 
     /**
+     * 歌剧字段值获取资源 并按照指定字段来进行排序
+     *
+     * @param resource
+     * @param conditions
+     * @return
+     */
+    public List getResourcesByFieldsByOrder(Class resource, HashMap<String, Object> conditions, Order order) {
+        try {
+            Criteria criteria = getCommonQueryCriteria(resource)
+                    .addOrder(order);
+            for (String key : conditions.keySet()) {
+                if (key.equals("author_id") || key.equals("music_id") || key.equals("series_id")) {
+                    criteria.add(Restrictions.eq(key.replace("_", "."), conditions.get(key)));
+                } else {
+                    criteria.add(Restrictions.eq(key, conditions.get(key)));
+                }
+            }
+            return criteria.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList();
+        }
+    }
+
+    /**
      * 返回热门资源 被选出的热门资源按照id倒排序放在前面
      * 后面则根据点击量再倒排序放在后面
      * 总共返回的资源数量由hotsize这个注解指名的数量决定
