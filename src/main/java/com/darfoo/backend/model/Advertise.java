@@ -2,15 +2,15 @@ package com.darfoo.backend.model;
 
 import com.darfoo.backend.caches.cota.CacheInsert;
 import com.darfoo.backend.caches.cota.CacheInsertEnum;
-import com.darfoo.backend.model.cota.annotations.*;
+import com.darfoo.backend.model.cota.annotations.ModelInsert;
+import com.darfoo.backend.model.cota.annotations.ModelOperation;
+import com.darfoo.backend.model.cota.annotations.ModelUpdate;
+import com.darfoo.backend.model.cota.annotations.ModelUpload;
 import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
 import com.darfoo.backend.model.resource.Image;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
 
 /**

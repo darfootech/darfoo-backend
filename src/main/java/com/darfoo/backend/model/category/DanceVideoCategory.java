@@ -21,7 +21,7 @@ public class DanceVideoCategory implements Serializable {
     @Column(name = "DESCRIPTION", nullable = false, columnDefinition = "varchar(255) not null")
     String description;
     //建立与video表的多对多关系(这边不要加FetchType.EAGER,采用默认的Lazy)
-    @ManyToMany(mappedBy = "categories",targetEntity = DanceVideo.class)
+    @ManyToMany(mappedBy = "categories", targetEntity = DanceVideo.class)
     Set<DanceVideo> videos = new HashSet<DanceVideo>();
 
     public DanceVideoCategory() {

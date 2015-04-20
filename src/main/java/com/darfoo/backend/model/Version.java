@@ -9,9 +9,11 @@ import java.io.Serializable;
 @Entity
 @Table(name = "version")
 public class Version implements Serializable {
+    //引用下面名为mysql的主键生成方式
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //引用下面名为mysql的主键生成方式
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
+
     @Column(name = "version", nullable = false, columnDefinition = "varchar(255) not null")
     String version;
 
