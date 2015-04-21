@@ -73,12 +73,8 @@ public class VersionController {
 
         String versionkey = String.format("launcher-%s-%s.apk", newversion, type);
 
-        String status = ServiceUtils.uploadQiniuResource(versionresource, versionkey, ModelUploadEnum.SMALL);
+        ServiceUtils.operateQiniuResourceAsync(versionresource, versionkey, ModelUploadEnum.SMALL, ServiceUtils.QiniuOperationType.UPLOAD);
 
-        if (status.equals("200")) {
-            return "success";
-        } else {
-            return "fail";
-        }
+        return "success";
     }
 }
