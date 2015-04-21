@@ -1,6 +1,7 @@
 package com.darfoo.backend.service.cota;
 
 import com.darfoo.backend.model.Advertise;
+import com.darfoo.backend.model.Version;
 import com.darfoo.backend.model.auth.Feedback;
 import com.darfoo.backend.model.cota.enums.*;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
@@ -39,6 +40,7 @@ public class TypeClassMapping {
     public static HashMap<DanceVideoType, String> danceVideoTypeNameMap = new HashMap<DanceVideoType, String>();
     public static HashMap<DanceGroupType, String> danceGroupTypeNameMap = new HashMap<DanceGroupType, String>();
     public static HashMap<OperaVideoType, String> operaVideoTypeNameMap = new HashMap<OperaVideoType, String>();
+    public static HashMap<String, String> versionTypeNameMap = new HashMap<String, String>();
 
     public static HashMap<String, DanceVideoType> danceVideoTypeMap = new HashMap<String, DanceVideoType>();
     public static HashMap<String, DanceGroupType> danceGroupTypeMap = new HashMap<String, DanceGroupType>();
@@ -60,6 +62,7 @@ public class TypeClassMapping {
         typeClassMap.put("operavideo", OperaVideo.class);
         typeClassMap.put("operaseries", OperaSeries.class);
         typeClassMap.put("advertise", Advertise.class);
+        typeClassMap.put("version", Version.class);
 
         typeClassMap.put("uploadnoauthvideo", UploadNoAuthVideo.class);
         typeClassMap.put("resourceclickcount", ResourceClickCount.class);
@@ -100,6 +103,8 @@ public class TypeClassMapping {
         danceGroupTypeNameMap.put(DanceGroupType.STAR, "明星舞队");
         operaVideoTypeNameMap.put(OperaVideoType.SERIES, "越剧连续剧");
         operaVideoTypeNameMap.put(OperaVideoType.SINGLE, "越剧电影");
+        versionTypeNameMap.put("release", "发布版本");
+        versionTypeNameMap.put("debug", "调试版本");
 
         typeNameMap.put(DanceVideoType.NORMAL, "欣赏视频");
         typeNameMap.put(DanceVideoType.TUTORIAL, "教学视频");

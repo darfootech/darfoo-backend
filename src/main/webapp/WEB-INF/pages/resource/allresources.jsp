@@ -16,6 +16,10 @@
                                         ${resource.name}
                                     </c:when>
 
+                                    <c:when test="${type == 'version'}">
+                                        version-${resource.version}
+                                    </c:when>
+
                                     <c:otherwise>
                                         ${resource.title}
                                     </c:otherwise>

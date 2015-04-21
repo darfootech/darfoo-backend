@@ -3,6 +3,7 @@ package com.darfoo.backend.service.admin;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.Advertise;
+import com.darfoo.backend.model.Version;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
@@ -39,7 +40,6 @@ public class DeleteController {
         if (resource == DanceVideo.class || resource == OperaVideo.class) {
             String imagekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
             String videokey = commonDao.getResourceAttr(resource, object, "video_key").toString();
-
             ServiceUtils.deleteResource(imagekey);
             ServiceUtils.deleteResource(videokey);
         } else if (resource == DanceMusic.class) {
@@ -50,9 +50,13 @@ public class DeleteController {
             Image image = (Image) commonDao.getResourceAttr(resource, object, "image");
             if (image != null) {
                 String imagekey = image.getImage_key();
-
                 ServiceUtils.deleteResource(imagekey);
             }
+        } else if (resource == Version.class) {
+            String versiontype = (String) commonDao.getResourceAttr(resource, object, "type");
+            String versionnum = (String) commonDao.getResourceAttr(resource, object, "version");
+            String versionkey = String.format("launcher-%s-%s.apk", versionnum, versiontype);
+            ServiceUtils.deleteResource(versionkey);
         }
         String status = CRUDEvent.getResponse(commonDao.deleteResourceById(resource, id));
         if (status.equals("DELETE_SUCCESS")) {

@@ -2,6 +2,7 @@ package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.Advertise;
+import com.darfoo.backend.model.Version;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
@@ -120,8 +121,12 @@ public class GalleryController {
         }
 
         if (resource == Advertise.class) {
-            modelMap.addAttribute("advertise", object);
+            modelMap.addAttribute(resource.getSimpleName().toLowerCase(), object);
             modelMap = putImageToModelMap(resource, object, modelMap);
+        }
+
+        if (resource == Version.class) {
+            modelMap.addAttribute(resource.getSimpleName().toLowerCase(), object);
         }
 
         return modelMap;
@@ -159,7 +164,11 @@ public class GalleryController {
     @RequestMapping(value = "/admin/gallery/all/{type}/{innertype}", method = RequestMethod.GET)
     public String showAllResourcesByInnerType(@PathVariable String type, @PathVariable String innertype, ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("type", Enum.valueOf(TypeClassMapping.innerTypeClassMap.get(type), innertype));
+        if (type.equals("version")) {
+            conditions.put("type", innertype);
+        } else {
+            conditions.put("type", Enum.valueOf(TypeClassMapping.innerTypeClassMap.get(type), innertype));
+        }
         List resources = commonDao.getResourcesByFields(TypeClassMapping.typeClassMap.get(type), conditions);
         return galleryAllResources(resources, modelMap, type);
     }
@@ -172,6 +181,8 @@ public class GalleryController {
             modelMap.put("typenames", TypeClassMapping.danceVideoTypeNameMap);
         } else if (type.equals("operavideo")) {
             modelMap.put("typenames", TypeClassMapping.operaVideoTypeNameMap);
+        } else if (type.equals("version")) {
+            modelMap.put("typenames", TypeClassMapping.versionTypeNameMap);
         } else {
             List resources = commonDao.getAllResource(TypeClassMapping.typeClassMap.get(type));
             return galleryAllResources(resources, modelMap, type);
