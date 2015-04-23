@@ -37,13 +37,19 @@
                         <c:forEach var="resource" items="${resources}">
                             <a style="color: #FFF" href="/darfoobackend/rest/admin/${type}/${resource.id}">
                                 <button type="button" id="${resource.id}" class="btn btn-primary btn-lg btn-block">
-                                        ${resource.title}
+                                    <c:choose>
+                                        <c:when test="${type == 'dancegroup'}">
+                                            ${resource.name}
+                                        </c:when>
+                                        <c:otherwise>
+                                            ${resource.title}
+                                        </c:otherwise>
+                                    </c:choose>
                                 </button>
                             </a>
 
                             <div class="form-group">
                                 <label for="order-${resource.id}">选择显示的顺序,数字越小在平板上就会显示在越前面</label>
-                                    ${resource.order}
                                 <select data-toggle="select" name="order-${resource.id}" id="order-${resource.id}"
                                         class="form-control select select-default mrs mbm">
                                     <c:forEach var="order" items="${orders}">

@@ -73,7 +73,7 @@ public class DanceGroup implements Serializable {
     @Column(name = "PRIORITY", nullable = false, updatable = true, columnDefinition = "int default 0")
     ResourcePriority priority = ResourcePriority.NOTPRIORITY;
 
-    @Column(name = "ORDER", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
+    @Column(name = "GROUP_ORDER", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
     @ModelInsert
     @ModelUpdate
     Integer order = 0;

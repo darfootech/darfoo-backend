@@ -85,22 +85,22 @@ public class UpdateController {
         return "update/updateresourceimage";
     }
 
-    @RequestMapping(value = "/admin/operavideo/updateorder", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/{type}/updateorder", method = RequestMethod.POST)
     public
     @ResponseBody
-    Integer updateOperavideoOrder(HttpServletRequest request) {
+    Integer updateOperavideoOrder(@PathVariable String type, HttpServletRequest request) {
         Enumeration<String> names = request.getParameterNames();
         while (names.hasMoreElements()) {
             String name = names.nextElement();
             String value = request.getParameter(name);
-            int operavideoid = Integer.parseInt(name.split("-")[1]);
+            int id = Integer.parseInt(name.split("-")[1]);
             int order = Integer.parseInt(value);
-            System.out.println("operavideoid -> " + operavideoid);
+            System.out.println("resource -> " + id);
             System.out.println("set order -> " + order);
 
             HashMap<String, Object> updatecontents = new HashMap<String, Object>();
             updatecontents.put("order", order);
-            commonDao.updateResourceFieldsById(OperaVideo.class, operavideoid, updatecontents);
+            commonDao.updateResourceFieldsById(TypeClassMapping.typeClassMap.get(type), id, updatecontents);
         }
 
         return 200;
