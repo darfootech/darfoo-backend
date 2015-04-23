@@ -30,7 +30,7 @@ public class GenericityTests {
 
     @Test
     public void getObjectTest() {
-        System.out.println(((Version)getObject(Version.class, 5)).getVersion());
+        System.out.println(((Version)getObject(Version.class, 40)).getVersion());
     }
 
 }

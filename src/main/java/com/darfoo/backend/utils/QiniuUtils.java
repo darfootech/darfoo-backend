@@ -57,12 +57,15 @@ public class QiniuUtils {
             GetPolicy getPolicy = new GetPolicy();
             //过期时间为一周
             getPolicy.expires = 7 * 24 * 3600;
-            String downloadUrl = getPolicy.makeRequest(baseUrl, mac);
-            System.out.println(downloadUrl);
             if (type == QiniuResourceEnum.ENCRYPT) {
+                System.out.println(baseUrl);
+                String downloadUrl = getPolicy.makeRequest(baseUrl, mac);
                 return CryptUtils.encryptQiniuUrl(downloadUrl);
             } else if (type == QiniuResourceEnum.RAW) {
-                return downloadUrl;
+                //缩小图片
+                String baseUrlSmall = String.format("%s?imageView2/2/w/230/h/126", baseUrl);
+                System.out.println(baseUrlSmall);
+                return getPolicy.makeRequest(baseUrlSmall, mac);
             } else {
                 System.out.println("wired");
                 return "";

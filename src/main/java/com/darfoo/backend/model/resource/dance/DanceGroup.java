@@ -73,8 +73,7 @@ public class DanceGroup implements Serializable {
     @Column(name = "PRIORITY", nullable = false, updatable = true, columnDefinition = "int default 0")
     ResourcePriority priority = ResourcePriority.NOTPRIORITY;
 
-    //推荐的明星舞队也要可以按照一定顺序来展示
-    @Column(name = "VIDEO_ORDER", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
+    @Column(name = "ORDER", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
     @ModelInsert
     @ModelUpdate
     Integer order = 0;
