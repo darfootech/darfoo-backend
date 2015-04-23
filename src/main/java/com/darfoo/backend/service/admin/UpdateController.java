@@ -2,12 +2,14 @@ package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.model.cota.ModelUpdate;
+import com.darfoo.backend.dao.resource.DanceGroupDao;
+import com.darfoo.backend.model.cota.annotations.ModelUpdate;
+import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
 import com.darfoo.backend.model.resource.Image;
-import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Tutorial;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaVideo;
+import com.darfoo.backend.service.category.DanceVideoCates;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
+import java.util.Enumeration;
 import java.util.HashMap;
 
 /**
@@ -27,7 +30,7 @@ import java.util.HashMap;
 @Controller
 public class UpdateController {
     @Autowired
-    AuthorDao authorDao;
+    DanceGroupDao authorDao;
     @Autowired
     CommonDao commonDao;
     @Autowired
@@ -44,23 +47,19 @@ public class UpdateController {
             }
         }
 
-        if (resource == Video.class) {
-            updatecontents.put("category1", request.getParameter("videospeed"));
-            updatecontents.put("category2", request.getParameter("videodifficult"));
-            updatecontents.put("category3", request.getParameter("videostyle"));
-            updatecontents.put("category4", request.getParameter("videoletter").toUpperCase());
+        if (resource == DanceVideo.class) {
+            String[] categories = request.getParameterValues("categories");
+            if (categories == null) {
+                updatecontents.put("category", "");
+            } else {
+                for (String category : categories) {
+                    updatecontents.put(String.format("category%s", category), DanceVideoCates.danceVideoCategoryMap.get(category));
+                }
+            }
         }
 
-        if (resource == Tutorial.class) {
-            updatecontents.put("category1", request.getParameter("tutorialspeed"));
-            updatecontents.put("category2", request.getParameter("tutorialdifficult"));
-            updatecontents.put("category3", request.getParameter("tutorialstyle"));
-        }
-
-        if (resource == Music.class) {
-            updatecontents.put("category1", request.getParameter("musicbeat"));
-            updatecontents.put("category2", request.getParameter("musicstyle"));
-            updatecontents.put("category3", request.getParameter("musicletter").toUpperCase());
+        if (resource == DanceMusic.class) {
+            updatecontents.put("category", request.getParameter("musicletter").toUpperCase());
         }
 
         HashMap<String, Integer> result = commonDao.updateResource(resource, id, updatecontents);
@@ -78,28 +77,55 @@ public class UpdateController {
         return commonUpdateResource(TypeClassMapping.typeClassMap.get(type), request);
     }
 
-    @RequestMapping(value = "/admin/{type}/updateimage/{id}", method = RequestMethod.GET)
-    public String updateVideoImage(@PathVariable String type, @PathVariable Integer id, ModelMap modelMap) {
+    @RequestMapping(value = "/admin/{type}/update{resourcetype}/{id}", method = RequestMethod.GET)
+    public String updateVideoImage(@PathVariable String type, @PathVariable String resourcetype, @PathVariable Integer id, ModelMap modelMap) {
         modelMap.addAttribute("resourceid", id);
         modelMap.addAttribute("type", type);
+        modelMap.addAttribute("resourcetype", resourcetype);
         return "update/updateresourceimage";
     }
 
-    @RequestMapping(value = "/admin/{type}/updateimageresource", method = RequestMethod.POST)
-    public String updateVideoImageResource(@PathVariable String type, @RequestParam("imageresource") CommonsMultipartFile imageresource, HttpServletRequest request) {
+    @RequestMapping(value = "/admin/operavideo/updateorder", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    Integer updateOperavideoOrder(HttpServletRequest request) {
+        Enumeration<String> names = request.getParameterNames();
+        while (names.hasMoreElements()) {
+            String name = names.nextElement();
+            String value = request.getParameter(name);
+            int operavideoid = Integer.parseInt(name.split("-")[1]);
+            int order = Integer.parseInt(value);
+            System.out.println("operavideoid -> " + operavideoid);
+            System.out.println("set order -> " + order);
+
+            HashMap<String, Object> updatecontents = new HashMap<String, Object>();
+            updatecontents.put("order", order);
+            commonDao.updateResourceFieldsById(OperaVideo.class, operavideoid, updatecontents);
+        }
+
+        return 200;
+    }
+
+    @RequestMapping(value = "/admin/{type}/update{resourcetype}resource", method = RequestMethod.POST)
+    public String updateVideoImageResource(@PathVariable String type, @PathVariable String resourcetype, @RequestParam("resourcefile") CommonsMultipartFile resourcefile, HttpServletRequest request) {
         int id = Integer.parseInt(request.getParameter("id"));
         Class resource = TypeClassMapping.typeClassMap.get(type);
         Object object = commonDao.getResourceById(resource, id);
-        String imagekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
-
-        System.out.println(id + " " + imagekey);
-
-        String imageStatusCode = ServiceUtils.reUploadSmallResource(imageresource, imagekey);
-
-        if (imageStatusCode.equals("200")) {
-            return "success";
+        String resourcekey;
+        ModelUploadEnum uploadtype;
+        if (resourcetype.equals("image")) {
+            uploadtype = ModelUploadEnum.SMALL;
+            resourcekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
+        } else if (resourcetype.equals("video") || resourcetype.equals("music")) {
+            uploadtype = ModelUploadEnum.LARGE;
+            resourcekey = (String) commonDao.getResourceAttr(resource, object, String.format("%s_key", resourcetype));
         } else {
-            return "fail";
+            uploadtype = null;
+            resourcekey = "";
         }
+        System.out.println(id + " " + resourcekey);
+
+        ServiceUtils.operateQiniuResourceAsync(resourcefile, resourcekey, uploadtype, ServiceUtils.QiniuOperationType.REUPLOAD);
+        return "success";
     }
 }

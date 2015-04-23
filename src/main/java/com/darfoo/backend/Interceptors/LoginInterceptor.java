@@ -18,7 +18,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 获得请求路径的uri
         String uri = request.getRequestURI();
-        System.out.println(request.getRemoteUser() + " - " + request.getRemoteHost() + " - " + request.getRemoteAddr());
+        System.out.println(uri + " - " + request.getRemoteUser() + " - " + request.getRemoteHost() + " - " + request.getRemoteAddr());
 
         // 判断路径是登出还是登录验证，是这两者之一的话执行Controller中定义的方法
         // 客户端的restfulapi的url不能拦截
@@ -30,20 +30,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             if (dashboardDao.isDashboardOpen()) {
                 System.out.println("在请求登陆页面");
                 if (request.getSession() != null && request.getSession().getAttribute("loginUser") != null) {
-                    response.sendRedirect(request.getContextPath() + "/rest/resources/video/new");
+                    response.sendRedirect(request.getContextPath() + "/rest/resources/new/dancevideo");
                 } else {
                     return true;
                 }
             } else {
-                return false;
-            }
-        } else if (uri.contains("/resources/") && (uri.contains("new") || uri.contains("create"))) {
-            //上传资源需要一个低权限的用户
-            System.out.println("在新建资源");
-            if (request.getSession() != null && request.getSession().getAttribute("loginUser") != null && (request.getSession().getAttribute("loginUser").equals("upload") || request.getSession().getAttribute("loginUser").equals("cleantha"))) {
-                return true;
-            } else {
-                response.sendRedirect(request.getContextPath() + "/rest/login");
                 return false;
             }
         } else if (uri.contains("cache")) {
@@ -61,17 +52,22 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         } else if (uri.contains("statistics")) {
             System.out.println("行为统计");
             return true;
-        } else if (uri.contains("admin")) {
-            // 其他情况判断session中是否有key，有的话继续用户的操作
-            if (request.getSession() != null && request.getSession().getAttribute("loginUser") != null && request.getSession().getAttribute("loginUser").equals("cleantha")) {
-                System.out.println("在管理资源");
+        } else if (uri.contains("auth")) {
+            System.out.println("用户操作");
+            return true;
+        } else if (uri.contains("autocreate")) {
+            System.out.println("自动上传");
+            return true;
+        } else if (uri.contains("admin") || (uri.contains("resources") && (uri.contains("new") || uri.contains("create")))) {
+            if (request.getSession() != null && request.getSession().getAttribute("loginUser") != null) {
                 return true;
             } else {
+                System.out.println("需要登陆");
                 response.sendRedirect(request.getContextPath() + "/rest/login");
                 return false;
             }
-        } else if (uri.contains("auth")) {
-            System.out.println("用户操作");
+        } else if (uri.contains("resources")) {
+            System.out.println("请求资源");
             return true;
         } else {
             // 最后的情况就是进入登录页面

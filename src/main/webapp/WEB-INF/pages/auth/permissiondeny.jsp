@@ -38,27 +38,6 @@
     }
 </style>
 
-<script>
-    function start() {
-        $.ajax({
-            type: "POST",
-            url: "/darfoobackend/rest/login/auth",
-            data: $("#loginform").serialize(),
-            success: function (data) {
-                if (data == "200") {
-                    alert("登陆成功");
-                    window.location.href = "/darfoobackend/rest/resources/video/new"
-                } else if (data == "501") {
-                    alert("登陆失败，用户名或者密码错误");
-                }
-            },
-            error: function () {
-                alert("登陆失败，用户名或者密码错误");
-            }
-        })
-    }
-</script>
-
 <!-- Static navbar -->
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">

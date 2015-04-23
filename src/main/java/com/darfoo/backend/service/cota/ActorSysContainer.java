@@ -9,7 +9,7 @@ public class ActorSysContainer {
     private ActorSystem sys;
 
     private ActorSysContainer() {
-        sys = ActorSystem.create("MySystem1");
+        sys = ActorSystem.create("darfooactor");
     }
 
     public ActorSystem getSystem() {

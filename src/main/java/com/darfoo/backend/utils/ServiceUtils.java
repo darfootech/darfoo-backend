@@ -1,19 +1,34 @@
 package com.darfoo.backend.utils;
 
-import com.darfoo.backend.model.cota.ModelUploadEnum;
+import akka.actor.ActorSystem;
+import akka.dispatch.OnComplete;
+import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
+import com.darfoo.backend.service.cota.ActorSysContainer;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import scala.concurrent.ExecutionContext;
+import scala.concurrent.Future;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
+
+import static akka.dispatch.Futures.future;
 
 /**
  * Created by zjh on 14-11-26.
  */
 public class ServiceUtils {
     static QiniuUtils qiniuUtils = new QiniuUtils();
+
+    public enum QiniuOperationType {
+        UPLOAD, REUPLOAD
+    }
+
+    final static ActorSystem system = ActorSysContainer.getInstance().getSystem();
+    final static ExecutionContext ec = system.dispatcher();
 
     public static String[] convertList2Array(List<String> vidoes) {
         String[] stockArr = new String[vidoes.size()];
@@ -51,15 +66,46 @@ public class ServiceUtils {
             FileUtils.delete(dirName);
         }
 
+        if (type == ModelUploadEnum.LARGE) {
+            FileUtils.delete(path);
+        }
+
         long endTime = System.currentTimeMillis();
         System.out.println("运行时间：" + String.valueOf(endTime - startTime) + "ms");
 
         return statusCode;
     }
 
-    public static String reUploadSmallResource(CommonsMultipartFile file, String fileName) {
+    public static String reUploadQiniuResource(CommonsMultipartFile file, String fileName, ModelUploadEnum type) {
         deleteResource(fileName);
-        return uploadQiniuResource(file, fileName, ModelUploadEnum.SMALL);
+        return uploadQiniuResource(file, fileName, type);
+    }
+
+    public static void operateQiniuResourceAsync(CommonsMultipartFile file, String key, ModelUploadEnum type, QiniuOperationType operation) {
+        final CommonsMultipartFile innerfile = file;
+        final String innerkey = key;
+        final ModelUploadEnum innertype = type;
+
+        //删除七牛资源的操作如果放在异步任务里会出现akka的空指针错误 暂时还无法定位问题原因只能暂时先移植外面
+        if (operation == QiniuOperationType.REUPLOAD) {
+            deleteResource(innerkey);
+        }
+
+        Future<String> future = future(new Callable<String>() {
+            public String call() {
+                return uploadQiniuResource(innerfile, innerkey, innertype);
+            }
+        }, system.dispatcher());
+
+        future.onComplete(new OnComplete<String>() {
+            public void onComplete(Throwable failure, String status) {
+                if (failure != null && !status.equals("200")) {
+                    System.out.println("upload file failed");
+                } else {
+                    System.out.println("upload file success");
+                }
+            }
+        }, ec);
     }
 
     public static void deleteResource(String key) {

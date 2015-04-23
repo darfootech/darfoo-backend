@@ -29,6 +29,7 @@
             /WEB-INF/pre-deal.xml
             /WEB-INF/springmvc-hibernate.xml
             /WEB-INF/redis-context.xml
+            /WEB-INF/util-context.xml
         </param-value>
     </context-param>
 
@@ -36,7 +37,7 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <error-page>
+    <!--<error-page>
         <error-code>404</error-code>
         <location>/error/404.jsp</location>
     </error-page>
@@ -59,6 +60,6 @@
     <error-page>
         <exception-type>java.lang.Throwable</exception-type>
         <location>/error/500.jsp</location>
-    </error-page>
+    </error-page>-->
 
 </web-app>

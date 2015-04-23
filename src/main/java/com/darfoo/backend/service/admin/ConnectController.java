@@ -3,7 +3,7 @@ package com.darfoo.backend.service.admin;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.resource.Music;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +30,7 @@ public class ConnectController {
 
     @RequestMapping(value = "/admin/connectmusic/{type}/all", method = RequestMethod.GET)
     public String connectMusicAll(@PathVariable String type, ModelMap modelMap) {
-        modelMap.addAttribute("musics", commonDao.getAllResource(Music.class));
+        modelMap.addAttribute("musics", commonDao.getAllResource(DanceMusic.class));
         modelMap.addAttribute("type", type);
         return "connectmusic/connectionallmusic";
     }
@@ -38,7 +38,7 @@ public class ConnectController {
     @RequestMapping(value = "/admin/connectmusic/single/{type}/{id}", method = RequestMethod.GET)
     public String connectMusicSingle(@PathVariable String type, @PathVariable Integer id, ModelMap modelMap, HttpSession session) {
         System.out.println("current music id: " + id);
-        Music music = (Music) commonDao.getResourceById(Music.class, id);
+        DanceMusic music = (DanceMusic) commonDao.getResourceById(DanceMusic.class, id);
         session.setAttribute("connectmusicid", id);
         modelMap.addAttribute("music", music);
 

@@ -3,8 +3,8 @@ package com.darfoo.backend.service.admin;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.RecommendDao;
-import com.darfoo.backend.model.resource.Tutorial;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
@@ -73,10 +73,8 @@ public class RecommendController {
 
     @RequestMapping(value = "/admin/recommend/updateimage/all", method = RequestMethod.GET)
     public String updateRecommendResourcesImage(ModelMap modelMap, HttpSession session) {
-        List<Video> recommendVideos = recommendDao.getRecommendResources(Video.class);
-        List<Tutorial> recommendTutorials = recommendDao.getRecommendResources(Tutorial.class);
+        List recommendVideos = recommendDao.getRecommendResources(DanceVideo.class);
         modelMap.addAttribute("videos", recommendVideos);
-        modelMap.addAttribute("tutorials", recommendTutorials);
         return "recommend/updaterecommendimageall";
     }
 
@@ -95,12 +93,7 @@ public class RecommendController {
     @RequestMapping("/admin/recommend/resource/updateimage")
     public String uploadRecommendResourceImage(@RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session) {
         String imagekey = (String) session.getAttribute("imagekey");
-        String imageStatusCode = ServiceUtils.reUploadSmallResource(imageresource, imagekey);
-
-        if (imageStatusCode.equals("200")) {
-            return "success";
-        } else {
-            return "fail";
-        }
+        ServiceUtils.operateQiniuResourceAsync(imageresource, imagekey, ModelUploadEnum.SMALL, ServiceUtils.QiniuOperationType.REUPLOAD);
+        return "success";
     }
 }

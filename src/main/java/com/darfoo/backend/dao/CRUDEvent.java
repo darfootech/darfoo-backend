@@ -16,7 +16,7 @@ public class CRUDEvent {
     public final static int UPDATE_FAIL = 0X22;        //更新失败
     public final static int UPDATE_VIDEO_NOTFOUND = 0X23; //VIDEO不存在
     public final static int UPDATE_MUSIC_NOTFOUND = 0X24; //MUSIC不存在
-    public final static int UPDATE_AUTHOR_NOTFOUND = 0X25;//作者不存在
+    public final static int UPDATE_AUTHOR_NOTFOUND = 0X25;//舞队不存在
     public final static int UPDATE_IMAGE_NOTFOUND = 0X26; //图片不存在
 
     public final static int DELETE_SUCCESS = 0X31;  //删除成功

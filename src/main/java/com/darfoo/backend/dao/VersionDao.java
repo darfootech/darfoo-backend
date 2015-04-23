@@ -24,6 +24,21 @@ public class VersionDao {
     @Autowired
     CommonDao commonDao;
 
+    public Version getLatestVersion(Class resource) {
+        Version version = null;
+        try {
+            List result = commonDao.getCommonQueryCriteria(resource)
+                    .addOrder(Order.desc("id"))
+                    .list();
+            if (result.size() > 0) {
+                version = (Version) result.get(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return version;
+    }
+
     public Version getLatestVersion(Class resource, String type) {
         Version version = null;
         try {

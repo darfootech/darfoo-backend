@@ -9,7 +9,7 @@ $(function () {
             success: function (data) {
                 if (data == "200") {
                     alert("提交资源信息成功");
-                    window.location.href = "/darfoobackend/rest/resources/" + type + "resource/new"
+                    window.location.href = "/darfoobackend/rest/resources/" + type + "/resource/new"
                 } else if (data == "500") {
                     alert("资源名字与明星舞队的组合已经存在,请更换资源标题或者名字");
                 } else if (data == "501") {
@@ -21,9 +21,25 @@ $(function () {
                 } else if (data == "504") {
                     alert("请保证图片名字带有后缀");
                 } else if (data == "505") {
-                    alert("伴奏名字和作者名字组合已经存在,请修改伴奏名字");
+                    alert("伴奏名字和舞队名字组合已经存在,请修改伴奏名字");
                 } else if (data == "506") {
                     alert("相同名字的明星舞队已经存在");
+                } else if (data == "507") {
+                    alert("资源名字不能为空");
+                } else if (data == "508") {
+                    alert("作者名字不能为空");
+                } else if (data == "509") {
+                    alert("作者简介不能为空");
+                } else if (data == "510") {
+                    alert("越剧连续剧还不存在");
+                } else if (data == "511") {
+                    alert("视频名字和连续剧id组合已存在,不可以进行插入了,是否需要修改");
+                } else if (data == "512") {
+                    alert("相同名字越剧连续剧存在,不能创建新明星舞队");
+                } else if (data == "513") {
+                    alert("越剧连续剧标题不能为空");
+                } else if (data == "514") {
+                    alert("已经存在同名的越剧电影,不可以进行插入");
                 } else {
                     alert("提交资源信息失败");
                 }
@@ -32,31 +48,5 @@ $(function () {
                 alert("提交资源信息失败");
             }
         });
-    });
-
-    $.ajax({
-        url: '/darfoobackend/rest/resources/music/all/service',
-        type: 'GET',
-        data: {},
-        success: function (response) {
-            console.log(response);
-
-            var states = new Bloodhound({
-                datumTokenizer: function (d) {
-                    return Bloodhound.tokenizers.whitespace(d.word);
-                },
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                limit: 4,
-                local: response
-            });
-
-            states.initialize();
-
-            $('input.typeahead-only').typeahead(null, {
-                name: 'states',
-                displayKey: 'word',
-                source: states.ttAdapter()
-            });
-        }
     });
 });

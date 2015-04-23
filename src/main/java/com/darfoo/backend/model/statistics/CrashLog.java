@@ -1,6 +1,6 @@
 package com.darfoo.backend.model.statistics;
 
-import com.darfoo.backend.model.cota.CSVTitle;
+import com.darfoo.backend.model.cota.annotations.CSVTitle;
 
 /**
  * Created by zjh on 15-3-3.

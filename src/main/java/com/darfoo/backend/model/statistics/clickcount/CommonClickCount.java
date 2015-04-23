@@ -1,7 +1,7 @@
 package com.darfoo.backend.model.statistics.clickcount;
 
-import com.darfoo.backend.model.cota.CSVTitle;
-import com.darfoo.backend.model.cota.ModelAttrSuper;
+import com.darfoo.backend.model.cota.annotations.CSVTitle;
+import com.darfoo.backend.model.cota.annotations.ModelAttrSuper;
 
 /**
  * Created by zjh on 15-3-2.
@@ -23,4 +23,8 @@ public class CommonClickCount {
     @ModelAttrSuper
     @CSVTitle(title = "热度")
     public Long hot;
+
+    @ModelAttrSuper
+    @CSVTitle(title = "title")
+    public String title;
 }

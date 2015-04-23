@@ -2,10 +2,12 @@ package com.darfoo.backend.caches.cota;
 
 import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.resource.Author;
+import com.darfoo.backend.model.cota.enums.DanceVideoType;
+import com.darfoo.backend.model.cota.enums.OperaVideoType;
 import com.darfoo.backend.model.resource.Image;
-import com.darfoo.backend.model.resource.Tutorial;
-import com.darfoo.backend.model.resource.Video;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaSeries;
 import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +46,21 @@ public class CacheProtocol {
 
                         if (cacheInsert.type() == CacheInsertEnum.NORMAL) {
                             if (field.getName().equals("author")) {
-                                Author author = (Author) field.get(object);
-                                cacheInsertMap.put("authorname", author.getName());
-                                System.out.println(field.getName() + " -> " + author.getName());
+                                DanceGroup author = (DanceGroup) field.get(object);
+                                if (author != null) {
+                                    System.out.println(field.getName() + " -> " + author.getName());
+                                    cacheInsertMap.put("authorname", author.getName());
+                                } else {
+                                    cacheInsertMap.put("authorname", "");
+                                }
+                            } else if (field.getName().equals("series")) {
+                                OperaVideoType type = (OperaVideoType) commonDao.getResourceAttr(model, object, "type");
+                                OperaSeries series = (OperaSeries) field.get(object);
+                                if (type == OperaVideoType.SERIES && series != null) {
+                                    cacheInsertMap.put("seriesname", series.getTitle());
+                                } else {
+                                    cacheInsertMap.put("seriesname", "");
+                                }
                             } else if (field.getName().equals("authorname")) {
                                 cacheInsertMap.put("authorname", field.get(object).toString());
                                 System.out.println(field.getName() + " -> " + field.get(object));
@@ -73,7 +87,7 @@ public class CacheProtocol {
                                 cacheInsertMap.put("video_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
                                 System.out.println("video_url -> " + field.get(object).toString());
                             } else {
-                                cacheInsertMap.put("music_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString() + ".mp3", QiniuResourceEnum.ENCRYPT));
+                                cacheInsertMap.put("music_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
                                 System.out.println("music_url -> " + field.get(object).toString());
                             }
                         } else {
@@ -81,11 +95,9 @@ public class CacheProtocol {
                         }
                     }
                 }
-                if (model == Video.class) {
-                    cacheInsertMap.put("type", 1 + "");
-                }
-                if (model == Tutorial.class) {
-                    cacheInsertMap.put("type", 0 + "");
+                if (model == DanceVideo.class) {
+                    DanceVideoType type = (DanceVideoType) commonDao.getResourceAttr(model, object, "type");
+                    cacheInsertMap.put("type", type.ordinal() + "");
                 }
                 commonRedisClient.hmset(cachekey, cacheInsertMap);
             }

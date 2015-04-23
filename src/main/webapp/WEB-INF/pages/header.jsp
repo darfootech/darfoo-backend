@@ -52,50 +52,60 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">新建资源 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/darfoobackend/rest/resources/video/new">舞蹈欣赏</a></li>
-                        <li><a href="/darfoobackend/rest/resources/tutorial/new">舞蹈教程</a></li>
-                        <li><a href="/darfoobackend/rest/resources/music/new">舞蹈伴奏</a></li>
-                        <li><a href="/darfoobackend/rest/resources/author/new">明星舞队</a></li>
-                    </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">下载表格 <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/darfoobackend/rest/admin/download/video">下载视频资源表格</a></li>
-                        <li><a href="/darfoobackend/rest/admin/download/tutorial">下载教程资源表格</a></li>
-                        <li><a href="/darfoobackend/rest/admin/download/music">下载伴奏资源表格</a></li>
-                        <li><a href="/darfoobackend/rest/admin/download/resourceclickcount">下载资源点击热度表格</a></li>
-                        <li><a href="/darfoobackend/rest/admin/download/menuclickcount">下载菜单点击热度表格</a></li>
-                        <li><a href="/darfoobackend/rest/admin/download/tabclickcount">下载底部菜单点击热度表格</a></li>
-                        <li><a href="/darfoobackend/rest/admin/download/resourceclicktime">下载资源点击时间表格</a></li>
-                        <li><a href="/darfoobackend/rest/admin/download/menuclicktime">下载菜单点击时间表格</a></li>
-                        <li><a href="/darfoobackend/rest/admin/download/tabclicktime">下载底部菜单点击时间表格</a></li>
-                        <li><a href="/darfoobackend/rest/admin/download/searchhistory">下载用户搜索记录表格</a></li>
-                        <li><a href="/darfoobackend/rest/admin/download/feedback">下载用户反馈表格</a></li>
-                        <li><a href="/darfoobackend/rest/admin/download/crashlog">下载崩溃日志表格</a></li>
+                        <li><a href="/darfoobackend/rest/resources/new/dancevideo">舞蹈视频</a></li>
+                        <li><a href="/darfoobackend/rest/resources/new/dancemusic">舞蹈伴奏</a></li>
+                        <li><a href="/darfoobackend/rest/resources/new/dancegroup">舞蹈舞队</a></li>
+                        <li><a href="/darfoobackend/rest/resources/new/operaseries">越剧连续剧</a></li>
+                        <li><a href="/darfoobackend/rest/resources/new/operavideo">越剧视频</a></li>
+                        <li><a href="/darfoobackend/rest/resources/new/advertise">广告</a></li>
                     </ul>
                 </li>
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">查看和修改资源 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/darfoobackend/rest/admin/gallery/video/all">查看修改舞蹈欣赏</a></li>
-                        <li><a href="/darfoobackend/rest/admin/gallery/tutorial/all">查看修改舞蹈教程</a></li>
-                        <li><a href="/darfoobackend/rest/admin/gallery/music/all">查看修改舞蹈伴奏</a></li>
-                        <li><a href="/darfoobackend/rest/admin/gallery/author/all">查看修改舞队</a></li>
-                        <li><a href="/darfoobackend/rest/admin/author/changetype">切换舞队类型</a></li>
-                        <li><a href="/darfoobackend/rest/admin/connectmusic/video/all">关联舞蹈伴奏和舞蹈视频</a></li>
-                        <li><a href="/darfoobackend/rest/admin/connectmusic/tutorial/all">关联舞蹈伴奏和舞蹈教程</a></li>
+                        <li><a href="/darfoobackend/rest/admin/gallery/dancevideo/all">查看修改舞蹈视频</a></li>
+                        <li><a href="/darfoobackend/rest/admin/gallery/dancemusic/all">查看修改舞蹈伴奏</a></li>
+                        <li><a href="/darfoobackend/rest/admin/gallery/dancegroup/all">查看修改舞队</a></li>
+                        <li><a href="/darfoobackend/rest/admin/gallery/operavideo/all">查看修改越剧视频</a></li>
+                        <li><a href="/darfoobackend/rest/admin/gallery/operaseries/all">查看修改越剧连续剧</a></li>
+                        <li><a href="/darfoobackend/rest/admin/gallery/advertise/all">查看修改广告</a></li>
+                        <li><a href="/darfoobackend/rest/admin/gallery/version/all">查看修改版本发布</a></li>
+                        <li><a href="/darfoobackend/rest/admin/dancegroup/changetype">切换舞队类型</a></li>
+                        <li><a href="/darfoobackend/rest/admin/connectmusic/dancevideo/all">关联舞蹈伴奏和舞蹈视频</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">下载表格 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/darfoobackend/rest/admin/download/dancevideo">下载舞蹈视频资源表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/dancemusic">下载舞蹈伴奏资源表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/dancegroup">下载舞队资源表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/operavideo">下载越剧视频资源表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/operaseries">下载越剧连续剧资源表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/feedback">下载用户反馈表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/stat/resourceclickcount">下载资源点击热度表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/stat/menuclickcount">下载菜单点击热度表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/stat/tabclickcount">下载底部菜单点击热度表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/stat/resourceclicktime">下载资源点击时间表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/stat/menuclicktime">下载菜单点击时间表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/stat/tabclicktime">下载底部菜单点击时间表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/stat/searchhistory">下载用户搜索记录表格</a></li>
+                        <li><a href="/darfoobackend/rest/admin/download/stat/crashlog">下载崩溃日志表格</a></li>
                     </ul>
                 </li>
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">资源推荐 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/darfoobackend/rest/admin/recommend/video">首页推荐舞蹈欣赏</a></li>
-                        <li><a href="/darfoobackend/rest/admin/recommend/tutorial">首页推荐舞蹈教程</a></li>
+                        <li><a href="/darfoobackend/rest/admin/recommend/dancevideo">首页推荐舞蹈欣赏</a></li>
                         <li><a href="/darfoobackend/rest/admin/recommend/updateimage/all">查看修改推荐舞蹈视频图片</a></li>
+                        <li><a href="/darfoobackend/rest/admin/dancegroup/change/hot">推荐热门舞队</a></li>
+                        <li><a href="/darfoobackend/rest/admin/dancegroup/change/priority">推荐明星舞队</a></li>
+                        <li><a href="/darfoobackend/rest/admin/dancemusic/change/hot">推荐热门舞蹈伴奏</a></li>
+                        <li><a href="/darfoobackend/rest/statistics/admin/dance/hotsearch">推荐广场舞热门搜索关键词</a></li>
+                        <li><a href="/darfoobackend/rest/statistics/admin/opera/hotsearch">推荐越剧热门搜索关键词</a></li>
                     </ul>
                 </li>
 
@@ -109,7 +119,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">资源同步 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/darfoobackend/rest/admin/runscript/upload">同步视频音频资源</a></li>
+                        <li><a href="/darfoobackend/rest/cache/admin/refreshcache">刷新缓存资源</a></li>
                         <li><a href="/darfoobackend/rest/admin/runscript/resourcevolumn">查看未同步视频音频容量</a></li>
                     </ul>
                 </li>

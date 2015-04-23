@@ -6,7 +6,7 @@ $(function () {
     var type = $("#type").text();
     var id = $("#id").text();
 
-    $("#update").click(function() {
+    $("#update").click(function () {
         $.ajax({
             type: "POST",
             url: "/darfoobackend/rest/admin/" + type + "/update",
@@ -26,22 +26,30 @@ $(function () {
                 } else if (data == "504") {
                     alert("相同名称的明星舞队已经存在");
                 } else if (data == "505") {
-                    alert("伴奏名字和作者名字组合已存在");
+                    alert("伴奏名字和舞队名字组合已存在");
                 } else if (data == "506") {
                     alert("请保证图片名字带有后缀");
                 } else if (data == "507") {
                     alert("相同名字的图片已经存在了,请修改图片名字");
+                } else if (data == "508") {
+                    alert("要更新的资源的的越剧连续剧不存在，请先完成越剧连续剧信息的创建");
+                } else if (data == "509") {
+                    alert("资源名字和越剧连续剧id组合已存在，不可以进行插入了，是否需要修改");
+                } else if (data == "510") {
+                    alert("相同名字的越剧连续剧已经存在了");
+                } else if (data == "511") {
+                    alert("已经存在同名的越剧电影,不可以进行插入");
                 } else {
                     alert("更新资源信息失败");
                 }
             },
             error: function () {
-                alert("更新作者信息失败");
+                alert("更新资源信息失败");
             }
         });
     });
 
-    $("#kickout").click(function(){
+    $("#kickout").click(function () {
         $.ajax({
             type: "POST",
             url: "/darfoobackend/rest/admin/" + type + "/delete",
@@ -62,33 +70,15 @@ $(function () {
         });
     });
 
-    $("#updateimage").click(function(){
+    $("#updateimage").click(function () {
         window.location.href = "/darfoobackend/rest/admin/" + type + "/updateimage/" + id;
     });
 
-    $.ajax({
-        url: '/darfoobackend/rest/resources/music/all/service',
-        type: 'GET',
-        data: {},
-        success: function (response) {
-            console.log(response);
+    $("#updatevideo").click(function () {
+        window.location.href = "/darfoobackend/rest/admin/" + type + "/updatevideo/" + id;
+    });
 
-            var states = new Bloodhound({
-                datumTokenizer: function (d) {
-                    return Bloodhound.tokenizers.whitespace(d.word);
-                },
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                limit: 4,
-                local: response
-            });
-
-            states.initialize();
-
-            $('input.typeahead-only').typeahead(null, {
-                name: 'states',
-                displayKey: 'word',
-                source: states.ttAdapter()
-            });
-        }
+    $("#updatemusic").click(function () {
+        window.location.href = "/darfoobackend/rest/admin/" + type + "/updatemusic/" + id;
     });
 });

@@ -1,25 +1,20 @@
 package com.darfoo.backend.service;
 
+import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.caches.dao.CacheDao;
 import com.darfoo.backend.caches.dao.CacheUtils;
-import com.darfoo.backend.caches.dao.VideoCacheDao;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.dao.cota.RecommendDao;
-import com.darfoo.backend.dao.resource.AuthorDao;
-import com.darfoo.backend.model.resource.Music;
-import com.darfoo.backend.model.resource.Video;
-import com.darfoo.backend.service.cota.CacheCollType;
-import com.darfoo.backend.service.cota.TypeClassMapping;
-import com.darfoo.backend.service.responsemodel.SingleMusic;
-import com.darfoo.backend.service.responsemodel.SingleVideo;
+import com.darfoo.backend.dao.resource.DanceGroupDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,18 +25,34 @@ import java.util.List;
 @RequestMapping("/cache")
 public class CacheController {
     @Autowired
-    VideoCacheDao videoCacheDao;
-    @Autowired
     CacheDao cacheDao;
     @Autowired
-    AuthorDao authorDao;
+    DanceGroupDao danceGroupDao;
     @Autowired
     CommonDao commonDao;
     @Autowired
-    RecommendDao recommendDao;
-    @Autowired
     CacheUtils cacheUtils;
+    @Autowired
+    CommonRedisClient redisClient;
 
+    //当在dashboard中修改了资源之后需要刷新(清空)redis
+    @RequestMapping(value = "/admin/refreshcache", method = RequestMethod.GET)
+    public String refreshCache(ModelMap modelMap) {
+        if (redisClient.deleteCurrentDB()) {
+            modelMap.put("message", "刷新成功");
+        } else {
+            modelMap.put("message", "刷新失败");
+        }
+        return "refreshcache";
+    }
+
+    /**
+     * 根据id获取某一类资源的单个记录
+     *
+     * @param type
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/{type}/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
@@ -49,23 +60,25 @@ public class CacheController {
         return cacheUtils.cacheSingleResource(type, id);
     }
 
-    @RequestMapping(value = "/video/recommend", method = RequestMethod.GET)
+    /**
+     * 获取首页推荐的舞蹈视频
+     *
+     * @return
+     */
+    @RequestMapping(value = "/{type}/recommend", method = RequestMethod.GET)
     public
     @ResponseBody
-    List cacheRecommendVideos() {
-        String cachekey = "recommend";
-
-        String[] types = {"video", "tutorial"};
-
-        for (String type : types) {
-            Class resource = TypeClassMapping.typeClassMap.get(type);
-            List recommendResources = recommendDao.getRecommendResources(resource);
-            cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, cachekey + type, CacheCollType.LIST);
-        }
-
-        return cacheDao.extractResourcesFromCache(SingleVideo.class, cachekey, CacheCollType.LIST);
+    List cacheRecommendVideos(@PathVariable String type) {
+        return cacheUtils.cacheRecommendResources(type);
     }
 
+    /**
+     * 舞曲大全 所有舞队
+     * 获取所有的舞队(与老版本的launcher兼容)
+     *
+     * @param type
+     * @return
+     */
     @RequestMapping(value = "/{type}/index", method = RequestMethod.GET)
     public
     @ResponseBody
@@ -73,72 +86,255 @@ public class CacheController {
         return cacheUtils.cacheIndexResources(type);
     }
 
-    @RequestMapping(value = "/author/index/page/{page}", method = RequestMethod.GET)
+    /**
+     * index分页
+     *
+     * @param type
+     * @return
+     */
+    @RequestMapping(value = "/{type}/index/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List cacheIndexResourcesByPage(@PathVariable Integer page) {
-        String type = "author";
-        Class resource = TypeClassMapping.typeClassMap.get(type);
-        String cachekey = String.format("%sindexpage%d", type, page);
-
-        List resources = authorDao.getAuthorsOrderByVideoCountDescByPage(page);
-
-        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.LIST);
-        return cacheDao.extractResourcesFromCache(TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.LIST);
+    List cacheIndexResourcesByPage(@PathVariable String type, @PathVariable Integer page) {
+        return cacheUtils.cacheIndexResources(type, page);
     }
 
-    @RequestMapping(value = "/{type}/category/{categories}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/index/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List getResourcesByCategories(@PathVariable String type, @PathVariable String categories) {
-        return cacheUtils.cacheResourcesByCategories(type, categories);
+    List cacheIndexResourcesBySkip(@PathVariable String type, @PathVariable Integer skipnum, @PathVariable Integer returnnum) {
+        return cacheUtils.cacheIndexResources(type, skipnum, returnnum);
     }
 
-    @RequestMapping(value = "/{type}/category/{categories}/page/{page}", method = RequestMethod.GET)
+    /**
+     * 获取最新的资源
+     *
+     * @param type
+     * @return
+     */
+    @RequestMapping(value = "/{type}/newest", method = RequestMethod.GET)
     public
     @ResponseBody
-    List getResourcesByCategoriesByPage(@PathVariable String type, @PathVariable String categories, @PathVariable Integer page) {
-        return cacheUtils.cacheResourcesByCategoriesByPage(type, categories, page);
+    List cacheNewestResources(@PathVariable String type) {
+        return cacheUtils.cacheNewestResources(type);
     }
 
-    @RequestMapping("/{type}/hottest")
+    /**
+     * 获取最新的资源分页
+     *
+     * @param type
+     * @param page
+     * @return
+     */
+    @RequestMapping(value = "/{type}/newest/page/{page}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List cacheNewestResourcesByPage(@PathVariable String type, @PathVariable Integer page) {
+        return cacheUtils.cacheNewestResources(type, page);
+    }
+
+    @RequestMapping(value = "/{type}/newest/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List cacheNewestResourcesBySkip(@PathVariable String type, @PathVariable Integer skipnum, @PathVariable Integer returnnum) {
+        return cacheUtils.cacheNewestResources(type, skipnum, returnnum);
+    }
+
+    @RequestMapping(value = "/{type}/all", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List cacheAllResources(@PathVariable String type) {
+        return cacheUtils.cacheAllResources(type);
+    }
+
+    @RequestMapping(value = "/{type}/all/page/{page}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List cacheAllResourcesByPage(@PathVariable String type, @PathVariable Integer page) {
+        return cacheUtils.cacheAllResources(type, page);
+    }
+
+    @RequestMapping(value = "/{type}/all/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List cacheAllResourcesBySkip(@PathVariable String type, @PathVariable Integer skipnum, @PathVariable Integer returnnum) {
+        return cacheUtils.cacheAllResources(type, skipnum, returnnum);
+    }
+
+    /**
+     * 根据类别获取资源
+     *
+     * @param type
+     * @param category
+     * @return
+     */
+    @RequestMapping(value = "/{type}/category/{category}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List getResourcesByCategories(@PathVariable String type, @PathVariable String category) {
+        return cacheUtils.cacheResourcesByCategory(type, category);
+    }
+
+    /**
+     * 根据类别获取资源分页
+     *
+     * @param type
+     * @param category
+     * @param page
+     * @return
+     */
+    @RequestMapping(value = "/{type}/category/{category}/page/{page}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List getResourcesByCategoriesByPage(@PathVariable String type, @PathVariable String category, @PathVariable Integer page) {
+        return cacheUtils.cacheResourcesByCategory(type, category, page);
+    }
+
+    @RequestMapping(value = "/{type}/category/{category}/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List getResourcesByCategoriesBySkip(@PathVariable String type, @PathVariable String category, @PathVariable Integer skipnum, @PathVariable Integer returnnum) {
+        return cacheUtils.cacheResourcesByCategory(type, category, skipnum, returnnum);
+    }
+
+    /**
+     * 根据子类型获取某一类资源
+     *
+     * @param type
+     * @param innertype
+     * @return
+     */
+    @RequestMapping(value = "/{type}/innertype/{innertype}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List getResourcesByInnertype(@PathVariable String type, @PathVariable String innertype) {
+        return cacheUtils.cacheResourcesByInnertype(type, innertype);
+    }
+
+    /**
+     * 根据子类型获取某一类资源分页
+     *
+     * @param type
+     * @param innertype
+     * @return
+     */
+    @RequestMapping(value = "/{type}/innertype/{innertype}/page/{page}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List getResourcesByInnertypeByPage(@PathVariable String type, @PathVariable String innertype, @PathVariable Integer page) {
+        return cacheUtils.cacheResourcesByInnertype(type, innertype, page);
+    }
+
+    @RequestMapping(value = "/{type}/innertype/{innertype}/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List getResourcesByInnertypeBySkip(@PathVariable String type, @PathVariable String innertype, @PathVariable Integer skipnum, @PathVariable Integer returnnum) {
+        return cacheUtils.cacheResourcesByInnertype(type, innertype, skipnum, returnnum);
+    }
+
+    /**
+     * 获取热门资源 暂时只有热门舞队
+     *
+     * @param type
+     * @return
+     */
+    @RequestMapping(value = "/{type}/hot", method = RequestMethod.GET)
     public
     @ResponseBody
     List getHottestResources(@PathVariable String type) {
-        return cacheUtils.cacheHottestResources(type);
+        return cacheUtils.cacheHotResources(type);
     }
 
-    @RequestMapping(value = "/video/getmusic/{id}", method = RequestMethod.GET)
+    /**
+     * 获取热门资源 分页 暂时只有热门舞队
+     *
+     * @param type
+     * @return
+     */
+    @RequestMapping(value = "/{type}/hot/page/{page}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List getHottestResourcesByPage(@PathVariable String type, @PathVariable Integer page) {
+        return cacheUtils.cacheHotResources(type, page);
+    }
+
+    @RequestMapping(value = "/{type}/hot/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List getHottestResourcesBySkip(@PathVariable String type, @PathVariable Integer skipnum, @PathVariable Integer returnnum) {
+        return cacheUtils.cacheHotResources(type, skipnum, returnnum);
+    }
+
+    /**
+     * 根据舞蹈视频获取对应的舞队伴奏
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/dancevideo/getdancemusic/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
     Object getMusicByVideoId(@PathVariable Integer id) {
-        String type = "music";
-        Class resource = TypeClassMapping.typeClassMap.get(type);
-        Music targetMusic = ((Video) commonDao.getResourceById(Video.class, id)).getMusic();
-        if (targetMusic != null) {
-            int music_id = targetMusic.getId();
-            videoCacheDao.insertMusic(id, music_id);
-            Object object = commonDao.getResourceById(resource, music_id);
-            cacheDao.insertSingleResource(resource, object, type);
-            return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), type);
-        } else {
-            return new SingleMusic(-1, "", "", "", 0L);
+        return cacheUtils.cacheDanceMusicForDanceVideo(id);
+    }
+
+    /**
+     * 获取某一个舞队下的所有舞蹈视频
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/{type}/videos/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public List getVideoListForDanceGroup(@PathVariable String type, @PathVariable Integer id) {
+        if (type.equals("dancegroup")) {
+            return cacheUtils.cacheDanceGroupVideos(id);
         }
+        if (type.equals("operaseries")) {
+            return cacheUtils.cacheOperaSeriesVideos(id);
+        }
+        return new ArrayList();
     }
 
-    @RequestMapping(value = "/author/videos/{id}", method = RequestMethod.GET)
+    /**
+     * 获取某一个舞队下的所有舞蹈视频分页
+     *
+     * @param id
+     * @param page
+     * @return
+     */
+    @RequestMapping(value = "/{type}/videos/{id}/page/{page}", method = RequestMethod.GET)
     @ResponseBody
-    public List getVideoListForAuthor(@PathVariable Integer id) {
-        return cacheUtils.cacheAuthorVideos(id);
+    public List getVideoListForDanceGroupByPage(@PathVariable String type, @PathVariable Integer id, @PathVariable Integer page) {
+        if (type.equals("dancegroup")) {
+            return cacheUtils.cacheDanceGroupVideos(id, page);
+        }
+        if (type.equals("operaseries")) {
+            return cacheUtils.cacheOperaSeriesVideos(id, page);
+        }
+        return new ArrayList();
     }
 
-    @RequestMapping(value = "/author/videos/{id}/page/{page}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/videos/{id}/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
     @ResponseBody
-    public List getVideoListForAuthorByPage(@PathVariable Integer id, @PathVariable Integer page) {
-        return cacheUtils.cacheAuthorVideos(id, page);
+    public List getVideoListForDanceGroupBySkip(@PathVariable String type, @PathVariable Integer id, @PathVariable Integer skipnum, @PathVariable Integer returnnum) {
+        if (type.equals("dancegroup")) {
+            return cacheUtils.cacheDanceGroupVideos(id, skipnum, returnnum);
+        }
+        if (type.equals("operaseries")) {
+            return cacheUtils.cacheOperaSeriesVideos(id, skipnum, returnnum);
+        }
+        return new ArrayList();
     }
 
-    //http://localhost:8080/darfoobackend/rest/cache/{type}/search?search=s
+    /**
+     * 搜索内容
+     *
+     * @param type
+     * @param request
+     * @return
+     * @example http://localhost:8080/darfoobackend/rest/cache/{type}/search?search=s
+     */
     @RequestMapping(value = "/{type}/search", method = RequestMethod.GET)
     public
     @ResponseBody
@@ -149,6 +345,14 @@ public class CacheController {
         return cacheUtils.cacheResourcesBySearch(type, searchContent);
     }
 
+    /**
+     * 搜索内容分页
+     *
+     * @param type
+     * @param page
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/{type}/search/page/{page}", method = RequestMethod.GET)
     public
     @ResponseBody
@@ -159,10 +363,34 @@ public class CacheController {
         return cacheUtils.cacheResourcesBySearch(type, searchContent, page);
     }
 
+    @RequestMapping(value = "/{type}/search/skip/{skipnum}/return/{returnnum}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List searchResourceBySkip(@PathVariable String type, @PathVariable Integer skipnum, @PathVariable Integer returnnum, HttpServletRequest request) {
+        String searchContent = request.getParameter("search");
+        System.out.println(searchContent);
+
+        return cacheUtils.cacheResourcesBySearch(type, searchContent, skipnum, returnnum);
+    }
+
+    /**
+     * 获取播放界面侧边资源列表
+     *
+     * @param type
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/{type}/sidebar/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
     List getSidebarResources(@PathVariable String type, @PathVariable Integer id) {
         return cacheUtils.cacheSidebarResources(type, id);
+    }
+
+    @RequestMapping(value = "/{type}/hotsearch", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List getHotSearchKeyWords(@PathVariable String type) {
+        return cacheUtils.cacheHotSearchKeyWords(type);
     }
 }

@@ -1,7 +1,7 @@
 package com.darfoo.backend.model.statistics.clicktime;
 
-import com.darfoo.backend.model.cota.CSVTitle;
-import com.darfoo.backend.model.cota.ModelAttrSuper;
+import com.darfoo.backend.model.cota.annotations.CSVTitle;
+import com.darfoo.backend.model.cota.annotations.ModelAttrSuper;
 
 /**
  * Created by zjh on 15-3-3.
@@ -27,4 +27,8 @@ public class CommonClickTime {
     @ModelAttrSuper
     @CSVTitle(title = "日期")
     public String date;
+
+    @ModelAttrSuper
+    @CSVTitle(title = "资源名称")
+    public String title;
 }
