@@ -267,6 +267,10 @@ public class InsertDao {
                     resultMap.put("insertid", -1);
                     return resultMap;
                 }
+            } else if (key.equals("order")) {
+                if (insertcontents.get(key) != null) {
+                    commonDao.setResourceAttr(resource, object, key, Integer.parseInt(insertcontents.get(key)));
+                }
             } else {
                 System.out.println("wired");
             }

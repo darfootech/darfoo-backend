@@ -3,10 +3,11 @@
 
 <script>
     $(function () {
+        var type = $("#type").text();
         $("#update").click(function () {
             $.ajax({
                 type: "POST",
-                url: "/darfoobackend/rest/admin/operavideo/updateorder",
+                url: "/darfoobackend/rest/admin/" + type + "/updateorder",
                 data: $("#updateresourceform").serialize(),
                 success: function (data) {
                     if (data == "200") {
@@ -22,9 +23,11 @@
     });
 </script>
 
+<div id="type" style="display: none">${type}</div>
+
 <div class="container">
-    <h1>设置越剧连续剧关联越剧视频的显示顺序</h1>
-    <h6>总共有${resources.size()}个越剧视频</h6>
+    <h1>${title}</h1>
+    <h6>总共有${resources.size()}个资源</h6>
 
     <div class="row">
         <div class="col-md-12">
@@ -39,11 +42,19 @@
                             </a>
 
                             <div class="form-group">
-                                <label for="order-${resource.id}">选择越剧视频在越剧连续剧中的顺序</label>
+                                <label for="order-${resource.id}">选择显示的顺序,数字越小在平板上就会显示在越前面</label>
+                                    ${resource.order}
                                 <select data-toggle="select" name="order-${resource.id}" id="order-${resource.id}"
-                                        class="form-control select select-success mrs mbm">
+                                        class="form-control select select-default mrs mbm">
                                     <c:forEach var="order" items="${orders}">
-                                        <option value="${order}">${order}</option>
+                                        <c:choose>
+                                            <c:when test="${order == resource.order}">
+                                                <option value="${order}" selected="selected">${order}</option>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <option value="${order}">${order}</option>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -51,7 +62,7 @@
                         </c:forEach>
                     </ul>
                 </c:if>
-                <button type="button" class="btn btn-default" id="update">更新越剧连续剧中视频顺序</button>
+                <button type="button" class="btn btn-default" id="update">更新资源显示顺序</button>
             </form>
         </div>
     </div>

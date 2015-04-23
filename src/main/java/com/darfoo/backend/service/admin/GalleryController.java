@@ -5,8 +5,10 @@ import com.darfoo.backend.model.Advertise;
 import com.darfoo.backend.model.Version;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
+import com.darfoo.backend.model.cota.enums.DanceGroupType;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
 import com.darfoo.backend.model.cota.enums.OperaVideoType;
+import com.darfoo.backend.model.cota.enums.ResourcePriority;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
@@ -219,7 +221,7 @@ public class GalleryController {
 
     //设置越剧连续剧中的越剧电影的顺序
     @RequestMapping(value = "/admin/{type}/videos/order/{id}", method = RequestMethod.GET)
-    public String setVideosOrder(@PathVariable String type, @PathVariable Integer id, ModelMap modelMap) {
+    public String setResourceVideosOrder(@PathVariable String type, @PathVariable Integer id, ModelMap modelMap) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         if (type.equals("operaseries")) {
             conditions.put("series_id", id);
@@ -231,8 +233,31 @@ public class GalleryController {
             modelMap.addAttribute("resources", videos);
             modelMap.addAttribute("type", "operavideo");
             modelMap.addAttribute("orders", orders);
-            return "update/setoperavideoorder";
+            modelMap.addAttribute("title", "设置越剧连续剧关联越剧视频的显示顺序");
+            return "update/setresourceorder";
         }
         return "fail";
+    }
+
+    @RequestMapping(value = "/admin/{type}/set/order", method = RequestMethod.GET)
+    public String setResourceOrder(@PathVariable String type, ModelMap modelMap) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        if (resource == DanceGroup.class) {
+            conditions.put("priority", ResourcePriority.ISPRIORITY);
+        }
+        if (conditions.isEmpty()) {
+            return "fail";
+        }
+        List resources = commonDao.getResourcesByFieldsByOrder(resource, conditions, Order.asc("order"));
+        List<Integer> orders = new ArrayList<Integer>();
+        for (int i = 0; i < resources.size(); i++) {
+            orders.add(i + 1);
+        }
+        modelMap.addAttribute("resources", resources);
+        modelMap.addAttribute("type", type);
+        modelMap.addAttribute("orders", orders);
+        modelMap.addAttribute("title", String.format("设置%s的现实顺序", TypeClassMapping.typeNameLiteralMap.get(type)));
+        return "update/setresourceorder";
     }
 }

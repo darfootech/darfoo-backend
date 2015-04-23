@@ -312,6 +312,10 @@ public class UpdateDao {
                             commonDao.setResourceAttr(resource, object, "image", new Image(imagekey));
                         }
                     }
+                } else if (key.equals("order")) {
+                    if (updatecontents.get(key) != null) {
+                        commonDao.setResourceAttr(resource, object, key, Integer.parseInt(updatecontents.get(key)));
+                    }
                 }
             }
             session.saveOrUpdate(object);
