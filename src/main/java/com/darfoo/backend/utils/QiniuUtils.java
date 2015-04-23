@@ -48,7 +48,7 @@ public class QiniuUtils {
 
     //key就是七牛云上的文件名字
     //根据type来判断资源链接是否需要加密 暂时图片资源链接不需要加密
-    public String getQiniuResourceUrl(String key, QiniuResourceEnum type) {
+    public String getQiniuResourceUrl(String key, QiniuResourceEnum type, Integer... options) {
         Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
         try {
             //domain在空间设置里可以看到，每一个bucket都对应有一个域名
@@ -63,9 +63,14 @@ public class QiniuUtils {
                 return CryptUtils.encryptQiniuUrl(downloadUrl);
             } else if (type == QiniuResourceEnum.RAW) {
                 //缩小图片
-                String baseUrlSmall = String.format("%s?imageView2/2/w/230/h/126", baseUrl);
-                System.out.println(baseUrlSmall);
-                return getPolicy.makeRequest(baseUrlSmall, mac);
+                if (options[0] == 3) {
+                    System.out.println(baseUrl);
+                    return getPolicy.makeRequest(baseUrl, mac);
+                }else {
+                    String baseUrlSmall = String.format("%s?imageView2/2/w/230/h/126", baseUrl);
+                    System.out.println(baseUrlSmall);
+                    return getPolicy.makeRequest(baseUrlSmall, mac);
+                }
             } else {
                 System.out.println("wired");
                 return "";
