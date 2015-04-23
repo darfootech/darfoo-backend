@@ -5,7 +5,6 @@ import com.darfoo.backend.model.Advertise;
 import com.darfoo.backend.model.Version;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
-import com.darfoo.backend.model.cota.enums.DanceGroupType;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
 import com.darfoo.backend.model.cota.enums.OperaVideoType;
 import com.darfoo.backend.model.cota.enums.ResourcePriority;

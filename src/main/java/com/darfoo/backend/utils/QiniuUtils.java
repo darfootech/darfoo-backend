@@ -66,7 +66,7 @@ public class QiniuUtils {
                 if (key.contains("recommend")) {
                     System.out.println(baseUrl);
                     return getPolicy.makeRequest(baseUrl, mac);
-                }else {
+                } else {
                     String baseUrlSmall = String.format("%s?imageView2/2/w/230/h/126", baseUrl);
                     System.out.println(baseUrlSmall);
                     return getPolicy.makeRequest(baseUrlSmall, mac);
