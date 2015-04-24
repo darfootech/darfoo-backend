@@ -37,7 +37,7 @@ public class VersionController {
         Map<String, Object> result = new HashMap<String, Object>();
         try {
             Version version = versionDao.getLatestVersion(Version.class, type);
-            String version_download_url = qiniuUtils.getQiniuResourceUrl(String.format("launcher-%s-%s.apk", version.getVersion(), type), QiniuResourceEnum.RAW);
+            String version_download_url = qiniuUtils.getQiniuResourceUrl(String.format("launcher-%s-%s.apk", version.getVersion(), type), QiniuResourceEnum.RAWNORMAL);
             result.put("version", version.getVersion());
             result.put("version_url", version_download_url);
             return result;

@@ -47,9 +47,9 @@ public class DanceGroupDaoTests {
     @Test
     public void getAuthorByName() {
         String name = "T-ara";
-        DanceGroup a = (DanceGroup) commonDao.getResourceByTitleOrName(DanceGroup.class, name, "name");
+        DanceGroup a = (DanceGroup) commonDao.getResourceByTitle(DanceGroup.class, name);
         if (a != null)
-            System.out.println(a.getName());
+            System.out.println(a.getTitle());
         else
             System.out.println("无该author记录");
     }
@@ -83,7 +83,7 @@ public class DanceGroupDaoTests {
         int aid = 2;
 
         DanceGroup author = (DanceGroup) commonDao.getResourceById(DanceGroup.class, aid);
-        String authorname = author.getName();
+        String authorname = author.getTitle();
 
         List<SingleDanceVideo> result = new ArrayList<SingleDanceVideo>();
 
@@ -94,8 +94,8 @@ public class DanceGroupDaoTests {
 
         for (DanceVideo video : videos) {
             int tid = video.getId();
-            String tutorial_download_url = qiniuUtils.getQiniuResourceUrl(video.getVideo_key(), QiniuResourceEnum.RAW);
-            String image_download_url = qiniuUtils.getQiniuResourceUrl(video.getImage().getImage_key(), QiniuResourceEnum.RAW);
+            String tutorial_download_url = qiniuUtils.getQiniuResourceUrl(video.getVideo_key(), QiniuResourceEnum.RAWNORMAL);
+            String image_download_url = qiniuUtils.getQiniuResourceUrl(video.getImage().getImage_key(), QiniuResourceEnum.RAWNORMAL);
             String title = video.getTitle();
             long timestamp = video.getUpdate_timestamp();
             result.add(new SingleDanceVideo(tid, title, authorname, tutorial_download_url, image_download_url, 0, timestamp));
@@ -112,7 +112,7 @@ public class DanceGroupDaoTests {
     public void getDanceGroupsOrderByVideoCountDesc() {
         List<DanceGroup> result = authorDao.getDanceGroupsOrderByVideoCountDesc();
         for (DanceGroup author : result) {
-            System.out.println(String.format("%d -> %s", author.getId(), author.getName()));
+            System.out.println(String.format("%d -> %s", author.getId(), author.getTitle()));
         }
         System.out.println("result size -> " + result.size());
     }
@@ -129,7 +129,7 @@ public class DanceGroupDaoTests {
         List<DanceGroup> authors = commonDao.getResourcesByHottest(DanceGroup.class, number);
         System.out.println("---------返回" + authors.size() + "个视频---------");
         for (DanceGroup a : authors) {
-            System.out.println(a.getName());
+            System.out.println(a.getTitle());
             System.out.println("热度值---->" + a.getHottest());
             System.out.println("---------------------------");
         }
