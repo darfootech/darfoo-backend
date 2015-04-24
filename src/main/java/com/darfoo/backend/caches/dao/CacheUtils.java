@@ -20,7 +20,6 @@ import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.SingleDanceMusic;
 import com.darfoo.backend.service.responsemodel.SingleDanceVideo;
-import com.darfoo.backend.service.responsemodel.SingleOperaVideo;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -52,22 +51,31 @@ public class CacheUtils {
     StatisticsCacheDao statisticsCacheDao;
 
     public void insertWithPagination(Class resource, List resources, String cachekey, String prefix, CacheCollType cacheCollType, Integer... pageArray) {
+        int start = 0;
+        int end = 0;
         if (pageArray.length == 0) {
             cacheDao.insertResourcesIntoCache(resource, resources, cachekey, prefix, cacheCollType);
         } else if (pageArray.length == 1) {
             int page = pageArray[0];
             int pageSize = limitDao.getResourceLimitSize(resource, PageSize.class);
-            int start = (page - 1) * pageSize;
-            int end = page * pageSize - 1;
-            cacheDao.insertResourcesIntoCache(resource, resources.subList(start, end), cachekey, prefix, cacheCollType);
+            start = (page - 1) * pageSize;
+            end = page * pageSize - 1;
         } else if (pageArray.length == 2) {
             int skipNum = pageArray[0];
             int returnNum = pageArray[1];
-            int start = skipNum;
-            int end = skipNum + returnNum - 1;
-            cacheDao.insertResourcesIntoCache(resource, resources.subList(start, end), cachekey, prefix, cacheCollType);
+            start = skipNum;
+            end = skipNum + returnNum - 1;
         } else {
             System.out.println("wired");
+        }
+
+        int maxsize = resources.size();
+        if (start > resources.size()) {
+            cacheDao.insertResourcesIntoCache(resource, new ArrayList(), cachekey, prefix, cacheCollType);
+        } else if (end + 1 > resources.size()) {
+            cacheDao.insertResourcesIntoCache(resource, resources.subList(start, maxsize), cachekey, prefix, cacheCollType);
+        } else {
+            cacheDao.insertResourcesIntoCache(resource, resources.subList(start, end + 1), cachekey, prefix, cacheCollType);
         }
     }
 
