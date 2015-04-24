@@ -94,7 +94,7 @@ public class InsertDao {
                 }
             } else if (key.equals("authorname")) {
                 String authorname = insertcontents.get(key);
-                criteria = session.createCriteria(DanceGroup.class).add(Restrictions.eq("name", authorname));
+                criteria = session.createCriteria(DanceGroup.class).add(Restrictions.eq("title", authorname));
                 if (criteria.list().size() == 1) {
                     commonDao.setResourceAttr(resource, object, "author", criteria.uniqueResult());
                 } else {

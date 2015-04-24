@@ -46,10 +46,6 @@ public class StatisticsDao {
                 if (fieldname.equals("date")) {
                     doc.append(fieldname, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 }
-                //dancegroup是name字段没有title字段
-                if (fieldname.equals("name")) {
-                    doc.append("title", conditions.get("title"));
-                }
             }
         }
         return doc;

@@ -60,12 +60,8 @@ public class StatisticsController {
             conditions.put("type", type);
             conditions.put("resourceid", id);
             Class clazz = TypeClassMapping.typeClassMap.get(type);
-            if (type.equals("dancegroup")) {
-                //dancegroup doesn't have 'title',only 'name'
-                conditions.put("title", commonDao.getResourceAttr(clazz, commonDao.getResourceById(clazz, id), "name"));
-            } else {
-                conditions.put("title", commonDao.getResourceAttr(clazz, commonDao.getResourceById(clazz, id), "title"));
-            }
+            conditions.put("title", commonDao.getResourceAttr(clazz, commonDao.getResourceById(clazz, id), "title"));
+
             statisticsDao.insertTimeBehavior(ResourceClickTime.class, conditions);
             statisticsDao.insertOrUpdateClickBehavior(ResourceClickCount.class, conditions);
 
