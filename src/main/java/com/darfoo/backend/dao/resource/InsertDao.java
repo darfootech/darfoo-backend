@@ -59,7 +59,7 @@ public class InsertDao {
                 if (!title.equals("")) {
                     String authorname = insertcontents.get("authorname");
 
-                    DanceGroup author = (DanceGroup) commonDao.getResourceByTitleOrName(DanceGroup.class, authorname, "name");
+                    DanceGroup author = (DanceGroup) commonDao.getResourceByTitle(DanceGroup.class, authorname);
 
                     if (author == null) {
                         System.out.println("舞队还不存在");
@@ -94,7 +94,7 @@ public class InsertDao {
                 }
             } else if (key.equals("authorname")) {
                 String authorname = insertcontents.get(key);
-                criteria = session.createCriteria(DanceGroup.class).add(Restrictions.eq("name", authorname));
+                criteria = session.createCriteria(DanceGroup.class).add(Restrictions.eq("title", authorname));
                 if (criteria.list().size() == 1) {
                     commonDao.setResourceAttr(resource, object, "author", criteria.uniqueResult());
                 } else {
@@ -236,10 +236,10 @@ public class InsertDao {
         Object object = resource.newInstance();
 
         for (String key : insertcontents.keySet()) {
-            if (key.equals("name")) {
+            if (key.equals("title")) {
                 String name = insertcontents.get(key);
                 if (!name.equals("")) {
-                    if (commonDao.isResourceExistsByField(DanceGroup.class, "name", name)) {
+                    if (commonDao.isResourceExistsByField(resource, key, name)) {
                         System.out.println("相同名字明星舞队已存在，不能创建新明星舞队");
                         resultMap.put("statuscode", 506);
                         resultMap.put("insertid", -1);
@@ -305,7 +305,7 @@ public class InsertDao {
                     if (type == OperaVideoType.SERIES) {
                         String seriesname = insertcontents.get("seriesname");
 
-                        OperaSeries series = (OperaSeries) commonDao.getResourceByTitleOrName(OperaSeries.class, seriesname, "title");
+                        OperaSeries series = (OperaSeries) commonDao.getResourceByTitle(OperaSeries.class, seriesname);
 
                         if (series == null) {
                             System.out.println("越剧连续剧还不存在");

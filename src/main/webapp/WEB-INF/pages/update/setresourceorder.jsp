@@ -37,14 +37,7 @@
                         <c:forEach var="resource" items="${resources}">
                             <a style="color: #FFF" href="/darfoobackend/rest/admin/${type}/${resource.id}">
                                 <button type="button" id="${resource.id}" class="btn btn-primary btn-lg btn-block">
-                                    <c:choose>
-                                        <c:when test="${type == 'dancegroup'}">
-                                            ${resource.name}
-                                        </c:when>
-                                        <c:otherwise>
-                                            ${resource.title}
-                                        </c:otherwise>
-                                    </c:choose>
+                                        ${resource.title}
                                 </button>
                             </a>
 

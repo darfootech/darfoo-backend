@@ -37,7 +37,7 @@ public class DanceGroup implements Serializable {
     @ModelInsert
     @ModelUpdate
     @CSVTitle(title = "舞队名字")
-    String name;
+    String title;
 
     @Column(name = "DESCRIPTION", nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
@@ -98,12 +98,12 @@ public class DanceGroup implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -149,7 +149,7 @@ public class DanceGroup implements Serializable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(this.getId() + " " + this.getName() + " " + this.getDescription() + " " + this.getImage().getImage_key());
+        sb.append(this.getId() + " " + this.getTitle() + " " + this.getDescription() + " " + this.getImage().getImage_key());
         return sb.toString();
     }
 }

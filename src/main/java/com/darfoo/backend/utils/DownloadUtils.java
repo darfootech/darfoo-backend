@@ -102,7 +102,7 @@ public class DownloadUtils {
                     if (attr.equals("author")) {
                         DanceGroup danceGroup = (DanceGroup) commonDao.getResourceAttr(resource, object, attr);
                         if (danceGroup != null) {
-                            value = danceGroup.getName();
+                            value = danceGroup.getTitle();
                         } else {
                             value = "未关联舞队";
                         }
@@ -181,18 +181,16 @@ public class DownloadUtils {
      * @param id
      */
     public void writeVideosOfResourceToCSV(Class resource, Integer id) {
-        String name = "";
+        String name = (String) commonDao.getResourceAttr(resource, commonDao.getResourceById(resource, id), "title");
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         Class videoClass = null;
 
         if (resource == DanceGroup.class) {
-            name = (String) commonDao.getResourceAttr(resource, commonDao.getResourceById(resource, id), "name");
             conditions.put("author_id", id);
             videoClass = DanceVideo.class;
         }
 
         if (resource == OperaSeries.class) {
-            name = (String) commonDao.getResourceAttr(resource, commonDao.getResourceById(resource, id), "title");
             conditions.put("series_id", id);
             videoClass = OperaVideo.class;
         }

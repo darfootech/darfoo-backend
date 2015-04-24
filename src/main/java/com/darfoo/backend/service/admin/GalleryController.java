@@ -76,7 +76,7 @@ public class GalleryController {
         } else if (resource == UploadNoAuthVideo.class) {
             String videokey = commonDao.getResourceAttr(resource, object, "video_key").toString();
             modelMap.addAttribute("video", object);
-            modelMap.addAttribute("videourl", qiniuUtils.getQiniuResourceUrl(videokey, QiniuResourceEnum.RAW));
+            modelMap.addAttribute("videourl", qiniuUtils.getQiniuResourceUrl(videokey, QiniuResourceEnum.RAWNORMAL));
         } else {
             System.out.println("wired");
         }
@@ -107,7 +107,7 @@ public class GalleryController {
 
         if (resource == DanceMusic.class) {
             String musickey = commonDao.getResourceAttr(resource, object, "music_key").toString();
-            modelMap.addAttribute("musicurl", qiniuUtils.getQiniuResourceUrl(musickey, QiniuResourceEnum.RAW));
+            modelMap.addAttribute("musicurl", qiniuUtils.getQiniuResourceUrl(musickey, QiniuResourceEnum.RAWNORMAL));
             modelMap.addAttribute("music", object);
         }
 
@@ -136,7 +136,7 @@ public class GalleryController {
     public ModelMap putImageToModelMap(Class resource, Object object, ModelMap modelMap) {
         Image image = (Image) commonDao.getResourceAttr(resource, object, "image");
         if (image != null) {
-            modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(image.getImage_key(), QiniuResourceEnum.RAW));
+            modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(image.getImage_key(), QiniuResourceEnum.RAWNORMAL));
             if (image.getImage_key().equals("")) {
                 modelMap.addAttribute("updateauthorimage", 1);
             }
@@ -151,8 +151,8 @@ public class GalleryController {
         modelMap.addAttribute("innertype", commonDao.getResourceAttr(resource, object, "type"));
         String videokey = commonDao.getResourceAttr(resource, object, "video_key").toString();
         String imagekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
-        modelMap.addAttribute("videourl", qiniuUtils.getQiniuResourceUrl(videokey, QiniuResourceEnum.RAW));
-        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(imagekey, QiniuResourceEnum.RAW));
+        modelMap.addAttribute("videourl", qiniuUtils.getQiniuResourceUrl(videokey, QiniuResourceEnum.RAWNORMAL));
+        modelMap.addAttribute("imageurl", qiniuUtils.getQiniuResourceUrl(imagekey, QiniuResourceEnum.RAWNORMAL));
         return modelMap;
     }
 

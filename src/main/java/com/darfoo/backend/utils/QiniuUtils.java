@@ -61,16 +61,15 @@ public class QiniuUtils {
                 System.out.println(baseUrl);
                 String downloadUrl = getPolicy.makeRequest(baseUrl, mac);
                 return CryptUtils.encryptQiniuUrl(downloadUrl);
-            } else if (type == QiniuResourceEnum.RAW) {
+            } else if (type == QiniuResourceEnum.RAWNORMAL) {
+                System.out.println(baseUrl);
+                return getPolicy.makeRequest(baseUrl, mac);
+            } else if (type == QiniuResourceEnum.RAWSMALL) {
                 //缩小图片
-                if (key.contains("recommend")) {
-                    System.out.println(baseUrl);
-                    return getPolicy.makeRequest(baseUrl, mac);
-                } else {
-                    String baseUrlSmall = String.format("%s?imageView2/2/w/230/h/126", baseUrl);
-                    System.out.println(baseUrlSmall);
-                    return getPolicy.makeRequest(baseUrlSmall, mac);
-                }
+                //首页推荐的图片和后台查看的视频就不要缩小了
+                String baseUrlSmall = String.format("%s?imageView2/2/w/230/h/126", baseUrl);
+                System.out.println(baseUrlSmall);
+                return getPolicy.makeRequest(baseUrlSmall, mac);
             } else {
                 System.out.println("wired");
                 return "";

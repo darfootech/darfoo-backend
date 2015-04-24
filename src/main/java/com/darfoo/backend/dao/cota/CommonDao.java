@@ -458,18 +458,13 @@ public class CommonDao {
      * 根据name或者title字段的值获取资源实例
      *
      * @param resource
-     * @param titlename
-     * @param type
+     * @param title
      * @return
      */
-    public Object getResourceByTitleOrName(Class resource, String titlename, String type) {
+    public Object getResourceByTitle(Class resource, String title) {
         try {
             Criteria criteria = getCommonQueryCriteria(resource);
-            if (type.equals("title")) {
-                criteria.add(Restrictions.eq("title", titlename));
-            } else if (type.equals("name")) {
-                criteria.add(Restrictions.eq("name", titlename));
-            }
+            criteria.add(Restrictions.eq("title", title));
             return criteria.uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
@@ -497,13 +492,8 @@ public class CommonDao {
             System.out.println("匹配>>>>" + sb.toString());
             Criteria criteria = getCommonQueryCriteria(resource)
                     .setProjection(Projections.property("id"));
-            if (ifHasCategoryResource(resource) || resource == OperaVideo.class) {
-                criteria.add(Restrictions.like("title", sb.toString(), MatchMode.ANYWHERE));
-            } else if (resource == DanceGroup.class) {
-                criteria.add(Restrictions.like("name", sb.toString(), MatchMode.ANYWHERE));
-            } else {
-                System.out.println("something is bad");
-            }
+            criteria.add(Restrictions.like("title", sb.toString(), MatchMode.ANYWHERE));
+
             List<Integer> l_id = criteria.list();
             if (l_id.size() > 0) {
                 criteria = getCommonQueryCriteria(resource)

@@ -5,16 +5,16 @@ package com.darfoo.backend.service.responsemodel;
  */
 public class SingleDanceGroup {
     Integer id;
-    String name;
+    String title;
     String description;
     String image_url;
 
     public SingleDanceGroup() {
     }
 
-    public SingleDanceGroup(Integer id, String name, String description, String image_url) {
+    public SingleDanceGroup(Integer id, String title, String description, String image_url) {
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.description = description;
         this.image_url = image_url;
     }
@@ -43,19 +43,19 @@ public class SingleDanceGroup {
         this.image_url = image_url;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override
     public String toString() {
         return "SingleDanceGroup{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", image_url='" + image_url + '\'' +
                 '}';

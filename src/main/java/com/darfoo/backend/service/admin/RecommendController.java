@@ -84,7 +84,7 @@ public class RecommendController {
         Object object = commonDao.getResourceById(resource, id);
         String imagekey = String.format("%s@@recommend%s.png", commonDao.getResourceAttr(resource, object, "video_key"), resource.getSimpleName().toLowerCase());
         session.setAttribute("imagekey", imagekey);
-        String imageurl = qiniuUtils.getQiniuResourceUrl(imagekey, QiniuResourceEnum.RAW);
+        String imageurl = qiniuUtils.getQiniuResourceUrl(imagekey, QiniuResourceEnum.RAWNORMAL);
         modelMap.addAttribute("resource", object);
         modelMap.addAttribute("imageurl", imageurl);
         return "recommend/updaterecommendresourceimage";

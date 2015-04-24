@@ -2,6 +2,7 @@ package com.darfoo.backend.caches.cota;
 
 import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.Advertise;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
 import com.darfoo.backend.model.cota.enums.OperaVideoType;
 import com.darfoo.backend.model.resource.Image;
@@ -48,8 +49,8 @@ public class CacheProtocol {
                             if (field.getName().equals("author")) {
                                 DanceGroup author = (DanceGroup) field.get(object);
                                 if (author != null) {
-                                    System.out.println(field.getName() + " -> " + author.getName());
-                                    cacheInsertMap.put("authorname", author.getName());
+                                    System.out.println(field.getName() + " -> " + author.getTitle());
+                                    cacheInsertMap.put("authorname", author.getTitle());
                                 } else {
                                     cacheInsertMap.put("authorname", "");
                                 }
@@ -76,9 +77,13 @@ public class CacheProtocol {
                                 String image_download_url = "";
                                 if (image != null) {
                                     if (prefix.contains("recommend")) {
-                                        image_download_url = qiniuUtils.getQiniuResourceUrl(commonDao.getResourceAttr(model, object, "video_key") + "@@recommend" + model.getSimpleName().toLowerCase() + ".png", QiniuResourceEnum.RAW);
+                                        image_download_url = qiniuUtils.getQiniuResourceUrl(commonDao.getResourceAttr(model, object, "video_key") + "@@recommend" + model.getSimpleName().toLowerCase() + ".png", QiniuResourceEnum.RAWNORMAL);
                                     } else {
-                                        image_download_url = qiniuUtils.getQiniuResourceUrl(image.getImage_key(), QiniuResourceEnum.RAW);
+                                        if (model == Advertise.class) {
+                                            image_download_url = qiniuUtils.getQiniuResourceUrl(image.getImage_key(), QiniuResourceEnum.RAWNORMAL);
+                                        } else {
+                                            image_download_url = qiniuUtils.getQiniuResourceUrl(image.getImage_key(), QiniuResourceEnum.RAWSMALL);
+                                        }
                                     }
                                 }
                                 cacheInsertMap.put("image_url", image_download_url);

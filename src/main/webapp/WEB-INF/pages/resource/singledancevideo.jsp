@@ -14,7 +14,7 @@
     });
 </script>
 
-<div id="oldauthorname" style="display: none">${video.author.name}</div>
+<div id="oldauthorname" style="display: none">${video.author.title}</div>
 
 <div class="container">
     <h1>查看与修改舞蹈视频信息</h1>
@@ -33,12 +33,12 @@
 
                 <div class="form-group">
                     <label for="authorname">关联的明星舞队---
-                        <div style="color: green; display: inline; font-size: 18pt">原本为${video.author.name}</div>
+                        <div style="color: green; display: inline; font-size: 18pt">原本为${video.author.title}</div>
                     </label>
                     <select data-toggle="select" name="authorname" id="authorname"
                             class="form-control select select-success mrs mbm">
                         <c:forEach var="author" items="${authors}">
-                            <option value="${author.name}">${author.name}</option>
+                            <option value="${author.title}">${author.title}</option>
                         </c:forEach>
                     </select>
                 </div>

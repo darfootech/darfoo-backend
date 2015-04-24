@@ -94,7 +94,7 @@
                     <c:forEach var="dancegroup" items="${stardancegroups}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
                             <div class="content changetonormal" picked="0" eid="${dancegroup.id}">
-                                    ${dancegroup.name}
+                                    ${dancegroup.title}
                             </div>
                         </li>
                     </c:forEach>
@@ -110,7 +110,7 @@
                     <c:forEach var="dancegroup" items="${normaldancegroups}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
                             <div class="content changetostar" picked="0" eid="${dancegroup.id}">
-                                    ${dancegroup.name}
+                                    ${dancegroup.title}
                             </div>
                         </li>
                     </c:forEach>

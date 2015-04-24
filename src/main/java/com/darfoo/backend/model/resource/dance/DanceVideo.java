@@ -204,7 +204,7 @@ public class DanceVideo implements Serializable {
         if (author == null) {
             sb.append("\nauthor:null");
         } else {
-            sb.append("\nauthor:" + author.getName() + "  演唱家信息:" + author.getDescription());
+            sb.append("\nauthor:" + author.getTitle() + "  演唱家信息:" + author.getDescription());
             if (author.getImage() == null) {
                 sb.append(" 舞队图片:" + null);
             } else {

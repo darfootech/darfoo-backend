@@ -20,7 +20,6 @@ import com.darfoo.backend.service.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.SingleDanceMusic;
 import com.darfoo.backend.service.responsemodel.SingleDanceVideo;
-import com.darfoo.backend.service.responsemodel.SingleOperaVideo;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -51,6 +50,35 @@ public class CacheUtils {
     @Autowired
     StatisticsCacheDao statisticsCacheDao;
 
+    public void insertWithPagination(Class resource, List resources, String cachekey, String prefix, CacheCollType cacheCollType, Integer... pageArray) {
+        int start = 0;
+        int end = 0;
+        if (pageArray.length == 0) {
+            cacheDao.insertResourcesIntoCache(resource, resources, cachekey, prefix, cacheCollType);
+        } else if (pageArray.length == 1) {
+            int page = pageArray[0];
+            int pageSize = limitDao.getResourceLimitSize(resource, PageSize.class);
+            start = (page - 1) * pageSize;
+            end = page * pageSize - 1;
+        } else if (pageArray.length == 2) {
+            int skipNum = pageArray[0];
+            int returnNum = pageArray[1];
+            start = skipNum;
+            end = skipNum + returnNum - 1;
+        } else {
+            System.out.println("wired");
+        }
+
+        int maxsize = resources.size();
+        if (start > resources.size()) {
+            cacheDao.insertResourcesIntoCache(resource, new ArrayList(), cachekey, prefix, cacheCollType);
+        } else if (end + 1 > resources.size()) {
+            cacheDao.insertResourcesIntoCache(resource, resources.subList(start, maxsize), cachekey, prefix, cacheCollType);
+        } else {
+            cacheDao.insertResourcesIntoCache(resource, resources.subList(start, end + 1), cachekey, prefix, cacheCollType);
+        }
+    }
+
     /**
      * 分页统一在cache层做
      * 先将满足条件的资源全部插入redis 然后直接在redis层进行切片来达到分页的效果
@@ -65,7 +93,7 @@ public class CacheUtils {
     //因为这里的分页是一次性把所有查询结果都放入缓存中然后在前端用redis游标来得到分页结果所以缓存的key中不需要包含页码号不然每请求一个页码都会在redis中生成一个完全一样的缓存结果
     //一种请求方式是按照定死的每一页显示的格式与页码来请求分页信息
     //一种请求方式是根据请求的跳过的个数与要返回的个数来获取翻页信息
-    public List returnWithPagination(Class resource, Class response, String cachekey, CacheCollType cachetype, Integer[] pageArray) {
+    public List returnWithPagination(Class resource, Class response, String cachekey, CacheCollType cachetype, Integer... pageArray) {
         if (pageArray.length == 0) {
             return cacheDao.extractResourcesFromCache(response, cachekey, cachetype);
         } else if (pageArray.length == 1) {
@@ -83,6 +111,24 @@ public class CacheUtils {
         } else {
             return new ArrayList();
         }
+    }
+
+    public String returnCacheKey(String baseCacheKey, Integer... pageArray) {
+        if (pageArray.length == 0) {
+            return baseCacheKey;
+        } else if (pageArray.length == 1) {
+            return String.format("%spage%d", baseCacheKey, pageArray[0]);
+        } else if (pageArray.length == 2) {
+            return String.format("%skip%dreturn%d", baseCacheKey, pageArray[0], pageArray[1]);
+        } else {
+            return "";
+        }
+    }
+
+    public List commonCacheFn(Class resource, List resources, String baseCacheKey, String prefix, Integer... pageArray) {
+        String cachekey = returnCacheKey(baseCacheKey, pageArray);
+        insertWithPagination(resource, resources, cachekey, prefix, CacheCollType.SORTEDSET, pageArray);
+        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(prefix), cachekey, CacheCollType.SORTEDSET);
     }
 
     /**
@@ -104,8 +150,8 @@ public class CacheUtils {
         String cachekey = String.format("%srecommend", type);
 
         List recommendResources = recommendDao.getRecommendResources(resource);
-        cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, cachekey, CacheCollType.SORTEDSET);
 
+        cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, cachekey, CacheCollType.SORTEDSET);
         return cacheDao.extractResourcesFromCache(SingleDanceVideo.class, cachekey, CacheCollType.SORTEDSET);
     }
 
@@ -126,8 +172,7 @@ public class CacheUtils {
             resources = commonDao.getAllResource(resource);
         }
 
-        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
-        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, type, pageArray);
     }
 
     /**
@@ -144,8 +189,7 @@ public class CacheUtils {
         int newestsize = limitDao.getResourceLimitSize(resource, NewestSize.class);
         List resources = commonDao.getResourcesByNewest(resource, newestsize);
 
-        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
-        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, type, pageArray);
     }
 
     public List cacheAllResources(String type, Integer... pageArray) {
@@ -161,8 +205,7 @@ public class CacheUtils {
             resources = commonDao.getAllResource(resource);
         }
 
-        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
-        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, type, pageArray);
     }
 
     /**
@@ -190,8 +233,7 @@ public class CacheUtils {
             resources = new ArrayList();
         }
 
-        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
-        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, type, pageArray);
     }
 
     /**
@@ -207,20 +249,19 @@ public class CacheUtils {
     public List cacheResourcesByInnertype(String type, String innertype, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         String cachekey = String.format("%sinnertype%s", type, innertype);
+
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         Enum innertypeValue = Enum.valueOf(TypeClassMapping.innerTypeClassMap.get(type), innertype);
         conditions.put("type", innertypeValue);
 
         List resources;
-
         if (resource == DanceGroup.class && innertypeValue == DanceGroupType.STAR) {
             resources = commonDao.getResourcesWithPriority(resource);
         } else {
             resources = commonDao.getResourcesByFields(resource, conditions);
         }
 
-        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
-        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, type, pageArray);
     }
 
     /**
@@ -240,8 +281,7 @@ public class CacheUtils {
             resources = new ArrayList();
         }
 
-        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
-        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, type, pageArray);
     }
 
     public List cacheResourcesBySearch(String type, String searchContent, Integer... pageArray) {
@@ -257,9 +297,8 @@ public class CacheUtils {
             System.out.println("wired");
             resources = new ArrayList();
         }
-        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, type, CacheCollType.SORTEDSET);
 
-        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, type, pageArray);
     }
 
     public List cacheSidebarResources(String type, Integer id) {
@@ -278,9 +317,8 @@ public class CacheUtils {
 
         Class resource = DanceVideo.class;
         List resources = commonDao.getResourcesByFields(resource, conditions);
-        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, resource.getSimpleName().toLowerCase(), CacheCollType.SORTEDSET);
 
-        return returnWithPagination(resource, SingleDanceVideo.class, cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, resource.getSimpleName().toLowerCase(), pageArray);
     }
 
     public List cacheOperaSeriesVideos(Integer id, Integer... pageArray) {
@@ -290,9 +328,8 @@ public class CacheUtils {
 
         Class resource = OperaVideo.class;
         List resources = commonDao.getResourcesByFieldsByOrder(resource, conditions, Order.asc("order"));
-        cacheDao.insertResourcesIntoCache(resource, resources, cachekey, resource.getSimpleName().toLowerCase(), CacheCollType.SORTEDSET);
 
-        return returnWithPagination(resource, SingleOperaVideo.class, cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, resource.getSimpleName().toLowerCase(), pageArray);
     }
 
     public Object cacheDanceMusicForDanceVideo(Integer id) {

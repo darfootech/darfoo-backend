@@ -98,7 +98,7 @@
                     <c:forEach var="resource" items="${unrecommendresources}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
                             <div class="content addrecommendevent" picked="0" eid="${resource.id}">${resource.title}
-                                (${resource.author.name})
+                                (${resource.author.title})
                             </div>
                         </li>
                     </c:forEach>
@@ -114,7 +114,7 @@
                     <c:forEach var="resource" items="${recommendresources}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
                             <div class="content deleterecommendevent" picked="0" eid="${resource.id}">${resource.title}
-                                (${resource.author.name})
+                                (${resource.author.title})
                             </div>
                         </li>
                     </c:forEach>
