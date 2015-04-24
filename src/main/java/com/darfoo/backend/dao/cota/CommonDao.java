@@ -561,7 +561,7 @@ public class CommonDao {
                 if (type == OperaVideoType.SERIES) {
                     int seriesid = ((OperaSeries) getResourceAttr(resource, object, "series")).getId();
                     conditions.put("series_id", seriesid);
-                    return getResourcesByFieldsWithoutId(resource, conditions, id);
+                    return getResourcesByFieldsByOrder(resource, conditions, Order.asc("order"));
                 } else {
                     conditions.put("type", OperaVideoType.SINGLE);
                     predList = getResourcesByFieldsWithoutId(resource, conditions, id);
