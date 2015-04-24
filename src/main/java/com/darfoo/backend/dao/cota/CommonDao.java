@@ -9,6 +9,7 @@ import com.darfoo.backend.model.cota.annotations.limit.HotSize;
 import com.darfoo.backend.model.cota.enums.DanceGroupType;
 import com.darfoo.backend.model.cota.enums.OperaVideoType;
 import com.darfoo.backend.model.cota.enums.ResourceHot;
+import com.darfoo.backend.model.cota.enums.ResourcePriority;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -370,7 +371,7 @@ public class CommonDao {
 
     public List getResourcesWithPriority(Class resource) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("priority", ResourceHot.ISHOT);
+        conditions.put("priority", ResourcePriority.ISPRIORITY);
         List priorityResources = getResourcesByFieldsByOrder(resource, conditions, Order.asc("order"));
         HashSet<Integer> hotids = new HashSet<Integer>();
         for (Object object : priorityResources) {
