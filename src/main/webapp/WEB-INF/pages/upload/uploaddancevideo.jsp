@@ -23,7 +23,7 @@
                     <select data-toggle="select" name="authorname" id="authorname"
                             class="form-control select select-success mrs mbm">
                         <c:forEach var="author" items="${authors}">
-                            <option value="${author.name}">${author.name}</option>
+                            <option value="${author.title}">${author.title}</option>
                         </c:forEach>
                     </select>
                 </div>

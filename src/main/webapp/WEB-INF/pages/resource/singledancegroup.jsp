@@ -16,7 +16,7 @@
 
                 <div class="form-group">
                     <label for="title">舞队名字</label>
-                    <input type="text" class="form-control" name="title" id="title" value="${author.name}"/>
+                    <input type="text" class="form-control" name="title" id="title" value="${author.title}"/>
                 </div>
 
                 <div class="form-group">

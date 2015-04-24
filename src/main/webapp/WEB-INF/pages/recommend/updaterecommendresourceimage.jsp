@@ -15,7 +15,7 @@
 
                 <div class="form-group">
                     <label for="authorname">关联的明星舞队</label>
-                    <input type="text" id="authorname" class="form-control" value="${resource.author.name}"
+                    <input type="text" id="authorname" class="form-control" value="${resource.author.title}"
                            disabled="disabled">
                 </div>
 

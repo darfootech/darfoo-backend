@@ -98,7 +98,7 @@
                     <c:forEach var="video" items="${notconnectvideos}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
                             <div class="content addconnectmusic" picked="0" eid="${video.id}">${video.title}
-                                (${video.author.name})
+                                (${video.author.title})
                             </div>
                         </li>
                     </c:forEach>
@@ -114,7 +114,7 @@
                     <c:forEach var="video" items="${connectvideos}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
                             <div class="content delconnectmusic" picked="0" eid="${video.id}">${video.title}
-                                (${video.author.name})
+                                (${video.author.title})
                             </div>
                         </li>
                     </c:forEach>
