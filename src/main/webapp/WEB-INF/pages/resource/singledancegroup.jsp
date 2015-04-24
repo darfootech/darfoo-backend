@@ -15,8 +15,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="name">舞队名字</label>
-                    <input type="text" class="form-control" name="name" id="name" value="${author.name}"/>
+                    <label for="title">舞队名字</label>
+                    <input type="text" class="form-control" name="title" id="title" value="${author.name}"/>
                 </div>
 
                 <div class="form-group">

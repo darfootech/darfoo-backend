@@ -12,8 +12,8 @@
         <div class="col-md-12">
             <form role="form" id="createresourceform">
                 <div class="form-group">
-                    <label for="name">舞队名字</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="请输入舞队名字">
+                    <label for="title">舞队名字</label>
+                    <input type="text" class="form-control" name="title" id="title" placeholder="请输入舞队名字">
                 </div>
 
                 <div class="form-group">
