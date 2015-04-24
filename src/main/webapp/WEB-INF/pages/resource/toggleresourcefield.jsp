@@ -107,15 +107,8 @@
                     <c:forEach var="resource" items="${negativeresources}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
                             <div class="content toggletopositive" picked="0" eid="${resource.id}">
-                                <c:choose>
-                                    <c:when test="${type == 'dancegroup'}">
-                                        ${resource.name}
-                                    </c:when>
+                                    ${resource.title}
 
-                                    <c:otherwise>
-                                        ${resource.title}
-                                    </c:otherwise>
-                                </c:choose>
                             </div>
                         </li>
                     </c:forEach>
@@ -130,15 +123,7 @@
                     <c:forEach var="resource" items="${positiveresources}">
                         <li class="list-group-item" style="cursor:pointer;background:white;">
                             <div class="content toggletonegative" picked="0" eid="${resource.id}">
-                                <c:choose>
-                                    <c:when test="${type == 'dancegroup'}">
-                                        ${resource.name}
-                                    </c:when>
-
-                                    <c:otherwise>
-                                        ${resource.title}
-                                    </c:otherwise>
-                                </c:choose>
+                                    ${resource.title}
                             </div>
                         </li>
                     </c:forEach>

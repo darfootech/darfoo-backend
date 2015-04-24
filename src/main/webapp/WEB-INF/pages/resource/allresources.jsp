@@ -12,10 +12,6 @@
                         <a style="color: #FFF" href="/darfoobackend/rest/admin/${type}/${resource.id}">
                             <button type="button" id="${resource.id}" class="btn btn-primary btn-lg btn-block">
                                 <c:choose>
-                                    <c:when test="${type == 'dancegroup'}">
-                                        ${resource.name}
-                                    </c:when>
-
                                     <c:when test="${type == 'version'}">
                                         version-${resource.version}
                                     </c:when>
