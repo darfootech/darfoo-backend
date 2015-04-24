@@ -63,7 +63,7 @@ public class QiniuUtils {
                 return CryptUtils.encryptQiniuUrl(downloadUrl);
             } else if (type == QiniuResourceEnum.RAW) {
                 //缩小图片
-                if (key.contains("recommend")) {
+                if (key.contains("recommend") || key.contains("mp3") || key.contains("flv")) {
                     System.out.println(baseUrl);
                     return getPolicy.makeRequest(baseUrl, mac);
                 } else {
