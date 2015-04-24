@@ -60,9 +60,9 @@ public class UpdateDao {
                 if (key.equals("authorname")) {
                     String authorname = updatecontents.get(key);
                     if (!authorname.equals("") && authorname != null) {
-                        String oldAuthorname = ((DanceGroup) commonDao.getResourceAttr(resource, object, "author")).getName();
+                        String oldAuthorname = ((DanceGroup) commonDao.getResourceAttr(resource, object, "author")).getTitle();
                         if (!authorname.equals(oldAuthorname)) {
-                            criteria = session.createCriteria(DanceGroup.class).add(Restrictions.eq("name", authorname));
+                            criteria = session.createCriteria(DanceGroup.class).add(Restrictions.eq("title", authorname));
                             criteria.setReadOnly(true);
                             DanceGroup author = (DanceGroup) criteria.uniqueResult();
                             if (author == null) {
@@ -273,12 +273,12 @@ public class UpdateDao {
             return resultMap;
         } else {
             for (String key : updatecontents.keySet()) {
-                if (key.equals("name")) {
+                if (key.equals("title")) {
                     String name = updatecontents.get(key);
                     String oldName = commonDao.getResourceAttr(resource, object, key).toString();
 
                     if (!name.equals("") && name != null && !name.equals(oldName)) {
-                        Object queryResource = commonDao.getResourceByTitleOrName(resource, name, key);
+                        Object queryResource = commonDao.getResourceByTitle(resource, name);
                         if (queryResource == null) {
                             commonDao.setResourceAttr(resource, object, key, name);
                         } else {
@@ -449,7 +449,7 @@ public class UpdateDao {
                     String oldName = commonDao.getResourceAttr(resource, object, key).toString();
 
                     if (!name.equals("") && name != null && !name.equals(oldName)) {
-                        Object queryResource = commonDao.getResourceByTitleOrName(resource, name, key);
+                        Object queryResource = commonDao.getResourceByTitle(resource, name);
                         if (queryResource == null) {
                             commonDao.setResourceAttr(resource, object, key, name);
                         } else {

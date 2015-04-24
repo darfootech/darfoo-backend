@@ -458,18 +458,13 @@ public class CommonDao {
      * 根据name或者title字段的值获取资源实例
      *
      * @param resource
-     * @param titlename
-     * @param type
+     * @param title
      * @return
      */
-    public Object getResourceByTitleOrName(Class resource, String titlename, String type) {
+    public Object getResourceByTitle(Class resource, String title) {
         try {
             Criteria criteria = getCommonQueryCriteria(resource);
-            if (type.equals("title")) {
-                criteria.add(Restrictions.eq("title", titlename));
-            } else if (type.equals("name")) {
-                criteria.add(Restrictions.eq("name", titlename));
-            }
+            criteria.add(Restrictions.eq("title", title));
             return criteria.uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();

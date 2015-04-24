@@ -48,8 +48,8 @@ public class CacheProtocol {
                             if (field.getName().equals("author")) {
                                 DanceGroup author = (DanceGroup) field.get(object);
                                 if (author != null) {
-                                    System.out.println(field.getName() + " -> " + author.getName());
-                                    cacheInsertMap.put("authorname", author.getName());
+                                    System.out.println(field.getName() + " -> " + author.getTitle());
+                                    cacheInsertMap.put("authorname", author.getTitle());
                                 } else {
                                     cacheInsertMap.put("authorname", "");
                                 }

@@ -102,7 +102,7 @@ public class DownloadUtils {
                     if (attr.equals("author")) {
                         DanceGroup danceGroup = (DanceGroup) commonDao.getResourceAttr(resource, object, attr);
                         if (danceGroup != null) {
-                            value = danceGroup.getName();
+                            value = danceGroup.getTitle();
                         } else {
                             value = "未关联舞队";
                         }
