@@ -63,6 +63,7 @@ public class QiniuUtils {
                 return CryptUtils.encryptQiniuUrl(downloadUrl);
             } else if (type == QiniuResourceEnum.RAW) {
                 //缩小图片
+                //首页推荐的图片和后台查看的视频就不要缩小了
                 if (key.contains("recommend") || key.contains("mp3") || key.contains("flv")) {
                     System.out.println(baseUrl);
                     return getPolicy.makeRequest(baseUrl, mac);
