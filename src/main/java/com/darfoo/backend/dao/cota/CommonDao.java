@@ -7,7 +7,9 @@ import com.darfoo.backend.dao.resource.UpdateDao;
 import com.darfoo.backend.model.cota.annotations.ModelOperation;
 import com.darfoo.backend.model.cota.annotations.limit.HotSize;
 import com.darfoo.backend.model.cota.enums.DanceGroupType;
+import com.darfoo.backend.model.cota.enums.OperaVideoType;
 import com.darfoo.backend.model.cota.enums.ResourceHot;
+import com.darfoo.backend.model.cota.enums.ResourcePriority;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -369,8 +371,8 @@ public class CommonDao {
 
     public List getResourcesWithPriority(Class resource) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("priority", ResourceHot.ISHOT);
-        List priorityResources = getResourcesByFields(resource, conditions);
+        conditions.put("priority", ResourcePriority.ISPRIORITY);
+        List priorityResources = getResourcesByFieldsByOrder(resource, conditions, Order.asc("order"));
         HashSet<Integer> hotids = new HashSet<Integer>();
         for (Object object : priorityResources) {
             hotids.add((Integer) getResourceAttr(resource, object, "id"));
@@ -402,7 +404,7 @@ public class CommonDao {
                     .addOrder(Order.desc("id"))
                     .add(Restrictions.not(Restrictions.eq("id", id)));
             for (String key : conditions.keySet()) {
-                if (key.equals("author_id") || key.equals("music_id")) {
+                if (key.equals("author_id") || key.equals("music_id") || key.equals("series_id")) {
                     criteria.add(Restrictions.eq(key.replace("_", "."), conditions.get(key)));
                 } else {
                     criteria.add(Restrictions.eq(key, conditions.get(key)));
@@ -553,7 +555,18 @@ public class CommonDao {
 
                 predList = getResourcesByFieldsWithoutId(resource, conditions, id);
             } else if (resource == OperaVideo.class) {
-                predList = getAllResourceWithoutId(resource, id);
+                Object object = getResourceById(resource, id);
+                OperaVideoType type = (OperaVideoType) getResourceAttr(resource, object, "type");
+                HashMap<String, Object> conditions = new HashMap<String, Object>();
+
+                if (type == OperaVideoType.SERIES) {
+                    int seriesid = ((OperaSeries) getResourceAttr(resource, object, "series")).getId();
+                    conditions.put("series_id", seriesid);
+                    return getResourcesByFieldsByOrder(resource, conditions, Order.asc("order"));
+                } else {
+                    conditions.put("type", OperaVideoType.SINGLE);
+                    predList = getResourcesByFieldsWithoutId(resource, conditions, id);
+                }
             } else {
                 System.out.println("something is wired");
             }

@@ -2,6 +2,7 @@ package com.darfoo.backend.cache;
 
 import com.darfoo.backend.caches.dao.CacheUtils;
 import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.resource.dance.DanceGroup;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -216,6 +217,11 @@ public class CacheServiceTests {
         for (String type : typeinnertypepair.keySet()) {
             logResources(cacheUtils.cacheResourcesByInnertype(type, typeinnertypepair.get(type)));
         }
+    }
+
+    @Test
+    public void cachePriorityDanceGroup() {
+        logResources(commonDao.getResourcesWithPriority(DanceGroup.class));
     }
 
     public void inner(Integer... ids) {
