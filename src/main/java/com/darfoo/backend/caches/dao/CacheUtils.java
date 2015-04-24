@@ -117,6 +117,12 @@ public class CacheUtils {
         }
     }
 
+    public List commonCacheFn(Class resource, List resources, String baseCacheKey, String prefix, Integer... pageArray) {
+        String cachekey = returnCacheKey(baseCacheKey, pageArray);
+        insertWithPagination(resource, resources, cachekey, prefix, CacheCollType.SORTEDSET, pageArray);
+        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(prefix), cachekey, CacheCollType.SORTEDSET);
+    }
+
     /**
      * 将单个资源缓存进入redis
      *
@@ -136,8 +142,8 @@ public class CacheUtils {
         String cachekey = String.format("%srecommend", type);
 
         List recommendResources = recommendDao.getRecommendResources(resource);
-        cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, cachekey, CacheCollType.SORTEDSET);
 
+        cacheDao.insertResourcesIntoCache(resource, recommendResources, cachekey, cachekey, CacheCollType.SORTEDSET);
         return cacheDao.extractResourcesFromCache(SingleDanceVideo.class, cachekey, CacheCollType.SORTEDSET);
     }
 
@@ -149,7 +155,7 @@ public class CacheUtils {
      */
     public List cacheIndexResources(String type, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
-        String cachekey = returnCacheKey(String.format("%sindex", type), pageArray);
+        String cachekey = String.format("%sindex", type);
 
         List resources;
         if (type.equals("dancegroup")) {
@@ -158,8 +164,7 @@ public class CacheUtils {
             resources = commonDao.getAllResource(resource);
         }
 
-        insertWithPagination(resource, resources, cachekey, type, CacheCollType.SORTEDSET, pageArray);
-        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, type, pageArray);
     }
 
     /**
@@ -171,18 +176,17 @@ public class CacheUtils {
      */
     public List cacheNewestResources(String type, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
-        String cachekey = returnCacheKey(String.format("%snewest", type), pageArray);
+        String cachekey = String.format("%snewest", type);
 
         int newestsize = limitDao.getResourceLimitSize(resource, NewestSize.class);
         List resources = commonDao.getResourcesByNewest(resource, newestsize);
 
-        insertWithPagination(resource, resources, cachekey, type, CacheCollType.SORTEDSET, pageArray);
-        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, type, pageArray);
     }
 
     public List cacheAllResources(String type, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
-        String cachekey = returnCacheKey(String.format("%sall", type), pageArray);
+        String cachekey = String.format("%sall", type);
 
         List resources;
         if (resource == OperaVideo.class) {
@@ -193,8 +197,7 @@ public class CacheUtils {
             resources = commonDao.getAllResource(resource);
         }
 
-        insertWithPagination(resource, resources, cachekey, type, CacheCollType.SORTEDSET, pageArray);
-        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, type, pageArray);
     }
 
     /**
@@ -210,7 +213,7 @@ public class CacheUtils {
      */
     public List cacheResourcesByCategory(String type, String category, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
-        String cachekey = returnCacheKey(String.format("%scategory%s", type, category), pageArray);
+        String cachekey = String.format("%scategory%s", type, category);
 
         List resources;
         if (type.equals("dancevideo")) {
@@ -222,8 +225,7 @@ public class CacheUtils {
             resources = new ArrayList();
         }
 
-        insertWithPagination(resource, resources, cachekey, type, CacheCollType.SORTEDSET, pageArray);
-        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, type, pageArray);
     }
 
     /**
@@ -238,21 +240,20 @@ public class CacheUtils {
      */
     public List cacheResourcesByInnertype(String type, String innertype, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
-        String cachekey = returnCacheKey(String.format("%sinnertype%s", type, innertype), pageArray);
+        String cachekey = String.format("%sinnertype%s", type, innertype);
+
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         Enum innertypeValue = Enum.valueOf(TypeClassMapping.innerTypeClassMap.get(type), innertype);
         conditions.put("type", innertypeValue);
 
         List resources;
-
         if (resource == DanceGroup.class && innertypeValue == DanceGroupType.STAR) {
             resources = commonDao.getResourcesWithPriority(resource);
         } else {
             resources = commonDao.getResourcesByFields(resource, conditions);
         }
 
-        insertWithPagination(resource, resources, cachekey, type, CacheCollType.SORTEDSET, pageArray);
-        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, type, pageArray);
     }
 
     /**
@@ -263,7 +264,7 @@ public class CacheUtils {
      */
     public List cacheHotResources(String type, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
-        String cachekey = returnCacheKey(String.format("%shot", type), pageArray);
+        String cachekey = String.format("%shot", type);
 
         List resources;
         if (resource.isAnnotationPresent(HotSize.class)) {
@@ -272,13 +273,12 @@ public class CacheUtils {
             resources = new ArrayList();
         }
 
-        insertWithPagination(resource, resources, cachekey, type, CacheCollType.SORTEDSET, pageArray);
-        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, type, pageArray);
     }
 
     public List cacheResourcesBySearch(String type, String searchContent, Integer... pageArray) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
-        String cachekey = returnCacheKey(String.format("%ssearch%s", type, searchContent), pageArray);
+        String cachekey = String.format("%ssearch%s", type, searchContent);
 
         List resources;
         if (type.equals("dancevideo")) {
@@ -290,8 +290,7 @@ public class CacheUtils {
             resources = new ArrayList();
         }
 
-        insertWithPagination(resource, resources, cachekey, type, CacheCollType.SORTEDSET, pageArray);
-        return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(type), cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, type, pageArray);
     }
 
     public List cacheSidebarResources(String type, Integer id) {
@@ -306,25 +305,23 @@ public class CacheUtils {
     public List cacheDanceGroupVideos(Integer id, Integer... pageArray) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("author_id", id);
-        String cachekey = returnCacheKey(String.format("dancegroupvideos%d", id), pageArray);
+        String cachekey = String.format("dancegroupvideos%d", id);
 
         Class resource = DanceVideo.class;
         List resources = commonDao.getResourcesByFields(resource, conditions);
 
-        insertWithPagination(resource, resources, cachekey, resource.getSimpleName().toLowerCase(), CacheCollType.SORTEDSET, pageArray);
-        return returnWithPagination(resource, SingleDanceVideo.class, cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, resource.getSimpleName().toLowerCase(), pageArray);
     }
 
     public List cacheOperaSeriesVideos(Integer id, Integer... pageArray) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("series_id", id);
-        String cachekey = returnCacheKey(String.format("operaseriesvideos%d", id), pageArray);
+        String cachekey = String.format("operaseriesvideos%d", id);
 
         Class resource = OperaVideo.class;
         List resources = commonDao.getResourcesByFieldsByOrder(resource, conditions, Order.asc("order"));
 
-        insertWithPagination(resource, resources, cachekey, resource.getSimpleName().toLowerCase(), CacheCollType.SORTEDSET, pageArray);
-        return returnWithPagination(resource, SingleOperaVideo.class, cachekey, CacheCollType.SORTEDSET, pageArray);
+        return commonCacheFn(resource, resources, cachekey, resource.getSimpleName().toLowerCase(), pageArray);
     }
 
     public Object cacheDanceMusicForDanceVideo(Integer id) {
