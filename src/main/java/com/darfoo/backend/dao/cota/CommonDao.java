@@ -370,7 +370,7 @@ public class CommonDao {
     public List getResourcesWithPriority(Class resource) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         conditions.put("priority", ResourceHot.ISHOT);
-        List priorityResources = getResourcesByFields(resource, conditions);
+        List priorityResources = getResourcesByFieldsByOrder(resource, conditions, Order.asc("order"));
         HashSet<Integer> hotids = new HashSet<Integer>();
         for (Object object : priorityResources) {
             hotids.add((Integer) getResourceAttr(resource, object, "id"));
