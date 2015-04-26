@@ -35,6 +35,12 @@ public class ThirdPartApp implements Serializable {
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
     String app_key;
 
+    @Transient
+    @ModelInsert
+    @ModelUpload(type = ModelUploadEnum.SMALL)
+    @ModelUpdate
+    String appkey;
+
     public ThirdPartApp() {
     }
 

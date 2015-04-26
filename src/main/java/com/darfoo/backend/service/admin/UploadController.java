@@ -2,6 +2,7 @@ package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.Advertise;
+import com.darfoo.backend.model.ThirdPartApp;
 import com.darfoo.backend.model.cota.annotations.ModelInsert;
 import com.darfoo.backend.model.cota.annotations.ModelUpload;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
@@ -90,6 +91,11 @@ public class UploadController {
             session.setAttribute("musickey", musickey);
         }
 
+        if (resource == ThirdPartApp.class) {
+            String appkey = String.format("%s-%s.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase(), "apk");
+            session.setAttribute("appkey", appkey);
+        }
+
         session.setAttribute("insertid", insertid);
         return statuscode;
     }
@@ -122,14 +128,8 @@ public class UploadController {
         if (type.equals("operavideo")) {
             modelMap.put("typenames", TypeClassMapping.operaVideoTypeNameMap);
         }
-        if (type.equals("dancemusic")) {
-            return "upload/uploaddancemusic";
-        }
-        if (type.equals("operaseries")) {
-            return "upload/uploadoperaseries";
-        }
-        if (type.equals("advertise")) {
-            return "upload/uploadadvertise";
+        if (type.equals("dancemusic") || type.equals("operaseries") || type.equals("advertise") || type.equals("thirdpartapp")) {
+            return "upload/upload" + type;
         }
         modelMap.put("operation", "upload");
         modelMap.put("type", type);
@@ -217,17 +217,17 @@ public class UploadController {
         return commonUploadResource(TypeClassMapping.typeClassMap.get(type), uploadresources, session);
     }
 
-    @RequestMapping(value = "/resources/{type}/music/create", method = RequestMethod.POST)
-    public String uploadMusicResource(@PathVariable String type, @RequestParam("musicresource") CommonsMultipartFile musicresource, HttpSession session) {
+    /**
+     * @param type advertise thirdpartapp dancemusic dancegroup
+     * @param rtype image music app
+     * @param resource
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/resources/{type}/{rtype}/create", method = RequestMethod.POST)
+    public String uploadMusicResource(@PathVariable String type, @PathVariable String rtype, @RequestParam("resource") CommonsMultipartFile resource, HttpSession session) {
         HashMap<String, CommonsMultipartFile> uploadresources = new HashMap<String, CommonsMultipartFile>();
-        uploadresources.put("musickey", musicresource);
-        return commonUploadResource(TypeClassMapping.typeClassMap.get(type), uploadresources, session);
-    }
-
-    @RequestMapping(value = "/resources/{type}/image/create", method = RequestMethod.POST)
-    public String uploadImageResource(@PathVariable String type, @RequestParam("imageresource") CommonsMultipartFile imageresource, HttpSession session) {
-        HashMap<String, CommonsMultipartFile> uploadresources = new HashMap<String, CommonsMultipartFile>();
-        uploadresources.put("imagekey", imageresource);
+        uploadresources.put(String.format("%skey", rtype), resource);
         return commonUploadResource(TypeClassMapping.typeClassMap.get(type), uploadresources, session);
     }
 }

@@ -9,8 +9,8 @@
             <form role="form" action="/darfoobackend/rest/resources/dancegroup/image/create" method="post"
                   enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="imageresource">选择要上传的舞队图片(请确保是JPG或者PNG格式的图片文件)</label>
-                    <input type="file" id="imageresource" name="imageresource">
+                    <label for="resource">选择要上传的舞队图片(请确保是JPG或者PNG格式的图片文件)</label>
+                    <input type="file" id="resource" name="resource">
                 </div>
 
                 <button type="submit" class="btn btn-default">上传舞队资源</button>

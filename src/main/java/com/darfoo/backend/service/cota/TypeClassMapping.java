@@ -1,6 +1,7 @@
 package com.darfoo.backend.service.cota;
 
 import com.darfoo.backend.model.Advertise;
+import com.darfoo.backend.model.ThirdPartApp;
 import com.darfoo.backend.model.Version;
 import com.darfoo.backend.model.auth.Feedback;
 import com.darfoo.backend.model.cota.enums.*;
@@ -63,6 +64,7 @@ public class TypeClassMapping {
         typeClassMap.put("operaseries", OperaSeries.class);
         typeClassMap.put("advertise", Advertise.class);
         typeClassMap.put("version", Version.class);
+        typeClassMap.put("thirdpartapp", ThirdPartApp.class);
 
         typeClassMap.put("uploadnoauthvideo", UploadNoAuthVideo.class);
         typeClassMap.put("resourceclickcount", ResourceClickCount.class);
