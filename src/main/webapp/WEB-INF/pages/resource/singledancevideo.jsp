@@ -83,8 +83,8 @@
                             <c:otherwise>
                             </c:otherwise>
                         </c:choose>
-                        <button type="button" class="btn btn-default" id="updateimage">更新舞蹈视频封面图片</button>
-                        <button type="button" class="btn btn-default" id="updatevideo">更新舞蹈视频视频资源</button>
+                        <button type="button" class="btn btn-default updateresource" id="updateimage">更新舞蹈视频封面图片</button>
+                        <button type="button" class="btn btn-default updateresource" id="updatevideo">更新舞蹈视频视频资源</button>
                     </div>
                 </div>
             </form>

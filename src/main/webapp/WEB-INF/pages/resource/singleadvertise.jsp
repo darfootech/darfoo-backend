@@ -33,7 +33,7 @@
                             <c:otherwise>
                             </c:otherwise>
                         </c:choose>
-                        <button type="button" class="btn btn-default" id="updateimage">更新广告封面图片</button>
+                        <button type="button" class="btn btn-default updateresource" id="updateimage">更新广告封面图片</button>
                     </div>
                 </div>
             </form>

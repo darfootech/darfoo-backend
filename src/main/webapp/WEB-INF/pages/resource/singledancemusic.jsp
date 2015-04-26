@@ -44,7 +44,7 @@
                             <c:otherwise>
                             </c:otherwise>
                         </c:choose>
-                        <button type="button" class="btn btn-default" id="updatemusic">更新舞蹈伴奏音频资源</button>
+                        <button type="button" class="btn btn-default updateresource" id="updatemusic">更新舞蹈伴奏音频资源</button>
                     </div>
                 </div>
             </form>

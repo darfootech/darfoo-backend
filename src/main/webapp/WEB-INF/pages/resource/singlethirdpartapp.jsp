@@ -33,7 +33,7 @@
                             <c:otherwise>
                             </c:otherwise>
                         </c:choose>
-                        <button type="button" class="btn btn-default" id="updateapp">更新第三方软件APK文件</button>
+                        <button type="button" class="btn btn-default updateresource" id="updateapp">更新第三方软件APK文件</button>
                     </div>
                 </div>
             </form>
