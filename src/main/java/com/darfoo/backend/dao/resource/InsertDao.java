@@ -43,14 +43,13 @@ public class InsertDao {
     @Autowired
     AccompanyDao accompanyDao;
 
-    public HashMap<String, Integer> insertDanceVideo(HashMap<String, String> insertcontents) throws IllegalAccessException, InstantiationException {
+    public HashMap<String, Integer> insertDanceVideo(HashMap<String, String> insertcontents, Class resource) throws IllegalAccessException, InstantiationException {
         Set<String> categoryTitles = new HashSet<String>();
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria;
 
-        Class resource = DanceVideo.class;
         Object object = resource.newInstance();
 
         for (String key : insertcontents.keySet()) {
@@ -143,7 +142,7 @@ public class InsertDao {
         return resultMap;
     }
 
-    public HashMap<String, Integer> insertDanceMusic(HashMap<String, String> insertcontents) throws IllegalAccessException, InstantiationException {
+    public HashMap<String, Integer> insertDanceMusic(HashMap<String, String> insertcontents, Class resource) throws IllegalAccessException, InstantiationException {
         Set<String> categoryTitles = new HashSet<String>();
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
         boolean isCategoryHasSingleChar = false;
@@ -151,7 +150,6 @@ public class InsertDao {
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria;
 
-        Class resource = DanceMusic.class;
         Object object = resource.newInstance();
 
         for (String key : insertcontents.keySet()) {
@@ -227,12 +225,11 @@ public class InsertDao {
         return resultMap;
     }
 
-    public HashMap<String, Integer> insertDanceGroup(HashMap<String, String> insertcontents) throws IllegalAccessException, InstantiationException {
+    public HashMap<String, Integer> insertDanceGroup(HashMap<String, String> insertcontents, Class resource) throws IllegalAccessException, InstantiationException {
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
         Session session = sessionFactory.getCurrentSession();
 
-        Class resource = DanceGroup.class;
         Object object = resource.newInstance();
 
         for (String key : insertcontents.keySet()) {
@@ -288,13 +285,12 @@ public class InsertDao {
         return resultMap;
     }
 
-    public HashMap<String, Integer> insertOperaVideo(HashMap<String, String> insertcontents) throws IllegalAccessException, InstantiationException {
+    public HashMap<String, Integer> insertOperaVideo(HashMap<String, String> insertcontents, Class resource) throws IllegalAccessException, InstantiationException {
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria;
 
-        Class resource = OperaVideo.class;
         Object object = resource.newInstance();
 
         for (String key : insertcontents.keySet()) {
@@ -396,12 +392,11 @@ public class InsertDao {
         return resultMap;
     }
 
-    public HashMap<String, Integer> insertOperaSeries(HashMap<String, String> insertcontents) throws IllegalAccessException, InstantiationException {
+    public HashMap<String, Integer> insertOperaSeries(HashMap<String, String> insertcontents, Class resource) throws IllegalAccessException, InstantiationException {
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
         Session session = sessionFactory.getCurrentSession();
 
-        Class resource = OperaSeries.class;
         Object object = resource.newInstance();
 
         for (String key : insertcontents.keySet()) {
@@ -440,12 +435,11 @@ public class InsertDao {
         return resultMap;
     }
 
-    public HashMap<String, Integer> insertAdvertise(HashMap<String, String> insertcontents) throws IllegalAccessException, InstantiationException {
+    public HashMap<String, Integer> insertAdvertise(HashMap<String, String> insertcontents, Class resource) throws IllegalAccessException, InstantiationException {
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
         Session session = sessionFactory.getCurrentSession();
 
-        Class resource = Advertise.class;
         Object object = resource.newInstance();
 
         commonDao.setResourceAttr(resource, object, "title", insertcontents.get("title"));
@@ -459,5 +453,38 @@ public class InsertDao {
         resultMap.put("statuscode", 200);
         resultMap.put("insertid", insertid);
         return resultMap;
+    }
+
+    public HashMap<String, Integer> insertThirdPartApp(HashMap<String, String> insertcontents, Class resource) throws IllegalAccessException, InstantiationException {
+        HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
+
+        Session session = sessionFactory.getCurrentSession();
+
+        Object object = resource.newInstance();
+
+        String title = insertcontents.get("title");
+
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("title", title);
+
+        if (commonDao.getResourceByFields(resource, conditions) == null) {
+            commonDao.setResourceAttr(resource, object, "title", title);
+
+            String appkey = String.format("%s-%s.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase(), "apk");
+
+            commonDao.setResourceAttr(resource, object, "app_key", appkey);
+
+            session.save(object);
+
+            int insertid = (Integer) commonDao.getResourceAttr(resource, object, "id");
+
+            resultMap.put("statuscode", 200);
+            resultMap.put("insertid", insertid);
+            return resultMap;
+        } else {
+            resultMap.put("statuscode", 515);
+            resultMap.put("insertid", -1);
+            return resultMap;
+        }
     }
 }

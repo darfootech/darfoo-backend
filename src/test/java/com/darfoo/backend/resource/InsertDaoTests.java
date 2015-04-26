@@ -2,6 +2,7 @@ package com.darfoo.backend.resource;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.Advertise;
+import com.darfoo.backend.model.ThirdPartApp;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -127,6 +128,17 @@ public class InsertDaoTests {
         String imagekey = String.format("%s-imagekey-%s.%s", resource.getSimpleName().toLowerCase(), System.currentTimeMillis(), "jpg");
         insertcontents.put("title", "呵呵");
         insertcontents.put("imagekey", imagekey);
+
+        HashMap<String, Integer> insertresult = commonDao.insertResource(resource, insertcontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
+        System.out.println("insertid -> " + insertresult.get("insertid"));
+    }
+
+    @Test
+    public void insertThirdPartApp() {
+        Class resource = ThirdPartApp.class;
+        HashMap<String, String> insertcontents = new HashMap<String, String>();
+        insertcontents.put("title", "芒果tv");
 
         HashMap<String, Integer> insertresult = commonDao.insertResource(resource, insertcontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));

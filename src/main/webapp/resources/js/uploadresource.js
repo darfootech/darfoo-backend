@@ -40,6 +40,8 @@ $(function () {
                     alert("越剧连续剧标题不能为空");
                 } else if (data == "514") {
                     alert("已经存在同名的越剧电影,不可以进行插入");
+                } else if (data == "515") {
+                    alert("同名的第三方app已经存在");
                 } else {
                     alert("提交资源信息失败");
                 }
