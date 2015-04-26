@@ -71,6 +71,7 @@
                         <li><a href="/darfoobackend/rest/admin/gallery/operavideo/all">查看修改越剧视频</a></li>
                         <li><a href="/darfoobackend/rest/admin/gallery/operaseries/all">查看修改越剧连续剧</a></li>
                         <li><a href="/darfoobackend/rest/admin/gallery/advertise/all">查看修改广告</a></li>
+                        <li><a href="/darfoobackend/rest/admin/gallery/thirdpartapp/all">查看修改第三方软件</a></li>
                         <li><a href="/darfoobackend/rest/admin/gallery/version/all">查看修改版本发布</a></li>
                         <li><a href="/darfoobackend/rest/admin/dancegroup/changetype">切换舞队类型</a></li>
                         <li><a href="/darfoobackend/rest/admin/connectmusic/dancevideo/all">关联舞蹈伴奏和舞蹈视频</a></li>

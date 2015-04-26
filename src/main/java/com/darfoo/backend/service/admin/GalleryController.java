@@ -2,6 +2,7 @@ package com.darfoo.backend.service.admin;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.Advertise;
+import com.darfoo.backend.model.ThirdPartApp;
 import com.darfoo.backend.model.Version;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
@@ -128,6 +129,11 @@ public class GalleryController {
 
         if (resource == Version.class) {
             modelMap.addAttribute(resource.getSimpleName().toLowerCase(), object);
+        }
+
+        if (resource == ThirdPartApp.class) {
+            modelMap.addAttribute(resource.getSimpleName().toLowerCase(), object);
+            modelMap.addAttribute("appurl", qiniuUtils.getQiniuResourceUrl((String) commonDao.getResourceAttr(resource, object, "app_key"), QiniuResourceEnum.RAWNORMAL));
         }
 
         return modelMap;
