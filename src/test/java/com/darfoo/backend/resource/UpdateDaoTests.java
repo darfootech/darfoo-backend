@@ -2,6 +2,7 @@ package com.darfoo.backend.resource;
 
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.Advertise;
+import com.darfoo.backend.model.ThirdPartApp;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
@@ -117,6 +118,16 @@ public class UpdateDaoTests {
 
         updatecontents.put("title", "水果水果");
         HashMap<String, Integer> insertresult = commonDao.updateResource(Advertise.class, id, updatecontents);
+        System.out.println("statuscode -> " + insertresult.get("statuscode"));
+    }
+
+    @Test
+    public void updateThirdPartAppById() {
+        HashMap<String, String> updatecontents = new HashMap<String, String>();
+        Integer id = 1;
+
+        updatecontents.put("title", "爱奇艺");
+        HashMap<String, Integer> insertresult = commonDao.updateResource(ThirdPartApp.class, id, updatecontents);
         System.out.println("statuscode -> " + insertresult.get("statuscode"));
     }
 }

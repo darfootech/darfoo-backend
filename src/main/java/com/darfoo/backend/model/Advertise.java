@@ -19,7 +19,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "advertise")
-@ModelOperation(insertMethod = "insertAdvertise", updateMethod = "updateAdvertise")
+@ModelOperation(insertMethod = "insertAdvertise", updateMethod = "updateTitle")
 public class Advertise implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

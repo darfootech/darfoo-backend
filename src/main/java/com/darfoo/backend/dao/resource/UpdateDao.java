@@ -41,14 +41,13 @@ public class UpdateDao {
     @Autowired
     AccompanyDao accompanyDao;
 
-    public HashMap<String, Integer> updateDanceVideo(Integer id, HashMap<String, String> updatecontents) {
+    public HashMap<String, Integer> updateDanceVideo(Integer id, HashMap<String, String> updatecontents, Class resource) {
         Set<String> categoryTitles = new HashSet<String>();
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria;
 
-        Class resource = DanceVideo.class;
         Object object = session.get(resource, id);
 
         if (object == null) {
@@ -167,7 +166,7 @@ public class UpdateDao {
         }
     }
 
-    public HashMap<String, Integer> updateDanceMusic(Integer id, HashMap<String, String> updatecontents) {
+    public HashMap<String, Integer> updateDanceMusic(Integer id, HashMap<String, String> updatecontents, Class resource) {
         Set<String> categoryTitles = new HashSet<String>();
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
         boolean isCategoryHasSingleChar = false;
@@ -175,7 +174,6 @@ public class UpdateDao {
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria;
 
-        Class resource = DanceMusic.class;
         Object object = session.get(resource, id);
 
         if (object == null) {
@@ -258,13 +256,12 @@ public class UpdateDao {
         }
     }
 
-    public HashMap<String, Integer> updateDanceGroup(Integer id, HashMap<String, String> updatecontents) {
+    public HashMap<String, Integer> updateDanceGroup(Integer id, HashMap<String, String> updatecontents, Class resource) {
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria;
 
-        Class resource = DanceGroup.class;
         Object object = session.get(resource, id);
 
         if (object == null) {
@@ -324,13 +321,12 @@ public class UpdateDao {
         }
     }
 
-    public HashMap<String, Integer> updateOperaVideo(Integer id, HashMap<String, String> updatecontents) {
+    public HashMap<String, Integer> updateOperaVideo(Integer id, HashMap<String, String> updatecontents, Class resource) {
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria;
 
-        Class resource = OperaVideo.class;
         Object object = session.get(resource, id);
 
         OperaVideoType type = TypeClassMapping.operaVideoTypeMap.get(updatecontents.get("type").toLowerCase());
@@ -430,12 +426,11 @@ public class UpdateDao {
         }
     }
 
-    public HashMap<String, Integer> updateOperaSeries(Integer id, HashMap<String, String> updatecontents) {
+    public HashMap<String, Integer> updateOperaSeries(Integer id, HashMap<String, String> updatecontents, Class resource) {
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
         Session session = sessionFactory.getCurrentSession();
 
-        Class resource = OperaSeries.class;
         Object object = session.get(resource, id);
 
         if (object == null) {
@@ -466,12 +461,11 @@ public class UpdateDao {
         }
     }
 
-    public HashMap<String, Integer> updateAdvertise(Integer id, HashMap<String, String> updatecontents) {
+    public HashMap<String, Integer> updateTitle(Integer id, HashMap<String, String> updatecontents, Class resource) {
         HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
 
         Session session = sessionFactory.getCurrentSession();
 
-        Class resource = Advertise.class;
         Object object = session.get(resource, id);
 
         if (object == null) {

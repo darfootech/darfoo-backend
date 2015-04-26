@@ -19,7 +19,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "thirdpartapp")
-@ModelOperation(insertMethod = "insertThirdPartApp", updateMethod = "updateThirdPartApp")
+@ModelOperation(insertMethod = "insertThirdPartApp", updateMethod = "updateTitle")
 public class ThirdPartApp implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

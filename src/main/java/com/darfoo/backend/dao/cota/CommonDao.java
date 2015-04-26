@@ -146,8 +146,8 @@ public class CommonDao {
 
         try {
             String methodName = ((ModelOperation) resource.getAnnotation(ModelOperation.class)).updateMethod();
-            Method method = UpdateDao.class.getDeclaredMethod(methodName, new Class[]{Integer.class, HashMap.class});
-            return (HashMap<String, Integer>) method.invoke(updateDao, new Object[]{id, updatecontents});
+            Method method = UpdateDao.class.getDeclaredMethod(methodName, new Class[]{Integer.class, HashMap.class, Class.class});
+            return (HashMap<String, Integer>) method.invoke(updateDao, new Object[]{id, updatecontents, resource});
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

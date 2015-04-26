@@ -256,7 +256,7 @@ public class GalleryController {
         modelMap.addAttribute("resources", resources);
         modelMap.addAttribute("type", type);
         modelMap.addAttribute("orders", orders);
-        modelMap.addAttribute("title", String.format("设置%s的现实顺序", TypeClassMapping.typeNameLiteralMap.get(type)));
+        modelMap.addAttribute("title", String.format("设置%s的显示顺序", TypeClassMapping.typeNameLiteralMap.get(type)));
         return "update/setresourceorder";
     }
 }
