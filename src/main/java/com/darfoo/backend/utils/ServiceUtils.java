@@ -50,6 +50,8 @@ public class ServiceUtils {
         FileUtils.createDir(dirName);
         String path = dirName + fileName;
 
+        System.out.println("path -> " + path);
+
         File newFile = new File(path);
         //通过CommonsMultipartFile的方法直接写文件（注意这个时候）
         try {

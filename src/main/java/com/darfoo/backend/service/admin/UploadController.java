@@ -92,7 +92,7 @@ public class UploadController {
         }
 
         if (resource == ThirdPartApp.class) {
-            String appkey = String.format("%s-%s.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase(), "apk");
+            String appkey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase(), insertid, "apk");
             session.setAttribute("appkey", appkey);
         }
 

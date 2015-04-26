@@ -478,6 +478,11 @@ public class InsertDao {
 
             int insertid = (Integer) commonDao.getResourceAttr(resource, object, "id");
 
+            HashMap<String, Object> updateMap = new HashMap<String, Object>();
+            appkey = String.format("%s-%s-%d.%s", insertcontents.get("title"), resource.getSimpleName().toLowerCase(), insertid, "apk");
+            updateMap.put("app_key", appkey);
+            commonDao.updateResourceFieldsById(resource, insertid, updateMap);
+
             resultMap.put("statuscode", 200);
             resultMap.put("insertid", insertid);
             return resultMap;
