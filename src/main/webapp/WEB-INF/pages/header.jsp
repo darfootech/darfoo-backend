@@ -18,22 +18,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Loading Bootstrap -->
-    <link href="/darfoobackend/resources/css/vendor/bootstrap.min.css" rel="stylesheet">
+    <link href="/darfoobackend/resources/css/vendor/bootstrap.min.css?t=1430060969" rel="stylesheet">
 
     <!-- Loading Flat UI -->
-    <link href="/darfoobackend/resources/css/flat-ui.css" rel="stylesheet">
+    <link href="/darfoobackend/resources/css/flat-ui.css?t=1430060969" rel="stylesheet">
 
     <link rel="shortcut icon" href="/darfoobackend/resources/img/favicon.ico?t=1402117937">
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="/darfoobackend/resources/js/vendor/jquery.min.js"></script>
+    <script src="/darfoobackend/resources/js/vendor/jquery.min.js?t=1430060969"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/darfoobackend/resources/js/flat-ui.min.js"></script>
+    <script src="/darfoobackend/resources/js/flat-ui.min.js?t=1430060969"></script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
     <!--[if lt IE 9]>
-    <script src="/darfoobackend/resources/js/vendor/html5shiv.js"></script>
-    <script src="/darfoobackend/resources/js/vendor/respond.min.js"></script>
+    <script src="/darfoobackend/resources/js/vendor/html5shiv.js?t=1430060969"></script>
+    <script src="/darfoobackend/resources/js/vendor/respond.min.js?t=1430060969"></script>
     <![endif]-->
 </head>
 <body>

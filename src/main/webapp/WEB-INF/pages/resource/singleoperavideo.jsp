@@ -2,8 +2,8 @@
 <%@include file="../header.jsp" %>
 <%@include file="../update/updatecota.jsp" %>
 
-<script src="/darfoobackend/resources/js/searchbelongto.js"></script>
-<script src="/darfoobackend/resources/js/modifyresource.js"></script>
+<script src="/darfoobackend/resources/js/searchbelongto.js?t=1430060969"></script>
+<script src="/darfoobackend/resources/js/modifyresource.js?t=1430060969"></script>
 
 <script>
     $(function () {

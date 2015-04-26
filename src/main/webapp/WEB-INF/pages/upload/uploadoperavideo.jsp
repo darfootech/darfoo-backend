@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@include file="../header.jsp" %>
 
-<script src="/darfoobackend/resources/js/searchbelongto.js"></script>
-<script src="/darfoobackend/resources/js/uploadresource.js"></script>
+<script src="/darfoobackend/resources/js/searchbelongto.js?t=1430060969"></script>
+<script src="/darfoobackend/resources/js/uploadresource.js?t=1430060969"></script>
 
 <div id="type" style="display: none">${type}</div>
 
