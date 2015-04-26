@@ -70,6 +70,10 @@ $(function () {
         });
     });
 
+    $("#updateapp").click(function () {
+        window.location.href = "/darfoobackend/rest/admin/" + type + "/updateapp/" + id;
+    });
+
     $("#updateimage").click(function () {
         window.location.href = "/darfoobackend/rest/admin/" + type + "/updateimage/" + id;
     });

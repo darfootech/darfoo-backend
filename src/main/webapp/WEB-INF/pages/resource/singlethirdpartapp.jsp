@@ -11,12 +11,12 @@
         <div class="col-md-12">
             <form role="form" id="updateresourceform">
                 <div style="display: none">
-                    <input type="text" name="id" value="${advertise.id}">
+                    <input type="text" name="id" value="${thirdpartapp.id}">
                 </div>
 
                 <div class="form-group">
                     <label for="title">第三方软件名字</label>
-                    <input type="text" class="form-control" name="title" id="title" value="${advertise.title}"/>
+                    <input type="text" class="form-control" name="title" id="title" value="${thirdpartapp.title}"/>
                 </div>
 
                 <div class="form-group">
@@ -33,7 +33,7 @@
                             <c:otherwise>
                             </c:otherwise>
                         </c:choose>
-                        <button type="button" class="btn btn-default" id="updateimage">更新第三方软件封面图片</button>
+                        <button type="button" class="btn btn-default" id="updateapp">更新第三方软件APK文件</button>
                     </div>
                 </div>
             </form>

@@ -81,7 +81,7 @@ public class UpdateController {
         modelMap.addAttribute("resourceid", id);
         modelMap.addAttribute("type", type);
         modelMap.addAttribute("resourcetype", resourcetype);
-        return "update/updateresourceimage";
+        return "update/updateresource";
     }
 
     @RequestMapping(value = "/admin/{type}/updateorder", method = RequestMethod.POST)
@@ -115,7 +115,7 @@ public class UpdateController {
         if (resourcetype.equals("image")) {
             uploadtype = ModelUploadEnum.SMALL;
             resourcekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
-        } else if (resourcetype.equals("video") || resourcetype.equals("music")) {
+        } else if (resourcetype.equals("video") || resourcetype.equals("music") || resourcetype.equals("app")) {
             uploadtype = ModelUploadEnum.LARGE;
             resourcekey = (String) commonDao.getResourceAttr(resource, object, String.format("%s_key", resourcetype));
         } else {

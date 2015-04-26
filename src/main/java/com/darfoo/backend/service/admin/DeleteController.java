@@ -3,6 +3,7 @@ package com.darfoo.backend.service.admin;
 import com.darfoo.backend.dao.CRUDEvent;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.Advertise;
+import com.darfoo.backend.model.ThirdPartApp;
 import com.darfoo.backend.model.Version;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
@@ -57,6 +58,9 @@ public class DeleteController {
             String versionnum = (String) commonDao.getResourceAttr(resource, object, "version");
             String versionkey = String.format("launcher-%s-%s.apk", versionnum, versiontype);
             ServiceUtils.deleteResource(versionkey);
+        } else if (resource == ThirdPartApp.class) {
+            String appkey = (String) commonDao.getResourceAttr(resource, object, "app_key");
+            ServiceUtils.deleteResource(appkey);
         }
         String status = CRUDEvent.getResponse(commonDao.deleteResourceById(resource, id));
         if (status.equals("DELETE_SUCCESS")) {
