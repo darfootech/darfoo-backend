@@ -5,16 +5,6 @@
 <script src="/darfoobackend/resources/js/searchbelongto.js?t=1430060969"></script>
 <script src="/darfoobackend/resources/js/modifyresource.js?t=1430060969"></script>
 
-<script>
-    $(function () {
-        var seriesname = $("#oldseriesname").text();
-
-        $('#seriesname option[value="' + seriesname + '"]').attr("selected", true);
-    });
-</script>
-
-<div id="oldseriesname" style="display: none">${video.series.title}</div>
-
 <div class="container">
     <h1>查看与修改越剧视频信息</h1>
 
@@ -37,13 +27,18 @@
                 <c:choose>
                     <c:when test="${innertype == 'SERIES'}">
                         <div class="form-group">
-                            <label for="seriesname">关联的越剧连续剧---
-                                <div style="color: green; display: inline; font-size: 18pt">原本为${video.series.title}</div>
-                            </label>
+                            <label for="seriesname">关联的越剧连续剧</label>
                             <select data-toggle="select" name="seriesname" id="seriesname"
                                     class="form-control select select-success mrs mbm">
                                 <c:forEach var="series" items="${serieses}">
-                                    <option value="${series.title}">${series.title}</option>
+                                    <c:choose>
+                                        <c:when test="${series.title == video.series.title}">
+                                            <option value="${series.title}" selected="selected">${series.title}</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="${series.title}">${series.title}</option>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </c:forEach>
                             </select>
                         </div>

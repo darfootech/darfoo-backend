@@ -2,19 +2,9 @@
 <%@include file="../header.jsp" %>
 <%@include file="../update/updatecota.jsp" %>
 
-<script src="/darfoobackend/resources/js/searchdancegroup.js?t=1430060969"></script>
+<script src="/darfoobackend/resources/js/searchbelongto.js?t=1430060969"></script>
 <script src="/darfoobackend/resources/js/getalldancemusic.js?t=1430060969"></script>
 <script src="/darfoobackend/resources/js/modifyresource.js?t=1430060969"></script>
-
-<script>
-    $(function () {
-        var authorname = $("#oldauthorname").text();
-
-        $('#authorname option[value="' + authorname + '"]').attr("selected", true);
-    });
-</script>
-
-<div id="oldauthorname" style="display: none">${video.author.title}</div>
 
 <div class="container">
     <h1>查看与修改舞蹈视频信息</h1>
@@ -32,13 +22,18 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="authorname">关联的明星舞队---
-                        <div style="color: green; display: inline; font-size: 18pt">原本为${video.author.title}</div>
-                    </label>
+                    <label for="authorname">关联的明星舞队</label>
                     <select data-toggle="select" name="authorname" id="authorname"
                             class="form-control select select-success mrs mbm">
                         <c:forEach var="author" items="${authors}">
-                            <option value="${author.title}">${author.title}</option>
+                            <c:choose>
+                                <c:when test="${author.title == video.author.title}">
+                                    <option value="${author.title}" selected="selected">${author.title}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${author.title}">${author.title}</option>
+                                </c:otherwise>
+                            </c:choose>
                         </c:forEach>
                     </select>
                 </div>
