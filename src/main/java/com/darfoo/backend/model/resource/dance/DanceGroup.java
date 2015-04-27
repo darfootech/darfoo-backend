@@ -25,7 +25,7 @@ import java.io.Serializable;
 @Table(name = "dancegroup")
 @ModelOperation(insertMethod = "insertDanceGroup", updateMethod = "updateDanceGroup")
 @PageSize(pagesize = 15)
-@HotSize(hotsize = 100)
+@HotSize(hotsize = 80)
 public class DanceGroup implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //引用下面名为mysql的主键生成方式
