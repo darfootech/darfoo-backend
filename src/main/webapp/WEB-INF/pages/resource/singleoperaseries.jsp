@@ -33,10 +33,12 @@
                             <c:otherwise>
                             </c:otherwise>
                         </c:choose>
-                        <button type="button" class="btn btn-default updateresource" id="updateimage">更新越剧连续剧封面图片</button>
+                        <button type="button" class="btn btn-default updateresource" id="updateimage">更新越剧连续剧封面图片
+                        </button>
                     </div>
                 </div>
                 <br/>
+
                 <div class="btn-toolbar">
                     <div class="btn-group btn-group-lg">
                         <a href="/darfoobackend/rest/admin/download/operaseries/videos/${series.id}">

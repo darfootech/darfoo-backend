@@ -218,8 +218,8 @@ public class UploadController {
     }
 
     /**
-     * @param type advertise thirdpartapp dancemusic dancegroup
-     * @param rtype image music app
+     * @param type     advertise thirdpartapp dancemusic dancegroup
+     * @param rtype    image music app
      * @param resource
      * @param session
      * @return

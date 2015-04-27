@@ -2,17 +2,13 @@ package com.darfoo.backend.dao.resource;
 
 import com.darfoo.backend.dao.cota.AccompanyDao;
 import com.darfoo.backend.dao.cota.CommonDao;
-import com.darfoo.backend.model.Advertise;
 import com.darfoo.backend.model.category.DanceMusicCategory;
 import com.darfoo.backend.model.category.DanceVideoCategory;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
 import com.darfoo.backend.model.cota.enums.OperaVideoType;
 import com.darfoo.backend.model.resource.Image;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
-import com.darfoo.backend.model.resource.dance.DanceMusic;
-import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.model.resource.opera.OperaSeries;
-import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.hibernate.Criteria;

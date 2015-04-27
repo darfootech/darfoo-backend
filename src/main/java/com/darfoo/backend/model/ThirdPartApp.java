@@ -7,8 +7,6 @@ import com.darfoo.backend.model.cota.annotations.ModelOperation;
 import com.darfoo.backend.model.cota.annotations.ModelUpdate;
 import com.darfoo.backend.model.cota.annotations.ModelUpload;
 import com.darfoo.backend.model.cota.enums.ModelUploadEnum;
-import com.darfoo.backend.model.resource.Image;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.io.Serializable;

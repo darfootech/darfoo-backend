@@ -22,7 +22,7 @@
                 <div class="form-group">
                     <label for="description">舞队简介</label>
                     <textarea type="text" class="form-control" name="description" id="description"
-                              >${author.description}</textarea>
+                            >${author.description}</textarea>
                 </div>
 
                 <c:choose>
@@ -61,6 +61,7 @@
                     </div>
                 </div>
                 <br/>
+
                 <div class="btn-toolbar">
                     <div class="btn-group btn-group-lg">
                         <a href="/darfoobackend/rest/admin/download/dancegroup/videos/${author.id}">
