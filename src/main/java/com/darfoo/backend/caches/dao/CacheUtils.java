@@ -196,6 +196,14 @@ public class CacheUtils {
         return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), String.format("%s-%d", type, id));
     }
 
+    public Object cacheSingleResource(String type, String title) {
+        Class resource = TypeClassMapping.typeClassMap.get(type);
+        Object object = commonDao.getResourceByTitle(resource, title);
+        System.out.println("title -> " + commonDao.getResourceAttr(resource, object, "title"));
+        cacheDao.insertSingleResource(resource, object, type);
+        return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), String.format("%s-%s", type, title));
+    }
+
     public List cacheRecommendResources(String type) {
         Class resource = TypeClassMapping.typeClassMap.get(type);
         String cachekey = String.format("%srecommend", type);

@@ -1,20 +1,14 @@
 package com.darfoo.backend.service.responsemodel;
 
 /**
- * Created by zjh on 15-4-20.
+ * Created by zjh on 15-4-28.
  */
-public class SingleAdvertise {
+public class SingleThirdPartApp {
     Integer id;
     String title;
-    String image_url;
+    String app_url;
 
-    public SingleAdvertise() {
-    }
-
-    public SingleAdvertise(Integer id, String title, String image_url) {
-        this.id = id;
-        this.title = title;
-        this.image_url = image_url;
+    public SingleThirdPartApp() {
     }
 
     public Integer getId() {
@@ -33,20 +27,20 @@ public class SingleAdvertise {
         this.title = title;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public String getApp_url() {
+        return app_url;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
+    public void setApp_url(String app_url) {
+        this.app_url = app_url;
     }
 
     @Override
     public String toString() {
-        return "SingleAdvertise{" +
+        return "SingleThirdPartApp{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", image_url='" + image_url + '\'' +
+                ", app_url='" + app_url + '\'' +
                 '}';
     }
 }

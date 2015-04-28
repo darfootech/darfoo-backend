@@ -38,11 +38,20 @@ public class CacheServiceTests {
     }
 
     @Test
-    public void cacheSingleResource() {
+    public void cacheSingleResourceById() {
         HashMap<String, Integer> typeidpair = new HashMap<String, Integer>();
         typeidpair.put("dancevideo", 1073);
         typeidpair.put("dancemusic", 436);
         typeidpair.put("dancegroup", 116);
+        for (String type : typeidpair.keySet()) {
+            System.out.println(cacheUtils.cacheSingleResource(type, typeidpair.get(type)));
+        }
+    }
+
+    @Test
+    public void cacheSingleResourceByTitle() {
+        HashMap<String, String> typeidpair = new HashMap<String, String>();
+        typeidpair.put("thirdpartapp", "芒果tv");
         for (String type : typeidpair.keySet()) {
             System.out.println(cacheUtils.cacheSingleResource(type, typeidpair.get(type)));
         }

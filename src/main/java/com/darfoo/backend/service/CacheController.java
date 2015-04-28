@@ -53,11 +53,27 @@ public class CacheController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/{type}/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{type}/id/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
     Object getSingleResourceFromCache(@PathVariable String type, @PathVariable Integer id) {
         return cacheUtils.cacheSingleResource(type, id);
+    }
+
+    /**
+     * 根据title获取某一类资源的单个记录
+     *
+     * @param type
+     * @return
+     * @example http://localhost:8080/darfoobackend/rest/cache/{type}/title?title=t
+     */
+    @RequestMapping(value = "/{type}/title", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    Object getSingleResourceFromCache(@PathVariable String type, HttpServletRequest request) {
+        String title = request.getParameter("title");
+        System.out.println(title);
+        return cacheUtils.cacheSingleResource(type, title);
     }
 
     /**

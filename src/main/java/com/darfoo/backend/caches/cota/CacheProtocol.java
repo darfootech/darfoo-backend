@@ -3,6 +3,7 @@ package com.darfoo.backend.caches.cota;
 import com.darfoo.backend.caches.client.CommonRedisClient;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.Advertise;
+import com.darfoo.backend.model.ThirdPartApp;
 import com.darfoo.backend.model.cota.enums.DanceVideoType;
 import com.darfoo.backend.model.cota.enums.OperaVideoType;
 import com.darfoo.backend.model.resource.Image;
@@ -14,6 +15,7 @@ import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Pipeline;
 
+import javax.annotation.Resource;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -37,6 +39,11 @@ public class CacheProtocol {
             String id = idField.get(object).toString();
 
             String cachekey = prefix + "-" + id;
+
+            if (model == ThirdPartApp.class) {
+                String title = (String) commonDao.getResourceAttr(model, object, "title");
+                cachekey = prefix + "-" + title;
+            }
 
             if (!commonRedisClient.exists(cachekey)) {
                 HashMap<String, String> cacheInsertMap = new HashMap<String, String>();
@@ -92,9 +99,12 @@ public class CacheProtocol {
                             } else if (field.getName().equals("video_key")) {
                                 cacheInsertMap.put("video_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
                                 System.out.println("video_url -> " + field.get(object).toString());
-                            } else {
+                            } else if (field.getName().equals("music_key")) {
                                 cacheInsertMap.put("music_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
                                 System.out.println("music_url -> " + field.get(object).toString());
+                            } else if (field.getName().equals("app_key")) {
+                                cacheInsertMap.put("app_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.RAWNORMAL));
+                                System.out.println("app_url -> " + field.get(object).toString());
                             }
                         } else {
                             System.out.println("something is wired");

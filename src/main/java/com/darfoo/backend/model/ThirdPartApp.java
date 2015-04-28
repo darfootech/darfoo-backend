@@ -30,6 +30,7 @@ public class ThirdPartApp implements Serializable {
     @ModelUpdate
     String title;
 
+    @Column(name = "APP_KEY", unique = true, nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
     String app_key;
 
