@@ -1,11 +1,12 @@
 package com.darfoo.backend.caches.dao;
 
 import com.darfoo.backend.caches.client.CommonRedisClient;
+import com.darfoo.backend.caches.cota.CacheCollType;
 import com.darfoo.backend.caches.cota.CacheProtocol;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
-import com.darfoo.backend.service.cota.CacheCollType;
 import org.springframework.beans.factory.annotation.Autowired;
+import redis.clients.jedis.Pipeline;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,6 +26,10 @@ public class CacheDao {
 
     public boolean insertSingleResource(Class resource, Object object, String prefix) {
         return cacheProtocol.insertResourceIntoCache(resource, object, prefix);
+    }
+
+    public boolean insertSingleResource(Pipeline pipeline, Class resource, Object object, String prefix) {
+        return cacheProtocol.insertResourceIntoCache(pipeline, resource, object, prefix);
     }
 
     public Object getSingleResource(Class resource, String cachekey) {
@@ -48,6 +53,25 @@ public class CacheDao {
             System.out.println("insert status -> " + status);
 
             boolean result = insertSingleResource(insertclass, object, prefix);
+            System.out.println("insert result -> " + result);
+        }
+    }
+
+    public void insertResourcesIntoCache(Pipeline pipeline, Class insertclass, List resources, String cachekey, String prefix, CacheCollType type) {
+        for (Object object : resources) {
+            int id = (Integer) commonDao.getResourceAttr(insertclass, object, "id");
+            if (type == CacheCollType.SET) {
+                pipeline.sadd(cachekey, String.format("%s-%d", prefix, id));
+            } else if (type == CacheCollType.LIST) {
+                String resourcekey = String.format("%s-%d", prefix, id);
+                pipeline.rpush(cachekey, resourcekey);
+            } else if (type == CacheCollType.SORTEDSET) {
+                pipeline.zadd(cachekey, (double) (resources.size() - resources.indexOf(object)), String.format("%s-%d", prefix, id));
+            } else {
+                System.out.println("wired");
+            }
+
+            boolean result = insertSingleResource(pipeline, insertclass, object, prefix);
             System.out.println("insert result -> " + result);
         }
     }
