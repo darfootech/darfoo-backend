@@ -1,10 +1,10 @@
 package com.darfoo.backend.caches.dao;
 
 import com.darfoo.backend.caches.client.CommonRedisClient;
+import com.darfoo.backend.caches.cota.CacheCollType;
 import com.darfoo.backend.caches.cota.CacheProtocol;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
-import com.darfoo.backend.caches.cota.CacheCollType;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Pipeline;
 
