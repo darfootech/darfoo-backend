@@ -17,7 +17,7 @@ import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.service.category.DanceVideoCates;
-import com.darfoo.backend.service.cota.CacheCollType;
+import com.darfoo.backend.caches.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.SingleDanceMusic;
 import com.darfoo.backend.service.responsemodel.SingleDanceVideo;

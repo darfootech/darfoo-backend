@@ -8,7 +8,7 @@ import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.model.resource.dance.DanceGroup;
 import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
-import com.darfoo.backend.service.cota.CacheCollType;
+import com.darfoo.backend.caches.cota.CacheCollType;
 import com.darfoo.backend.service.cota.TypeClassMapping;
 import com.darfoo.backend.service.responsemodel.SingleDanceGroup;
 import com.darfoo.backend.service.responsemodel.SingleDanceMusic;
