@@ -43,6 +43,7 @@ public class PipelineTests {
     //插入多个无依赖的数据使用pipeline可以非阻塞的并发执行 理论上可以得到性能提升
     //0.581 seconds
     //使用pipeline获得了10倍的性能提升
+    //0.319 seconds
     @Test
     public void piplineInsert() {
         Jedis jedis = null;
@@ -53,7 +54,7 @@ public class PipelineTests {
             for (int i = 0; i < 100000; i++) {
                 pipeline.set("p" + i, "p" + i);
             }
-            List<Object> results = pipeline.syncAndReturnAll();
+            //List<Object> results = pipeline.syncAndReturnAll();
             long end = System.currentTimeMillis();
             System.out.println("Pipelined SET: " + ((end - start)/1000.0) + " seconds");
         } catch (Exception e) {

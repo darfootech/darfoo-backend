@@ -1,5 +1,6 @@
 package com.darfoo.backend.caches.dao;
 
+import com.darfoo.backend.caches.client.RedisManager;
 import com.darfoo.backend.dao.cota.CategoryDao;
 import com.darfoo.backend.dao.cota.CommonDao;
 import com.darfoo.backend.dao.cota.LimitDao;
@@ -22,6 +23,9 @@ import com.darfoo.backend.service.responsemodel.SingleDanceMusic;
 import com.darfoo.backend.service.responsemodel.SingleDanceVideo;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Pipeline;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +53,8 @@ public class CacheUtils {
     StatisticsDao statisticsDao;
     @Autowired
     StatisticsCacheDao statisticsCacheDao;
+
+    JedisPool jedisPool = RedisManager.getRedisPoolInstance();
 
     public void insertWithPagination(Class resource, List resources, String cachekey, String prefix, CacheCollType cacheCollType, Integer... pageArray) {
         if (pageArray.length == 0) {
@@ -78,6 +84,48 @@ public class CacheUtils {
             } else {
                 cacheDao.insertResourcesIntoCache(resource, resources.subList(start, end + 1), cachekey, prefix, cacheCollType);
             }
+        }
+    }
+
+    public void insertWithPaginationWithPipeline(Class resource, List resources, String cachekey, String prefix, CacheCollType cacheCollType, Integer... pageArray) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            Pipeline pipeline = jedis.pipelined();
+
+            if (pageArray.length == 0) {
+                cacheDao.insertResourcesIntoCache(pipeline, resource, resources, cachekey, prefix, cacheCollType);
+            } else {
+                int start = 0;
+                int end = 0;
+                if (pageArray.length == 1) {
+                    int page = pageArray[0];
+                    int pageSize = limitDao.getResourceLimitSize(resource, PageSize.class);
+                    start = (page - 1) * pageSize;
+                    end = page * pageSize - 1;
+                }
+
+                if (pageArray.length == 2) {
+                    int skipNum = pageArray[0];
+                    int returnNum = pageArray[1];
+                    start = skipNum;
+                    end = skipNum + returnNum - 1;
+                }
+
+                int maxsize = resources.size();
+                if (start > resources.size()) {
+                    cacheDao.insertResourcesIntoCache(pipeline, resource, new ArrayList(), cachekey, prefix, cacheCollType);
+                } else if (end + 1 > resources.size()) {
+                    cacheDao.insertResourcesIntoCache(pipeline, resource, resources.subList(start, maxsize), cachekey, prefix, cacheCollType);
+                } else {
+                    cacheDao.insertResourcesIntoCache(pipeline, resource, resources.subList(start, end + 1), cachekey, prefix, cacheCollType);
+                }
+            }
+            //List<Object> results = pipeline.syncAndReturnAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            jedisPool.returnResource(jedis);
         }
     }
 
@@ -129,7 +177,8 @@ public class CacheUtils {
 
     public List commonCacheFn(Class resource, List resources, String baseCacheKey, String prefix, Integer... pageArray) {
         String cachekey = returnCacheKey(baseCacheKey, pageArray);
-        insertWithPagination(resource, resources, cachekey, prefix, CacheCollType.SORTEDSET, pageArray);
+        //insertWithPagination(resource, resources, cachekey, prefix, CacheCollType.SORTEDSET, pageArray);
+        insertWithPaginationWithPipeline(resource, resources, cachekey, prefix, CacheCollType.SORTEDSET, pageArray);
         return returnWithPagination(resource, TypeClassMapping.cacheResponseMap.get(prefix), cachekey, CacheCollType.SORTEDSET);
     }
 

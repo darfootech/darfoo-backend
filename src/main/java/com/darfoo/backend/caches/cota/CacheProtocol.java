@@ -12,6 +12,7 @@ import com.darfoo.backend.model.resource.opera.OperaSeries;
 import com.darfoo.backend.utils.QiniuResourceEnum;
 import com.darfoo.backend.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import redis.clients.jedis.Pipeline;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -105,6 +106,93 @@ public class CacheProtocol {
                     cacheInsertMap.put("type", type.ordinal() + "");
                 }
                 commonRedisClient.hmset(cachekey, cacheInsertMap);
+            }
+            return true;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return false;
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean insertResourceIntoCache(Pipeline pipeline, Class model, Object object, String prefix) {
+        try {
+            Field idField = model.getDeclaredField("id");
+            idField.setAccessible(true);
+            String id = idField.get(object).toString();
+
+            String cachekey = prefix + "-" + id;
+
+            if (!commonRedisClient.exists(cachekey)) {
+                HashMap<String, String> cacheInsertMap = new HashMap<String, String>();
+                for (Field field : model.getDeclaredFields()) {
+                    if (field.isAnnotationPresent(CacheInsert.class)) {
+                        field.setAccessible(true);
+                        Annotation annotation = field.getAnnotation(CacheInsert.class);
+                        CacheInsert cacheInsert = (CacheInsert) annotation;
+
+                        if (cacheInsert.type() == CacheInsertEnum.NORMAL) {
+                            if (field.getName().equals("author")) {
+                                DanceGroup author = (DanceGroup) field.get(object);
+                                if (author != null) {
+                                    System.out.println(field.getName() + " -> " + author.getTitle());
+                                    cacheInsertMap.put("authorname", author.getTitle());
+                                } else {
+                                    cacheInsertMap.put("authorname", "");
+                                }
+                            } else if (field.getName().equals("series")) {
+                                OperaVideoType type = (OperaVideoType) commonDao.getResourceAttr(model, object, "type");
+                                OperaSeries series = (OperaSeries) field.get(object);
+                                if (type == OperaVideoType.SERIES && series != null) {
+                                    cacheInsertMap.put("seriesname", series.getTitle());
+                                } else {
+                                    cacheInsertMap.put("seriesname", "");
+                                }
+                            } else if (field.getName().equals("authorname")) {
+                                cacheInsertMap.put("authorname", field.get(object).toString());
+                                System.out.println(field.getName() + " -> " + field.get(object));
+                            } else if (field.getName().equals("update_timestamp")) {
+                                cacheInsertMap.put(field.getName(), ((Long) field.get(object) / 1000) + "");
+                            } else {
+                                cacheInsertMap.put(field.getName(), field.get(object).toString());
+                                System.out.println(field.getName() + " -> " + field.get(object));
+                            }
+                        } else if (cacheInsert.type() == CacheInsertEnum.RESOURCE) {
+                            if (field.getName().equals("image")) {
+                                Image image = (Image) field.get(object);
+                                String image_download_url = "";
+                                if (image != null) {
+                                    if (prefix.contains("recommend")) {
+                                        image_download_url = qiniuUtils.getQiniuResourceUrl(commonDao.getResourceAttr(model, object, "video_key") + "@@recommend" + model.getSimpleName().toLowerCase() + ".png", QiniuResourceEnum.RAWNORMAL);
+                                    } else {
+                                        if (model == Advertise.class) {
+                                            image_download_url = qiniuUtils.getQiniuResourceUrl(image.getImage_key(), QiniuResourceEnum.RAWNORMAL);
+                                        } else {
+                                            image_download_url = qiniuUtils.getQiniuResourceUrl(image.getImage_key(), QiniuResourceEnum.RAWSMALL);
+                                        }
+                                    }
+                                }
+                                cacheInsertMap.put("image_url", image_download_url);
+                                System.out.println("image_url -> " + image_download_url);
+                            } else if (field.getName().equals("video_key")) {
+                                cacheInsertMap.put("video_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
+                                System.out.println("video_url -> " + field.get(object).toString());
+                            } else {
+                                cacheInsertMap.put("music_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
+                                System.out.println("music_url -> " + field.get(object).toString());
+                            }
+                        } else {
+                            System.out.println("something is wired");
+                        }
+                    }
+                }
+                if (model == DanceVideo.class) {
+                    DanceVideoType type = (DanceVideoType) commonDao.getResourceAttr(model, object, "type");
+                    cacheInsertMap.put("type", type.ordinal() + "");
+                }
+                pipeline.hmset(cachekey, cacheInsertMap);
             }
             return true;
         } catch (IllegalAccessException e) {
