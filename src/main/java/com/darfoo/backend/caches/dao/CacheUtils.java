@@ -402,7 +402,7 @@ public class CacheUtils {
             cacheDao.insertSingleResource(resource, object, type);
             return cacheDao.getSingleResource(TypeClassMapping.cacheResponseMap.get(type), String.format("%s-%d", type, mid));
         } else {
-            return new SingleDanceMusic(-1, "", "", "", 0L);
+            return new SingleDanceMusic(-1, "", "", "", "", 0L);
         }
     }
 

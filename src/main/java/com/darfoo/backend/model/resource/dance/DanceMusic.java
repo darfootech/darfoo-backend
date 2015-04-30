@@ -47,6 +47,10 @@ public class DanceMusic implements Serializable {
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
     String music_key;
 
+    @Column(name = "SPEEDUP_KEY", unique = true, nullable = false, columnDefinition = "varchar(255) not null")
+    @CacheInsert(type = CacheInsertEnum.RESOURCE)
+    String speedup_key;
+
     @Column(name = "UPDATE_TIMESTAMP", nullable = false, columnDefinition = "bigint(64) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     Long update_timestamp = System.currentTimeMillis();
