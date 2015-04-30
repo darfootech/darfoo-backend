@@ -8,17 +8,19 @@ public class SingleOperaVideo {
     String title;
     String seriesname;
     String video_url;
+    String speedup_url;
     String image_url;
     Long update_timestamp;
 
     public SingleOperaVideo() {
     }
 
-    public SingleOperaVideo(Integer id, String title, String seriesname, String video_url, String image_url, Long update_timestamp) {
+    public SingleOperaVideo(Integer id, String title, String seriesname, String video_url, String speedup_url, String image_url, Long update_timestamp) {
         this.id = id;
         this.title = title;
         this.seriesname = seriesname;
         this.video_url = video_url;
+        this.speedup_url = speedup_url;
         this.image_url = image_url;
         this.update_timestamp = update_timestamp;
     }
@@ -71,6 +73,14 @@ public class SingleOperaVideo {
         this.seriesname = seriesname;
     }
 
+    public String getSpeedup_url() {
+        return speedup_url;
+    }
+
+    public void setSpeedup_url(String speedup_url) {
+        this.speedup_url = speedup_url;
+    }
+
     @Override
     public String toString() {
         return "SingleOperaVideo{" +
@@ -78,6 +88,7 @@ public class SingleOperaVideo {
                 ", title='" + title + '\'' +
                 ", seriesname='" + seriesname + '\'' +
                 ", video_url='" + video_url + '\'' +
+                ", speedup_url='" + speedup_url + '\'' +
                 ", image_url='" + image_url + '\'' +
                 ", update_timestamp=" + update_timestamp +
                 '}';

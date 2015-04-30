@@ -10,6 +10,7 @@ public class SingleDanceVideo {
     String title;
     String authorname;
     String video_url;
+    String speedup_url;
     String image_url;
     //-> 教学是0 欣赏时1
     Integer type;
@@ -18,11 +19,12 @@ public class SingleDanceVideo {
     public SingleDanceVideo() {
     }
 
-    public SingleDanceVideo(Integer id, String title, String authorname, String video_url, String image_url, Integer type, Long update_timestamp) {
+    public SingleDanceVideo(Integer id, String title, String authorname, String video_url, String speedup_url, String image_url, Integer type, Long update_timestamp) {
         this.id = id;
         this.title = title;
         this.authorname = authorname;
         this.video_url = video_url;
+        this.speedup_url = speedup_url;
         this.image_url = image_url;
         this.type = type;
         this.update_timestamp = update_timestamp;
@@ -84,6 +86,14 @@ public class SingleDanceVideo {
         this.type = type;
     }
 
+    public String getSpeedup_url() {
+        return speedup_url;
+    }
+
+    public void setSpeedup_url(String speedup_url) {
+        this.speedup_url = speedup_url;
+    }
+
     @Override
     public String toString() {
         return "SingleDanceVideo{" +
@@ -91,6 +101,7 @@ public class SingleDanceVideo {
                 ", title='" + title + '\'' +
                 ", authorname='" + authorname + '\'' +
                 ", video_url='" + video_url + '\'' +
+                ", speedup_url='" + speedup_url + '\'' +
                 ", image_url='" + image_url + '\'' +
                 ", type=" + type +
                 ", update_timestamp=" + update_timestamp +

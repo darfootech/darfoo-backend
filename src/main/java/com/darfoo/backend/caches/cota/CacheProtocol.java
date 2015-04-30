@@ -97,6 +97,8 @@ public class CacheProtocol {
                     } else if (field.getName().equals("video_key")) {
                         cacheInsertMap.put("video_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
                         System.out.println("video_url -> " + field.get(object).toString());
+                        cacheInsertMap.put("speedup_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
+                        System.out.println("speedup_url -> " + field.get(object).toString());
                     } else if (field.getName().equals("music_key")) {
                         cacheInsertMap.put("music_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
                         System.out.println("music_url -> " + field.get(object).toString());

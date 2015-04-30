@@ -39,6 +39,7 @@ public class QiniuUtils {
         this.bucketName = "zjdxlab410yy";
         this.mimeType = null;
         this.domain = "7qnarb.com1.z0.glb.clouddn.com";
+        //this.domain = "speedup.darfoo.com";
         this.auth = Auth.create(Config.ACCESS_KEY, Config.SECRET_KEY);
         this.operater = new OperationManager(this.auth);
     }
