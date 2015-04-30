@@ -9,6 +9,14 @@ import com.qiniu.api.rs.GetPolicy;
 import com.qiniu.api.rs.PutPolicy;
 import com.qiniu.api.rs.RSClient;
 import com.qiniu.api.rs.URLUtils;
+import com.qiniu.common.QiniuException;
+import com.qiniu.http.Response;
+import com.qiniu.processing.OperationManager;
+import com.qiniu.storage.BucketManager;
+import com.qiniu.util.Auth;
+import com.qiniu.util.StringMap;
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.net.URLCodec;
 import org.json.JSONException;
 
 import java.io.File;
@@ -22,13 +30,17 @@ public class QiniuUtils {
     private String mimeType;
     private String domain;
 
+    private Auth auth;
+    private OperationManager operater;
+
     public QiniuUtils() {
         Config.ACCESS_KEY = "bnMvAStYBsL5AjYM3UXbpGalrectRZZF88Y6fZ-X";
         Config.SECRET_KEY = "eMZK5q9HI1EXe7KzNtsyKJZJPHEfh96XcHvDigyG";
         this.bucketName = "zjdxlab410yy";
         this.mimeType = null;
-        //this.domain = "zjdxlab410yy.qiniudn.com"; // godaddy的一次dns问题
         this.domain = "7qnarb.com1.z0.glb.clouddn.com";
+        this.auth = Auth.create(Config.ACCESS_KEY, Config.SECRET_KEY);
+        this.operater = new OperationManager(this.auth);
     }
 
     public String getToken() {
@@ -70,12 +82,67 @@ public class QiniuUtils {
                 String baseUrlSmall = String.format("%s?imageView2/2/w/230/h/126", baseUrl);
                 System.out.println(baseUrlSmall);
                 return getPolicy.makeRequest(baseUrlSmall, mac);
+            } else if (type == QiniuResourceEnum.M3U8) {
+                Long expiretime = 7 * 24 * 3600L;
+                baseUrl = baseUrl + "?pm3u8/0/expires/" + expiretime;
+                return this.auth.privateDownloadUrl(baseUrl);
             } else {
                 System.out.println("wired");
                 return "";
             }
         } catch (Exception e) {
             return e.getMessage();
+        }
+    }
+
+    public String escape(String url) throws EncoderException {
+        URLCodec urlEncoder = new URLCodec("UTF-8");
+        return urlEncoder.encode(url).replace("+", "%20");
+    }
+
+    public String makeBaseUrl(String domain, String key) throws EncoderException {
+        return "http://" + domain + "/" + escape(key);
+    }
+
+    public String getM3U8DownloadUrl(String domain, String key) {
+        try {
+            String baseUrl = makeBaseUrl(domain, key);
+            Long expiretime = 7 * 24 * 3600L;
+            baseUrl = baseUrl + "?pm3u8/0/expires/" + expiretime;
+            return this.auth.privateDownloadUrl(baseUrl);
+        } catch (EncoderException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+    }
+
+    public void resourceOperation(String key) {
+        String notifyURL = "http://115.29.174.222:9001/qiniucallback";
+        boolean force = true;
+        String pipeline = "";
+
+        StringMap params = new StringMap().putNotEmpty("notifyURL", notifyURL)
+                .putWhen("force", 1, force).putNotEmpty("pipeline", pipeline);
+
+        String fops = "avthumb/m3u8/ab/400k/r/24";
+
+        try {
+            // 针对指定空间的文件触发 pfop 操作
+            String id = operater.pfop(this.bucketName, key, fops, params);
+            System.out.println(id);
+            // 可通过下列地址查看处理状态信息。
+            // 实际项目中设置 notifyURL，接受通知。通知内容和处理完成后的查看信息一致。
+            //String url = "http://api.qiniu.com/status/get/prefop?id=" + id;
+        } catch (QiniuException e) {
+            Response r = e.response;
+            // 请求失败时简单状态信息
+            System.out.println(r.toString());
+            try {
+                // 响应的文本信息
+                System.out.println(r.bodyString());
+            } catch (QiniuException e1) {
+                //ignore
+            }
         }
     }
 
