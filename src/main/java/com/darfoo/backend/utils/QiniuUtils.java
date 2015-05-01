@@ -29,7 +29,7 @@ public class QiniuUtils {
     private String bucketName;
     private String mimeType;
     private String domain;
-
+    private BucketManager bucketManager;
     private Auth auth;
     private OperationManager operater;
 
@@ -41,6 +41,7 @@ public class QiniuUtils {
         this.domain = "7qnarb.com1.z0.glb.clouddn.com";
         //this.domain = "speedup.darfoo.com";
         this.auth = Auth.create(Config.ACCESS_KEY, Config.SECRET_KEY);
+        this.bucketManager = new BucketManager(this.auth);
         this.operater = new OperationManager(this.auth);
     }
 
@@ -144,6 +145,30 @@ public class QiniuUtils {
             } catch (QiniuException e1) {
                 //ignore
             }
+        }
+    }
+
+    public void copyFile(String originbucket, String originkey, String targetbucket, String targetkey) {
+        try {
+            this.bucketManager.copy(originbucket, originkey, targetbucket, targetkey);
+        } catch (QiniuException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteFile(String bucket, String key) {
+        try {
+            this.bucketManager.delete(bucket, key);
+        } catch (QiniuException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void renameFile(String oldkey, String newkey) {
+        try {
+            bucketManager.rename(this.bucketName, oldkey, newkey);
+        } catch (QiniuException e) {
+            e.printStackTrace();
         }
     }
 

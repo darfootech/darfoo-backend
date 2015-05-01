@@ -34,6 +34,11 @@ public class QiniuTests {
     }
 
     @Test
+    public void renameFile() {
+        qiniuUtils.renameFile("留下来.mp4", "留下来吧33.mp4");
+    }
+
+    @Test
     public void generateM3U8PlayableFile() {
         //String key = "鼓楼天歌-口令 背面-dancevideo-1705.mp4";
         String key = "东方姑娘-dancevideo-1279.flv";
