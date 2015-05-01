@@ -98,7 +98,7 @@ public class DanceGroupDaoTests {
             String image_download_url = qiniuUtils.getQiniuResourceUrl(video.getImage().getImage_key(), QiniuResourceEnum.RAWNORMAL);
             String title = video.getTitle();
             long timestamp = video.getUpdate_timestamp();
-            result.add(new SingleDanceVideo(tid, title, authorname, tutorial_download_url, image_download_url, 0, timestamp));
+            result.add(new SingleDanceVideo(tid, title, authorname, tutorial_download_url, tutorial_download_url, image_download_url, 0, timestamp));
         }
 
         for (SingleDanceVideo video : result) {
