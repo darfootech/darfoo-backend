@@ -112,10 +112,10 @@ public class UpdateController {
         Object object = commonDao.getResourceById(resource, id);
         String resourcekey;
         ModelUploadEnum uploadtype;
-        if (resourcetype.equals("image")) {
+        if (resourcetype.equals("image") || resourcetype.equals("app")) {
             uploadtype = ModelUploadEnum.SMALL;
             resourcekey = ((Image) commonDao.getResourceAttr(resource, object, "image")).getImage_key();
-        } else if (resourcetype.equals("video") || resourcetype.equals("music") || resourcetype.equals("app")) {
+        } else if (resourcetype.equals("video") || resourcetype.equals("music")) {
             uploadtype = ModelUploadEnum.LARGE;
             resourcekey = (String) commonDao.getResourceAttr(resource, object, String.format("%s_key", resourcetype));
         } else {

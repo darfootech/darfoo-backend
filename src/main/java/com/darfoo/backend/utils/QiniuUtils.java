@@ -118,6 +118,7 @@ public class QiniuUtils {
         }
     }
 
+    //对大资源进行分片加快客户端的加载
     public void resourceOperation(String key) {
         String notifyURL = "http://115.29.174.222:9001/qiniucallback";
         boolean force = true;

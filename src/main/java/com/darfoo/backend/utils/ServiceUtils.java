@@ -83,7 +83,7 @@ public class ServiceUtils {
         return uploadQiniuResource(file, fileName, type);
     }
 
-    public static void operateQiniuResourceAsync(CommonsMultipartFile file, String key, ModelUploadEnum type, QiniuOperationType operation) {
+    public static void operateQiniuResourceAsync(CommonsMultipartFile file, String key, final ModelUploadEnum type, final QiniuOperationType operation) {
         final CommonsMultipartFile innerfile = file;
         final String innerkey = key;
         final ModelUploadEnum innertype = type;
@@ -105,6 +105,9 @@ public class ServiceUtils {
                     System.out.println("upload file failed");
                 } else {
                     System.out.println("upload file success");
+                    if (operation == QiniuOperationType.REUPLOAD && type == ModelUploadEnum.LARGE) {
+                        qiniuUtils.resourceOperation(innerkey);
+                    }
                 }
             }
         }, ec);
