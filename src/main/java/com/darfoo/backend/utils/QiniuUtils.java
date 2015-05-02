@@ -1,5 +1,9 @@
 package com.darfoo.backend.utils;
 
+import com.darfoo.backend.dao.cota.CommonDao;
+import com.darfoo.backend.model.resource.dance.DanceMusic;
+import com.darfoo.backend.model.resource.dance.DanceVideo;
+import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.qiniu.api.auth.AuthException;
 import com.qiniu.api.auth.digest.Mac;
 import com.qiniu.api.config.Config;
@@ -18,14 +22,20 @@ import com.qiniu.util.StringMap;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.net.URLCodec;
 import org.json.JSONException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by zjh on 14-11-26.
  */
 public class QiniuUtils {
+    @Autowired
+    CommonDao commonDao;
     private String bucketName;
     private String mimeType;
     private String domain;
@@ -162,6 +172,32 @@ public class QiniuUtils {
             this.bucketManager.delete(bucket, key);
         } catch (QiniuException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void speedupResources() {
+        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        conditions.put("speedup_key", "");
+        List<String> resourcekeys = new ArrayList<String>();
+        List dancevideos = commonDao.getResourcesByFields(DanceVideo.class, conditions);
+        List dancemusics = commonDao.getResourcesByFields(DanceMusic.class, conditions);
+        List operavideos = commonDao.getResourcesByFields(OperaVideo.class, conditions);
+
+        for (Object danceVideo : dancevideos) {
+            resourcekeys.add((String) commonDao.getResourceAttr(DanceVideo.class, danceVideo, "video_key"));
+        }
+
+        for (Object danceMusic : dancemusics) {
+            resourcekeys.add((String) commonDao.getResourceAttr(DanceMusic.class, danceMusic, "music_key"));
+        }
+
+        for (Object operaVideo : operavideos) {
+            resourcekeys.add((String) commonDao.getResourceAttr(OperaVideo.class, operaVideo, "video_key"));
+        }
+
+        for (String key : resourcekeys) {
+            System.out.println(key);
+            resourceOperation(key);
         }
     }
 

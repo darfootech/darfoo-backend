@@ -16,6 +16,7 @@ import com.darfoo.backend.model.resource.opera.OperaSeries;
 import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.service.category.DanceVideoCates;
 import com.darfoo.backend.service.cota.TypeClassMapping;
+import com.darfoo.backend.utils.QiniuUtils;
 import com.darfoo.backend.utils.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,6 +40,8 @@ import java.util.HashMap;
 public class UploadController {
     @Autowired
     CommonDao commonDao;
+    @Autowired
+    QiniuUtils qiniuUtils;
 
     public int commonInsertResource(Class resource, HttpServletRequest request, HttpSession session) {
         HashMap<String, String> insertcontents = new HashMap<String, String>();
@@ -202,6 +205,13 @@ public class UploadController {
         System.out.println("title -> " + request.getParameter("title"));
         System.out.println("insertstatus ->" + status);
         return result;
+    }
+
+    //自动上传完一个资源之后请求这个action来触发资源分片以加速在launcher上播放器的加载
+    @RequestMapping(value = "/resources/triggerspeedup", method = RequestMethod.GET)
+    public @ResponseBody String triggerSpeedup() {
+        qiniuUtils.speedupResources();
+        return "ok";
     }
 
     @RequestMapping(value = "/resources/{type}/resource/new", method = RequestMethod.GET)

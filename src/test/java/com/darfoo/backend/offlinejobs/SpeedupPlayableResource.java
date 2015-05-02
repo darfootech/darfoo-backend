@@ -5,6 +5,7 @@ import com.darfoo.backend.model.resource.dance.DanceMusic;
 import com.darfoo.backend.model.resource.dance.DanceVideo;
 import com.darfoo.backend.model.resource.opera.OperaVideo;
 import com.darfoo.backend.utils.QiniuUtils;
+import com.darfoo.backend.utils.ServiceUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,30 +85,6 @@ public class SpeedupPlayableResource {
 
     @Test
     public void speedupResourcesWithFailedRecords() {
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        conditions.put("speedup_key", "");
-        List<String> resourcekeys = new ArrayList<String>();
-        List dancevideos = commonDao.getResourcesByFields(DanceVideo.class, conditions);
-        List dancemusics = commonDao.getResourcesByFields(DanceMusic.class, conditions);
-        List operavideos = commonDao.getResourcesByFields(OperaVideo.class, conditions);
-
-        for (Object danceVideo : dancevideos) {
-            resourcekeys.add((String) commonDao.getResourceAttr(DanceVideo.class, danceVideo, "video_key"));
-        }
-
-        for (Object danceMusic : dancemusics) {
-            resourcekeys.add((String) commonDao.getResourceAttr(DanceMusic.class, danceMusic, "music_key"));
-        }
-
-        for (Object operaVideo : operavideos) {
-            resourcekeys.add((String) commonDao.getResourceAttr(OperaVideo.class, operaVideo, "video_key"));
-        }
-
-        for (String key : resourcekeys) {
-            System.out.println(key);
-            qiniuUtils.resourceOperation(key);
-        }
-
-        System.out.println("total playable resource -> " + resourcekeys.size());
+        qiniuUtils.speedupResources();
     }
 }
