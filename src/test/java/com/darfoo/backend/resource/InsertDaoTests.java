@@ -105,14 +105,14 @@ public class InsertDaoTests {
         HashMap<String, String> insertcontents = new HashMap<String, String>();
         String videoTitle = "videotitle-" + System.currentTimeMillis();
         //String videoTitle = "videotitle-1428809230001";
-        String operaseriesname = "红楼梦";
+        String operaseriesname = "何文秀";
         String imagekey = String.format("%s-imagekey-%s.%s", resource.getSimpleName().toLowerCase(), System.currentTimeMillis(), ".jpg");
 
         insertcontents.put("imagekey", imagekey);
         insertcontents.put("title", videoTitle);
-        //insertcontents.put("seriesname", operaseriesname);
-        //insertcontents.put("type", "series");
-        insertcontents.put("type", "single");
+        insertcontents.put("seriesname", operaseriesname);
+        insertcontents.put("type", "series");
+        //insertcontents.put("type", "single");
         insertcontents.put("videotype", "mp4");
         //insertcontents.put("order", "1");
 

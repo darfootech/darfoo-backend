@@ -32,7 +32,7 @@ public class UpdateDaoTests {
         String videoTitle = "呵呵-" + System.currentTimeMillis();
         String authorName = "王广成广场舞";
 
-        Integer id = 1055;
+        Integer id = 1355;
 
         updatecontents.put("title", videoTitle);
         updatecontents.put("authorname", authorName);
@@ -54,7 +54,7 @@ public class UpdateDaoTests {
         String musicTitle = "呵呵-" + System.currentTimeMillis();
         String authorName = "仓木麻衣";
 
-        Integer id = 430;
+        Integer id = 450;
 
         updatecontents.put("title", musicTitle);
         updatecontents.put("authorname", authorName);
@@ -98,13 +98,14 @@ public class UpdateDaoTests {
         HashMap<String, String> updatecontents = new HashMap<String, String>();
         //String videoTitle = "么么-" + System.currentTimeMillis();
         String videoTitle = "三三三";
-        String seriesname = "红楼梦";
+        String seriesname = "何文秀";
 
-        Integer id = 3;
+        Integer id = 15;
 
         updatecontents.put("title", videoTitle);
-        //updatecontents.put("seriesname", seriesname);
-        updatecontents.put("type", "single");
+        updatecontents.put("seriesname", seriesname);
+        updatecontents.put("type", "series");
+        //updatecontents.put("type", "single");
         //updatecontents.put("order", "1");
 
         HashMap<String, Integer> insertresult = commonDao.updateResource(OperaVideo.class, id, updatecontents);

@@ -53,7 +53,7 @@ public class OperaVideo implements Serializable {
 
     @Column(name = "SPEEDUP_KEY", unique = true, nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
-    String speedup_key;
+    String speedup_key = "";
 
     //点击量
     @Column(name = "HOTTEST", nullable = true, updatable = true, columnDefinition = "bigint(64) default 0")
