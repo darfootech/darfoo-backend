@@ -113,7 +113,6 @@ public class CacheProtocol {
                     } else if (field.getName().equals("music_key")) {
                         cacheInsertMap.put("music_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
                         System.out.println("music_url -> " + field.get(object).toString());
-                        String speedupkey = (String) commonDao.getResourceAttr(model, object, "speedup_key");
                         insertSpeedupUrl(model, object, field, cacheInsertMap);
                     } else if (field.getName().equals("app_key")) {
                         cacheInsertMap.put("app_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.RAWNORMAL));

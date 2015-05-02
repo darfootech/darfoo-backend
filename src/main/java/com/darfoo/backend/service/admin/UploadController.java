@@ -209,7 +209,9 @@ public class UploadController {
 
     //自动上传完一个资源之后请求这个action来触发资源分片以加速在launcher上播放器的加载
     @RequestMapping(value = "/resources/triggerspeedup", method = RequestMethod.GET)
-    public @ResponseBody String triggerSpeedup() {
+    public
+    @ResponseBody
+    String triggerSpeedup() {
         qiniuUtils.speedupResources();
         return "ok";
     }
