@@ -38,8 +38,8 @@ public class QiniuUtils {
         Config.SECRET_KEY = "eMZK5q9HI1EXe7KzNtsyKJZJPHEfh96XcHvDigyG";
         this.bucketName = "zjdxlab410yy";
         this.mimeType = null;
-        this.domain = "7qnarb.com1.z0.glb.clouddn.com";
-        //this.domain = "speedup.darfoo.com";
+        //this.domain = "7qnarb.com1.z0.glb.clouddn.com";
+        this.domain = "speedup.darfoo.com";
         this.auth = Auth.create(Config.ACCESS_KEY, Config.SECRET_KEY);
         this.bucketManager = new BucketManager(this.auth);
         this.operater = new OperationManager(this.auth);
