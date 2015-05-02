@@ -57,6 +57,10 @@ public class DanceVideo implements Serializable {
     @CacheInsert(type = CacheInsertEnum.RESOURCE)
     String video_key;
 
+    @Column(name = "SPEEDUP_KEY", unique = true, nullable = false, columnDefinition = "varchar(255) not null")
+    @CacheInsert(type = CacheInsertEnum.RESOURCE)
+    String speedup_key = "";
+
     @Column(name = "TITLE", nullable = false, columnDefinition = "varchar(255) not null")
     @CacheInsert(type = CacheInsertEnum.NORMAL)
     @ModelInsert

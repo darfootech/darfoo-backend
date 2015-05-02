@@ -8,7 +8,8 @@ package com.darfoo.backend.utils;
  * RAW -> 未加密链接
  * SMALL -> 未加密并且缩小资源
  * ENCRYPT -> 加密链接
+ * M3U8 -> 音视频切片文件
  */
 public enum QiniuResourceEnum {
-    RAWNORMAL, ENCRYPT, RAWSMALL
+    RAWNORMAL, ENCRYPT, RAWSMALL, M3U8
 }

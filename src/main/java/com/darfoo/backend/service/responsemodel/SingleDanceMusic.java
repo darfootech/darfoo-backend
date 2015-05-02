@@ -8,16 +8,18 @@ public class SingleDanceMusic {
     String title;
     String authorname;
     String music_url;
+    String speedup_url;
     Long update_timestamp;
 
     public SingleDanceMusic() {
     }
 
-    public SingleDanceMusic(Integer id, String title, String authorname, String music_url, Long update_timestamp) {
+    public SingleDanceMusic(Integer id, String title, String authorname, String music_url, String speedup_url, Long update_timestamp) {
         this.id = id;
         this.title = title;
         this.authorname = authorname;
         this.music_url = music_url;
+        this.speedup_url = speedup_url;
         this.update_timestamp = update_timestamp;
     }
 
@@ -61,6 +63,14 @@ public class SingleDanceMusic {
         this.title = title;
     }
 
+    public String getSpeedup_url() {
+        return speedup_url;
+    }
+
+    public void setSpeedup_url(String speedup_url) {
+        this.speedup_url = speedup_url;
+    }
+
     @Override
     public String toString() {
         return "SingleDanceMusic{" +
@@ -68,6 +78,7 @@ public class SingleDanceMusic {
                 ", title='" + title + '\'' +
                 ", authorname='" + authorname + '\'' +
                 ", music_url='" + music_url + '\'' +
+                ", speedup_url='" + speedup_url + '\'' +
                 ", update_timestamp=" + update_timestamp +
                 '}';
     }

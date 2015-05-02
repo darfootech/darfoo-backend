@@ -43,6 +43,18 @@ public class CacheProtocol {
         return cachekey;
     }
 
+    private HashMap<String, String> insertSpeedupUrl(Class model, Object object, Field field, HashMap<String, String> insertMap) throws IllegalAccessException {
+        String speedupkey = (String) commonDao.getResourceAttr(model, object, "speedup_key");
+        if (speedupkey.equals("")) {
+            insertMap.put("speedup_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
+            System.out.println("speedup_url -> " + field.get(object).toString());
+        } else {
+            insertMap.put("speedup_url", qiniuUtils.getQiniuResourceUrl(speedupkey, QiniuResourceEnum.ENCRYPT));
+            System.out.println("speedup_url -> " + field.get(object).toString());
+        }
+        return insertMap;
+    }
+
     private HashMap<String, String> getInsertCacheMap(Class model, Object object, String prefix) throws IllegalAccessException, NoSuchFieldException {
         HashMap<String, String> cacheInsertMap = new HashMap<String, String>();
         for (Field field : model.getDeclaredFields()) {
@@ -97,9 +109,11 @@ public class CacheProtocol {
                     } else if (field.getName().equals("video_key")) {
                         cacheInsertMap.put("video_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
                         System.out.println("video_url -> " + field.get(object).toString());
+                        insertSpeedupUrl(model, object, field, cacheInsertMap);
                     } else if (field.getName().equals("music_key")) {
                         cacheInsertMap.put("music_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
                         System.out.println("music_url -> " + field.get(object).toString());
+                        insertSpeedupUrl(model, object, field, cacheInsertMap);
                     } else if (field.getName().equals("app_key")) {
                         cacheInsertMap.put("app_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.RAWNORMAL));
                         System.out.println("app_url -> " + field.get(object).toString());
