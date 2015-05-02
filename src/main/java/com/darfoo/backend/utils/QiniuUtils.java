@@ -97,7 +97,7 @@ public class QiniuUtils {
             } else if (type == QiniuResourceEnum.M3U8) {
                 Long expiretime = 7 * 24 * 3600L;
                 baseUrl = baseUrl + "?pm3u8/0/expires/" + expiretime;
-                return this.auth.privateDownloadUrl(baseUrl);
+                return CryptUtils.encryptQiniuUrl(this.auth.privateDownloadUrl(baseUrl));
             } else {
                 System.out.println("wired");
                 return "";
