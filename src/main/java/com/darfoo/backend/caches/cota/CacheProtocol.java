@@ -49,7 +49,7 @@ public class CacheProtocol {
             insertMap.put("speedup_url", qiniuUtils.getQiniuResourceUrl(field.get(object).toString(), QiniuResourceEnum.ENCRYPT));
             System.out.println("speedup_url -> " + field.get(object).toString());
         } else {
-            insertMap.put("speedup_url", qiniuUtils.getQiniuResourceUrl(speedupkey, QiniuResourceEnum.ENCRYPT));
+            insertMap.put("speedup_url", qiniuUtils.getQiniuResourceUrl(speedupkey, QiniuResourceEnum.M3U8));
             System.out.println("speedup_url -> " + field.get(object).toString());
         }
         return insertMap;
