@@ -38,7 +38,9 @@ public class QiniuUtils {
     CommonDao commonDao;
     private String bucketName;
     private String mimeType;
-    private String domain;
+    //因为客户端暂时不支持302重定向所以只能蛋疼的分两个域名了,m3u8切片文件因为本身只用来播放所以就用加速后的域名
+    private String downloaddomain;
+    private String playdomain;
     private BucketManager bucketManager;
     private Auth auth;
     private OperationManager operater;
@@ -48,8 +50,8 @@ public class QiniuUtils {
         Config.SECRET_KEY = "eMZK5q9HI1EXe7KzNtsyKJZJPHEfh96XcHvDigyG";
         this.bucketName = "zjdxlab410yy";
         this.mimeType = null;
-        //this.domain = "7qnarb.com1.z0.glb.clouddn.com";
-        this.domain = "speedup.darfoo.com";
+        this.downloaddomain = "7qnarb.com1.z0.glb.clouddn.com";
+        this.playdomain = "speedup.darfoo.com";
         this.auth = Auth.create(Config.ACCESS_KEY, Config.SECRET_KEY);
         this.bucketManager = new BucketManager(this.auth);
         this.operater = new OperationManager(this.auth);
@@ -77,7 +79,10 @@ public class QiniuUtils {
         try {
             //domain在空间设置里可以看到，每一个bucket都对应有一个域名
             //所谓的key其实就是上传的文件名字
-            String baseUrl = URLUtils.makeBaseUrl(domain, key);
+            String baseUrl = URLUtils.makeBaseUrl(downloaddomain, key);
+            if (type == QiniuResourceEnum.M3U8) {
+                baseUrl = URLUtils.makeBaseUrl(playdomain, key);
+            }
             GetPolicy getPolicy = new GetPolicy();
             //过期时间为一周
             getPolicy.expires = 7 * 24 * 3600;

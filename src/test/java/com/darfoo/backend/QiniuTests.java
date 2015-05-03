@@ -26,7 +26,8 @@ public class QiniuTests {
     @Test
     public void getDownloadUrl() {
         String normalkey = "鼓楼天歌-口令 背面-dancevideo-1705.mp4";
-        String m3u8key = "a99slR6hWZjQWtJUbE8Ze6SdRyU=/ljAnjyjYJYJFi5NB6dSNgk1Xd1Qs";
+        //String m3u8key = "a99slR6hWZjQWtJUbE8Ze6SdRyU=/ljAnjyjYJYJFi5NB6dSNgk1Xd1Qs";
+        String m3u8key = "a99slR6hWZjQWtJUbE8Ze6SdRyU=/FhAgoIWHUOmEdDT0kDWi4K-jJSGu";
         //String normalkey = "东方姑娘-dancevideo-1279.flv";
         //String m3u8key = "a99slR6hWZjQWtJUbE8Ze6SdRyU=/lkZ7lFcHqt-wkZGeTGLTSlTJvBp_";
         System.out.println("normal download url -> " + qiniuUtils.getQiniuResourceUrl(normalkey, QiniuResourceEnum.RAWNORMAL));
@@ -41,7 +42,8 @@ public class QiniuTests {
     @Test
     public void generateM3U8PlayableFile() {
         //String key = "鼓楼天歌-口令 背面-dancevideo-1705.mp4";
-        String key = "东方姑娘-dancevideo-1279.flv";
+        //String key = "东方姑娘-dancevideo-1279.flv";
+        String key = "磕儿-169.mp3";
         qiniuUtils.resourceOperation(key);
     }
 }
