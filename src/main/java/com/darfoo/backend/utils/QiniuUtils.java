@@ -80,7 +80,8 @@ public class QiniuUtils {
             //domain在空间设置里可以看到，每一个bucket都对应有一个域名
             //所谓的key其实就是上传的文件名字
             String baseUrl = URLUtils.makeBaseUrl(downloaddomain, key);
-            if (type == QiniuResourceEnum.M3U8) {
+            //缩略图与切片资源都是用点播加速的域名
+            if (type == QiniuResourceEnum.M3U8 || type == QiniuResourceEnum.RAWSMALL) {
                 baseUrl = URLUtils.makeBaseUrl(playdomain, key);
             }
             GetPolicy getPolicy = new GetPolicy();
